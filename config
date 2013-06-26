@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	worktree = /usr/local/batchRunScripts
+[remote "prodimages-dev"]
+	url = git@github.com:relic7/prodimages.git
+	fetch = +refs/heads/*:refs/remotes/prodimages-dev/*
