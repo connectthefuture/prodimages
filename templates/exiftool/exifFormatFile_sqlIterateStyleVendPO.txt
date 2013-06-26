@@ -1,0 +1,6 @@
+# this is a comment line
+#[HEAD](
+	POMGR_SNP.PRODUCT_SNAPSHOT.PO_HDR = '${DirectoryName}'
+	AND POMGR_SNP.PRODUCT_SNAPSHOT.PO_HDR = '${Basename}'
+)
+#[TAIL]OR
