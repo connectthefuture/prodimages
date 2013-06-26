@@ -1,0 +1,80 @@
+# this is a comment line
+#[HEAD]                            -- MetaData Records --
+<html>
+<head>
+<style type="text/css">
+div.img
+  {
+  margin:2px;
+  border:1px solid #0000ff;
+  height:auto;
+  width:auto;
+  float:left;
+  text-align:center;
+  }
+div.img img
+  {
+  display:inline;
+  margin:3px;
+  border:1px solid #ffffff;
+  }
+div.img a:hover img
+  {
+  border:1px solid #0000ff;
+  }
+div.desc
+  {
+  text-align:center;
+  font-weight:normal;
+  width:120px;
+  margin:2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="img">
+  <a target="_blank" href="${SourceFile}">
+  <img src="${Directory}/${FileName}" alt="${IPTC:Title}" width="100" height="120" />
+  </a>
+  <div class="desc">${IPTC:Title}</div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="${Directory}/${FileName}">
+  <img src="${Directory}/${FileName}" alt="${IPTC:Subject}" width="200" height="240" />
+  </a>
+  <div class="desc">${FileName}</div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="${SourceFile}">
+  <img src="${Directory}/${FileName}" alt="${IPTC:RetoucherName}" width="244" height="288" />
+  </a>
+  <div class="desc">Add a description of the image here</div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="${SourceFile}">
+  <img src="${Directory}/${FileName}" alt="${IPTC:Composer}" width="25" height="38" />
+  </a>
+  <div class="desc">{$FileName}</div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="${SourceFile}">
+  <img src="${Directory}/${FileName}" alt="${XMP:Artist}" width="50" height="90" />
+  </a>
+  <div class="desc">${IPTC:Composer}</div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="${SourceFile}">
+  <img src="${Directory}/${FileName}" alt="${IPTC:CreateDate}" width="70" height="90" />
+  </a>
+  <div class="desc">${FileName}</div>
+</div>
+
+</body>
+</html>
+#[TAIL]

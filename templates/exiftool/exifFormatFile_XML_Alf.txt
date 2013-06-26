@@ -1,0 +1,22 @@
+# this is a comment line
+#[HEAD]
+ <?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+ <properties>
+    <entry key="type">cm:content</entry>
+    <entry key="aspects">cm:dublincore,cm:versionable</entry>
+    <entry key="cm:title">$XMP:Artist</entry>
+    <entry key="cm:description">$XMP:Album</entry>
+    <entry key="cm:created">${EXIF:DateTimeOriginal}</entry>
+    <!-- cm:dublincore properties -->
+    <entry key="cm:author">$PhotographerName</entry>
+    <entry key="cm:publisher">$RetoucherName</entry>
+    <entry key="cm:contributor">$IPTC:SpecialInstructions</entry>
+    <entry key="cm:type">Photograph</entry>
+    <entry key="cm:identifier">$FileName</entry>
+    <entry key="cm:dcsource">${Make}</entry>
+    <entry key="cm:coverage">$IPTC:Source</entry>
+    <entry key="cm:rights">$IPTC:CopyrightNotice</entry>
+    <entry key="cm:subject">$XMP:Genre</entry>
+ </properties>
+#[TAIL]-- end --

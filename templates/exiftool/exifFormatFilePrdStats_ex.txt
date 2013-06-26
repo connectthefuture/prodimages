@@ -1,0 +1,14 @@
+# this is a comment line
+#[HEAD]                            -- Photo META Records --
+File: $FileName
+            Photo Date           ${EXIF:DateTimeOriginal}
+            Product Type        $XMP:Genre
+            Brands         			$Keywords
+            Event Groups	        $XMP:Album
+			Event  IDs	        	$IPTC:Source            
+			
+         	Prod Status			$IPTC:CopyrightNotice
+            Start Dates			$IPTC:SpecialInstructions
+			Sample Status        $IPTC:SimilarityIndex
+			MetaData Date        $XMP:MetadataDate
+#[TAIL]-- end --

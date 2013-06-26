@@ -1,0 +1,146 @@
+@charset "UTF-8";
+/* CSS Document */
+		table
+		  	{
+			margin: 2px;
+			border: 1px solid #6699cc;
+			height: auto;
+			width: auto;
+			float: none;
+			text-align: left;
+			table-layout: inherit;
+		  	}
+		form 
+		  	{
+			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+			font-size: medium;
+			font-style: normal;
+			line-height: normal;
+			font-weight: normal;
+			color: rgb(0,0,102);
+			background-attachment: fixed;
+			background-color: rgb(215,215,215);
+			background-repeat: no-repeat;
+			background-position: center center;
+			letter-spacing: normal;
+			text-align: justify;
+			vertical-align: sub;
+			word-spacing: normal;
+			display: inline-table;
+			margin: auto;
+			padding: 2px;
+			clear: both;
+			float: none;
+			border: thin solid rgb(0,0,51);
+			overflow: auto;
+			position: relative;
+			cursor: context-menu;
+			filter: BlendTrans(Duration=22);
+			page-break-before: auto;
+			page-break-after: auto;
+			-webkit-transition: all ease-in-out;
+			-moz-transition: all ease-in-out;
+			-ms-transition: all ease-in-out;
+			-o-transition: all ease-in-out;
+			transition: all ease-in-out;
+		  	}
+		body
+		  	{
+			background: grid-columns: scroll;
+			transition-property: all;
+			background-color: rgb(215,215,215);
+			background-clip: border-box
+		  	}
+    #iframe1{
+			appearance: window;
+			resize: horizontal;
+			height: 480px;
+			width: 400px;
+			padding: 1px;
+			margin-top: .5px;
+			margin-right: 10px;
+			margin-bottom: 3px;
+			margin-left: 10px;
+			scrollbar-3d-light-color: rgb(0,255,51);
+			scrollbar-shadow-color: rgb(0,0,204);
+			scrollbar-face-color: rgb(0,51,204);
+			scrollbar-base-color: rgb(153,102,255);
+			perspective-origin: top;
+			alignment-adjust: baseline;
+			nav-up: current;
+			zoom: auto;
+	  }
+		div.img
+		  	{	
+			margin:1px;
+			border:1px solid #6699cc;
+			height:auto;
+			width:auto;
+			float: inherit;
+			text-align:center;
+		  	}
+		div.img img
+		  	{
+			display:inline;
+			margin:2px;
+			border:1px solid #ffffff;
+		  	}
+		div.img a:hover img
+		  	{
+			border: 1px solid #0000ff;
+			appearance: dialog;
+		  	}
+		div.desc
+		  	{
+			text-align:center;
+			font-weight:normal;
+			width:auto;
+			margin:1px;
+		  	}
+		div.button 
+		  	{
+			font-size: small;
+			font-weight: normal;
+			color: rgb(215,215,215);
+			background-color: rgb(0,0,51);
+			display: inline-block;
+			text-align: justify;
+			float: right;
+			height: auto;
+			width: 45px;
+			}
+		div.searchstyle {
+			font-size: x-large;
+			font-weight: bold;
+			letter-spacing: normal;
+			text-align: justify;
+			display: inline;
+			position: relative;
+			}
+		div.searchmulti1 {
+			background-color: rgb(0,0,51);
+			font-size: medium;
+			font-weight: bold;
+			letter-spacing: normal;
+			text-align: justify;
+			display: inline;
+			position: relative;
+		}
+	#iframe2{
+			appearance: window;
+			resize: horizontal;
+			height: 240;
+			width: auto;
+			padding: 1px;
+			margin-top: .5px;
+			margin-right: 10px;
+			margin-bottom: 3px;
+			margin-left: 10px;
+			vertical-align: bottom;
+			display: inline-table;
+			border-top-style: none;
+			border-right-style: none;
+			border-bottom-style: none;
+			border-left-style: none;
+			position: relative;
+		}
