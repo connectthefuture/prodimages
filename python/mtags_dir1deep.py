@@ -42,6 +42,7 @@ def sqlQueryMetatags(style,f):
         metatag['IPTC:PONumber'] = row['po_num']
         metatag['IPTC:VendorStyle'] = row['vendor_style']
         metatag['IPTC:Brand'] = row['brand']
+        metatag['Keywords'] = row['brand']
         metatag['XMP:Genre'] = row['category_parent']
         metatag['IPTC:ProductType'] = row['category_sub']
         metatag['EventID'] = row['event_id']
