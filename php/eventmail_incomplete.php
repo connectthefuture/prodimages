@@ -103,7 +103,7 @@
 	//$textbody	= shell_exec("cat " . "~/Dropbox/Dropbox_sites/Dreamweaver_sites/1test.html");
 	//}
 
-	$attachment = "/mnt/Post_Ready/zImages_1/dag/sites/queries_PHP_test1/Reports/event_incomplete_14days.html";
+	$attachment = "/mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/event_incomplete_14days.html";
 // 		
 		$htmlbody		= shell_exec("cat " . $attachment);
  		$textbody		= shell_exec("cat " . $attachment);
