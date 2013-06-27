@@ -77,6 +77,7 @@ import os
 import glob
 import sqlalchemy
 glbdir = sys.argv[1]
+#fnamewatched = sys.argv[1]
 #glbdir='/mnt/Post_Ready/aPhotoPush'
 #glbdir = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117257'
 #globtoconvert = os.path.join('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117147', '*.jpg')
@@ -125,6 +126,7 @@ def get_dbinfo_for_metatags_filelist(filelist):
 #    metafield_dict[k] = metatags
 
 metadict = get_dbinfo_for_metatags_filelist(globtoconvert)
+#metadict = get_dbinfo_for_metatags_filelist(fnamewatched)
 exiftags = []
 exifdict = {}
 for k,v in metadict.items():
@@ -153,7 +155,7 @@ for k,v in metadict.items():
 #        exiftags.append(exifcmd)
 execlist = []
 for key,value in exifdict.iteritems():
-    execstring = "exiftool -m -fast2 -q {0} {1}".format(value,key)
+    execstring = "exiftool -m -fast2 -overwrite_original -q {0} {1}".format(value,key)
     execlist.append(execstring)
 
 def bashexec_subproc(cmdstring):
