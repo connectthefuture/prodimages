@@ -6,8 +6,8 @@
 dateLog=`date`
 <<<<<<< HEAD
 echo "START _1_ $dateLog" >> $LOGDIR/FindMakeLowres_PMphotoAttribImg_log.txt
-pmPhotoDir=/Volumes/Post_Ready/zImages_1
-pmPhotoXdir=/Volumes/Post_Ready/zImages_1/xxFer
+pmPhotoDir=/mnt/Post_Ready/zImages_1
+pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
 =======
 echo "START _1_ $dateLog" >> ~/Dropbox/FindMakeLowres_log.txt
 pmPhotoDir=/mnt/Post_Ready/zImages_1

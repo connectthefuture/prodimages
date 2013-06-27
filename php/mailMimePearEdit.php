@@ -20,12 +20,12 @@
 		else	$replyto = "john.bragato@gmail.com";
 		
 	if (isset($_POST['filehtml'])) $filehtml = $_POST['filehtml'];
-		else	$filehtml = "/Volumes/Post_Ready/zProd_Server/imageServer7/mail/outbox/compiledPhotoReport.html";
+		else	$filehtml = "/mnt/Post_Ready/zProd_Server/imageServer7/mail/outbox/compiledPhotoReport.html";
 	
 	//$DAYRtmp = "date " . "+%Y-%m-%d-RetouchToDo";
 	//$DAYRdo = shell_exec("$DAYRtmp");
-	//$DAYR   =   "/Volumes/Post_Ready/Daily/" . "$DAYRdo";
-	//$filehtmlcount = shell_exec("`find /Volumes/Post_Ready/Daily/$DAYR -type f | awk -F'/' '{ print $NF }' | sort | wc -l`");
+	//$DAYR   =   "/mnt/Post_Ready/Daily/" . "$DAYRdo";
+	//$filehtmlcount = shell_exec("`find /mnt/Post_Ready/Daily/$DAYR -type f | awk -F'/' '{ print $NF }' | sort | wc -l`");
 	//$filehtmlcounttmp = "find " . "$DAYR";
 	//$endoffilehtmlcounttmp = "-type " . "f " . "| " . "awk " . "-F'/' " . "'{ " .  "print " . "\$NF " . "}' " . "| " . "sort " . "| " . "wc " . "-l";
 	//$filehtmlcount  =   "$filehtmlcounttmp" . "filehtmlcounttmp2";

@@ -69,7 +69,7 @@ for f in `find $convertedFolder_l -iname \*.jpg`
 do
 baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
 echo $f | awk -v folder_l=$convertedFolder_l -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_lfname" "fname"_l.jpg") }' | /bin/bash;
-## /Volumes/johnb/AWkdebug.txt
+## /mnt/johnb/AWkdebug.txt
 done;
 
 ## Medium Jpegs

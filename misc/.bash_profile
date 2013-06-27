@@ -1,17 +1,17 @@
 export PERL5LIB=/usr/lib:/usr/X11/lib
-#alias exifData_mysql5run='sudo mysql5 --socket=$MYSQL5_SOCKET --user=root --password=root --database=imageMetaData < /Volumes/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/import_exifInfoImagePost_Ready.sql' 
-#alias pmImport_mysql5run='sudo mysql5 --socket=$MYSQL5_SOCKET --user=root --password=root --database=imageMetaData < /Volumes/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql'
-#alias postReadyAllImport_mysql5run='sudo mysql5 --socket=$MYSQL5_SOCKET --user=root --password=root --database=imageMetaData < /Volumes/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/post_ready_summary.csv_open'
-alias run_postReadyAllImport_mysql5='source ~/.bash_profile && sudo port load mysql55-server && sudo mysql5 --socket=/Applications/MAMP/tmp/mysql/mysql.sock --password=root --database=imageMetaData < /Volumes/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/post_ready_summary.csv_open' 
-alias run_exifData_mysql5='source ~/.bash_profile && sudo port load mysql55-server && sudo mysql5 --socket=/Applications/MAMP/tmp/mysql/mysql.sock --password=root --database=imageMetaData < /Volumes/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/import_exifInfoImagePost_Ready.sql'
-alias run_pmImport_mysql5='source ~/.bash_profile && sudo port load mysql55-server && sudo mysql5 --socket=/Applications/MAMP/tmp/mysql/mysql.sock --password=root --database=imageMetaData < /Volumes/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql'
+#alias exifData_mysql5run='sudo mysql5 --socket=$MYSQL5_SOCKET --user=root --password=root --database=imageMetaData < /mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/import_exifInfoImagePost_Ready.sql' 
+#alias pmImport_mysql5run='sudo mysql5 --socket=$MYSQL5_SOCKET --user=root --password=root --database=imageMetaData < /mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql'
+#alias postReadyAllImport_mysql5run='sudo mysql5 --socket=$MYSQL5_SOCKET --user=root --password=root --database=imageMetaData < /mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/post_ready_summary.csv_open'
+alias run_postReadyAllImport_mysql5='source ~/.bash_profile && sudo port load mysql55-server && sudo mysql5 --socket=/Applications/MAMP/tmp/mysql/mysql.sock --password=root --database=imageMetaData < /mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/post_ready_summary.csv_open' 
+alias run_exifData_mysql5='source ~/.bash_profile && sudo port load mysql55-server && sudo mysql5 --socket=/Applications/MAMP/tmp/mysql/mysql.sock --password=root --database=imageMetaData < /mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/import_exifInfoImagePost_Ready.sql'
+alias run_pmImport_mysql5='source ~/.bash_profile && sudo port load mysql55-server && sudo mysql5 --socket=/Applications/MAMP/tmp/mysql/mysql.sock --password=root --database=imageMetaData < /mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql'
 alias apacheAmpps='/Applications/AMPPS/apache/bin/apachectl'
 alias sshvbox1='ssh 'jb@192.168.56.101''
 
 #####---->File7 Images Server Vars
-export PRODSRV=/Volumes/Post_Ready/zProd_Server/imageServer7
-export LIBSRV=/Volumes/Post_Ready/zProd_Server/imageServer7/lib
-export DATASRV=/Volumes/Post_Ready/zProd_Server/imageServer7/data
+export PRODSRV=/mnt/Post_Ready/zProd_Server/imageServer7
+export LIBSRV=/mnt/Post_Ready/zProd_Server/imageServer7/lib
+export DATASRV=/mnt/Post_Ready/zProd_Server/imageServer7/data
 export MAGICK_FOLDER=$PRODSRV/var/magick 
 export MAGICK_LOAD=$MAGICK_FOLDER/magick_load
 export SCRIPTS=$PRODSRV/scripts
@@ -21,15 +21,15 @@ export IMGSELECTS=$PRODSRV/images/images_jpg_photoselects
 # alias mount_netsrv101=`mount_ftp imagedrop:imagedrop0@netsrv101.l3.bluefly.com $PRODSRV/mnt/netsrv101/`
 
 ####---->Image Locations
-#export NETSRV101=/Volumes/Post_Ready/zProd_Server/imageServer/mnt/netsrv101/images/
+#export NETSRV101=/mnt/Post_Ready/zProd_Server/imageServer/mnt/netsrv101/images/
 export drop_RETOUCHERS=$PRODSRV/tmp/imagedrop/retouchers/
 export drop_PHOTOSTUDIO=$PRODSRV/tmp/imagedrop/photostudio/
-export archStill=/Volumes/Post_Ready/Retouch_Still
-export archFashion=/Volumes/Post_Ready/Retouch_Fashion
-export pushStill=/Volumes/Post_Ready/aPhotoPush
-export pushFashion=/Volumes/Post_Ready/eFashionPush
+export archStill=/mnt/Post_Ready/Retouch_Still
+export archFashion=/mnt/Post_Ready/Retouch_Fashion
+export pushStill=/mnt/Post_Ready/aPhotoPush
+export pushFashion=/mnt/Post_Ready/eFashionPush
 export tmpPhotoSelects=$PRODSRV/tmp/tmpPhotoSelects
-export tmpDeletePhoto=/Volumes/Post_Ready/zProd_Server/tmpDeletePhoto
+export tmpDeletePhoto=/mnt/Post_Ready/zProd_Server/tmpDeletePhoto
 
 
 ##<--------- ORACLE EnvVars

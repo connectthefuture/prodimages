@@ -5,22 +5,22 @@ batchDoneDate=`date +%Y%b%d`
 
 ##### Replace _1 etc in FileNames
 userDropFolders=/home/johnb/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly
-preBatchDtop=/Volumes/johnb/Desktop/FilesToBatch_FromPublicDrop
-batchDtop=/Volumes/johnb/Desktop/batch
-postBatchDone=/Volumes/johnb/Desktop/batchDone
-postBatchArchive=/Volumes/johnb/Desktop/Archive
+preBatchDtop=/mnt/johnb/Desktop/FilesToBatch_FromPublicDrop
+batchDtop=/mnt/johnb/Desktop/batch
+postBatchDone=/mnt/johnb/Desktop/batchDone
+postBatchArchive=/mnt/johnb/Desktop/Archive
 
-convertedFolder_png=/Volumes/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/PNG_Primary/
-convertedFolder_l=/Volumes/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/L_JPG/
-convertedFolder_m=/Volumes/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/M_JPG/
-convertedFolder_alt=/Volumes/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/ALT_JPG_PNG/
+convertedFolder_png=/mnt/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/PNG_Primary/
+convertedFolder_l=/mnt/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/L_JPG/
+convertedFolder_m=/mnt/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/M_JPG/
+convertedFolder_alt=/mnt/johnb/Public/FilesToLoad_DropToServer/a_Drop_to_Load/ALT_JPG_PNG/
 
-uploadInProg=/Volumes/johnb/Public/FilesToLoad_DropToServer/b_Drop_Inprog_Loading
-uploadComplete=/Volumes/johnb/Public/FilesToLoad_DropToServer/c_Drop_Complete
+uploadInProg=/mnt/johnb/Public/FilesToLoad_DropToServer/b_Drop_Inprog_Loading
+uploadComplete=/mnt/johnb/Public/FilesToLoad_DropToServer/c_Drop_Complete
 
 
 #####		Remove Bad Files
-errorFolder=/Volumes/johnb/Desktop/Errors
+errorFolder=/mnt/johnb/Desktop/Errors
 mkdir $errorFolder
 find $userDropFolders -type f -iname \*.* | grep ' ' | xargs -I '{}' mv -f '{}' $errorFolder
 
@@ -35,7 +35,7 @@ find $userDropFolders -type f -iname [{^2-9}][0-9{8}]\*.jpg | grep -v ' ' | xarg
 for f in `find $preBatchDtop -iname \*.jpg`
 do
 baseName=`basename $f | sed 's/\ /\\\ /g'`
-echo $f | sed 's/\ /\\\ /g' | awk -v fname=$baseName '{print("mv -f "$1" /Volumes/johnb/Desktop/batch/"fname)}' | sed 's/_1//2' | sed 's/_2/_alt01/2' | sed 's/_3/_alt02/2' | sed 's/_4/_alt03/2' | sed 's/_5/_alt04/2' | sed 's/_6/_alt05/2' | /bin/bash;
+echo $f | sed 's/\ /\\\ /g' | awk -v fname=$baseName '{print("mv -f "$1" /mnt/johnb/Desktop/batch/"fname)}' | sed 's/_1//2' | sed 's/_2/_alt01/2' | sed 's/_3/_alt02/2' | sed 's/_4/_alt03/2' | sed 's/_5/_alt04/2' | sed 's/_6/_alt05/2' | /bin/bash;
 done;
 
 ### Move/Copy files to folder based on Format ImageMagick will convert to
@@ -51,7 +51,7 @@ for f in `find $convertedFolder_l -iname \*.jpg`
 do
 baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
 echo $f | awk -v folder_l=$convertedFolder_l -v fname=$baseNamePlus '{print("mv -fv "$1 folder_lfname" "fname"_l.jpg")}' | /bin/bash;
-#>> /Volumes/johnb/AWkdebug.txt 
+#>> /mnt/johnb/AWkdebug.txt 
 done;
 
 ## Medium Jpegs
@@ -85,7 +85,7 @@ find $convertedFolder_alt -type f -iname \*alt*.png -exec mv {} $uploadInProg \;
 find $convertedFolder_alt -type f -iname \*.jpg -exec rm {} \;
 
 #### Original stored
-batchDoneFolder="/Volumes/johnb/Desktop/batchDone/$batchDoneDate"
+batchDoneFolder="/mnt/johnb/Desktop/batchDone/$batchDoneDate"
 mkdir $batchDoneFolder
 for f in `find $batchDtop -iname \*.jpg`
 do
@@ -103,5 +103,5 @@ do
 uploadResult=`curl -k -T $f $ftpLoginFull`
 exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'='$Today' $f
 mv -f $f $uploadComplete;
-echo '$Today, $f, $uploadResult' >> /Volumes/johnb/Documents/uploadLog.txt
+echo '$Today, $f, $uploadResult' >> /mnt/johnb/Documents/uploadLog.txt
 done;

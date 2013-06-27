@@ -8,7 +8,7 @@ DAY=`date "+%Y-%m-%d-RetouchToDo"`
 
 ## RUN SQL Query spooling Queryt to CSV
 
-#dailyPhpMyAdminForImport=/Volumes/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql
+#dailyPhpMyAdminForImport=/mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql
 dailyPhpMyAdminForImport=/usr/local/batchRunScripts/sql/prodsnapshot_import.sql
 
 #dailyPhpMyAdminForImport=/mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql

@@ -7,8 +7,8 @@ if [[ -n "$1" ]];
 then
     userDropFolders="$1"
 else
-    userDropFolders="/Volumes/johnb/Public/Drop_FinalFilesOnly"
-    magickBaseR=/Volumes/johnb/
+    userDropFolders="/mnt/johnb/Public/Drop_FinalFilesOnly"
+    magickBaseR=/mnt/johnb/
 fi;
 
 cd $userDropFolders
@@ -46,9 +46,9 @@ mkdir $errorFolder
 find $userDropFolders -type f -iname \*.* | grep ' ' | xargs -I '{}' mv -f '{}' $errorFolder
 
 #### Run Tag Retouched Photos with Retoucher Name Test if using
-if [[ "$userDropFolders" -eq "/Volumes/johnb/Public/Drop_FinalFilesOnly" ]];
+if [[ "$userDropFolders" -eq "/mnt/johnb/Public/Drop_FinalFilesOnly" ]];
 then
-    tmpArch=/Volumes/johnb/Desktop
+    tmpArch=/mnt/johnb/Desktop
     /usr/local/batchRunScripts/TAG_fromDirNameGeneric.sh
 fi;
 
@@ -76,7 +76,7 @@ for f in `find $convertedFolder_l -iname \*.jpg`
 do
 baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
 echo $f | awk -v folder_l=$convertedFolder_l -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_lfname" "fname"_l.jpg") }' | /bin/bash;
-#>> /Volumes/johnb/AWkdebug.txt 
+#>> /mnt/johnb/AWkdebug.txt 
 done;
 
 ## Medium Jpegs

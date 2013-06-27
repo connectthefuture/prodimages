@@ -3,7 +3,7 @@
 . ~/.bashrc
 
 DROP_RETOUCHERS=$PRODSRV/tmp/imagedrop/retouchers
-uploadDropbox=/Volumes/johnb/Dropbox/Retouchers-Remote-Upload
+uploadDropbox=/mnt/johnb/Dropbox/Retouchers-Remote-Upload
 
 jamesDone=$DROP_RETOUCHERS/JamesHoetker
 jamesFind=`find $uploadDropbox -iname \*jh\*.zip`

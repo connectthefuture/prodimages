@@ -3,7 +3,7 @@
 . ~/.bash_profile
 
 
-file4Images=/Volumes/Company/Production/Images/Kayla
+file4Images=/mnt/Company/Production/Images/Kayla
 i7RsyncTmp=$PRODSRV/var/consignment/rsync_file4_tmp
 
 

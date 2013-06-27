@@ -48,7 +48,7 @@ def csv_reader(filepath,delim):
 #        return all_lines
 
 #fields = my_csv.next()
-searchstring = "exiftool -'IPTC:SimilarityIndex=Scanned In at Bluefly' /Volumes/Post_Ready/aPhotoPush/032213_CH/323548201/323548201_2.jpg"
+searchstring = "exiftool -'IPTC:SimilarityIndex=Scanned In at Bluefly' /mnt/Post_Ready/aPhotoPush/032213_CH/323548201/323548201_2.jpg"
 csvlines = csv_reader(filepath, ",")
 #print csvlines
 pattern = re.compile(".")
