@@ -17,6 +17,10 @@ find $pushFashion -type f -iname \*_\?.jpg | sed s/\ /\\\\\ /g | sed s/\"/\\\"/g
 
 
 cp $styleStringTest "$styleStringTest"_open
+
+## Import updates to Mysql
+/usr/local/batchRunScripts/bash/styleStringImportPma.sh
+
 #cp $styleStringTest $styleStringTestF7
 #awk -FS' ' '{ gsub(/'.jpg'/, "" , $1); print $1 }'
 # awk '{ gsub(/"_[a-zA-Z0-9]{1,5} /, "" , $1); print $1 }'
