@@ -1,3 +1,5 @@
 0000000000000000000000000000000000000000 5937ae88f99f5a663d710d89d6edd133b5ab0d6f John Bragato <jbragato@yahoo.com> 1372272663 -0400	commit (initial): init
 5937ae88f99f5a663d710d89d6edd133b5ab0d6f c3ae0624600dcacf92792715c9ee604de0e613be John Bragato <jbragato@yahoo.com> 1372272811 -0400	commit: init
 c3ae0624600dcacf92792715c9ee604de0e613be 86bf13174cb17112f42945251483789998ebafa7 John Bragato <jbragato@yahoo.com> 1372273266 -0400	commit: pywatch
+86bf13174cb17112f42945251483789998ebafa7 d51906a2040731d8fb8deab917f31b1f49b89460 root <root@prodimages.bluefly.corp> 1372301609 -0400	commit: ini
+d51906a2040731d8fb8deab917f31b1f49b89460 f8e9ab7eab395a7d72cc7b8e9fb3fd3ec597c48e root <root@prodimages.bluefly.corp> 1372301640 -0400	pull git://github.com/splitbrain/Watcher.git: Merge made by the 'recursive' strategy.
