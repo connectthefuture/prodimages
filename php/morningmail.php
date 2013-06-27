@@ -98,7 +98,7 @@
 	//$textbody	= shell_exec("cat " . "~/Dropbox/Dropbox_sites/Dreamweaver_sites/1test.html");
 	//}
 
-	$attachment = "~/Dropbox/Dropbox_sites/queries_run_search/Reports/retouching_daily_breakdown.html";
+	$attachment = "/mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/retouching_daily_breakdown.html";
 // 		
 		$htmlbody		= shell_exec("cat " . $attachment);
  		$textbody		= shell_exec("cat " . $attachment);

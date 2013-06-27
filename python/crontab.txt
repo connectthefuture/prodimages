@@ -101,13 +101,13 @@
 #CrInfo Mail Daily Retouch Report to All - with breakdown
 50	7	*	*	*	/usr/local/batchRunScripts/numbersDailyMailFullReport.sh
 #CrInfo Update view and send html morning Retouch email status
-56	7	*	*	*	. /Users/johnb/.bash_profile && /usr/local/batchRunScripts/view_morningpush_progress.sh > ~/Dropbox/Dropbox_sites/queries_run_search/Reports/retouching_daily_breakdown.html && php -f /usr/local/batchRunScripts/mail_sql/morningmail.php
+56	7	*	*	*	. /Users/johnb/.bash_profile && /usr/local/batchRunScripts/bash/view_morningpush_progress.sh > /mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/retouching_daily_breakdown.html && php -f /usr/local/batchRunScripts/mail_sql/morningmail.php
 #CrInfo Update view and send html morning Retouch email status THE LAVENDER REPORT
-04	8	*	*	*	/usr/local/batchRunScripts/morningEventMailIncompletes.sh
+04	8	*	*	*	/usr/local/batchRunScripts/bash/morningEventMailIncompletes.sh
 #CrInfo Update view and send html morning Retouch email status --- ONLY USED FOR SEARCH LINK REPORT UPDATE
 59	7,10,11,12,13,14,15,16,17,21	*	*	*	/usr/local/batchRunScripts/morningEventMail.sh
 #CrInfo Update view and send html morning Retouch email status
-#CronniX 59	7	*	*	*	. /Users/johnb/.bash_profile && /usr/local/batchRunScripts/view_events_progress.sh > ~/Dropbox/Dropbox_sites/queries_run_search/Reports/event_progress_14days.html && php -f /usr/local/batchRunScripts/mail_sql/eventmail_sp.php
+#CronniX 59	7	*	*	*	. /home/johnb/.bash_profile && /usr/local/batchRunScripts/bash/view_events_progress.sh > /mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/event_progress_14days.html && php -f /usr/local/batchRunScripts/php/eventmail_sp.php
 #CrInfo Mail to Conrad and myself shot counts
 #CronniX 52	8	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/numbersDailyMailPhotoOnly.sh
 #CrInfo Rsynch Kayla'sm Consignment files and Dirs to ImageServer7 consignment from Xdrive---Every 1 hr--Includes renaming of dirs to remove spaces
