@@ -10,8 +10,8 @@
 /usr/local/batchRunScripts/bash/import_prodsnapshot_livedata.sh & \; 
 
 ## 2nd dssprd1 import
-/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/importData/importEventStyleInfoPMA.sh &
-/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/sampleAgingImportpma.sh &
+/usr/local/batchRunScripts/bash/importEventStyleInfoPMA.sh &
+/usr/local/batchRunScripts/bash/sampleAgingImportpma.sh &
 /usr/local/batchRunScripts/bash/importSampleVendorStyle_pma.sh &
 /usr/local/batchRunScripts/bash/import_prodsnapshot.sh &
 /usr/local/batchRunScripts/bash/importSKUToPhpMyAdmin.sh & \;
