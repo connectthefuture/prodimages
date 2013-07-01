@@ -5,8 +5,8 @@
 pmPhotoDir=/mnt/Post_Ready/zImages_1
 pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
 zoomPng=$pmPhotoXdir/zoomPng
-#dirStill=/mnt/Post_Ready/Retouch_Still
-#dirFashion=/mnt/Post_Ready/Retouch_Fashion
+dirStill=/mnt/Post_Ready/Retouch_Still
+dirFashion=/mnt/Post_Ready/Retouch_Fashion
 
 ###-------Time Logging
 dateLog=`date`
@@ -17,8 +17,8 @@ echo "Start _All_ $dateLog" >> $LOGDIR/FindMakeLowres_log.txt
 #find $pushFashion -type d -mindepth 1 -maxdepth 1 -exec cp -pR {} $dirFashion \;
 
 ## Double For loop to find and convert recent pushes for Zimages
-fileListD=`find ${pushStill} ${pushFashion} -mtime -25h -maxdepth 1 -mindepth 1 -type d | xargs -L1 -n1`
-#fileList=`find ${pushStill} ${pushFashion} -type f -mtime -27h -iname \*.jpg`
+fileListD=`find ${pushStill} ${pushFashion} -maxdepth 1 -mindepth 1 -mmin 2000 -type d | xargs -L1 -n1`
+#fileListD=`find $dirStill -maxdepth 1 -mindepth 1 -mmin 2000 -type d & find $dirFashion -maxdepth 1 -mindepth 1 -mmin 2000 -type d | xargs -L1 -n1`
 for d in $fileListD; 
 do
 fileList=`find $d -type f -iname \*.jpg`

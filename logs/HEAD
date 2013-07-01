@@ -4,3 +4,21 @@ c3ae0624600dcacf92792715c9ee604de0e613be 86bf13174cb17112f42945251483789998ebafa
 86bf13174cb17112f42945251483789998ebafa7 d51906a2040731d8fb8deab917f31b1f49b89460 root <root@prodimages.bluefly.corp> 1372301609 -0400	commit: ini
 d51906a2040731d8fb8deab917f31b1f49b89460 f8e9ab7eab395a7d72cc7b8e9fb3fd3ec597c48e root <root@prodimages.bluefly.corp> 1372301640 -0400	pull git://github.com/splitbrain/Watcher.git: Merge made by the 'recursive' strategy.
 f8e9ab7eab395a7d72cc7b8e9fb3fd3ec597c48e b642ba9e29cd45bb1d7b290e0982fa4d5273cd56 root <root@prodimages.bluefly.corp> 1372301721 -0400	commit: commit
+b642ba9e29cd45bb1d7b290e0982fa4d5273cd56 cfa9f333cef35f33ef86ce497ed603db35b55fc4 John Bragato <jbragato@yahoo.com> 1372356970 -0400	commit: updates to mail scripts
+cfa9f333cef35f33ef86ce497ed603db35b55fc4 3457968583cbfa8bd68054bccc1672a0f434f15e John Bragato <jbragato@yahoo.com> 1372357442 -0400	pull prodimages-dev master: Fast-forward
+3457968583cbfa8bd68054bccc1672a0f434f15e f08c9bc1926751168c26d476c0364d100e627d59 John Bragato <jbragato@yahoo.com> 1372357931 -0400	pull prodimages-dev master: Fast-forward
+f08c9bc1926751168c26d476c0364d100e627d59 9dd5f01e43127d351ec1f8377e5f04250c5f4ba3 John Bragato <jbragato@yahoo.com> 1372358684 -0400	pull prodimages-dev master: Fast-forward
+9dd5f01e43127d351ec1f8377e5f04250c5f4ba3 5a17400b48b1d26794eaea01c343f61adefc5280 John Bragato <jbragato@yahoo.com> 1372359078 -0400	pull prodimages-dev master: Fast-forward
+5a17400b48b1d26794eaea01c343f61adefc5280 ee429eca30f6e59de996b66e13173c78f92a7eb9 John Bragato <jbragato@yahoo.com> 1372359284 -0400	pull prodimages-dev master: Fast-forward
+ee429eca30f6e59de996b66e13173c78f92a7eb9 65d3c2ea595c684565cc2a6a391ab5f07833cb76 John Bragato <jbragato@yahoo.com> 1372359392 -0400	pull prodimages-dev master: Fast-forward
+65d3c2ea595c684565cc2a6a391ab5f07833cb76 2d964cffde35e112a823f8a597ecbe86a399f91f John Bragato <jbragato@yahoo.com> 1372359570 -0400	pull prodimages-dev master: Fast-forward
+2d964cffde35e112a823f8a597ecbe86a399f91f 4eff02b5d302378612d1eecc3edcbebcb804ea20 John Bragato <jbragato@yahoo.com> 1372363853 -0400	commit: watch
+4eff02b5d302378612d1eecc3edcbebcb804ea20 569a7f149f4f923f965735cb64a61bc44a2ab040 John Bragato <jbragato@yahoo.com> 1372365911 -0400	pull prodimages-dev master: Fast-forward
+569a7f149f4f923f965735cb64a61bc44a2ab040 24e7515d7ada5d9654415ce81d8b0d9fb4f45418 John Bragato <jbragato@yahoo.com> 1372369064 -0400	pull prodimages-dev master: Fast-forward
+24e7515d7ada5d9654415ce81d8b0d9fb4f45418 cf7b110894aa72c9ab28b744e4322b937656cb63 John Bragato <jbragato@yahoo.com> 1372371170 -0400	pull prodimages-dev master: Fast-forward
+cf7b110894aa72c9ab28b744e4322b937656cb63 704d185032ed09e59a942d348ba7f81e2c7b39cf John Bragato <jbragato@yahoo.com> 1372372740 -0400	commit: added
+704d185032ed09e59a942d348ba7f81e2c7b39cf 7dfca9cae846b3300fb657db97aceb034cedbe9f John Bragato <jbragato@yahoo.com> 1372372890 -0400	commit: dir
+7dfca9cae846b3300fb657db97aceb034cedbe9f 8ea1acc6f60eed582ea3151c60efae8188d4012f John Bragato <jbragato@yahoo.com> 1372442594 -0400	pull prodimages-dev master: Fast-forward
+8ea1acc6f60eed582ea3151c60efae8188d4012f 2c95760ac2130677ab4064ba1ec96f3c7468a092 John Bragato <jbragato@yahoo.com> 1372443811 -0400	pull prodimages-dev master: Fast-forward
+2c95760ac2130677ab4064ba1ec96f3c7468a092 a71da6ecb04990edc6d343a5779e0cf5dd8f374d John Bragato <jbragato@yahoo.com> 1372458203 -0400	pull prodimages-dev master: Fast-forward
+a71da6ecb04990edc6d343a5779e0cf5dd8f374d 407b0be2c30b29f1ce32aa414de8bae9fe60c06d John Bragato <jbragato@yahoo.com> 1372459713 -0400	pull prodimages-dev master: Fast-forward
