@@ -1,4 +1,4 @@
-cmt
+commit statusev
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
@@ -8,8 +8,7 @@ cmt
 #	modified:   COMMIT_EDITMSG
 #	modified:   FETCH_HEAD
 #	modified:   ORIG_HEAD
-#	modified:   bash/importEventStyleStatusImgCpy.sh
-#	modified:   bash/view_events_incomplete.sh
+#	modified:   bash/importEventStyleStatus.sh
 #	modified:   index
 #	modified:   logs/HEAD
 #	modified:   logs/refs/heads/master
@@ -85,6 +84,7 @@ cmt
 #	objects/09/e7fd6c9a596c3e3b3074b160440808939d4d88
 #	objects/0a/0264f02c2dccc0e39bcffa5f5d1fe744265cc4
 #	objects/0a/300c1e68c55b315586ee0a1a0c49ab0f1e0049
+#	objects/0b/3a6dbcca63efb4eeb79787dae873e3d34af368
 #	objects/0b/3f444d26d0f6af3003fc4bc8a5323794106217
 #	objects/0b/77bc148d71261adc489d91c7ec4049e499b523
 #	objects/0b/b224198077adb3e83c8358048b3f1823f5cfa8
@@ -100,6 +100,7 @@ cmt
 #	objects/0e/342772222a811b220f8dd9ee3a7fa8d399c793
 #	objects/0e/698c30bd6e5e31bf8034f9fe07b7e3b55f3941
 #	objects/0e/f48774acce2c5e3aad9ff196ba965bd6f51ba6
+#	objects/0f/553c8bc36766899dbed987fbb02d4956853e13
 #	objects/0f/8ad16504be0b443642063146b24bd15326cd0e
 #	objects/10/092d2ce28bbf723933982cead43b5de97a52c5
 #	objects/10/a3622294601979fea4821ed5fe4f1b670085c4
@@ -160,6 +161,7 @@ cmt
 #	objects/1b/5cad90fa2b8766e5d7a5a01c2a081b1cbbd038
 #	objects/1b/a0e6e5bf7d793677b4f25cf1484f469b41b646
 #	objects/1c/176fb67d3052a51be21777f333df8fb8a6b753
+#	objects/1c/4838c2dc5bbf10a45e6fbc781216c6d86fdad4
 #	objects/1c/642b993f1e92c8358f9191419e7c4825a64204
 #	objects/1c/7f8efe922d474f441317a87912ede3e0d53bab
 #	objects/1c/84c40ae9046dc396a35669f3d630ca866bb824
@@ -243,6 +245,7 @@ cmt
 #	objects/2d/964cffde35e112a823f8a597ecbe86a399f91f
 #	objects/2d/9b650c5f67a797121cf89d21cd2e456fa994f0
 #	objects/2e/5ce65c3365ccb18386543dd8a908972e952575
+#	objects/2e/a4ec944366f7dfa7a3deda8c3a3ac41faca39f
 #	objects/2e/d8aae39fc4356f15d878241ba1ae80d13de11a
 #	objects/2e/e9476e576cf6632a90309c9e8df40678ccb816
 #	objects/2e/f3176059fc4d6f3490db8404401a3ae38d8c33
@@ -280,10 +283,12 @@ cmt
 #	objects/34/335aeaa3821b68e33b4df5b6ac415a134178a1
 #	objects/34/36ec06a29e99d9646e5a883da1e444f6649787
 #	objects/34/57968583cbfa8bd68054bccc1672a0f434f15e
+#	objects/34/f69836886dff2d4c1cd033c63ce5765caeba3a
 #	objects/35/08f4a78705f1de82d5b82b3d912cb4afc06f87
 #	objects/35/20ecc548ef642349968f40da2e2aa8cc3b5cd7
 #	objects/35/3b4544b0999bbff69e916f8ad29b179fa26732
 #	objects/35/e90181d8d34d4f2c809779f046c967993263bb
+#	objects/35/edd244ba0e2ed34bff97803f3da0e829887e38
 #	objects/36/968525732b3ef80895c6e343f8eb8c42e03bea
 #	objects/36/c8ec09f6be3724c91fb82c9bbb55d536803e33
 #	objects/36/e277a7f61e1d794c1fcba26edd97437e466205
@@ -316,6 +321,7 @@ cmt
 #	objects/3a/b0fe240663220d5edf7b10ad2bd73f28b0ffc9
 #	objects/3b/08c399629fa6612ff579a462a36eb59530c45e
 #	objects/3b/1ac2022e14e7a84003944e3c296635cee25a27
+#	objects/3b/3cc4bf5f6e73a9453f47fb30aae79d39ece049
 #	objects/3b/7ba5372b5a7600088e8b0b26f2204e77666f5b
 #	objects/3b/aabd39b36f15accdbab96a6129b2ee43167b0d
 #	objects/3b/fb7c80c2afa67b934c0ed2ffd35d2348780fb6
@@ -333,6 +339,7 @@ cmt
 #	objects/3d/c7cf71f03f96cc9893442503ac30eaaf707f19
 #	objects/3d/d1ae0db55a9af8df4db51048830ddfd2c4b153
 #	objects/3e/5b480c65bdd292cd99f8645261d88d5bc5db63
+#	objects/3e/791526941d5ede87715e9e4b77bbb52fbd9fe9
 #	objects/3e/a308c2d73067f12c7ddb1f20bc3708f64a86ae
 #	objects/3e/aec0170ead5f14df5b5d572da8257f5825e388
 #	objects/3e/fc675fa8221a244e49307497710941d21ff0a2
@@ -350,6 +357,7 @@ cmt
 #	objects/40/960c1931ce9faf100e21530dd93af17a03eec6
 #	objects/41/1b1db0b20e71b2817dc789b8a88eff0cb648af
 #	objects/41/8b437a1ccf8347e7fc65e006bd9cee9fe8dc51
+#	objects/41/b23e50af32074d12d388418d28facda3b27af7
 #	objects/41/fa081592d45662ab61da204bc3be4e925ecc15
 #	objects/42/32a38d4d11c8ce57d31298ba8c93db07bb6e85
 #	objects/42/39748dd22873c135b21b781edc4949e533acda
@@ -383,6 +391,7 @@ cmt
 #	objects/47/885308a8cf0ea192bcd6578c0bcc96c3155df4
 #	objects/48/03fa0488e234572f926b098bef7666a69f2ca5
 #	objects/48/64d116f69c0ab25ae68e4a5f3f238ac3503609
+#	objects/48/ac87d00fcf360ef79b546fb128ced2fa81e118
 #	objects/48/c5d1883ae4aa26200fcb9ee76148f2d34f9eae
 #	objects/49/111d6eb1650c62a21cdad57503a75c5cb23378
 #	objects/49/78dd6a8b629cb183c3b1e74e5aa88220563d16
@@ -408,6 +417,7 @@ cmt
 #	objects/4e/4d24ea3b7bd75c208f28a8339dcf3677e10719
 #	objects/4e/5afe524ff95a808c0323887542c1165ae34e24
 #	objects/4e/6cb22a4be178e9325192a79939754948f91fca
+#	objects/4e/899ea208bdc0cf12fc44c5a5d20cd29a1c04e6
 #	objects/4e/ff02b5d302378612d1eecc3edcbebcb804ea20
 #	objects/4f/2596c6be71db4fa17796fc2d14e8b841e11694
 #	objects/4f/526fffdee501ef023e9e0ce149f6c8a48f230c
@@ -429,6 +439,7 @@ cmt
 #	objects/52/f7199ba77efb873b3c09be5f209c5eba41e5ee
 #	objects/53/32075c6d5aa788f385f4f893cafb570a8ea72c
 #	objects/53/502c867efda2b9224721d081c4339765d5fc49
+#	objects/53/7e77823c58bdda4281a60e24c1221e01137a7c
 #	objects/53/8b98bf3b46bfdb6d8b48ba5c10549230629dcc
 #	objects/53/917fb68e0304aff1baae750bc119e7f26c5275
 #	objects/53/ab12b41d63eaa17d8f2d2189cf33fae4bb0806
@@ -553,6 +564,7 @@ cmt
 #	objects/67/08e2ea7169022b65c98a4ace91a517cd71f329
 #	objects/67/c82a506b413bf849b615da885710a2de6ac3e0
 #	objects/67/f37f6399ada5029740532b29533b1a93704c02
+#	objects/68/41c1f8dffae54a1fcd2f911fec18ccb17245b4
 #	objects/68/4279ad8031919a2d16a5d6e231bd72fbca487b
 #	objects/68/cf8a5daf1699a81f38c8b2880d785ca2eb9a4a
 #	objects/69/306aaf8c4744e3b8b9f5c7d28518e6fb030be1
@@ -627,6 +639,7 @@ cmt
 #	objects/76/56327709465e4c7eafce3a23428e023f63da01
 #	objects/76/7db7c6ffdab33becbac57e8b74f6919fd6a9ad
 #	objects/76/7e778cbe140989ca7ed0470aff581b691437c6
+#	objects/76/d116a9419343952c04c44f850922fe6a8260c5
 #	objects/76/e2ec1ce52210c8e20b9a6c4ade6594652244f5
 #	objects/76/f15f766b6b65c5175d11c40ea9528b7dacebd4
 #	objects/76/fc8cd93b556ae30aced7d41a908928c0b84e1a
@@ -749,6 +762,7 @@ cmt
 #	objects/8a/b4483a43b4021736c75eca1b7200e82ed37391
 #	objects/8a/d8686d87e5700d72c83f60a99ed292b4089f9d
 #	objects/8b/030ca02bf65e054c0ac2b0e9b93cbe158c2116
+#	objects/8b/19f4f7a7c154f3d3b96db074f1ac8c387e4ab7
 #	objects/8b/346b700423f3bd562791a842b4e0c2b8e8cd66
 #	objects/8b/40a87ab7ba768276bd9d015fb66da2d618a2c6
 #	objects/8b/4cda78321e2c81f9255a1fd857c74cb07ca2d9
@@ -814,6 +828,7 @@ cmt
 #	objects/97/15da9756d7a9cde76626fd7e1e52c8422195c5
 #	objects/97/67831d569df89df9841d8fb4c3e0b97bd78137
 #	objects/97/8b45a5fa7f4101bbcbf300998927e893d856b5
+#	objects/97/e22b91d043af7d5ec458122b150035c7c6ad0c
 #	objects/98/00214e30e7307d9e127d34ee15e46cd36c05fc
 #	objects/98/deeb4e674e2feebf68f2ac87db8b76f4151c0c
 #	objects/98/e0fb95f9f4507b40579d248f2a2136bb410101
@@ -926,6 +941,7 @@ cmt
 #	objects/af/78127d9c9429b17d2af08fe8d19d53e166dae6
 #	objects/af/b34caa224c0db1d3e07da01540307cfc2b1326
 #	objects/b0/11055d27b07418cf70f3d959033ff7e50032c8
+#	objects/b0/47592b762839cc37d0f92a3ca947a259f32680
 #	objects/b0/51120092615bbc2f066c2f27878dd4d36ee9e0
 #	objects/b0/8df7df30ec4d1fa9352cc45cb740986f0c74ba
 #	objects/b0/b9e811f47859b5516d07cb606df3a90e7480ff
@@ -1007,6 +1023,7 @@ cmt
 #	objects/be/60821fd38b90caff6ef4d433cdec37ed144bfc
 #	objects/be/767f27c1c366150899c74cd7fa4ae6a2c47eb2
 #	objects/be/cbdc13ea7affb0769eb641e5d744e1d4be87b4
+#	objects/bf/66ef216728c01992f3b23c9ecd2c0f00aa2f07
 #	objects/bf/ccb031823bdf015b68b547cb05da1d40ffc2a3
 #	objects/c0/1ad5040c6b938a79ed14475028a26a266f77f2
 #	objects/c0/2c6b0f2ed51da091fe5199a1e00f260d7e97e7
@@ -1183,6 +1200,7 @@ cmt
 #	objects/db/fa32365c3477797f57c4291123843296605c0d
 #	objects/dc/176b1e26bf2b403b2c18552820c4137298132a
 #	objects/dc/3efae57c45b85d66edd01f4c732a072769aa94
+#	objects/dc/55b5a5754f737f8c6794c5306f3a274000e5d9
 #	objects/dc/5ec7a0f72505d298620259f0f8e165cb4d12d6
 #	objects/dc/769bae515f29244ddf5570fb017efe4a8dc665
 #	objects/dc/8c7674197eaf87a878cc296d1fb4ac42b9366c
