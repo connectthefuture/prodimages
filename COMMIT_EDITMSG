@@ -1,16 +1,9 @@
-commit
+cmt
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
-# Explicit paths specified without -i nor -o; assuming --only paths...
 # On branch master
 # Changes to be committed:
 #   (use "git reset HEAD <file>..." to unstage)
-#
-#	modified:   bash/view_events_progress.sh
-#
-# Changes not staged for commit:
-#   (use "git add <file>..." to update what will be committed)
-#   (use "git checkout -- <file>..." to discard changes in working directory)
 #
 #	modified:   COMMIT_EDITMSG
 #	modified:   FETCH_HEAD
@@ -18,7 +11,6 @@ commit
 #	modified:   bash/importEventStyleStatusImgCpy.sh
 #	modified:   bash/view_events_incomplete.sh
 #	modified:   index
-#	modified:   index.lock
 #	modified:   logs/HEAD
 #	modified:   logs/refs/heads/master
 #	modified:   logs/refs/remotes/prodimages-dev/master
@@ -30,12 +22,12 @@ commit
 #
 #	bash/pmUpdate_singlePhotoDate.sh
 #	bash/view_events_incomplete.sh.save
-#	next-index-19996.lock
 #	objects/00/2c87572a175310a258e7de3e54aa7c08c29e17
 #	objects/00/436ddde68e0837e65c122f474d259752d9f179
 #	objects/00/490d09aa01813754cfe2f260ba978bb712e35f
 #	objects/00/69c7a9356a83be7df65cf6edf919243a7b426c
 #	objects/00/8975f32020225987263ae3fce3c4a59428cbe5
+#	objects/00/a858827f4f1b83a2d49aca5cc1f1af347afa22
 #	objects/00/e17c4caf9543f6ebb3d65fb41fd6f0ccd469fe
 #	objects/00/e28fae3342b739e01453f7f32b00ecf99353c1
 #	objects/01/19a2f2565401ad0b00094b3f65e250fab3e3a5
@@ -169,6 +161,7 @@ commit
 #	objects/1b/a0e6e5bf7d793677b4f25cf1484f469b41b646
 #	objects/1c/176fb67d3052a51be21777f333df8fb8a6b753
 #	objects/1c/642b993f1e92c8358f9191419e7c4825a64204
+#	objects/1c/7f8efe922d474f441317a87912ede3e0d53bab
 #	objects/1c/84c40ae9046dc396a35669f3d630ca866bb824
 #	objects/1c/c9322ccfb6517a3fc151c0de8003141ebdc656
 #	objects/1c/d2b34425bd4dff35c9ca025b4851cffa16ee3d
@@ -196,6 +189,7 @@ commit
 #	objects/21/a855a2fefecd05b907177d9da0b21df4425d22
 #	objects/21/b0aec072bd6ec073e19ea581dbadda93688777
 #	objects/21/bbacaa232cdce463744c3cb017fd8816a4a073
+#	objects/21/cf0be82217e7bbf16b8b9559f254fcc36b3fe5
 #	objects/22/03871e7fcd083b2818f48f5fcbe881ad909679
 #	objects/22/44f1182f73dbc15fbe40a9f9c4ba1b604e713f
 #	objects/22/8e53b38ee5e63c3d90d08e9f19e84149ef1dc6
@@ -237,6 +231,7 @@ commit
 #	objects/2b/824fad2fa47d706b57ecff5b007702628cf054
 #	objects/2b/902553b686dcd578236e0ae3ed94c27b2737d1
 #	objects/2b/eeec21049ce5b90ae22a4d7230250dbf047daf
+#	objects/2b/f6523a335ab39e7032795ebbbe02ffc9a6cc00
 #	objects/2b/f654ae0645b2a44c8608f143af964bc8403b23
 #	objects/2c/16f4b225906ceb751679d26b78727e2dc2a5b8
 #	objects/2c/5483a7e32daa3935a6b4908773b885460710c3
@@ -281,6 +276,7 @@ commit
 #	objects/33/1a3df4f74afddf3a4af2c96b0d74782310e2da
 #	objects/33/2939727406cd267845307b2f12fed64e85958f
 #	objects/33/4ff3cb2e3b73ae15f0fbab8f961497bccbf3de
+#	objects/33/9c18f9e294f720435ffbec39bbcb2e39220404
 #	objects/34/335aeaa3821b68e33b4df5b6ac415a134178a1
 #	objects/34/36ec06a29e99d9646e5a883da1e444f6649787
 #	objects/34/57968583cbfa8bd68054bccc1672a0f434f15e
@@ -439,6 +435,7 @@ commit
 #	objects/53/bb33f05b4333e71836973479079dcb4920011f
 #	objects/53/bc83f5ab97f6b4ed032c56223ca76940ce693b
 #	objects/53/c36783b5887f4c1f245555070dc7df266b5554
+#	objects/53/e7f07df7d927af04e58e2d483e4efdd9dba1e6
 #	objects/54/12b0e7c4d964646e5b73bddcd0d3f64e724171
 #	objects/54/1671f1e1a0c88581c51501c6c1711067bf0faf
 #	objects/54/18fc7b49742ca78edd855156b8d396991ca208
@@ -470,6 +467,7 @@ commit
 #	objects/57/dd6065766328b3442405e322ed658ddc9792ae
 #	objects/57/e5ef4eca9b6f0723087ca21476fbd4fb1da66f
 #	objects/58/436ae16968d0fecc063586772a9da7aa2c789d
+#	objects/58/45c973eb4bd774a28955cef39768a8227a8f25
 #	objects/58/7b0db140a965ae536fbfdcb7d305dd242f9d11
 #	objects/58/a3fc452b812cba09fa89f1c3661b3f564b0c70
 #	objects/58/edcf951bff676ed8effbb0ba131938fcaadd6e
@@ -479,6 +477,7 @@ commit
 #	objects/59/4e4368d4f3ca389984e9ddef18cde73e900ada
 #	objects/59/88ace022da7ed6a875c616e76ffa9aa0ec9822
 #	objects/59/c870ae9c68249172812bbdd66c6d4a09c7b00e
+#	objects/59/cd5db7e44451d97a2e5a631bb68a5152bfb46d
 #	objects/59/e70f7f88f2e63d1f0c1f2ed51a3f3815e461b1
 #	objects/59/e9507bc8ff4efbe8a90e727ce24907c4f8eced
 #	objects/59/f3839fc1b5406c6da70cf270b6fd700274eff9
@@ -500,6 +499,7 @@ commit
 #	objects/5e/0ee055bb79687c6a17a9d8173e693f0f73da2b
 #	objects/5e/1b63c4c8e5c12d0f93595e43d23bc6221a1ff9
 #	objects/5e/1ce8403f8447d7678b0d3ebe8a851dc589fc89
+#	objects/5e/2d799e07ef628485ffd66f888ace22e960e371
 #	objects/5e/49fa5dc0bf1e0993a2481b4c5722648755ffdd
 #	objects/5e/64d464da8d060ade0523ae66a0ea168571558c
 #	objects/5e/72b03e61890683bc23b5f024fa94f6693e3d34
@@ -543,6 +543,7 @@ commit
 #	objects/65/32d7256c5c0b004889179399a4eecfcfa32a41
 #	objects/65/c992ac8ef2e69b986af46e8725be30adbcbbdf
 #	objects/65/d3c2ea595c684565cc2a6a391ab5f07833cb76
+#	objects/65/ddc83665b888e89868aaaef2d0c0cfa3ba7cfe
 #	objects/65/e2f2b45e76ae9f2ed10498729e3a3dfffc3838
 #	objects/65/f6fecd7b4cc11897190cfc12b8a75be6460d2c
 #	objects/66/7540b831875464a75e1ed0467abcb94a9c7da7
@@ -590,6 +591,7 @@ commit
 #	objects/6f/57352556348678d386303b4046054a10bfce91
 #	objects/6f/6e68c0b923b96e9f0b9df7b9e0c3bb92fb8ccc
 #	objects/6f/786b1af4db5393111736ac879c8179a13c32a6
+#	objects/6f/a80fc7545522779fda4b9529edac4581f436eb
 #	objects/6f/ec00e819c3a7d08e28be611c3c6110237c2852
 #	objects/70/159170ac0f3807f5d8593a885bb6e238349883
 #	objects/70/4d185032ed09e59a942d348ba7f81e2c7b39cf
@@ -664,6 +666,7 @@ commit
 #	objects/7c/4fe72dd3c3ab8a6cfc86ee424ed485a27a6ad4
 #	objects/7c/76579ade695096205da781477c4485e8af21c0
 #	objects/7c/b0ee4a482d49b6f972dff5912d1cbabaf2c00f
+#	objects/7c/cf1fefa02a5c51fc93c8babee87a68db7d1243
 #	objects/7c/cfeca06b711f2055b6276e5199fff8d3856957
 #	objects/7d/11cceeb6d94b12830d1336c2cdbd0fa7caa1ba
 #	objects/7d/196915580a98614c540a8e4e96de3b8bed7492
@@ -755,6 +758,7 @@ commit
 #	objects/8b/8e9be74b18954052e8f9c630d4162a595be072
 #	objects/8b/e450e241ac253378afece64a2ee06c8a5f100f
 #	objects/8c/0221cdedd432d2ea0fb23fb2f2f6e6b46a92c3
+#	objects/8c/34a810f26afefd8b2ab1dfc6bc7c6b0ebfb16d
 #	objects/8c/c10a557640c8478da7aab23d0f692287266216
 #	objects/8c/e97556660e1dd1da21e2f085ea0a70d9b9d632
 #	objects/8d/5b4c11e6eca3b8de89c03fdbff8e5070890fae
@@ -771,6 +775,7 @@ commit
 #	objects/8e/90b43c12b446a8cbe4822c07e6e08d8363c1bc
 #	objects/8e/a1acc6f60eed582ea3151c60efae8188d4012f
 #	objects/8f/225d78a199e41909413604b0919f89dedeaca8
+#	objects/90/137fba6ca18632945ecde10f7e67f07e370b90
 #	objects/90/ce43792a9d5aa574e735ed2768fa30219bca31
 #	objects/91/1fc9943103aab21df9a15226c9d8b570e34710
 #	objects/91/82d5f1fdbf2b8e3a343ff634a47f1ca4de7a08
@@ -804,6 +809,7 @@ commit
 #	objects/96/3e68d9b624b678a2c26e6830349679e6d9dda4
 #	objects/96/a28e391c2214c867612ba0b068e09618763830
 #	objects/96/ccae7ca20e4b1f0deeeb0502e00216fecd24f4
+#	objects/96/f2f066d73dbdfc8fc9148a5e70d62040ed2617
 #	objects/96/f9b6353a710c11fc0541890aa95bff2b1ab68e
 #	objects/97/15da9756d7a9cde76626fd7e1e52c8422195c5
 #	objects/97/67831d569df89df9841d8fb4c3e0b97bd78137
@@ -836,6 +842,8 @@ commit
 #	objects/9d/a2f6f03fd8e32336b9ad4cbbd9f20c1ab99bcb
 #	objects/9d/cd472b0f0f6da40be8f8538a61f09ae62bfa52
 #	objects/9d/d5f01e43127d351ec1f8377e5f04250c5f4ba3
+#	objects/9e/403be271a64fb9f2c3826b91cd09a10546c67d
+#	objects/9e/4d8f67c2c3040d8780bf047a7481dbf8f7d36f
 #	objects/9e/4f2aca965d6fd3da22f3f77e4503b6ac6270fb
 #	objects/9e/7c2cc8f731250ac10de852d69397af8779e778
 #	objects/9e/b8d694b9050f5e67ca61f5cbcf8b9c7a631dee
@@ -860,6 +868,7 @@ commit
 #	objects/a3/ffe88127eecfdd6d329f32fb12d08754a3127d
 #	objects/a4/3d009f1862db753e3b6ef46feab6aef437a0a6
 #	objects/a4/40564a6390b2bd79bbf64a4de1c1b87955e9a6
+#	objects/a4/c2b8005acbbd385c391e49603c071170e3294a
 #	objects/a4/f7e65e0fb96d30ae5e72a17c703634409ee755
 #	objects/a5/8a837e75dce7109afb1251101d919508dba7b9
 #	objects/a5/920d4eb18f35baee5d2150eb518eb347ab12ea
@@ -945,6 +954,7 @@ commit
 #	objects/b4/bc9e77e3af609279832e931e127b3ec7f1d08d
 #	objects/b4/dd7d139338d5ca51b878bb0d0f2128d6f66cb9
 #	objects/b5/103f82ce168ded585d60afa6174d38dd8a8863
+#	objects/b5/554f24ec49ac10c4317f1ee134546e930038bc
 #	objects/b5/6da5dc61487f25d6ee826692ccb31ff1c04887
 #	objects/b5/7271059d219277eb722bbef7271e961817f409
 #	objects/b5/b1adc0290c2f21dc6b86dd2dd1547b23734426
@@ -980,6 +990,8 @@ commit
 #	objects/bb/7363744709b07a0af4be7c53aa4c042d8719f4
 #	objects/bb/a65ebe39fab8d71adba825687ce8b126fe4b2c
 #	objects/bb/b4719c5611e7637569c14a3ea2a157075fbb08
+#	objects/bb/b86756b0ab893795975e44420044e6785ce4af
+#	objects/bc/3832e1834ef4cc57834a86e1b8c71b452d9c11
 #	objects/bc/631246eb4909256743b369ff9494911db997f1
 #	objects/bc/d53151dfccc55ea410ce219229eb6d1614c493
 #	objects/bc/d8a2b6f36933af693d6bb1b5d8cea60f9fbdd0
@@ -1147,6 +1159,7 @@ commit
 #	objects/d8/9785ada08e6f076fc90db79099c4b4a9b63c87
 #	objects/d8/d3b55c4c29036bcc6810cd524e288f8437e12c
 #	objects/d8/dbdf5fd711d126d9545ed40784e2a6c06e9953
+#	objects/d8/ef75086b495c4e4b5a6c0090ab1c562444262e
 #	objects/d9/2f00e53bb7042a77fdf40cc494365b44c9cfa7
 #	objects/d9/801a81e4c5619e56014400af85b9fc4dd4c1a4
 #	objects/d9/856bc6671bd701a87878f85b31ac5d728654e1
@@ -1235,6 +1248,7 @@ commit
 #	objects/e7/c010ff311fc44d0b3a51b42d13201e56c58e7f
 #	objects/e7/e45f27664101fc56d040ccb4449ab4fa26a1c2
 #	objects/e8/87df631abc1e7637b35bece2c89f7f4a4443e8
+#	objects/e8/8ef166a6b2aadd72ce10c2b397d9d903df5dc0
 #	objects/e8/ba3d2c8c2e1f426269184ded2a3e99cebdee9c
 #	objects/e8/de4f3e1cdcfbb071c78d9baf7bd612870ac67c
 #	objects/e8/f04044fe0c2aba7a2773353516150cf46ff5d0
@@ -1312,6 +1326,7 @@ commit
 #	objects/f8/b3ceb279ac10306f51040931891ff61d8c374b
 #	objects/f8/ba8c698852f1ed4ca4879ccb818812c84d5c8f
 #	objects/f8/fea10f5c7ac739edf4bc309cd1102cfdc16892
+#	objects/f8/fffdd7f05eea92f472032cef280a1c81801c06
 #	objects/f9/7982b3f3ff1a7c45b6856013e3ad500d6ebd4c
 #	objects/f9/9f40377c031d61198b0768cb0dda6347098fd2
 #	objects/f9/b216dd6a82add24b3efee53201bce7d3fb1136
@@ -1343,6 +1358,7 @@ commit
 #	objects/fe/4baa6888b32dd340fad0acf344ce4454898b67
 #	objects/fe/5f9e6a1949789ee21cc3a026c411f638109b61
 #	objects/fe/d0f29520718186a661d7e32e275a411388ecc6
+#	objects/ff/8040498da8aa407cd711085f47ef6fe70ab4a8
 #	objects/ff/8e4fdaf05f70ed0e7f2d01828fee705e8a8bfd
 #	objects/ff/934106f388abebee3e638d9c0f1d1548c57736
 #	objects/ff/9c7f706eeaab612f714aa09d0e75b7b27ff1b8
