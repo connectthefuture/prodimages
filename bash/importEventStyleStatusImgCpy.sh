@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . ~/.bash_profile
-. ~/.bashrc
 
 DATE=`date "+%Y-%m-%d"`
 DAY=`date "+%Y-%m-%d-RetouchToDo"`
