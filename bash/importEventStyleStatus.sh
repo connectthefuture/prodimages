@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . ~/.bash_profile
-. ~/.bashrc
 
 DATE=`date "+%Y-%m-%d"`
 DAY=`date "+%Y-%m-%d-RetouchToDo"`
@@ -21,7 +20,6 @@ cat $dbOutRaw | sed 's/^ *//g' | sed 's/--//g' | sed s/'  '//g | sed 's/producti
 
 colNames=`head -1 $dbOutClean | xargs -L1 | sed 's/__/\,/g'`
 #cols=`cat $LIBSRV/headers_productsnpimport.csv`
-#colNames=`echo -e " "$cols`
 ##source ~/.bash_profile && sudo port load mysql55-server && sudo mysql5 --socket=/Applications/MAMP/tmp/mysql/mysql.sock --password=mysql --database=imageMetaData < $dbOutClean ;
 sleep 3
 ###<--------Import to Localhost MySQL db dailyImports
