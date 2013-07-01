@@ -7,7 +7,6 @@ DATE=`date "+%Y-%m-%d"`
 DAY=`date "+%Y-%m-%d-RetouchToDo"`
 
 ## RUN SQL Query spooling Queryt to CSV
- 
 
 dailyPhpMyAdminForImport=$SCRIPTS/sql/event_style_status.sql
 
@@ -29,6 +28,6 @@ sleep 3
 importMysql=mysqlimport
 
 
-mysqlimport --host=127.0.0.1 --port=3301 --user=root --password=mysql --fields-terminated-by="__" --default-character-set=utf8 --fields-enclosed-by="'" --fields-escaped-by="\"" --delete --replace --ignore-lines=1 --columns=""$colNames"" --local data_imports "$dbOutClean"
+mysqlimport --host=127.0.0.1 --port=3301 --user=root --password=mysql --fields-terminated-by="__" --default-character-set=utf8 --fields-enclosed-by="'" --fields-escaped-by="\"" --delete --replace --ignore-lines=1 --columns=""$colNames"" --local data_imports $dbOutClean
 
 exit;
