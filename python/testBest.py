@@ -30,7 +30,7 @@ for row in result:
             import os,sqlalchemy,shutil,datetime
             dt = str(datetime.datetime.now())
             today = dt.split(' ')[0]
-            today_folder = os.path.join('/mnt/Post_Ready/Daily', today)
+            #today_folder = os.path.join('/mnt/Post_Ready/Daily', today)
             file_path = row[0]
             file_name = file_path.split('/')[-1]
             #cmdargs = file_path, os.path.join(today_folder, file_name)
