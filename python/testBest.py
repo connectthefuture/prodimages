@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 
-
 import os,sqlalchemy,shutil,datetime
 mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@localhost:3301/data_imagepaths')
 connection = mysql_engine.connect()   
