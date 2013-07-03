@@ -11,8 +11,9 @@ styleStringTest=$DATASRV/csv/StyleStringTest.csv
 #retouchStill=/mnt/Post_Ready/aPhotoPush
 #retouchFashion=/mnt/Post_Ready/eFashionPush
 
-find $pushStill -type f -iname \*_\?.jpg | sed s/\ /\\\\\ /g | sed s/\"/\\\"/g | sort -k1 -d | xargs exiftool -d %Y-%m-%d -m -P -f -fast2 -'FileName' -'CreateDate' -csv | grep -e ^[2-7,{1}] | sort | awk -FS',' '{ print $0 }' | awk '{ gsub(/\ /, "" , $1); print $1 }' | awk -F',' '{ print $2, $1, $NF }' | awk '{ split($0, a, " "); print a[3], $1, a[2] }' | awk '{ gsub(/.jpg/, "" , $2); print $2, $1, $3 }' | awk '{ gsub(/_[a-zA-Z0-9]{1,5}/, "" , $1); print $1, $2, $3 }' | sort -k1.1,1.9 -n | awk -F_ '{ print $0, $NF }' | awk '{ split($NF,a,".");print $1,$2,$3,a[1]}' > $styleStringTest;
-find $pushFashion -type f -iname \*_\?.jpg | sed s/\ /\\\\\ /g | sed s/\"/\\\"/g | sort -k1 -d | xargs exiftool -d %Y-%m-%d -m -P -f -fast2 -'FileName' -'CreateDate' -csv | grep -e ^[2-7,{1}] | sort | awk -FS',' '{ print $0 }' | awk '{ gsub(/\ /, "" , $1); print $1 }' | awk -F',' '{ print $2, $1, $NF }' | awk '{ split($0, a, " "); print a[3], $1, a[2] }' | awk '{ gsub(/.jpg/, "" , $2); print $2, $1, $3 }' | awk '{ gsub(/_[a-zA-Z0-9]{1,5}/, "" , $1); print $1, $2, $3 }' | sort -k1.1,1.9 -n | awk -F_ '{ print $0, $NF }' | awk '{ split($NF,a,".");print $1,$2,$3,a[1]}' >> $styleStringTest;
+find $pushStill -type f -iname \*_\?.jpg | sed s/\ /\\\\\ /g | sed s/\"/\\\"/g | sort -k1 -d | xargs exiftool -d %Y-%m-%d -m -P -f -fast2 -'FileName' -'CreateDate' -csv | sort | awk -FS',' '{ print $0 }' | awk '{ gsub(/\ /, "" , $1); print $1 }' | awk -F',' '{ print $2, $1, $NF }' | awk '{ split($0, a, " "); print a[3], $1, a[2] }' | awk '{ gsub(/.jpg/, "" , $2); print $2, $1, $3 }' | awk '{ gsub(/_[a-zA-Z0-9]{1,5}/, "" , $1); print $1, $2, $3 }' | sort -k1.1,1.9 -n | awk -F_ '{ print $0, $NF }' | awk '{ split($NF,a,".");print $1,$2,$3,a[1]}'  | grep -e ^[2-7,{1}] > $styleStringTest;
+
+find $pushFashion -type f -iname \*_\?.jpg | sed s/\ /\\\\\ /g | sed s/\"/\\\"/g | sort -k1 -d | xargs exiftool -d %Y-%m-%d -m -P -f -fast2 -'FileName' -'CreateDate' -csv | sort | awk -FS',' '{ print $0 }' | awk '{ gsub(/\ /, "" , $1); print $1 }' | awk -F',' '{ print $2, $1, $NF }' | awk '{ split($0, a, " "); print a[3], $1, a[2] }' | awk '{ gsub(/.jpg/, "" , $2); print $2, $1, $3 }' | awk '{ gsub(/_[a-zA-Z0-9]{1,5}/, "" , $1); print $1, $2, $3 }' | sort -k1.1,1.9 -n | awk -F_ '{ print $0, $NF }' | awk '{ split($NF,a,".");print $1,$2,$3,a[1]}' | grep -e ^[2-7,{1}] >> $styleStringTest;
 
 
 cp $styleStringTest "$styleStringTest"_open
@@ -28,6 +29,6 @@ cp $styleStringTest "$styleStringTest"_open
 #egrep -o '\b[0-9]{9}' | uniq
 
 
-styleStringImportPma.sh
+#styleStringImportPma.sh
 
 exit;

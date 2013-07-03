@@ -8,6 +8,7 @@
 #	modified:   COMMIT_EDITMSG
 #	modified:   FETCH_HEAD
 #	modified:   ORIG_HEAD
+#	modified:   bash/styleStringTestMakerPushed.sh
 #	modified:   index
 #	modified:   logs/HEAD
 #	modified:   logs/refs/heads/master
@@ -107,7 +108,9 @@
 #	objects/0e/f48774acce2c5e3aad9ff196ba965bd6f51ba6
 #	objects/0f/553c8bc36766899dbed987fbb02d4956853e13
 #	objects/0f/8ad16504be0b443642063146b24bd15326cd0e
+#	objects/0f/9753177aac43319f16b1ca921e0735468255a8
 #	objects/10/092d2ce28bbf723933982cead43b5de97a52c5
+#	objects/10/1e7bd3805055942bd6412dafd4ce8e02087f73
 #	objects/10/a3622294601979fea4821ed5fe4f1b670085c4
 #	objects/10/aa3a307129b86beb883553a6a38b6cc51a059b
 #	objects/10/ce819d2cb9c8d06bcff30e435a320badce456e
@@ -415,6 +418,7 @@
 #	objects/46/90a5756c2aafdc0a1757546739d865ce8b3de3
 #	objects/46/956557c2077bac1830c4fb2367f457f1819929
 #	objects/46/9a36107191afbf4ecb26d7bad6f54d57e1f834
+#	objects/46/f7109145817c0f563a235c1849055c78c6214e
 #	objects/47/18c2c0d0accb580e4133b54377fad66193b8cb
 #	objects/47/4768ecb5bb35fd8ef01c8a086973ae55fbfbc1
 #	objects/47/73d53880018b7648dda171eee0391fe381b510
@@ -438,6 +442,7 @@
 #	objects/4c/1e3ab6aec8bdb9e9d75d1f7867ae1ca9ae937f
 #	objects/4c/559e7a8872cf840883eb4c3e61924a9a4cd750
 #	objects/4c/728545721d57e278b1e964b8999087a2540574
+#	objects/4c/756593a9b411b202b82001ccc4f6f285f9a957
 #	objects/4c/a019139e89705a4571ad6ef58c78b3ce4e395c
 #	objects/4c/b694ab82205466c01f63dfd93719b17d9a98ba
 #	objects/4d/3245c1a4ed8fe02f202dc1d06e2bacb9f5aab5
@@ -456,6 +461,7 @@
 #	objects/4f/526fffdee501ef023e9e0ce149f6c8a48f230c
 #	objects/4f/6f0ce4855da043feee63522a65187f84c3288a
 #	objects/4f/7ca49bbdeb141034b78ef255d87cc86a17a529
+#	objects/4f/a1a0c65560a2d540fcb8a21fc012c0c606f849
 #	objects/4f/b765433d7c912de787a12616db639bef8c675f
 #	objects/4f/ee000a3e34662124c6ae819635973bc21f7fe2
 #	objects/4f/f102b7ceab69084ca9521d8f692e9f38661d5e
@@ -475,6 +481,7 @@
 #	objects/52/f7199ba77efb873b3c09be5f209c5eba41e5ee
 #	objects/53/32075c6d5aa788f385f4f893cafb570a8ea72c
 #	objects/53/502c867efda2b9224721d081c4339765d5fc49
+#	objects/53/78003f9af715ebb22566b4aad471e22200c53e
 #	objects/53/7e77823c58bdda4281a60e24c1221e01137a7c
 #	objects/53/8b98bf3b46bfdb6d8b48ba5c10549230629dcc
 #	objects/53/917fb68e0304aff1baae750bc119e7f26c5275
@@ -498,6 +505,7 @@
 #	objects/55/50d142d6c0872deda6c19c1d4ac4c149d0adbe
 #	objects/55/8bcbea3ec7e4422301055b48d2a85a38c9621a
 #	objects/55/a586dc95d79c056e176a7e581254b0458ee0fe
+#	objects/55/b13cbabe070293dea3fc83626b2cd06a790a18
 #	objects/55/b3b0c8448fa5f781ddb2be2695d4ffda865ca4
 #	objects/55/b6b30bd47329c9767a5018b1f3726564807504
 #	objects/55/d5340f6c2db130cc6f02f2ca19b8e7c6e2a0b4
@@ -518,6 +526,7 @@
 #	objects/58/436ae16968d0fecc063586772a9da7aa2c789d
 #	objects/58/45c973eb4bd774a28955cef39768a8227a8f25
 #	objects/58/7b0db140a965ae536fbfdcb7d305dd242f9d11
+#	objects/58/8682ce4ff3bd00764b42fbf616e07bf4f7b1cc
 #	objects/58/a3fc452b812cba09fa89f1c3661b3f564b0c70
 #	objects/58/edcf951bff676ed8effbb0ba131938fcaadd6e
 #	objects/59/05b609438da175cbe983d6c98f78208f73d0c5
@@ -604,6 +613,7 @@
 #	objects/66/81f4a639521baf67cf2ca42986085f25515ab6
 #	objects/66/838fdf58c1df37fd54f4e12ae7f0101bc57cc1
 #	objects/67/08e2ea7169022b65c98a4ace91a517cd71f329
+#	objects/67/3073de9a6414059ea924f9e4dbe3de9a466aad
 #	objects/67/c82a506b413bf849b615da885710a2de6ac3e0
 #	objects/67/f37f6399ada5029740532b29533b1a93704c02
 #	objects/68/41c1f8dffae54a1fcd2f911fec18ccb17245b4
@@ -658,6 +668,7 @@
 #	objects/70/9df7ebec75dd2c6bd95637179d0c48b0a9f0ae
 #	objects/70/9e9259738266fa82de1100760bda679d2f0c7b
 #	objects/70/a1457e4e4929b167151c40624e3771c4eefd3b
+#	objects/70/ae7aac1fc7bcf8c601780a2bd57df9c28b9b17
 #	objects/70/bf539f8ee8f66b7b3d6a2a4d0af8711058e3d6
 #	objects/71/084fba2a09fcabade9f41cc3f43d8be766af76
 #	objects/71/0a2821d4bf82ec9fed33bef275eb7178389910
@@ -826,6 +837,7 @@
 #	objects/8b/8e9be74b18954052e8f9c630d4162a595be072
 #	objects/8b/e450e241ac253378afece64a2ee06c8a5f100f
 #	objects/8c/0221cdedd432d2ea0fb23fb2f2f6e6b46a92c3
+#	objects/8c/13a75d7a65dcd4f94f001fee1681f3a4c14be0
 #	objects/8c/34a810f26afefd8b2ab1dfc6bc7c6b0ebfb16d
 #	objects/8c/c10a557640c8478da7aab23d0f692287266216
 #	objects/8c/e97556660e1dd1da21e2f085ea0a70d9b9d632
@@ -908,6 +920,7 @@
 #	objects/9b/e0388fb8913669dec5a3427087820b18a6584e
 #	objects/9c/444b332c145550b570664ed6cddcdc1fa102e2
 #	objects/9c/b962790aa8231d3dead4037b4abb2b9ff55c15
+#	objects/9c/e2e594baf1bd6ad5cde128ab49197a0c121e2e
 #	objects/9d/1db0bef082d820d5ad7dcd8a3c7128d97f308e
 #	objects/9d/4b8f68f2a53943086afa7a836b2c6c9a13e3f9
 #	objects/9d/8b412802e6b7761eabb0b6183d6828747571bd
@@ -977,6 +990,7 @@
 #	objects/a9/972e3727017e90a9e669be4f887e25988491b8
 #	objects/aa/1c96df9c2b3f25b3616c14242d9e84397fe1c8
 #	objects/aa/530fe1d9c881d0c56fe4762fdf8b2dcdda6fd6
+#	objects/aa/831a1d435cc06cd4773a6cb016d30970b1e10d
 #	objects/aa/8bff845d99555dd47b32862edaba4046058d3c
 #	objects/aa/c8d40e934e01f1c3bb07d11fc83a1748eca598
 #	objects/aa/e088c50d6374e5ccd4586f2f2920d619852945
@@ -1029,6 +1043,7 @@
 #	objects/b3/2414ca614bd8670413537a2433ab0b07e4a4c9
 #	objects/b3/283358ea04b6a560953e89751a1985377ae749
 #	objects/b3/382fbade446b3790e755ae71c76a0990635fdf
+#	objects/b3/49844870dc34d55adaeba74bd9264fbe00c4ea
 #	objects/b3/4dedda7de50f58bd8c58e3a11e56b1be17ef24
 #	objects/b3/667deedc55876cf4132fc730ed3773b060204d
 #	objects/b3/69acdb11c22f8c04a679c742b6d2abb93e0101
@@ -1138,6 +1153,7 @@
 #	objects/c5/aece10385157043e1fa1871d619a08fdeafbe9
 #	objects/c5/e3d086bac40951d21cca7c72df23dd05f382de
 #	objects/c6/1dffaad775d6fe5bf0250d224f07f4fd1ab3cb
+#	objects/c6/6d42a010f191bae1b30e93da0ff66a84e0f535
 #	objects/c6/a25f89793eb85e8fa5ceca0723c1cc539c6457
 #	objects/c6/ad6e6872611d441ac4ec8b905edd4a2a3d63e0
 #	objects/c6/c85bf20939b4f911ce58b72208af7642d1c5fd
@@ -1231,6 +1247,7 @@
 #	objects/d3/78942662bfebf887cd709b3dad731e3a5448de
 #	objects/d3/a1e2bd15a047c732f3d652273caa0342521950
 #	objects/d3/e4fbcd0e7861baf204353961e471f1c8734d36
+#	objects/d4/249a5ab069bb0c4db3b118c2e892d6b80b1d98
 #	objects/d4/698e2f034badf78a59c93fc9a34f21708f8cea
 #	objects/d4/6bf9bf52253440275bd96ce292341901670b66
 #	objects/d4/7c90f832b8aa09f6417bb8eb11cb87b7a75742
@@ -1260,6 +1277,7 @@
 #	objects/d7/e7a551dc783fa2b6a2c2d6126a677e5b3e1ef9
 #	objects/d7/f59b6c38db7aca9ab3ce482b2e350c2bc1320c
 #	objects/d8/01b43dec9f8ad3a18254c0eaad8849eb1fe756
+#	objects/d8/10854520bc65d7899d194e5521a0bf4c9a9062
 #	objects/d8/283f92f7f83cc72dc286fd021b1718a3aea4e9
 #	objects/d8/9785ada08e6f076fc90db79099c4b4a9b63c87
 #	objects/d8/d3b55c4c29036bcc6810cd524e288f8437e12c
@@ -1294,6 +1312,7 @@
 #	objects/dc/5ec7a0f72505d298620259f0f8e165cb4d12d6
 #	objects/dc/769bae515f29244ddf5570fb017efe4a8dc665
 #	objects/dc/8c7674197eaf87a878cc296d1fb4ac42b9366c
+#	objects/dc/a0ef0e4f5939030575fad9329b40ab726d6595
 #	objects/dc/ae11ca5e61e14aa785856cf24ae2170de43c41
 #	objects/dc/d7979e97e5dec400b123a78a527e6a2698dded
 #	objects/dc/e8061046a9414df07fa5248c8a01b3b1fad46f
@@ -1337,6 +1356,7 @@
 #	objects/e3/c011de0bd89daac6a2dda35baac1d075f7dd07
 #	objects/e3/cadc01fd33d23d68192a2a5c2e6b78877de427
 #	objects/e3/dea1ae95b726d355127bfa5b30e0a28684ea9f
+#	objects/e4/a59b2f3d82dfaef282104602392416a016c9dd
 #	objects/e4/af7dc974d3eee18279c621677d170310c0d57a
 #	objects/e4/cd8b805d2cb9992605bb07f8cb510193c2bf23
 #	objects/e5/0493d04e5a497d658718d9ee9ef547d5370aa3
@@ -1371,6 +1391,7 @@
 #	objects/ea/e6f6915ceae82a6d2cd67e68945beb432e1457
 #	objects/eb/2e9e2d5279bbee2350da6db78cf3657d29efa4
 #	objects/eb/5c133ff1a49d59da31c51bd25a84d5133549f7
+#	objects/eb/70a9038f7cede464978f7a7104daa548704c87
 #	objects/eb/a3577fcf01707a443b43dad3d761f7962ce6ca
 #	objects/eb/b846de644cb5923bbdb5ff6597d9d4f5db4236
 #	objects/eb/f2ec786062cfe72ab10c8aed12a23658842e6e
@@ -1467,6 +1488,7 @@
 #	objects/fc/1300cdd05689857bfd14aa27d463666ce643f6
 #	objects/fc/5302cbea86711725030bfd1b25576d420e27b5
 #	objects/fd/0c039db15b214b2525e7b86168fbb40bd1eb5e
+#	objects/fd/0f42a5a71b57208b921a8b7fd575a34fd8fab6
 #	objects/fd/28023661aae4150cc643ebcca6eec87b8dcfb7
 #	objects/fd/4dabba66e92f948634ed74cdf59c28e896a570
 #	objects/fd/4fca84351a3ec4c134e2bc0a2792d463ca77f3
@@ -1487,3 +1509,4 @@
 #	objects/ff/9c7f706eeaab612f714aa09d0e75b7b27ff1b8
 #	objects/ff/c51bc0d3e8f71c0cff40b13e6ca8b0eb63cb91
 #	objects/ff/c98336cfefd4f5e5eb855e7e6e9d9a73670bee
+#	python/testBest.py.save
