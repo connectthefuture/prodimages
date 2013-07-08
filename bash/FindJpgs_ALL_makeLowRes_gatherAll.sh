@@ -77,7 +77,8 @@ exiftool -r -m -f '-Directory=%4f/' '-Filename=%f.%e' $tmpDeletePhoto;
 ##cp -p -R $pushStill $dirStill;
 ##cp -p -R $pushFashion $dirFashion;
 sleep 1;
-/mnt/Post_Ready/zProd_Server/imageServer7/scripts/default/styleStringZimagesPro.sh;
+
+styleStringZimagesPro.sh;
 
 ###-------Time Logging
 dateLog=`date`
