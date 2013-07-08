@@ -17,7 +17,7 @@ echo "Start _All_ $dateLog" >> $LOGDIR/FindMakeLowres_log.txt
 #find $pushFashion -type d -mindepth 1 -maxdepth 1 -exec cp -pR {} $dirFashion \;
 
 ## Double For loop to find and convert recent pushes for Zimages
-fileListD=`find ${pushStill} ${pushFashion} -maxdepth 1 -mindepth 1 -mmin 2000 -type d | xargs -L1 -n1`
+fileListD=`find "$dirStill" "$dirFashion" -maxdepth 1 -mindepth 1 -mtime -22h -type d | xargs -L1 -n1`
 #fileListD=`find $dirStill -maxdepth 1 -mindepth 1 -mmin 2000 -type d & find $dirFashion -maxdepth 1 -mindepth 1 -mmin 2000 -type d | xargs -L1 -n1`
 for d in $fileListD; 
 do

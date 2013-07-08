@@ -15,7 +15,7 @@ pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
 >>>>>>> 5a6c3db907983a96a6cdc0bf6194a7a13e8401de
 
 ## -- Read all Dirs in Push folders
-fileListD=`find ${pushStill} ${pushFashion} -mtime -25h -maxdepth 1 -mindepth 1 -type d | xargs -L1 -n1`
+fileListD=`find ${pushStill} ${pushFashion} -mtime -22h -maxdepth 1 -mindepth 1 -type d | xargs -L1 -n1`
 
 
 ##<--------------->Convert all to Retouch Folders to Backup
