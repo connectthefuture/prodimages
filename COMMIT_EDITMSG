@@ -1,4 +1,4 @@
-fixed string script with joel
+
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
@@ -6,9 +6,6 @@ fixed string script with joel
 #   (use "git reset HEAD <file>..." to unstage)
 #
 #	modified:   COMMIT_EDITMSG
-#	modified:   FETCH_HEAD
-#	modified:   ORIG_HEAD
-#	modified:   bash/styleStringTestMakerPushed.sh
 #	modified:   index
 #	modified:   logs/HEAD
 #	modified:   logs/refs/heads/master
@@ -37,6 +34,7 @@ fixed string script with joel
 #	objects/01/90eff13447f9aa0d06855c1ec2b9fd6d22461b
 #	objects/01/a0da746d1c774404702eaabd3632eb3682fa28
 #	objects/01/d2ea522807bc0ba9a124774b2683394ca88324
+#	objects/02/2a8cb0f80b1dc9797b01f99fe64999b55a6665
 #	objects/02/3afdb8c47f4a36eb0a092959dfa932052b5da2
 #	objects/02/aa8d43385331dbfc1b36a14b0bd8062c2c028f
 #	objects/02/b703e4980424c69ad0ed550429948a6bdce2fb
@@ -54,6 +52,7 @@ fixed string script with joel
 #	objects/04/7b5271f569d5f7d0d8f83ceff3659444bdc4c7
 #	objects/04/86486517911156bd4ef6c9f65d760ef9899192
 #	objects/04/bfb0ec124d221f3b4ddadf7420c7c3442a8bd8
+#	objects/04/ff997434b7fca4b120e606ec6e537a96f72407
 #	objects/05/2826de5f98ace08977d7319fa3651f03241290
 #	objects/05/28ab21e3612cc67b72a79a8b7b2443a2f64040
 #	objects/05/6279a359b647704a451d649c140f323ddbf1b8
@@ -125,6 +124,7 @@ fixed string script with joel
 #	objects/12/5e084fc86c225a276ffc5335bf2fd0da42fec6
 #	objects/12/8e5259a9bf188fcde14f6635e46d7a9655c08e
 #	objects/12/8ed6cbf6ba9a34041c9c3e1da0fdb3c651588e
+#	objects/12/928f486a8b23746ce6b7968b0292c1e350d8b7
 #	objects/13/034284e6e61b60a16ff3c56e70502ccad7ed72
 #	objects/13/1e434a20ede033e03ee1c8c920857e789999e2
 #	objects/13/45cf887c2ad0a1ac9a6118d5cde27e61613a33
@@ -178,6 +178,7 @@ fixed string script with joel
 #	objects/1c/4838c2dc5bbf10a45e6fbc781216c6d86fdad4
 #	objects/1c/6126132a41686bf209a1ebe977b839026e596c
 #	objects/1c/642b993f1e92c8358f9191419e7c4825a64204
+#	objects/1c/6f0773c13eae43e8a07ef54b6a8f966a3200dc
 #	objects/1c/7f8efe922d474f441317a87912ede3e0d53bab
 #	objects/1c/84c40ae9046dc396a35669f3d630ca866bb824
 #	objects/1c/c9322ccfb6517a3fc151c0de8003141ebdc656
@@ -191,6 +192,7 @@ fixed string script with joel
 #	objects/1e/a6197f609454fcc9e35c8bb5bec5a6dbe6da3a
 #	objects/1e/baa005c71dce483ca9225581ef9d184a200f68
 #	objects/1f/39c49b2db7e29c2a00232f78bc1c89b952d9b5
+#	objects/1f/49ee4e6da422fb4fd33402d2cf4b0203bec722
 #	objects/1f/5736792662f755ab8398a18e34ce58f51cea55
 #	objects/1f/d567db847ba7dc07aa895a4b0c477204ceffdc
 #	objects/1f/e6919f0a7f86237b8a375123ed5b0faaeea120
@@ -236,6 +238,7 @@ fixed string script with joel
 #	objects/27/69d69dfc6f14467428e7f185f71e7be688fb21
 #	objects/27/b251f950a92e04bd1f52d39c5678c2fdd42e2b
 #	objects/27/c3981ddf8e38297f9f7d41e3cfbec85b39a4da
+#	objects/27/e8d4ff942bfe632f648413a7241f7d1bb7e76c
 #	objects/28/1e96f45891f3e115b625248a230c17e8914f30
 #	objects/28/26179f3d8a57af31d184cf45caa1c877d9943c
 #	objects/28/51af7da8c073e5d57c04d5b9f58e0beefe0720
@@ -271,6 +274,7 @@ fixed string script with joel
 #	objects/2e/e9476e576cf6632a90309c9e8df40678ccb816
 #	objects/2e/f3176059fc4d6f3490db8404401a3ae38d8c33
 #	objects/2e/f7fcdcba505f09cf34b2332bcb5f910eb4ecd3
+#	objects/2e/fbce371888f7137cf08eae3bfbd4366619cbbf
 #	objects/2f/0240079a02b7a089f69865304178157de07259
 #	objects/2f/260d463bdd782477fb3fb43e3201d82ddc0c22
 #	objects/2f/36c8bbf597b354eab1c5b5ae89a60606040440
@@ -289,9 +293,11 @@ fixed string script with joel
 #	objects/31/4535a4cd82723cef31ed25b83cd06961f9c51e
 #	objects/31/9760bdef95eb0cb1a310c3efaefa07b6e941ba
 #	objects/31/bfe3b6ffc4c32afe5fc0d2bced0828c2354c7d
+#	objects/32/0f024195e1caac22e2486a7bcdb44c4522689f
 #	objects/32/2b0285280f13beea55bd5762c8c4740972a786
 #	objects/32/44d8711244433b8240c37b504399fcb6d60b28
 #	objects/32/709db1eefab0f58109af6b570d3a4b4065138b
+#	objects/32/7d069ef59410cdefce40714e57a76b6fd1972e
 #	objects/32/7e591f01b037c02dca7a0122f9b6e47f687f6d
 #	objects/32/8608bf747470f7de2915d331d99b7ce19669ca
 #	objects/32/8b6a9f91734be319e64d710ab93ea49661c761
@@ -346,8 +352,10 @@ fixed string script with joel
 #	objects/3a/9f64ba9c1a7c2022f089dcf7bafe364fabb1ee
 #	objects/3a/b0fe240663220d5edf7b10ad2bd73f28b0ffc9
 #	objects/3a/b73a1cc77e6d3f7965fde4ca727cb5a92d4a1c
+#	objects/3a/f8362a2017aaac679c610a36170ba2de976bb9
 #	objects/3b/04516777ad06d77c4026c3c1beb5265be7cd42
 #	objects/3b/08c399629fa6612ff579a462a36eb59530c45e
+#	objects/3b/1595db0d4bd5a649b1230cde724ebea82b8336
 #	objects/3b/1ac2022e14e7a84003944e3c296635cee25a27
 #	objects/3b/3cc4bf5f6e73a9453f47fb30aae79d39ece049
 #	objects/3b/7ba5372b5a7600088e8b0b26f2204e77666f5b
@@ -414,6 +422,7 @@ fixed string script with joel
 #	objects/45/ca9cdd025a086fd0ddb6c46d2206876c823bf6
 #	objects/45/f19d1e6612a3096bc1912b3c482f9a66600f8c
 #	objects/46/09abcc0d2123eb369f62b36fc6a620b9b9f9dd
+#	objects/46/7311660a4346ed8bf7ce527468925af3b1504e
 #	objects/46/8d33bff626ebffbd1aafeac6c4c9db56d5cb72
 #	objects/46/90a5756c2aafdc0a1757546739d865ce8b3de3
 #	objects/46/956557c2077bac1830c4fb2367f457f1819929
@@ -438,6 +447,8 @@ fixed string script with joel
 #	objects/4b/5b8d9085e033c92eec5d9f141e4f92ff2d2c3a
 #	objects/4b/69e83492bf9b8f1df2b10984cf16e63b5bb7ff
 #	objects/4b/a2599977663ff39965a75ddcbfa2584dae4832
+#	objects/4b/a8ce5c67f792aa8f884fb37f3888903935ccfa
+#	objects/4c/040d48cdd28c81ca749bdb55f36622a21d10ce
 #	objects/4c/1af46145eb82b9314f88090731ed765e0f5d82
 #	objects/4c/1e3ab6aec8bdb9e9d75d1f7867ae1ca9ae937f
 #	objects/4c/559e7a8872cf840883eb4c3e61924a9a4cd750
@@ -448,6 +459,7 @@ fixed string script with joel
 #	objects/4d/3245c1a4ed8fe02f202dc1d06e2bacb9f5aab5
 #	objects/4d/49fa551622ff4b05e3b4dde4b729d6989c2a12
 #	objects/4d/70b317508c506cf3827b7fb9cd83b74eafc32b
+#	objects/4d/7de97e5a7c9f6cfdc12f48a527d8316d4e5e06
 #	objects/4d/803e52ca84ac582a111c6a9a463fd2bf4d06f3
 #	objects/4d/86d246568ae5285eff3e660aa320f51c317bbd
 #	objects/4d/c68a8a2fe779782373b97e359c7d4eeab804ca
@@ -525,6 +537,7 @@ fixed string script with joel
 #	objects/57/e5ef4eca9b6f0723087ca21476fbd4fb1da66f
 #	objects/58/436ae16968d0fecc063586772a9da7aa2c789d
 #	objects/58/45c973eb4bd774a28955cef39768a8227a8f25
+#	objects/58/54b5285683934193db423ce7893b86c6b404ba
 #	objects/58/7b0db140a965ae536fbfdcb7d305dd242f9d11
 #	objects/58/8682ce4ff3bd00764b42fbf616e07bf4f7b1cc
 #	objects/58/a3fc452b812cba09fa89f1c3661b3f564b0c70
@@ -650,6 +663,7 @@ fixed string script with joel
 #	objects/6e/7f65fc633736aa41055db2d2ea4d6910a10947
 #	objects/6e/9dd2b9910c2ea1398a19bbb5137251359373c6
 #	objects/6e/a33419886be1db6c17b7be782f6ab7b0070f23
+#	objects/6e/ec4645d033e95976eaa8db0c94c620dd71fd5d
 #	objects/6e/feee6c1b45f6bace3d29e18df210ddca9da99c
 #	objects/6f/0cd34ce4863ea1b5f9a3408f369e1b321f774f
 #	objects/6f/2505ad451f0f2111184fad2d08e5faf2ffae6a
@@ -684,12 +698,14 @@ fixed string script with joel
 #	objects/73/792e7d14175af45442d48534588142769faa0c
 #	objects/73/7b43303110cbfc0646ee5a09850484005d42f8
 #	objects/73/9a9bb650df8e1b004608b2465213e4c7aa0388
+#	objects/73/a4ae4311da21204b9fa14baaa262f4daf5c308
 #	objects/73/e03ad5eab20b993058abfa2eeb20f24cab48b2
 #	objects/73/f3b4406061d4d9a0f640c98e3c159292c3b6e7
 #	objects/74/
 #	objects/75/3ce7fb1d65206bf3ce52500a281d9c5e161376
 #	objects/75/68d339bc47c69aa0222bdc5271c47c70cfe451
 #	objects/75/709660848f4f7eaefebddadcb6f5249c72e532
+#	objects/75/8066392bbe5976e53c1bacdde2aafcb50c5409
 #	objects/75/8a0e91c81f6b9e9ef7e280016bf79b094a4fb8
 #	objects/75/9d69d30921f6f05648f9280d3209d18d2d1b6b
 #	objects/75/d8c3aed13674ded2be4e72fc2fa219965fa984
@@ -721,6 +737,7 @@ fixed string script with joel
 #	objects/79/fc1b2167828a74f63b1dbcc71c64c8c032a5a8
 #	objects/7a/09d86ee07960143fa1bdf2e715db8b5a0eb4a9
 #	objects/7a/29d8bf87867c5124bc1bd25cdbcb83e67fa3b9
+#	objects/7a/41c881de1ca3004c0f26fa8fc6074a3ae8cc82
 #	objects/7a/479f2707ebb34ea6b825439c2b2c7f67e72685
 #	objects/7a/60eee5a887e1b515f0db27e409de8eae40511b
 #	objects/7a/7c1ce8b60b4cbfc8f3c7b3403daa10a027bc2a
@@ -735,6 +752,7 @@ fixed string script with joel
 #	objects/7b/29a28845bdf73889467d0bd8e74040c3f838c6
 #	objects/7b/4373a5e7a04afc88f36d264bbf7f8cc6732eda
 #	objects/7b/69432c473a93a3421afd74ea3a09405f5f4b86
+#	objects/7b/7dcfab55a746686c1344d1815a4ab67662a215
 #	objects/7b/a506193ebd1133970c9352af5f144e9cca2cd5
 #	objects/7b/b58dd4fc7288cd750a3f8556882525b5421197
 #	objects/7b/f6e16aef98061c8cc26b06395681376e5c6c15
@@ -861,6 +879,7 @@ fixed string script with joel
 #	objects/90/137fba6ca18632945ecde10f7e67f07e370b90
 #	objects/90/ce43792a9d5aa574e735ed2768fa30219bca31
 #	objects/91/1fc9943103aab21df9a15226c9d8b570e34710
+#	objects/91/6548c0c6674386bbfad86f9a70c0292c2d5ee1
 #	objects/91/82d5f1fdbf2b8e3a343ff634a47f1ca4de7a08
 #	objects/91/c51d1873e0d8ad6070973aaa535505bf64f91e
 #	objects/91/c88a492b4df637e3c66f8462062c983cb3abdb
@@ -870,6 +889,7 @@ fixed string script with joel
 #	objects/92/abb283d33934964f295625dc121dfe3bd98d18
 #	objects/92/b01d0b4ba4f456d6efc91215757903353ca775
 #	objects/92/cbd4ebf6f76bc2f63a4540ef5a494ee012399b
+#	objects/92/cf707d1071defc40cf8d12ca6e3e5481977bf1
 #	objects/92/dff47787d064d0df377904a50dc1d2e5578b47
 #	objects/92/e1d72eece4f1969b4c43b244db969617df4e7a
 #	objects/93/0e44641f552e089cd76d6f91cfdd0c75eee584
@@ -936,6 +956,7 @@ fixed string script with joel
 #	objects/9e/4f2aca965d6fd3da22f3f77e4503b6ac6270fb
 #	objects/9e/7c2cc8f731250ac10de852d69397af8779e778
 #	objects/9e/85f9c7a907ab19d03f6ad524408b461e363c82
+#	objects/9e/b855c3e5779b34cb254428e46552b634d1522c
 #	objects/9e/b8d694b9050f5e67ca61f5cbcf8b9c7a631dee
 #	objects/9f/0f458f9d3cc9b715d2d49355e2036542e09718
 #	objects/9f/729468823c1e22b51847d26b2da18ea4bbdee6
@@ -957,6 +978,7 @@ fixed string script with joel
 #	objects/a3/0a20f1ecedac5b6e71881962333e1f6b0c7b96
 #	objects/a3/0ad2b6ba253aef208ab180f835ba76e4f07e92
 #	objects/a3/a40841c57f099bbb510d57690f38f8f4b26d34
+#	objects/a3/db76886d6075b1b24781587ce498803f8bcb5e
 #	objects/a3/ffe88127eecfdd6d329f32fb12d08754a3127d
 #	objects/a4/3d009f1862db753e3b6ef46feab6aef437a0a6
 #	objects/a4/40564a6390b2bd79bbf64a4de1c1b87955e9a6
@@ -1099,6 +1121,7 @@ fixed string script with joel
 #	objects/bb/b86756b0ab893795975e44420044e6785ce4af
 #	objects/bb/be896888b9db1aa4bb29b2feed38c46ff0481e
 #	objects/bc/3832e1834ef4cc57834a86e1b8c71b452d9c11
+#	objects/bc/616fb1f529086b8ff875ab61e6d4d06fadc115
 #	objects/bc/631246eb4909256743b369ff9494911db997f1
 #	objects/bc/d53151dfccc55ea410ce219229eb6d1614c493
 #	objects/bc/d8a2b6f36933af693d6bb1b5d8cea60f9fbdd0
@@ -1131,6 +1154,7 @@ fixed string script with joel
 #	objects/c2/0cd0fb86603c139ff366201cff0f63a8339477
 #	objects/c2/103886c5cb07bb3bdefd18ecf8e8e6f2613373
 #	objects/c2/2fc1e2f989cafbdf7e741e062adcb7696ae960
+#	objects/c2/3916ffefc695680b2213c55898b36cda9d5e01
 #	objects/c2/491b9548962d9b4504b92fbf084c285f824fdb
 #	objects/c2/5937f383434c68fd3d78a55f5518a32cdbb4b6
 #	objects/c2/ddc3f4b1eeb8a01f03e819a0e18213668b34ba
@@ -1150,6 +1174,7 @@ fixed string script with joel
 #	objects/c4/f24335ae227d37c64b6f885144c06a7856a196
 #	objects/c4/f3088eb89f62ca3a98b7b95dcee14e7c4148c3
 #	objects/c4/f54a36c58d8241996c7ec8a8143988814af0fe
+#	objects/c5/356217bcba70ab081fc8fe854e8f5718fe3960
 #	objects/c5/5cf1207f0f973b04e9f3aa8a29e3da6fa234c3
 #	objects/c5/a169ecf5bfb754405c8feb622b4203f5b7eee1
 #	objects/c5/aece10385157043e1fa1871d619a08fdeafbe9
@@ -1233,6 +1258,7 @@ fixed string script with joel
 #	objects/cf/e357fb8db6dcefb02fac511e23bc3131b2322c
 #	objects/cf/e4a63a88f921f6ee72b6ebf128edd30b19cd9d
 #	objects/d0/7916bdc71febac23c050c543bccd577e20b963
+#	objects/d0/c90bdbef866c29dda7d14debaa803b5f28b065
 #	objects/d1/00f921dfe62d2b701480ee90d70d1242cd9f4a
 #	objects/d1/142d2394f9ad8dccec0eeb009c223e29d8ab06
 #	objects/d1/5294e20410d7f433770b32d97208e035616e18
@@ -1274,6 +1300,7 @@ fixed string script with joel
 #	objects/d7/82c397eee99975e02fafb877c1494e5d084a52
 #	objects/d7/9c214bea3e1b2a6c90893195b10745f5ffd8c1
 #	objects/d7/a1d32ed7d86d6ee37ae3e291ea8faad9b621f5
+#	objects/d7/c320e09f9fbd3733651f33391c794d6ba3165a
 #	objects/d7/c8d152c808d9a323f9671d939d4463e215006c
 #	objects/d7/c999b31b1e91f514375ce95ba1c0bf22d4f2f8
 #	objects/d7/e7a551dc783fa2b6a2c2d6126a677e5b3e1ef9
@@ -1368,6 +1395,7 @@ fixed string script with joel
 #	objects/e5/9442b1af5c8c74250ad5fea0398e6ab2a0d260
 #	objects/e5/aced669004c1f35e819a3918c4e9659278e3f9
 #	objects/e5/ecc12df60a62ed72ed12d35ae83b207d211022
+#	objects/e6/30916ec90cea453c119459e8b0d9aef0560251
 #	objects/e6/4a8cde4936e45bc3e47fbc2efbbbec75dc8897
 #	objects/e6/77b9cf132f72f00463dc1947c7bc3d5903d753
 #	objects/e6/94c958226a3cd183641e8e556c3b3e80b8259d
@@ -1399,6 +1427,7 @@ fixed string script with joel
 #	objects/eb/f2ec786062cfe72ab10c8aed12a23658842e6e
 #	objects/ec/1a59fbbed2f5be2c2977d4ebbd23d8f6c0410a
 #	objects/ec/72b8bf1d2f93377db6a3bc8ccdbb9c7954d6eb
+#	objects/ec/ba76a9c1205823aeea804c7c6fe401ea0028cf
 #	objects/ed/25078f64b7909e960f4d75a85f819e0b346b3d
 #	objects/ed/63804181c3d0a2eff4f714553c3e075fa66c9a
 #	objects/ed/b23527ddb7eb07517eeec6c5beeff66aec61a5
@@ -1449,7 +1478,9 @@ fixed string script with joel
 #	objects/f3/71783429c8f754766371db5a0e54bfc9f85625
 #	objects/f3/8ea879cb5a3d3b837a5799375cc0cd70e9354a
 #	objects/f3/b554ff170b9d9c361482db601719df0969493d
+#	objects/f4/2f427b953902cf5928e569e3e1b380bab8269b
 #	objects/f4/46daf4d7df1cbc140d6bc81b47d8eabb6de173
+#	objects/f4/7f454cd3d3a114cb70ccff51b8065dce7dcd3f
 #	objects/f4/dee4211e1ed99c3aa9df969acb0b0698489cf7
 #	objects/f4/e060f6543c579ad2c65446fbbc306f4d604545
 #	objects/f4/e1eca171ae7cfc69833b7431feaa4a35f1be59
@@ -1511,4 +1542,5 @@ fixed string script with joel
 #	objects/ff/9c7f706eeaab612f714aa09d0e75b7b27ff1b8
 #	objects/ff/c51bc0d3e8f71c0cff40b13e6ca8b0eb63cb91
 #	objects/ff/c98336cfefd4f5e5eb855e7e6e9d9a73670bee
+#	python/django/
 #	python/testBest.py.save
