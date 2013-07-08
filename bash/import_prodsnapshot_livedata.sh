@@ -35,5 +35,7 @@ colNames=`echo -e $cols`
 
 mysqlimport --host=127.0.0.1 --port=3301 --user=root --password=mysql --fields-terminated-by="," --default-character-set=utf8 --fields-enclosed-by="'" --fields-escaped-by="\"" --delete --replace --ignore-lines=1 --columns="$cols" --local data_imports "$dbOutClean"
 
+mysqlimport --host=127.0.0.1 --port=3301 --user=root --password=mysql --fields-terminated-by="," --default-character-set=utf8 --fields-enclosed-by="'" --fields-escaped-by="\"" --delete --replace --ignore-lines=1 --columns="$cols" --local data_imagepaths "$dbOutClean"
+
 exit;
 
