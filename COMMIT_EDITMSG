@@ -1,4 +1,4 @@
-
+fixed string script with joel
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
@@ -571,6 +571,7 @@
 #	objects/5f/a9d006efb490d6e9f05912fadf5222b270bcf6
 #	objects/5f/ac043e407fe80fb1bb50fb6d3dbb8b6fb2832a
 #	objects/5f/bb4174cd42c12d80db67172a74ac896d88081e
+#	objects/5f/ca9583fd9fcbd6101029680720418003f56889
 #	objects/5f/ec82cfd8712b0edf7447e5a820b201b4357f1b
 #	objects/5f/f00c786cda3604b6ba3e749efe605a1e4c70cd
 #	objects/60/048405d4c9d23160c8ca22de26616de14e316b
@@ -1072,6 +1073,7 @@
 #	objects/b7/afc04f707eaeb7f3f8efe02b0ebc7443c5d8ff
 #	objects/b7/cadc4644575fe62eb3fe68a486f5cd7a901dce
 #	objects/b8/08847d9f7169dae686bda0c708337e656466e3
+#	objects/b8/96d8a6b44f1dc0b02f5c283f9dcb61c3979197
 #	objects/b8/ab352e3c6867ae869d297908ef0afdfaa1199e
 #	objects/b8/bb1d19abe07ba5e86b2bbd5acf25f7894661f4
 #	objects/b8/e672e053ed597d996ae1f309ceee1e26d85e5b
