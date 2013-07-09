@@ -35,10 +35,10 @@ stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum)
 
 for k,v in stylesDict.iteritems():
     for val in v:
-        vendor_url = 'http://admin.swisswatchintl.com/Z'
+        vendor_url = 'http://admin.swisswatchintl.com/Z/'
         vendor_style = k + ".jpg"
         colorstyle = str(v[val]) + ".jpg"
-        vendor_file = vendor_url + "/" + vendor_style
+        vendor_file = vendor_url + vendor_style
         colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle)
         # 
         print vendor_file, colorstyle_file
