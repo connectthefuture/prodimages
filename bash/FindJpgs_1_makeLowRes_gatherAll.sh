@@ -1,21 +1,18 @@
 #!/bin/bash
 . ~/.bash_profile
 
-#pushStill=/mnt/Post_Ready/aPhotoPush
-#pushFashion=/mnt/Post_Ready/eFashionPush
+#pushStill=/Volumes/Post_Ready/aPhotoPush
+#pushFashion=/Volumes/Post_Ready/eFashionPush
 dateLog=`date`
-<<<<<<< HEAD
 echo "START _1_ $dateLog" >> $LOGDIR/FindMakeLowres_PMphotoAttribImg_log.txt
-pmPhotoDir=/mnt/Post_Ready/zImages_1
-pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
-=======
+pmPhotoDir=/Volumes/Post_Ready/zImages_1
+pmPhotoXdir=/Volumes/Post_Ready/zImages_1/xxFer
 echo "START _1_ $dateLog" >> ~/Dropbox/FindMakeLowres_log.txt
-pmPhotoDir=/mnt/Post_Ready/zImages_1
-pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
->>>>>>> 5a6c3db907983a96a6cdc0bf6194a7a13e8401de
+pmPhotoDir=/Volumes/Post_Ready/zImages_1
+pmPhotoXdir=/Volumes/Post_Ready/zImages_1/xxFer
 
 ## -- Read all Dirs in Push folders
-fileListD=`find ${pushStill} ${pushFashion} -mtime -22h -maxdepth 1 -mindepth 1 -type d | xargs -L1 -n1`
+fileListD=`find ${pushStill} ${pushFashion} -maxdepth 1 -mindepth 1 -type d | xargs -L1 -n1`
 
 
 ##<--------------->Convert all to Retouch Folders to Backup
@@ -40,8 +37,8 @@ done;
 done;
 
 ##Rez Down Images for Faster loading Then send attributes to PM
-pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
-pmPhotoDir=/mnt/Post_Ready/zImages_1
+pmPhotoXdir=/Volumes/Post_Ready/zImages_1/xxFer
+pmPhotoDir=/Volumes/Post_Ready/zImages_1
 cd $pmPhotoXdir
 #mogrify '*.jpg[400x480]'
 
