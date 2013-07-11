@@ -17,6 +17,7 @@ find $pushFashion -type f -iname \*_\?.jpg | sed s/\ /\\\\\ /g | sed s/\"/\\\"/g
 
 
 cp $styleStringTest "$styleStringTest"_open
+cp $styleStringTest $styleStringImport
 
 ## Import updates to Mysql
 mysqlimport --host=127.0.0.1 --port=3301 --user=root --password=mysql --fields-terminated-by="\ " --default-character-set=utf8 --fields-enclosed-by="\'" --fields-escaped-by="\"" --delete --replace --ignore-lines=0 --columns="colorstyle,photo_date,file_path,alt" --local data_imagepaths "$styleStringImport" ;
