@@ -5,7 +5,7 @@ def sqlQueryConsigRename(vnum, ponum):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
     connection = orcl_engine.connect()    
-    print connection
+    #print connection
     querymake_consig_stylefix="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.VENDOR_STYLE LIKE '" + vnum + "%' AND POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "'"
     
     result = connection.execute(querymake_consig_stylefix)
