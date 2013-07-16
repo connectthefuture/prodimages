@@ -8,14 +8,17 @@ DAY=`date "+%Y-%m-%d-RetouchToDo"`
 
 ## RUN SQL Query spooling Queryt to CSV
 
-#dailyPhpMyAdminForImport=/mnt/Post_Complete/CSV_updates/PrdExtra_Photoshop_Logs/phpImportTOrelation_PM_SchemasTables_sqlInsert/DailyImportTophpMyAdmin_SQL.sql
-dailyPhpMyAdminForImport=$SCRIPTS/sql/prodsnapshot_import_livedata.sql
+#dailyPhpMyAdminForImport=$SCRIPTS/sql/prodsnapshot_import_livedata.sql
+dailyPhpMyAdminForImport=$SCRIPTS/sql/prodsnapshot_import_livedata_bfyprd12.sql
+
+
 
 dbOutRaw=$PRODSRV/tmp/limbo/spoolpmaimportprodsnapshotlive.csv
 dbOutClean=$PRODSRV/data/csv/product_snapshot_live.csv
 
 ###<----Make dbOutRaw
-$DSSPRDLOGIN @$dailyPhpMyAdminForImport;
+$BFYPRDLOGIN @$dailyPhpMyAdminForImport;
+#$DSSPRDLOGIN @$dailyPhpMyAdminForImport;
 
 ##headersPma=$LIBSRV/headers_productsnpimport.csv
 
