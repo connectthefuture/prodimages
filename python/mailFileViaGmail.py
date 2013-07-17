@@ -7,10 +7,8 @@ from email.MIMEText import MIMEText
 from email import Encoders
 import os
 
-gmail_user = "john.bragato@gmail.com"
-gmail_pwd = "yankee17"
 
-def mail(to, subject, text, attach):
+def send_gmail(to, subject, text, attach):
    msg = MIMEMultipart()
 
    msg['From'] = gmail_user
@@ -35,7 +33,31 @@ def mail(to, subject, text, attach):
    # Should be mailServer.quit(), but that crashes...
    mailServer.close()
 
-mail("john.bragato@bluefly.com",
-   "Hello from python!",
-   "This is a email sent with <b>python</b>",
-   "/Users/JCut/Dropbox/Dropbox_sites/imageServertmp/images/images_jpg_PhotoSelects/3176/317612801/317612801_1.jpg")
+################# RUN ##################
+import re,os
+
+
+gmail_user = "john.bragato@gmail.com"
+gmail_pwd = "yankee17"
+
+for arg in sys.argv[0]:
+    toaddrs_list = []
+    pattern_email = re.compile(r'.+[@].+[.].+')
+    to_emailargs = re.findall(pattern_email, arg)
+    if to_emailargs:
+        for line in to_emailargs:
+        toaddrs_list.append(line)
+    else:    
+    
+if len(toaddrs_list) = 0:
+    toaddrs      = "john.bragato@bluefly.com"
+elif len(toaddrs_list) = 1:
+    toaddrs      = toaddrs_list.pop()
+else:
+    print toaddrs
+#msgsubj     = sys.argv[2]
+#bodyfile     = 
+#msgbody     = open(bodyfile, 'rb').read()
+#attachfile   = sys.argv[1]
+
+#send_gmail("{toaddrs}".format(toaddrs="toaddrs"), "Hello from python!", "This is a email sent with <b>python</b>", attachfile)
