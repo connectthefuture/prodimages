@@ -34,30 +34,67 @@ def send_gmail(to, subject, text, attach):
    mailServer.close()
 
 ################# RUN ##################
-import re,os
+
+import re,os,sys
 
 
 gmail_user = "john.bragato@gmail.com"
 gmail_pwd = "yankee17"
 
-for arg in sys.argv[0]:
-    toaddrs_list = []
-    pattern_email = re.compile(r'.+[@].+[.].+')
-    to_emailargs = re.findall(pattern_email, arg)
-    if to_emailargs:
-        for line in to_emailargs:
-        toaddrs_list.append(line)
-    else:    
-    
-if len(toaddrs_list) = 0:
-    toaddrs      = "john.bragato@bluefly.com"
-elif len(toaddrs_list) = 1:
-    toaddrs      = toaddrs_list.pop()
-else:
-    print toaddrs
-#msgsubj     = sys.argv[2]
-#bodyfile     = 
-#msgbody     = open(bodyfile, 'rb').read()
-#attachfile   = sys.argv[1]
+#for arg in sys.argv[1]:
+#    print arg
+#    toaddrs_list = []
+#    pattern_email = re.compile(r'.+[@].+[.].+')
+#    to_emailargs = re.findall(pattern_email, arg)
+#    if to_emailargs:
+#        for line in to_emailargs:
+#            toaddrs_list.append(line)
+#    else:
+#        print "Fail"   
+#
 
-#send_gmail("{toaddrs}".format(toaddrs="toaddrs"), "Hello from python!", "This is a email sent with <b>python</b>", attachfile)
+
+## Test for HTML File is at sys.argv[3] to insert as Body of email
+try:
+    if sys.argv[2]:
+        test = sys.argv[2]
+        try:
+            if os.path.isfile(test):
+                bodyfile    = sys.argv[2]
+                msgsubj     = "SentByPython"
+                msgbody     = open(bodyfile, 'rb').read()
+
+                try:
+                    if sys.argv[3]:
+                        toaddrs     = "john.bragato@bluefly.com"
+                except:
+                    toaddrs     = "john.bragato@bluefly.com"
+
+            else:
+                toaddrs     = sys.argv[2]
+                msgbody     = "TestBody"
+                msgsubj     = "SentByPython"
+        except NameError:
+            msgbody      = "NameErrorTestBody"
+            msgsubj      = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
+            toaddrs      = "john.bragato@bluefly.com"
+except IndexError:
+    toaddrs     = "john.bragato@bluefly.com"
+    msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1])) 
+    msgbody     = "TestBody"
+
+## Test for HTML File to insert as Body of email
+
+        
+
+
+
+
+## Include file as first arg as an attachment to mail
+try:
+    attachfile   = sys.argv[1]
+    
+    send_gmail(toaddrs, msgsubj, msgbody, attachfile)
+    
+except:
+    print "Failed to Send File. Make Sure a valid file is your 1st Arg"
