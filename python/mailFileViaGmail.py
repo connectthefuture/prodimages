@@ -93,8 +93,9 @@ except IndexError:
 ## Include file as first arg as an attachment to mail
 try:
     attachfile   = sys.argv[1]
-    
-    send_gmail(toaddrs, msgsubj, msgbody, attachfile)
-    
+    if os.path.isfile(attachfile):
+        send_gmail(toaddrs, msgsubj, msgbody, attachfile)
+    else:
+        send_gmail(toaddrs, msgsubj, msgbody, "NotAfile")
 except:
     print "Failed to Send File. Make Sure a valid file is your 1st Arg"
