@@ -57,3 +57,4 @@ ecb1135a63f94d6d9fa4a19cbbcaf0fe3d00bae9 143df0466ab0449e71e1b46c59f5f9efbd2624a
 143df0466ab0449e71e1b46c59f5f9efbd2624a8 8afa5920dfbe3b8f6714bd9ecbd58c2e61540ba8 John Bragato <jbragato@yahoo.com> 1374093265 -0400	pull prodimages-dev master: Fast-forward
 8afa5920dfbe3b8f6714bd9ecbd58c2e61540ba8 737631876776eeb7e6000b767cd5fd876202bd20 John Bragato <jbragato@yahoo.com> 1374093665 -0400	pull prodimages-dev master: Fast-forward
 737631876776eeb7e6000b767cd5fd876202bd20 40ba6f0c21573dc77e96f6a38b1b660bacd9342c John Bragato <jbragato@yahoo.com> 1374095403 -0400	commit: commited live db shell scripts
+40ba6f0c21573dc77e96f6a38b1b660bacd9342c fe1422bfaf190e6cc6a027647b27a7114fdcea5a John Bragato <jbragato@yahoo.com> 1374096510 -0400	commit: made py scripts executable

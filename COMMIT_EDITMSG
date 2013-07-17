@@ -1,4 +1,4 @@
-
+made py scripts executable
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
@@ -254,6 +254,7 @@
 #	objects/1e/588c525c9867e2bcce6d7150df3072ac821872
 #	objects/1e/5ae5af58d35266db8e14335f0f754f419fbdbd
 #	objects/1e/6c83a3c041baf8d5703be26500b782a98c5ee6
+#	objects/1e/7448a165bcbf5695bba55ecaaf65029c679f94
 #	objects/1e/96572ce4a452dab8fe58c843ca3f5fef63a47d
 #	objects/1e/a6197f609454fcc9e35c8bb5bec5a6dbe6da3a
 #	objects/1e/baa005c71dce483ca9225581ef9d184a200f68
@@ -1680,6 +1681,7 @@
 #	objects/ea/2263d6feb270c1f061fad8ad1ef2f0cbbe7fe4
 #	objects/ea/2e6c3fd95194954d1d263bf7531b50ee28a890
 #	objects/ea/4b6871fe529b8589d99da7f82e0aaeae852a41
+#	objects/ea/73709994dbf4cb33e54bb9a7129662ac861d08
 #	objects/ea/bd0b6a90aff01d4eb5bff13e7eeff31838a114
 #	objects/ea/de6715471e3e489b004d43f7c450d99c98697d
 #	objects/ea/e6f6915ceae82a6d2cd67e68945beb432e1457
