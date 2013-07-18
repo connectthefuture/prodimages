@@ -1,4 +1,4 @@
-made py scripts executable
+
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
@@ -6,39 +6,12 @@ made py scripts executable
 #   (use "git reset HEAD <file>..." to unstage)
 #
 #	modified:   COMMIT_EDITMSG
+#	modified:   FETCH_HEAD
+#	modified:   ORIG_HEAD
 #	modified:   index
 #	modified:   logs/HEAD
 #	modified:   logs/refs/heads/master
 #	modified:   logs/refs/remotes/prodimages-dev/master
-#	modified:   python/.DS_Store
-#	modified:   python/.spyderproject
-#	modified:   python/DropboxSync.py
-#	modified:   python/FindDuplicates.py
-#	modified:   python/PYTHON_FUNCTION_MASTER.py
-#	modified:   python/PyInotifyEventHandler.pyc
-#	modified:   python/Recurse_Collect_Insert.py
-#	modified:   python/SWIReader.py
-#	modified:   python/SWIReaderOut.py
-#	modified:   python/Sample Code 2.py
-#	modified:   python/Swi-mapdb.py
-#	modified:   python/ThreadingFunx.py
-#	modified:   python/Untitled 4.py
-#	modified:   python/bandc_ver_cache_clear.py
-#	modified:   python/csv_rename.py
-#	modified:   python/dropboxlogin.py
-#	modified:   python/gcalScript.py
-#	modified:   python/imageClass.py
-#	modified:   python/pickleTextFile.py
-#	modified:   python/pythonstartup.py
-#	modified:   python/recurse_dir_get_exif_forStyleStringT.py
-#	modified:   python/recursedirlist.py
-#	modified:   python/simpleSocketWebSrv.py
-#	modified:   python/socksrvClient.py
-#	modified:   python/swi_download_from_Csv.py
-#	modified:   python/theBestPythonGetter.py.save
-#	modified:   python/tmp_recursedirlist.py
-#	modified:   python/xjbSecureSockServer.py
-#	modified:   python/xjbSocketClient.py
 #	modified:   refs/heads/master
 #	modified:   refs/remotes/prodimages-dev/master
 #
@@ -104,6 +77,7 @@ made py scripts executable
 #	objects/06/6b72dfbd10870fdc9a7859dc972e4191c6cf7c
 #	objects/06/8ce158886ddb59d3625738a23af4b25a4d4a5d
 #	objects/06/d9821bb29772dfbe90d9c83efa438991e604f2
+#	objects/06/dae8f8e8d2a9e5159417056cefbee1afbfc465
 #	objects/06/e155428fa575cd7eb135c42e7fe7ff97019e3d
 #	objects/06/e9372599d773a90366dc69e623e2599f612ec4
 #	objects/07/14a2e2787bf1b376199cdcf7bc92d0fe69c256
@@ -262,6 +236,7 @@ made py scripts executable
 #	objects/1f/40c08a7908f58b23d422410549b0e53abe4328
 #	objects/1f/49ee4e6da422fb4fd33402d2cf4b0203bec722
 #	objects/1f/5736792662f755ab8398a18e34ce58f51cea55
+#	objects/1f/8d6e0e9ee2a4310547e370999b931cc8a0275a
 #	objects/1f/d567db847ba7dc07aa895a4b0c477204ceffdc
 #	objects/1f/e6919f0a7f86237b8a375123ed5b0faaeea120
 #	objects/20/7bccaba8f2ae3bf9691b12a00577493d142534
@@ -374,6 +349,8 @@ made py scripts executable
 #	objects/31/9760bdef95eb0cb1a310c3efaefa07b6e941ba
 #	objects/31/bfe3b6ffc4c32afe5fc0d2bced0828c2354c7d
 #	objects/31/c9c8cb015789ab63421c3b63500a97757599bf
+#	objects/31/ed8adc3555bf1f9b1ed6569fc778b55653f218
+#	objects/31/f6c9b9ede52c6740380414575b5426c1f384c1
 #	objects/32/0f024195e1caac22e2486a7bcdb44c4522689f
 #	objects/32/2b0285280f13beea55bd5762c8c4740972a786
 #	objects/32/44d8711244433b8240c37b504399fcb6d60b28
@@ -397,6 +374,7 @@ made py scripts executable
 #	objects/34/57968583cbfa8bd68054bccc1672a0f434f15e
 #	objects/34/90712569447fa9211845d59ccf474752971f67
 #	objects/34/d536bbab8f0aafe8a2020921792ab60bbce802
+#	objects/34/e94cd465b93c3b95e57f987fd592338adfa264
 #	objects/34/f69836886dff2d4c1cd033c63ce5765caeba3a
 #	objects/35/08f4a78705f1de82d5b82b3d912cb4afc06f87
 #	objects/35/20ecc548ef642349968f40da2e2aa8cc3b5cd7
@@ -405,6 +383,7 @@ made py scripts executable
 #	objects/35/edd244ba0e2ed34bff97803f3da0e829887e38
 #	objects/36/8f4181e7d0ee9e2be7e76c87fbe588e2efa820
 #	objects/36/968525732b3ef80895c6e343f8eb8c42e03bea
+#	objects/36/c48aa343a72453ba0700446aca460850fa99bc
 #	objects/36/c8ec09f6be3724c91fb82c9bbb55d536803e33
 #	objects/36/cbff2ad661ce0ced6b01795453bfc51daa9cfb
 #	objects/36/df3c153703a7737ce686aec86bc48ad7327ca6
@@ -466,6 +445,7 @@ made py scripts executable
 #	objects/3d/9fb3cb086bf6b973e57a9024bd137ec42e9f31
 #	objects/3d/c7cf71f03f96cc9893442503ac30eaaf707f19
 #	objects/3d/d1ae0db55a9af8df4db51048830ddfd2c4b153
+#	objects/3e/35323e153c241623a51396bedeebc416b3d776
 #	objects/3e/5b480c65bdd292cd99f8645261d88d5bc5db63
 #	objects/3e/791526941d5ede87715e9e4b77bbb52fbd9fe9
 #	objects/3e/a308c2d73067f12c7ddb1f20bc3708f64a86ae
@@ -489,6 +469,7 @@ made py scripts executable
 #	objects/40/ba6f0c21573dc77e96f6a38b1b660bacd9342c
 #	objects/40/ea9f5b755c26fc1a2578728d9305a83193eebd
 #	objects/41/1b1db0b20e71b2817dc789b8a88eff0cb648af
+#	objects/41/432afc57b470728d2160f2c20f3e783ed7359e
 #	objects/41/8b437a1ccf8347e7fc65e006bd9cee9fe8dc51
 #	objects/41/8c792dd2e3dd1d999aabbe68e45eeea006a570
 #	objects/41/b23e50af32074d12d388418d28facda3b27af7
@@ -505,6 +486,7 @@ made py scripts executable
 #	objects/42/f8266f2c2fd01eaadaa40220df51b65cc0cb82
 #	objects/42/fba59c8a41765ba4c9cdd3110119f68353c8cb
 #	objects/42/fd5faff2b352a58f6b319d0abe7b30971588ec
+#	objects/43/1a64ccb68c88e72edc5db7ba4604a44dc24902
 #	objects/43/258964ced77d47a119dd33f48c1c52dd08495b
 #	objects/43/396336f50c3f41cbd7b24b5bc199f773a0574b
 #	objects/43/591c1954a4b6f7bbd8ceae24ef59a7327d1792
@@ -618,6 +600,7 @@ made py scripts executable
 #	objects/54/12b0e7c4d964646e5b73bddcd0d3f64e724171
 #	objects/54/1671f1e1a0c88581c51501c6c1711067bf0faf
 #	objects/54/18fc7b49742ca78edd855156b8d396991ca208
+#	objects/54/6a7e0789788099201ee6771278f3726e405c85
 #	objects/54/6eeb3b839da0304584f40e3ab7e1390e243e41
 #	objects/54/8b93a0214f780ab476a66ae46f09db4af4e66d
 #	objects/54/aa7d9694352ae60d83aeb16af6cef27dc5a576
@@ -646,6 +629,7 @@ made py scripts executable
 #	objects/57/10a02c8f90fbc75a89e2b6ecee5da6f7fba390
 #	objects/57/1c0c67e9fd12650498c1a993d410f78a5fc3e9
 #	objects/57/3ea08dad2351c8c2c1707ec3a685c32a4427af
+#	objects/57/53f9fda10512105949812a226a363ffeca6f35
 #	objects/57/62cbe4c52199e7a14a351525068c6493429b4e
 #	objects/57/705c0d46a6eddeb3c42e414398e78a53695f06
 #	objects/57/7c466d9eeaeaeb9e2f9a927dc4593c9e410431
@@ -718,6 +702,7 @@ made py scripts executable
 #	objects/61/d7e7b3759e60b1b4b0d8f35bb28f7b23b4ab91
 #	objects/62/20292d68e7486eb6039fc1912d22bd238b332c
 #	objects/62/323fcd6bc53e5e3172c332bfd8efc251d770d4
+#	objects/62/84571bdaf507a4add1b38c884f655c45e6135c
 #	objects/62/a61e5e932da0bd6c8d9d1227c2594cd55b5261
 #	objects/62/ca8777e15d78e569573055377d9439114dead9
 #	objects/62/d95e21b1d43e05f4102e4342ebacfa814341b4
@@ -728,6 +713,7 @@ made py scripts executable
 #	objects/63/65d1c62a86fe691230c9a3cabee174066f1d69
 #	objects/63/6b6939ae275dcd3280c554a847e4e80dfd984e
 #	objects/63/78be14c76908f9a262cf40ea7facaf0e416c53
+#	objects/63/8ef69c83bde8156c028602e421cf3cf2c09ff5
 #	objects/63/c5e768e21fc7c231a435b17fae9489b1186411
 #	objects/63/dc6cd6dfd6cbd5ee806b31c9c8d8bef5a97483
 #	objects/63/e490521043a8198568081c286967bd4a02b861
@@ -823,6 +809,7 @@ made py scripts executable
 #	objects/70/bf539f8ee8f66b7b3d6a2a4d0af8711058e3d6
 #	objects/71/084fba2a09fcabade9f41cc3f43d8be766af76
 #	objects/71/0a2821d4bf82ec9fed33bef275eb7178389910
+#	objects/71/0e94178e796a23bc31cd23ec091048ba8d2a5f
 #	objects/71/696d4a9771e77bac900ed71193343ab0683ce5
 #	objects/71/d8a44937f310bd9dd72ed82499af1dea5ace52
 #	objects/71/e54afd7078a3c2b8b504a1a56790333c08a737
@@ -967,6 +954,7 @@ made py scripts executable
 #	objects/84/1436597b22f7bb95061c807f03da40bac09b13
 #	objects/84/4ee3b504eec292a7acb93478e0a57c0e61e0a2
 #	objects/84/505bd71557fddada92ca22a119c351d387c43a
+#	objects/84/8d4002bcdbbd1309ea23f0721118ec487e1a26
 #	objects/84/9d793de3dfa93edd7daa9c605aadab67cc5a47
 #	objects/84/f227872368532ae719b2a4b86b3777937086ee
 #	objects/85/085f19e4632cecebaaca746e62b01691da2302
@@ -985,6 +973,7 @@ made py scripts executable
 #	objects/86/ebb65adea0e5703ceb859393c93f642ec312e6
 #	objects/86/eda913ea7773dcbccd2d0a0e62543041290e03
 #	objects/86/f898fd68fa4fb26cf93d29e2e4d9c70ee9c546
+#	objects/87/545eb77dedf8a45e60783e906e4ae8f4b40ae4
 #	objects/87/5bd77d8d2c8b458377b9d0a232086b1c64d400
 #	objects/87/64d309c313cc510005831553f4f9d1468250a6
 #	objects/87/99ee5f33947cd8383905f1d16ec7c278ce6a12
@@ -1084,9 +1073,12 @@ made py scripts executable
 #	objects/94/4cdf572ad9f504fa953e01913254e4dd63c422
 #	objects/94/537553dc5d640cbfcd825e5bcf30c61ea552a7
 #	objects/94/720d7608884654ddbefaccbf93273c7c1a8f97
+#	objects/94/75dc2f782297cc8d1d5e4e1565e4ddec94b102
 #	objects/94/a065acef6905ff22226fe0662124e22efd69ed
+#	objects/94/adde59f618b2e2b2302d108493c13386fea144
 #	objects/94/e28a6a93b8637fc4cd889e7a5d94951d31b2c2
 #	objects/94/ea06edb36249c6c78de02f81fc68f373eaaaa7
+#	objects/95/65121e2a174ae3bdc8a0d4d7b718d91ff27cbf
 #	objects/95/7aa3cfd16b8178727431a7fb2d22ce7d9cdbdc
 #	objects/95/7e1a71457803b31bac6853115c354a50f24995
 #	objects/95/c0a6ed2731aaa3012114498f0ab4c93e2e5520
@@ -1159,6 +1151,7 @@ made py scripts executable
 #	objects/a1/0526b9ff0f150864b998a4419835f4ccfbf539
 #	objects/a1/65ea1f057f72e43c048a74abe39b28daac1733
 #	objects/a1/747a5cc67a005c252d834a9917e78ae883e8c3
+#	objects/a1/77102c3d56f56bd8de292796406f46c18d72c8
 #	objects/a1/93731195e53c80076ee91ecc6f4cdd0cf56232
 #	objects/a1/aefc6d4f2e731a2e0f5aef76eb7269a705280a
 #	objects/a1/c56e3a8e6306dc338d39f748dd664a2d9e5652
@@ -1180,6 +1173,7 @@ made py scripts executable
 #	objects/a4/3d009f1862db753e3b6ef46feab6aef437a0a6
 #	objects/a4/40564a6390b2bd79bbf64a4de1c1b87955e9a6
 #	objects/a4/ae9b60e8bed7a7da97addb36db2661df1dc297
+#	objects/a4/af000288d3bcf4e5b536a35e6cfeaacfd56d0d
 #	objects/a4/c2b8005acbbd385c391e49603c071170e3294a
 #	objects/a4/f7e65e0fb96d30ae5e72a17c703634409ee755
 #	objects/a5/748dc1d764a17cce75d49a94f44833bad3a336
@@ -1285,6 +1279,7 @@ made py scripts executable
 #	objects/b3/cdda01d21939a2181edec7fb48c7c6662da7ec
 #	objects/b3/d566f350d6afc7d09efd3f4420c5a28139b180
 #	objects/b3/d7f97b60e413d928e253a9032f28360617be6b
+#	objects/b3/e9eda2233dae164fad454fa8d0e64de55b3fce
 #	objects/b4/081eccc924ce7286491d6993339d29b21b632a
 #	objects/b4/47c667d3f95c04a89211b28ccd5730c678be94
 #	objects/b4/7a026df5a34715bb21c60553e64405e36c06de
@@ -1305,6 +1300,7 @@ made py scripts executable
 #	objects/b6/94e939a99c979e2be50d617b6d5012dbdb0af9
 #	objects/b6/b5a3f2e461fd5d5a1c75425bbc2c62ecb1a27c
 #	objects/b6/b9ef3d62434db62e801e61451f22b82385739c
+#	objects/b6/f1011e86c3da89b3084486c895fb1d1b57b73d
 #	objects/b7/285e7c822f0c8c32124c53e7061f06931e17d3
 #	objects/b7/4941c5eafff3571109159a896037d2422affd8
 #	objects/b7/4cef8d9f26a4815fd6f62c4bce7a5b2893ebf2
@@ -1315,6 +1311,7 @@ made py scripts executable
 #	objects/b8/96d8a6b44f1dc0b02f5c283f9dcb61c3979197
 #	objects/b8/ab352e3c6867ae869d297908ef0afdfaa1199e
 #	objects/b8/bb1d19abe07ba5e86b2bbd5acf25f7894661f4
+#	objects/b8/c46e941b43fcae33ecff6966d8db69329e3478
 #	objects/b8/e672e053ed597d996ae1f309ceee1e26d85e5b
 #	objects/b9/1b3919e8c880b387fcaba37b206a561239096d
 #	objects/b9/2eba043d8b84df48b9273db74471f0bd674694
@@ -1355,6 +1352,7 @@ made py scripts executable
 #	objects/bd/84281c71dd279feb6c8a8c1e6ce1685d6869d4
 #	objects/bd/8b55e001de52d11ec7e6c08b64da0764aa523c
 #	objects/be/544f6cfe6b49ed1ee5151e4a9ebdcf5b005ede
+#	objects/be/573fa88c9de610c31140d37dfc19a624f7c5c6
 #	objects/be/582941f30fb2010ab2c346689988ded5f161c2
 #	objects/be/60821fd38b90caff6ef4d433cdec37ed144bfc
 #	objects/be/767f27c1c366150899c74cd7fa4ae6a2c47eb2
@@ -1370,6 +1368,7 @@ made py scripts executable
 #	objects/c0/b92af463b930e4d07ce3220c79b2257a551b96
 #	objects/c0/beb3790a4477d94524b1ee9862a8fc3dfe8a0b
 #	objects/c1/0d74d81378e03583068a50d3376eed57a23874
+#	objects/c1/2d4bfb59dac7a90f4f18478c59539d520ff7fd
 #	objects/c1/3c3e346c0bba5c81824f31c5e0509c3c70d9c6
 #	objects/c1/564ad04d78b054465a72078019c02150598068
 #	objects/c1/59fcf49168b2a65687de54f692f6f5c8e59592
@@ -1433,6 +1432,7 @@ made py scripts executable
 #	objects/c8/0038110005e5565b9296bf5e9717741ed67b2f
 #	objects/c8/5293329e256439514f2f47717e3893a3d66262
 #	objects/c8/5d53a689f45a0c6b37f2b0f9808bf415a096b8
+#	objects/c8/88ee88c3d1b17cdafb0d7acdfd7cd49a9b97ef
 #	objects/c8/9961ac800ed9c21aa6890c38428883e163bacf
 #	objects/c8/adc57f7503f510c7c7390562884c0918ed6b23
 #	objects/c8/b38cb93acf4b7af325e55a25c0c78eadc0a68e
@@ -1544,6 +1544,7 @@ made py scripts executable
 #	objects/d7/5c570e20ebecdf2cbea60486479d96a708734d
 #	objects/d7/6f9a7ce3af483a5f659fb195e04b5c0d5dd853
 #	objects/d7/7431ee093021a7dda60306b5bdd1da6e9efc20
+#	objects/d7/7ef0dcc179c8b7d744d91f078d64da499b8526
 #	objects/d7/82c397eee99975e02fafb877c1494e5d084a52
 #	objects/d7/9c214bea3e1b2a6c90893195b10745f5ffd8c1
 #	objects/d7/a1d32ed7d86d6ee37ae3e291ea8faad9b621f5
@@ -1577,6 +1578,7 @@ made py scripts executable
 #	objects/da/6e5aae6fcbd4ff1e19d9496b047a13af6713b8
 #	objects/da/73f3c9da5f0bada438ece90406e30f1c642988
 #	objects/da/7a61a6f807e61241bd4a8d798520d5195708bb
+#	objects/da/7ab9e7d96e61667a3e85c7d8ff8421acee4064
 #	objects/da/aec09108100d00074a7430a8c9819b073c4ce8
 #	objects/da/af29830715e8e8c67523e4a87bf29c76d275c7
 #	objects/da/b597562c0fb65c2a64cf86b749f2075ff1d6e5
@@ -1628,6 +1630,7 @@ made py scripts executable
 #	objects/e1/2db0718f7dd3c457ed07efd401ca06d93f9367
 #	objects/e1/550a1646f49f48c54697f7c359828e7ab0fdd6
 #	objects/e1/6e82c6f9229cb72c9a7fb7693fca744b5dbcf4
+#	objects/e1/d08b9a520f15fe51c65cf6492e30ecfbe08f36
 #	objects/e1/dd4746303f540d86c1c586a6f0d7efb025214c
 #	objects/e1/de090865eaf08c7c02440aca6f9f4377cb5673
 #	objects/e1/ee842bdc79d001818a0b181168440558e3ebaa
@@ -1652,6 +1655,7 @@ made py scripts executable
 #	objects/e4/cd8b805d2cb9992605bb07f8cb510193c2bf23
 #	objects/e5/0493d04e5a497d658718d9ee9ef547d5370aa3
 #	objects/e5/1eef1deab036a92b6e9ab1706daf9c7613d822
+#	objects/e5/2a137c0f8ed4ecf933ac3042452bbbc1afbe7a
 #	objects/e5/54ae9b81992257668d2e3ca09f7336ede7bd14
 #	objects/e5/640404e55c24a4fa30ca51e9ada0f5f9166e1c
 #	objects/e5/9442b1af5c8c74250ad5fea0398e6ab2a0d260
@@ -1785,6 +1789,7 @@ made py scripts executable
 #	objects/f7/e18615451805ba9aa7f1928616cfb971521ff7
 #	objects/f7/f042dc3162a4989a6e73cd5d48d14fe5c3ba0d
 #	objects/f8/287467307a2a7fb845f39f2055ef4324b31cdb
+#	objects/f8/6bc60bba360293090536325a012097022433fe
 #	objects/f8/7e3b894feb1fa18f924ac240c373adb3f67516
 #	objects/f8/b3ceb279ac10306f51040931891ff61d8c374b
 #	objects/f8/ba8c698852f1ed4ca4879ccb818812c84d5c8f
@@ -1806,6 +1811,7 @@ made py scripts executable
 #	objects/fb/1d8976f0f7a88170cb6e52fc9dae5e9e3a6966
 #	objects/fb/2995efa73e89226fff246d1910c0bb556a8d7e
 #	objects/fb/3766db782b8881c2875f1d17e7f5702ceca42a
+#	objects/fb/5454f67f64d441debe51863a0da1274cdd68f9
 #	objects/fb/55249005f30f08806de2b7804d17123df224a5
 #	objects/fb/7056bc9317f2b8073cde9e97e61a6bef1e6af4
 #	objects/fb/9a641c52616e6048665ed45282caa1a0398378
@@ -1827,6 +1833,7 @@ made py scripts executable
 #	objects/fd/f0ee08436b5ae73ae22f30ba4632fce245fac8
 #	objects/fe/04127e70a8602dc1a25c1c1a2ec006672ea728
 #	objects/fe/0af1a23bffa3ca88e8aba154a00a4253a2301d
+#	objects/fe/1422bfaf190e6cc6a027647b27a7114fdcea5a
 #	objects/fe/18f10f22696990e88cd683202cd96cd9901850
 #	objects/fe/4ba9181d13a977a0b722ec894f47b0b03db7f1
 #	objects/fe/4baa6888b32dd340fad0acf344ce4454898b67
