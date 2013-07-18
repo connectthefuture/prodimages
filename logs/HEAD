@@ -60,3 +60,5 @@ ecb1135a63f94d6d9fa4a19cbbcaf0fe3d00bae9 143df0466ab0449e71e1b46c59f5f9efbd2624a
 40ba6f0c21573dc77e96f6a38b1b660bacd9342c fe1422bfaf190e6cc6a027647b27a7114fdcea5a John Bragato <jbragato@yahoo.com> 1374096510 -0400	commit: made py scripts executable
 fe1422bfaf190e6cc6a027647b27a7114fdcea5a fb5454f67f64d441debe51863a0da1274cdd68f9 John Bragato <jbragato@yahoo.com> 1374096594 -0400	commit: bash scripts executable now All
 fb5454f67f64d441debe51863a0da1274cdd68f9 11c6410c2f6f7dd5f992be8ef395bcc5c0ea5d79 John Bragato <jbragato@yahoo.com> 1374151340 -0400	pull prodimages-dev master: Fast-forward
+11c6410c2f6f7dd5f992be8ef395bcc5c0ea5d79 0e1f0a5837ceedf04c682e4c8440d98f47363f93 John Bragato <jbragato@yahoo.com> 1374151481 -0400	commit: exec 10days view
+0e1f0a5837ceedf04c682e4c8440d98f47363f93 b8d04eb9e8f0ee9d3f5be07413e87d8013e6d87b John Bragato <jbragato@yahoo.com> 1374171664 -0400	commit (merge): Merge https://github.com/benhoyt/scandir
