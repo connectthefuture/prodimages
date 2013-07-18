@@ -37,10 +37,10 @@ def get_exif(filepath):
 from PIL import Image
 import pyexiv2
 
-Exif.Photo.DateTimeOriginal
+#Exif.Photo.DateTimeOriginal
 
-for k,v in mdata.iteritems():
-    print k,v
+#for k,v in mdata.iteritems():
+#    print k,v
 
 rootdir = sys.argv[1]
 
@@ -52,7 +52,8 @@ for line in walkedout:
     colorstyle = filename.split('_')[0]
     alt = file_path.split('_')[-1]
     alt = alt.strip('.jpg')
-    print "{0},{1},{2},{3}".format(colorstyle,alt,file_path,alt)
+    photodate = pyexiv2.ImageMetadata(file_path)['DateTimeOriginal']
+    print "{0},{1},{2},{3}".format(colorstyle,photodate,file_path,alt)
     
     
  
