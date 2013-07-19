@@ -65,7 +65,7 @@ def make_lowres_thumbnails_dir_or_singlefile(pathname):
 
 
 ###    
-## Write Rows to Dated CSV in Users Home Dir
+## Write Rows to Dated CSV in Users Home Dir If Desired
 def csv_write_datedOutfile(lines):
     import csv,datetime,os
     dt = str(datetime.datetime.now())
