@@ -70,9 +70,9 @@ for line in walkedout:
             stylestringsdict_tmp['file_path'] = file_path
             stylestringsdict_tmp['alt'] = alt
             stylestringsdict[file_path] = stylestringsdict_tmp
-            
+            file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
             ## Format CSV Rows
-            row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path,alt)
+            row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
             print row
             stylestrings.append(row)
         except IOError:
@@ -94,6 +94,7 @@ for k,v in stylestringsdict.iteritems():
     try:
         os.mkdirs(destdir)
         shutil.copy2(src,destdir)
+ ###------TODO MAKE COPY LOWRES AFTER COPYING TO ZIMAGES USING PIL   
     except:
         #try:
         shutil.copy2(src,destdir)
