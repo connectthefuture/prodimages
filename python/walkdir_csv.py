@@ -114,7 +114,8 @@ for line in walkedout:
             stylestrings.append(row)
         except IOError:
             print "IOError on {0}".format(line)
-
+        except AttributeError:
+            print "AttributeError on {0}".format(line)
 
 ## Write CSV List to dated file for Import to MySQL
 #csv_write_datedOutfile(stylestrings)
