@@ -21,7 +21,7 @@ def get_exif(filepath):
     from PIL import Image
     from PIL.ExifTags import TAGS
     exifdata = {}
-    i = Image.open(filepath,'rbU')
+    i = Image.open(filepath)
     info = i._getexif()
     for tag, value in info.items():
         decoded = TAGS.get(tag, tag)
@@ -58,26 +58,29 @@ stylestringsdict = {}
 for line in walkedout:
 #try:
     stylestringsdict_tmp = {}
-    if re.findall(regex,line):        
-        file_path = line
-        filename = file_path.split('/')[-1]
-        colorstyle = filename.split('_')[0]
-        alt_ext = file_path.split('_')[-1]
-        alt = alt_ext.split('.')[0]
-        ext = alt_ext.split('.')[-1]
-        photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-        #photo_da_te = pyexiv2.ImageMetadata(file_path)['DateTimeOriginal']
-        #photo_date = "PhotoDate"
-        stylestringsdict_tmp['colorstyle'] = colorstyle
-        stylestringsdict_tmp['photo_date'] = photo_date
-        stylestringsdict_tmp['file_path'] = file_path
-        stylestringsdict_tmp['alt'] = alt
-        stylestringsdict[file_path] = stylestringsdict_tmp
-        ## Format CSV Rows
-        row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path,alt)
-        #print row
-        stylestrings.append(row)
-        
+    if re.findall(regex,line):
+        try:
+            file_path = line
+            filename = file_path.split('/')[-1]
+            colorstyle = filename.split('_')[0]
+            alt_ext = file_path.split('_')[-1]
+            alt = alt_ext.split('.')[0]
+            ext = alt_ext.split('.')[-1]
+            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+            photo_date = photo_date.replace(':','-')
+            #photo_da_te = pyexiv2.ImageMetadata(file_path)['DateTimeOriginal']
+            #photo_date = "PhotoDate"
+            stylestringsdict_tmp['colorstyle'] = colorstyle
+            stylestringsdict_tmp['photo_date'] = photo_date
+            stylestringsdict_tmp['file_path'] = file_path
+            stylestringsdict_tmp['alt'] = alt
+            stylestringsdict[file_path] = stylestringsdict_tmp
+            ## Format CSV Rows
+            row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path,alt)
+            print row
+            stylestrings.append(row)
+        except IOError:
+            print "IOError on {0}".format(line)
 
 #except:
 #    print "Failed"
@@ -92,19 +95,20 @@ for line in walkedout:
 for k,v in stylestringsdict.iteritems():
     import os,sys,shutil
     src = k
-    destdir = os.path.join('~/Public/Post_Ready/zImages_1', v['colorstyle'][:4])
+    destdir = os.path.join('/mnt/Post_Ready/zImages_1', v['colorstyle'][:4])
     destfilename = src.split('/')[-1]
     destpath = os.path.join(destdir,destfilename)
     try:
         os.mkdirs(destdir)
         shutil.copy2(src,destdir)
     except:
-        try:
-            shutil.copy2(src,destfile)
-        except:
-            print "Error on {0} --> {1}".format(src,destpath)
-            pass
-    pass
+        #try:
+        shutil.copy2(src,destdir)
+        print "Success Copying {0} --> {1}".format(src,destpath)
+        #except:
+        #    print "Error on {0} --> {1}".format(src,destpath)
+        #    pass
+        #pass
     
 
 
