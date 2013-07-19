@@ -1,4 +1,4 @@
-#!/usr/local/python
+#!/usr/bin/env python
 
 def find_regex_list(regex,filelist):
     import re,os
