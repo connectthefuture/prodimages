@@ -45,9 +45,6 @@ from PIL import Image
 #import pyexiv2
 import os,sys,re
 
-#Exif.Photo.DateTimeOriginal
-
-
 rootdir = sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
@@ -56,7 +53,6 @@ regex = re.compile(r'.+?[.jpg|.JPG]$')
 stylestrings = []
 stylestringsdict = {}
 for line in walkedout:
-#try:
     stylestringsdict_tmp = {}
     if re.findall(regex,line):
         try:
@@ -68,22 +64,19 @@ for line in walkedout:
             ext = alt_ext.split('.')[-1]
             photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
             photo_date = photo_date.replace(':','-')
-            #photo_da_te = pyexiv2.ImageMetadata(file_path)['DateTimeOriginal']
-            #photo_date = "PhotoDate"
+
             stylestringsdict_tmp['colorstyle'] = colorstyle
             stylestringsdict_tmp['photo_date'] = photo_date
             stylestringsdict_tmp['file_path'] = file_path
             stylestringsdict_tmp['alt'] = alt
             stylestringsdict[file_path] = stylestringsdict_tmp
+            
             ## Format CSV Rows
             row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path,alt)
             print row
             stylestrings.append(row)
         except IOError:
             print "IOError on {0}".format(line)
-
-#except:
-#    print "Failed"
 
 
 ## Write CSV List to dated file for Import to MySQL
@@ -123,7 +116,7 @@ for k,v in stylestringsdict.iteritems():
     dfill['colorstyle'] = v['colorstyle']
     dfill['photo_date'] = v['photo_date']
     fpathstrip = k
-    fpathstrip = fpathstrip.replace('/mnt/Post_Ready/', '/')
+    fpathstrip = fpathstrip.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
     dfill['file_path'] = fpathstrip
     dfill['alt'] = v['alt']
     fulldict[k] =  dfill
