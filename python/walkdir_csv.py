@@ -179,7 +179,8 @@ for k,v in fulldict.iteritems():
         connection = mysql_engine.connect()
 
         connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
-    
+        
+        print "Successful Insert {0}".format(k)
     
     except sqlalchemy.exc.IntegrityError:
         print "Duplicate Entry {0}".format(k)    
