@@ -130,16 +130,18 @@ for k,v in stylestringsdict.iteritems():
     destpath = os.path.join(destdir,destfilename)
     ## Test if File Exists in zimage Directory else copy it and resize
     if os.path.isfile(destpath):
+        print "Not Copying Over File {0}".format(destpath)
         pass
     else:
             
         try:
             os.mkdirs(destdir)
             shutil.copy2(src,destdir)
-            
+            print "Success Copying {0} --> {1}".format(src,destpath)
             ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
             try:
                 make_lowres_thumbnails_dir_or_singlefile(destpath)
+                print "Created Thumbnail --> {0}".format(destpath)
             except:
                 print "Error Creating Thumbnail for {0}".format(destpath)
                 
@@ -147,6 +149,13 @@ for k,v in stylestringsdict.iteritems():
             #try:
             shutil.copy2(src,destdir)
             print "Success Copying {0} --> {1}".format(src,destpath)
+            ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
+            try:
+                make_lowres_thumbnails_dir_or_singlefile(destpath)
+                print "Created Thumbnail --> {0}".format(destpath)
+            except:
+                print "Error Creating Thumbnail for {0}".format(destpath)
+            
             #except:
             #    print "Error on {0} --> {1}".format(src,destpath)
             #    pass
@@ -195,7 +204,7 @@ for k,v in fulldict.iteritems():
             print "Successful Insert to Post_Ready_Originals --> {0}".format(k)
         
         elif re.findall(regex_zimages, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+            connection.execute("""INSERT INTO zimages1_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert to Zimages --> {0}".format(k)
         
         else:
