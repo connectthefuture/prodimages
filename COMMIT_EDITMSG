@@ -1,45 +1,21 @@
-Merge https://github.com/benhoyt/scandir
-Conflicts:
-	README.md
-#
-# It looks like you may be committing a merge.
-# If this is not correct, please remove the file
-#	MERGE_HEAD
-# and try again.
-
-
+instaled scandir
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
 # Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
 #
-#	new file:   .gitattributes
-#	new file:   .gitignore
-#	new file:   CHANGES.txt
 #	modified:   COMMIT_EDITMSG
-#	modified:   FETCH_HEAD
-#	new file:   LICENSE.txt
 #	modified:   ORIG_HEAD
-#	modified:   README.md
-#	new file:   _scandir.c
-#	new file:   benchmark.py
 #	modified:   index
 #	modified:   logs/HEAD
 #	modified:   logs/refs/heads/master
-#	modified:   logs/refs/remotes/prodimages-dev/master
 #	modified:   refs/heads/master
-#	modified:   refs/remotes/prodimages-dev/master
-#	new file:   scandir.py
-#	new file:   setup.py
-#	new file:   tests/run_tests.py
-#	new file:   tests/test_walk.py
+#	modified:   setup.py
 #
 # Untracked files:
 #   (use "git add <file>..." to include in what will be committed)
 #
-#	MERGE_HEAD
-#	MERGE_MODE
-#	MERGE_MSG
 #	bash/view_events_incomplete.sh.save
 #	objects/00/2c87572a175310a258e7de3e54aa7c08c29e17
 #	objects/00/436ddde68e0837e65c122f474d259752d9f179
@@ -116,6 +92,7 @@ Conflicts:
 #	objects/08/4ef12c21722a970a537d6df36e2ff2cb6b48d3
 #	objects/08/6a89abbd46b6dd9804ddfedbe646b1f9e14061
 #	objects/08/efd35874b58f53dea56b92fcfa8a5a1c85b68f
+#	objects/09/0e5772fec0ebeb8f016dd87ddaf58acc032a97
 #	objects/09/239152541afd5efea39a857b2ebcf8e66cda1f
 #	objects/09/49c9ecc1a1e694976149c826195574f806a138
 #	objects/09/572982b0afdc02121009deedc5d87e408f252b
@@ -126,6 +103,7 @@ Conflicts:
 #	objects/0a/300c1e68c55b315586ee0a1a0c49ab0f1e0049
 #	objects/0a/3595c0c680c33e2a26b80305908c40ad68325f
 #	objects/0a/3b553126e4b98f0521dcd5568fb5baffb741b9
+#	objects/0a/9bc97cfa29634b7ed9e38e3352ed8273b68456
 #	objects/0b/3a6dbcca63efb4eeb79787dae873e3d34af368
 #	objects/0b/3f444d26d0f6af3003fc4bc8a5323794106217
 #	objects/0b/77bc148d71261adc489d91c7ec4049e499b523
@@ -571,6 +549,7 @@ Conflicts:
 #	objects/45/f19d1e6612a3096bc1912b3c482f9a66600f8c
 #	objects/46/09abcc0d2123eb369f62b36fc6a620b9b9f9dd
 #	objects/46/18198d85af5cdfd8984581917cb996a7babbfb
+#	objects/46/3ad9a97b40079a6c97d3b7108d544f7108334e
 #	objects/46/7311660a4346ed8bf7ce527468925af3b1504e
 #	objects/46/8d33bff626ebffbd1aafeac6c4c9db56d5cb72
 #	objects/46/90a5756c2aafdc0a1757546739d865ce8b3de3
@@ -1140,6 +1119,7 @@ Conflicts:
 #	objects/91/3ef7e6eab48fa67736ac2e2f9af7ed0f6ab211
 #	objects/91/6548c0c6674386bbfad86f9a70c0292c2d5ee1
 #	objects/91/82d5f1fdbf2b8e3a343ff634a47f1ca4de7a08
+#	objects/91/8f65e49930c071f4ca5909edfad0ad5ae756db
 #	objects/91/c51d1873e0d8ad6070973aaa535505bf64f91e
 #	objects/91/c88a492b4df637e3c66f8462062c983cb3abdb
 #	objects/92/0fc369892ad1fd2355c9b08820415a3ac5c2ac
@@ -1271,6 +1251,7 @@ Conflicts:
 #	objects/a3/a6d4daa294819ea4157cf969aa140ac671d984
 #	objects/a3/db76886d6075b1b24781587ce498803f8bcb5e
 #	objects/a3/ffe88127eecfdd6d329f32fb12d08754a3127d
+#	objects/a4/03b505107cdf1441331dedc7fdb7b4d66918e4
 #	objects/a4/19502996b531c9d3aa95718bdeef159ffaaef7
 #	objects/a4/248a29bf07647d3f2dd72b1ecb2fd0afdf6fd2
 #	objects/a4/3d009f1862db753e3b6ef46feab6aef437a0a6
@@ -1407,6 +1388,7 @@ Conflicts:
 #	objects/b5/f3bd7e16e5510d55c6d6703146fc6b0a8ada16
 #	objects/b6/1bcd270e01fae28deab4ec1c5b3a0e95607ed4
 #	objects/b6/42ba9e29cd45bb1d7b290e0982fa4d5273cd56
+#	objects/b6/49e1c040dd5e08d6d14ca3481a43098764ae89
 #	objects/b6/91643cb530d85adfb8c85b3ff9228fa5c73c1f
 #	objects/b6/94e939a99c979e2be50d617b6d5012dbdb0af9
 #	objects/b6/b5a3f2e461fd5d5a1c75425bbc2c62ecb1a27c
@@ -1424,6 +1406,7 @@ Conflicts:
 #	objects/b8/ab352e3c6867ae869d297908ef0afdfaa1199e
 #	objects/b8/bb1d19abe07ba5e86b2bbd5acf25f7894661f4
 #	objects/b8/c46e941b43fcae33ecff6966d8db69329e3478
+#	objects/b8/d04eb9e8f0ee9d3f5be07413e87d8013e6d87b
 #	objects/b8/e672e053ed597d996ae1f309ceee1e26d85e5b
 #	objects/b9/1b3919e8c880b387fcaba37b206a561239096d
 #	objects/b9/2eba043d8b84df48b9273db74471f0bd674694
@@ -1574,6 +1557,7 @@ Conflicts:
 #	objects/cb/62d2d07fdb624ca16725ab03994bc8d458482c
 #	objects/cb/91b7659842af7b42935a2ffe5490a5649cabe7
 #	objects/cb/95cfb65d0eccdff5b0ece8acfe7917466eb430
+#	objects/cb/9af7d173b7dae9ef1b71d607293c8eaacbb9fe
 #	objects/cb/d7a3681cb3d0aaa4851069cd4c0cb25c01d572
 #	objects/cb/fd99523f79caa91cb29d64447789d3a67c98c7
 #	objects/cc/24d6d5ac3674ccd38a9ba1f91488d51eeef617
@@ -1685,6 +1669,7 @@ Conflicts:
 #	objects/d8/51537ec098d00666e1505ded56328f6c50ed8d
 #	objects/d8/74aae2dc165ff4992f6831bb231bc3a1e7c9d8
 #	objects/d8/9785ada08e6f076fc90db79099c4b4a9b63c87
+#	objects/d8/c75cd9d280cc902217c5ed2edbd4d28d9a3a27
 #	objects/d8/d3b55c4c29036bcc6810cd524e288f8437e12c
 #	objects/d8/dbdf5fd711d126d9545ed40784e2a6c06e9953
 #	objects/d8/ef75086b495c4e4b5a6c0090ab1c562444262e
@@ -1698,6 +1683,7 @@ Conflicts:
 #	objects/d9/c0f5e0c495e51997884d4c84aefd77ef07b976
 #	objects/d9/e10537b54c50cdf73e2d6f82aecdd2eee6acea
 #	objects/d9/e948a066d8d0ad87d768dd05bae2e2ab6449d3
+#	objects/da/024a34d5eef14b30588b0e6de806cf998f6733
 #	objects/da/0e0eec2553e8a6489ca6c4dd44f33b64c7bc2b
 #	objects/da/218e68c1bc01ed2734065cf41fba836251eec0
 #	objects/da/33f6d1911259f81e4d595bcc0d96b9f97a2777
@@ -1976,6 +1962,7 @@ Conflicts:
 #	objects/fe/0af1a23bffa3ca88e8aba154a00a4253a2301d
 #	objects/fe/1422bfaf190e6cc6a027647b27a7114fdcea5a
 #	objects/fe/18f10f22696990e88cd683202cd96cd9901850
+#	objects/fe/3e32e26dce9c9e23d231b2e4a0ac8e0947cb27
 #	objects/fe/4ba9181d13a977a0b722ec894f47b0b03db7f1
 #	objects/fe/4baa6888b32dd340fad0acf344ce4454898b67
 #	objects/fe/5f9e6a1949789ee21cc3a026c411f638109b61
