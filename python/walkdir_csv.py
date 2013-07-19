@@ -182,7 +182,7 @@ for k,v in fulldict.iteritems():
     
     
     except sqlalchemy.exc.IntegrityError:
-        print "Duplicate Entry {0}".format(fpathstrip)    
+        print "Duplicate Entry {0}".format(k)    
 
     #for vals in v:
     #    print v[vals]
