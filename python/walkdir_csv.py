@@ -101,7 +101,6 @@ for line in walkedout:
             ext = alt_ext.split('.')[-1]
             photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
             photo_date = photo_date.replace(':','-')
-
             stylestringsdict_tmp['colorstyle'] = colorstyle
             stylestringsdict_tmp['photo_date'] = photo_date
             stylestringsdict_tmp['file_path'] = file_path
@@ -129,25 +128,30 @@ for k,v in stylestringsdict.iteritems():
     destdir = os.path.join('/mnt/Post_Ready/zImages_1', v['colorstyle'][:4])
     destfilename = src.split('/')[-1]
     destpath = os.path.join(destdir,destfilename)
-    try:
-        os.mkdirs(destdir)
-        shutil.copy2(src,destdir)
-        
-        ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
-        try:
-            make_lowres_thumbnails_dir_or_singlefile(destpath)
-        except:
-            print "Error Creating Thumbnail for {0}".format(destpath)
+    ## Test if File Exists in zimage Directory else copy it and resize
+    if os.path.isfile(destpath):
+        pass
+    else:
             
-    except:
-        #try:
-        shutil.copy2(src,destdir)
-        print "Success Copying {0} --> {1}".format(src,destpath)
-        #except:
-        #    print "Error on {0} --> {1}".format(src,destpath)
-        #    pass
-        #pass
-    
+        try:
+            os.mkdirs(destdir)
+            shutil.copy2(src,destdir)
+            
+            ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
+            try:
+                make_lowres_thumbnails_dir_or_singlefile(destpath)
+            except:
+                print "Error Creating Thumbnail for {0}".format(destpath)
+                
+        except:
+            #try:
+            shutil.copy2(src,destdir)
+            print "Success Copying {0} --> {1}".format(src,destpath)
+            #except:
+            #    print "Error on {0} --> {1}".format(src,destpath)
+            #    pass
+            #pass
+        
 
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
@@ -162,6 +166,7 @@ for k,v in stylestringsdict.iteritems():
     dfill['photo_date'] = v['photo_date']
     file_path = k
     file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+    file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     fulldict[k] =  dfill
@@ -175,12 +180,31 @@ for k,v in stylestringsdict.iteritems():
 ## Take the compiled k/v pairs and Format + Insert into MySQL DB
 for k,v in fulldict.iteritems():
     try:
+        
         mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         connection = mysql_engine.connect()
-
-        connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
         
-        print "Successful Insert {0}".format(k)
+        
+        ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
+        sqlinsert_choose_test = v['file_path']
+        regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.+?[.jpg|.JPG]$')
+        regex_postreadyoriginal = re.compile(r'^/Retouch_.+?[.jpg|.JPG]$')
+        regex_zimages = re.compile(r'^[/zImages].+?[.jpg|.JPG]$')
+        
+        if re.findall(regex_photoselects, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+            print "Successful Insert Push_Photoselecs --> {0}".format(k)
+            
+        elif re.findall(regex_postreadyoriginal, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO post_ready_original (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+            print "Successful Insert to Post_Ready_Originals --> {0}".format(k)
+        
+        elif re.findall(regex_zimages, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+            print "Successful Insert to Zimages --> {0}".format(k)
+        
+        else:
+            print "Database Table not Found for Inserting {0}".format(k)
     
     except sqlalchemy.exc.IntegrityError:
         print "Duplicate Entry {0}".format(k)    
