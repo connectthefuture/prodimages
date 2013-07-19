@@ -170,11 +170,6 @@ for k,v in stylestringsdict.iteritems():
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     fulldict[k] =  dfill
-    #csv_datedOutFile(kvstring)
-    #print kvstring
-    #d = dict(colorstyle=colorstyle, photo_date=photo_date, file_path=file_path, alt=alt)
-    #print dfill
-    print 'DebuggerLine'
 
 
 ## Take the compiled k/v pairs and Format + Insert into MySQL DB
