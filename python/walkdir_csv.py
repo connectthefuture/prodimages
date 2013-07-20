@@ -139,37 +139,49 @@ for k,v in stylestringsdict.iteritems():
     destpath = os.path.join(destdir,destfilename)
     ## Test if File Exists in zimage Directory else copy it and resize
     if os.path.isfile(destpath):
-        print "Not Copying Over File {0}".format(destpath)
+        #print "Not Copying Over File {0}".format(destpath)
         pass
     else:
 
         try:
             os.mkdirs(destdir)
             shutil.copy2(src,destdir)
-            print "Success Copying {0} --> {1}".format(src,destpath)
+            success = "Success Copying {0} --> {1}".format(src,destpath)
+            #print success
+            csv_write_datedOutfile(success)
             ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
             try:
                 make_lowres_thumbnails_dir_or_singlefile(destpath)
-                print "Created Thumbnail --> {0}".format(destpath)
+                successthumb = "Created Thumbnail --> {0}".format(destpath)
+                #print successthumb
+                csv_write_datedOutfile(successthumb)
             except:
-                print "Error Creating Thumbnail for {0}".format(destpath)
+                errthumb = "Error Creating Thumbnail for {0}".format(destpath)
+                print errthumb
+                csv_write_datedOutfile(errthumb)
+
 
         except:
             #try:
             shutil.copy2(src,destdir)
-            print "Success Copying {0} --> {1}".format(src,destpath)
+            success = "Success Copying {0} --> {1}".format(src,destpath)
+            #print success
+            csv_write_datedOutfile(success)
             ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
             try:
                 make_lowres_thumbnails_dir_or_singlefile(destpath)
-                print "Created Thumbnail --> {0}".format(destpath)
+                successthumb = "Created Thumbnail --> {0}".format(destpath)
+                #print successthumb
+                csv_write_datedOutfile(successthumb)
             except:
-                print "Error Creating Thumbnail for {0}".format(destpath)
+                errthumb = "Error Creating Thumbnail for {0}".format(destpath)
+                print errthumb
+                csv_write_datedOutfile(errthumb)
 
             #except:
             #    print "Error on {0} --> {1}".format(src,destpath)
             #    pass
             #pass
-
 
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
