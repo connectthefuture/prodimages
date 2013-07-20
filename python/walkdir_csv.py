@@ -99,7 +99,12 @@ for line in walkedout:
             alt_ext = file_path.split('_')[-1]
             alt = alt_ext.split('.')[0]
             ext = alt_ext.split('.')[-1]
-            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+            
+            try:            
+                photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+            except:
+                photo_date = 0000-00-00
+                
             photo_date = photo_date.replace(':','-')
             stylestringsdict_tmp['colorstyle'] = colorstyle
             stylestringsdict_tmp['photo_date'] = photo_date
