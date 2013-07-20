@@ -160,7 +160,7 @@ for k,v in stylestringsdict.iteritems():
 				success = "Success Moving {0} --> {1}".format(src,destpath)
 				#print success
 				csv_write_datedOutfile(success)
-        except:
+            except:
 				errthumb = "Error Moving {0} --> {0}".format(src,destpath)
 				print errthumb
 				csv_write_datedOutfile(errthumb)
