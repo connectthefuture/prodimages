@@ -39,7 +39,8 @@ def make_lowres_thumbnails_dir_or_singlefile(pathname):
     from PIL import Image
     import glob, os, re
     size = 600, 720
-    regex_jpeg = re.compile(r'.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
+    regex_jpeg = re.compile(r'.+?[.jpg|.JPG]$')
+#    regex_jpeg_colorstyle = re.compile(r'.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
 
     if re.findall(regex_jpeg, pathname):
     ## If input variable is a single File Create 1 Thumb
@@ -146,7 +147,7 @@ for k,v in stylestringsdict.iteritems():
             ## Prior to COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
 			make_lowres_thumbnails_dir_or_singlefile(src)
 			successthumb = "Created Thumbnail --> {0}".format(src)
-			src = src.replace('.JPG', '.JPEG')
+			src = src.replace('.jpg', '.jpeg')
 			#print successthumb
 			csv_write_datedOutfile(successthumb)
             try:
@@ -160,13 +161,12 @@ for k,v in stylestringsdict.iteritems():
                 print errthumb
                 csv_write_datedOutfile(errthumb)
 
-
         except:
             #try:
             ## Prior to COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
 			make_lowres_thumbnails_dir_or_singlefile(src)
 			successthumb = "Created Thumbnail --> {0}".format(src)
-			src = src.replace('.JPG', '.JPEG')
+			src = src.replace('.jpg', '.jpeg')
 			#print successthumb
 			csv_write_datedOutfile(successthumb)
             try:
@@ -181,7 +181,6 @@ for k,v in stylestringsdict.iteritems():
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy
-#import _mysql
 
 ## First compile the SQL Fields as key value pairs
 fulldict = {}
