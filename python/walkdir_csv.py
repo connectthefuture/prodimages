@@ -152,8 +152,7 @@ for k,v in stylestringsdict.iteritems():
         try:
             make_lowres_thumbnails_dir_or_singlefile(src)
             successthumb = "Created Thumbnail --> {0}".format(src)
-            #print successthumb
-			csv_write_datedOutfile(successthumb)
+            csv_write_datedOutfile(successthumb)
 ## Success on Thumb Creation Now Move to Dest Dir
             try:
                 src = os.replace('.jpg', '.jpeg')
