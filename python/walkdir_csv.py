@@ -143,41 +143,33 @@ for k,v in stylestringsdict.iteritems():
         #print "Not Copying Over File {0}".format(destpath)
         pass
     else:
+## Mkdir if not there
         try:
-            ## Prior to COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
-			make_lowres_thumbnails_dir_or_singlefile(src)
-			successthumb = "Created Thumbnail --> {0}".format(src)
-			src = src.replace('.jpg', '.jpeg')
-			#print successthumb
-			csv_write_datedOutfile(successthumb)
-			try:
-				os.mkdirs(destdir)
-				shutil.copy2(src,destdir)
-				success = "Success Copying {0} --> {1}".format(src,destpath)
-				#print success
-				csv_write_datedOutfile(success)
-			except:
-				errthumb = "Error Creating Thumbnail for {0}".format(destpath)
-				print errthumb
-				csv_write_datedOutfile(errthumb)
-
+            os.mkdirs(destdir)
         except:
-            #try:
-            ## Prior to COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
-			make_lowres_thumbnails_dir_or_singlefile(src)
+            pass
+## Mk Thumbs Then move thumbs to Destdir
+        try:
+            make_lowres_thumbnails_dir_or_singlefile(src)
 			successthumb = "Created Thumbnail --> {0}".format(src)
-			src = src.replace('.jpg', '.jpeg')
 			#print successthumb
 			csv_write_datedOutfile(successthumb)
-			try:
-				shutil.copy2(src,destdir)
-				success = "Success Copying {0} --> {1}".format(src,destpath)
+## Success on Thumb Creation Now Move to Dest Dir
+            try:
+                src = os.replace('.jpg', '.jpeg')
+				os.rename(src,destpath)
+				success = "Success Moving {0} --> {1}".format(src,destpath)
 				#print success
 				csv_write_datedOutfile(success)
 			except:
-				errthumb = "Error Creating Thumbnail for {0}".format(destpath)
+				errthumb = "Error Moving {0} --> {0}".format(src,destpath)
 				print errthumb
 				csv_write_datedOutfile(errthumb)
+        except:
+            errthumb = "Error Creating Thumbnail for {0}".format(src)
+            print errthumb
+            csv_write_datedOutfile(errthumb)
+
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy

@@ -7,10 +7,8 @@ Created on Sat Feb 23 22:38:40 2013
 @name: FUNCTION DEFINITIONS
 """
 
-#from sys import * 
-#from os import * 
 import os
-import sysu
+import sys
 import re
 import readline 
 import rlcompleter
