@@ -37,32 +37,32 @@ def get_exif(file_path):
 ## Make Lowres Thumnails from Image files or Directory Full of Image Files
 def make_lowres_thumbnails_dir_or_singlefile(pathname):
     from PIL import Image
-    import glob, os
+    import glob, os, re
     size = 600, 720
+    regex_jpeg = re.compile(r'.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
 
+    if re.findall(regex_jpeg, pathname):
     ## If input variable is a single File Create 1 Thumb
-    if os.path.isfile(pathname):
-        try:
-            infile = os.path.abspath(pathname)
-            filename, ext = os.path.splitext(infile)
-            im = Image.open(infile)
-            im.thumbnail(size, Image.ANTIALIAS)
-            im.save(filename + ".thumbnail", "JPG")
-        except:
-            print "Error Creating Single File Thumbnail for {0}".format(infile)
-
-    ## If input variable is a Directory Decend into Dir and Crate Thumnails for all jpgs
-    elif os.path.isdir(pathname):
-        dirname = os.path.abspath(pathname)
-        for infile in glob.glob(os.path.join(dirname, "*.jpg")):
+        if os.path.isfile(pathname):
             try:
+                infile = os.path.abspath(pathname)
                 filename, ext = os.path.splitext(infile)
                 im = Image.open(infile)
                 im.thumbnail(size, Image.ANTIALIAS)
-                im.save(filename + ".thumbnail", "JPG")
+                im.save(filename , "JPEG")
             except:
-                print "Error Creating Thumbnail for {0}".format(infile)
-
+                print "Error Creating Single File Thumbnail for {0}".format(infile)
+    ## If input variable is a Directory Decend into Dir and Crate Thumnails for all jpgs
+        elif os.path.isdir(pathname):
+            dirname = os.path.abspath(pathname)
+            for infile in glob.glob(os.path.join(dirname, "*.jpg")):
+                try:
+                    filename, ext = os.path.splitext(infile)
+                    im = Image.open(infile)
+                    im.thumbnail(size, Image.ANTIALIAS)
+                    im.save(filename, "JPEG")
+                except:
+                    print "Error Creating Thumbnail for {0}".format(infile)
 
 ###
 ## Write Rows to Dated CSV in Users Home Dir If Desired
@@ -142,19 +142,19 @@ for k,v in stylestringsdict.iteritems():
         #print "Not Copying Over File {0}".format(destpath)
         pass
     else:
-
         try:
-            os.mkdirs(destdir)
-            shutil.copy2(src,destdir)
-            success = "Success Copying {0} --> {1}".format(src,destpath)
-            #print success
-            csv_write_datedOutfile(success)
-            ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
+            ## Prior to COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
+			make_lowres_thumbnails_dir_or_singlefile(src)
+			successthumb = "Created Thumbnail --> {0}".format(src)
+			src = src.replace('.JPG', '.JPEG')
+			#print successthumb
+			csv_write_datedOutfile(successthumb)
             try:
-                make_lowres_thumbnails_dir_or_singlefile(destpath)
-                successthumb = "Created Thumbnail --> {0}".format(destpath)
-                #print successthumb
-                csv_write_datedOutfile(successthumb)
+				os.mkdirs(destdir)
+				shutil.copy2(src,destdir)
+				success = "Success Copying {0} --> {1}".format(src,destpath)
+				#print success
+				csv_write_datedOutfile(success)
             except:
                 errthumb = "Error Creating Thumbnail for {0}".format(destpath)
                 print errthumb
@@ -163,26 +163,21 @@ for k,v in stylestringsdict.iteritems():
 
         except:
             #try:
-            shutil.copy2(src,destdir)
-            success = "Success Copying {0} --> {1}".format(src,destpath)
-            #print success
-            csv_write_datedOutfile(success)
-            ## AFTER COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
+            ## Prior to COPYING TO HASED DIR STRUCTURE REZ DOWN IMG TO 600X720 For faster Browser Loading
+			make_lowres_thumbnails_dir_or_singlefile(src)
+			successthumb = "Created Thumbnail --> {0}".format(src)
+			src = src.replace('.JPG', '.JPEG')
+			#print successthumb
+			csv_write_datedOutfile(successthumb)
             try:
-                make_lowres_thumbnails_dir_or_singlefile(destpath)
-                successthumb = "Created Thumbnail --> {0}".format(destpath)
-                #print successthumb
-                csv_write_datedOutfile(successthumb)
+				shutil.copy2(src,destdir)
+				success = "Success Copying {0} --> {1}".format(src,destpath)
+				#print success
+				csv_write_datedOutfile(success)
             except:
                 errthumb = "Error Creating Thumbnail for {0}".format(destpath)
                 print errthumb
                 csv_write_datedOutfile(errthumb)
-
-            #except:
-            #    print "Error on {0} --> {1}".format(src,destpath)
-            #    pass
-            #pass
-
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy

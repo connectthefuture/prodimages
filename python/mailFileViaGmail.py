@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
@@ -50,7 +50,7 @@ gmail_pwd = "yankee17"
 #        for line in to_emailargs:
 #            toaddrs_list.append(line)
 #    else:
-#        print "Fail"   
+#        print "Fail"
 #
 
 
@@ -61,7 +61,7 @@ try:
         try:
             if os.path.isfile(test):
                 bodyfile    = sys.argv[2]
-                msgsubj     = "SentByPython"
+                msgsubj     = "The Daily Completion Manifesto"
                 msgbody     = open(bodyfile, 'rb').read()
 
                 try:
@@ -80,12 +80,12 @@ try:
             toaddrs      = "john.bragato@bluefly.com"
 except IndexError:
     toaddrs     = "john.bragato@bluefly.com"
-    msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1])) 
+    msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
     msgbody     = "TestBody"
 
 ## Test for HTML File to insert as Body of email
 
-        
+
 
 
 
