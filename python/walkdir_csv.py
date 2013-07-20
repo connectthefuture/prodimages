@@ -155,19 +155,19 @@ for k,v in stylestringsdict.iteritems():
             csv_write_datedOutfile(successthumb)
 ## Success on Thumb Creation Now Move to Dest Dir
             try:
-                src = os.replace('.jpg', '.jpeg')
+				src = os.replace('.jpg', '.jpeg')
 				os.rename(src,destpath)
 				success = "Success Moving {0} --> {1}".format(src,destpath)
 				#print success
 				csv_write_datedOutfile(success)
-            except:
+			except:
 				errthumb = "Error Moving {0} --> {0}".format(src,destpath)
 				print errthumb
 				csv_write_datedOutfile(errthumb)
-        except:
-            errthumb = "Error Creating Thumbnail for {0}".format(src)
-            print errthumb
-            csv_write_datedOutfile(errthumb)
+		except:
+			errthumb = "Error Creating Thumbnail for {0}".format(src)
+			print errthumb
+			csv_write_datedOutfile(errthumb)
 
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
