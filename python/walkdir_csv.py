@@ -150,16 +150,16 @@ for k,v in stylestringsdict.iteritems():
 			src = src.replace('.jpg', '.jpeg')
 			#print successthumb
 			csv_write_datedOutfile(successthumb)
-            try:
+			try:
 				os.mkdirs(destdir)
 				shutil.copy2(src,destdir)
 				success = "Success Copying {0} --> {1}".format(src,destpath)
 				#print success
 				csv_write_datedOutfile(success)
-            except:
-                errthumb = "Error Creating Thumbnail for {0}".format(destpath)
-                print errthumb
-                csv_write_datedOutfile(errthumb)
+			except:
+				errthumb = "Error Creating Thumbnail for {0}".format(destpath)
+				print errthumb
+				csv_write_datedOutfile(errthumb)
 
         except:
             #try:
