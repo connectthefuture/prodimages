@@ -212,9 +212,9 @@ for k,v in fulldict.iteritems():
 
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.+?[.jpg|.JPG]$')
-        regex_postreadyoriginal = re.compile(r'^/Retouch_.+?[.jpg|.JPG]$')
-        regex_zimages = re.compile(r'^[/zImages].+?[.jpg|.JPG]$')
+        regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
+        regex_postreadyoriginal = re.compile(r'^/Retouch_.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
+        regex_zimages = re.compile(r'^[/zImages].+?[0-9]{9}_[1-6][.jpg|.JPG]$')
 
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
