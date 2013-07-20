@@ -151,8 +151,8 @@ for k,v in stylestringsdict.iteritems():
 ## Mk Thumbs Then move thumbs to Destdir
         try:
             make_lowres_thumbnails_dir_or_singlefile(src)
-			successthumb = "Created Thumbnail --> {0}".format(src)
-			#print successthumb
+            successthumb = "Created Thumbnail --> {0}".format(src)
+            #print successthumb
 			csv_write_datedOutfile(successthumb)
 ## Success on Thumb Creation Now Move to Dest Dir
             try:
@@ -161,7 +161,7 @@ for k,v in stylestringsdict.iteritems():
 				success = "Success Moving {0} --> {1}".format(src,destpath)
 				#print success
 				csv_write_datedOutfile(success)
-			except:
+            except:
 				errthumb = "Error Moving {0} --> {0}".format(src,destpath)
 				print errthumb
 				csv_write_datedOutfile(errthumb)
