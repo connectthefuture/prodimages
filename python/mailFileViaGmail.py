@@ -58,26 +58,24 @@ gmail_pwd = "yankee17"
 try:
     if sys.argv[2]:
         test = sys.argv[2]
-        try:
-            if os.path.isfile(test):
-                bodyfile    = sys.argv[2]
-                msgsubj     = "The Daily Completion Manifesto"
+        if os.path.isfile(test):
+            bodyfile    = sys.argv[2]
+            msgsubj     = "The Daily Completion Manifesto"
+### Try to make body of message render HTML
+            try:
                 msgbody     = open(bodyfile, 'rb').read()
-
-                try:
-                    if sys.argv[3]:
-                        toaddrs     = "john.bragato@bluefly.com"
-                except:
-                    toaddrs     = "john.bragato@bluefly.com"
-
+            except NameError:
+                msgbody      = "NameErrorTestBody"
+#                msgsubj      = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
+#                toaddrs      = "john.bragato@bluefly.com"
+            if sys.argv[3]:
+                toaddrs     = "john.bragato@bluefly.com"
             else:
-                toaddrs     = sys.argv[2]
-                msgbody     = "TestBody"
-                msgsubj     = "SentByPython"
-        except NameError:
-            msgbody      = "NameErrorTestBody"
-            msgsubj      = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
-            toaddrs      = "john.bragato@bluefly.com"
+			    toaddrs     = "john.bragato@bluefly.com"
+        else:
+			toaddrs     = sys.argv[2]
+			msgbody     = "TestBody"
+			msgsubj     = "SentByPython"
 except IndexError:
     toaddrs     = "john.bragato@bluefly.com"
     msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
