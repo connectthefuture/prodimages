@@ -39,10 +39,10 @@ def make_lowres_thumbnails_dir_or_singlefile(pathname):
     from PIL import Image
     import glob, os
     size = 600, 720
-    
+
     ## If input variable is a single File Create 1 Thumb
     if os.path.isfile(pathname):
-        try:    
+        try:
             infile = os.path.abspath(pathname)
             filename, ext = os.path.splitext(infile)
             im = Image.open(infile)
@@ -50,7 +50,7 @@ def make_lowres_thumbnails_dir_or_singlefile(pathname):
             im.save(filename + ".thumbnail", "JPG")
         except:
             print "Error Creating Single File Thumbnail for {0}".format(infile)
-    
+
     ## If input variable is a Directory Decend into Dir and Crate Thumnails for all jpgs
     elif os.path.isdir(pathname):
         dirname = os.path.abspath(pathname)
@@ -64,7 +64,7 @@ def make_lowres_thumbnails_dir_or_singlefile(pathname):
                 print "Error Creating Thumbnail for {0}".format(infile)
 
 
-###    
+###
 ## Write Rows to Dated CSV in Users Home Dir If Desired
 def csv_write_datedOutfile(lines):
     import csv,datetime,os
@@ -99,12 +99,15 @@ for line in walkedout:
             alt_ext = file_path.split('_')[-1]
             alt = alt_ext.split('.')[0]
             ext = alt_ext.split('.')[-1]
-            
-            try:            
+
+            try:
                 photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-            except:
-                photo_date = 0000-00-00
-                
+            except KeyError:
+            	try:
+            	    photo_date = get_exif(file_path)['DateTime'][:10]
+            	except KeyError:
+                	photo_date = 0000-00-00
+
             photo_date = photo_date.replace(':','-')
             stylestringsdict_tmp['colorstyle'] = colorstyle
             stylestringsdict_tmp['photo_date'] = photo_date
@@ -139,7 +142,7 @@ for k,v in stylestringsdict.iteritems():
         print "Not Copying Over File {0}".format(destpath)
         pass
     else:
-            
+
         try:
             os.mkdirs(destdir)
             shutil.copy2(src,destdir)
@@ -150,7 +153,7 @@ for k,v in stylestringsdict.iteritems():
                 print "Created Thumbnail --> {0}".format(destpath)
             except:
                 print "Error Creating Thumbnail for {0}".format(destpath)
-                
+
         except:
             #try:
             shutil.copy2(src,destdir)
@@ -161,12 +164,12 @@ for k,v in stylestringsdict.iteritems():
                 print "Created Thumbnail --> {0}".format(destpath)
             except:
                 print "Error Creating Thumbnail for {0}".format(destpath)
-            
+
             #except:
             #    print "Error on {0} --> {1}".format(src,destpath)
             #    pass
             #pass
-        
+
 
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
@@ -190,34 +193,34 @@ for k,v in stylestringsdict.iteritems():
 ## Take the compiled k/v pairs and Format + Insert into MySQL DB
 for k,v in fulldict.iteritems():
     try:
-        
+
         mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         connection = mysql_engine.connect()
-        
-        
+
+
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
         regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.+?[.jpg|.JPG]$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?[.jpg|.JPG]$')
         regex_zimages = re.compile(r'^[/zImages].+?[.jpg|.JPG]$')
-        
+
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert Push_Photoselecs --> {0}".format(k)
-            
+
         elif re.findall(regex_postreadyoriginal, sqlinsert_choose_test):
             connection.execute("""INSERT INTO post_ready_original (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert to Post_Ready_Originals --> {0}".format(k)
-        
+
         elif re.findall(regex_zimages, sqlinsert_choose_test):
             connection.execute("""INSERT INTO zimages1_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert to Zimages --> {0}".format(k)
-        
+
         else:
             print "Database Table not Found for Inserting {0}".format(k)
-    
+
     except sqlalchemy.exc.IntegrityError:
-        print "Duplicate Entry {0}".format(k)    
+        print "Duplicate Entry {0}".format(k)
 
     #for vals in v:
     #    print v[vals]
