@@ -134,41 +134,46 @@ for line in walkedout:
 
 ## Create Dir Struct under ZIMAGES_1 if dir doesnt Exist and copy files to it
 for k,v in stylestringsdict.iteritems():
-    import os,sys,shutil
+    import os,sys,shutil, re
+    regex_zimages = re.compile(r'^.*?/zImages.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
     src = k
-    destdir = os.path.join('/mnt/Post_Ready/zImages_1', v['colorstyle'][:4])
-    destfilename = src.split('/')[-1]
-    destpath = os.path.join(destdir,destfilename)
-    ## Test if File Exists in zimage Directory else copy it and resize
-    if os.path.isfile(destpath):
-        #print "Not Copying Over File {0}".format(destpath)
+## Dont Move or Resize Files found in zImages copy everything else to zImages
+    if re.findall(regex_zimages, src):
         pass
     else:
-## Mkdir if not there
-        try:
-            os.mkdirs(destdir)
-        except:
-            pass
-## Mk Thumbs Then move thumbs to Destdir
-        try:
-            make_lowres_thumbnails_dir_or_singlefile(src)
-            successthumb = "Created Thumbnail --> {0}".format(src)
-            csv_write_datedOutfile(successthumb)
-## Success on Thumb Creation Now Move to Dest Dir
-            try:
-				src = os.replace('.jpg', '.jpeg')
-				os.rename(src,destpath)
-				success = "Success Moving {0} --> {1}".format(src,destpath)
-				#print success
-				csv_write_datedOutfile(success)
-            except:
-				errthumb = "Error Moving {0} --> {0}".format(src,destpath)
+		destdir = os.path.join('/mnt/Post_Ready/zImages_1', v['colorstyle'][:4])
+		destfilename = src.split('/')[-1]
+		destpath = os.path.join(destdir,destfilename)
+		## Test if File Exists in zimage Directory else copy it and resize
+		if os.path.isfile(destpath):
+			#print "Not Copying Over File {0}".format(destpath)
+			pass
+		else:
+	## Mkdir if not there
+			try:
+				os.mkdirs(destdir)
+			except:
+				pass
+	## Mk Thumbs Then move thumbs to Destdir
+			try:
+				make_lowres_thumbnails_dir_or_singlefile(src)
+				successthumb = "Created Thumbnail --> {0}".format(src)
+				csv_write_datedOutfile(successthumb)
+	## Success on Thumb Creation Now Move to Dest Dir
+				try:
+					src = os.replace('.jpg', '.jpeg')
+					os.rename(src,destpath)
+					success = "Success Moving {0} --> {1}".format(src,destpath)
+					#print success
+					csv_write_datedOutfile(success)
+				except:
+					errthumb = "Error Moving {0} --> {0}".format(src,destpath)
+					print errthumb
+					csv_write_datedOutfile(errthumb)
+			except:
+				errthumb = "Error Creating Thumbnail for {0}".format(src)
 				print errthumb
 				csv_write_datedOutfile(errthumb)
-        except:
-			errthumb = "Error Creating Thumbnail for {0}".format(src)
-			print errthumb
-			csv_write_datedOutfile(errthumb)
 
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
@@ -194,7 +199,6 @@ for k,v in fulldict.iteritems():
 
         mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         connection = mysql_engine.connect()
-
 
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
