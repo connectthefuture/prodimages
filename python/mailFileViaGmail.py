@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
@@ -50,7 +50,7 @@ gmail_pwd = "yankee17"
 #        for line in to_emailargs:
 #            toaddrs_list.append(line)
 #    else:
-#        print "Fail"   
+#        print "Fail"
 #
 
 
@@ -58,34 +58,32 @@ gmail_pwd = "yankee17"
 try:
     if sys.argv[2]:
         test = sys.argv[2]
-        try:
-            if os.path.isfile(test):
-                bodyfile    = sys.argv[2]
-                msgsubj     = "SentByPython"
+        if os.path.isfile(test):
+            bodyfile    = sys.argv[2]
+            msgsubj     = "The Daily Completion Manifesto"
+### Try to make body of message render HTML
+            try:
                 msgbody     = open(bodyfile, 'rb').read()
-
-                try:
-                    if sys.argv[3]:
-                        toaddrs     = "john.bragato@bluefly.com"
-                except:
-                    toaddrs     = "john.bragato@bluefly.com"
-
+            except NameError:
+                msgbody      = "NameErrorTestBody"
+#                msgsubj      = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
+#                toaddrs      = "john.bragato@bluefly.com"
+            if sys.argv[3]:
+                toaddrs     = "john.bragato@bluefly.com"
             else:
-                toaddrs     = sys.argv[2]
-                msgbody     = "TestBody"
-                msgsubj     = "SentByPython"
-        except NameError:
-            msgbody      = "NameErrorTestBody"
-            msgsubj      = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
-            toaddrs      = "john.bragato@bluefly.com"
+			    toaddrs     = "john.bragato@bluefly.com"
+        else:
+			toaddrs     = sys.argv[2]
+			msgbody     = "TestBody"
+			msgsubj     = "SentByPython"
 except IndexError:
     toaddrs     = "john.bragato@bluefly.com"
-    msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1])) 
+    msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
     msgbody     = "TestBody"
 
 ## Test for HTML File to insert as Body of email
 
-        
+
 
 
 
