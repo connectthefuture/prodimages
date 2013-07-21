@@ -39,7 +39,7 @@ def make_lowres_thumbnails_dir_or_singlefile(pathname):
     from PIL import Image
     import glob, os, re
     size = 600, 720
-    regex_jpeg = re.compile(r'.+?[.jpg|.JPG]$')
+    regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
 #    regex_jpeg_colorstyle = re.compile(r'.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
 
     if re.findall(regex_jpeg, pathname):
@@ -86,7 +86,7 @@ import os,sys,re
 rootdir = sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
-regex = re.compile(r'.+?[.jpg|.JPG]$')
+regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 
 stylestrings = []
 stylestringsdict = {}
@@ -197,9 +197,9 @@ for k,v in fulldict.iteritems():
 
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
-        regex_postreadyoriginal = re.compile(r'^/Retouch_.+?[0-9]{9}_[1-6][.jpg|.JPG]$')
-        regex_zimages = re.compile(r'^[/zImages].+?[0-9]{9}_[1-6][.jpg|.JPG]$')
+        regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.+?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+        regex_postreadyoriginal = re.compile(r'^/.+?/Retouch_.+?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+        regex_zimages = re.compile(r'^/zImages.+?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
