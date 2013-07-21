@@ -184,7 +184,7 @@ for k,v in stylestringsdict.iteritems():
     file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
-    fulldict[k] =  dfill
+    fulldict[k] = dfill
 
 
 ## Take the compiled k/v pairs and Format + Insert into MySQL DB
@@ -197,9 +197,9 @@ for k,v in fulldict.iteritems():
 
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.+?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
-        regex_postreadyoriginal = re.compile(r'^/.+?/Retouch_.+?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
-        regex_zimages = re.compile(r'^/zImages.+?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+        regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+        regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+        regex_zimages = re.compile(r'^/zImages.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
