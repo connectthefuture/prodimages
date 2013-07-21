@@ -86,7 +86,8 @@ import os,sys,re
 rootdir = sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
-regex = re.compile(r'.+?\.[jpgJPG]{3}$')
+regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+#regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 
 stylestrings = []
 stylestringsdict = {}
