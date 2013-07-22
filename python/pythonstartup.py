@@ -10,7 +10,7 @@ Created on Sat Feb 23 22:38:40 2013
 import os
 import sys
 import re
-import readline 
+import readline
 import rlcompleter
 import atexit
 import csv
@@ -31,8 +31,8 @@ dir_homedir            = os.path.abspath(dir_homedir)
 dir_zimages 	        = os.path.abspath("/mnt/Post_Ready/zImages_1")
 dir_pushfashion 	    = os.path.abspath("/mnt/Post_Ready/eFashionPush")
 dir_pushstill 	        = os.path.abspath("/mnt/Post_Ready/aPhotoPush")
-dir_sites 	            = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/sites") 
-dir_apps 	            = os.path.abspath("/mnt/Dropbox/Apps") 
+dir_sites 	            = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/sites")
+dir_apps 	            = os.path.abspath("/mnt/Dropbox/Apps")
 dir_consig 	            = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment")
 dir_datacsv             = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/data/csv")
 dir_dboxapps 		    = os.path.join(dir_homedir, "Dropbox/Apps")
@@ -90,7 +90,7 @@ Return Date Formatted for Inserting to MySQL db
 def dateMysql(date):
     date = {}
     import datetime
-    from string import Formatter    
+    from string import Formatter
     dt = unicode(datetime.datetime.today())
     ##print dt
     Formatter()
@@ -103,7 +103,7 @@ def dateMysql(date):
 Return Exif info to KeyValue Array
 """
 def get_exif(fn):
-    
+
     ret = {}
     from PIL import Image
     from PIL.ExifTags import TAGS
@@ -113,13 +113,13 @@ def get_exif(fn):
         decoded = TAGS.get(tag, tag)
         ret[decoded] = value
     return ret
-    
+
 ###########################################################################################################################################################
 
                             ###########
                             ### CSV ###
                             ###########
-                           
+
 #######################################
 #######################################################################
 ###########    CSV Write to file and CSV read from file delim=csv #####
@@ -129,7 +129,7 @@ def get_exif(fn):
 ############
 """
 Write a Text file of input -- File Named as Today Date to Pictures folder on Linux And OSX
-"""    
+"""
     ##
 def csv_write_datedOutfile(lines):
     import csv,datetime,os
@@ -145,7 +145,7 @@ def csv_write_datedOutfile(lines):
 ###########
 #### 2 ####
 ###########
-########### 
+###########
 ### CSV read from file
 ##
 def csv_read_file(filename, delim):
@@ -153,10 +153,10 @@ def csv_read_file(filename, delim):
         dialect = csv.Sniffer().sniff(f.read(1024))
         reader = csv.reader(f, delimiter=delim, dialect=dialect)
         rows = []
-        for row in reader: 
+        for row in reader:
             rows.append(row)
         return sorted(rows)
-        
+
 ###########
 #### 2 ####
 ###########
@@ -171,7 +171,7 @@ def csv_write_datedOutfile(lines):
         with open(f, 'ab+') as csvwritefile:
             writer = csv.writer(csvwritefile, delimiter=',')
             writer.writerows([lines])
-                    
+
 #################
 """
 Glob or Reg Search Dir for CSV output as:
@@ -194,13 +194,13 @@ def outputExifCsv(listDirGlob):
 """
 Functions for returning union, intersection of 2 lists or Unique results of 1 list
 
-""" 
+"""
 def unique(a):
     """ return the list with duplicate elements removed """
-    return list(set(a)) 
+    return list(set(a))
 def intersect(a, b):
     """ return the intersection of two lists """
-    return list(set(a) & set(b)) 
+    return list(set(a) & set(b))
 def union(a, b):
     """ return the union of two lists """
     return list(set(a) | set(b))
@@ -237,7 +237,7 @@ def recurse_dir_list(directory):
         recursivefilelist.append(filepath)
     regex = re.compile(r'.+?[.]jpg$')
     alljpgs = []
-    for f in recursivefilelist:    
+    for f in recursivefilelist:
         foundjpgs = re.findall(regex,f)
         if foundjpgs:
             alljpgs.append(f)
@@ -287,7 +287,7 @@ def soup_get_links_jpgs(soup):
 
 ### Combined consolidated func run like --> linklist = url_get_links(targeturl)  --- Use url_download_fileslist_dbx(imglinks) to download
 ####################################################################
-##### 
+#####
 #1E
 ###  COMBINED: Get All href Links "Specific JPEG href select, NOT IN THIS ONEfrom Beautiful Soup and Requests -- downloads URL as html and returns Unique Links to files in text formatted by BSoup
 def url_get_links(targeturl):
@@ -309,7 +309,7 @@ def url_get_links(targeturl):
 #### 2 ####
 ###########   Download URL as file Uses urllib ###
 ###########   URL LIB 1  ###
-###  Will SAVE FILE  to var - downloaddir-- 
+###  Will SAVE FILE  to var - downloaddir--
 ###
 def url_download_file_http(url):
     from time import time
@@ -359,7 +359,7 @@ def url_download_fileslist_dbx(imglinkslist):
 ###########   Download URL string AND Save tmp file obj to Local User Directory
 ###########   URL LIB 2  ###
 ###  To Change final location of SAVED Download change var downloaddir  ###
-###					
+###
 def url2_download_rw_httpsave(targeturl):
     from time import time
     import urllib2, subprocess, os
@@ -375,7 +375,7 @@ def url2_download_rw_httpsave(targeturl):
     downloadfile = urllib2.urlopen(targetreq)
     downloadtmp = downloadfile[0]
     regex = re.compile(r'.+?/([A-Za-z0-9-_%]+?.jpg)')
-    imagename = re.findall(regex, targeturl) 
+    imagename = re.findall(regex, targeturl)
     downloadfinal = os.path.join(downloaddir, imagename)
     print downloadfinal
     os.path.rename(downloadtmp, downloadfinal)
@@ -384,7 +384,7 @@ def url2_download_rw_httpsave(targeturl):
     return 	downloadfinal
 ##################
 ###########
-#### 4 a #### Send headers 
+#### 4 a #### Send headers
 ################## GOOOD
 def url2_download_read_http_utf8(targeturl):
     try:
@@ -485,8 +485,8 @@ def url2_download_file(url):
     except AttributeError:
         print "Attrib Error"
     except urllib2.HTTPError:
-        print "HTTP Error - Bad File URL" 
-    
+        print "HTTP Error - Bad File URL"
+
     #except HTTPError:
     #    print "404 Error"
         #return 	downloadfinal
@@ -495,7 +495,7 @@ def url2_download_file(url):
 #    try:
 #        url2_download_file(link)
 #    except urllib2.HTTPError:
-#        print "HTTPError" 
+#        print "HTTPError"
 
 ####################
 #############
@@ -537,17 +537,17 @@ def sqlQueryStyles(searchField,searchParam):
     #import sys
     #import csv
     #ret = {}
-    ##  Create Sql Engine and Connection Obj -- Connected  --- 
+    ##  Create Sql Engine and Connection Obj -- Connected  ---
     ##  Includes local replicated server & remote connections
     #engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imagepaths')
-    
+
     engine = sqlalchemy.create_engine('mysql://root:root@localhost/data_imagepaths')
     connection = engine.connect()
 
     ## Create Query
     #querymake = "select * from product_snapshot where " + searchField + " like %" + searchParam + "%"
     querymake = "select * from product_snapshot where " + searchField + " = " + searchParam
-    
+
     engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imagepaths')
     #querymake = "select * from " + searchtable + " where " + searchField + " = " + searchParam
     #result = connection.execute("select * from product_snapshot where brand = 'Gucci'")
@@ -571,7 +571,7 @@ def sqlQueryEvents(searchtable,searchField,searchParam):
     #import sys
     #import csv
     #ret = {}
-    ##  Create Sql Engine and Connection Obj -- Connected  --- 
+    ##  Create Sql Engine and Connection Obj -- Connected  ---
     ##  Includes local replicated server & remote connections
     #engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imagepaths')
     engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imports')
@@ -579,7 +579,7 @@ def sqlQueryEvents(searchtable,searchField,searchParam):
 
     ## Create Query
     #querymake = "select * from product_snapshot where " + searchField + " like %" + searchParam + "%"
-  
+
     querymake = "select * from " + searchtable + " where " + searchField + " = " + searchParam
     #result = connection.execute("select * from product_snapshot where brand = 'Gucci'")
     result = connection.execute(querymake)
@@ -587,17 +587,17 @@ def sqlQueryEvents(searchtable,searchField,searchParam):
     ### Print Results of Query
     for row in result:
         print "colorstyle:",        row['colorstyle']
-        print "event group:",       row['event_group']        
+        print "event group:",       row['event_group']
         print "event id:",          row['event_id']
-        print "event title:",       row['event_title']        
+        print "event title:",       row['event_title']
         print "event start:",       row['ev_start']
-        #print "production status:", row['production_status']        
-        
+        #print "production status:", row['production_status']
+
     connection.close()
     return rowsss
-    
-    
-    
+
+
+
 
 def sqlQueryEventsUpcoming():
     import sqlalchemy
@@ -607,20 +607,20 @@ def sqlQueryEventsUpcoming():
     result = connection.execute(querymake_eventscal)
     events = {}
     for row in result:
-        event = {}        
+        event = {}
         event['ID'] = row['ID']
         event['START_DATE'] = row['START_DATE']
         event['EVENT_DESCRIPTION'] = row['EVENT_DESCRIPTION']
         events[row['ID']] = event
-        
+
     print events
     connection.close()
     return events
-    
-    
-    
-    
-    
+
+
+
+
+
 ##########
 ############ AJAX CLASSES
 
@@ -721,5 +721,22 @@ class HttpRequestHandler(asynchat.async_chat):
             self.handling = True
             self.ibuffer = []
             self.handle_request()
-   
 
+
+
+#### Walks a Dir and returns a Dict
+def recursive_dirlist(rootdir):
+    import os
+    walkedlist = []
+    for dirname, subdirnames, filenames in os.walk(rootdir):
+        # append path of all filenames to walkedlist
+        for filename in filenames:
+            file_path = os.path.abspath(os.path.join(dirname, filename))
+            if os.path.isfile(file_path):
+                walkedlist.append(file_path)
+    # Advanced usage:
+    # editing the 'dirnames' list will stop os.walk() from recursing into there.
+    #if '.git' in dirnames:
+    # don't go into any .git directories.
+    #    dirnames.remove('.git')
+    return walkedlist
