@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+
+
+"""
+Created on sun jul 22 14:48:56 2013
+
+@author: jb
+"""
+def sqlQuerylivesnapshot():
+    import sqlalchemy
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
+    connection = orcl_engine.connect()
+
+    querymake_livesnapshot="SELECT DISTINCT MAX(POMGR.PRODUCT_COLOR.ID) AS colorstyle,POMGR.BRAND.NAME AS brand,POMGR.LK_PRODUCT_STATUS.NAMEAS production_status,MAX(POMGR.PO_LINE.PO_HDR_ID) AS po_number,MAX(POMGR.LK_SAMPLE_STATUS.NAME) AS sample_status,MAX(to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')) AS status_dt,to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') AS copy_ready_dt,to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT, 'YYYY-MM-DD') AS image_ready_dt,to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') AS production_complete_dt,to_date(POMGR.PRODUCT_COLOR.START_DATE, 'YYYY-MM-DD') AS start_dt,to_date(POMGR.PRODUCT_COLOR.ORIGINAL_START_DATE, 'YYYY-MM-DD') AS orig_start_dt,POMGR.LK_DEPT.NAMEAS gender,POMGR.BUYER_PRODUCT_LINE.NAME AS category,MAX(POMGR.CATEGORY.NAME) AS product_type,to_date(POMGR.PRODUCT_COLOR_DETAIL.PHOTOGRAPHED_DATE, 'YYYY-MM-DD') AS sample_image_dt,POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style,POMGR.COLOR_GROUP.DESCRIPTIONAS color,MAX(POMGR.PRODUCT_FOLDER.LABEL) AS product_subtype,MAX(POMGR.SAMPLE_TRACKING_NUMBER.SAMPLE_ID) AS sample_id,MAX(POMGR.SKU.SKU_CODE) AS sku,MAX(POMGR.TRACKING_NUMBER.REF_NUMBER) AS track_number,MAX(to_date(POMGR.TRACKING_NUMBER.CREATE_DT, 'YYYY-MM-DD')) AS track_dt,MAX(POMGR.LK_SAMPLE_LOCATION.NAME)AS sample_location,MAX(POMGR.USERS.USERNAME) AS track_user,POMGR.LK_PO_TYPE.NAME AS po_type FROM POMGR.PRODUCT_COLOR LEFT JOIN POMGR.COLOR_GROUP ON POMGR.PRODUCT_COLOR.COLOR_GROUP_ID = POMGR.COLOR_GROUP.ID LEFT JOIN POMGR.LK_PRODUCT_STATUS ON POMGR.PRODUCT_COLOR.PRODUCTION_STATUS_ID = POMGR.LK_PRODUCT_STATUS.ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID LEFT JOIN POMGR.SKU ON POMGR.PRODUCT_COLOR.ID = POMGR.SKU.PRODUCT_COLOR_ID LEFT JOIN POMGR.PO_SKU ON POMGR.SKU.ID = POMGR.PO_SKU.SKU_ID LEFT JOIN POMGR.SAMPLE ON POMGR.SAMPLE.PO_SKU_ID = POMGR.PO_SKU.ID LEFT JOIN POMGR.SAMPLE_TRACKING ON POMGR.SAMPLE.ID = POMGR.SAMPLE_TRACKING.SAMPLE_ID LEFT JOIN POMGR.USERS ON POMGR.SAMPLE_TRACKING.USER_ID = POMGR.USERS.ID LEFT JOIN POMGR.LK_SAMPLE_STATUS ON POMGR.SAMPLE_TRACKING.STATUS_ID = POMGR.LK_SAMPLE_STATUS.ID LEFT JOIN POMGR.SAMPLE_TRACKING_NUMBER ON POMGR.SAMPLE_TRACKING.SAMPLE_ID = POMGR.SAMPLE_TRACKING_NUMBER.SAMPLE_ID LEFT JOIN POMGR.TRACKING_NUMBER ON POMGR.SAMPLE_TRACKING_NUMBER.TRACKING_NUMBER_ID = POMGR.TRACKING_NUMBER.ID LEFT JOIN POMGR.LK_SAMPLE_LOCATION ON POMGR.SAMPLE_TRACKING.LOCATION_ID = POMGR.LK_SAMPLE_LOCATION.ID LEFT JOIN POMGR.PO_LINE ON POMGR.PO_SKU.PO_LINE_ID = POMGR.PO_LINE.ID LEFT JOIN POMGR.PO_HDR ON POMGR.PO_LINE.PO_HDR_ID = POMGR.PO_HDR.ID LEFT JOIN POMGR.LK_PO_STATUS ON POMGR.PO_HDR.PO_STATUS_ID = POMGR.LK_PO_STATUS.ID LEFT JOIN POMGR.LK_PO_TYPE ON POMGR.PO_HDR.PO_TYPE_ID = POMGR.LK_PO_TYPE.ID LEFT JOIN POMGR.PRODUCT ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT.ID INNER JOIN POMGR.BRAND ON POMGR.PRODUCT.BRAND_ID = POMGR.BRAND.ID INNER JOIN POMGR.PRODUCT_FOLDER ON POMGR.PRODUCT.PRODUCT_FOLDER_ID = POMGR.PRODUCT_FOLDER.ID LEFT JOIN POMGR.PRD_FDR_CAT_REL ON POMGR.PRODUCT.PRODUCT_FOLDER_ID = POMGR.PRD_FDR_CAT_REL.FOLDER_ID LEFT JOIN POMGR.CATEGORY ON POMGR.CATEGORY.ID = POMGR.PRD_FDR_CAT_REL.CATEGORY_ID LEFT JOIN POMGR.BUYER_PRODUCT_LINE ON POMGR.PRODUCT.BUYER_PRODUCT_LINE_ID = POMGR.BUYER_PRODUCT_LINE.ID LEFT JOIN POMGR.LK_DEPT ON POMGR.LK_DEPT.ID = POMGR.BUYER_PRODUCT_LINE.DEPT_ID WHERE POMGR.SAMPLE_TRACKING.CREATE_DT >= TRUNC(SysDate - 365) GROUP BY POMGR.BRAND.NAME,POMGR.LK_PRODUCT_STATUS.NAME,to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD'),to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT, 'YYYY-MM-DD'),to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD'),to_date(POMGR.PRODUCT_COLOR.START_DATE, 'YYYY-MM-DD'),to_date(POMGR.PRODUCT_COLOR.ORIGINAL_START_DATE, 'YYYY-MM-DD'),POMGR.LK_DEPT.NAME,POMGR.BUYER_PRODUCT_LINE.NAME,to_date(POMGR.PRODUCT_COLOR_DETAIL.PHOTOGRAPHED_DATE, 'YYYY-MM-DD'),POMGR.PRODUCT_COLOR.VENDOR_STYLE,POMGR.COLOR_GROUP.DESCRIPTION,POMGR.LK_PO_TYPE.NAME,POMGR.PRODUCT.BRAND_ID ORDER by MAX(POMGR.PRODUCT_COLOR.ID) ASC"
+    result = connection.execute(querymake_livesnapshot)
+    snapshot = {}
+    for row in result:
+        snapshot_tmp = {}
+        snapshot_tmp['colorstyle'] = row['colorstyle']
+        snapshot_tmp['brand'] = row['brand']
+        snapshot_tmp['production_status'] = row['production_status']
+        snapshot_tmp['po_number'] = row['po_number']
+        snapshot_tmp['sample_status'] = row['sample_status']
+        snapshot_tmp['status_dt'] = row['status_dt']
+        snapshot_tmp['copy_ready_dt'] = row['copy_ready_dt']
+        snapshot_tmp['image_ready_dt'] = row['image_ready_dt']
+        snapshot_tmp['production_complete_dt'] = row['production_complete_dt']
+        snapshot_tmp['start_dt'] = row['start_dt']
+        snapshot_tmp['orig_start_dt'] = row['orig_start_dt']
+        snapshot_tmp['gender'] = row['gender']
+        snapshot_tmp['category'] = row['category']
+        snapshot_tmp['product_type'] = row['product_type']
+        snapshot_tmp['sample_image_dt'] = row['sample_image_dt']
+        snapshot_tmp['vendor_style'] = row['vendor_style']
+        snapshot_tmp['color'] = row['color']
+        snapshot_tmp['product_subtype'] = row['product_subtype']
+        snapshot_tmp['sample_id'] = row['sample_id']
+        snapshot_tmp['sku'] = row['sku']
+        snapshot_tmp['track_number'] = row['track_number']
+        snapshot_tmp['track_dt'] = row['track_dt']
+        snapshot_tmp['sample_location'] = row['sample_location']
+        snapshot_tmp['track_user'] = row['track_user']
+        snapshot_tmp['po_type'] = row['po_type']
+
+        ## colorstyle as dict KEY
+        snapshot[row['colorstyle']] = snapshot_tmp
+
+    connection.close()
+    return snapshot
+
+#### Run Import To Mysql
+import sys
+import os
+import sqlalchemy
+
+
+livesnapshot = sqlQuerylivesnapshot()
+
+for k,v in livesnapshot.iteritems():
+    try:
+
+        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+        connection = mysql_engine.connect()
+        connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+
+
+
+        print "Successful Insert Push_Photoselecs --> {0}".format(k)
+
+
+    except sqlalchemy.exc.IntegrityError:
+        print "Duplicate Entry {0}".format(k)
+    except sqlalchemy.exc.DatabaseError:
+        continue
+        print "DBERR" + k
+
+#     except KeyError:
+#         continue
