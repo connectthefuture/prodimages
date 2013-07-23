@@ -56,13 +56,17 @@ import sqlalchemy
 
 livesnapshot = sqlQuerylivesnapshot()
 
+## Truncate Prior to Inserting new data
+mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+connection = mysql_engine.connect()
+trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+connection.close()
+
 for k,v in livesnapshot.iteritems():
     try:
 
         mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         connection = mysql_engine.connect()
-        trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-        connection.execute(trunc_table)
         connection.execute("""INSERT INTO product_snapshot_live (colorstyle, brand, production_status, po_number, sample_status, status_dt, copy_ready_dt, image_ready_dt, production_complete_dt, start_dt, orig_start_dt, gender, category, product_type, sample_image_dt, vendor_style, color, product_subtype, sample_id, sku, track_number, track_dt, sample_location, track_user, po_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
 
         #print "Successful Insert Push_Photoselecs --> {0}".format(k)
