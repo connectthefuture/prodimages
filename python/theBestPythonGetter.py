@@ -11,7 +11,7 @@ result = connection.execute(daily_incomplete_query)
 
 
 dt = str(datetime.datetime.now())
-today = dt.split(' ')[0]
+today = dt.split(' ')[0:]
 today_folder = os.path.join('/mnt/Post_Ready/Daily', today)
 try:
     os.mkdir(today_folder)
