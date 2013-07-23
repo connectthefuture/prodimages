@@ -15,7 +15,7 @@ today = dt.split(' ')[0]
 today_folder = os.path.join('/mnt/Post_Ready/Daily', today)
 try:
     os.mkdir(today_folder)
-    os.chmod(today_folder,00755)
+    #os.chmod(today_folder,00755)
 except:
     pass
         
@@ -35,7 +35,7 @@ for row in result:
             #cmdargs = file_path, os.path.join(today_folder, file_name)
             dest_file = os.path.join(today_folder, file_name)
             shutil.copy2(file_path, dest_file)
-            os.chmod(dest_file,00755)
+            #os.chmod(dest_file,00755)
             #rowlist.append(cmdargs)
             ncount += 1
             print "Files Found: {0},\t File Name: {1}".format(ncount,file_name)
