@@ -28,7 +28,7 @@ import csv
 import os
 
 
-file = '/Users/johnb/Downloads/sku-conv.csv'
+file = '/Users/johnb/Pictures/swi_feeds/sku-luxury-conv.csv'
 filedict = {}
 with open(file, 'rb') as f:
     reader = csv.reader(f, dialect=csv)
