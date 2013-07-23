@@ -101,15 +101,13 @@ for line in walkedout:
             alt_ext = file_path.split('_')[-1]
             alt = alt_ext.split('.')[0]
             ext = alt_ext.split('.')[-1]
-
             try:
                 photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
             except KeyError:
-            	try:
+                try:
             	    photo_date = get_exif(file_path)['DateTime'][:10]
-            	except KeyError:
-                	photo_date = NULL
-
+                except KeyError:
+                    photo_date = NULL
             photo_date = photo_date.replace(':','-')
             stylestringsdict_tmp['colorstyle'] = colorstyle
             stylestringsdict_tmp['photo_date'] = photo_date
@@ -198,8 +196,17 @@ for k,v in fulldict.iteritems():
     try:
 
         mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-        connection = mysql_engine.connect()
+        #connection = mysql_engine.connect()
+        
+        mysql_engine.echo = False  # Try changing this to True and see what happens
+        metadata = BoundMetaData(mysql_engine)
+        
+        push_photoselects = Table('push_photoselects', metadata, autoload=True)
 
+        i = push_photoselects.insert()
+        i.execute(colorstyle=colorstyle, photo_date=photo_date, file_path=file_path, alt=alt)
+        
+        
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
         regex_photoselects = re.compile(r'^/mnt/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
