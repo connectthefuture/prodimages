@@ -80,4 +80,4 @@ if len(versioned_links) <= 50:
         #versioned_links.pop()
         #csv_write_datedOutfile(line)
 
-
+### RUN with bandc_ver_cache_clear.py 3380 | xargs -L1 | sed -E 's/\[u//g' | sed -E 's/\]//g'
