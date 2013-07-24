@@ -75,7 +75,8 @@ if len(versioned_links) <= 50:
     for line in versioned_links:
         #line = line.strip('[u')
         #line = line.strip(']')
-        print "Formatted {0}".format(line)
+        #print "Formatted {0}".format(line)
+        print str(line)
         #versioned_links.pop()
         #csv_write_datedOutfile(line)
 
