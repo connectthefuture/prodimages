@@ -1,28 +1,5 @@
 import pycurl
 
-c = pycurl.Curl()
-c.setopt(c.URL, 'http://myappserver.com/ses1')
-c.setopt(c.CONNECTTIMEOUT, 5)
-c.setopt(c.TIMEOUT, 8)
-c.setopt(c.COOKIEFILE, '')
-c.setopt(c.FAILONERROR, True)
-c.setopt(c.HTTPHEADER, ['Accept: text/html', 'Accept-Charset: UTF-8'])
-try:
-    c.perform()
-
-    c.setopt(c.URL, 'http://myappserver.com/ses2')
-    c.setopt(c.POSTFIELDS, 'foo=bar&bar=foo')
-    c.perform()
-except pycurl.error, error:
-    errno, errstr = error
-    print 'An error occurred: ', errstr
-
-
-
-
-
-
-
 
 #if token != "" && account != "" && mediaPath != "" && mediaType != "":
 
@@ -30,16 +7,16 @@ except pycurl.error, error:
 ## Setup variables
 token = "9af6d09a-1250-4766-85bd-29cebf1c984f"
 account = "4936"
-mediaPath = argv[1]
+mediaPath = sys.argv[1]
 mediaType = "8"
 
 
-purgeURL = "https://api.edgecast.com/v2/mcc/customers/" + account + "/edge/purge"
+purgeURL = "https://api.edgecast.com/v2/mcc/customers/{0}/edge/purge".format(account)
 
 ## Create send data
 request_params = (
 'MediaPath' = mediaPath,
-'MediaType' = mediaType,
+'MediaType' = mediaType
 )
 data = json_encode(request_params)
 head_authtoken = "Authorization: tok:{0}".format(token)
@@ -65,3 +42,33 @@ head_contenttype,
 head_accept,
 head_content_len
 ])
+try:
+    c.perform()
+
+except pycurl.error, error:
+    errno, errstr = error
+    print 'An error occurred: ', errstr
+
+
+
+
+c = pycurl.Curl()
+c.setopt(c.URL, 'http://myappserver.com/ses1')
+c.setopt(c.CONNECTTIMEOUT, 5)
+c.setopt(c.TIMEOUT, 8)
+c.setopt(c.COOKIEFILE, '')
+c.setopt(c.FAILONERROR, True)
+c.setopt(c.HTTPHEADER, ['Accept: text/html', 'Accept-Charset: UTF-8'])
+try:
+    c.perform()
+
+    c.setopt(c.URL, 'http://myappserver.com/ses2')
+    c.setopt(c.POSTFIELDS, 'foo=bar&bar=foo')
+    c.perform()
+
+
+
+
+
+
+
