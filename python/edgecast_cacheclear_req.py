@@ -1,3 +1,26 @@
+import pycurl
+
+c = pycurl.Curl()
+c.setopt(c.URL, 'http://myappserver.com/ses1')
+c.setopt(c.CONNECTTIMEOUT, 5)
+c.setopt(c.TIMEOUT, 8)
+c.setopt(c.COOKIEFILE, '')
+c.setopt(c.FAILONERROR, True)
+c.setopt(c.HTTPHEADER, ['Accept: text/html', 'Accept-Charset: UTF-8'])
+try:
+    c.perform()
+
+    c.setopt(c.URL, 'http://myappserver.com/ses2')
+    c.setopt(c.POSTFIELDS, 'foo=bar&bar=foo')
+    c.perform()
+except pycurl.error, error:
+    errno, errstr = error
+    print 'An error occurred: ', errstr
+
+
+
+
+
 
 
 
@@ -19,22 +42,26 @@ request_params = (
 'MediaType' = mediaType,
 )
 data = json_encode(request_params)
+head_authtoken = "Authorization: tok:{0}".format(token)
+head_content_len= "Content-length: {0})".format(str(len(data)))
+head_accept = 'Accept: application/json'
+head_contenttype = 'Content-Type: application/json'
 
 ## Send the request to Edgecast
-ch = curl_init()
-curl_setopt(ch, CURLOPT_URL, purgeURL)
-curl_setopt(ch, CURLOPT_PORT , 443)
-curl_setopt(ch, CURLOPT_SSL_VERIFYPEER, 0)
-curl_setopt(ch, CURLOPT_HEADER, 0)
+c = pycurl.Curl()
+c.setopt(c.URL, purgeURL)
+c.setopt(c.PORT , 443)
+c.setopt(c.SSL_VERIFYPEER, 0)
+c.setopt(c.HEADER, 0)
 curl_setopt(ch, CURLINFO_HEADER_OUT, 1)
-curl_setopt(ch, CURLOPT_RETURNTRANSFER, true)
-curl_setopt(ch, CURLOPT_FORBID_REUSE, 1)
-curl_setopt(ch, CURLOPT_FRESH_CONNECT, 1)
-curl_setopt(ch, CURLOPT_CUSTOMREQUEST, "PUT")
-curl_setopt(ch, CURLOPT_POSTFIELDS,data)
-curl_setopt(ch, CURLOPT_HTTPHEADER, array(
-'Authorization: tok:' + token,
-'Content-Type: application/json',
-'Accept: application/json',
-'Content-length: ' + str(len(data))
-)
+c.setopt(c.RETURNTRANSFER, true)
+c.setopt(c.FORBID_REUSE, 1)
+c.setopt(c.FRESH_CONNECT, 1)
+c.setopt(c.CUSTOMREQUEST, "PUT")
+c.setopt(c.POSTFIELDS,data)
+c.setopt(c.HTTPHEADER, [
+head_authtoken,
+head_contenttype,
+head_accept,
+head_content_len
+])
