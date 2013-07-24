@@ -14,7 +14,6 @@ def url_get_links(targeturl):
     return set(linklist)
 
 
-
 def return_versioned_urls(text):
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
     listurls = []
@@ -22,7 +21,7 @@ def return_versioned_urls(text):
         testfind =  regex.findall(line)
         if testfind:
             listurls.append(testfind)
-            print testfind
+            #print testfind
         else:
             pass
     return listurls
@@ -44,10 +43,13 @@ def get_catid_from_eventid(eventid):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
     connection = orcl_engine.connect()
     eventid = str(eventid)
-    eventid_tocatid_query = "SELECT DISTINCT POMGR.EVENT.CATEGORY FROM POMGR.EVENT WHERE POMGR.EVENT.ID = '" + eventid + "'"
+    if len(eventid) == 4:
+        eventid_tocatid_query = "SELECT DISTINCT POMGR.EVENT.CATEGORY FROM POMGR.EVENT WHERE POMGR.EVENT.ID = '" + eventid + "'"
     #print eventid_tocatid_query
-    for row in connection.execute(eventid_tocatid_query):
-        catid = row['category']
+        for row in connection.execute(eventid_tocatid_query):
+            catid = row['category']
+    else:
+        catid = eventid
     if catid:
         return catid
     else:
@@ -59,8 +61,6 @@ def send_purge_request_edgecast(mediaPath):
     ## Setup variables
     token = "9af6d09a-1250-4766-85bd-29cebf1c984f"
     account = "4936"
-    #mediaPath = sys.argv[1]
-    #mediaPath = 'http://cdn.is.belleandclive.com/mgen/Bluefly/prodImage.ms?productCode=324860301&width=320&height=430&ver=3'
     mediaType = "8"
 
     purgeURL = "https://api.edgecast.com/v2/mcc/customers/{0}/edge/purge".format(account)
@@ -71,14 +71,11 @@ def send_purge_request_edgecast(mediaPath):
         'MediaPath' : mediaPath,
         'MediaType' : mediaType 
         })
-
         #data = json_encode(request_params)
         head_authtoken = "Authorization: tok:{0}".format(token)
         head_content_len= "Content-length: {0}".format(str(len(data)))
         head_accept = 'Accept: application/json'
         head_contenttype = 'Content-Type: application/json'
-        #print head_content_len
-        ## Send the request to Edgecast
         ### Send the request to Edgecast
         c = pycurl.Curl()
         c.setopt(pycurl.URL, purgeURL)
@@ -121,9 +118,7 @@ versioned_links = return_versioned_urls(listpage_urllist)
 if len(versioned_links) <= 50:
 
     for url_purge in versioned_links:
-        send_purge_request_edgecast(url_purge)
-        #versioned_links.pop()
-        #csv_write_datedOutfile(line)
+        send_purge_request_edgecast(url_purge[0])
+        #csv_write_datedOutfile(url_purge[0])
 else:
     print "Failed -- Over 50 URLs Submitted"    
-### RUN with bandc_ver_cache_clear.py 3380 | xargs -L1 | sed -E 's/\[u//g' | sed -E 's/\]//g'
