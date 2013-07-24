@@ -78,7 +78,7 @@ versioned_links = return_versioned_url(listpage_urllist)
 #count = 0
 print len(versioned_links)
 for line in versioned_links:
-    print line
+    print "Formatted {0}".format(line)
     #csv_write_datedOutfile(line)
 
 
