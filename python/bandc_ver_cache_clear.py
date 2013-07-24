@@ -13,7 +13,7 @@ def url_get_links(targeturl):
         sorted(linklist)
     ## Return list of unique links
     return list(set(linklist))
-          
+
 
 
 def return_versioned_url(text):
@@ -26,7 +26,7 @@ def return_versioned_url(text):
             print testfind
         else:
             pass
-    return listurls 
+    return listurls
 
 
 def csv_write_datedOutfile(lines):
@@ -48,7 +48,7 @@ def get_catid_from_eventid(eventid):
     eventid_tocatid_query = "SELECT DISTINCT POMGR.EVENT.CATEGORY FROM POMGR.EVENT WHERE POMGR.EVENT.ID = '" + eventid + "'"
     #print eventid_tocatid_query
     for row in connection.execute(eventid_tocatid_query):
-        catid = row['category']    
+        catid = row['category']
     if catid:
         return catid
     else:
@@ -57,7 +57,7 @@ def get_catid_from_eventid(eventid):
 #urls = bandc_return_versioned_url_listpage(htmlfile)
 
 
-#print len(urls)      
+#print len(urls)
 
 #'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=cat1670052'
 
@@ -75,8 +75,10 @@ listpage_urllist = url_get_links(url_catid)
 
 ## Parse urllist returning only versioned List page images
 versioned_links = return_versioned_url(listpage_urllist)
-
+#count = 0
+print len(versioned_links)
 for line in versioned_links:
-    csv_write_datedOutfile(line)
+    print line
+    #csv_write_datedOutfile(line)
 
 
