@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import sys,re,os
 
 def url_get_links(targeturl):
     import os,re,sys,requests
@@ -12,11 +11,11 @@ def url_get_links(targeturl):
         linklist.append(link.get('src'))
         sorted(linklist)
     ## Return list of unique links
-    return list(set(linklist))
+    return set(linklist)
 
 
 
-def return_versioned_url(text):
+def return_versioned_urls(text):
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
     listurls = []
     for line in text:
@@ -54,14 +53,9 @@ def get_catid_from_eventid(eventid):
     else:
         print "Event {0} has not been pushed to ATG yet".format(eventid)
 
-#urls = bandc_return_versioned_url_listpage(htmlfile)
+############ RUN ###########
 
-
-#print len(urls)
-
-#'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=cat1670052'
-
-#htmlfile = sys.argv[1]
+import sys,re,os
 eventid = sys.argv[1]
 
 catid = get_catid_from_eventid(eventid)
@@ -74,15 +68,15 @@ url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' 
 listpage_urllist = url_get_links(url_catid)
 
 ## Parse urllist returning only versioned List page images
-versioned_links = return_versioned_url(listpage_urllist)
+versioned_links = return_versioned_urls(listpage_urllist)
 #count = 0
 if len(versioned_links) <= 50:
 
-    for line in iter.versioned_links:
+    for line in versioned_links:
         #line = line.strip('[u')
         #line = line.strip(']')
         print "Formatted {0}".format(line)
         #versioned_links.pop()
-    #csv_write_datedOutfile(line)
+        #csv_write_datedOutfile(line)
 
 
