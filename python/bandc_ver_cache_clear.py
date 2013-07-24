@@ -76,9 +76,10 @@ listpage_urllist = url_get_links(url_catid)
 ## Parse urllist returning only versioned List page images
 versioned_links = return_versioned_url(listpage_urllist)
 #count = 0
-print len(versioned_links)
-for line in versioned_links:
-    print "Formatted {0}".format(line)
+if len(versioned_links) <= 50:
+
+    for line in versioned_links:
+        print "Formatted {0}".format(str(line))
     #csv_write_datedOutfile(line)
 
 
