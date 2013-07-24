@@ -20,7 +20,7 @@ today = dt.split(' ')[0]
 
 ### directory where to save attachments (default: current)
 
-feeds_dir = '/Volumes/Post_Complete/.Vendor_to_Load/feeds'
+feeds_dir = '/mnt/Post_Complete/.Vendor_to_Load/feeds'
 m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
 m.login('john.bragato@bluefly.com','forty000one')
 keywordsSearch = 'Feeds'
