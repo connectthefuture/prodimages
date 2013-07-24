@@ -79,8 +79,10 @@ versioned_links = return_versioned_url(listpage_urllist)
 if len(versioned_links) <= 50:
 
     for line in versioned_links:
-        #print "Formatted {0}".format(str(line))
-        versioned_links.pop()
+        line = line.strip('[u')
+        line = line.strip(']')
+        print "Formatted {0}".format(line)
+        #versioned_links.pop()
     #csv_write_datedOutfile(line)
 
 
