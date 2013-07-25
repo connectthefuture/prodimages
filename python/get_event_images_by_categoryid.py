@@ -52,7 +52,7 @@ def upload(file):
 ################# RUN ###########################
 
 import sys,os,re,ftplib
-
+#import PythonMagick as Magick
 categoryid = sys.argv[1]
 
 ## Get the Styles within this event
@@ -91,9 +91,22 @@ for k,v in event_styles.iteritems():
 
 print "Total Files Downloaded: {0}".format(count)
 #
-os.chdir(destdir)
-for f in os.listdir(destdir):
-    print f #os.sys()
+
+### Now that Files have downloaded, change dirs to dload folder and pad images using PythonMagick
+#os.chdir(destdir)
+#for f in os.listdir(destdir):
+#    print f #os.sys()
+#    fname = f.split(".")[0]
+#    ext = f.split(".")[-1]
+#    img = Magick.Image(f)
+#    img.format('PNG')
+#    img.sample('!350x432')
+#    img.columns('400')
+#    img.rows('480')
+#    img.quality(100)
+#    img.magick('JPG')
+#    img.backgroundColor("white")
+    
 
 
     
