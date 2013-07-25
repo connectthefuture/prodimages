@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Created on WED JUL 24 11:23:55 2013
+
+Functions for getting and parsing html files and pages
+
+@author: jb
+"""
 def url_get_links(targeturl):
     import os,re,sys,requests
     from bs4 import BeautifulSoup
