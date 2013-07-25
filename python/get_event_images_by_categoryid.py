@@ -27,22 +27,25 @@ def event_styles_by_categoryid(categoryid):
 ## Download via FTP
 def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
     # fetch a binary file
+    import ftplib
     ftpdown = ftplib.FTP("netsrv101.l3.bluefly.com")
     ftpdown.login("imagedrop", "imagedrop0")
     if outfile is None:
         outfile = sys.stdout
-        ftpdown.retrbinary("RETR " + remote_pathtofile, outfile.write)
-
+    destfile = open(outfile, "wb")
+    ftpdown.retrbinary("RETR " + remote_pathtofile, destfile.write, 8*1024)
+    destfile.close()
 
 ## Upload to imagedrop via FTP
 def upload(file):
+    import ftplib
     ftpup = ftplib.FTP("file3.bluefly.corp/ImageDrop/")
     ftpup.login("imagedrop", "imagedrop0")
     ext = os.path.splitext(file)[1]
     if ext in (".txt", ".htm", ".html"):
         ftpup.storlines("STOR " + file, open(file))
     else:
-        ftpup.storbinary("STOR " + file, open(file, "rb"), 1024)
+        ftpup.storbinary("STOR " + file, open(file, "rb"), 8*1024)
 
 
 ################# RUN ###########################
@@ -60,10 +63,10 @@ count = 0
 for k,v in event_styles.iteritems():
     event_id = v['event_id']
     colorstyle = str(k)
-    serverdir = colorstyle[:4]
+    hashdir = colorstyle[:4]
     colorstyle_file = colorstyle + ".png"
     remotedir = "/mnt/images/images"
-    remotepath = os.path.join(remotedir, serverdir, colorstyle_file)
+    remotepath = os.path.join(remotedir, hashdir, colorstyle_file)
     destdir = os.path.join(os.path.expanduser('~'), 'event_' + str(event_id))
     destpath = os.path.join(destdir, colorstyle_file)
     
@@ -86,5 +89,11 @@ for k,v in event_styles.iteritems():
     ## weddavLogin="https://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
 
 
-print "Total Files Downloaded: {0}".format(count) 
+print "Total Files Downloaded: {0}".format(count)
+#
+os.chdir(destdir)
+for f in os.listdir(destdir):
+    print f #os.sys()
+
+
     

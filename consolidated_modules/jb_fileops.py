@@ -24,27 +24,35 @@ def recursive_dirlist(rootdir):
     #    dirnames.remove('.git')
     return walkedlist
 
+
 """
 ###
 {{ Download File from FTP Server netsrv101 }}
 """
-def getbinary_ftp_netsrv101(pathtofile, outfile=None):
+def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
     # fetch a binary file
-    ftp = ftplib.FTP("netsrv101.l3.bluefly.com")
-    ftp.login("imagedrop", "imagedrop0")
+    import ftplib
+    ftpdown = ftplib.FTP("netsrv101.l3.bluefly.com")
+    ftpdown.login("imagedrop", "imagedrop0")
     if outfile is None:
         outfile = sys.stdout
-        ftp.retrbinary("RETR " + pathtofile, outfile.write)
+    destfile = open(outfile, "wb")
+    ftpdown.retrbinary("RETR " + remote_pathtofile, destfile.write, 8*1024)
+    destfile.close()
+
 
 """
 ###
 {{  Upload File to imagedrop via FTP }}
 """
+## Upload to imagedrop via FTP
 def upload(file):
+    import ftplib
     ftpup = ftplib.FTP("file3.bluefly.corp/ImageDrop/")
     ftpup.login("imagedrop", "imagedrop0")
     ext = os.path.splitext(file)[1]
     if ext in (".txt", ".htm", ".html"):
         ftpup.storlines("STOR " + file, open(file))
     else:
-        ftpup.storbinary("STOR " + file, open(file, "rb"), 1024)
+        ftpup.storbinary("STOR " + file, open(file, "rb"), 8*1024)
+
