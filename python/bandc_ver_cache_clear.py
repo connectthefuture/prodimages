@@ -118,18 +118,18 @@ versioned_links = return_versioned_urls(listpage_urllist)
 if len(versioned_links) <= 50:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9]+?)')
-    for url_purge_local in versioned_links:
-        url = url_purge_local.split('=')
-        colorstyle = re.findall(regex, url)
-        #colorstyle = colorstyle.group[1]
-        #version = re.match(regex, url_purge_local)
-        #version = version.group[-1]
-        #colorstyle = url_purge_local.split()
-        version  = re.findall(regex, url)
-        print "{0} and version num {1}".format(colorstyle,version) 
-#    for url_purge in versioned_links:
-#        send_purge_request_edgecast(url_purge[0])
-#        csv_write_datedOutfile(url_purge)
+#    for url_purge_local in versioned_links:
+#        url = url_purge_local.split('=')
+#        colorstyle = re.findall(regex, url)
+#        #colorstyle = colorstyle.group[1]
+#        #version = re.match(regex, url_purge_local)
+#        #version = version.group[-1]
+#        #colorstyle = url_purge_local.split()
+#        version  = re.findall(regex, url)
+#        print "{0} and version num {1}".format(colorstyle,version) 
+    for url_purge in versioned_links:
+        send_purge_request_edgecast(url_purge[0])
+        csv_write_datedOutfile(url_purge)
 
 else:
     print "Failed -- Over 50 URLs Submitted"    

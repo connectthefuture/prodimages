@@ -180,7 +180,7 @@ if len(versioned_links) <= 50:
         version = version.pop()[-1].split('=')[-1]
         #print "{0} and version num {1}".format(colorstyle,version)
         #try:
-        alt_send_POST_localis(colorstyle,version)
+        send_purge_request_localis(colorstyle,version)
         #except:
         #    print sys.stderr().read()
     for url_purge in versioned_links:
