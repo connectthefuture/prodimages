@@ -55,6 +55,61 @@ def get_catid_from_eventid(eventid):
     else:
         print "Event {0} has not been pushed to ATG yet".format(eventid)
 
+def alt_send_POST_localis(colorstyle, version):
+    import httplib, urllib
+    BNCPHP = "http://clearcache.bluefly.corp/BnCClear2.php"
+    POSTDATA = "'style={colorstyle}&version={version}'".format(colorstyle=colorstyle, version=version)
+    params = urllib.urlencode({'style': colorstyle, 'version': version})
+    headers = {"Content-type": "application/x-www-form-urlencoded",
+                "Accept": "text/plain"}
+    conn = httplib.HTTPConnection(BNCPHP.split('/')[:-1])
+    conn.request("POST", "/BnCClear2.php", params, headers)
+    response = conn.getresponse()
+    print response.status, response.reason
+    if response.status == 200:
+        
+    #200 OK
+         data = response.read()
+         print data
+    
+    conn.close()
+
+
+def send_purge_request_localis(colorstyle, version):
+    if colorstyle != "" and version != "":
+        import pycurl,json
+        BNCPHP = "http://clearcache.bluefly.corp/BnCClear2.php"
+        #POSTDATA = "'style={colorstyle}&version={version}'".format(colorstyle=colorstyle, version=version)
+        ## Create send data
+        data = json.dumps({
+        'style' : colorstyle,
+        'version' : version
+        })
+        
+        head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
+        head_content_len= "Content-length: {0}".format(str(len(data)))
+        head_accept = 'Accept: application/json'
+        
+        c = pycurl.Curl()
+        c.setopt(c.URL, BNCPHP)
+        
+        c.setopt(pycurl.HEADER, 0)
+        #c.setopt(pycurl.INFOTYPE_HEADER_OUT, 1)
+        #c.setopt(pycurl.RETURNTRANSFER, 1)
+        c.setopt(pycurl.FORBID_REUSE, 1)
+        c.setopt(pycurl.FRESH_CONNECT, 1)
+        c.setopt(pycurl.POSTFIELDS, data)
+        c.setopt(pycurl.HTTPHEADER, [head_contenttype, head_accept, head_content_len])
+        #c.setopt(c.POSTFIELDS, POSTDATA)
+        c.setopt(c.VERBOSE, True)
+        c.perform()
+        c.close()
+        print "Successfully Sent Purge Request for --> Style: {0} Ver: {1}".format(str(colorstyle=colorstyle), str(version=version))
+        #head_authtoken = "Authorization: tok:{0}".format(token)
+        #head_content_len= "Content-length: {0}".format(str(len(POSTDATA)))
+        #head_accept = 'Accept: application/json'
+        #head_contenttype = 'Content-Type: application/json'
+
 
 def send_purge_request_edgecast(mediaPath):
     import pycurl,json,sys,os
@@ -119,17 +174,22 @@ if len(versioned_links) <= 50:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9]+?)')
     for url_purge_local in versioned_links:
-        url = url_purge_local.split('=')
-        colorstyle = re.findall(regex, url)
-        #colorstyle = colorstyle.group[1]
-        #version = re.match(regex, url_purge_local)
-        #version = version.group[-1]
-        #colorstyle = url_purge_local.split()
-        version  = re.findall(regex, url)
-        print "{0} and version num {1}".format(colorstyle,version) 
-#    for url_purge in versioned_links:
-#        send_purge_request_edgecast(url_purge[0])
-#        csv_write_datedOutfile(url_purge)
+        colorstyle = re.findall(regex, url_purge_local[0])
+        colorstyle = colorstyle.pop()[1]
+        version  = re.findall(regex, url_purge_local[0])
+        version = version.pop()[-1].split('=')[-1]
+        #print "{0} and version num {1}".format(colorstyle,version)
+        #try:
+        alt_send_POST_localis(colorstyle,version)
+        #except:
+        #    print sys.stderr().read()
+    for url_purge in versioned_links:
+        send_purge_request_edgecast(url_purge[0])
+        csv_write_datedOutfile(url_purge)
 
 else:
     print "Failed -- Over 50 URLs Submitted"    
+
+
+
+
