@@ -88,7 +88,7 @@ def send_purge_request_localis(colorstyle, version):
         
         head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
         head_content_len= "Content-length: {0}".format(str(len(data)))
-        head_accept = 'Accept: application/json'
+        head_accept = 'Accept: text/plain'
         
         c = pycurl.Curl()
         c.setopt(c.URL, BNCPHP)
@@ -104,7 +104,7 @@ def send_purge_request_localis(colorstyle, version):
         c.setopt(c.VERBOSE, True)
         c.perform()
         c.close()
-        print "Successfully Sent Purge Request for --> Style: {0} Ver: {1}".format(str(colorstyle=colorstyle), str(version=version))
+        print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
         #head_authtoken = "Authorization: tok:{0}".format(token)
         #head_content_len= "Content-length: {0}".format(str(len(POSTDATA)))
         #head_accept = 'Accept: application/json'
