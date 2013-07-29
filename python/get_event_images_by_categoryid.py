@@ -99,6 +99,7 @@ def subproc_pad_to_x480(file,destdir):
 
     except:
         print "Failed: {0}".format(file)
+    return outfile
 
 
 ################# RUN ###########################
@@ -148,5 +149,8 @@ print "Total Files Downloaded: {0}".format(count)
 ### Now that Files have downloaded, change dirs to dload folder and pad images using PythonMagick
 os.chdir(destdir)
 for f in os.listdir(destdir):
-    subproc_pad_to_x480(f,destdir)
+    padded_file = subproc_pad_to_x480(f,destdir)
+    print padded_file
+    
+
      
