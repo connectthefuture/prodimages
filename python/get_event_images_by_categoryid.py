@@ -120,5 +120,4 @@ print "Total Files Downloaded: {0}".format(count)
 os.chdir(destdir)
 for f in os.listdir(destdir):
     pad_image_to_x480(f)
-
-    
+     
