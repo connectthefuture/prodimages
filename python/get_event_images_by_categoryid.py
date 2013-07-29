@@ -61,7 +61,6 @@ def pad_image_to_x480(file):
     ## Open Primary image 
     img = Image(file)
     img.backgroundColor("white")
-    img.format('PNG')
     img.sample('!350x432')
 
     # Composite + Save Primary over bg, padding primary with white of bg
