@@ -52,7 +52,7 @@ except:
 
 ## Completed Downloads
 upload_drop = '/mnt/Post_Complete/.Vendor_to_Load/upload_drop'
-daily_dir = os.path.join(upload_drop, today + 'jpgs')
+daily_dir = os.path.join(upload_drop, today + '_jpgs')
 os.mkdir(daily_dir, 16877)
 
 filedict = build_url_colorstyle_dict(file)
