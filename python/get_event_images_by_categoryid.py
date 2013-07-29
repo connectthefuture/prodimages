@@ -71,7 +71,6 @@ def pad_image_to_x480(file):
     img.quality(100)
     img.write(outfile)
 
-mogrify -format jpg -resize 350x432 -background white -gravity center -extent 400x480 $file
 
 def subproc_pad_to_x480(file,destdir):
     import subprocess, os
