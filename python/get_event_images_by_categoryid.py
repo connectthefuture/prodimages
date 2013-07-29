@@ -65,12 +65,41 @@ def pad_image_to_x480(file):
 
     # Composite + Save Primary over bg, padding primary with white of bg
     type = img.type
-    img.composite(bgimg, 0, 0, CompositeOperator.OverCompositeOp)
+    img.composite(bgimg, 0, 0, CompositeOperator.DstOverCompositeOp)
     img.magick('JPG')
     img.type = type
     img.quality(100)
     img.write(outfile)
 
+mogrify -format jpg -resize 350x432 -background white -gravity center -extent 400x480 $file
+
+def subproc_pad_to_x480(file,destdir):
+    import subprocess, os
+    
+    fname = file.split(".")[0]
+    ext = file.split(".")[-1]
+    outfile = os.path.join(destdir, fname + "_" + "l" + ".jpg")
+    
+    try:
+            
+        subprocess.call([
+            "convert",
+            file,
+            "-format",
+            "jpg",
+            "-resize",
+            "350x432",
+            "-background",
+            "white",
+            "-gravity",
+            "center",
+            "-extent",
+            "400x480",
+            outfile,
+        ])
+
+    except:
+        print "Failed: {0}".format(file)
 
 
 ################# RUN ###########################
@@ -120,5 +149,5 @@ print "Total Files Downloaded: {0}".format(count)
 ### Now that Files have downloaded, change dirs to dload folder and pad images using PythonMagick
 os.chdir(destdir)
 for f in os.listdir(destdir):
-    pad_image_to_x480(f)
+    subproc_pad_to_x480(f,destdir)
      
