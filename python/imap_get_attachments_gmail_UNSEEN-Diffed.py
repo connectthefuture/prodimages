@@ -4,7 +4,7 @@ dt = str(datetime.datetime.now())
 today = dt.split(' ')[0]
 
 ### directory where to save attachments (default: current)
-feeds_dir = '/Volumes/Post_Complete/.Vendor_to_Load/feeds'
+feeds_dir = '/mnt/Post_Complete/.Vendor_to_Load/feeds'
 m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
 m.login('john.bragato@bluefly.com','forty000one')
 keywordsSearch = 'Feeds'
@@ -50,7 +50,7 @@ for f in feeds_files:
     if re.findall(regex, f):
         print f
 
-OLD_PATH = os.path.join(feeds_dir,'/Volumes/Post_Complete/.Vendor_to_Load/feeds/sku-conv.csv')
+OLD_PATH = os.path.join(feeds_dir,'/mnt/Post_Complete/.Vendor_to_Load/feeds/sku-conv.csv')
 NEW_PATH = os.path.join(feeds_dir, today + "_" + "sku-conv.csv")
 
 
