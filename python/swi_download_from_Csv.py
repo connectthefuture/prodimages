@@ -45,9 +45,9 @@ dt = str(datetime.datetime.now())
 today = dt.split(' ')[0]
 
 ## Should be run after Imap get attachments so that todays swi file is used
-if sys.argv[1]:
+try:
     file = sys.argv[1]
-else:
+except:
     file = os.path.join('/mnt/Post_Complete/.Vendor_to_Load/feeds', today + '_sku-luxury-conv.csv')
 
 ## Completed Downloads
