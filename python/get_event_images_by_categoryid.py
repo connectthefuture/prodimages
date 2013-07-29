@@ -50,7 +50,7 @@ def upload(file):
 
 ## Create BG image to Composite Primary over inorder to pad BC cutoffs on List page
 def pad_image_to_x480(file):
-    from PythonMagick import *
+    from PythonMagick import Image, CompositeOperator
     fname = file.split(".")[0]
     ext = file.split(".")[-1]
     outfile = os.path.join(destdir, fname + "_" + "l" + ".jpg")
