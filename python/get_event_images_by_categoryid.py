@@ -37,7 +37,7 @@ def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
     destfile.close()
 
 ## Upload to imagedrop via FTP
-def upload(file):
+def upload_to_imagedrop(file):
     import ftplib
     ftpup = ftplib.FTP("file3.bluefly.corp/ImageDrop/")
     ftpup.login("imagedrop", "imagedrop0")
@@ -146,11 +146,11 @@ for k,v in event_styles.iteritems():
 print "Total Files Downloaded: {0}".format(count)
 #
 
-### Now that Files have downloaded, change dirs to dload folder and pad images using PythonMagick
+### Now that Files have downloaded, change dirs to dload folder and pad images using PythonMagick Then load the _l
 os.chdir(destdir)
 for f in os.listdir(destdir):
     padded_file = subproc_pad_to_x480(f,destdir)
-    print padded_file
+    upload_to_imagedrop(padded_file)
     
 
      
