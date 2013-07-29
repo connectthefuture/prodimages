@@ -64,8 +64,10 @@ def pad_image_to_x480(file):
     img.sample('350x432')
 
     # Composite + Save Primary over bg, padding primary with white of bg
-    img.composite(bgimg, 0, 0, CompositeOperator.DstOverCompositeOp)
+    type = img.type
+    img.composite(bgimg, 0, 0, CompositeOperator.OverCompositeOp)
     img.magick('JPG')
+    img.type = type
     img.quality(100)
     img.write(outfile)
 
