@@ -48,6 +48,30 @@ def upload(file):
         ftpup.storbinary("STOR " + file, open(file, "rb"), 8*1024)
 
 
+## Create BG image to Composite Primary over inorder to pad BC cutoffs on List page
+def pad_image_to_x480(file):
+    from PythonMagick import *
+    fname = file.split(".")[0]
+    ext = file.split(".")[-1]
+    outfile = os.path.join(destdir, fname + "_" + "l" + ".jpg")
+
+    ## Make BG layer
+    bgimg = Image('400x480', 'white')
+
+    ## Open Primary image 
+    img = Image(file)
+    img.backgroundColor("white")
+    img.format('PNG')
+    img.sample('!350x432')
+
+    # Composite + Save Primary over bg, padding primary with white of bg
+    img.composite(bgimg, 0, 0, CompositeOperator.DstOverCompositeOp)
+    img.magick('JPG')
+    img.quality(100)
+    img.write(outfile)
+
+
+
 ################# RUN ###########################
 ################# RUN ###########################
 
@@ -93,20 +117,8 @@ print "Total Files Downloaded: {0}".format(count)
 #
 
 ### Now that Files have downloaded, change dirs to dload folder and pad images using PythonMagick
-#os.chdir(destdir)
-#for f in os.listdir(destdir):
-#    print f #os.sys()
-#    fname = f.split(".")[0]
-#    ext = f.split(".")[-1]
-#    img = Magick.Image(f)
-#    img.format('PNG')
-#    img.sample('!350x432')
-#    img.columns('400')
-#    img.rows('480')
-#    img.quality(100)
-#    img.magick('JPG')
-#    img.backgroundColor("white")
-    
-
+os.chdir(destdir)
+for f in os.listdir(destdir):
+    pad_image_to_x480(f)
 
     

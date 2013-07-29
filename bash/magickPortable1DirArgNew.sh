@@ -53,6 +53,7 @@ then
 fi;
 
 ######		Move all files starting with 9 Digits to preBatch Folder
+echo $userDropFolders
 find $userDropFolders -type f -iname [{^2-9}][0-9{8}]\*.jpg | grep -v ' ' | xargs -I '{}' mv -f '{}' $preBatchDtop
 
 
