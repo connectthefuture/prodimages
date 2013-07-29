@@ -23,31 +23,49 @@ def url_download_file(url,filepath):
     else:
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
         
-        
-import csv
-import os
 
 
-file = '/Users/johnb/Pictures/swi_feeds/sku-luxury-conv.csv'
-filedict = {}
-with open(file, 'rb') as f:
-    reader = csv.reader(f, dialect=csv)
-    for row in reader:
-        localdict = {}
-        localdict['url'] = row[2]
-        localdict['style'] = row[1]
-        filedict[row[1]] = localdict
-        
-        
-        
+def build_url_colorstyle_dict(file):
+    import csv
+    filedict = {}
+    with open(file, 'rb') as f:
+        reader = csv.reader(f, dialect=csv)
+        for row in reader:
+            localdict = {}
+            localdict['url'] = row[2]
+            localdict['style'] = row[1]
+            filedict[row[1]] = localdict
+    return filedict
+
+
+########### RUN ########
+
+import csv,datetime,os,sys
+dt = str(datetime.datetime.now())
+today = dt.split(' ')[0]
+
+## Should be run after Imap get attachments so that todays swi file is used
+if sys.argv[1]:
+    file = sys.argv[1]
+else:
+    file = os.path.join('/mnt/Post_Complete/.Vendor_to_Load/feeds', today + '_sku-luxury-conv.csv')
+
+## Completed Downloads
+upload_drop = '/mnt/Post_Complete/.Vendor_to_Load/upload_drop'
+daily_dir = os.path.join(upload_drop, today + 'jpgs')
+os.mkdir(daily_dir, 16877)
+
+filedict = build_url_colorstyle_dict(file)
+
+
 for k,v in filedict.iteritems():
-    os.chdir(os.path.join(os.path.expanduser('~'), 'script_downloads'))
+    os.chdir(daily_dir)
     vendor_url = v['url']
     colorstyle = k + ".jpg"
     colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle)
     #print vendor_url, colorstyle_file
     url_download_file(vendor_url,colorstyle_file)
-    #print swiurl
+#print swiurl
         
         
 #for k,v in stylesDict.iteritems():

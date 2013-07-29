@@ -80,15 +80,15 @@ def send_purge_request_localis(colorstyle, version):
         import pycurl,json
         BNCPHP = "http://clearcache.bluefly.corp/BnCClear2.php"
         #POSTDATA = "'style={colorstyle}&version={version}'".format(colorstyle=colorstyle, version=version)
-        POSTDATA = "'{colorstyle} {version}'".format(colorstyle=colorstyle, version=version)
+        #POSTDATA = "'{colorstyle} {version}'".format(colorstyle=colorstyle, version=version)
         ## Create send data
-#        data = json.dumps({
-#        'style' : colorstyle,
-#        'version' : version
-#        })
-        
+        data = json.dumps({
+        'img' : colorstyle,
+        'ver' : version
+        })
+#        
         head_contenttype = 'Content-Type: application/x-www-form-urlencoded;charset=utf-8'
-        head_content_len= "Content-length: {0}".format(str(len(POSTDATA)))
+        head_content_len= "Content-length: {0}".format(str(len(data)))
         head_accept = 'Accept: text/plain'
         head_useragent = 'User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0'
         c = pycurl.Curl()
@@ -98,7 +98,7 @@ def send_purge_request_localis(colorstyle, version):
         #c.setopt(pycurl.RETURNTRANSFER, 1)
         c.setopt(pycurl.FORBID_REUSE, 1)
         c.setopt(pycurl.FRESH_CONNECT, 1)
-        c.setopt(pycurl.POSTFIELDS, POSTDATA)
+        c.setopt(pycurl.POSTFIELDS, data)
         c.setopt(pycurl.HTTPHEADER, [head_useragent, head_contenttype, head_accept, head_content_len])
         #c.setopt(c.POSTFIELDS, POSTDATA)
         c.setopt(c.VERBOSE, True)
