@@ -10,13 +10,13 @@ def sqlQueryEventsUpcoming():
     connection = orcl_engine.connect()
     querymake_eventscal = '''SELECT DISTINCT
       POMGR.EVENT.ID                             AS event_id,
-      POMGR.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID AS "colorstyle",
-      POMGR.LK_EVENT_PRODUCT_CATEGORY.NAME       AS "prod_category",
+      POMGR.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID AS colorstyle,
+      POMGR.LK_EVENT_PRODUCT_CATEGORY.NAME       AS prod_category,
       POMGR.EVENT.EVENT_DESCRIPTION              AS event_title,
       POMGR.EVENT.START_DATE                     AS ev_start,
       POMGR.EVENT.END_DATE                       AS ev_end,
-      POMGR.LK_PRODUCT_STATUS.NAME               AS "production_status",
-      POMGR.EVENT.CATEGORY                       AS "category_id"
+      POMGR.LK_PRODUCT_STATUS.NAME               AS production_status,
+      POMGR.EVENT.CATEGORY                       AS category_id
     FROM
       POMGR.EVENT_PRODUCT_COLOR
     LEFT JOIN POMGR.PRODUCT_COLOR
@@ -55,7 +55,7 @@ def sqlQueryEventsUpcoming():
         event['ev_end'] = row['ev_end']        
         event['colorstyle'] = row['colorstyle']        
         event['production_status'] = row['production_status']  
-        events[row['colorstyle']] = event
+        events[row['event_id']] = event
         
     #print events
     connection.close()
@@ -78,13 +78,14 @@ for key,value in future_events.iteritems():
         print kv, [value]
 #for key,value in future_events.iteritems():
 #    import datetime, time    
-#    for kv in [value]:
-#        titlekv = value['event_id']
+#    for v in [value]:
+#        titlekv = key
 #        desckv = value['event_title']
 #        colorstyle = value['colorstyle']
 #        status = value['production_status']
-#        category = value['category']
-#                
+#        category = value['category_id']
+#        prod_category = value['prod_category']
+        
 #        lockv = str(category)
 #        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
 #        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
