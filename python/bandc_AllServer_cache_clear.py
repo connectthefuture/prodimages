@@ -82,15 +82,18 @@ def send_purge_request_localis(colorstyle, version):
         #POSTDATA = "'style={colorstyle}&version={version}'".format(colorstyle=colorstyle, version=version)
         #POSTDATA = "'{colorstyle} {version}'".format(colorstyle=colorstyle, version=version)
         ## Create send data
-        data = json.dumps({
-        'img' : colorstyle,
-        'ver' : version
-        })
-#        
-        head_contenttype = 'Content-Type: application/x-www-form-urlencoded;charset=utf-8'
+        #data = json.dumps({
+        #'style' : colorstyle,
+        #'version' : version
+        #})
+#       
+        data = "style={0}&version={1}".format(colorstyle, version) 
+        head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
         head_content_len= "Content-length: {0}".format(str(len(data)))
-        head_accept = 'Accept: text/plain'
+        #head_accept = 'Accept: text/html'
+        head_accept = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
         head_useragent = 'User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0'
+        head_referer = 'Referer: http://clearcache.bluefly.corp/BnCClear1.php'
         c = pycurl.Curl()
         c.setopt(c.URL, BNCPHP)
         c.setopt(pycurl.HEADER, 0)
@@ -99,7 +102,7 @@ def send_purge_request_localis(colorstyle, version):
         c.setopt(pycurl.FORBID_REUSE, 1)
         c.setopt(pycurl.FRESH_CONNECT, 1)
         c.setopt(pycurl.POSTFIELDS, data)
-        c.setopt(pycurl.HTTPHEADER, [head_useragent, head_contenttype, head_accept, head_content_len])
+        c.setopt(pycurl.HTTPHEADER, [head_useragent, head_referer, head_contenttype, head_accept, head_content_len])
         #c.setopt(c.POSTFIELDS, POSTDATA)
         c.setopt(c.VERBOSE, True)
         c.perform()
@@ -160,6 +163,7 @@ eventid = sys.argv[1]
 
 catid = get_catid_from_eventid(eventid)
 ## Join Catid to BC Url
+#url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
 url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
 
 #url_colorstyle_pdp = 'http://www.belleandclive.com/browse/product.jsp?id=' + colorstyle
