@@ -16,7 +16,7 @@ def sqlQueryEventsUpcoming():
       POMGR.EVENT.START_DATE                     AS ev_start,
       POMGR.EVENT.END_DATE                       AS ev_end,
       POMGR.LK_PRODUCT_STATUS.NAME               AS "production_status",
-      POMGR.EVENT.CATEGORY                       AS "categoryid"
+      POMGR.EVENT.CATEGORY                       AS "prod_category"
     FROM
       POMGR.EVENT_PRODUCT_COLOR
     LEFT JOIN POMGR.PRODUCT_COLOR
