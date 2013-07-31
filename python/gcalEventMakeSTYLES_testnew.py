@@ -51,7 +51,7 @@ def sqlQueryEventsUpcoming():
     for row in result:
         event = {}
         styles = []
-        print row
+        print result[row]
         event['event_id'] = row['event_id']
         event['prod_category'] = row['prod_category']
         event['event_title'] = row['event_title']
