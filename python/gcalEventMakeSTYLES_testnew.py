@@ -148,13 +148,16 @@ for k,v in future_events.iteritems():
             print len(gcalevents)
             
             for event in gcalevents:
-                print event.getTitle()
-                print event.getContent()
-                print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-                print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-            print ev
-            calendar.addEvent (ev)
+                gcalevent = event.getTitle()
+                if gcalevent == titleid:
+                    continue
+                else:
+                    print event.getContent()
+                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+                    ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+                    print ev
+                    calendar.addEvent (ev)
         except xml.parsers.expat.ExpatError:
             print "FAILED" + key,value
             continue
