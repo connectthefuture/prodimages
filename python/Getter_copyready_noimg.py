@@ -12,7 +12,7 @@ result = connection.execute(daily_incomplete_query)
 
 dt = str(datetime.datetime.now())
 today = dt.split(' ')[0]
-today_folder = os.path.join('/mnt/Post_Ready/Daily', today + '_copy_ready')
+today_folder = os.path.join('/mnt/Post_Ready/Daily', today + '_copy')
 try:
     os.mkdir(today_folder, 16877)
     #os.chmod(today_folder,00755)
