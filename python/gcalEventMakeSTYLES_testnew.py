@@ -50,7 +50,7 @@ def sqlQueryEventsUpcoming():
     events = {}
     for row in result:
         event = {}
-#        styles = []
+        styles = {}
         print row
         event['event_id'] = row['event_id']
         event['prod_category'] = row['prod_category']
@@ -59,15 +59,13 @@ def sqlQueryEventsUpcoming():
         event['ev_start'] = row['ev_start']
         event['ev_end'] = row['ev_end']
         event['production_status'] = row['production_status']
-
-
-        event[row['colorstyle']] = set(row['colorstyle']) #row['colorstyle']
+        styles['colorstyle'] = row['colorstyle']
 
         events[row['event_id']] = event
 
     #print events
     connection.close()
-    return events
+    return events, styles
 
 # First retrieve the event from the API.
 #event = service.events().get(calendarId='primary', eventId='eventId').execute()
