@@ -79,6 +79,8 @@ def sqlQueryEventsUpcoming():
 
 
 future_events = sqlQueryEventsUpcoming()
+
+print future_events
 for key,value in future_events.iteritems():
     for val in [value]:
         print key, val
