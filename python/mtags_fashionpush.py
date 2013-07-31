@@ -155,7 +155,7 @@ for k,v in metadict.items():
 #        exiftags.append(exifcmd)
 execlist = []
 for key,value in exifdict.iteritems():
-    execstring = "exiftool -m -fast2 -overwrite_original -q {0} {1}".format(value,key)
+    execstring = "exiftool -m -fast2 -overwrite_original_in_place -q {0} {1}".format(value,key)
     execlist.append(execstring)
 
 def bashexec_subproc(cmdstring):
