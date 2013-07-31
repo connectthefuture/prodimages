@@ -75,47 +75,48 @@ def sqlQueryEventsUpcoming():
 
 future_events = sqlQueryEventsUpcoming()
 for key,value in future_events.iteritems():
-    for kv in [value]:
-        print key, [value]
-#for key,value in future_events.iteritems():
-#    import datetime, time
-#    for v in [value]:
-#        titlekv = key
-#        desckv = value['event_title']
-#        colorstyle = value['colorstyle']
-#        status = value['production_status']
-#        category = value['category_id']
-#        prod_category = value['prod_category']
+    for val in value:
+        print key, val[value]
 
-#        lockv = str(category)
-#        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
-#        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
-#        sdatekvsplit = sdatekvraw.split(",")
-#        edatekvsplit = edatekvraw.split(",")
-#        sdatekv = map(int,sdatekvsplit)
-#        edatekv = map(int,edatekvsplit)
-#        titleid = '{0}_{1}'.format(titlekv,desckv)
-#        descfull = '{0}_{1}'.format(colorstyle,status)
-#        descfull = str(descfull)
-#    try:
+# for key,value in future_events.iteritems():
+#     import datetime, time
+#     for v in [value]:
+#         titlekv = key
+#         desckv = value['event_title']
+#         colorstyle = value['colorstyle']
+#         status = value['production_status']
+#         category = value['category_id']
+#         prod_category = value['prod_category']
 #
-#        from GoogleCalendar import *
-#        gCalMNG = GoogleCalendarMng()
-#        myname = "john bragato"
-#        myemail = "john.bragato@gmail.com"
-#        gCalMNG.connect (myemail, "yankee17")
-#        calendar = gCalMNG.getCalendar ("Default1")
-#        gcalevents = calendar.getEvents()
-#        print len(gcalevents)
+#         lockv = str(category)
+#         sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
+#         edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
+#         sdatekvsplit = sdatekvraw.split(",")
+#         edatekvsplit = edatekvraw.split(",")
+#         sdatekv = map(int,sdatekvsplit)
+#         edatekv = map(int,edatekvsplit)
+#         titleid = '{0}_{1}'.format(titlekv,desckv)
+#         descfull = '{0}_{1}'.format(colorstyle,status)
+#         descfull = str(descfull)
+#     try:
+# #
+#         from GoogleCalendar import *
+#         gCalMNG = GoogleCalendarMng()
+#         myname = "john bragato"
+#         myemail = "john.bragato@gmail.com"
+#         gCalMNG.connect (myemail, "yankee17")
+#         calendar = gCalMNG.getCalendar ("Default1")
+#         gcalevents = calendar.getEvents()
+#         print len(gcalevents)
 #
-#        for event in gcalevents:
-#            print event.getTitle()
-#            print event.getContent()
-#            print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-#            print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-#        ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-#        print ev
-#        calendar.addEvent (ev)
-#    except xml.parsers.expat.ExpatError:
-#        print "FAILED" + key,value
-#        continue
+#         for event in gcalevents:
+#             print event.getTitle()
+#             print event.getContent()
+#             print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+#             print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+#         ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+#         print ev
+#         calendar.addEvent (ev)
+#     except xml.parsers.expat.ExpatError:
+#         print "FAILED" + key,value
+#         continue
