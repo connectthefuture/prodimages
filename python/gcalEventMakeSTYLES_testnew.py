@@ -42,7 +42,9 @@ def sqlQueryEventsUpcoming():
       POMGR.EVENT.START_DATE,
       POMGR.EVENT.END_DATE,
       POMGR.LK_PRODUCT_STATUS.NAME,
-      POMGR.EVENT.CATEGORY'''
+      POMGR.EVENT.CATEGORY
+    ORDER BY
+      POMGR.EVENT.ID DESC'''
     result = connection.execute(querymake_eventscal)
 
     events = {}
