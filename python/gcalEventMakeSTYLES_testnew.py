@@ -50,8 +50,8 @@ def sqlQueryEventsUpcoming():
     events = {}
     for row in result:
         event = {}
-        styles = []
-        print result[row]
+#        styles = []
+        print row
         event['event_id'] = row['event_id']
         event['prod_category'] = row['prod_category']
         event['event_title'] = row['event_title']
@@ -60,8 +60,8 @@ def sqlQueryEventsUpcoming():
         event['ev_end'] = row['ev_end']
         event['production_status'] = row['production_status']
 
-        styles.append(row['colorstyle'])
-        event[row['colorstyle']] = styles #row['colorstyle']
+
+        event[row['colorstyle']] = set(row['colorstyle']) #row['colorstyle']
 
         events[row['event_id']] = event
 
