@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar 12 11:23:55 2013
@@ -43,20 +44,20 @@ def sqlQueryEventsUpcoming():
       POMGR.LK_PRODUCT_STATUS.NAME,
       POMGR.EVENT.CATEGORY'''
     result = connection.execute(querymake_eventscal)
-    
+
     events = {}
     for row in result:
-        event = {}        
+        event = {}
         event['event_id'] = row['event_id']
-        event['prod_category'] = row['prod_category']                
+        event['prod_category'] = row['prod_category']
         event['event_title'] = row['event_title']
         event['category_id'] = row['category_id']
         event['ev_start'] = row['ev_start']
-        event['ev_end'] = row['ev_end']        
-        event['colorstyle'] = row['colorstyle']        
-        event['production_status'] = row['production_status']  
+        event['ev_end'] = row['ev_end']
+        event['colorstyle'] = row['colorstyle']
+        event['production_status'] = row['production_status']
         events[row['event_id']] = event
-        
+
     #print events
     connection.close()
     return events
@@ -77,7 +78,7 @@ for key,value in future_events.iteritems():
     for kv in [value]:
         print kv, [value]
 #for key,value in future_events.iteritems():
-#    import datetime, time    
+#    import datetime, time
 #    for v in [value]:
 #        titlekv = key
 #        desckv = value['event_title']
@@ -85,7 +86,7 @@ for key,value in future_events.iteritems():
 #        status = value['production_status']
 #        category = value['category_id']
 #        prod_category = value['prod_category']
-        
+
 #        lockv = str(category)
 #        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
 #        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
@@ -95,9 +96,9 @@ for key,value in future_events.iteritems():
 #        edatekv = map(int,edatekvsplit)
 #        titleid = '{0}_{1}'.format(titlekv,desckv)
 #        descfull = '{0}_{1}'.format(colorstyle,status)
-#        descfull = str(descfull)    
+#        descfull = str(descfull)
 #    try:
-#        
+#
 #        from GoogleCalendar import *
 #        gCalMNG = GoogleCalendarMng()
 #        myname = "john bragato"
@@ -106,7 +107,7 @@ for key,value in future_events.iteritems():
 #        calendar = gCalMNG.getCalendar ("Default1")
 #        gcalevents = calendar.getEvents()
 #        print len(gcalevents)
-#        
+#
 #        for event in gcalevents:
 #            print event.getTitle()
 #            print event.getContent()
