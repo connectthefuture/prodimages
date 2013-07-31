@@ -116,7 +116,7 @@ for line in walkedout:
             stylestringsdict_tmp['file_path'] = file_path
             stylestringsdict_tmp['alt'] = alt
             stylestringsdict[file_path] = stylestringsdict_tmp
-            file_path_reletive = file_path.replace('/Volumes/Post_Ready/zImages_1/', '/zImages/')
+            file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
             file_path_reletive = file_path.replace('JPG', 'jpg')
             ## Format CSV Rows
             row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
@@ -141,7 +141,7 @@ for k,v in stylestringsdict.iteritems():
     if re.findall(regex_zimages, src):
         pass
     else:
-		destdir = os.path.join('/Volumes/Post_Ready/zImages_1', v['colorstyle'][:4])
+		destdir = os.path.join('/mnt/Post_Ready/zImages_1', v['colorstyle'][:4])
 		destfilename = src.split('/')[-1]
 		destpath = os.path.join(destdir,destfilename)
 		## Test if File Exists in zimage Directory else copy it and resize
@@ -186,8 +186,8 @@ for k,v in stylestringsdict.iteritems():
     dfill['colorstyle'] = v['colorstyle']
     dfill['photo_date'] = v['photo_date']
     file_path = k
-    file_path = file_path.replace('/Volumes/Post_Ready/zImages_1/', '/zImages/')
-    file_path = file_path.replace('/Volumes/Post_Ready/Retouch_', '/Retouch_')
+    file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+    file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     fulldict[k] = dfill
@@ -202,7 +202,7 @@ for k,v in fulldict.iteritems():
 
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_photoselects = re.compile(r'^/Volumes/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+        regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_zimages = re.compile(r'^/zImages.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
