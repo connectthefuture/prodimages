@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar 12 11:23:55 2013
@@ -7,6 +6,7 @@ Created on Tue Mar 12 11:23:55 2013
 """
 def sqlQueryEventsUpcoming():
     import sqlalchemy
+    from collections import defaultdict
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
     connection = orcl_engine.connect()
     querymake_eventscal = '''SELECT DISTINCT
@@ -42,27 +42,27 @@ def sqlQueryEventsUpcoming():
       POMGR.EVENT.START_DATE,
       POMGR.EVENT.END_DATE,
       POMGR.LK_PRODUCT_STATUS.NAME,
-      POMGR.EVENT.CATEGORY
-    ORDER BY
-      POMGR.EVENT.ID DESC'''
+      POMGR.EVENT.CATEGORY'''
     result = connection.execute(querymake_eventscal)
-
+    #future_events = sqlQueryEventsUpcoming()
+    #for key,value in future_events.iteritems():
+        #for kv in [value]:
     events = {}
+    styles = defaultdict(list)
     for row in result:
-        event = {}
-        styles = {}
-        print row
+        event = {}        
+        #print row
         event['event_id'] = row['event_id']
-        event['prod_category'] = row['prod_category']
+        event['prod_category'] = row['prod_category']                
         event['event_title'] = row['event_title']
         event['category_id'] = row['category_id']
         event['ev_start'] = row['ev_start']
-        event['ev_end'] = row['ev_end']
+        event['ev_end'] = row['ev_end']                
+        #event['colorstyle'] = row['colorstyle']
         event['production_status'] = row['production_status']
-        styles['colorstyle'] = row['colorstyle']
-
+        styles[row['event_id']].append(row['colorstyle'])
         events[row['event_id']] = event
-
+        
     #print events
     connection.close()
     return events, styles
@@ -77,53 +77,84 @@ def sqlQueryEventsUpcoming():
 # Print the updated date.
 #print updated_event['updated']
 
-
-future_events = sqlQueryEventsUpcoming()
-
-print future_events
-for key,value in future_events.iteritems():
-    for val in [value]:
-        print key, val
-
-# for key,value in future_events.iteritems():
-#     import datetime, time
-#     for v in [value]:
-#         titlekv = key
-#         desckv = value['event_title']
-#         colorstyle = value['colorstyle']
-#         status = value['production_status']
-#         category = value['category_id']
-#         prod_category = value['prod_category']
+#years_dict = dict()
 #
-#         lockv = str(category)
-#         sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
-#         edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
-#         sdatekvsplit = sdatekvraw.split(",")
-#         edatekvsplit = edatekvraw.split(",")
-#         sdatekv = map(int,sdatekvsplit)
-#         edatekv = map(int,edatekvsplit)
-#         titleid = '{0}_{1}'.format(titlekv,desckv)
-#         descfull = '{0}_{1}'.format(colorstyle,status)
-#         descfull = str(descfull)
-#     try:
-# #
-#         from GoogleCalendar import *
-#         gCalMNG = GoogleCalendarMng()
-#         myname = "john bragato"
-#         myemail = "john.bragato@gmail.com"
-#         gCalMNG.connect (myemail, "yankee17")
-#         calendar = gCalMNG.getCalendar ("Default1")
-#         gcalevents = calendar.getEvents()
-#         print len(gcalevents)
+#for line in list:
+#    if line[0] in years_dict:
+#        # append the new number to the existing array at this slot
+#        years_dict[line[0]].append(line[1])
+#    else:
+#        # create a new array in this slot
+#        years_dict[line[0]] = [line[1]]
+
+#from collections import defaultdict
+#styles = defaultdict(list)
 #
-#         for event in gcalevents:
-#             print event.getTitle()
-#             print event.getContent()
-#             print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-#             print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-#         ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-#         print ev
-#         calendar.addEvent (ev)
-#     except xml.parsers.expat.ExpatError:
-#         print "FAILED" + key,value
-#         continue
+#future_events, future_styles = sqlQueryEventsUpcoming()
+#for key,value in future_styles.iteritems():
+#    #for kv in [value]:
+#    #d[value['event_id']].append(key)
+#    print "Event {0} has {1} Styles".format(key,len(value))
+
+#print d
+
+count = 0
+for k,v in future_events.iteritems():
+    import datetime, time
+    for value in [v]:
+        titlekv = str(value['event_id'])
+        desckv = value['event_title']
+        colorstyles = future_styles.get(value['event_id'])
+        status = value['production_status']
+        prod_category = value['prod_category']
+        category_id = value['category_id']
+        
+        pmurl = "http://pm.bluefly.corp/manager/event/editevent.html?id="
+        pmimgs = "http://pm.bluefly.corp/manager/event/viewproductimages.html?id="
+        bcurl = "http://www.belleandclive.com/browse/sales/details.jsp?categoryId="
+        
+        pmurl = pmurl + titlekv
+        pmimgs = pmimgs + titlekv
+        bcurl = pmurl + titlekv
+        
+        try:
+            if colorstyles == None:
+                lockv = str(pmurl)
+            else:
+                lockv = str(pmimgs)
+        except TypeError:
+            lockv = str(bcurl)
+        
+        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
+        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
+        sdatekvsplit = sdatekvraw.split(",")
+        edatekvsplit = edatekvraw.split(",")
+        sdatekv = map(int,sdatekvsplit)
+        edatekv = map(int,edatekvsplit)
+        titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
+        descfull = '{0} {1} in Event {2}: {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles)
+        descfull = str(descfull)
+        #print titleid, descfull, edatekv, prod_category, lockv
+        count += 1
+        #print count
+        try:
+            from GoogleCalendar import *
+            gCalMNG = GoogleCalendarMng()
+            myname = "john bragato"
+            myemail = "john.bragato@gmail.com"
+            gCalMNG.connect (myemail, "yankee17")
+            calendar = gCalMNG.getCalendar ("Default1")
+            gcalevents = calendar.getEvents()
+            print len(gcalevents)
+            
+            for event in gcalevents:
+                print event.getTitle()
+                print event.getContent()
+                print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+                print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+            print ev
+            calendar.addEvent (ev)
+        except xml.parsers.expat.ExpatError:
+            print "FAILED" + key,value
+            continue
