@@ -147,11 +147,12 @@ for k,v in event_styles.iteritems():
 print "Total Files Downloaded: {0}".format(count)
 #
 
-### Now that Files have downloaded, change dirs to dload folder and pad images using PythonMagick Then load the _l
+### Now that Files have downloaded, change dirs to dload folder and pad images using subproc + ImageMagick Then load the _l
 os.chdir(destdir)
 for f in os.listdir(destdir):
     padded_file = subproc_pad_to_x480(f,destdir)
-    upload_to_imagedrop(padded_file)
+    ## Uncomment below to have padded file autoload after padding
+    #upload_to_imagedrop(padded_file)
     
 
      
