@@ -176,7 +176,7 @@ versioned_links = return_versioned_urls(listpage_urllist)
 #count = 0
 if len(versioned_links) <= 50:
 
-    regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9]+?)')
+    regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     for url_purge_local in versioned_links:
         colorstyle = re.findall(regex, url_purge_local[0])
         colorstyle = colorstyle.pop()[1]
