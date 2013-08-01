@@ -128,10 +128,10 @@ for k,v in event_styles.iteritems():
     if os.path.isdir(destdir):
         pass
     else:
-        #try:
-        os.makedirs(destdir, 16877)
-        #except:
-            #pass
+        try:
+            os.makedirs(destdir, 16877)
+        except OSError:
+            pass
 
     try:
         getbinary_ftp_netsrv101(remotepath, outfile=destpath)
