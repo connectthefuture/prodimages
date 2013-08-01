@@ -86,7 +86,7 @@ def sqlQueryEventsUpcoming():
 #from collections import defaultdict
 #styles = defaultdict(list)
 #
-#future_events, future_styles = sqlQueryEventsUpcoming()
+future_events, future_styles = sqlQueryEventsUpcoming()
 #for key,value in future_styles.iteritems():
 #    #for kv in [value]:
 #    #d[value['event_id']].append(key)
