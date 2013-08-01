@@ -5,11 +5,11 @@
 #pushFashion=/Volumes/Post_Ready/eFashionPush
 dateLog=`date`
 echo "START _1_ $dateLog" >> $LOGDIR/FindMakeLowres_PMphotoAttribImg_log.txt
-pmPhotoDir=/Volumes/Post_Ready/zImages_1
-pmPhotoXdir=/Volumes/Post_Ready/zImages_1/xxFer
-echo "START _1_ $dateLog" >> ~/Dropbox/FindMakeLowres_log.txt
-pmPhotoDir=/Volumes/Post_Ready/zImages_1
-pmPhotoXdir=/Volumes/Post_Ready/zImages_1/xxFer
+pmPhotoDir=/mnt/Post_Ready/zImages_1
+pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
+echo "START _1_ $dateLog" >> /tmp/FindMakeLowres_log.txt
+pmPhotoDir=/mnt/Post_Ready/zImages_1
+pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
 
 ## -- Read all Dirs in Push folders
 fileListD=`find ${pushStill} ${pushFashion} -maxdepth 1 -mindepth 1 -type d | xargs -L1 -n1`
@@ -37,8 +37,8 @@ done;
 done;
 
 ##Rez Down Images for Faster loading Then send attributes to PM
-pmPhotoXdir=/Volumes/Post_Ready/zImages_1/xxFer
-pmPhotoDir=/Volumes/Post_Ready/zImages_1
+pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
+pmPhotoDir=/mnt/Post_Ready/zImages_1
 cd $pmPhotoXdir
 #mogrify '*.jpg[400x480]'
 
