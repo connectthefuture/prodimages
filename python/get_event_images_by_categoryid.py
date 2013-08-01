@@ -101,7 +101,6 @@ def subproc_pad_to_x480(file,destdir):
         print "Failed: {0}".format(file)
     return outfile
 
-
 ################# RUN ###########################
 ################# RUN ###########################
 
@@ -113,6 +112,8 @@ categoryid = sys.argv[1]
 event_styles = event_styles_by_categoryid(categoryid)
 count = 0
 
+prodimages_share = '/home/johnb/Share/PRODIMAGES_OUTPUT'
+
 ### Iterate list and Download Files from Netsrv101
 for k,v in event_styles.iteritems():
     event_id = v['event_id']
@@ -121,7 +122,7 @@ for k,v in event_styles.iteritems():
     colorstyle_file = colorstyle + ".png"
     remotedir = "/mnt/images/images"
     remotepath = os.path.join(remotedir, hashdir, colorstyle_file)
-    destdir = os.path.join(os.path.expanduser('~'), 'event_' + str(event_id))
+    destdir = os.path.join(prodimages_share, 'event_' + str(event_id))
     destpath = os.path.join(destdir, colorstyle_file)
     
     if os.path.isdir(destdir):
