@@ -154,6 +154,7 @@ for k,v in future_events.iteritems():
                     ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
                     print ev
                     calendar.addEvent (ev)
-        except xml.parsers.expat.ExpatError:
+        #except xml.parsers.expat.ExpatError:
+        except:
             print "FAILED" + key,value
             continue
