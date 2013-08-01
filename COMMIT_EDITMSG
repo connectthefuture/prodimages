@@ -1,24 +1,34 @@
-copy gett
+Merge branch 'master' of github.com:relic7/prodimages
+
+Conflicts:
+	python/Getter_copyready_noimg.py
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	MERGE_HEAD
+# and try again.
+
+
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
 # Changes to be committed:
-#   (use "git reset HEAD <file>..." to unstage)
 #
 #	modified:   COMMIT_EDITMSG
-#	modified:   FETCH_HEAD
 #	modified:   ORIG_HEAD
 #	modified:   index
 #	modified:   logs/HEAD
 #	modified:   logs/refs/heads/master
-#	modified:   logs/refs/remotes/prodimages-dev/master
-#	deleted:    python/Getter_copyready_noimg
+#	new file:   python/Getter_copyready_noimg.py
+#	modified:   python/walkdir_csv.py
 #	modified:   refs/heads/master
-#	modified:   refs/remotes/prodimages-dev/master
 #
 # Untracked files:
 #   (use "git add <file>..." to include in what will be committed)
 #
+#	MERGE_HEAD
+#	MERGE_MODE
+#	MERGE_MSG
 #	bash/view_events_incomplete.sh.save
 #	objects/00/2c87572a175310a258e7de3e54aa7c08c29e17
 #	objects/00/436ddde68e0837e65c122f474d259752d9f179
@@ -246,6 +256,7 @@ copy gett
 #	objects/16/90bd76675296f9ed1b4461c5bc8e18ae4ba5c9
 #	objects/16/93ab51e2c930564044ee41bac2547175ef7cf1
 #	objects/16/a508e5b2f43744696b0b530711a76bd7852f8c
+#	objects/16/acea13a21b2cf5a10d7523e87a553a9f34e673
 #	objects/16/af733a942d2f9821c0f57f012d41ffe687ec30
 #	objects/16/ba648fd4e0172888b3d75040de4bbf30c5227a
 #	objects/16/cae0245a1131bfa1c9ebdbe4f260fa3fd08a63
@@ -288,6 +299,7 @@ copy gett
 #	objects/1a/116bea57f4c59d36df1eb5f37e793ad2fe44ca
 #	objects/1a/2fcd965be5646b15d51ec2684de30627c8618e
 #	objects/1a/68b531d3844dc0d3be8ca5141d284307c3030e
+#	objects/1a/6c5feae1b174a4f85b242c931bb5db55e54053
 #	objects/1a/867601c6dcf3512a5fbcaef61aa94556717bb9
 #	objects/1a/aaf3b939d58adbe24d812be9e8953c624e2d7a
 #	objects/1a/b6ca60ff94b0207c20b70157316dce3508ea7b
@@ -338,7 +350,9 @@ copy gett
 #	objects/1f/8d6e0e9ee2a4310547e370999b931cc8a0275a
 #	objects/1f/8f572679ff324530506bbc06a186703c702364
 #	objects/1f/8f62df3142ca6913a2ad5fa487c57567df6ff4
+#	objects/1f/af59d6f702a92d041bed971a288b1d8a16d07e
 #	objects/1f/d567db847ba7dc07aa895a4b0c477204ceffdc
+#	objects/1f/e626394da78286791187c67a6753e80e9fc2bc
 #	objects/1f/e6919f0a7f86237b8a375123ed5b0faaeea120
 #	objects/20/404b63625c96ec6bffab0a24547fc53abde60a
 #	objects/20/7bccaba8f2ae3bf9691b12a00577493d142534
@@ -559,6 +573,7 @@ copy gett
 #	objects/33/954c81bb89ebb3841a42dd9ededbacbc9ad876
 #	objects/33/9c18f9e294f720435ffbec39bbcb2e39220404
 #	objects/33/d72fc923dfea2c878a87ed71deda0a320230f9
+#	objects/34/16bd6e68bf4757a7635c1ea0c2c6eb9f25e7d5
 #	objects/34/335aeaa3821b68e33b4df5b6ac415a134178a1
 #	objects/34/34e7b6e7f375fba97539271d93d382badaa8f1
 #	objects/34/36ec06a29e99d9646e5a883da1e444f6649787
@@ -605,6 +620,7 @@ copy gett
 #	objects/38/d931d6f434397c6335d8757846928f81be91f2
 #	objects/38/def53dda76010443d077984d0aea4f3e3dd529
 #	objects/38/e5fd28c9f4140d5a5059334c056067c67577e7
+#	objects/38/ed0393ad40108a4cc0aaa92db9bb1640afb190
 #	objects/38/ee7a69014201140f6f17e8456fb4a6f3001a4d
 #	objects/39/0361e76720bb7f8ab2753fd64f5293ce6fdd44
 #	objects/39/054e42ee26f0e835464e1c7d81d50072c40da7
@@ -626,6 +642,7 @@ copy gett
 #	objects/3a/2273190fe8b1e2bbf8a344be871eeee9f2b8a6
 #	objects/3a/2a6bd0f7e895add1c192f708384d477e51d514
 #	objects/3a/324b4efe62e1c939714786a64fab43e4ba4c05
+#	objects/3a/3f71643a07b752616c444bd2fb9f9271ff3051
 #	objects/3a/66420cf79dc2d777d85f3ada8494222bbd4bd8
 #	objects/3a/73504d33e0366a2e2af67cab7efdde415be167
 #	objects/3a/74b7b0551228dfc2d355cd32f5a6cef6536e4d
@@ -817,6 +834,7 @@ copy gett
 #	objects/4c/f03baf5ff46cca541b31dd5ccf434a3a8c8e3a
 #	objects/4d/1777c7158119b7534e6b78dc324cd6672b87dd
 #	objects/4d/3245c1a4ed8fe02f202dc1d06e2bacb9f5aab5
+#	objects/4d/333a0bdb581075c2cb4b265af7d9403c312c93
 #	objects/4d/38d18324a69dddd1f8aab9c5984014899579c7
 #	objects/4d/49fa551622ff4b05e3b4dde4b729d6989c2a12
 #	objects/4d/70b317508c506cf3827b7fb9cd83b74eafc32b
@@ -993,6 +1011,7 @@ copy gett
 #	objects/5e/2d799e07ef628485ffd66f888ace22e960e371
 #	objects/5e/44937e64c386cb241b5d470ad3497948a51d57
 #	objects/5e/49fa5dc0bf1e0993a2481b4c5722648755ffdd
+#	objects/5e/55a553653ec7922d9735543b08f4d04b97b7b8
 #	objects/5e/61bd3b0eb227e07d2f4ba4ad84da40de64c5ef
 #	objects/5e/64d464da8d060ade0523ae66a0ea168571558c
 #	objects/5e/72b03e61890683bc23b5f024fa94f6693e3d34
@@ -1458,6 +1477,7 @@ copy gett
 #	objects/8a/f8adea44f8d55f476558d5a3b8d934b08ef260
 #	objects/8a/fa5920dfbe3b8f6714bd9ecbd58c2e61540ba8
 #	objects/8b/030ca02bf65e054c0ac2b0e9b93cbe158c2116
+#	objects/8b/0b23362a8c69886405fc50b9533a4ee2c84577
 #	objects/8b/19f4f7a7c154f3d3b96db074f1ac8c387e4ab7
 #	objects/8b/346b700423f3bd562791a842b4e0c2b8e8cd66
 #	objects/8b/398cd843d99d4585156dc5da8e81d8234b97de
@@ -2180,6 +2200,7 @@ copy gett
 #	objects/cf/d79c8d6ad4950e1f24f1c496b271fd5b8d3c72
 #	objects/cf/e357fb8db6dcefb02fac511e23bc3131b2322c
 #	objects/cf/e4a63a88f921f6ee72b6ebf128edd30b19cd9d
+#	objects/cf/ec0b05b6aac75d1d262098ca55d843aed04d16
 #	objects/d0/0322d93ce64c7b9ac7cb7c381297a33087bc60
 #	objects/d0/12ed572839e53da01f1bde96b8e83bf536a4ac
 #	objects/d0/69d1af8bfcf7d80462ffbc47a13af69ffad79e
