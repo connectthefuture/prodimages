@@ -1,10 +1,5 @@
 #/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 12 11:23:55 2013
 
-@author: jb
-"""
 def sqlQueryEventsUpcoming():
     import sqlalchemy
     from collections import defaultdict
