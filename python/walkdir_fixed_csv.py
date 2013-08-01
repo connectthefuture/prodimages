@@ -84,8 +84,10 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
     size = 600, 720
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
     zimages_root = '/mnt/Post_Ready/zImages_1'
-
-    if re.findall(regex_jpeg, pathname):
+    test_zimages = '/'.join(pathname.split('/')[:4])
+    if test_zimages == zimages_root:
+        pass
+    elif re.findall(regex_jpeg, pathname):
         zimages_root = '/mnt/Post_Ready/zImages_1'
     ## If input variable is a single File Create 1 Thumb
         if os.path.isfile(pathname):
@@ -217,7 +219,7 @@ for k,v in fulldict.iteritems():
         sqlinsert_choose_test = v['file_path']
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
-        regex_zimages = re.compile(r'^/zImages.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+        regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
