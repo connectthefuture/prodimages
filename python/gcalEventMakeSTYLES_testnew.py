@@ -151,9 +151,9 @@ for k,v in future_events.iteritems():
                     print event.getContent()
                     #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
                     #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-                    ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-                    print ev
-                    calendar.addEvent (ev)
+            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+            print ev
+            calendar.addEvent (ev)
         # except xml.parsers.expat.ExpatError:
         except:
             #print "FAILED" + key,value
