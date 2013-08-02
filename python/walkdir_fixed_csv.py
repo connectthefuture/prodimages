@@ -70,8 +70,8 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 stylestrings.append(row)
             except IOError:
                 print "IOError on {0}".format(line)
-            except AttributeError:
-                print "AttributeError on {0}".format(line)
+            #except AttributeError:
+            #    print "AttributeError on {0}".format(line)
     return stylestringsdict
     
 
