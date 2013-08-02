@@ -45,6 +45,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                         photo_date = 0000-00-00
                 except AttributeError:
                         photo_date = 0000-00-00
+                photo_date = str(photo_date)
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
                 stylestringsdict_tmp['photo_date'] = photo_date
