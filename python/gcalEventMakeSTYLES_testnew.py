@@ -40,9 +40,9 @@ def sqlQueryEventsUpcoming():
       POMGR.LK_PRODUCT_STATUS.NAME,
       POMGR.EVENT.CATEGORY'''
     result = connection.execute(querymake_eventscal)
-    #future_events = sqlQueryEventsUpcoming()
-    #for key,value in future_events.iteritems():
-        #for kv in [value]:
+#future_events = sqlQueryEventsUpcoming()
+#for key,value in future_events.iteritems():
+    #for kv in [value]:
     events = {}
     styles = defaultdict(list)
     for row in result:
@@ -54,16 +54,17 @@ def sqlQueryEventsUpcoming():
         event['category_id'] = row['category_id']
         event['ev_start'] = row['ev_start']
         event['ev_end'] = row['ev_end']
-        #event['colorstyle'] = row['colorstyle']
+#event['colorstyle'] = row['colorstyle']
         event['production_status'] = row['production_status']
         
         status = str(row['production_status'])
         colorstyle = str(row['colorstyle'])
-        stylestatus = "'{0}' : '{1}'".format(colorstyle, status)
+        
+        #stylestatus = "{0} : {1}".format(colorstyle, status)
+        stylestatus = (colorstyle,status)
         styles[row['event_id']].append(stylestatus)
         events[row['event_id']] = event
-
-    #print events
+#print events
     connection.close()
     return events, styles
 
@@ -76,10 +77,10 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
     myname = "john bragato"
     myemail = "john.bragato@gmail.com"
     gCalMNG.connect (myemail, "yankee17")
-    #if choose_calendar == None:
-    #    calendar = gCalMNG.getCalendar ("Default1")
-    #else:
-    #    choose_calendar = str(choose_calendar)
+#if choose_calendar == None:
+#    calendar = gCalMNG.getCalendar ("Default1")
+#else:
+#    choose_calendar = str(choose_calendar)
     calendar = gCalMNG.getCalendar ("Default1")
     gcalevents = calendar.getEvents()
     print len(gcalevents)
@@ -143,9 +144,15 @@ for k,v in future_events.iteritems():
                 elif colorstyle[1] == 'Production Incomplete':
                         incomplete.append(colorstyle)
         
-        print "Incomplete Styles = {0}".format(incomplete)
-        print "Complete Styles = {0}".format(complete)
+        incomplete_styles = "{0} Incomplete Styles = {1}".format(len(incomplete),incomplete)
+        complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
+        colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
         
+        if len(incomplete) == 0:
+            event_complete_flag = True
+        else: 
+            event_complete_flag = False
+            
         status = value['production_status']
         prod_category = value['prod_category']
         category_id = value['category_id']
@@ -173,7 +180,7 @@ for k,v in future_events.iteritems():
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
         titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
-        descfull = '{0} {1} in Event {2}: {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles)
+        descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
         count += 1
