@@ -94,25 +94,23 @@ def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
 
 ###
 ## Resize/Copy Image as Copy All Metadata from Source Image File to Resized Thumb
-def resize_image(source_path, dest_path, size):
+def resize_image(infile, dest_file, size):
     from PIL import Image
     import pyexiv2
-    ## Extract Originals Metadata prior to Resizing
+    zimages_filepath = dest_file
+## Extract Originals Metadata prior to Resizing
     source_metadata = pyexiv2.ImageMetadata(infile)
     source_metadata.read()
-    
-    # Resize and Save Thumb copy to Zimages
+# Resize and Save Thumb copy to Zimages
     im = Image.open(infile)
     im.thumbnail(size, Image.ANTIALIAS)
     im.save(zimages_filepath , "JPEG")
     print infile, zimages_filepath
-
-    # Copy EXIF data from Source to Resized Image
+# Copy EXIF data from Source to Resized Image
     dest_metadata = pyexiv2.ImageMetadata(zimages_filepath)
     dest_metadata.read()
     source_metadata.copy(dest_metadata, exif=True, iptc=True, xmp=True, comment=True)
-
-    # set EXIF image size info to resized size
+# set EXIF image size info to resized size
     dest_metadata.read()
     dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
     dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
