@@ -69,7 +69,7 @@ def sqlQueryEventsUpcoming():
 
 
 
-def gcal_insert_bc_event(myname, myemail, titleid, descfull, lockv, sdatekv, edatekv, choose_calendar=None):
+def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, choose_calendar=None):
     from GoogleCalendar import *
     gCalMNG = GoogleCalendarMng()
     myname = "john bragato"
@@ -174,27 +174,29 @@ for k,v in future_events.iteritems():
         #print titleid, descfull, edatekv, prod_category, lockv
         count += 1
         #print count
+        
         try:
-            from GoogleCalendar import *
-            gCalMNG = GoogleCalendarMng()
-            myname = "john bragato"
-            myemail = "john.bragato@gmail.com"
-            gCalMNG.connect (myemail, "yankee17")
-            calendar = gCalMNG.getCalendar ("Default1")
-            gcalevents = calendar.getEvents()
-            print len(gcalevents)
-            gcaleventslist = []
-            for event in gcalevents:
-                gcalevent = event.getTitle()
-                if gcalevent == titleid:
-                    continue
-                else:
-                    print event.getContent()
-                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-            print ev
-            calendar.addEvent (ev)
+            gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
+#            from GoogleCalendar import *
+#            gCalMNG = GoogleCalendarMng()
+#            myname = "john bragato"
+#            myemail = "john.bragato@gmail.com"
+#            gCalMNG.connect (myemail, "yankee17")
+#            calendar = gCalMNG.getCalendar ("Default1")
+#            gcalevents = calendar.getEvents()
+#            print len(gcalevents)
+#            gcaleventslist = []
+#            for event in gcalevents:
+#                gcalevent = event.getTitle()
+#                if gcalevent == titleid:
+#                    continue
+#                else:
+#                    print event.getContent()
+#                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+#                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+#            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+#            print ev
+#            calendar.addEvent (ev)
         # except xml.parsers.expat.ExpatError:
         except:
             #print "FAILED" + key,value
