@@ -90,6 +90,7 @@ def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
     # Add and Write new Tag to File
     image_metadata[exiftag] = exifvalue
     image_metadata.write()
+    return image_filepath
 
 
 ###
@@ -115,6 +116,7 @@ def resize_image(infile, dest_file, size):
 #    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
 #    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
     dest_metadata.write()
+    return zimages_filepath
     
 
 
@@ -173,6 +175,7 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
             #    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
             #    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
                 dest_metadata.write()
+            return zimages_filepath
 
 
 
@@ -220,13 +223,12 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
                     #    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
                     #    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
                         dest_metadata.write()
-
+                return zimages_filepath
             except:
                 print "Error Creating Thumbnail for {0}".format(infile)
 
     else:
         print "File: {0} is not a jpg".format(pathname)
-                return zimages_filepath
 
 ###
 ## Write Rows to Dated CSV in Users Home Dir If Desired
