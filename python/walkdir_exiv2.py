@@ -56,4 +56,22 @@ for line in walkedout:
     print "{0},{1},{2},{3}".format(colorstyle,photodate,file_path,alt)
     
     
- 
+def resize_image(source_path, dest_path, size):
+    from PIL import *
+    import pyexiv2
+    # resize image
+    image = Image.open(source_path)
+    image.thumbnail(size, Image.ANTIALIAS)
+    image.save(dest_path, "JPEG")
+
+    # copy EXIF data
+    source_image = pyexiv2.Image(source_path)
+    source_image.readMetadata()
+    dest_image = pyexiv2.Image(dest_path)
+    dest_image.readMetadata()
+    source_image.copyMetadataTo(dest_image)
+
+    # set EXIF image size info to resized size
+    dest_image["Exif.Photo.PixelXDimension"] = image.size[0]
+    dest_image["Exif.Photo.PixelYDimension"] = image.size[1]
+    dest_image.writeMetadata()

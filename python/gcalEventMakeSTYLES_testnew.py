@@ -25,7 +25,7 @@ def sqlQueryEventsUpcoming():
     LEFT JOIN POMGR.EVENT
     ON
       POMGR.EVENT_PRODUCT_COLOR.EVENT_ID = POMGR.EVENT.ID
-    LEFT JOIN POMGR.LK_EVENT_PRODUCT_CATEGORY
+    INNER JOIN POMGR.LK_EVENT_PRODUCT_CATEGORY
     ON
       POMGR.EVENT.PRODUCT_CATEGORY_ID = POMGR.LK_EVENT_PRODUCT_CATEGORY.ID
     WHERE
@@ -46,22 +46,55 @@ def sqlQueryEventsUpcoming():
     events = {}
     styles = defaultdict(list)
     for row in result:
-        event = {}        
+        event = {}
         #print row
         event['event_id'] = row['event_id']
-        event['prod_category'] = row['prod_category']                
+        event['prod_category'] = row['prod_category']
         event['event_title'] = row['event_title']
         event['category_id'] = row['category_id']
         event['ev_start'] = row['ev_start']
-        event['ev_end'] = row['ev_end']                
+        event['ev_end'] = row['ev_end']
         #event['colorstyle'] = row['colorstyle']
         event['production_status'] = row['production_status']
-        styles[row['event_id']].append(row['colorstyle'])
+
+        status = str(row['production_status'])
+        colorstyle = str(row['colorstyle'])
+        stylestatus = "'{0}' : '{1}'".format(colorstyle, status)
+        styles[row['event_id']].append(stylestatus)
         events[row['event_id']] = event
-        
+
     #print events
     connection.close()
     return events, styles
+
+
+
+def gcal_insert_bc_event(myname, myemail, titleid, descfull, lockv, sdatekv, edatekv, choose_calendar=None):
+    from GoogleCalendar import *
+    gCalMNG = GoogleCalendarMng()
+    myname = "john bragato"
+    myemail = "john.bragato@gmail.com"
+    gCalMNG.connect (myemail, "yankee17")
+    if choose_calendar = None:
+        calendar = gCalMNG.getCalendar ("Default1")
+    else:
+        choose_calendar = str(choose_calendar)
+    calendar = gCalMNG.getCalendar (choose_calendar)
+    gcalevents = calendar.getEvents()
+    print len(gcalevents)
+    gcaleventslist = []
+    for event in gcalevents:
+        gcalevent = event.getTitle()
+        if gcalevent == titleid:
+            continue
+        else:
+            print event.getContent()
+            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+    ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+    print ev
+    calendar.addEvent (ev)
+
 
 # First retrieve the event from the API.
 #event = service.events().get(calendarId='primary', eventId='eventId').execute()
@@ -101,18 +134,26 @@ for k,v in future_events.iteritems():
         titlekv = str(value['event_id'])
         desckv = value['event_title']
         colorstyles = future_styles.get(value['event_id'])
+        incomplete = []
+        complete = []
+        for colorstyle in colorstyles:
+                if colorstyle[1] == 'Production Complete':
+                        complete.append(colorstyle)
+                elif colorstyle[1] == 'Production Incomplete':
+                        incomplete.append(colorstyle)
+
         status = value['production_status']
         prod_category = value['prod_category']
         category_id = value['category_id']
-        
+
         pmurl = "http://pm.bluefly.corp/manager/event/editevent.html?id="
         pmimgs = "http://pm.bluefly.corp/manager/event/viewproductimages.html?id="
         bcurl = "http://www.belleandclive.com/browse/sales/details.jsp?categoryId="
-        
+
         pmurl = pmurl + titlekv
         pmimgs = pmimgs + titlekv
         bcurl = pmurl + titlekv
-        
+
         try:
             if colorstyles == None:
                 lockv = str(pmurl)
@@ -120,7 +161,7 @@ for k,v in future_events.iteritems():
                 lockv = str(pmimgs)
         except TypeError:
             lockv = str(bcurl)
-        
+
         sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
         edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
         sdatekvsplit = sdatekvraw.split(",")
@@ -142,7 +183,7 @@ for k,v in future_events.iteritems():
             calendar = gCalMNG.getCalendar ("Default1")
             gcalevents = calendar.getEvents()
             print len(gcalevents)
-            
+            gcaleventslist = []
             for event in gcalevents:
                 gcalevent = event.getTitle()
                 if gcalevent == titleid:
