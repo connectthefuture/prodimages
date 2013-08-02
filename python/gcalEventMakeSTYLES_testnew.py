@@ -210,5 +210,5 @@ for k,v in future_events.iteritems():
             calendar.addEvent (ev)
         except xml.parsers.expat.ExpatError:
         #except:
-            print "FAILED" + k,v
+            print "FAILED" #+ k,v
         #    continue
