@@ -131,7 +131,7 @@ future_events, future_styles = sqlQueryEventsUpcoming()
 
 count = 0
 for k,v in future_events.iteritems():
-    import datetime, time
+    import datetime, time, xml
     for value in [v]:
         titlekv = str(value['event_id'])
         desckv = value['event_title']
