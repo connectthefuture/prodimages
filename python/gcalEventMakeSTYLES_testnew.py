@@ -16,18 +16,18 @@ def sqlQueryEventsUpcoming():
       POMGR.EVENT.CATEGORY                       AS category_id
     FROM
       POMGR.EVENT_PRODUCT_COLOR
-    LEFT JOIN POMGR.PRODUCT_COLOR
-    ON
-      POMGR.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.PRODUCT_ID
-    LEFT JOIN POMGR.LK_PRODUCT_STATUS
-    ON
-      POMGR.PRODUCT_COLOR.PRODUCTION_STATUS_ID = POMGR.LK_PRODUCT_STATUS.ID
     LEFT JOIN POMGR.EVENT
     ON
       POMGR.EVENT_PRODUCT_COLOR.EVENT_ID = POMGR.EVENT.ID
     INNER JOIN POMGR.LK_EVENT_PRODUCT_CATEGORY
     ON
       POMGR.EVENT.PRODUCT_CATEGORY_ID = POMGR.LK_EVENT_PRODUCT_CATEGORY.ID
+    LEFT JOIN POMGR.PRODUCT_COLOR
+    ON
+      POMGR.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
+    LEFT JOIN POMGR.LK_PRODUCT_STATUS
+    ON
+      POMGR.PRODUCT_COLOR.PRODUCTION_STATUS_ID = POMGR.LK_PRODUCT_STATUS.ID
     WHERE
       POMGR.EVENT.START_DATE >= TRUNC(SysDate)
     GROUP BY
@@ -56,7 +56,7 @@ def sqlQueryEventsUpcoming():
         event['ev_end'] = row['ev_end']
         #event['colorstyle'] = row['colorstyle']
         event['production_status'] = row['production_status']
-
+        
         status = str(row['production_status'])
         colorstyle = str(row['colorstyle'])
         stylestatus = "'{0}' : '{1}'".format(colorstyle, status)
@@ -69,17 +69,18 @@ def sqlQueryEventsUpcoming():
 
 
 
-def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, choose_calendar=None):
-    from GoogleCalendar import *
+def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
+    from GoogleCalendar import GoogleCalendarMng, newEvent
+    import GoogleCalendar
     gCalMNG = GoogleCalendarMng()
     myname = "john bragato"
     myemail = "john.bragato@gmail.com"
     gCalMNG.connect (myemail, "yankee17")
-    if choose_calendar == None:
-        calendar = gCalMNG.getCalendar ("Default1")
-    else:
-        choose_calendar = str(choose_calendar)
-    calendar = gCalMNG.getCalendar (choose_calendar)
+    #if choose_calendar == None:
+    #    calendar = gCalMNG.getCalendar ("Default1")
+    #else:
+    #    choose_calendar = str(choose_calendar)
+    calendar = gCalMNG.getCalendar ("Default1")
     gcalevents = calendar.getEvents()
     print len(gcalevents)
     gcaleventslist = []
@@ -89,8 +90,8 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, choose_cale
             continue
         else:
             print event.getContent()
-            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+#print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+#print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
     ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
     print ev
     calendar.addEvent (ev)
@@ -141,7 +142,10 @@ for k,v in future_events.iteritems():
                         complete.append(colorstyle)
                 elif colorstyle[1] == 'Production Incomplete':
                         incomplete.append(colorstyle)
-
+        
+        print "Incomplete Styles = {0}".format(incomplete)
+        print "Complete Styles = {0}".format(complete)
+        
         status = value['production_status']
         prod_category = value['prod_category']
         category_id = value['category_id']
@@ -176,28 +180,28 @@ for k,v in future_events.iteritems():
         #print count
         
         try:
-            gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
-#            from GoogleCalendar import *
-#            gCalMNG = GoogleCalendarMng()
-#            myname = "john bragato"
-#            myemail = "john.bragato@gmail.com"
-#            gCalMNG.connect (myemail, "yankee17")
-#            calendar = gCalMNG.getCalendar ("Default1")
-#            gcalevents = calendar.getEvents()
-#            print len(gcalevents)
-#            gcaleventslist = []
-#            for event in gcalevents:
-#                gcalevent = event.getTitle()
-#                if gcalevent == titleid:
-#                    continue
-#                else:
-#                    print event.getContent()
-#                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-#                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-#            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-#            print ev
-#            calendar.addEvent (ev)
-        # except xml.parsers.expat.ExpatError:
-        except:
-            #print "FAILED" + key,value
-            continue
+        #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
+            from GoogleCalendar import *
+            gCalMNG = GoogleCalendarMng()
+            myname = "john bragato"
+            myemail = "john.bragato@gmail.com"
+            gCalMNG.connect (myemail, "yankee17")
+            calendar = gCalMNG.getCalendar ("Default1")
+            gcalevents = calendar.getEvents()
+            print len(gcalevents)
+            gcaleventslist = []
+            for event in gcalevents:
+                gcalevent = event.getTitle()
+                if gcalevent == titleid:
+                    continue
+                else:
+                    print event.getContent()
+                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+            print ev
+            calendar.addEvent (ev)
+        except xml.parsers.expat.ExpatError:
+        #except:
+            print "FAILED" + k,v
+        #    continue
