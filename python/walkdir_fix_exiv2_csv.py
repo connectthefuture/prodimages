@@ -20,19 +20,6 @@ def recursive_dirlist(rootdir):
 
 
 ###
-## Extract All Metadata from Image File as Dict
-def get_exif(file_path):
-    from PIL import Image
-    from PIL.ExifTags import TAGS
-    exifdata = {}
-    im = Image.open(file_path)
-    info = im._getexif()
-    for tag, value in info.items():
-        decoded = TAGS.get(tag, tag)
-        exifdata[decoded] = value
-    return exifdata
-
-###
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
@@ -56,6 +43,8 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                         photo_date = get_exif(file_path)['DateTime'][:10]
                     except KeyError:
                         photo_date = 0000-00-00
+                except AttributeError:
+                        photo_date = 0000-00-00
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
                 stylestringsdict_tmp['photo_date'] = photo_date
@@ -75,11 +64,64 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
     return stylestringsdict
     
 
+
 ###
-## Make Lowres Thumnails from Image files or Directory Full of Image Files
+## Extract All Metadata from Image File as Dict using PIL
+def get_exif(file_path):
+    from PIL import Image
+    from PIL.ExifTags import TAGS
+    exifdata = {}
+    im = Image.open(file_path)
+    info = im._getexif()
+    for tag, value in info.items():
+        decoded = TAGS.get(tag, tag)
+        exifdata[decoded] = value
+    return exifdata
+
+
+###
+## Write Single Metadata Tag/Value to Imagefile using pyexiv2
+def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
+    from PIL import *
+    import pyexiv2
+    # copy EXIF data
+    image_file = pyexiv2.Image(image_filepath)
+    image_file.readMetadata()
+    # set EXIF image size info to resized size
+    image_file[exiftag] = exifvalue
+    dest_image.writeMetadata()
+
+
+###
+## Resize/Copy Image as Copy All Metadata from Source Image File to Resized Thumb
+def resize_image(source_path, dest_path, size):
+    from PIL import *
+    import pyexiv2
+    # resize image
+    image = Image.open(source_path)
+    image.thumbnail(size, Image.ANTIALIAS)
+    image.save(dest_path, "JPEG")
+
+    # copy EXIF data
+    source_image = pyexiv2.Image(source_path)
+    source_image.readMetadata()
+    dest_image = pyexiv2.Image(dest_path)
+    dest_image.readMetadata()
+    source_image.copyMetadataTo(dest_image)
+
+    # set EXIF image size info to resized size
+    dest_image["Exif.Photo.PixelXDimension"] = image.size[0]
+    dest_image["Exif.Photo.PixelYDimension"] = image.size[1]
+    dest_image.writeMetadata()
+    
+
+
+###
+## Make Lowres Thumnails from Image files or Directory Full of Image Files. Copy Metadata after creating Thumbnail
 def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
     import os, sys, re, csv
     from PIL import Image
+    import pyexiv2
     import glob, os, re
     size = 600, 720
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
@@ -111,10 +153,25 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
                 print "File Exists: {0}".format(zimages_filepath)
                 pass
             else:
+                # Resize and Save Thumb copy to Zimages
                 im = Image.open(infile)
                 im.thumbnail(size, Image.ANTIALIAS)
                 im.save(zimages_filepath , "JPEG")
                 print infile, zimages_filepath
+
+                # copy EXIF data from Source to Resized Image
+                source_image = pyexiv2.Image(infile)
+                source_image.readMetadata()
+                dest_image = pyexiv2.Image(zimages_filepath)
+                dest_image.readMetadata()
+                source_image.copyMetadataTo(dest_image)
+
+                # set EXIF image size info to resized size
+                dest_image["Exif.Photo.PixelXDimension"] = image.size[0]
+                dest_image["Exif.Photo.PixelYDimension"] = image.size[1]
+                dest_image.writeMetadata()
+                
+                
             #except:
              #   print "Error Creating Single File Thumbnail for {0}".format(infile)
     ## If input variable is a Directory Decend into Dir and Crate Thumnails for all jpgs
@@ -142,9 +199,23 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
                     pass
                     print "File Exists: {0}".format(zimages_filepath)
                 else:
+                    # Resize and Save Thumb copy to Zimages
                     im = Image.open(infile)
                     im.thumbnail(size, Image.ANTIALIAS)
                     im.save(zimages_filepath , "JPEG")
+                    print infile, zimages_filepath
+                    
+                    # copy EXIF data from Source to Resized Image
+                    source_image = pyexiv2.Image(infile)
+                    source_image.readMetadata()
+                    dest_image = pyexiv2.Image(zimages_filepath)
+                    dest_image.readMetadata()
+                    source_image.copyMetadataTo(dest_image)
+
+                    # set EXIF image size info to resized size
+                    dest_image["Exif.Photo.PixelXDimension"] = image.size[0]
+                    dest_image["Exif.Photo.PixelYDimension"] = image.size[1]
+                    dest_image.writeMetadata()
                     
             except:
                 print "Error Creating Thumbnail for {0}".format(infile)
