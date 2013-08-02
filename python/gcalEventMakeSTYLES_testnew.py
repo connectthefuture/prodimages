@@ -75,7 +75,7 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, choose_cale
     myname = "john bragato"
     myemail = "john.bragato@gmail.com"
     gCalMNG.connect (myemail, "yankee17")
-    if choose_calendar = None:
+    if choose_calendar == None:
         calendar = gCalMNG.getCalendar ("Default1")
     else:
         choose_calendar = str(choose_calendar)
