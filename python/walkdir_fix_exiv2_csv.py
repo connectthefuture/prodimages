@@ -226,7 +226,7 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
 
     else:
         print "File: {0} is not a jpg".format(pathname)
-    return zimages_filepath
+                return zimages_filepath
 
 ###
 ## Write Rows to Dated CSV in Users Home Dir If Desired
