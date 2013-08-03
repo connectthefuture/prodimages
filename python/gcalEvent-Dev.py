@@ -149,6 +149,27 @@ for k,v in future_events.iteritems():
         complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
         
+        ## Build Styles List Template
+        from string import Template
+        
+        html_completed = [] 
+        for complete_style in complete:
+            colorstyle = complete_style[0]
+            Complete_Styles_Template = Template('Styles Remaining to Complete:\n\t\t$colorstyle')
+            Complete_Styles = Complete_Styles_Template.substitute(colorstyle=colorstyle)
+            
+        html_incomplete = []
+        for incomplete_style in incomplete:
+            colorstyle = incomplete_style[0]
+            Incomplete_Styles_Template = Template('Styles Remaining to Complete:\n\t\t$colorstyle')
+            Incomplete_Styles = Incomplete_Styles_Template.substitute(colorstyle=colorstyle)
+            
+            
+        CompletionList_Template = Template('Total Incomplete: $incompletecount\n$Incomplete_Styles\nTotal Complete: $completecount\n$Complete_Styles')
+        CompletionList = CompletionList_Template.substitute(incompletecount=len(incomplete_styles),incomplete_styles=incomplete_styles,completecount=len(complete_styles),complete_styles=complete_styles)
+        
+        
+        
         if len(incomplete) == 0:
             event_complete_flag = True
         else: 
@@ -183,12 +204,11 @@ for k,v in future_events.iteritems():
         titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
         descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
         descfull = str(descfull)
-        #print titleid, descfull, edatekv, prod_category, lockv
+#print titleid, descfull, edatekv, prod_category, lockv
         count += 1
-        #print count
-        
+#print count
         try:
-        #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
+############gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
             from GoogleCalendar import *
             gCalMNG = GoogleCalendarMng()
             myname = "john bragato"
