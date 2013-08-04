@@ -207,6 +207,25 @@ for k,v in future_events.iteritems():
 #print titleid, descfull, edatekv, prod_category, lockv
         count += 1
 #print count
+
+
+
+        import GCalendar_Class
+        import gdata
+        #gcal_client = GCalendar_Class.GCalendar(email='john.bragato@gmail.com', password='yankee17')
+        myemail = 'john.bragato@gmail.com'
+        password = 'yankee17'
+        calendar_id = 'khn4f4kmgcu19h7tgh8ejv8894%40group.calendar.google.com'
+        private_id = '/private-8cd060685625899c147572bcfe26fc55/basic'
+        
+        gcal_client = gdata.calendar.client.CalendarClient(source=myemail)
+        gcal_client.ClientLogin(myemail, password, gcal_client.source)       
+        feed_uri = gcal_client.get_calendar_event_feed_uri(calendar=calendar_id)
+        event_uri = os.path.join(feed_uri)
+        calendar_entry = gcal_client.get_calendar_entry(event_uri, desired_class=gdata.calendar.data.CalendarEventEntry)
+        
+        
+        
         try:
 ############gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
             from GoogleCalendar import *
