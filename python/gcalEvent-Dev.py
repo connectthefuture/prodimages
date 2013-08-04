@@ -56,10 +56,10 @@ def sqlQueryEventsUpcoming():
         event['ev_end'] = row['ev_end']
 #event['colorstyle'] = row['colorstyle']
         event['production_status'] = row['production_status']
-        
+
         status = str(row['production_status'])
         colorstyle = str(row['colorstyle'])
-        
+
         #stylestatus = "{0} : {1}".format(colorstyle, status)
         stylestatus = (colorstyle,status)
         styles[row['event_id']].append(stylestatus)
@@ -96,7 +96,7 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
         calendar.addEvent (ev)
     except xml.parsers.expat.ExpatError:
     #except:
-        print "FAILED" 
+        print "FAILED"
 
 
 # First retrieve the event from the API.
@@ -144,37 +144,37 @@ for k,v in future_events.iteritems():
                         complete.append(colorstyle)
                 elif colorstyle[1] == 'Production Incomplete':
                         incomplete.append(colorstyle)
-        
+
         incomplete_styles = "{0} Incomplete Styles = {1}".format(len(incomplete),incomplete)
         complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
-        
+
         ## Build Styles List Template
         from string import Template
-        
-        html_completed = [] 
+
+        html_completed = []
         for complete_style in complete:
             colorstyle = complete_style[0]
             Complete_Styles_Template = Template('Styles Remaining to Complete:\n\t\t$colorstyle')
             Complete_Styles = Complete_Styles_Template.substitute(colorstyle=colorstyle)
-            
+
         html_incomplete = []
         for incomplete_style in incomplete:
             colorstyle = incomplete_style[0]
             Incomplete_Styles_Template = Template('Styles Remaining to Complete:\n\t\t$colorstyle')
             Incomplete_Styles = Incomplete_Styles_Template.substitute(colorstyle=colorstyle)
-            
-            
+
+
         CompletionList_Template = Template('Total Incomplete: $incompletecount\n$Incomplete_Styles\nTotal Complete: $completecount\n$Complete_Styles')
         CompletionList = CompletionList_Template.substitute(incompletecount=len(incomplete_styles),incomplete_styles=incomplete_styles,completecount=len(complete_styles),complete_styles=complete_styles)
-        
-        
-        
+
+
+
         if len(incomplete) == 0:
             event_complete_flag = True
-        else: 
+        else:
             event_complete_flag = False
-            
+
         status = value['production_status']
         prod_category = value['prod_category']
         category_id = value['category_id']
@@ -225,7 +225,28 @@ calendar_id = 'khn4f4kmgcu19h7tgh8ejv8894%40group.calendar.google.com/private-8c
 default1_calid = 'http://www.google.com/calendar/feeds/khn4f4kmgcu19h7tgh8ejv8894%40group.calendar.google.com/private-8cd060685625899c147572bcfe26fc55/basic'
 gcal_client = GCalendar_Class.gdata.calendar.client.CalendarClient()
 gcal_client.ClientLogin(myemail,password)
-        
+
+## Delete Events
+gCalMNG = GoogleCalendarMng()
+myname = "john bragato"
+myemail = "john.bragato@gmail.com"
+gCalMNG.connect (myemail, "yankee17")
+
+calendar = gCalMNG.getCalendar ("Default1")
+events = calendar.getEvents()
+for event in events:
+    if event.getTitle() == titleid:
+        event.delete()
+
+## Update Events
+events = calendar.getEvents()
+for event in events:
+    if event.getTitle() == titleid:
+        event.setContent(event.getContent() + "Changes on location")
+        event.setLocation(locv)
+        event.update()
+
+
         try:
 ############gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
             from GoogleCalendar import *
