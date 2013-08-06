@@ -264,6 +264,7 @@ count = 0
 gcal_inserts = []
 for k,v in future_events.iteritems():
     import datetime, time, xml
+    from collections import defaultdict
     for value in [v]:
         titlekv = str(value['event_id'])
         desckv = str(value['event_title'])
@@ -315,43 +316,41 @@ for k,v in future_events.iteritems():
         titleid = str(titleid)
         try:
             default_cal = gcal_login_jb().getCalendars()[1]
-			events = default_cal.getEvents()
-			from collections import defaultdict
-			inserts_dict = defaultdict(list)
-			event_data_dict = defaultdict(list)
-			for event in events:
-				editing_url, title_4digit, title, content = get_event_data(event)
-				event_data = (editing_url, title_4digit, title, content,)
-				event_data_dict[title].append(event_data)
-				inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-				inserts_dict[title].append(inserts)
-				count += 1
+            events = default_cal.getEvents()
+            inserts_dict = defaultdict(list)
+            event_data_dict = defaultdict(list)
+            for event in events:
+                editing_url, title_4digit, title, content = get_event_data(event)
+                event_data = (editing_url, title_4digit, title, content,)
+                event_data_dict[title].append(event_data)
+                inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
+                inserts_dict[title].append(inserts)
+                count += 1
 				#print count
 			#print data_inserts_dict
-			for k,v in event_data_dict.iteritems():
-				match = inserts_dict.get(k)
-				print "Successful Match {0},{1}".format(k,match)
-			#print count
-				try:
-					delete_gcalendar_event(k)
-					print "Deleted {0}".format(k)
-				except:
-					print "Failed Deletion {0}".format(k)
-			else:
-				continue
-				#print "Failed {0},{1}".format(k,val[1][0])
+            for k,v in event_data_dict.iteritems():
+                match = inserts_dict.get(k)
+                print "Successful Match {0},{1}".format(k,match)
+                try:
+                    delete_gcalendar_event(k)
+                    print "Deleted {0}".format(k)
+                except:
+                    print "Failed Deletion {0}".format(k)
+#print "Failed {0},{1}".format(k,val[1][0])
         except AttributeError:
             pass
 
 for k,[v] in inserts_dict.iteritems():
-    titleid = k
-    descfull = [v][1]
-    lockv = [v][2]
-    sdatekv = [v][3]
-    edatekv = [v][4]
-    print titleid, descfull, lockv, sdatekv, edatekv
-    gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17')
-
+    try:
+        titleid = k
+        descfull = [v][1]
+        lockv = [v][2]
+        sdatekv = [v][3]
+        edatekv = [v][4]
+        print titleid, descfull, lockv, sdatekv, edatekv
+        gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17')
+    except:
+        print "Failed {}{}{}{}{}".format(titleid, descfull, lockv, sdatekv, edatekv)
 ##
 ##
 
