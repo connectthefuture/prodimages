@@ -116,7 +116,8 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
             if event.getTitle() == titleid:
                 continue
             else:
-                print event.getContent()
+                event.getContent()
+                #print event.getContent()
         ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
         print ev
         calendar.addEvent(ev)
