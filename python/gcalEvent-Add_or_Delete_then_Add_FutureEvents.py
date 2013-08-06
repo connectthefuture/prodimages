@@ -96,7 +96,7 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
     for event in events:
         if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
             event.delete()
-    return True
+            return "Deleted {0}".format(titleid)
 ###
 def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
                              edatekv, calendar_name='Default1',
