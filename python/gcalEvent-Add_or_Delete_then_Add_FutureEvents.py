@@ -73,15 +73,10 @@ def if_exists_gcalendar_event(titleid,
     calendar = gCalMNG.getCalendar(calendar_name)
     events = calendar.getEvents()
     for event in events:
-        try:
-            if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
-                print titleid
-                result = True
-            else:
-                print "{0} No Longer Exists".format(titleid)
-                result = False
-        except OSError:
-            result = False
+        #try:
+        if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
+            print titleid
+            result = True
         return result
 ##
 def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
