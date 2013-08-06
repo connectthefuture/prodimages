@@ -251,7 +251,7 @@ def delete_gcalendar_comment(titleid, calendar_name='Default1', current_comment=
                     comment.delete()
 ##RUN##
 future_events, future_styles = sqlQueryEventsUpcoming()
-    default_cal = gcal_login_jb().getCalendars()[1]
+default_cal = gcal_login_jb().getCalendars()[1]
 try:
     events = default_cal.getEvents()
     ## Delete all Calendar Events prior to Fresh insert
