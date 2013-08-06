@@ -318,14 +318,17 @@ for k,v in future_events.iteritems():
             count += 1
             #print count
         #print data_inserts_dict
-    for k,v in event_data_dict.iteritems():
-        match = inserts_dict.get(k)
-        print "Successful Match {0},{1}".format(k,match)
+        for k,v in event_data_dict.iteritems():
+            match = inserts_dict.get(k)
+            print "Successful Match {0},{1}".format(k,match)
         #print count
-        delete_gcalendar_event(k)
-        print "Deleted {0}".format(k)
-    else:
-        continue
+            try:
+                delete_gcalendar_event(k)
+                print "Deleted {0}".format(k)
+            except:
+                print "Failed Deletion {0}".format(k)
+        else:
+            continue
             #print "Failed {0},{1}".format(k,val[1][0])
 
 ##
