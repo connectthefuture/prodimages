@@ -97,7 +97,8 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
     calendar = gCalMNG.getCalendar(calendar_name)
     events = calendar.getEvents()
     for event in events:
-        if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
+#        if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
+        if event.getTitle() == titleid():
             event.delete()
             return "Deleted {0}".format(titleid)
 ###
@@ -261,8 +262,9 @@ for k,v in future_events.iteritems():
         descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
         descfull = str(descfull)
         titleid = str(titleid)
-        while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
+        while True:
 #            try:
+            if_exists_gcalendar_event(titleid, calendar_name='Default1')
             print "Deleting {0}".format(titleid)
             delete_gcalendar_event(titleid, calendar_name='Default1',
                                    myemail='john.bragato@gmail.com',
