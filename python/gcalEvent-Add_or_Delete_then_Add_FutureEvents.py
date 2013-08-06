@@ -254,11 +254,13 @@ future_events, future_styles = sqlQueryEventsUpcoming()
 
 default_cal = gcal_login_jb().getCalendars()[1]
 events = default_cal.getEvents()
-try:
+## Delete all Calendar Events prior to Fresh insert
+if len(events) >= 1:
     for event in events:
-        delete_gcalendar_event(event)
-except:
-    print "Nothing to Delete"
+        try:
+            delete_gcalendar_event(event)
+        except:
+            print "Nothing to Delete"
 
 count = 0
 gcal_inserts = []
