@@ -75,6 +75,7 @@ def if_exists_gcalendar_event(titleid,
     for event in events:
         #try:
         if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
+            print type(event.getTitle())
             print event.getTitle().split(' ')[1]
             result = True
             print "True {0}".format(titleid)
@@ -98,7 +99,7 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
     events = calendar.getEvents()
     for event in events:
 #        if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
-        if event.getTitle() == titleid():
+        if event.getTitle() == titleid:
             event.delete()
             return "Deleted {0}".format(titleid)
 ###
