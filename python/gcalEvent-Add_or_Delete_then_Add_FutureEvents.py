@@ -315,12 +315,13 @@ for k,v in future_events.iteritems():
             insert_tuple = (event_data, inserts)
             data_inserts_dict[title].append(insert_tuple)
             count += 1
-            print count
+            #print count
         #print data_inserts_dict
         for k,v in data_inserts_dict.iteritems():
             for val in v:
                 if k == val[1][0]:
                     print "Successful Match {0},{1}".format(k,val[1][0])
+                    print count
                 else:
                     continue
                     #print "Failed {0},{1}".format(k,val[1][0])
