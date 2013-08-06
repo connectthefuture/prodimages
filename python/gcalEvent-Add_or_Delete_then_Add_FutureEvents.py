@@ -77,7 +77,12 @@ def if_exists_gcalendar_event(titleid,
         if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
             print titleid
             result = True
-        return result
+            print type(result)
+            return result
+        else:
+            result = False
+            print type(result)
+            return result
 ##
 def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
     from GoogleCalendar import GoogleCalendarMng
@@ -253,9 +258,8 @@ for k,v in future_events.iteritems():
         descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
         descfull = str(descfull)
         titleid = str(titleid)
-        while True:
+        while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
 #            try:
-            if_exists_gcalendar_event(titleid, calendar_name='Default1')
             print titleid
             delete_gcalendar_event(titleid, calendar_name='Default1',
                                    myemail='john.bragato@gmail.com',
