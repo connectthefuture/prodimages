@@ -81,7 +81,8 @@ def if_exists_gcalendar_event(titleid,
             return result
         else:
             result = False
-            print type(result)
+            print "False {0}".format(titleid)
+            #print type(result)
             return result
 ##
 def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
