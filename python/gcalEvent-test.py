@@ -269,80 +269,65 @@ for k,v in future_events.iteritems():
     import datetime, time, xml
     from collections import defaultdict
     for value in [v]:
-        titlekv = str(value['event_id'])
-        desckv = str(value['event_title'])
-        desckv = desckv.replace('&', 'And')
-        desckv = desckv.replace('%', ' Percent')
-        colorstyles = future_styles.get(value['event_id'])
-        colorstyles.sort
-        incomplete = []
-        complete = []
-        for colorstyle in colorstyles:
-                if colorstyle[1] == 'Production Complete':
-                        complete.append(colorstyle)
-                        complete.sort
-                elif colorstyle[1] == 'Production Incomplete':
-                        incomplete.append(colorstyle)
-                        incomplete.sort
-        incomplete_styles = "{0} Incomplete Styles --> {1}".format(len(incomplete),incomplete)
-        complete_styles = "{0} Complete Styles --> {1}".format(len(complete),complete)
-        colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
-        if len(incomplete) == 0:
-            event_complete_flag = True
-        else:
-            event_complete_flag = False
-        status = value['production_status']
-        prod_category = str(value['prod_category'])
-        category_id = str(value['category_id'])
-        pmurl = "http://pm.bluefly.corp/manager/event/editevent.html?id="
-        pmimgs = "http://pm.bluefly.corp/manager/event/viewproductimages.html?id="
-        bcurl = "http://www.belleandclive.com/browse/sales/details.jsp?categoryId="
-        pmurl = pmurl + titlekv
-        pmimgs = pmimgs + titlekv
-        bcurl = pmurl + titlekv
         try:
-            if colorstyles == None:
-                lockv = str(pmurl)
+
+            titlekv = str(value['event_id'])
+            desckv = str(value['event_title'])
+            desckv = desckv.replace('&', 'And')
+            desckv = desckv.replace('%', ' Percent')
+            colorstyles = future_styles.get(value['event_id'])
+            colorstyles.sort
+            incomplete = []
+            complete = []
+            for colorstyle in colorstyles:
+                    if colorstyle[1] == 'Production Complete':
+                            complete.append(colorstyle)
+                            complete.sort
+                    elif colorstyle[1] == 'Production Incomplete':
+                            incomplete.append(colorstyle)
+                            incomplete.sort
+            incomplete_styles = "{0} Incomplete Styles --> {1}".format(len(incomplete),incomplete)
+            complete_styles = "{0} Complete Styles --> {1}".format(len(complete),complete)
+            colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
+            if len(incomplete) == 0:
+                event_complete_flag = True
             else:
-                lockv = str(pmimgs)
-        except TypeError:
-            lockv = str(bcurl)
-        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
-        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
-        sdatekvsplit = sdatekvraw.split(",")
-        edatekvsplit = edatekvraw.split(",")
-        sdatekv = map(int,sdatekvsplit)
-        edatekv = map(int,edatekvsplit)
-        titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
-        descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
-        descfull = str(descfull)
-        titleid = str(titleid)
-        try:
-            default_cal = gcal_login_jb().getCalendars()[1]
-            events = default_cal.getEvents()
-            inserts_dict = defaultdict(list)
-            event_data_dict = defaultdict(list)
-            for event in events:
-                editing_url, title_4digit, title, content = get_event_data(event)
-                event_data = (editing_url, title_4digit, title, content,)
-                event_data_dict[title].append(event_data)
-                inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-                inserts_dict[title].append(inserts)
-                count += 1
-#print count
-#print data_inserts_dict
-            for k,v in event_data_dict.iteritems():
-                match = inserts_dict.get(v['event_id'])
-                print "Successful Match {0},{1}".format(k,match)
-                try:
-                    #delete_gcalendar_event(k)
-                    print "Deleted {0}".format(k)
-                except:
-                    print "Failed Deletion {0}".format(k)
-#print "Failed {0},{1}".format(k,val[1][0])
-        except AttributeError:
-            pass
-##
+                event_complete_flag = False
+            status = value['production_status']
+            prod_category = str(value['prod_category'])
+            category_id = str(value['category_id'])
+            pmurl = "http://pm.bluefly.corp/manager/event/editevent.html?id="
+            pmimgs = "http://pm.bluefly.corp/manager/event/viewproductimages.html?id="
+            bcurl = "http://www.belleandclive.com/browse/sales/details.jsp?categoryId="
+            pmurl = pmurl + titlekv
+            pmimgs = pmimgs + titlekv
+            bcurl = pmurl + titlekv
+            try:
+                if colorstyles == None:
+                    lockv = str(pmurl)
+                else:
+                    lockv = str(pmimgs)
+            except TypeError:
+                lockv = str(bcurl)
+    ###
+            sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
+            edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
+            sdatekvsplit = sdatekvraw.split(",")
+            edatekvsplit = edatekvraw.split(",")
+            sdatekv = map(int,sdatekvsplit)
+            edatekv = map(int,edatekvsplit)
+            titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
+    ###     descfull = '<html><table><tr>{0} {1} in Event {2}:\n</tr></table><table>{3}\n</tr></table></html>'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
+            descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
+            descfull = str(descfull)
+            titleid = str(titleid)
+    #####   print titleid, descfull, edatekv, prod_category, lockv
+            gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
+                                 edatekv, calendar_name='Test2',
+                                 myemail='john.bragato@gmail.com',
+                                 password='yankee17')
+        except:
+            print "Error{}".format(k)
 for k,[v] in inserts_dict.iteritems():
     try:
         titleid = k
