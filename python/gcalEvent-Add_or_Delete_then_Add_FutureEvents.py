@@ -263,7 +263,7 @@ for k,v in future_events.iteritems():
         titleid = str(titleid)
         while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
 #            try:
-            print titleid
+            print "Deleting {0}".format(titleid)
             delete_gcalendar_event(titleid, calendar_name='Default1',
                                    myemail='john.bragato@gmail.com',
                                    password='yankee17')
