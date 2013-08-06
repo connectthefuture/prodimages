@@ -331,9 +331,11 @@ for k,v in future_events.iteritems():
                 count += 1
 #print count
 #print data_inserts_dict
+            matched = []
             for k,v in event_data_dict.iteritems():
                 match = inserts_dict.get(v['event_id'])
                 print "Successful Match {0},{1}".format(k,match)
+                matched.append(match)
                 try:
                     #delete_gcalendar_event(k)
                     print "Deleted {0}".format(k)
@@ -341,7 +343,7 @@ for k,v in future_events.iteritems():
                     print "Failed Deletion {0}".format(k)
 #print "Failed {0},{1}".format(k,val[1][0])
         except AttributeError:
-            pass
+            print "AttributeError on {}".format(event)
 ##
 for k,[v] in inserts_dict.iteritems():
     try:
