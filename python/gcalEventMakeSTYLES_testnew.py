@@ -135,16 +135,18 @@ for k,v in future_events.iteritems():
     import datetime, time
     for value in [v]:
         titlekv = str(value['event_id'])
-        desckv = value['event_title']
+        desckv = str(value['event_title'])
+        desckv = desckv.replace('&', 'And')
+        desckv = desckv.replace('%', ' Percent')
         colorstyles = future_styles.get(value['event_id'])
+        colorstyles = sorted(colorstyles)
         incomplete = []
         complete = []
         for colorstyle in colorstyles:
-                if colorstyle[1] == 'Production Complete':
-                        complete.append(colorstyle)
-                elif colorstyle[1] == 'Production Incomplete':
-                        incomplete.append(colorstyle)
-        
+            if colorstyle[1] == 'Production Complete':
+                complete.append(colorstyle)
+            elif colorstyle[1] == 'Production Incomplete':
+                incomplete.append(colorstyle)
         incomplete_styles = "{0} Incomplete Styles = {1}".format(len(incomplete),incomplete)
         complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)

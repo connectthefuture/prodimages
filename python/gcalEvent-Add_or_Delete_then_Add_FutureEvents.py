@@ -103,8 +103,8 @@ def get_event_data(event):
     title = event.getTitle()
     editing_url = event.getEditURL()
     #print eventid, title, editing_url
-    title_4digit = title.strip(r'')
-    #title_4digit = bfly_eventnum[:4]
+    #title_4digit = title.strip(r'')
+    title_4digit = bfly_eventnum[5:10]
     #if title_4digit.isdigit():
     return editing_url, title_4digit, title, content
 ##
@@ -255,13 +255,13 @@ future_events, future_styles = sqlQueryEventsUpcoming()
 default_cal = gcal_login_jb().getCalendars()[1]
 events = default_cal.getEvents()
 ## Delete all Calendar Events prior to Fresh insert
-if len(events) >= 1:
-    for event in events:
-        try:
-            title = event.getTitle()
-            event.delete()
-        except:
-            print "Nothing to Delete"
+#if len(events) >= 1:
+#    for event in events:
+#        try:
+#            title = event.getTitle()
+#            event.delete()
+#        except:
+#            print "Nothing to Delete"
 
 count = 0
 gcal_inserts = []
@@ -274,16 +274,16 @@ for k,v in future_events.iteritems():
         desckv = desckv.replace('&', 'And')
         desckv = desckv.replace('%', ' Percent')
         colorstyles = future_styles.get(value['event_id'])
-        colorstyles.sort
+        colorstyles = sorted(colorstyles)
         incomplete = []
         complete = []
         for colorstyle in colorstyles:
                 if colorstyle[1] == 'Production Complete':
                         complete.append(colorstyle)
-                        complete.sort
+                        complete = sorted(colorstyles)
                 elif colorstyle[1] == 'Production Incomplete':
                         incomplete.append(colorstyle)
-                        incomplete.sort
+                        incomplete = sorted(colorstyles)
         incomplete_styles = "{0} Incomplete Styles --> {1}".format(len(incomplete),incomplete)
         complete_styles = "{0} Complete Styles --> {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
@@ -329,8 +329,6 @@ for k,v in future_events.iteritems():
                 inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
                 inserts_dict[title].append(inserts)
                 count += 1
-#print count
-#print data_inserts_dict
             matched = []
             for k,v in event_data_dict.iteritems():
                 match = inserts_dict.get(v['event_id'])
@@ -342,7 +340,7 @@ for k,v in future_events.iteritems():
                 except:
                     print "Failed Deletion {0}".format(k)
 #print "Failed {0},{1}".format(k,val[1][0])
-        except AttributeError:
+        except OSError:
             print "AttributeError on {}".format(event)
 ##
 for k,[v] in inserts_dict.iteritems():
