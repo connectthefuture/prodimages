@@ -88,6 +88,46 @@ def if_exists_gcalendar_event(titleid,
             #print type(result)
             return result
 ##
+def gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17'):
+    from GoogleCalendar import GoogleCalendarMng
+    import xml
+    gCalMNG = GoogleCalendarMng()
+    myemail = myemail
+    gCalMNG.connect(myemail, password)
+    return gCalMNG
+##
+##
+def get_event_data(event):
+    eventid = event.getID()
+    content = event.getContent()
+    title = event.getTitle()
+    editing_url = event.getEditURL()
+    #print eventid, title, editing_url
+    title_4digit = title.strip(r'')
+    #title_4digit = bfly_eventnum[:4]
+    #if title_4digit.isdigit():
+    return editing_url, title_4digit, title, content
+##
+def if_exists_event(gCalMNG, event_id):
+    import xml
+    calendar = gCalMNG.getCalendar(calendar_name)
+    events = calendar.getEvents()
+    for event in events:
+        #try:
+        if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
+            print type(event.getTitle())
+            print event.getTitle().split(' ')[1]
+            result = True
+            print "True {0}".format(titleid)
+            return result
+        else:
+            print event.getTitle().split(' ')[1]
+            result = False
+            print "False {0}".format(titleid)
+            print titleid.split(' ')[1]
+            #print type(result)
+            return result
+##
 def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
     from GoogleCalendar import GoogleCalendarMng
     import xml
@@ -212,6 +252,7 @@ def delete_gcalendar_comment(titleid, calendar_name='Default1', current_comment=
 ##RUN##
 future_events, future_styles = sqlQueryEventsUpcoming()
 count = 0
+gcal_inserts = []
 for k,v in future_events.iteritems():
     import datetime, time, xml
     for value in [v]:
@@ -263,15 +304,25 @@ for k,v in future_events.iteritems():
         descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
         descfull = str(descfull)
         titleid = str(titleid)
-        while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
-#            try:
-            print "Deleting {0}".format(titleid)
-            delete_gcalendar_event(titleid, calendar_name='Default1',
-                                   myemail='john.bragato@gmail.com',
-                                   password='yankee17')
-#            except:
-#                pass
-        gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
-                             edatekv, calendar_name='Default1',
-                             myemail='john.bragato@gmail.com',
-                             password='yankee17')
+
+        #gCalMNG = gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17')
+        default_cal = gcal_login_jb().getCalendars()[1]
+        events = default_cal.getEvents()
+        event_data = (editing_url, title_4digit, title, content,)
+        inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
+        print event_data + '\n' + inserts
+##
+##
+
+#        while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
+##            try:
+#            print "Deleting {0}".format(titleid)
+#            delete_gcalendar_event(titleid, calendar_name='Default1',
+#                                   myemail='john.bragato@gmail.com',
+#                                   password='yankee17')
+##            except:
+##                pass
+#        gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
+#                             edatekv, calendar_name='Default1',
+#                             myemail='john.bragato@gmail.com',
+#                             password='yankee17')
