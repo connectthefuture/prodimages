@@ -331,10 +331,10 @@ for k,v in future_events.iteritems():
 #print count
 #print data_inserts_dict
             for k,v in event_data_dict.iteritems():
-                match = inserts_dict.get(k)
+                match = inserts_dict.get(v['event_id'])
                 print "Successful Match {0},{1}".format(k,match)
                 try:
-                    delete_gcalendar_event(k)
+                    #delete_gcalendar_event(k)
                     print "Deleted {0}".format(k)
                 except:
                     print "Failed Deletion {0}".format(k)
@@ -343,7 +343,6 @@ for k,v in future_events.iteritems():
             pass
 ##
 for k,[v] in inserts_dict.iteritems():
-
     try:
         titleid = k
         descfull = [v][1]
