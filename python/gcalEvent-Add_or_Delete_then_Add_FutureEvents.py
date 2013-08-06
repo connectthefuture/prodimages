@@ -323,23 +323,31 @@ for k,v in future_events.iteritems():
             inserts_dict = defaultdict(list)
             event_data_dict = defaultdict(list)
             for event in events:
-                editing_url, title_4digit, title, content = get_event_data(event)
-                event_data = (editing_url, title_4digit, title, content,)
-                event_data_dict[title].append(event_data)
-                inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-                inserts_dict[title].append(inserts)
-                count += 1
+                gcalevent = event.getTitle()
+                if gcalevent == titleid
+                    print "Match {} to {}".format(titleid,gcalevent)
+                    continue
+                else:
+                    continue
+                try:
+                    editing_url, title_4digit, title, content = get_event_data(event)
+                    event_data = (editing_url, title_4digit, title, content,)
+                    event_data_dict[title].append(event_data)
+                except AttributeError:
+                    pass
+            inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
+            inserts_dict[title].append(inserts)
+            count += 1
             matched = []
             for k,v in event_data_dict.iteritems():
                 match = inserts_dict.get(v['event_id'])
                 print "Successful Match {0},{1}".format(k,match)
                 matched.append(match)
                 try:
-                    #delete_gcalendar_event(k)
+#delete_gcalendar_event(k)
                     print "Deleted {0}".format(k)
                 except:
                     print "Failed Deletion {0}".format(k)
-#print "Failed {0},{1}".format(k,val[1][0])
         except OSError:
             print "AttributeError on {}".format(event)
 ##
@@ -356,6 +364,7 @@ for k,[v] in inserts_dict.iteritems():
         print "Failed {}{}{}{}{}".format(titleid, descfull, lockv, sdatekv, edatekv)
 ##
 ##
+print lockv, desckv, titlekv, incomplete_styles
 
 #        while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
 ##            try:
