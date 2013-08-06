@@ -331,6 +331,14 @@ for k,v in future_events.iteritems():
             continue
             #print "Failed {0},{1}".format(k,val[1][0])
 
+for k,[v] in inserts_dict.iteritems():
+    titleid = k
+    descfull = [v][1]
+    lockv = [v][2]
+    sdatekv = [v][3]
+    edatekv = [v][4]
+    gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17')
+
 ##
 ##
 
