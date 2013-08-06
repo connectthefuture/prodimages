@@ -58,7 +58,6 @@ def sqlQueryEventsUpcoming():
         styles[row['event_id']].append(stylestatus)
         events[row['event_id']] = event
     connection.close()
-    styles = styles.sort
     return events, styles
 ##
 def if_exists_gcalendar_event(titleid,
