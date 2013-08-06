@@ -74,11 +74,11 @@ def if_exists_gcalendar_event(titleid,
     events = calendar.getEvents()
     for event in events:
         try:
-            if event.getTitle() == titleid:
+            if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
                 print titleid
                 result = True
             else:
-                print titleid
+                #print titleid
                 result = False
         except AttributeError:
             result = False
@@ -94,7 +94,7 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
     calendar = gCalMNG.getCalendar(calendar_name)
     events = calendar.getEvents()
     for event in events:
-        if event.getTitle() == titleid:
+        if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
             event.delete()
     return True
 ###
