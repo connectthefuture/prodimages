@@ -320,7 +320,9 @@ for k,v in future_events.iteritems():
         for k,v in data_inserts_dict.iteritems():
             for val in v:
                 if k == val[1][0]:
-                    print k,val[1][0]
+                    print "Successful Match {0},{1}".format(k,val[1][0])
+                else:
+                    print "Failed {0},{1}".format(k,val[1][0])
 
 ##
 ##
