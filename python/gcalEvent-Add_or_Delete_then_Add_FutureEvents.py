@@ -308,9 +308,14 @@ for k,v in future_events.iteritems():
         #gCalMNG = gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17')
         default_cal = gcal_login_jb().getCalendars()[1]
         events = default_cal.getEvents()
-        event_data = (editing_url, title_4digit, title, content,)
-        inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-        print event_data + '\n' + inserts
+        count = 0
+        for event in events:
+            editing_url, title_4digit, title, content = get_event_data()
+            event_data = (editing_url, title_4digit, title, content,)
+            inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
+            print event_data + '\n' + inserts
+            count += 1
+            print count
 ##
 ##
 
