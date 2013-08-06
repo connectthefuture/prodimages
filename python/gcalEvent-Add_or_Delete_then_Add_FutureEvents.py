@@ -78,7 +78,7 @@ def if_exists_gcalendar_event(titleid,
                 print titleid
                 result = True
             else:
-                #print titleid
+                print "{0} No Longer Exists".format(titleid)
                 result = False
         except OSError:
             result = False
