@@ -259,12 +259,12 @@ for k,v in future_events.iteritems():
         descfull = str(descfull)
         titleid = str(titleid)
         while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
-            try:
-                delete_gcalendar_event(titleid, calendar_name='Default1',
-                                       myemail='john.bragato@gmail.com',
-                                       password='yankee17')
-            except:
-                pass
+#            try:
+            delete_gcalendar_event(titleid, calendar_name='Default1',
+                                   myemail='john.bragato@gmail.com',
+                                   password='yankee17')
+#            except:
+#                pass
         gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
                              edatekv, calendar_name='Default1',
                              myemail='john.bragato@gmail.com',
