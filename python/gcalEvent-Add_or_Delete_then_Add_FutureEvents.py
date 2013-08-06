@@ -252,6 +252,10 @@ def delete_gcalendar_comment(titleid, calendar_name='Default1', current_comment=
 ##RUN##
 future_events, future_styles = sqlQueryEventsUpcoming()
 
+default_cal = gcal_login_jb().getCalendars()[1]
+events = default_cal.getEvents()
+for event in evedelete_gcalendar_event(titleid
+
 count = 0
 gcal_inserts = []
 for k,v in future_events.iteritems():
@@ -305,8 +309,8 @@ for k,v in future_events.iteritems():
         descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
         descfull = str(descfull)
         titleid = str(titleid)
-        default_cal = gcal_login_jb().getCalendars()[1]
         try:
+            default_cal = gcal_login_jb().getCalendars()[1]
 			events = default_cal.getEvents()
 			from collections import defaultdict
 			inserts_dict = defaultdict(list)
@@ -341,6 +345,7 @@ for k,[v] in inserts_dict.iteritems():
     lockv = [v][2]
     sdatekv = [v][3]
     edatekv = [v][4]
+    print titleid, descfull, lockv, sdatekv, edatekv
     gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17')
 
 ##
