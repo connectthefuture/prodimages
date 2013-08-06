@@ -309,13 +309,17 @@ for k,v in future_events.iteritems():
         default_cal = gcal_login_jb().getCalendars()[1]
         events = default_cal.getEvents()
         count = 0
+        from collections import defaultdict
+        data_inserts_dict = defaultdict(list)
         for event in events:
             editing_url, title_4digit, title, content = get_event_data(event)
             event_data = (editing_url, title_4digit, title, content,)
             inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-        print event_data, inserts
-        count += 1
-        print count
+            insert_tuple = (event_data, inserts)
+            data_inserts_dict[event_data].append(insert_tuple)
+            count += 1
+            print count
+        print data_inserts_dict
 ##
 ##
 
