@@ -322,7 +322,8 @@ for k,v in future_events.iteritems():
                 if k == val[1][0]:
                     print "Successful Match {0},{1}".format(k,val[1][0])
                 else:
-                    print "Failed {0},{1}".format(k,val[1][0])
+                    continue
+                    #print "Failed {0},{1}".format(k,val[1][0])
 
 ##
 ##
