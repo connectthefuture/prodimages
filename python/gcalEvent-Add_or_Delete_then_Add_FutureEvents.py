@@ -80,7 +80,7 @@ def if_exists_gcalendar_event(titleid,
             else:
                 #print titleid
                 result = False
-        except AttributeError:
+        except OSError:
             result = False
         return result
 ##
