@@ -75,11 +75,12 @@ def if_exists_gcalendar_event(titleid,
     for event in events:
         #try:
         if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
-            print titleid
+            print event.getTitle().split(' ')[1]
             result = True
             print "True {0}".format(titleid)
             return result
         else:
+            print event.getTitle().split(' ')[1]
             result = False
             print "False {0}".format(titleid)
             #print type(result)
