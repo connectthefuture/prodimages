@@ -316,7 +316,7 @@ for k,v in future_events.iteritems():
             event_data = (editing_url, title_4digit, title, content,)
             inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
             insert_tuple = (event_data, inserts)
-            data_inserts_dict[event_data].append(insert_tuple)
+            data_inserts_dict[title].append(insert_tuple)
             count += 1
             print count
         print data_inserts_dict
