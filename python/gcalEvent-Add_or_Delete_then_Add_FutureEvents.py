@@ -313,9 +313,9 @@ for k,v in future_events.iteritems():
             editing_url, title_4digit, title, content = get_event_data(event)
             event_data = (editing_url, title_4digit, title, content,)
             inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-            print event_data, inserts
-            count += 1
-            print count
+        print event_data, inserts
+        count += 1
+        print count
 ##
 ##
 
