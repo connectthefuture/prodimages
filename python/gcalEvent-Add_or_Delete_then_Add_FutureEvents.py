@@ -251,6 +251,7 @@ def delete_gcalendar_comment(titleid, calendar_name='Default1', current_comment=
                     comment.delete()
 ##RUN##
 future_events, future_styles = sqlQueryEventsUpcoming()
+
 count = 0
 gcal_inserts = []
 for k,v in future_events.iteritems():
@@ -305,31 +306,34 @@ for k,v in future_events.iteritems():
         descfull = str(descfull)
         titleid = str(titleid)
         default_cal = gcal_login_jb().getCalendars()[1]
-        events = default_cal.getEvents()
-        from collections import defaultdict
-        inserts_dict = defaultdict(list)
-        event_data_dict = defaultdict(list)
-        for event in events:
-            editing_url, title_4digit, title, content = get_event_data(event)
-            event_data = (editing_url, title_4digit, title, content,)
-            event_data_dict[title].append(event_data)
-            inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-            inserts_dict[title].append(inserts)
-            count += 1
-            #print count
-        #print data_inserts_dict
-        for k,v in event_data_dict.iteritems():
-            match = inserts_dict.get(k)
-            print "Successful Match {0},{1}".format(k,match)
-        #print count
-            try:
-                delete_gcalendar_event(k)
-                print "Deleted {0}".format(k)
-            except:
-                print "Failed Deletion {0}".format(k)
-        else:
-            continue
-            #print "Failed {0},{1}".format(k,val[1][0])
+        try:
+			events = default_cal.getEvents()
+			from collections import defaultdict
+			inserts_dict = defaultdict(list)
+			event_data_dict = defaultdict(list)
+			for event in events:
+				editing_url, title_4digit, title, content = get_event_data(event)
+				event_data = (editing_url, title_4digit, title, content,)
+				event_data_dict[title].append(event_data)
+				inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
+				inserts_dict[title].append(inserts)
+				count += 1
+				#print count
+			#print data_inserts_dict
+			for k,v in event_data_dict.iteritems():
+				match = inserts_dict.get(k)
+				print "Successful Match {0},{1}".format(k,match)
+			#print count
+				try:
+					delete_gcalendar_event(k)
+					print "Deleted {0}".format(k)
+				except:
+					print "Failed Deletion {0}".format(k)
+			else:
+				continue
+				#print "Failed {0},{1}".format(k,val[1][0])
+        except AttributeError:
+            pass
 
 for k,[v] in inserts_dict.iteritems():
     titleid = k
