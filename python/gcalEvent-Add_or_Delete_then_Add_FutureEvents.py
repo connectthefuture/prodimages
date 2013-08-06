@@ -304,11 +304,8 @@ for k,v in future_events.iteritems():
         descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
         descfull = str(descfull)
         titleid = str(titleid)
-
-        #gCalMNG = gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17')
         default_cal = gcal_login_jb().getCalendars()[1]
         events = default_cal.getEvents()
-        count = 0
         from collections import defaultdict
         data_inserts_dict = defaultdict(list)
         for event in events:
@@ -320,6 +317,11 @@ for k,v in future_events.iteritems():
             count += 1
             print count
         print data_inserts_dict
+        for k,v in data_inserts_dict.iteritems():
+            for val in v:
+                if k == val[1][0]:
+                    print k,val[1][0]
+
 ##
 ##
 
