@@ -263,9 +263,8 @@ for k,v in future_events.iteritems():
         descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
         descfull = str(descfull)
         titleid = str(titleid)
-        while True:
+        while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
 #            try:
-            if_exists_gcalendar_event(titleid, calendar_name='Default1')
             print "Deleting {0}".format(titleid)
             delete_gcalendar_event(titleid, calendar_name='Default1',
                                    myemail='john.bragato@gmail.com',
