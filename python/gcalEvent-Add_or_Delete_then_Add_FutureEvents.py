@@ -307,24 +307,26 @@ for k,v in future_events.iteritems():
         default_cal = gcal_login_jb().getCalendars()[1]
         events = default_cal.getEvents()
         from collections import defaultdict
-        data_inserts_dict = defaultdict(list)
+        inserts_dict = defaultdict(list)
+        event_data_dict = defaultdict(list)
         for event in events:
             editing_url, title_4digit, title, content = get_event_data(event)
             event_data = (editing_url, title_4digit, title, content,)
+            event_data_dict[title].append(event_data)
             inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
-            insert_tuple = (event_data, inserts)
-            data_inserts_dict[title].append(insert_tuple)
+            inserts_dict[title].append(inserts)
             count += 1
             #print count
         #print data_inserts_dict
-        for k,v in data_inserts_dict.iteritems():
-            for val in v:
-                if k == val[1][0]:
-                    print "Successful Match {0},{1}".format(k,val[1][0])
-                    print count
-                else:
-                    continue
-                    #print "Failed {0},{1}".format(k,val[1][0])
+        for k,v in event_data_dict.iteritems():
+            match = inserts_dict.get(k)
+            print "Successful Match {0},{1}".format(k,match)
+            print count
+            #delete_gcalendar_event(titleid)
+            #print "Deleted {0}".format(titleid)
+        else:
+            continue
+            #print "Failed {0},{1}".format(k,val[1][0])
 
 ##
 ##
