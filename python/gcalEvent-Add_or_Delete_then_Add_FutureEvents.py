@@ -61,7 +61,7 @@ def sqlQueryEventsUpcoming():
     return events, styles
 ##
 def if_exists_gcalendar_event(titleid,
-                              calendar_name='Test2',
+                              calendar_name='Default1',
                               myemail='john.bragato@gmail.com',
                               password='yankee17'):
     from GoogleCalendar import GoogleCalendarMng
@@ -84,7 +84,7 @@ def if_exists_gcalendar_event(titleid,
             result = False
         return result
 ##
-def delete_gcalendar_event(titleid, calendar_name='Test2', myemail='john.bragato@gmail.com', password='yankee17'):
+def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
     from GoogleCalendar import GoogleCalendarMng
     import xml
     gCalMNG = GoogleCalendarMng()
@@ -99,7 +99,7 @@ def delete_gcalendar_event(titleid, calendar_name='Test2', myemail='john.bragato
     return True
 ###
 def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
-                             edatekv, calendar_name='Test2',
+                             edatekv, calendar_name='Default1',
                              myemail='john.bragato@gmail.com',
                              password='yankee17'):
     import GoogleCalendar, xml
@@ -257,14 +257,14 @@ for k,v in future_events.iteritems():
         descfull = '{0} {1} in Event {2}:\n{3}\n'.format(len(colorstyles), prod_category, titlekv, incomplete_styles)
         descfull = str(descfull)
         titleid = str(titleid)
-        while if_exists_gcalendar_event(titleid, calendar_name='Test1') == True:
+        while if_exists_gcalendar_event(titleid, calendar_name='Default1') == True:
             try:
-                delete_gcalendar_event(titleid, calendar_name='Test1',
+                delete_gcalendar_event(titleid, calendar_name='Default1',
                                        myemail='john.bragato@gmail.com',
                                        password='yankee17')
             except:
                 pass
         gcal_insert_bc_event(titleid, descfull, lockv, sdatekv,
-                             edatekv, calendar_name='Test1',
+                             edatekv, calendar_name='Default1',
                              myemail='john.bragato@gmail.com',
                              password='yankee17')
