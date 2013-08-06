@@ -316,7 +316,7 @@ for k,v in future_events.iteritems():
             data_inserts_dict[title].append(insert_tuple)
             count += 1
             print count
-        print data_inserts_dict
+        #print data_inserts_dict
         for k,v in data_inserts_dict.iteritems():
             for val in v:
                 if k == val[1][0]:
