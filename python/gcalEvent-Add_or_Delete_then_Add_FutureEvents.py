@@ -326,8 +326,8 @@ for k,v in future_events.iteritems():
                 inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
                 inserts_dict[title].append(inserts)
                 count += 1
-				#print count
-			#print data_inserts_dict
+#print count
+#print data_inserts_dict
             for k,v in event_data_dict.iteritems():
                 match = inserts_dict.get(k)
                 print "Successful Match {0},{1}".format(k,match)
@@ -339,8 +339,9 @@ for k,v in future_events.iteritems():
 #print "Failed {0},{1}".format(k,val[1][0])
         except AttributeError:
             pass
-
+##
 for k,[v] in inserts_dict.iteritems():
+
     try:
         titleid = k
         descfull = [v][1]
