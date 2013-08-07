@@ -185,7 +185,7 @@ for k,v in future_events.iteritems():
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
-        titleid = 'Event {0} -- {1} -- {2)% Complete'.format(titlekv,desckv,str(progress))
+        titleid = 'Event {0} -- {1} -- {2}% Complete'.format(titlekv,desckv,str(progress))
         descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
