@@ -29,6 +29,10 @@ def vendor_styles_from_filename(directory):
             vendor_styles = []
             for line in sorted_dir_list:
                 vendorstyle = '_'.join(line.split("_")[:-1])
+#                try:
+#                    vendorstyle = vendorstyle.replace('/',':')
+#                except:
+#                    pass
                 vendor_styles.append(vendorstyle)
                 sorted(vendor_styles)
     return sorted(vendor_styles)
@@ -65,10 +69,10 @@ def run_SQL_Query(vendor_styles_list,directory):
 
         
     for vendor_style in vendor_styles_list:
+            print vendor_style
             try:     
                 result = sqlQueryConsigRename(vendor_style, ponum)
                 returnlist.append(result)
-    
             except sqlalchemy.exc.DatabaseError:
                 print "Error on Vendor Style {0}".format(vendor_style)
     
