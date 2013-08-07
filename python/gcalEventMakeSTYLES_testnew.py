@@ -56,10 +56,10 @@ def sqlQueryEventsUpcoming():
         event['ev_end'] = row['ev_end']
 #event['colorstyle'] = row['colorstyle']
         event['production_status'] = row['production_status']
-        
+
         status = str(row['production_status'])
         colorstyle = str(row['colorstyle'])
-        
+
         #stylestatus = "{0} : {1}".format(colorstyle, status)
         stylestatus = (colorstyle,status)
         styles[row['event_id']].append(stylestatus)
@@ -96,7 +96,7 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
         calendar.addEvent (ev)
     except xml.parsers.expat.ExpatError:
     #except:
-        print "FAILED" 
+        print "FAILED"
 
 
 # First retrieve the event from the API.
@@ -150,14 +150,17 @@ for k,v in future_events.iteritems():
         incomplete_styles = "{0} Incomplete Styles = {1}".format(len(incomplete),incomplete)
         complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
-        
+        count_complete = len(complete)
+        count_incomplete = len(incomplete)
+        count_total = count_complete + count_incomplete
+        progress = count_complete/count_total*100
         if len(incomplete) == 0:
             event_complete_flag = True
-        else: 
+        else:
             event_complete_flag = False
-            
+
         status = value['production_status']
-        prod_category = value['prod_category']
+        prod_category = str(value['prod_category'])
         category_id = value['category_id']
 
         pmurl = "http://pm.bluefly.corp/manager/event/editevent.html?id="
@@ -182,21 +185,21 @@ for k,v in future_events.iteritems():
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
-        titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
+        titleid = 'Event {0} -- {1} -- {2)% Complete'.format(titlekv,desckv,str(progress))
         descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
         count += 1
         #print count
-        
+
         try:
         #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
             from GoogleCalendar import *
             gCalMNG = GoogleCalendarMng()
             myname = "john bragato"
             myemail = "john.bragato@gmail.com"
-            gCalMNG.connect (myemail, "yankee17")
-            calendar = gCalMNG.getCalendar ("Default1")
+            gCalMNG.connect(myemail, "yankee17")
+            calendar = gCalMNG.getCalendar("Default1")
             gcalevents = calendar.getEvents()
             print len(gcalevents)
             gcaleventslist = []
