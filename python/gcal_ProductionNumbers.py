@@ -21,8 +21,8 @@ def sql_query_production_numbers():
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
     for row in prodcomplete:
-            prodcomplete_dict[row['prod_complete_dt']] = row['prod_complete_dt']
-            prodcomplete_dict[row['completion_total']] = row['completion_total']
+            prodcomplete_dict['prod_complete_dt'] = row['prod_complete_dt']
+            prodcomplete_dict['completion_total'] = row['completion_total']
     ### Get Retouching Complete Totals and Build Dict of key value pairs
     querymake_retouchnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
@@ -32,8 +32,8 @@ def sql_query_production_numbers():
     retouchcomplete = connection.execute(querymake_retouchnumbers)
     retouchcomplete_dict = {}
     for row in retouchcomplete:
-            retouchcomplete_dict[row['retouch_complete_dt']] = row['retouch_complete_dt']
-            retouchcomplete_dict[row['retouch_total']] = row['retouch_total']
+            retouchcomplete_dict['retouch_complete_dt'] = row['retouch_complete_dt']
+            retouchcomplete_dict['retouch_total'] = row['retouch_total']
     ### Get Copy Complete Totals and Build Dict of key value pairs
     querymake_copynumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
@@ -43,8 +43,8 @@ def sql_query_production_numbers():
     copycomplete = connection.execute(querymake_copynumbers)
     copycomplete_dict = {}
     for row in copycomplete:
-            copycomplete_dict[row['copy_complete_dt']] = row['copy_complete_dt']
-            copycomplete_dict[row['copy_total']] = row['copy_total']
+            copycomplete_dict['copy_complete_dt'] = row['copy_complete_dt']
+            copycomplete_dict['copy_total'] = row['copy_total']
     connection.close()
     return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict
 
