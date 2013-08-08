@@ -150,7 +150,7 @@ for k,v in future_events.iteritems():
         count_incomplete = len(incomplete)
         count_incomplete += .00
         count_total = count_complete + count_incomplete
-        progress = count_complete/count_total*100
+        progress = "{:.0%}".format(count_complete/count_total)
         if len(incomplete) == 0:
             event_complete_flag = True
         else:
