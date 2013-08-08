@@ -98,19 +98,20 @@ def gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17'):
 ##
 ##
 def get_event_data(event):
+    import xml
     eventid = event.getID()
     content = event.getContent()
     title = event.getTitle()
     editing_url = event.getEditURL()
     #print eventid, title, editing_url
     #title_4digit = title.strip(r'')
-    title_4digit = bfly_eventnum[5:10]
+    title_4digit = title[5:10]
     #if title_4digit.isdigit():
     return editing_url, title_4digit, title, content
 ##
 def if_exists_event(gCalMNG, event_id):
     import xml
-    calendar = gCalMNG.getCalendar(calendar_name)
+    calendar = gCalMNG.getCalendar(calendar_name="Default1")
     events = calendar.getEvents()
     for event in events:
         #try:
@@ -128,7 +129,8 @@ def if_exists_event(gCalMNG, event_id):
             #print type(result)
             return result
 ##
-def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
+def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com',
+                           password='yankee17'):
     from GoogleCalendar import GoogleCalendarMng
     import xml
     gCalMNG = GoogleCalendarMng()
@@ -261,7 +263,7 @@ while len(events) >= 1:
         events = default_cal.getEvents()
     default_cal = gcal_login_jb().getCalendars()[1]
     events = default_cal.getEvents()
-        
+
 events = default_cal.getEvents()
 count = 0
 gcal_inserts = []
@@ -278,12 +280,12 @@ for k,v in future_events.iteritems():
         incomplete = []
         complete = []
         for colorstyle in colorstyles:
-                if colorstyle[1] == 'Production Complete':
-                        complete.append(colorstyle)
-                        complete = sorted(colorstyles)
-                elif colorstyle[1] == 'Production Incomplete':
-                        incomplete.append(colorstyle)
-                        incomplete = sorted(colorstyles)
+            if colorstyle[1] == 'Production Complete':
+                complete.append(colorstyle)
+                complete = sorted(colorstyles)
+            elif colorstyle[1] == 'Production Incomplete':
+                incomplete.append(colorstyle)
+                incomplete = sorted(colorstyles)
         incomplete_styles = "{0} Incomplete Styles --> {1}".format(len(incomplete),incomplete)
         complete_styles = "{0} Complete Styles --> {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
@@ -336,8 +338,8 @@ for k,v in future_events.iteritems():
                     editing_url, title_4digit, titleid, content = get_event_data(event)
                 except AttributeError:
                     pass
-                event_data = (editing_url, title_4digit, titleid, content,)
-                event_data_dict[title].append(event_data)
+                event_data_fr_google = (editing_url, title_4digit, titleid, content,)
+                event_data_dict[titlekv].append(event_data_fr_google)
             inserts = (titleid, descfull, lockv, sdatekv, edatekv,)
             inserts_dict[titleid].append(inserts)
             count += 1
