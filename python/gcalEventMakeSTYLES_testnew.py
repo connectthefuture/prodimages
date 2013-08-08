@@ -182,7 +182,7 @@ for k,v in future_events.iteritems():
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
-        titleid = 'Event {0} - {2}% Complete - {1}'.format(titlekv,desckv,str(progress))
+        titleid = 'Event {0} - {2} Complete - {1}'.format(titlekv,desckv,str(progress))
         descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
@@ -209,8 +209,8 @@ for k,v in future_events.iteritems():
                     #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
                     #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
             ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-            print ev
-            calendar.addEvent (ev)
+            #print ev
+            calendar.addEvent(ev)
         except xml.parsers.expat.ExpatError:
         #except:
             print "FAILED" #+ k,v
