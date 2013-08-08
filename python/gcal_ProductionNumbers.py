@@ -48,10 +48,8 @@ def sql_query_production_numbers():
     connection.close()
     return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict
 
-#future_events = sqlQueryEventsUpcoming()
-#for key,value in future_events.iteritems():
-    #for kv in [value]:
 
+## Walk Root Directory and Return List or all Files in all Subdirs too
 def recursive_dirlist(rootdir):
     import os
     walkedlist = []
@@ -67,6 +65,67 @@ def recursive_dirlist(rootdir):
     # don't go into any .git directories.
     #    dirnames.remove('.git')
     return walkedlist
+
+
+###
+## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
+def walkeddir_parse_stylestrings_out(walkeddir_list):
+    import re,os
+    regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+    stylestrings = []
+    stylestringsdict = {}
+    for line in walkeddir_list:
+        stylestringsdict_tmp = {}
+        if re.findall(regex,line):
+            try:
+                file_path = line
+                filename = file_path.split('/')[-1]
+                colorstyle = filename.split('_')[0]
+                alt_ext = file_path.split('_')[-1]
+                alt = alt_ext.split('.')[0]
+                ext = alt_ext.split('.')[-1]
+                try:
+                    photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                except KeyError:
+                    try:
+                        photo_date = get_exif(file_path)['DateTime'][:10]
+                    except KeyError:
+                        photo_date = '0000-00-00'
+                except AttributeError:
+                        photo_date = '0000-00-00'
+                photo_date = str(photo_date)
+                photo_date = photo_date.replace(':','-')
+                stylestringsdict_tmp['colorstyle'] = colorstyle
+                stylestringsdict_tmp['photo_date'] = photo_date
+                stylestringsdict_tmp['file_path'] = file_path
+                stylestringsdict_tmp['alt'] = alt
+                stylestringsdict[file_path] = stylestringsdict_tmp
+                file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+                file_path_reletive = file_path.replace('JPG', 'jpg')
+                ## Format CSV Rows
+                row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
+                print row
+                stylestrings.append(row)
+            except IOError:
+                print "IOError on {0}".format(line)
+            #except AttributeError:
+            #    print "AttributeError on {0}".format(line)
+    return stylestringsdict
+    
+
+
+###
+## Extract All Metadata from Image File as Dict using PIL
+def get_exif(file_path):
+    from PIL import Image
+    from PIL.ExifTags import TAGS
+    exifdata = {}
+    im = Image.open(file_path)
+    info = im._getexif()
+    for tag, value in info.items():
+        decoded = TAGS.get(tag, tag)
+        exifdata[decoded] = value
+    return exifdata
 
 
 def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
@@ -117,26 +176,7 @@ def get_event_data(event):
     #title_4digit = bfly_eventnum[:4]
     #if title_4digit.isdigit():
     return editing_url, title_4digit, title, content
-##
-def if_exists_event(gCalMNG, titleid):
-    import xml
-    calendar = gCalMNG.getCalendar(calendar_name)
-    events = calendar.getEvents()
-    for event in events:
-        #try:
-        if event.getTitle().split(' ')[1] == titleid.split(' ')[1]:
-            print type(event.getTitle())
-            print event.getTitle().split(' ')[1]
-            result = True
-            print "True {0}".format(titleid)
-            return result
-        else:
-            print event.getTitle().split(' ')[1]
-            result = False
-            print "False {0}".format(titleid)
-            print titleid.split(' ')[1]
-            #print type(result)
-            return result
+    
 ##
 def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
     from GoogleCalendar import GoogleCalendarMng
@@ -170,6 +210,22 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
 prodcomplete_dict, retouchcomplete_dict, copycomplete_dict = sql_query_production_numbers()
 
 print prodcomplete_dict
+
+rootdir_still = '/mnt/Post_Ready/Retouch_Still'
+rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
+
+walkedout_still = recursive_dirlist(rootdir_still)
+walkedout_fashion = recursive_dirlist(rootdir_fashion)
+
+## Parse Walked Directory Paths Output stylestringssdict
+stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
+stylestringsdict_fashion = walkeddir_parse_stylestrings_out(walkedout_fashion)
+
+regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+#regex = re.compile(r'.+?\.[jpgJPG]{3}$')
+
+## Write CSV List to dated file for Impor t to MySQL
+#csv_write_datedOutfile(stylestrings)
 
 #count = 0
 #for k,v in future_events.iteritems():
