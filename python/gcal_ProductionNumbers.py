@@ -52,7 +52,7 @@ def sql_query_production_numbers():
     copycomplete_dict = {}
     for row in copycomplete:
             tmp_dict = {}
-            copycomplete_dict['copy_total'] = row['copy_total']
+            tmp_dict['copy_total'] = row['copy_total']
             copycomplete_dict[row['copy_complete_dt']] = tmp_dict
 
     connection.close()
