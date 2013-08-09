@@ -12,8 +12,10 @@ def sql_query_production_numbers():
     from collections import defaultdict
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
     connection = orcl_engine.connect()
+
     ### Get Production Complete Totals and Build Dict of key value pairs
-    querymake_prodnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
+    querymake_prodnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
+    POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 1)
     GROUP BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
@@ -21,10 +23,13 @@ def sql_query_production_numbers():
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
     for row in prodcomplete:
-            prodcomplete_dict['prod_complete_dt'] = row['prod_complete_dt']
-            prodcomplete_dict['completion_total'] = row['completion_total']
+            tmp_dict = {}
+            tmp_dict['completion_total'] = row['completion_total']
+            prodcomplete_dict[row['prod_complete_dt']] = tmp_dict
+
     ### Get Retouching Complete Totals and Build Dict of key value pairs
-    querymake_retouchnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
+    querymake_retouchnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
+    POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 1)
     GROUP BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT
@@ -32,10 +37,13 @@ def sql_query_production_numbers():
     retouchcomplete = connection.execute(querymake_retouchnumbers)
     retouchcomplete_dict = {}
     for row in retouchcomplete:
-            retouchcomplete_dict['retouch_complete_dt'] = row['retouch_complete_dt']
-            retouchcomplete_dict['retouch_total'] = row['retouch_total']
+            tmp_dict = {}
+            tmp_dict['retouch_total'] = row['retouch_total']
+            retouchcomplete_dict[row['retouch_complete_dt']] = tmp_dict
+
     ### Get Copy Complete Totals and Build Dict of key value pairs
-    querymake_copynumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
+    querymake_copynumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
+    POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 1)
     GROUP BY POMGR.PRODUCT_COLOR.COPY_READY_DT
@@ -43,8 +51,10 @@ def sql_query_production_numbers():
     copycomplete = connection.execute(querymake_copynumbers)
     copycomplete_dict = {}
     for row in copycomplete:
-            copycomplete_dict['copy_complete_dt'] = row['copy_complete_dt']
+            tmp_dict = {}
             copycomplete_dict['copy_total'] = row['copy_total']
+            copycomplete_dict[row['copy_complete_dt']] = tmp_dict
+
     connection.close()
     return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict
 
