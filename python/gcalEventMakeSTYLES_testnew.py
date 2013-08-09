@@ -40,31 +40,26 @@ def sqlQueryEventsUpcoming():
       POMGR.LK_PRODUCT_STATUS.NAME,
       POMGR.EVENT.CATEGORY'''
     result = connection.execute(querymake_eventscal)
-#future_events = sqlQueryEventsUpcoming()
-#for key,value in future_events.iteritems():
-    #for kv in [value]:
+
     events = {}
     styles = defaultdict(list)
     for row in result:
         event = {}
-        #print row
         event['event_id'] = row['event_id']
         event['prod_category'] = row['prod_category']
         event['event_title'] = row['event_title']
         event['category_id'] = row['category_id']
         event['ev_start'] = row['ev_start']
         event['ev_end'] = row['ev_end']
-#event['colorstyle'] = row['colorstyle']
         event['production_status'] = row['production_status']
 
         status = str(row['production_status'])
         colorstyle = str(row['colorstyle'])
 
-        #stylestatus = "{0} : {1}".format(colorstyle, status)
         stylestatus = (colorstyle,status)
         styles[row['event_id']].append(stylestatus)
         events[row['event_id']] = event
-#print events
+
     connection.close()
     return events, styles
 
@@ -151,9 +146,11 @@ for k,v in future_events.iteritems():
         complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
         count_complete = len(complete)
+        count_complete += .00
         count_incomplete = len(incomplete)
+        count_incomplete += .00
         count_total = count_complete + count_incomplete
-        progress = count_complete/count_total*100
+        progress = "{:.0%}".format(count_complete/count_total)
         if len(incomplete) == 0:
             event_complete_flag = True
         else:
@@ -185,7 +182,7 @@ for k,v in future_events.iteritems():
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
-        titleid = 'Event {0} -- {1} -- {2}% Complete'.format(titlekv,desckv,str(progress))
+        titleid = 'Event {0} - {2} Complete - {1}'.format(titlekv,desckv,str(progress))
         descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
@@ -212,8 +209,8 @@ for k,v in future_events.iteritems():
                     #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
                     #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
             ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-            print ev
-            calendar.addEvent (ev)
+            #print ev
+            calendar.addEvent(ev)
         except xml.parsers.expat.ExpatError:
         #except:
             print "FAILED" #+ k,v
