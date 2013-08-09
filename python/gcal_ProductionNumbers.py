@@ -28,7 +28,7 @@ def sql_query_production_numbers():
 
 
     ### Get Retouching Complete Totals and Build Dict of key value pairs
-    querymake_retouchnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.PRODUCT_COLOR_ID) as completion_total, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
+    querymake_retouchnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.PRODUCT_COLOR_ID) as retouch_total, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 1)
     GROUP BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT
@@ -38,11 +38,11 @@ def sql_query_production_numbers():
     retouchcomplete_dict = {}
     for row in retouchcomplete:
             retouchcomplete_dict[row['retouch_complete_dt']] = row['retouch_complete_dt']
-            retouchcomplete_dict[row['completion_total']] = row['completion_total']
+            retouchcomplete_dict[row['retouch_total']] = row['retouch_total']
 
 
     ### Get Copy Complete Totals and Build Dict of key value pairs
-    querymake_copynumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.PRODUCT_COLOR_ID) as completion_total, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
+    querymake_copynumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.PRODUCT_COLOR_ID) as copy_total, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 1)
     GROUP BY POMGR.PRODUCT_COLOR.COPY_READY_DT
@@ -52,7 +52,7 @@ def sql_query_production_numbers():
     copycomplete_dict = {}
     for row in copycomplete:
             copycomplete_dict[row['copy_complete_dt']] = row['copy_complete_dt']
-            copycomplete_dict[row['completion_total']] = row['completion_total']
+            copycomplete_dict[row['copy_total']] = row['copy_total']
 
 
 
@@ -64,8 +64,6 @@ def sql_query_production_numbers():
     #for kv in [value]:
 
 
-
-
 def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
     from GoogleCalendar import GoogleCalendarMng, newEvent
     import GoogleCalendar
@@ -74,8 +72,8 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
         gCalMNG = GoogleCalendarMng()
         myname = "john bragato"
         myemail = "john.bragato@gmail.com"
-        gCalMNG.connect (myemail, "yankee17")
-        calendar = gCalMNG.getCalendar ("Default1")
+        gCalMNG.connect(myemail, "yankee17")
+        calendar = gCalMNG.getCalendar("Production_Numbers")
         gcalevents = calendar.getEvents()
         print len(gcalevents)
         gcaleventslist = []
@@ -89,7 +87,7 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
                 #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
         ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
         print ev
-        calendar.addEvent (ev)
+        calendar.addEvent(ev)
     except xml.parsers.expat.ExpatError:
     #except:
         print "FAILED"
@@ -176,7 +174,7 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
 #from collections import defaultdict
 #styles = defaultdict(list)
 #
-future_events, future_styles = sqlQueryEventsUpcoming()
+prodcomplete_dict, retouchcomplete_dict, copycomplete_dict = sqlQueryEventsUpcoming()
 #for key,value in future_styles.iteritems():
 #    #for kv in [value]:
 #    #d[value['event_id']].append(key)
@@ -211,30 +209,6 @@ for k,v in future_events.iteritems():
 
         progress = count_complete/count_total*100
 
-        if len(incomplete) == 0:
-            event_complete_flag = True
-        else:
-            event_complete_flag = False
-
-        status = value['production_status']
-        prod_category = value['prod_category']
-        category_id = value['category_id']
-
-        pmurl = "http://pm.bluefly.corp/manager/event/editevent.html?id="
-        pmimgs = "http://pm.bluefly.corp/manager/event/viewproductimages.html?id="
-        bcurl = "http://www.belleandclive.com/browse/sales/details.jsp?categoryId="
-
-        pmurl = pmurl + titlekv
-        pmimgs = pmimgs + titlekv
-        bcurl = pmurl + titlekv
-
-        try:
-            if colorstyles == None:
-                lockv = str(pmurl)
-            else:
-                lockv = str(pmimgs)
-        except TypeError:
-            lockv = str(bcurl)
 
         sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
         edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
@@ -242,7 +216,7 @@ for k,v in future_events.iteritems():
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
-        titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
+        titleid = ' {0} Styles Production Complete'.format(titlekv)
         descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
