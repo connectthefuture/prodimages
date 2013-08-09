@@ -78,6 +78,20 @@ def recursive_dirlist(rootdir):
 
 
 ###
+## Extract All Metadata from Image File as Dict using PIL
+def get_exif(file_path):
+    from PIL import Image
+    from PIL.ExifTags import TAGS
+    exifdata = {}
+    im = Image.open(file_path)
+    info = im._getexif()
+    for tag, value in info.items():
+        decoded = TAGS.get(tag, tag)
+        exifdata[decoded] = value
+    return exifdata
+
+
+###
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
@@ -95,7 +109,8 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 alt = alt_ext.split('.')[0]
                 ext = alt_ext.split('.')[-1]
                 try:
-                    photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                    photo_date = file_path.split('/')[4][:6]
+					photo_date = "20{2:.2}-{0:.2}-{1:.2}".format(photo_date[:2], photo_date[2:4], photo_date[4:6])
                 except KeyError:
                     try:
                         photo_date = get_exif(file_path)['DateTime'][:10]
@@ -122,20 +137,6 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
             #    print "AttributeError on {0}".format(line)
     return stylestringsdict
 
-
-
-###
-## Extract All Metadata from Image File as Dict using PIL
-def get_exif(file_path):
-    from PIL import Image
-    from PIL.ExifTags import TAGS
-    exifdata = {}
-    im = Image.open(file_path)
-    info = im._getexif()
-    for tag, value in info.items():
-        decoded = TAGS.get(tag, tag)
-        exifdata[decoded] = value
-    return exifdata
 
 
 def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
@@ -176,7 +177,7 @@ def gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17'):
     return gCalMNG
 ##
 ##
-def get_event_data(event):
+def get_google_event_data(event):
     eventid = event.getID()
     content = event.getContent()
     title = event.getTitle()
@@ -217,6 +218,12 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
 
 
 #
+############## RUN ###########
+import os,re,sys,csv
+regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+
+
+
 prodcomplete_dict, retouchcomplete_dict, copycomplete_dict = sql_query_production_numbers()
 
 print prodcomplete_dict
@@ -224,6 +231,7 @@ print prodcomplete_dict
 rootdir_still = '/mnt/Post_Ready/Retouch_Still'
 rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
 
+#Walk rootdir tree compile dict of Walked Directory
 walkedout_still = recursive_dirlist(rootdir_still)
 walkedout_fashion = recursive_dirlist(rootdir_fashion)
 
@@ -231,7 +239,20 @@ walkedout_fashion = recursive_dirlist(rootdir_fashion)
 stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
 stylestringsdict_fashion = walkeddir_parse_stylestrings_out(walkedout_fashion)
 
-regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+## First compile the Fields as key value pairs
+fulldict = {}
+for k,v in stylestringsdict.iteritems():
+    dfill = {}
+    dfill['colorstyle'] = v['colorstyle']
+    dfill['photo_date'] = v['photo_date']
+    file_path = k
+    file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+    file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
+    dfill['file_path'] = file_path
+    dfill['alt'] = v['alt']
+    fulldict[k] = dfill
+
+
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 
 ## Write CSV List to dated file for Impor t to MySQL
@@ -267,8 +288,8 @@ regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 #        progress = count_complete/count_total*100
 #
 #
-#        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
-#        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
+#        sdatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(value['ev_start'])
+#        edatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(value['ev_end'])
 #        sdatekvsplit = sdatekvraw.split(",")
 #        edatekvsplit = edatekvraw.split(",")
 #        sdatekv = map(int,sdatekvsplit)
