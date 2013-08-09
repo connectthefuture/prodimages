@@ -95,7 +95,10 @@ def get_exif(file_path):
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
-    regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+########  Regex only finds _1.jpg files
+    regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
+    regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
+
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
@@ -109,15 +112,20 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 alt = alt_ext.split('.')[0]
                 ext = alt_ext.split('.')[-1]
                 try:
-                    photo_date = file_path.split('/')[4][:6]
-					photo_date = "20{2:.2}-{0:.2}-{1:.2}".format(photo_date[:2], photo_date[2:4], photo_date[4:6])
-                except KeyError:
-                    try:
-                        photo_date = get_exif(file_path)['DateTime'][:10]
-                    except KeyError:
-                        photo_date = '0000-00-00'
+                    path_date = file_path.split('/')[4][:6]
+                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
+                    if re.findall(regex_date, path_date):
+                        photo_date = path_date
+                    else:
+                        try:
+                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                        except KeyError:
+                            try:
+                                photo_date = get_exif(file_path)['DateTime'][:10]
+                            except KeyError:
+                                photo_date = '0000-00-00'
                 except AttributeError:
-                        photo_date = '0000-00-00'
+                    photo_date = '0000-00-00'
                 photo_date = str(photo_date)
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
@@ -220,24 +228,54 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
 #
 ############## RUN ###########
 import os,re,sys,csv
-regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+from collections import defaultdict
 
+regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
 
-
+### Query DB for Prod,Retouch and Copy counts by date
 prodcomplete_dict, retouchcomplete_dict, copycomplete_dict = sql_query_production_numbers()
 
 print prodcomplete_dict
-
-rootdir_still = '/mnt/Post_Ready/Retouch_Still'
+######  Recursively search Photo Folders and get counts of shots by date
 rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
-
-#Walk rootdir tree compile dict of Walked Directory
-walkedout_still = recursive_dirlist(rootdir_still)
+#####  Walk rootdir tree compile dict of Walked Directory
 walkedout_fashion = recursive_dirlist(rootdir_fashion)
-
-## Parse Walked Directory Paths Output stylestringssdict
-stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
+#### Parse Walked Directory Paths Output stylestringssdict
 stylestringsdict_fashion = walkeddir_parse_stylestrings_out(walkedout_fashion)
+### Get and Collect Counts of fashion and still sets by date
+fashiond = defaultdict(list)
+for row in stylestringsdict_fashion.itervalues():
+    file_path = row['file_path']
+    fashiond[row['photo_date']].append(file_path)
+## Count the Grouped Files
+# fashioncomplete_dict = defaultdict(int)
+# for k in fashiond:
+#     fashioncomplete_dict[k] +=1
+fashioncomplete_dict = {}
+for k,v in fashiond.iteritems():
+    fashioncomplete_dict[k] = len(v)
+#    fashioncomplete_dict['shot_count'] = len(v)
+######
+####
+######  Recursively search Photo Folders and get counts of shots by date
+rootdir_still = '/mnt/Post_Ready/aPhotoPush'
+#####  Walk rootdir tree compile dict of Walked Directory
+walkedout_still = recursive_dirlist(rootdir_still)
+#### Parse Walked Still Directory Paths Output stylestringssdict
+stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
+### Now the still sets counts by date
+stilld = defaultdict(list)
+for row in stylestringsdict_still.itervalues():
+    file_path = row['file_path']
+    stilld[row['photo_date']].append(file_path)
+## Count the Grouped Files
+stillcomplete_dict = {}
+for k,v in stilld.iteritems():
+    stillcomplete_dict[k] = len(v)
+#    fashioncomplete_dict['shot_count'] = len(v)
+
+
+
 
 ## First compile the Fields as key value pairs
 fulldict = {}
