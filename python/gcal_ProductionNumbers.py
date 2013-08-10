@@ -17,7 +17,7 @@ def sql_query_production_numbers():
     querymake_prodnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
     POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 1)
+    WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 25)
     GROUP BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
     ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC'''
     prodcomplete = connection.execute(querymake_prodnumbers)
@@ -25,6 +25,7 @@ def sql_query_production_numbers():
     for row in prodcomplete:
             tmp_dict = {}
             tmp_dict['completion_total'] = row['completion_total']
+            tmp_dict['role'] = 'Production'
             prodcomplete_dict[row['prod_complete_dt']] = tmp_dict
 
     ### Get Retouching Complete Totals and Build Dict of key value pairs
@@ -39,6 +40,7 @@ def sql_query_production_numbers():
     for row in retouchcomplete:
             tmp_dict = {}
             tmp_dict['retouch_total'] = row['retouch_total']
+            tmp_dict['role'] = 'Retouching'
             retouchcomplete_dict[row['retouch_complete_dt']] = tmp_dict
 
     ### Get Copy Complete Totals and Build Dict of key value pairs
@@ -53,6 +55,7 @@ def sql_query_production_numbers():
     for row in copycomplete:
             tmp_dict = {}
             tmp_dict['copy_total'] = row['copy_total']
+            tmp_dict['role'] = 'Copy'
             copycomplete_dict[row['copy_complete_dt']] = tmp_dict
 
     connection.close()
@@ -98,7 +101,6 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
 ########  Regex only finds _1.jpg files
     regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
-
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
@@ -246,7 +248,15 @@ stylestringsdict_fashion = walkeddir_parse_stylestrings_out(walkedout_fashion)
 fashiond = defaultdict(list)
 for row in stylestringsdict_fashion.itervalues():
     file_path = row['file_path']
-    fashiond[row['photo_date']].append(file_path)
+    photo_date = row['photo_date']
+    dt = photo_date.replace('-', ', ')
+    dt = tuple(dt.split(','))
+    dt = map(int,tuple(dt))
+    dt = dt.append(0)
+    dt = dt.append(0)
+    #### 6 digit date
+    photo_date = dt.append(0)
+    fashiond[photo_date].append(file_path)
 ## Count the Grouped Files
 # fashioncomplete_dict = defaultdict(int)
 # for k in fashiond:
@@ -254,11 +264,12 @@ for row in stylestringsdict_fashion.itervalues():
 fashioncomplete_dict = {}
 for k,v in fashiond.iteritems():
     fashioncomplete_dict[k] = len(v)
+    fashioncomplete_dict['Role'] = 'Fashion_Photo'
 #    fashioncomplete_dict['shot_count'] = len(v)
 ######
 ####
 ######  Recursively search Photo Folders and get counts of shots by date
-rootdir_still = '/mnt/Post_Ready/aPhotoPush'
+rootdir_still = '/mnt/Post_Ready/Retouch_Still'
 #####  Walk rootdir tree compile dict of Walked Directory
 walkedout_still = recursive_dirlist(rootdir_still)
 #### Parse Walked Still Directory Paths Output stylestringssdict
@@ -267,15 +278,47 @@ stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
 stilld = defaultdict(list)
 for row in stylestringsdict_still.itervalues():
     file_path = row['file_path']
-    stilld[row['photo_date']].append(file_path)
+    photo_date = row['photo_date']
+    dt = photo_date.replace('-', ', ')
+    dt = tuple(dt.split(','))
+    dt = map(int,tuple(dt))
+    dt = dt.append(0)
+    dt = dt.append(0)
+    #### 6 digit date
+    photo_date = dt.append(0)
+
+    stilld[photo_date].append(file_path)
 ## Count the Grouped Files
 stillcomplete_dict = {}
 for k,v in stilld.iteritems():
     stillcomplete_dict[k] = len(v)
+    stillcomplete_dict['Role'] = 'Still_Photo'
 #    fashioncomplete_dict['shot_count'] = len(v)
 
+#####  Consignment ######
+rootdir_consig = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment'
+walkedout_consig = recursive_dirlist(rootdir_consig)
+#### Parse Walked Directory Paths Output stylestringssdict
+stylestringsdict_consig= walkeddir_parse_stylestrings_out(walkedout_consig)
+### Get and Collect Counts of fashion and still sets by date
+consigd = defaultdict(list)
+for row in stylestringsdict_consig.itervalues():
+    file_path = row['file_path']
+    photo_date = row['photo_date']
+    dt = photo_date.replace('-', ', ')
+    dt = tuple(dt.split(','))
+    dt = map(int,tuple(dt))
+    dt = dt.append(0)
+    dt = dt.append(0)
+    #### 6 digit date
+    photo_date = dt.append(0)
 
-
+    consigd[photo_date].append(file_path)
+## Count the Grouped Files
+consigcomplete_dict = {}
+for k,v in consigd.iteritems():
+    consigcomplete_dict[k] = len(v)
+    consigcomplete_dict['Role'] = 'Consig_Photo'
 
 ## First compile the Fields as key value pairs
 fulldict = {}
