@@ -177,15 +177,16 @@ for k,v in future_events.iteritems():
             lockv = str(bcurl)
 
         sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
-        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
-        event_ends = edatekvraw
-        edatekvraw = edatekvraw.replace('00','23',2)
+        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
+        event_ends = '{:%Y,%m,%d,%B,%A,%S,00,00,00}'.format(value['ev_end'])
+        sdatekvraw = edatekvraw.replace('07','11',2)
+        edatekvraw = edatekvraw.replace('07','23',2)
         sdatekvsplit = sdatekvraw.split(",")
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
         titleid = 'Event {0} - {2} Complete - {1}'.format(titlekv,desckv,str(progress))
-        descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
+        descfull = '{0} {1} in Event {2}: Ending {3}\n {4}\n'.format(len(colorstyles), prod_category, titlekv, event_ends, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
         count += 1
