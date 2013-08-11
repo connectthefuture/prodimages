@@ -178,14 +178,15 @@ for k,v in future_events.iteritems():
 
         sdatekvraw = '{:%Y,%m,%d,11,30,%S,00,00,00}'.format(value['ev_start'])
         edatekvraw = '{:%Y,%m,%d,23,59,%S,00,00,00}'.format(value['ev_start'])
-        event_ends = '{:%Y,%m,%d,%B,%A,%S,00,00,00}'.format(value['ev_end'])
+ #       event_ends = '{:%Y,%m,%d,%A,%A,%S,00,00,00}'.format(value['ev_end'])
+        event_ends = '{:%A %B %d}'.format(value['ev_end'])
         sdatekvraw = edatekvraw.replace('07','11',2)
         edatekvraw = edatekvraw.replace('07','23',2)
         sdatekvsplit = sdatekvraw.split(",")
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
-        titleid = 'Event {0} - {2} Complete - {1}'.format(titlekv,desckv,str(progress))
+        titleid = 'Event {0} - {1} Complete - {2}'.format(titlekv,str(progress),desckv)
         descfull = '{0} {1} in Event {2}: Ending {3}\n {4}\n'.format(len(colorstyles), prod_category, titlekv, event_ends, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
