@@ -323,22 +323,22 @@ for k,v in consigd.iteritems():
 
 
 
-for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
-[ "{} {}".format(k,v) for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict) ]
+#for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
+#[ "{} {}".format(k,v) for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict) ]
 
 
 ## First compile the Fields as key value pairs
-fulldict = {}
-for k,v in stylestringsdict.iteritems():
-    dfill = {}
-    dfill['colorstyle'] = v['colorstyle']
-    dfill['photo_date'] = v['photo_date']
-    file_path = k
-    file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-    file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
-    dfill['file_path'] = file_path
-    dfill['alt'] = v['alt']
-    fulldict[k] = dfill
+#fulldict = {}
+#for k,v in stylestringsdict.iteritems():
+#    dfill = {}
+#    dfill['colorstyle'] = v['colorstyle']
+#    dfill['photo_date'] = v['photo_date']
+#    file_path = k
+#    file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+#    file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
+#    dfill['file_path'] = file_path
+#    dfill['alt'] = v['alt']
+#    fulldict[k] = dfill
 
 
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
@@ -367,6 +367,7 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict):
             lockv = v['role']
             try:
             #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
+                from GoogleCalendar import *
                 gCalMNG = gcal_login_jb()
                 calendar = gCalMNG.getCalendar("ProductionNumbers")
                 gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()

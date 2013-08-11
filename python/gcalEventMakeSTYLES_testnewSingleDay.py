@@ -187,7 +187,7 @@ for k,v in future_events.iteritems():
         sdatekv = map(int,sdatekvsplit)
         edatekv = map(int,edatekvsplit)
         titleid = 'Event {0} - {1} Complete - {2}'.format(titlekv,str(progress),desckv)
-        descfull = '{0} {1} in Event {2}: Ending {3}\n {4}\n'.format(len(colorstyles), prod_category, titlekv, event_ends, colorstyles_statuses)
+        descfull = '{0} {1} in Event {2}:\n\tEnding {3}\n\n\n {4}\n'.format(len(colorstyles), prod_category, titlekv, event_ends, colorstyles_statuses)
         descfull = str(descfull)
         #print titleid, descfull, edatekv, prod_category, lockv
         count += 1
@@ -218,4 +218,6 @@ for k,v in future_events.iteritems():
         except xml.parsers.expat.ExpatError:
         #except:
             print "FAILED" #+ k,v
+        except AttributeError:
+            print "AttributeError {}".format(ev)
         #    continue
