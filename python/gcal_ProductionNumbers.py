@@ -32,7 +32,7 @@ def sql_query_production_numbers():
     querymake_retouchnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
     POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 1)
+    WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 25)
     GROUP BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT
     ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC'''
     retouchcomplete = connection.execute(querymake_retouchnumbers)
@@ -47,7 +47,7 @@ def sql_query_production_numbers():
     querymake_copynumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
     POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 1)
+    WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 25)
     GROUP BY POMGR.PRODUCT_COLOR.COPY_READY_DT
     ORDER BY POMGR.PRODUCT_COLOR.COPY_READY_DT DESC'''
     copycomplete = connection.execute(querymake_copynumbers)
@@ -249,13 +249,17 @@ fashiond = defaultdict(list)
 for row in stylestringsdict_fashion.itervalues():
     file_path = row['file_path']
     photo_date = row['photo_date']
-    dt = photo_date.replace('-', ', ')
-    dt = tuple(dt.split(','))
-    dt = map(int,tuple(dt))
-    dt = dt.append(0)
-    dt = dt.append(0)
-    #### 6 digit date
-    photo_date = dt.append(0)
+    try:
+        dt = photo_date.replace('-', ', ')
+        dt = tuple(dt.split(','))
+        dt = map(int,tuple(dt))
+        dt = dt.append(0)
+        dt = dt.append(0)
+#        dt = dt.append(0)
+        #### 6 digit date
+        photo_date = dt.append(0)
+    except:
+        pass
     fashiond[photo_date].append(file_path)
 ## Count the Grouped Files
 # fashioncomplete_dict = defaultdict(int)
@@ -279,14 +283,17 @@ stilld = defaultdict(list)
 for row in stylestringsdict_still.itervalues():
     file_path = row['file_path']
     photo_date = row['photo_date']
-    dt = photo_date.replace('-', ', ')
-    dt = tuple(dt.split(','))
-    dt = map(int,tuple(dt))
-    dt = dt.append(0)
-    dt = dt.append(0)
-    #### 6 digit date
-    photo_date = dt.append(0)
-
+    try:
+        dt = photo_date.replace('-', ', ')
+        dt = tuple(dt.split(','))
+        dt = map(int,tuple(dt))
+        dt = dt.append(0)
+        dt = dt.append(0)
+        #dt = dt.append(0)
+        #### 6 digit date
+        photo_date = dt.append(0)
+    except:
+        pass
     stilld[photo_date].append(file_path)
 ## Count the Grouped Files
 stillcomplete_dict = {}
@@ -305,20 +312,28 @@ consigd = defaultdict(list)
 for row in stylestringsdict_consig.itervalues():
     file_path = row['file_path']
     photo_date = row['photo_date']
-    dt = photo_date.replace('-', ', ')
-    dt = tuple(dt.split(','))
-    dt = map(int,tuple(dt))
-    dt = dt.append(0)
-    dt = dt.append(0)
-    #### 6 digit date
-    photo_date = dt.append(0)
-
+    try:
+        dt = photo_date.replace('-', ', ')
+        dt = tuple(dt.split(','))
+        dt = map(int,tuple(dt))
+        dt = dt.append(0)
+        dt = dt.append(0)
+        #dt = dt.append(0)
+        #### 6 digit date
+        photo_date = dt.append(0)
+    except:
+        pass
     consigd[photo_date].append(file_path)
 ## Count the Grouped Files
 consigcomplete_dict = {}
 for k,v in consigd.iteritems():
     consigcomplete_dict[k] = len(v)
     consigcomplete_dict['Role'] = 'Consig_Photo'
+
+
+
+for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
+
 
 ## First compile the Fields as key value pairs
 fulldict = {}
