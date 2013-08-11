@@ -375,6 +375,8 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, sti
             try:
             #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
                 from GoogleCalendar import *
+                myname = "john bragato"
+                myemail = "john.bragato@gmail.com"
                 gCalMNG = gcal_login_jb()
                 calendar = gCalMNG.getCalendar("ProductionNumbers")
                 gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
