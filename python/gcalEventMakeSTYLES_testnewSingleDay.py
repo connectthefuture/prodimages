@@ -179,7 +179,7 @@ for k,v in future_events.iteritems():
         sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
         edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
         event_ends = edatekvraw
-        edatekvraw.replace('00','23',2)
+        edatekvraw = edatekvraw.replace('00','23',2)
         sdatekvsplit = sdatekvraw.split(",")
         edatekvsplit = edatekvraw.split(",")
         sdatekv = map(int,sdatekvsplit)
