@@ -14,12 +14,12 @@ def sql_query_production_numbers():
     connection = orcl_engine.connect()
 
     ### Get Production Complete Totals and Build Dict of key value pairs
-    querymake_prodnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
-    POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
+    querymake_prodnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
+    to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 25)
-    GROUP BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
-    ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC'''
+    GROUP BY to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD')
+    ORDER BY to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
     for row in prodcomplete:
@@ -29,12 +29,12 @@ def sql_query_production_numbers():
             prodcomplete_dict[row['prod_complete_dt']] = tmp_dict
 
     ### Get Retouching Complete Totals and Build Dict of key value pairs
-    querymake_retouchnumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
-    POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
+    querymake_retouchnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
+    to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT, 'YYYY-MM-DD') as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 25)
-    GROUP BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT
-    ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC'''
+    GROUP BY to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT, 'YYYY-MM-DD')
+    ORDER BY to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT, 'YYYY-MM-DD') DESC"""
     retouchcomplete = connection.execute(querymake_retouchnumbers)
     retouchcomplete_dict = {}
     for row in retouchcomplete:
@@ -43,13 +43,20 @@ def sql_query_production_numbers():
             tmp_dict['role'] = 'Retouching'
             retouchcomplete_dict[row['retouch_complete_dt']] = tmp_dict
 
+
+#    MAX(to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')) AS sample_dt,
+#    MAX(POMGR.LK_SAMPLE_STATUS.NAME) AS sample_status
+#    LEFT JOIN POMGR.SAMPLE ON POMGR.PRODUCT_COLOR.ID = POMGR.SAMPLE.PRODUCT_COLOR_ID
+#    LEFT JOIN POMGR.SAMPLE_TRACKING ON POMGR.SAMPLE.ID = POMGR.SAMPLE_TRACKING.SAMPLE_ID
+#    LEFT JOIN POMGR.LK_SAMPLE_STATUS ON POMGR.SAMPLE_TRACKING.STATUS_ID = POMGR.LK_SAMPLE_STATUS.ID
+#
     ### Get Copy Complete Totals and Build Dict of key value pairs
-    querymake_copynumbers = '''SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
-    POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
+    querymake_copynumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
+    to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 25)
-    GROUP BY POMGR.PRODUCT_COLOR.COPY_READY_DT
-    ORDER BY POMGR.PRODUCT_COLOR.COPY_READY_DT DESC'''
+    GROUP BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD')
+    ORDER BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') DESC"""
     copycomplete = connection.execute(querymake_copynumbers)
     copycomplete_dict = {}
     for row in copycomplete:
