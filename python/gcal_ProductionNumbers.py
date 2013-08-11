@@ -345,13 +345,13 @@ for k,v in stylestringsdict.iteritems():
 
 ## Write CSV List to dated file for Impor t to MySQL
 #csv_write_datedOutfile(stylestrings)
-for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
+for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict):
     count = 0
     for k,v in iterdict.iteritems():
         import datetime, time
         for value in [v]:
             titlekv = str(v['role'])
-            desckv = str(v['retouch_total'])
+            desckv = str(v['total'])
             desckv = desckv.replace('&', 'And')
             desckv = desckv.replace('%', ' Percent')
             sdatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
@@ -361,7 +361,7 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, sti
             sdatekv = map(int,sdatekvsplit)
             edatekv = map(int,edatekvsplit)
             titleid = '{0} -- {1}'.format(titlekv,desckv)
-            descfull = '{0} Total for {1:.10} is {2}:\n'.format(titlekv, k, desckv)
+            descfull = '{0} Total for {1} is {2}:\n'.format(titlekv, k, desckv)
             descfull = str(descfull)
             count += 1
             lockv = v['role']

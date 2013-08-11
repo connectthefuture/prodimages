@@ -213,3 +213,10 @@ for k,v in future_events.iteritems():
         #except:
             print "FAILED" #+ k,v
         #    continue
+
+
+## GCalendar Class using GDATA API 2
+
+glogin_jb = GCalendar("john.bragato@gmail.com", "yankee17")
+feed = glogin_jb.cal_client.get_own_calendars_feed()
+feed_elements = feed.get_elements()
