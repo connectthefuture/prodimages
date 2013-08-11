@@ -322,6 +322,9 @@ for k,v in stilld.iteritems():
 #        dt = "{} 00:00:00".format(dt)
 #        dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
 #        #### 5 digit date
+#        dateraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(dt)
+#        dateraw = dateraw.split(",")
+#        dt = map(int,dateraw)
 #        photo_date = dt
 #    except:
 #        pass
@@ -329,9 +332,10 @@ for k,v in stilld.iteritems():
 ### Count the Grouped Files
 #consigcomplete_dict = {}
 #for k,v in consigd.iteritems():
-#    consigcomplete_dict[k] = len(v)
-#    consigcomplete_dict['role'] = 'Consig_Photo'
-
+#    tmp_dict = {}
+#    tmp_dict['role'] = 'Still'
+#    tmp_dict['total'] = len(v)
+#    consigcomplete_dict[k] = tmp_dict
 
 
 #for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
@@ -404,7 +408,7 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, sti
                         #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
                 ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
                 print ev
-                calendar.addEvent (ev)
+                calendar.addEvent(ev)
             except xml.parsers.expat.ExpatError:
             #except:
                 print "FAILED" #+ k,v
