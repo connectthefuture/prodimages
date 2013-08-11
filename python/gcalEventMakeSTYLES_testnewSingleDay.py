@@ -179,7 +179,7 @@ for k,v in future_events.iteritems():
         sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
         edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
  #       event_ends = '{:%Y,%m,%d,%A,%A,%S,00,00,00}'.format(value['ev_end'])
-        event_ends = '{:%A.3 %B %d}'.format(value['ev_end'])
+        event_ends = '{:%A %b %d}'.format(value['ev_end'])
         sdatekvraw = edatekvraw.replace('07','11',2)
         edatekvraw = edatekvraw.replace('07','23',2)
         sdatekvsplit = sdatekvraw.split(",")
