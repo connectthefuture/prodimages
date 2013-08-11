@@ -227,9 +227,11 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
 #print updated_event['updated']
 
 
-#
-############## RUN ###########
-import os,re,sys,csv
+#####################################################
+###                                             #####
+############## RUN ##################################
+###
+import os,re,sys,csv,datetime,time
 from collections import defaultdict
 
 regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
@@ -264,7 +266,10 @@ for row in stylestringsdict_fashion.itervalues():
 #     fashioncomplete_dict[k] +=1
 fashioncomplete_dict = {}
 for k,v in fashiond.iteritems():
-    fashioncomplete_dict[k] = len(v)
+    tmp_dict = {}
+    tmp_dict['role'] = 'Fashion'
+    tmp_dict['total'] = len(v)
+    fashioncomplete_dict[k] = tmp_dict
 #    fashioncomplete_dict['Role'] = 'Fashion_Photo'
 #    fashioncomplete_dict['shot_count'] = len(v)
 ######
@@ -295,7 +300,10 @@ for row in stylestringsdict_still.itervalues():
 ## Count the Grouped Files
 stillcomplete_dict = {}
 for k,v in stilld.iteritems():
-    stillcomplete_dict[k] = len(v)
+    tmp_dict = {}
+    tmp_dict['role'] = 'Still'
+    tmp_dict['total'] = len(v)
+    stillcomplete_dict[k] = tmp_dict
 #    stillcomplete_dict['Role'] = 'Still_Photo'
 #    fashioncomplete_dict['shot_count'] = len(v)
 
