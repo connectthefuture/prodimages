@@ -139,7 +139,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 file_path_reletive = file_path.replace('JPG', 'jpg')
                 ## Format CSV Rows
                 row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
-                print row
+                #print row
                 stylestrings.append(row)
             except IOError:
                 print "IOError on {0}".format(line)
@@ -237,7 +237,7 @@ regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
 ### Query DB for Prod,Retouch and Copy counts by date
 prodcomplete_dict, retouchcomplete_dict, copycomplete_dict = sql_query_production_numbers()
 
-print prodcomplete_dict
+#print prodcomplete_dict
 ######  Recursively search Photo Folders and get counts of shots by date
 rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
 #####  Walk rootdir tree compile dict of Walked Directory
@@ -251,13 +251,10 @@ for row in stylestringsdict_fashion.itervalues():
     photo_date = row['photo_date']
     try:
         dt = photo_date.replace('-', ', ')
-        dt = tuple(dt.split(','))
-        dt = map(int,tuple(dt))
-        dt = dt.append(0)
-        dt = dt.append(0)
-#        dt = dt.append(0)
-        #### 6 digit date
-        photo_date = dt.append(0)
+        dt = "{} 00:00:00".format(dt)
+        dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+        #### 5 digit date
+        photo_date = dt
     except:
         pass
     fashiond[photo_date].append(file_path)
@@ -268,7 +265,7 @@ for row in stylestringsdict_fashion.itervalues():
 fashioncomplete_dict = {}
 for k,v in fashiond.iteritems():
     fashioncomplete_dict[k] = len(v)
-    fashioncomplete_dict['Role'] = 'Fashion_Photo'
+#    fashioncomplete_dict['Role'] = 'Fashion_Photo'
 #    fashioncomplete_dict['shot_count'] = len(v)
 ######
 ####
@@ -285,13 +282,10 @@ for row in stylestringsdict_still.itervalues():
     photo_date = row['photo_date']
     try:
         dt = photo_date.replace('-', ', ')
-        dt = tuple(dt.split(','))
-        dt = map(int,tuple(dt))
-        dt = dt.append(0)
-        dt = dt.append(0)
-        #dt = dt.append(0)
-        #### 6 digit date
-        photo_date = dt.append(0)
+        dt = "{} 00:00:00".format(dt)
+        dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+        #### 5 digit date
+        photo_date = dt
     except:
         pass
     stilld[photo_date].append(file_path)
@@ -299,7 +293,7 @@ for row in stylestringsdict_still.itervalues():
 stillcomplete_dict = {}
 for k,v in stilld.iteritems():
     stillcomplete_dict[k] = len(v)
-    stillcomplete_dict['Role'] = 'Still_Photo'
+#    stillcomplete_dict['Role'] = 'Still_Photo'
 #    fashioncomplete_dict['shot_count'] = len(v)
 
 #####  Consignment ######
@@ -314,13 +308,10 @@ for row in stylestringsdict_consig.itervalues():
     photo_date = row['photo_date']
     try:
         dt = photo_date.replace('-', ', ')
-        dt = tuple(dt.split(','))
-        dt = map(int,tuple(dt))
-        dt = dt.append(0)
-        dt = dt.append(0)
-        #dt = dt.append(0)
-        #### 6 digit date
-        photo_date = dt.append(0)
+        dt = "{} 00:00:00".format(dt)
+        dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+        #### 5 digit date
+        photo_date = dt
     except:
         pass
     consigd[photo_date].append(file_path)
