@@ -69,12 +69,11 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
     from GoogleCalendar import GoogleCalendarMng, newEvent
     import GoogleCalendar
     try:
-        #from GoogleCalendar import *
         gCalMNG = GoogleCalendarMng()
         myname = "john bragato"
         myemail = "john.bragato@gmail.com"
-        gCalMNG.connect (myemail, "yankee17")
-        calendar = gCalMNG.getCalendar ("Default1")
+        gCalMNG.connect(myemail, "yankee17")
+        calendar = gCalMNG.getCalendar("Default1")
         gcalevents = calendar.getEvents()
         print len(gcalevents)
         gcaleventslist = []
@@ -191,7 +190,6 @@ for k,v in future_events.iteritems():
 
         try:
         #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
-            from GoogleCalendar import *
             gCalMNG = GoogleCalendarMng()
             myname = "john bragato"
             myemail = "john.bragato@gmail.com"

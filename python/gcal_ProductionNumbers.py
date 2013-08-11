@@ -24,7 +24,7 @@ def sql_query_production_numbers():
     prodcomplete_dict = {}
     for row in prodcomplete:
             tmp_dict = {}
-            tmp_dict['completion_total'] = row['completion_total']
+            tmp_dict['total'] = row['completion_total']
             tmp_dict['role'] = 'Production'
             prodcomplete_dict[row['prod_complete_dt']] = tmp_dict
 
@@ -39,7 +39,7 @@ def sql_query_production_numbers():
     retouchcomplete_dict = {}
     for row in retouchcomplete:
             tmp_dict = {}
-            tmp_dict['retouch_total'] = row['retouch_total']
+            tmp_dict['total'] = row['retouch_total']
             tmp_dict['role'] = 'Retouching'
             retouchcomplete_dict[row['retouch_complete_dt']] = tmp_dict
 
@@ -54,7 +54,7 @@ def sql_query_production_numbers():
     copycomplete_dict = {}
     for row in copycomplete:
             tmp_dict = {}
-            tmp_dict['copy_total'] = row['copy_total']
+            tmp_dict['total'] = row['copy_total']
             tmp_dict['role'] = 'Copy'
             copycomplete_dict[row['copy_complete_dt']] = tmp_dict
 
@@ -319,11 +319,12 @@ for row in stylestringsdict_consig.itervalues():
 consigcomplete_dict = {}
 for k,v in consigd.iteritems():
     consigcomplete_dict[k] = len(v)
-    consigcomplete_dict['Role'] = 'Consig_Photo'
+    consigcomplete_dict['role'] = 'Consig_Photo'
 
 
 
 for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
+[ "{} {}".format(k,v) for k,v in iter(prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict) ]
 
 
 ## First compile the Fields as key value pairs
@@ -344,69 +345,45 @@ for k,v in stylestringsdict.iteritems():
 
 ## Write CSV List to dated file for Impor t to MySQL
 #csv_write_datedOutfile(stylestrings)
-
-#count = 0
-#for k,v in future_events.iteritems():
-#    import datetime, time
-#    for value in [v]:
-#        titlekv = str(value['event_id'])
-#        desckv = str(value['event_title'])
-#        desckv = desckv.replace('&', 'And')
-#        desckv = desckv.replace('%', ' Percent')
-#        colorstyles = future_styles.get(value['event_id'])
-#        colorstyles = sorted(colorstyles)
-#        still_complete = []
-#        fashion_complete = []
-#
-#
-#        for colorstyle in colorstyles:
-#            if colorstyle[1] == 'Production Complete':
-#                complete.append(colorstyle)
-#            elif colorstyle[1] == 'Production Incomplete':
-#                incomplete.append(colorstyle)
-#        incomplete_styles = "{0} Incomplete Styles = {1}".format(len(incomplete),incomplete)
-#        complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
-#        colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
-#
-#        count_complete = len(complete)
-#        count_incomplete = len(incomplete)
-#        count_total = count_complete + count_incomplete
-#
-#        progress = count_complete/count_total*100
-#
-#
-#        sdatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(value['ev_start'])
-#        edatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(value['ev_end'])
-#        sdatekvsplit = sdatekvraw.split(",")
-#        edatekvsplit = edatekvraw.split(",")
-#        sdatekv = map(int,sdatekvsplit)
-#        edatekv = map(int,edatekvsplit)
-#        titleid = 'Event {0} -- {1}'.format(titlekv,desckv)
-#        descfull = '{0} {1} in Event {2}:\n {3}\n'.format(len(colorstyles), prod_category, titlekv, colorstyles_statuses)
-#        descfull = str(descfull)
-#        #print titleid, descfull, edatekv, prod_category, lockv
-#        count += 1
-#        #print count
-#
-#        try:
-#        #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
-#            gCalMNG = gcal_login_jb()
-#            #calendar = gCalMNG.getCalendar("Default1")
-#            gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
-#            print len(gcalevents)
-#            gcaleventslist = []
-#            for event in gcalevents:
-#                gcalevent = event.getTitle()
-#                if gcalevent == titleid:
-#                    continue
-#                else:
-#                    print event.getContent()
-#                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-#                    #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-#            ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-#            print ev
-#            calendar.addEvent (ev)
-#        except xml.parsers.expat.ExpatError:
-#        #except:
-#            print "FAILED" #+ k,v
-#        #    continue
+for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
+    count = 0
+    for k,v in iterdict.iteritems():
+        import datetime, time
+        for value in [v]:
+            titlekv = str(v['role'])
+            desckv = str(v['retouch_total'])
+            desckv = desckv.replace('&', 'And')
+            desckv = desckv.replace('%', ' Percent')
+            sdatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
+            edatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
+            sdatekvsplit = sdatekvraw.split(",")
+            edatekvsplit = edatekvraw.split(",")
+            sdatekv = map(int,sdatekvsplit)
+            edatekv = map(int,edatekvsplit)
+            titleid = '{0} -- {1}'.format(titlekv,desckv)
+            descfull = '{0} Total for {1:.10} is {2}:\n'.format(titlekv, k, desckv)
+            descfull = str(descfull)
+            count += 1
+            lockv = v['role']
+            try:
+            #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
+                gCalMNG = gcal_login_jb()
+                calendar = gCalMNG.getCalendar("ProductionNumbers")
+                gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
+                print len(gcalevents)
+                gcaleventslist = []
+                for event in gcalevents:
+                    gcalevent = event.getTitle()
+                    if gcalevent == titleid:
+                        continue
+                    else:
+                        print event.getContent()
+                        #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+                        #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+                ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+                print ev
+                calendar.addEvent (ev)
+            except xml.parsers.expat.ExpatError:
+            #except:
+                print "FAILED" #+ k,v
+        #    continue

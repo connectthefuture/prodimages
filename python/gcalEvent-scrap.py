@@ -30,18 +30,22 @@ import time
 </atom:link>
 '''
 
-EventEntry entry = ...
+event_entry = gdata.calendar.data.CalendarEventEntry()
+link_type = 'application/x-google-gadgets+xml'
+atomlink = atom.Link(link_type, "http://schemas.google.com/gCal/2005/webContent")
+atomlink.Title = "SUPER TEST"
+href = 'https://raw.github.com/relic7/prodimages/master/html_css_js/html/compiledPhotoReport.html'
+#href = 'http://l.yimg.com/j/assets/i/us/sp/v/mlb/players_l/20130405/7054.1.jpg'
+atomlink.HRef = href
+web_content = gdata.calendar.WebContent()
+web_content.url = 'https://raw.github.com/relic7/prodimages/master/html_css_js/html/compiledPhotoReport.html' #"http://www.google.com/logos/july4th06.gif"
+web_content.width = 370
+web_content.height = 530
+web_content.gadget_pref.append(gdata.calendar.data.WebContentGadgetPref(name='color', value='green'))
+atomlink.extension_elements.append(web_content)
+event_entry.link.append(atomlink)
+new_event = glogin_jb.cal_client.InsertEvent(event_entry)
 
-AtomLink link = new AtomLink("image/gif", "http://schemas.google.com/gCal/2005/webContent");
-link.Title = "Test content";
-link.HRef = "http://www.google.com/calendar/images/google-holiday.gif";
-WebContent content = new WebContent();
-content.Url = "http://www.google.com/logos/july4th06.gif";
-content.Width = 270;
-content.Height = 130;
-link.ExtensionElements.Add(content);
-entry.Links.Add(link);
-entry.Update(
 
 
 def InsertCalendar(cal_client=gcal_connect, title=titleid, description=descfull, time_zone='America/New_York', hidden=False, location=locv, color=colorflag):
