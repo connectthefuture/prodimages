@@ -342,10 +342,14 @@ for k,v in consigd.iteritems():
 
 
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
+try:
+    print stillcomplete_dict[1]
+except:
+    pass
 
 ## Write CSV List to dated file for Impor t to MySQL
 #csv_write_datedOutfile(stylestrings)
-for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict):
+for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
     count = 0
     for k,v in iterdict.iteritems():
         import datetime, time
