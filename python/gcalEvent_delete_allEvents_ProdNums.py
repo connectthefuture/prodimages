@@ -11,7 +11,7 @@ def gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17'):
 
 
 ##### RUN ####
-default_cal = gcal_login_jb().getCalendars()[0]
+default_cal = gcal_login_jb().getCalendars()[2]
 events = default_cal.getEvents()
 # Delete all Calendar Events prior to Fresh insert
 print len(events)
