@@ -143,7 +143,7 @@ for k,v in future_events.iteritems():
             elif colorstyle[1] == 'Production Incomplete':
                 incomplete.append(colorstyle)
         incomplete_styles = "{0} Incomplete Styles = {1}".format(len(incomplete),incomplete)
-        complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
+        complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete[1])
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
         count_complete = len(complete)
         count_complete += .00
@@ -176,8 +176,8 @@ for k,v in future_events.iteritems():
         except TypeError:
             lockv = str(bcurl)
 
-        sdatekvraw = '{:%Y,%m,%d,11,30,%S,00,00,00}'.format(value['ev_start'])
-        edatekvraw = '{:%Y,%m,%d,23,59,%S,00,00,00}'.format(value['ev_start'])
+        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
+        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_end'])
  #       event_ends = '{:%Y,%m,%d,%A,%A,%S,00,00,00}'.format(value['ev_end'])
         event_ends = '{:%A %B %d}'.format(value['ev_end'])
         sdatekvraw = edatekvraw.replace('07','11',2)
