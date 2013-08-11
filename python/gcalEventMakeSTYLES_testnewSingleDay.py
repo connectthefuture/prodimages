@@ -156,9 +156,9 @@ for k,v in future_events.iteritems():
         else:
             event_complete_flag = False
 
-        status = value['production_status']
+        status = str(value['production_status'])
         prod_category = str(value['prod_category'])
-        category_id = value['category_id']
+        category_id = str(value['category_id'])
 
         pmurl = "http://pm.bluefly.corp/manager/event/editevent.html?id="
         pmimgs = "http://pm.bluefly.corp/manager/event/viewproductimages.html?id="
