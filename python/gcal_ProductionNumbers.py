@@ -250,7 +250,7 @@ for row in stylestringsdict_fashion.itervalues():
     file_path = row['file_path']
     photo_date = row['photo_date']
     try:
-        dt = photo_date.replace('-', ', ')
+        dt = photo_date
         dt = "{} 00:00:00".format(dt)
         dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
@@ -281,7 +281,7 @@ for row in stylestringsdict_still.itervalues():
     file_path = row['file_path']
     photo_date = row['photo_date']
     try:
-        dt = photo_date.replace('-', ', ')
+        dt = photo_date
         dt = "{} 00:00:00".format(dt)
         dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
@@ -307,7 +307,7 @@ for row in stylestringsdict_consig.itervalues():
     file_path = row['file_path']
     photo_date = row['photo_date']
     try:
-        dt = photo_date.replace('-', ', ')
+        dt = photo_date
         dt = "{} 00:00:00".format(dt)
         dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
