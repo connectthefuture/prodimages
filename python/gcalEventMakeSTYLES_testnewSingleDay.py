@@ -139,11 +139,11 @@ for k,v in future_events.iteritems():
         complete = []
         for colorstyle in colorstyles:
             if colorstyle[1] == 'Production Complete':
-                complete.append(colorstyle)
+                complete.append(colorstyle[0])
             elif colorstyle[1] == 'Production Incomplete':
-                incomplete.append(colorstyle)
+                incomplete.append(colorstyle[0])
         incomplete_styles = "{0} Incomplete Styles = {1}".format(len(incomplete),incomplete)
-        complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete[1])
+        complete_styles = "{0} Complete Styles = {1}".format(len(complete),complete)
         colorstyles_statuses = "{0}\n{1}".format(incomplete_styles,complete_styles)
         count_complete = len(complete)
         count_complete += .00
