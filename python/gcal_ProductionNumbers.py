@@ -350,7 +350,10 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict):
     for k,v in iterdict.iteritems():
         import datetime, time
         for value in [v]:
-            titlekv = str(v['role'])
+            try:
+                titlekv = str(v['role'])
+            except:
+                titlekv = 'Studio_Shots'
             desckv = str(v['total'])
             desckv = desckv.replace('&', 'And')
             desckv = desckv.replace('%', ' Percent')
