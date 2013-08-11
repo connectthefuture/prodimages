@@ -20,5 +20,9 @@ while len(events) >= 1:
         event.delete()
         events = default_cal.getEvents()
         print len(events)
-    default_cal = gcal_login_jb().getCalendars()[0]
-    events = default_cal.getEvents()
+    try:
+        default_cal = gcal_login_jb().getCalendars()[0]
+        events = default_cal.getEvents()
+    except AttributeError:
+        print "Error"
+        pass
