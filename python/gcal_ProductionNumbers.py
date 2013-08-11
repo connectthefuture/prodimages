@@ -252,7 +252,7 @@ for row in stylestringsdict_fashion.itervalues():
     try:
         dt = photo_date
         dt = "{} 00:00:00".format(dt)
-        dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+        dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
         photo_date = dt
     except:
@@ -283,7 +283,7 @@ for row in stylestringsdict_still.itervalues():
     try:
         dt = photo_date
         dt = "{} 00:00:00".format(dt)
-        dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+        dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
         photo_date = dt
     except:
@@ -309,7 +309,7 @@ for row in stylestringsdict_consig.itervalues():
     try:
         dt = photo_date
         dt = "{} 00:00:00".format(dt)
-        dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+        dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
         photo_date = dt
     except:
