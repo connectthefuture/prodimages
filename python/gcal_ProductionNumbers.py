@@ -297,9 +297,6 @@ for row in stylestringsdict_still.itervalues():
         dt = "{} 00:00:00".format(dt)
         dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
-        dateraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(dt)
-        dateraw = dateraw.split(",")
-        dt = map(int,dateraw)
         photo_date = dt
     except:
         pass
