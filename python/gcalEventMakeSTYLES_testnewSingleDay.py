@@ -176,8 +176,8 @@ for k,v in future_events.iteritems():
         except TypeError:
             lockv = str(bcurl)
 
-        sdatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
-        edatekvraw = '{:%Y,%m,%d,%H,%M,%S,00,00,00}'.format(value['ev_start'])
+        sdatekvraw = '{:%Y,%m,%d,11,30,%S,00,00,00}'.format(value['ev_start'])
+        edatekvraw = '{:%Y,%m,%d,23,59,%S,00,00,00}'.format(value['ev_start'])
         event_ends = '{:%Y,%m,%d,%B,%A,%S,00,00,00}'.format(value['ev_end'])
         sdatekvraw = edatekvraw.replace('07','11',2)
         edatekvraw = edatekvraw.replace('07','23',2)
