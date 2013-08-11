@@ -296,30 +296,30 @@ for k,v in stilld.iteritems():
 #    stillcomplete_dict['Role'] = 'Still_Photo'
 #    fashioncomplete_dict['shot_count'] = len(v)
 
-#####  Consignment ######
-rootdir_consig = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment'
-walkedout_consig = recursive_dirlist(rootdir_consig)
-#### Parse Walked Directory Paths Output stylestringssdict
-stylestringsdict_consig= walkeddir_parse_stylestrings_out(walkedout_consig)
-### Get and Collect Counts of fashion and still sets by date
-consigd = defaultdict(list)
-for row in stylestringsdict_consig.itervalues():
-    file_path = row['file_path']
-    photo_date = row['photo_date']
-    try:
-        dt = photo_date
-        dt = "{} 00:00:00".format(dt)
-        dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-        #### 5 digit date
-        photo_date = dt
-    except:
-        pass
-    consigd[photo_date].append(file_path)
-## Count the Grouped Files
-consigcomplete_dict = {}
-for k,v in consigd.iteritems():
-    consigcomplete_dict[k] = len(v)
-    consigcomplete_dict['role'] = 'Consig_Photo'
+######  Consignment ######
+#rootdir_consig = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment'
+#walkedout_consig = recursive_dirlist(rootdir_consig)
+##### Parse Walked Directory Paths Output stylestringssdict
+#stylestringsdict_consig= walkeddir_parse_stylestrings_out(walkedout_consig)
+#### Get and Collect Counts of fashion and still sets by date
+#consigd = defaultdict(list)
+#for row in stylestringsdict_consig.itervalues():
+#    file_path = row['file_path']
+#    photo_date = row['photo_date']
+#    try:
+#        dt = photo_date
+#        dt = "{} 00:00:00".format(dt)
+#        dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+#        #### 5 digit date
+#        photo_date = dt
+#    except:
+#        pass
+#    consigd[photo_date].append(file_path)
+### Count the Grouped Files
+#consigcomplete_dict = {}
+#for k,v in consigd.iteritems():
+#    consigcomplete_dict[k] = len(v)
+#    consigcomplete_dict['role'] = 'Consig_Photo'
 
 
 
