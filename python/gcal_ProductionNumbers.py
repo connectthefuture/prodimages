@@ -340,6 +340,12 @@ for row in stylestringsdict_still.itervalues():
         if type(dt) == datetime.datetime:
             photo_date = dt
             stilld[photo_date].append(file_path)
+        else:
+            dt = ''
+            dt = "2000-01-01 00:00:00".format(dt)
+            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+            photo_date = dt
+            stilld[photo_date].append(file_path)
     except:
         pass
 
