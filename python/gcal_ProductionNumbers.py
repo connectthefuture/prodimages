@@ -381,42 +381,45 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, sti
                 titlekv = str(v['role'])
             except:
                 titlekv = 'Studio_Shots'
-            desckv = str(v['total'])
-            desckv = desckv.replace('&', 'And')
-            desckv = desckv.replace('%', ' Percent')
-            sdatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
-            edatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
-            sdatekvsplit = sdatekvraw.split(",")
-            edatekvsplit = edatekvraw.split(",")
-            sdatekv = map(int,sdatekvsplit)
-            edatekv = map(int,edatekvsplit)
-            titleid = '{0} -- {1}'.format(titlekv,desckv)
-            descfull = '{0} Total for {1} is {2}:\n'.format(titlekv, k, desckv)
-            descfull = str(descfull)
-            count += 1
-            lockv = v['role']
             try:
-            #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
-                from GoogleCalendar import *
-                myname = "john bragato"
-                myemail = "john.bragato@gmail.com"
-                gCalMNG = gcal_login_jb()
-                calendar = gCalMNG.getCalendar("ProductionNumbers")
-                gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
-                print len(gcalevents)
-                gcaleventslist = []
-                for event in gcalevents:
-                    gcalevent = event.getTitle()
-                    if gcalevent == titleid:
-                        continue
-                    else:
-                        print event.getContent()
-                        #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-                        #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
-                ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
-                print ev
-                calendar.addEvent(ev)
-            except xml.parsers.expat.ExpatError:
-            #except:
-                print "FAILED" #+ k,v
+                desckv = str(v['total'])
+                desckv = desckv.replace('&', 'And')
+                desckv = desckv.replace('%', ' Percent')
+                sdatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
+                edatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
+                sdatekvsplit = sdatekvraw.split(",")
+                edatekvsplit = edatekvraw.split(",")
+                sdatekv = map(int,sdatekvsplit)
+                edatekv = map(int,edatekvsplit)
+                titleid = '{0} -- {1}'.format(titlekv,desckv)
+                descfull = '{0} Total for {1} is {2}:\n'.format(titlekv, k, desckv)
+                descfull = str(descfull)
+                count += 1
+                lockv = v['role']
+                try:
+                #gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv)
+                    from GoogleCalendar import *
+                    myname = "john bragato"
+                    myemail = "john.bragato@gmail.com"
+                    gCalMNG = gcal_login_jb()
+                    calendar = gCalMNG.getCalendar("ProductionNumbers")
+                    gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
+                    print len(gcalevents)
+                    gcaleventslist = []
+                    for event in gcalevents:
+                        gcalevent = event.getTitle()
+                        if gcalevent == titleid:
+                            continue
+                        else:
+                            print event.getContent()
+                            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+                            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
+                    ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
+                    print ev
+                    calendar.addEvent(ev)
+                except xml.parsers.expat.ExpatError:
+                #except:
+                    print "FAILED" #+ k,v
+            except ValueError:
+                print "ValueError Key: {} Value: {}".format(k,v)
         #    continue
