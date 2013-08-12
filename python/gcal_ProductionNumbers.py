@@ -256,17 +256,18 @@ stylestringsdict_fashion = walkeddir_parse_stylestrings_out(walkedout_fashion)
 ### Get and Collect Counts of fashion and still sets by date
 fashiond = defaultdict(list)
 for row in stylestringsdict_fashion.itervalues():
-    file_path = row['file_path']
-    photo_date = row['photo_date']
     try:
+        file_path = row['file_path']
+        photo_date = row['photo_date']
         dt = photo_date
         dt = "{} 00:00:00".format(dt)
         dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
-        photo_date = dt
+        if type(dt) == datetime.datetime:
+            photo_date = dt
+            fashiond[photo_date].append(file_path)
     except:
         pass
-    fashiond[photo_date].append(file_path)
 ## Count the Grouped Files
 # fashioncomplete_dict = defaultdict(int)
 # for k in fashiond:
@@ -290,17 +291,19 @@ stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
 ### Now the still sets counts by date
 stilld = defaultdict(list)
 for row in stylestringsdict_still.itervalues():
-    file_path = row['file_path']
-    photo_date = row['photo_date']
     try:
+        file_path = row['file_path']
+        photo_date = row['photo_date']
         dt = photo_date
         dt = "{} 00:00:00".format(dt)
         dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
         #### 5 digit date
-        photo_date = dt
+        if type(dt) == datetime.datetime:
+            photo_date = dt
+            stilld[photo_date].append(file_path)
     except:
         pass
-    stilld[photo_date].append(file_path)
+
 ## Count the Grouped Files
 stillcomplete_dict = {}
 for k,v in stilld.iteritems():
