@@ -99,11 +99,42 @@ def sql_query_production_numbers():
         dtsplit = datetime.datetime.strptime(dtsplit, "%Y-%m-%d %H:%M:%S")
         samples_received_dict[dtsplit] = tmp_dict
 
-
+    ### Get Sample InHouse Totals and Build Dict of key value pairs
+    querymake_samples_inhouse = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as sample_total,
+    to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD') AS sample_dt,
+    POMGR.PRODUCT_COLOR.PRODUCTION_STATUS as production_status
+    FROM POMGR.PRODUCT_COLOR
+    LEFT JOIN POMGR.SAMPLE ON POMGR.PRODUCT_COLOR.ID = POMGR.SAMPLE.PRODUCT_COLOR_ID
+    LEFT JOIN POMGR.SAMPLE_TRACKING ON POMGR.SAMPLE.ID = POMGR.SAMPLE_TRACKING.SAMPLE_ID
+    LEFT JOIN POMGR.LK_SAMPLE_STATUS ON POMGR.SAMPLE_TRACKING.STATUS_ID = POMGR.LK_SAMPLE_STATUS.ID
+    WHERE (POMGR.SAMPLE_TRACKING.CREATE_DT > TRUNC(SysDate - 30)
+    AND POMGR.LK_SAMPLE_STATUS.NAME = 'Scanned In at Bluefly'
+    AND POMGR.PRODUCT_COLOR.PRODUCTION_STATUS = 'Production_Incomplete')
+    GROUP BY POMGR.PRODUCT_COLOR.PRODUCTION_STATUS,
+    to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')
+    ORDER BY to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD') DESC"""
+    samples_inhouse = connection.execute(querymake_samples_inhouse)
+    samples_inhouse_tmpdict = {}
+    for row in samples_inhouse:
+        tmp_dict = {}
+        tmp_dict['total'] = row['sample_total']
+        tmp_dict['role'] = 'Samples_Inhouse'
+        samples_inhouse_tmpdict[row['sample_dt']] = tmp_dict
+## Super Coersion of nums and year due to time stamp occasionally on copy dates
+    samples_inhouse_dict = {}
+    for k,v in samples_inhouse_tmpdict.iteritems():
+        tmp_dict = {}
+        tmp_dict['total'] = v['total']
+        tmp_dict['role'] = v['role']
+        dt = str(datetime.datetime.strptime(str(k), "%Y-%m-%d %H:%M:%S"))
+        dtsplit = dt.replace('00','', 2)
+        dtsplit = "20{2:.2}-{1:.2}-{0:.2} 00:00:00".format(dtsplit[:2],dtsplit[3:5],dtsplit[6:8])
+        dtsplit = datetime.datetime.strptime(dtsplit, "%Y-%m-%d %H:%M:%S")
+        samples_inhouse_dict[dtsplit] = tmp_dict
 
 
     connection.close()
-    return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict
+    return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, samples_inhouse_dict
 
 
 ## Walk Root Directory and Return List or all Files in all Subdirs too
@@ -281,7 +312,7 @@ from collections import defaultdict
 regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
 
 ### Query DB for Prod,Retouch and Copy counts by date
-prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict = sql_query_production_numbers()
+prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, samples_inhouse_dict = sql_query_production_numbers()
 
 #print prodcomplete_dict
 ######  Recursively search Photo Folders and get counts of shots by date
@@ -419,7 +450,7 @@ except:
 #csv_write_datedOutfile(stylestrings)
 for iterdict in (prodcomplete_dict, retouchcomplete_dict,
                  copycomplete_dict, stillcomplete_dict,
-                 fashioncomplete_dict, samples_received_dict):
+                 fashioncomplete_dict, samples_received_dict, samples_inhouse_dict):
     count = 0
     for k,v in iterdict.iteritems():
         import datetime, time
