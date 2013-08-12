@@ -46,7 +46,7 @@ mkdir $errorFolder
 find $userDropFolders -type f -iname \*.* | grep ' ' | xargs -I '{}' mv -f '{}' $errorFolder
 
 #### Run Tag Retouched Photos with Retoucher Name Test if using
-if [[ "$userDropFolders" -eq "/mnt/johnb/Public/Drop_FinalFilesOnly" ]];
+if [[ "$userDropFolders" = "/mnt/johnb/Public/Drop_FinalFilesOnly" ]];
 then
     tmpArch=/mnt/johnb/Desktop
     /usr/local/batchRunScripts/TAG_fromDirNameGeneric.sh
