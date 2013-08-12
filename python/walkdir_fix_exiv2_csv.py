@@ -179,6 +179,7 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
                     dest_metadata.write()
                 except IOError:
                     print "Bad Image File {}".format(zimages_filepath)
+                    pass
             return zimages_filepath
 
 
