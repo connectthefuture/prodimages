@@ -65,8 +65,27 @@ def sql_query_production_numbers():
             tmp_dict['role'] = 'Copy'
             copycomplete_dict[row['copy_complete_dt']] = tmp_dict
 
+    ### Get Sample Received Totals and Build Dict of key value pairs
+    querymake_sample_received = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as sample_total,
+    MAX(to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')) AS sample_dt
+    FROM POMGR.PRODUCT_COLOR
+    LEFT JOIN POMGR.SAMPLE ON POMGR.PRODUCT_COLOR.ID = POMGR.SAMPLE.PRODUCT_COLOR_ID
+    LEFT JOIN POMGR.SAMPLE_TRACKING ON POMGR.SAMPLE.ID = POMGR.SAMPLE_TRACKING.SAMPLE_ID
+    LEFT JOIN POMGR.LK_SAMPLE_STATUS ON POMGR.SAMPLE_TRACKING.STATUS_ID = POMGR.LK_SAMPLE_STATUS.ID
+    WHERE (POMGR.SAMPLE_TRACKING.CREATE_DT >= TRUNC(SysDate - 25)
+    AND POMGR.LK_SAMPLE_STATUS.NAME = 'Scanned In at Bluefly')
+    GROUP BY to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')
+    ORDER BY to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD') DESC"""
+    samples_received = connection.execute(querymake_sample_received)
+    samples_received_dict = {}
+    for row in samples_received:
+            tmp_dict = {}
+            tmp_dict['total'] = row['sample_total']
+            tmp_dict['role'] = 'Samples_Received'
+            samples_received_dict[row['sample_dt']] = tmp_dict
+
     connection.close()
-    return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict
+    return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict
 
 
 ## Walk Root Directory and Return List or all Files in all Subdirs too
@@ -244,7 +263,7 @@ from collections import defaultdict
 regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
 
 ### Query DB for Prod,Retouch and Copy counts by date
-prodcomplete_dict, retouchcomplete_dict, copycomplete_dict = sql_query_production_numbers()
+prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict = sql_query_production_numbers()
 
 #print prodcomplete_dict
 ######  Recursively search Photo Folders and get counts of shots by date
@@ -374,7 +393,9 @@ except:
 
 ## Write CSV List to dated file for Impor t to MySQL
 #csv_write_datedOutfile(stylestrings)
-for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, stillcomplete_dict, fashioncomplete_dict):
+for iterdict in (prodcomplete_dict, retouchcomplete_dict,
+                 copycomplete_dict, stillcomplete_dict,
+                 fashioncomplete_dict, samples_received_dict):
     count = 0
     for k,v in iterdict.iteritems():
         import datetime, time
