@@ -15,7 +15,7 @@ def sql_query_production_numbers():
 
     ### Get Production Complete Totals and Build Dict of key value pairs
     querymake_prodnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
-    POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
+    to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 25)
     GROUP BY to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD')
@@ -30,7 +30,7 @@ def sql_query_production_numbers():
 
     ### Get Retouching Complete Totals and Build Dict of key value pairs
     querymake_retouchnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
-    POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
+    to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT, 'YYYY-MM-DD') as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 25)
     GROUP BY to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT, 'YYYY-MM-DD')
@@ -52,7 +52,7 @@ def sql_query_production_numbers():
 #
     ### Get Copy Complete Totals and Build Dict of key value pairs
     querymake_copynumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
-    POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
+    to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 25)
     GROUP BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD')
@@ -67,7 +67,7 @@ def sql_query_production_numbers():
 
     ### Get Sample Received Totals and Build Dict of key value pairs
     querymake_sample_received = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as sample_total,
-    POMGR.SAMPLE_TRACKING.CREATE_DT AS sample_dt
+    to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD') AS sample_dt
     FROM POMGR.PRODUCT_COLOR
     LEFT JOIN POMGR.SAMPLE ON POMGR.PRODUCT_COLOR.ID = POMGR.SAMPLE.PRODUCT_COLOR_ID
     LEFT JOIN POMGR.SAMPLE_TRACKING ON POMGR.SAMPLE.ID = POMGR.SAMPLE_TRACKING.SAMPLE_ID
