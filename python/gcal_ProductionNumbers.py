@@ -432,7 +432,7 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict,
                 edatekvsplit = edatekvraw.split(",")
                 sdatekv = map(int,sdatekvsplit)
                 edatekv = map(int,edatekvsplit)
-                titleid = '{0} -- {1}'.format(titlekv,desckv)
+                titleid = '{0} -- {1}'.format(desckv,titlekv)
 #                if v['total'] < 200:
 #                    congrats = '<>'
 #                elif v['total'] >= 200:
