@@ -371,12 +371,12 @@ for row in stylestringsdict_still.itervalues():
         if type(dt) == datetime.datetime:
             photo_date = dt
             stilld[photo_date].append(file_path)
-        else:
-            dt = ''
-            dt = "2000-01-01 00:00:00".format(dt)
-            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-            photo_date = dt
-            stilld[photo_date].append(file_path)
+#        else:
+#            dt = ''
+#            dt = "2000-01-01 00:00:00".format(dt)
+#            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+#            photo_date = dt
+#            stilld[photo_date].append(file_path)
     except:
         pass
 
@@ -463,8 +463,8 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict,
                 desckv = str(v['total'])
                 desckv = desckv.replace('&', 'And')
                 desckv = desckv.replace('%', ' Percent')
-                sdatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
-                edatekvraw = '{:%Y,%m,%d,00,00,00,00,00,00}'.format(k)
+                sdatekvraw = '{:%Y,%m,%d,00,01,00,00,00,00}'.format(k)
+                edatekvraw = '{:%Y,%m,%d,23,50,00,00,00,00}'.format(k)
                 sdatekvsplit = sdatekvraw.split(",")
                 edatekvsplit = edatekvraw.split(",")
                 sdatekv = map(int,sdatekvsplit)
