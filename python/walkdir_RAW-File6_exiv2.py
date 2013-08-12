@@ -23,7 +23,7 @@ def recursive_dirlist(rootdir):
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
-    regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+    regex = re.compile(r'.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
@@ -33,9 +33,10 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 file_path = line
                 filename = file_path.split('/')[-1]
                 colorstyle = filename.split('_')[0]
-                alt_ext = file_path.split('_')[-1]
-                alt = alt_ext.split('.')[0]
-                ext = alt_ext.split('.')[-1]
+                alt = file_path.split('_')[-2]
+                outtake_num = file_path.split('_')[-1]
+                outtake_num = outtake_num.split('.')[0]
+                ext = filename.split('.')[-1]
                 try:
                     photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
                 except KeyError:
@@ -256,10 +257,10 @@ import os,sys,re
 rootdir = sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
-regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+#regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
-
-
+#regex = re.compile(r'^/.+?/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+regex = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
 ## Parse Walked Directory Paths Output stylestringssdict
 stylestringsdict = walkeddir_parse_stylestrings_out(walkedout)
 
@@ -269,10 +270,10 @@ stylestringsdict = walkeddir_parse_stylestrings_out(walkedout)
 
 
 ## Create Dir Struct under ZIMAGES_1 if dir doesnt Exist and make/copy Jpeg Thumbs files to it
-for k,v in stylestringsdict.iteritems():
-    import os,sys,shutil, re
-    pathname = k
-    make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname)
+#for k,v in stylestringsdict.iteritems():
+    #import os,sys,shutil, re
+    #pathname = k
+    #make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname)
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy
@@ -285,7 +286,7 @@ for k,v in stylestringsdict.iteritems():
     dfill['photo_date'] = v['photo_date']
     file_path = k
     file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-    file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
+    file_path = file_path.replace('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/ON_FIGURE/')
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     fulldict[k] = dfill
@@ -297,13 +298,17 @@ for k,v in fulldict.iteritems():
 
         mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         connection = mysql_engine.connect()
-
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
+        regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
+
+        if re.findall(regex_photoselects, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+            print "Successful Insert production_raw_onfigure --> {0}".format(k)
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert Push_Photoselecs --> {0}".format(k)
