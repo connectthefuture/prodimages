@@ -433,7 +433,14 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict,
                 sdatekv = map(int,sdatekvsplit)
                 edatekv = map(int,edatekvsplit)
                 titleid = '{0} -- {1}'.format(titlekv,desckv)
-                descfull = '{0} Total for {1} is {2}:\n'.format(titlekv, k, desckv)
+                if v['total'] < 200:
+                    congrats = '<>'
+                elif v['total'] >= 200:
+                    if v['total'] <= 300:
+                        congrats = '<-->'
+                    else:
+                        congrats = '<-*->'
+                descfull = '{0} Total for {1} is {2} {3}\n'.format(titlekv, srt(k)[:10], congrats, desckv)
                 descfull = str(descfull)
                 count += 1
                 lockv = v['role']
