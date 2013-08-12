@@ -403,7 +403,10 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, sti
                     myemail = "john.bragato@gmail.com"
                     gCalMNG = gcal_login_jb()
                     calendar = gCalMNG.getCalendar("ProductionNumbers")
-                    gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
+                    try:
+                        gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
+                    except AttributeError:
+                        pass
                     print len(gcalevents)
                     gcaleventslist = []
                     for event in gcalevents:
