@@ -248,7 +248,8 @@ prodcomplete_dict, retouchcomplete_dict, copycomplete_dict = sql_query_productio
 
 #print prodcomplete_dict
 ######  Recursively search Photo Folders and get counts of shots by date
-rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
+## rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
+rootdir_fashion = '/mnt/Post_Ready/eFashionPush'
 #####  Walk rootdir tree compile dict of Walked Directory
 walkedout_fashion = recursive_dirlist(rootdir_fashion)
 #### Parse Walked Directory Paths Output stylestringssdict
@@ -283,7 +284,8 @@ for k,v in fashiond.iteritems():
 ######
 ####
 ######  Recursively search Photo Folders and get counts of shots by date
-rootdir_still = '/mnt/Post_Ready/Retouch_Still'
+## rootdir_still = '/mnt/Post_Ready/Retouch_Still'
+rootdir_still = '/mnt/Post_Ready/aPhotoPush'
 #####  Walk rootdir tree compile dict of Walked Directory
 walkedout_still = recursive_dirlist(rootdir_still)
 #### Parse Walked Still Directory Paths Output stylestringssdict
