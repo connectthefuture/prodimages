@@ -440,7 +440,7 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict,
 #                        congrats = '<-->'
 #                    else:
 #                        congrats = '<-*->'
-                descfull = '{0} Total for {1} is {2}\n'.format(titlekv, srt(k)[:10], desckv)
+                descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
                 descfull = str(descfull)
                 count += 1
                 lockv = v['role']
