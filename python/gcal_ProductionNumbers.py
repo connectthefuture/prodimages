@@ -474,6 +474,8 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict,
                     ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
                     print ev
                     calendar.addEvent(ev)
+                except AttributeError:
+                    print "AttributeError"
                 except xml.parsers.expat.ExpatError:
                 #except:
                     print "FAILED" #+ k,v
