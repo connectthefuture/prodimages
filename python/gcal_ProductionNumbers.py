@@ -490,18 +490,18 @@ for iterdict in (prodcomplete_dict, retouchcomplete_dict,
                     calendar = gCalMNG.getCalendar("ProductionNumbers")
                     try:
                         gcalevents = gCalMNG.getCalendar("ProductionNumbers").getEvents()
+                        print len(gcalevents)
+                        gcaleventslist = []
+                        for event in gcalevents:
+                            gcalevent = event.getTitle()
+                            if gcalevent == titleid:
+                                continue
+                            else:
+                                print event.getContent()
+                                #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
+                                #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
                     except AttributeError:
                         pass
-                    print len(gcalevents)
-                    gcaleventslist = []
-                    for event in gcalevents:
-                        gcalevent = event.getTitle()
-                        if gcalevent == titleid:
-                            continue
-                        else:
-                            print event.getContent()
-                            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getStartTime()))
-                            #print time.strftime("%Y-%m-%dT%H:%M:%S" , time.localtime(event.getEndTime()))
                     ev = newEvent(myname, myemail, titleid, descfull, lockv, time.mktime(sdatekv), time.mktime(edatekv))
                     print ev
                     calendar.addEvent(ev)
