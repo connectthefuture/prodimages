@@ -355,4 +355,18 @@ def sql_query_production_numbers():
             tmp_dict['role'] = 'Samples_Received'
             samples_received_dict[row['sample_dt']] = tmp_dict
 
+    querymake_copynumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
+    POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_complete_dt
+    FROM POMGR.PRODUCT_COLOR
+    WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 25)
+    GROUP BY POMGR.PRODUCT_COLOR.COPY_READY_DT
+    ORDER BY POMGR.PRODUCT_COLOR.COPY_READY_DT DESC"""
+    copycomplete = connection.execute(querymake_copynumbers)
+    copycomplete_dict = {}
+    for row in copycomplete:
+        tmp_dict = {}
+        tmp_dict['total'] = row['copy_total']
+        tmp_dict['role'] = 'Copy'
+        copycomplete_dict[row['copy_complete_dt']] = tmp_dict
+
 #
