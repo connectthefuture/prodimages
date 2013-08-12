@@ -15,11 +15,11 @@ def sql_query_production_numbers():
 
     ### Get Production Complete Totals and Build Dict of key value pairs
     querymake_prodnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
-    to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') as prod_complete_dt
+    POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
     WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 25)
-    GROUP BY to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD')
-    ORDER BY to_date(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') DESC"""
+    GROUP BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
+    ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
     for row in prodcomplete:
