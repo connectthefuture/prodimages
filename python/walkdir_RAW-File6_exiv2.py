@@ -24,6 +24,7 @@ def recursive_dirlist(rootdir):
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
     regex = re.compile(r'.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+    regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
@@ -38,14 +39,23 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 outtake_num = outtake_num.split('.')[0]
                 ext = filename.split('.')[-1]
                 try:
-                    photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-                except KeyError:
-                    try:
-                        photo_date = get_exif(file_path)['DateTime'][:10]
-                    except KeyError:
-                        photo_date = '0000-00-00'
+                    path_date = file_path.split('/')[4][:6]
+                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
+                    if re.findall(regex_date, path_date):
+                        photo_date = path_date
+                    else:
+                        try:
+                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                        except KeyError:
+                            try:
+                                photo_date = get_exif(file_path)['DateTime'][:10]
+                            except KeyError:
+                                photo_date = '0000-00-00'
                 except AttributeError:
-                        photo_date = '0000-00-00'
+                    photo_date = '0000-00-00'
+                except IOError:
+                    print "IOError on {0}".format(line)
+                    photo_date = '0000-00-00'
                 photo_date = str(photo_date)
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
@@ -131,12 +141,13 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
     import glob, os, re
     size = 600, 720
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
-    zimages_root = '/mnt/Post_Ready/zImages_1'
+    regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPG]{3}$')
+    zimages_root = '/mnt/Production_Raw/.zImages_1'
     test_zimages = '/'.join(pathname.split('/')[:4])
     if test_zimages == zimages_root:
         pass
-    elif re.findall(regex_jpeg, pathname):
-        zimages_root = '/mnt/Post_Ready/zImages_1'
+    elif re.findall(regex_productionraw_Exports, pathname):
+        zimages_root = '/mnt/Production_Raw/.zImages_1'
     ## If input variable is a single File Create 1 Thumb
         if os.path.isfile(pathname):
             #try:
@@ -261,6 +272,7 @@ walkedout = recursive_dirlist(rootdir)
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 #regex = re.compile(r'^/.+?/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
 regex = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPG]{3}$')
 ## Parse Walked Directory Paths Output stylestringssdict
 stylestringsdict = walkeddir_parse_stylestrings_out(walkedout)
 
@@ -285,8 +297,8 @@ for k,v in stylestringsdict.iteritems():
     dfill['colorstyle'] = v['colorstyle']
     dfill['photo_date'] = v['photo_date']
     file_path = k
-    file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-    file_path = file_path.replace('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/ON_FIGURE/')
+    file_path = file_path.replace('/mnt/Post_Ready/.zImages_1/', '/studio_thumbs/')
+    file_path = file_path.replace('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/studio_raw/')
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     fulldict[k] = dfill
@@ -300,23 +312,29 @@ for k,v in fulldict.iteritems():
         connection = mysql_engine.connect()
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+        regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[CR2]{3}$')
+        regex_productionraw_jpg = re.compile(r'^/.+?Raw/\.zImages_1/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
-
+## ProdRaw RAW
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert production_raw_onfigure --> {0}".format(k)
+## ProdRaw Thumbs
+        if re.findall(regex_photoselects, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+            print "Successful Insert production_raw_onfigure --> {0}".format(k)
+## PostReady Daily Selects To get images for Retouching     
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert Push_Photoselecs --> {0}".format(k)
-
+## PostReady Archived HiRez Selects
         elif re.findall(regex_postreadyoriginal, sqlinsert_choose_test):
             connection.execute("""INSERT INTO post_ready_original (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert to Post_Ready_Originals --> {0}".format(k)
-
+## Post_Ready zImages Thumbs
         elif re.findall(regex_zimages, sqlinsert_choose_test):
             connection.execute("""INSERT INTO zimages1_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert to Zimages --> {0}".format(k)
