@@ -51,6 +51,9 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                                 photo_date = get_exif(file_path)['DateTime'][:10]
                             except KeyError:
                                 photo_date = '0000-00-00'
+                        except IOError:
+                            photo_date = '0000-00-00'
+                            print "IOError on {0}".format(line)
                 except AttributeError:
                     photo_date = '0000-00-00'
                 except IOError:
