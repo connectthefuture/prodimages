@@ -306,7 +306,7 @@ for k,v in fulldict.iteritems():
         regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
 
-        if re.findall(regex_photoselects, sqlinsert_choose_test):
+        if re.findall(regex_productionraw, sqlinsert_choose_test):
             connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert production_raw_onfigure --> {0}".format(k)
         if re.findall(regex_photoselects, sqlinsert_choose_test):
