@@ -20,10 +20,11 @@ def recursive_dirlist(rootdir):
 
 
 ###
+###
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
-    regex = re.compile(r'.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+    regex = re.compile(r'.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[CR2]{3}$')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
@@ -38,14 +39,23 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 outtake_num = outtake_num.split('.')[0]
                 ext = filename.split('.')[-1]
                 try:
-                    photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-                except KeyError:
-                    try:
-                        photo_date = get_exif(file_path)['DateTime'][:10]
-                    except KeyError:
-                        photo_date = '0000-00-00'
+                    path_date = file_path.split('/')[4][:6]
+                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
+                    if re.findall(regex_date, path_date):
+                        photo_date = path_date
+                    else:
+                        try:
+                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                        except KeyError:
+                            try:
+                                photo_date = get_exif(file_path)['DateTime'][:10]
+                            except KeyError:
+                                photo_date = '0000-00-00'
                 except AttributeError:
-                        photo_date = '0000-00-00'
+                    photo_date = '0000-00-00'
+                except IOError:
+                    print "IOError on {0}".format(line)
+                    photo_date = '0000-00-00'
                 photo_date = str(photo_date)
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
@@ -260,7 +270,7 @@ walkedout = recursive_dirlist(rootdir)
 #regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 #regex = re.compile(r'^/.+?/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
-regex = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+regex = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[CR2]{3}$')
 ## Parse Walked Directory Paths Output stylestringssdict
 stylestringsdict = walkeddir_parse_stylestrings_out(walkedout)
 
@@ -300,7 +310,7 @@ for k,v in fulldict.iteritems():
         connection = mysql_engine.connect()
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+        regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[CR2]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
