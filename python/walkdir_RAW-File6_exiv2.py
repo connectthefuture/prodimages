@@ -214,7 +214,7 @@ def subproc_magick_thumbs_600720(file,destdir):
                 "jpeg:",
                 file,
                 "-size",
-                "3744x5616",
+                "600x720",
                 "-colorspace",
                 "rgb",
                 "-adaptive-sharpen",
@@ -226,7 +226,7 @@ def subproc_magick_thumbs_600720(file,destdir):
                 "-colorspace",
                 "srgb",
                 "-quality",
-                "100",
+                "75",
                 "-thumbnail",
                 outsize,
                 outfile
