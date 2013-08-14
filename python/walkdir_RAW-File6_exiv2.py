@@ -116,7 +116,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
                 file_path_reletive = file_path.replace('JPG', 'jpg')
                 ## Format CSV Rows
-                row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
+                row = "{0},{1},{2},{3},{4}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
                 print row
                 stylestrings.append(row)
             except IOError:
