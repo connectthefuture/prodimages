@@ -1,6 +1,6 @@
 #!/bin/bash
 . ~/.bash_profile
-Today=`date +%Y-%m-%d-%H\:%M`
+Today=`date +%Y%m%d%H%M`
 batchDoneDate=`date +%Y%b%d`
 
 dropBase=/mnt/Post_Complete/Complete_to_Load
@@ -10,8 +10,9 @@ completeArch=/mnt/Post_Complete/Completed_Archive/Uploaded
 cd $dropBase
 ## make and go to Base folder for portability
 
-mkdir magickBase
-magickBaseR=magickBase/
+magickBase=magickBase_"$Today"
+mkdir magickBase_"$Today"
+magickBaseR=magickBase_"$Today"/
 cd $magickBaseR
 magickBase=`pwd`
 
