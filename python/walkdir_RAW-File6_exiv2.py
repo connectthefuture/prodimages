@@ -285,10 +285,10 @@ stylestringsdict = walkeddir_parse_stylestrings_out(walkedout)
 
 
 ## Create Dir Struct under ZIMAGES_1 if dir doesnt Exist and make/copy Jpeg Thumbs files to it
-#for k,v in stylestringsdict.iteritems():
-    #import os,sys,shutil, re
-    #pathname = k
-    #make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname)
+for k,v in stylestringsdict.iteritems():
+    import os,sys,shutil, re
+    pathname = k
+    make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname)
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy
