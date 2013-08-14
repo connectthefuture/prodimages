@@ -83,8 +83,8 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 try:
                     path_date = file_path.split('/')[6][:6]
                     path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
-                if re.findall(regex_date, path_date):
-                    photo_date = path_date
+                    if re.findall(regex_date, path_date):
+                        photo_date = path_date
                 else:
                     try:
                         photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
