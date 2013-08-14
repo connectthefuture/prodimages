@@ -123,8 +123,35 @@ def get_dbinfo_for_metatags_singlefile(f):
     return metafield_dict
     #return listed
 
+def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
+    from PIL import Image
+    import pyexiv2
+    # Read EXIF data to initialize
+    image_metadata = pyexiv2.ImageMetadata(image_filepath)
+    image_metadata.read()
+    # Add and Write new Tag to File
+    image_metadata[exiftag] = exifvalue
+    image_metadata.write()
+    return image_filepath
 
 
+def get_exif_metadata_value(image_filepath, exiftag=None, exifvalue=None):
+    from PIL import Image
+    import pyexiv2
+    if exifvalue = None:
+        
+        # Read EXIF data to initialize
+        image_metadata = pyexiv2.ImageMetadata(image_filepath)
+        metadata = image_metadata.read()
+        # Add and Write new Tag to File
+        exifvalue = metadata[exiftag]
+        # image_metadata[exiftag] = exifvalue
+        # image_metadata.write()
+    else:
+        print "Not Yet Built"
+    return image_filepath
+    
+    
 ##################### Begin CMDS ##############
 
 import sys

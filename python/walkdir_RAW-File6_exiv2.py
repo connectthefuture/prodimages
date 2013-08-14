@@ -85,17 +85,17 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                     path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
                     if re.findall(regex_date, path_date):
                         photo_date = path_date
-                else:
-                    try:
-                        photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-                    except KeyError:
+                    else:
                         try:
-                            photo_date = get_exif(file_path)['DateTime'][:10]
+                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
                         except KeyError:
-                            photo_date = '0000-00-00'
-                        except IOError:
-                            photo_date = '0000-00-00'
-                            print "IOError on {0}".format(line)
+                            try:
+                                photo_date = get_exif(file_path)['DateTime'][:10]
+                            except KeyError:
+                                photo_date = '0000-00-00'
+                            except IOError:
+                                photo_date = '0000-00-00'
+                                print "IOError on {0}".format(line)
                 except AttributeError:
                     photo_date = '0000-00-00'
                 except IOError:
