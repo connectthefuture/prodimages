@@ -199,20 +199,22 @@ def resize_image(infile, dest_file, size):
 def subproc_magick_thumbs_600720(file,destdir):
     import subprocess, os, re
     outsize = '600x720'
+    insize = '3744x5616'
     fname = file.split(".")[0]
     ext = file.split(".")[-1]
-    outfile = os.path.join(destdir, fname + "_" + "l" + ".jpg")
+    outfile = os.path.join(destdir, fname + ".jpg")
     regex_CR2 = re.compile(r'.+?\.[CR2cr2]')
     regex_jpg = re.compile(r'.+?\.[JPGjpg]')    
     if re.findall(regex_CR2, file):
         
         try:
-            file = str("rgb:" + file)    
             subprocess.call([
                 "convert",
                 "-define",
-                "jpeg:size=600x720",
+                "jpeg:",
                 file,
+                "-size",
+                "3744x5616",
                 "-colorspace",
                 "rgb",
                 "-adaptive-sharpen",
@@ -263,6 +265,7 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
     import pyexiv2
     import glob, os, re
     size = 600, 720
+    size = 3744, 5616
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
     regex_productionraw_Raw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[CR2]{3}$')

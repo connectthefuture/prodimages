@@ -1,11 +1,11 @@
 #!/bin/bash
 . ~/.bash_profile
-Today=`date +%Y-%m-%d`
+Today=`date +%Y-%m-%d-%H\:%M`
 batchDoneDate=`date +%Y%b%d`
 
-dropBase=/home/johnb/mnt/Post_Complete/Complete_to_Load
+dropBase=/mnt/Post_Complete/Complete_to_Load
 userDropFolders=$dropBase/Drop_FinalFilesOnly
-completeArch=/home/johnb/mnt/Post_Complete/Completed_Archive/Uploaded
+completeArch=/mnt/Post_Complete/Completed_Archive/Uploaded
 #userDropFolders="$1"
 cd $dropBase
 ## make and go to Base folder for portability
@@ -68,7 +68,7 @@ for f in `find $convertedFolder_l -iname \*.jpg`
 do
 baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
 echo $f | awk -v folder_l=$convertedFolder_l -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_lfname" "fname"_l.jpg") }' | /bin/bash;
-#>> /home/johnb/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/AWkdebug.txt 
+#>> /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/AWkdebug.txt 
 done;
 
 ## Medium Jpegs
@@ -106,7 +106,7 @@ batchDoneFolder="$postBatchDone/$batchDoneDate"
 mkdir $batchDoneFolder
 for f in `find $batchDtop -iname \*.jpg`
 do
-exiftool -m -P -fast2 -overwrite_original -'IPTC:DateOriginalRetouchProcessed'='$Today' $f
+exiftool -m -P -fast2 -overwrite_original -'IPTC:DateOriginalRetouchProcessed'="$Today" $f
 mv -f $f $batchDoneFolder
 done;
 
@@ -118,7 +118,7 @@ ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
 for f in `find $uploadInProg -type f -iname \*.*g`
 do
 uploadResult=`curl -k -T $f $ftpLoginFull`
-exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'='$Today' $f
+exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'="$Today" $f
 mv -f $f $uploadComplete;
 echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt
 
