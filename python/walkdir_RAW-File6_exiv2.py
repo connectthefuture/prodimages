@@ -23,15 +23,16 @@ def recursive_dirlist(rootdir):
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
-    regex_Raw = re.compile(r'.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+    regex_Raw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.CR2$')
     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
         stylestringsdict_tmp = {}
-        try:
-            if re.findall(regex_productionraw_Exports,line):
+        if re.findall(regex_productionraw_Exports,line):
+            try:
+
                 file_path = line
                 filename = file_path.split('/')[-1]
                 colorstyle = filename.split('_')[0]
@@ -71,8 +72,11 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
                 print row
                 stylestrings.append(row)
-
-            elif re.findall(regex_Raw,line):
+            except IOError:
+                print "IOError on {0}".format(line)
+        
+        elif re.findall(regex_Raw,line):
+            try:
                 file_path = line
                 filename = file_path.split('/')[-1]
                 colorstyle = filename.split('_')[0]
@@ -115,8 +119,8 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
                 print row
                 stylestrings.append(row)
-        except IOError:
-            print "IOError on {0}".format(line)
+            except IOError:
+                print "IOError on {0}".format(line)
             #except AttributeError:
             #    print "AttributeError on {0}".format(line)
     return stylestringsdict
@@ -443,7 +447,7 @@ for k,v in fulldict.iteritems():
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
         #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
-        regex_productionraw = re.compile(r'/.*?/[0-9]{9}.+?\.[jpgJPGCR2]{3}$')
+        regex_productionraw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_zimages = re.compile(r'^/.+?Raw/\.zImages_1/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
@@ -452,7 +456,7 @@ for k,v in fulldict.iteritems():
 
 ## ProdRaw RAW
         if re.findall(regex_productionraw, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
             print "Successful Insert production_raw_onfigure --> {0}".format(k)
 ## ProdRaw Thumbs
         elif re.findall(regex_productionraw_zimages, sqlinsert_choose_test):
