@@ -151,6 +151,22 @@ def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
     return image_filepath
 
 
+def get_exif_metadata_value(image_filepath, exiftag=None, exifvalue=None):
+    from PIL import Image
+    import pyexiv2
+    if exifvalue:
+        
+        # Read EXIF data to initialize
+        image_metadata = pyexiv2.ImageMetadata(image_filepath)
+        metadata = image_metadata.read()
+        # Add and Write new Tag to File
+        exifvalue = metadata[exiftag]
+        # image_metadata[exiftag] = exifvalue
+        # image_metadata.write()
+    else:
+        print "Not Yet Built"
+    return image_filepath
+
 ###
 ## Resize/Copy Image as Copy All Metadata from Source Image File to Resized Thumb
 def resize_image(infile, dest_file, size):
