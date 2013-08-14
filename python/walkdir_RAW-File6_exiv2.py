@@ -30,93 +30,93 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
     stylestringsdict = {}
     for line in walkeddir_list:
         stylestringsdict_tmp = {}
-		try:
-		    if re.findall(regex_productionraw_Exports,line):
-				file_path = line
-				filename = file_path.split('/')[-1]
-				colorstyle = filename.split('_')[0]
-				alt = file_path.split('_')[-1]
-				ext = filename.split('.')[-1]
-				try:
-					path_date = file_path.split('/')[6][:6]
-					path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
-					if re.findall(regex_date, path_date):
-						photo_date = path_date
-					else:
-						try:
-							photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-						except KeyError:
-							try:
-								photo_date = get_exif(file_path)['DateTime'][:10]
-							except KeyError:
-								photo_date = '0000-00-00'
-						except IOError:
-							photo_date = '0000-00-00'
-							print "IOError on {0}".format(line)
-				except AttributeError:
-					photo_date = '0000-00-00'
-				except IOError:
-					print "IOError on {0}".format(line)
-					photo_date = '0000-00-00'
-				photo_date = str(photo_date)
-				photo_date = photo_date.replace(':','-')
-				stylestringsdict_tmp['colorstyle'] = colorstyle
-				stylestringsdict_tmp['photo_date'] = photo_date
-				stylestringsdict_tmp['file_path'] = file_path
-				stylestringsdict_tmp['alt'] = alt
-				stylestringsdict[file_path] = stylestringsdict_tmp
-				file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-				file_path_reletive = file_path.replace('JPG', 'jpg')
-				## Format CSV Rows
-				row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
-				print row
-				stylestrings.append(row)
+        try:
+            if re.findall(regex_productionraw_Exports,line):
+                file_path = line
+                filename = file_path.split('/')[-1]
+                colorstyle = filename.split('_')[0]
+                alt = file_path.split('_')[-1]
+                ext = filename.split('.')[-1]
+                try:
+                    path_date = file_path.split('/')[6][:6]
+                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
+                    if re.findall(regex_date, path_date):
+                        photo_date = path_date
+                    else:
+                        try:
+                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                        except KeyError:
+                            try:
+                                photo_date = get_exif(file_path)['DateTime'][:10]
+                            except KeyError:
+                                photo_date = '0000-00-00'
+                        except IOError:
+                            photo_date = '0000-00-00'
+                            print "IOError on {0}".format(line)
+                except AttributeError:
+                    photo_date = '0000-00-00'
+                except IOError:
+                    print "IOError on {0}".format(line)
+                    photo_date = '0000-00-00'
+                photo_date = str(photo_date)
+                photo_date = photo_date.replace(':','-')
+                stylestringsdict_tmp['colorstyle'] = colorstyle
+                stylestringsdict_tmp['photo_date'] = photo_date
+                stylestringsdict_tmp['file_path'] = file_path
+                stylestringsdict_tmp['alt'] = alt
+                stylestringsdict[file_path] = stylestringsdict_tmp
+                file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+                file_path_reletive = file_path.replace('JPG', 'jpg')
+                				## Format CSV Rows
+                row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
+                print row
+                stylestrings.append(row)
 
-			elif re.findall(regex_Raw,line):
-				file_path = line
-				filename = file_path.split('/')[-1]
-				colorstyle = filename.split('_')[0]
-				alt = file_path.split('_')[-2]
-				shot_number = file_path.split('_')[-1]
-				shot_number = shot_number.split('.')[0]
-				ext = filename.split('.')[-1]
-				try:
-					path_date = file_path.split('/')[6][:6]
-					path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
-					if re.findall(regex_date, path_date):
-						photo_date = path_date
-					else:
-						try:
-							photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-						except KeyError:
-							try:
-								photo_date = get_exif(file_path)['DateTime'][:10]
-							except KeyError:
-								photo_date = '0000-00-00'
-						except IOError:
-							photo_date = '0000-00-00'
-							print "IOError on {0}".format(line)
-				except AttributeError:
-					photo_date = '0000-00-00'
-				except IOError:
-					print "IOError on {0}".format(line)
-					photo_date = '0000-00-00'
-				photo_date = str(photo_date)
-				photo_date = photo_date.replace(':','-')
-				stylestringsdict_tmp['colorstyle'] = colorstyle
-				stylestringsdict_tmp['photo_date'] = photo_date
-				stylestringsdict_tmp['file_path'] = file_path
-				stylestringsdict_tmp['alt'] = alt
-				stylestringsdict_tmp['shot_number'] = shot_number
-				stylestringsdict[file_path] = stylestringsdict_tmp
-				file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-				file_path_reletive = file_path.replace('JPG', 'jpg')
-				## Format CSV Rows
-				row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
-				print row
-				stylestrings.append(row)
-		except IOError:
-			print "IOError on {0}".format(line)
+            elif re.findall(regex_Raw,line):
+                file_path = line
+                filename = file_path.split('/')[-1]
+                colorstyle = filename.split('_')[0]
+                alt = file_path.split('_')[-2]
+                shot_number = file_path.split('_')[-1]
+                shot_number = shot_number.split('.')[0]
+                ext = filename.split('.')[-1]
+                try:
+                    path_date = file_path.split('/')[6][:6]
+                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
+                if re.findall(regex_date, path_date):
+                    photo_date = path_date
+                else:
+                    try:
+                        photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                    except KeyError:
+                        try:
+                            photo_date = get_exif(file_path)['DateTime'][:10]
+                        except KeyError:
+                            photo_date = '0000-00-00'
+                        except IOError:
+                            photo_date = '0000-00-00'
+                            print "IOError on {0}".format(line)
+                except AttributeError:
+                    photo_date = '0000-00-00'
+                except IOError:
+                    print "IOError on {0}".format(line)
+                    photo_date = '0000-00-00'
+                photo_date = str(photo_date)
+                photo_date = photo_date.replace(':','-')
+                stylestringsdict_tmp['colorstyle'] = colorstyle
+                stylestringsdict_tmp['photo_date'] = photo_date
+                stylestringsdict_tmp['file_path'] = file_path
+                stylestringsdict_tmp['alt'] = alt
+                stylestringsdict_tmp['shot_number'] = shot_number
+                stylestringsdict[file_path] = stylestringsdict_tmp
+                file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+                file_path_reletive = file_path.replace('JPG', 'jpg')
+                ## Format CSV Rows
+                row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
+                print row
+                stylestrings.append(row)
+        except IOError:
+            print "IOError on {0}".format(line)
             #except AttributeError:
             #    print "AttributeError on {0}".format(line)
     return stylestringsdict
