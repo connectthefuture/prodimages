@@ -192,8 +192,62 @@ def resize_image(infile, dest_file, size):
     dest_metadata.write()
     return zimages_filepath
 
-
-
+def subproc_magick_thumbs_600720(file,destdir):
+    import subprocess, os, re
+    
+    fname = file.split(".")[0]
+    ext = file.split(".")[-1]
+    outfile = os.path.join(destdir, fname + "_" + "l" + ".jpg")
+    regex_CR2 = re.compile(r'.+?\.[CR2cr2]')
+    regex_jpg = re.compile(r'.+?\.[JPGjpg]')    
+    if re.findall(regex_CR2, file):
+        
+        try:
+            file = str("rgb:" + file)    
+            subprocess.call([
+                "convert",
+                "-colorspace",
+                "rgb",
+                file,
+                "-adaptive-sharpen",
+                "100",
+                "-unsharp",
+                "40",
+                "-format",
+                "jpg",
+                "-colorspace",
+                "srgb",
+                "-quality",
+                "100",
+                "-compress",
+                "none",
+                outfile
+            ])
+        except:
+            print "Failed: {0}".format(file)
+    
+    elif re.findall(regex_jpg, file_path):
+        try:
+            file = str("rgb:" + file)    
+            subprocess.call([
+                "convert",
+                file,
+                "-format",
+                "jpg",
+                "-adaptive-sharpen",
+                "70",
+                "-unsharp",
+                "50",
+                "-quality",
+                "80",
+                "-compress",
+                "none",
+                outfile
+            ])
+        except:
+            print "Failed: {0}".format(file)
+    return outfile
+        
 ###
 ## Make Lowres Thumnails from Image files or Directory Full of Image Files. Copy Metadata after creating Thumbnail
 def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
