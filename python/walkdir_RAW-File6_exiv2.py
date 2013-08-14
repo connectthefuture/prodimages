@@ -338,7 +338,7 @@ for k,v in stylestringsdict.iteritems():
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy
-
+#from mtags_singlefile_RAW import sqlQueryMetatags
 ## First compile the SQL Fields as key value pairs
 fulldict = {}
 for k,v in stylestringsdict.iteritems():
