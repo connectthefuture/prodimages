@@ -145,9 +145,12 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
     size = 600, 720
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPG]{3}$')
+    regex_productionraw_Raw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[CR2]{3}$')
     zimages_root = '/mnt/Production_Raw/.zImages_1'
     test_zimages = '/'.join(pathname.split('/')[:4])
     if test_zimages == zimages_root:
+        pass
+    elif re.findall(regex_productionraw_Raw, pathname):
         pass
     elif re.findall(regex_productionraw_Exports, pathname):
         zimages_root = '/mnt/Production_Raw/.zImages_1'
@@ -329,7 +332,7 @@ for k,v in fulldict.iteritems():
         if re.findall(regex_productionraw_zimages, sqlinsert_choose_test):
             connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert production_raw_onfigure --> {0}".format(k)
-## PostReady Daily Selects To get images for Retouching     
+## PostReady Daily Selects To get images for Retouching
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert Push_Photoselecs --> {0}".format(k)
