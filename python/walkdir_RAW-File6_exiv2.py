@@ -198,7 +198,7 @@ def resize_image(infile, dest_file, size):
 
 def subproc_magick_thumbs_600720(file,destdir):
     import subprocess, os, re
-    size = '600x720'
+    outsize = '600x720'
     fname = file.split(".")[0]
     ext = file.split(".")[-1]
     outfile = os.path.join(destdir, fname + "_" + "l" + ".jpg")
@@ -210,9 +210,11 @@ def subproc_magick_thumbs_600720(file,destdir):
             file = str("rgb:" + file)    
             subprocess.call([
                 "convert",
+                "-define",
+                "jpeg:size=600x720",
+                file,
                 "-colorspace",
                 "rgb",
-                file,
                 "-adaptive-sharpen",
                 "100",
                 "-unsharp",
@@ -223,16 +225,16 @@ def subproc_magick_thumbs_600720(file,destdir):
                 "srgb",
                 "-quality",
                 "100",
-                "-compress",
-                "none",
+                "-thumbnail",
+                outsize,
                 outfile
             ])
+            print "Made Thumb from RAW with Magick"
         except:
             print "Failed: {0}".format(file)
     
     elif re.findall(regex_jpg, file):
         try:
-            file = str("rgb:" + file)    
             subprocess.call([
                 "convert",
                 file,
@@ -244,10 +246,11 @@ def subproc_magick_thumbs_600720(file,destdir):
                 "50",
                 "-quality",
                 "80",
-                "-compress",
-                "none",
+                "-thumbnail",
+                outsize,
                 outfile
             ])
+            print "Made Jpg-Thumb with Magick"
         except:
             print "Failed: {0}".format(file)
     return outfile
