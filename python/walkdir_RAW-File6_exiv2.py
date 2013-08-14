@@ -432,7 +432,7 @@ for k,v in stylestringsdict.iteritems():
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     try:
-        dfill['shot_number']
+        dfill['shot_number'] = v['shot_number']
     except:
         pass
     fulldict[k] = dfill
