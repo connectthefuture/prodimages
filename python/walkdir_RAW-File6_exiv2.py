@@ -447,7 +447,7 @@ for k,v in fulldict.iteritems():
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
         #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
-        regex_productionraw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.[jpgJPGCR2]{3}$')
+        regex_productionraw = re.compile(r'.*?/ON_FIGURE/.+?/[0-9]{9}.+?/[0-9]{9}.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_zimages = re.compile(r'^/.+?Raw/\.zImages_1/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
@@ -456,7 +456,7 @@ for k,v in fulldict.iteritems():
 
 ## ProdRaw RAW
         if re.findall(regex_productionraw, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
             print "Successful Insert production_raw_onfigure --> {0}".format(k)
 ## ProdRaw Thumbs
         elif re.findall(regex_productionraw_zimages, sqlinsert_choose_test):
