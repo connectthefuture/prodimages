@@ -455,7 +455,7 @@ for k,v in fulldict.iteritems():
             print "Successful Insert production_raw_onfigure --> {0}".format(k)
 ## ProdRaw Thumbs
         if re.findall(regex_productionraw_zimages, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
+            connection.execute("""INSERT INTO production_raw_zimages (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert production_raw_onfigure --> {0}".format(k)
 ## PostReady Daily Selects To get images for Retouching
         if re.findall(regex_photoselects, sqlinsert_choose_test):
