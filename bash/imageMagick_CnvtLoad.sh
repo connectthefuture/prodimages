@@ -104,5 +104,5 @@ do
 uploadResult=`curl -k -T $f $ftpLoginFull`
 exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'='$Today' $f
 mv -f $f $uploadComplete;
-echo '$Today, $f, $uploadResult' >> $PRODSRV/logs/uploadLog.txt
+echo "$Today, $f, $uploadResult" >> $PRODSRV/logs/uploadLog.txt
 done;

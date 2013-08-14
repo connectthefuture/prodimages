@@ -12,7 +12,7 @@ sampleMail=`find /Users/johnb/Library/Mail/Mailboxes/AutoDownloads.mbox/Attachme
 for f in $sampleMail
 do
 cat $f | sed 's/\ //g' | grep -av \( >> $compiledFile; 
-echo -e \t\t$TODAY >> $compiledFile;
+echo -e \t\t"$TODAY" >> $compiledFile;
 done;
 
 

@@ -11,7 +11,7 @@ testArgs1=`ls "$dropboxRunDir" | wc -l`
 
 if [ "$testArgs1" -gt 0 ];
 	then
-	echo '$logTime__$testArgs1' >> "$dropBoxDunDir"/cronscriptrunlog.log
+	echo "$logTime__$testArgs1" >> "$dropBoxDunDir"/cronscriptrunlog.log
 
 	search=`find $dropboxRunDir -type f -name \*.sh`
 	testSearch=`echo $search | wc -l`
@@ -22,10 +22,10 @@ if [ "$testArgs1" -gt 0 ];
 		
 		for f `find $dropboxRunDir -type f -name \*.sh`
 		do
-		echo 'RUNNING--$logTime__$f' >> "$dropBoxDunDir"/cronscriptrunlog.log;
+		echo "RUNNING--$logTime__$f" >> "$dropBoxDunDir"/cronscriptrunlog.log;
 		/bin/bash $f;
 		sleep 1;
-		echo 'COMPLETED--$logTime__$f' >> "$dropBoxDunDir"/cronscriptrunlog.log
+		echo "COMPLETED--$logTime__$f" >> "$dropBoxDunDir"/cronscriptrunlog.log
 		mv $f $dropboxRunDir
 		done;
 

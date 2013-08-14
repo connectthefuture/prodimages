@@ -28,7 +28,7 @@ if [ "$testArgs2" -lt 1 ];
 then
 uploadComplete="$2"
 mv -f "$f" "$uploadComplete";
-echo '"$Today" "$f" "$uploadResult"  >> ./"$batchDoneDate"_uploadLog.txt
+echo "$Today" "$f" "$uploadResult"  >> ./"$batchDoneDate"_uploadLog.txt
 fi;
 
 done;

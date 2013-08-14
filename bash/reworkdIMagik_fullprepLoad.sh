@@ -89,7 +89,7 @@ batchDoneFolder="/mnt/johnb/Desktop/batchDone/$batchDoneDate"
 mkdir $batchDoneFolder
 for f in `find $batchDtop -iname \*.jpg`
 do
-exiftool -m -P -fast2 -overwrite_original -'IPTC:DateOriginalRetouchProcessed'='$Today' $f
+exiftool -m -P -fast2 -overwrite_original -"IPTC:DateOriginalRetouchProcessed"="$Today" $f
 mv -f $f $batchDoneFolder
 done;
 
@@ -103,5 +103,5 @@ do
 uploadResult=`curl -k -T $f $ftpLoginFull`
 exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'='$Today' $f
 mv -f $f $uploadComplete;
-echo '$Today, $f, $uploadResult' >> /mnt/johnb/Documents/uploadLog.txt
+echo "$Today, $f, $uploadResult" >> $LOGDIR/uploadLog.txt
 done;
