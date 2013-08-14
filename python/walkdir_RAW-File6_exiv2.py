@@ -194,7 +194,7 @@ def resize_image(infile, dest_file, size):
 
 def subproc_magick_thumbs_600720(file,destdir):
     import subprocess, os, re
-    
+    size = '600x720'
     fname = file.split(".")[0]
     ext = file.split(".")[-1]
     outfile = os.path.join(destdir, fname + "_" + "l" + ".jpg")
@@ -226,7 +226,7 @@ def subproc_magick_thumbs_600720(file,destdir):
         except:
             print "Failed: {0}".format(file)
     
-    elif re.findall(regex_jpg, file_path):
+    elif re.findall(regex_jpg, file):
         try:
             file = str("rgb:" + file)    
             subprocess.call([
@@ -442,7 +442,7 @@ for k,v in fulldict.iteritems():
         connection = mysql_engine.connect()
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
+        regex_productionraw = re.compile(r'^.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
         regex_productionraw_zimages = re.compile(r'^/.+?Raw/\.zImages_1/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
