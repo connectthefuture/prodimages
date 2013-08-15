@@ -5,7 +5,7 @@ batchDoneDate=`date +%Y%b%d`
 
 dropBase=/mnt/Post_Complete/Complete_to_Load
 userDropFolders=$dropBase/Drop_FinalFilesOnly
-completeArch=/mnt/Post_Complete/Completed_Archive/Uploaded
+completeArch=/mnt/Post_Complete/Complete_Archive/Uploaded
 #userDropFolders="$1"
 cd $dropBase
 ## make and go to Base folder for portability
