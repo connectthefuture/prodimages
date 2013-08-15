@@ -9,7 +9,7 @@ completeArch=/mnt/Post_Complete/Completed_Archive/Uploaded
 #userDropFolders="$1"
 cd $dropBase
 ## make and go to Base folder for portability
-
+cd .tmp_processing/
 magickBase=magickBase_"$Today"
 mkdir magickBase_"$Today"
 magickBaseR=magickBase_"$Today"/
@@ -43,7 +43,7 @@ mkdir $errorFolder
 find $userDropFolders -type f -iname \*.* | grep ' ' | xargs -I '{}' mv -f '{}' $errorFolder
 
 #### Run Tag Retouched Photos with Retoucher Name
-# /usr/local/batchRunScripts/TAG_fromDirName.sh
+#/usr/local/batchRunScripts/bash/TAG_fromDirName.sh
 
 ######		Move all files starting with 9 Digits to preBatch Folder
 find $userDropFolders -type f -iname [{^2-9}][0-9{8}]\*.jpg | grep -v ' ' | xargs -I '{}' mv -f '{}' $preBatchDtop
@@ -69,7 +69,7 @@ for f in `find $convertedFolder_l -iname \*.jpg`
 do
 baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
 echo $f | awk -v folder_l=$convertedFolder_l -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_lfname" "fname"_l.jpg") }' | /bin/bash;
-#>> /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/AWkdebug.txt 
+#>> /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/AWkdebug.txt
 done;
 
 ## Medium Jpegs
@@ -103,11 +103,11 @@ find $convertedFolder_alt -type f -iname \*alt*.png -exec mv {} $uploadInProg \;
 find $convertedFolder_alt -type f -iname \*.jpg -exec rm {} \;
 
 #### Original stored
-batchDoneFolder="$postBatchDone/$batchDoneDate"
+batchDoneFolder="$completeArch/$batchDoneDate"
 mkdir $batchDoneFolder
 for f in `find $batchDtop -iname \*.jpg`
 do
-exiftool -m -P -fast2 -overwrite_original -'IPTC:DateOriginalRetouchProcessed'="$Today" $f
+#exiftool -m -P -fast2 -overwrite_original -'IPTC:DateOriginalRetouchProcessed'="$Today" $f
 mv -f $f $batchDoneFolder
 done;
 
@@ -119,10 +119,10 @@ ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
 for f in `find $uploadInProg -type f -iname \*.*g`
 do
 uploadResult=`curl -k -T $f $ftpLoginFull`
-exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'="$Today" $f
+#exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'="$Today" $f
 mv -f $f $uploadComplete;
 echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt
 
 done;
 
-rsync $uploadComplete
+#rsync $uploadComplete
