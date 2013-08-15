@@ -2,7 +2,7 @@
 
 def event_styles_by_categoryid(categoryid):
     import sqlalchemy
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1521/bfyprd11')
     connection = orcl_engine.connect()
     
     if len(categoryid) != 4:

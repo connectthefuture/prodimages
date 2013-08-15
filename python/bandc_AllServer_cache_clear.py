@@ -41,7 +41,7 @@ def csv_write_datedOutfile(lines):
 def get_catid_from_eventid(eventid):
     if len(eventid) == 4:
         import sqlalchemy
-        orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
+        orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1521/bfyprd11')
         connection = orcl_engine.connect()
         eventid = str(eventid)
         eventid_tocatid_query = "SELECT DISTINCT POMGR.EVENT.CATEGORY FROM POMGR.EVENT WHERE POMGR.EVENT.ID = '" + eventid + "'"

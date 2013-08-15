@@ -317,7 +317,7 @@ if __name__ == '__main__':
 def sql_query_production_numbers():
     import sqlalchemy
     from collections import defaultdict
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1531/bfyprd12')
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1521/bfyprd11')
     connection = orcl_engine.connect()
 
     ### Get Production Complete Totals and Build Dict of key value pairs
