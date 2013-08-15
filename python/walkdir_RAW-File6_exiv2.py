@@ -74,7 +74,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 stylestrings.append(row)
             except IOError:
                 print "IOError on {0}".format(line)
-        
+
         elif re.findall(regex_Raw,line):
             try:
                 file_path = line
@@ -159,7 +159,7 @@ def get_exif_metadata_value(image_filepath, exiftag=None, exifvalue=None):
     from PIL import Image
     import pyexiv2
     if exifvalue:
-        
+
         # Read EXIF data to initialize
         image_metadata = pyexiv2.ImageMetadata(image_filepath)
         metadata = image_metadata.read()
@@ -204,15 +204,17 @@ def subproc_magick_thumbs_600720(file,destdir):
     ext = file.split(".")[-1]
     outfile = os.path.join(destdir, fname + ".jpg")
     regex_CR2 = re.compile(r'.+?\.[CR2cr2]')
-    regex_jpg = re.compile(r'.+?\.[JPGjpg]')    
+    regex_jpg = re.compile(r'.+?\.[JPGjpg]')
     if re.findall(regex_CR2, file):
-        
+
         try:
             subprocess.call([
                 "convert",
-                "-define",
-                "jpeg:",
+                "-format",
+                "jpg",
                 file,
+                "-define",
+                "jpeg:size=3744x5616",
                 "-size",
                 "600x720",
                 "-colorspace",
@@ -234,7 +236,7 @@ def subproc_magick_thumbs_600720(file,destdir):
             print "Made Thumb from RAW with Magick"
         except:
             print "Failed: {0}".format(file)
-    
+
     elif re.findall(regex_jpg, file):
         try:
             subprocess.call([
@@ -256,7 +258,7 @@ def subproc_magick_thumbs_600720(file,destdir):
         except:
             print "Failed: {0}".format(file)
     return outfile
-        
+
 ###
 ## Make Lowres Thumnails from Image files or Directory Full of Image Files. Copy Metadata after creating Thumbnail
 def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
