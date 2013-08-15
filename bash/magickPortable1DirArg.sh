@@ -10,9 +10,9 @@ completeArch=/mnt/Post_Complete/Completed_Archive/Uploaded
 cd $dropBase
 ## make and go to Base folder for portability
 cd .tmp_processing/
-magickBase=magickBase_"$Today"
-mkdir magickBase_"$Today"
-magickBaseR=magickBase_"$Today"/
+magickBase=magickBase-"$Today"
+mkdir magickBase-"$Today"
+magickBaseR=magickBase-"$Today"/
 cd $magickBaseR
 magickBase=`pwd`
 
@@ -124,6 +124,6 @@ mv -f $f $uploadComplete;
 echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt
 
 done;
-chmod -R 777 $dropbase
-chod -R 775 $batchDoneFolder
+chmod -R 777 "$dropbase"
+chmod -R 775 "$batchDoneFolder"
 #rsync $uploadComplete
