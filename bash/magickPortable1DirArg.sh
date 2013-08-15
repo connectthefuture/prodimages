@@ -124,5 +124,6 @@ mv -f $f $uploadComplete;
 echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt
 
 done;
-
+chmod -R 777 $dropbase
+chod -R 775 $batchDoneFolder
 #rsync $uploadComplete
