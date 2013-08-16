@@ -19,12 +19,13 @@ fi;
 ########
 for f in `find $search -type f -iname \*.*g`
 do
-uploadResult=`curl -k -T $f $ftpLoginFull`
 
+uploadResult=`curl -k -T $f "$ftpLoginFull"`
+echo $uploadResult
 ########--------Test if Arg #2 supplied
 testArgs2=`ls "$2" | wc -l`
 
-if [ "$testArgs2" -lt 1 ]; 
+if [ "$testArgs2" -lt 1 ];
 then
 uploadComplete="$2"
 mv -f "$f" "$uploadComplete";
