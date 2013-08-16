@@ -22,6 +22,7 @@ do
 
 uploadResult=`curl -k -T $f "$ftpLoginFull"`
 echo $uploadResult
+sleep .5
 ########--------Test if Arg #2 supplied
 testArgs2=`ls "$2" | wc -l`
 
