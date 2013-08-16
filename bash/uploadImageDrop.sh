@@ -4,7 +4,7 @@
 Today=`date +%Y-%m-%d`
 batchDoneDate=`date +%Y%b%d`
 
-ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
+ftpLoginFull="imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop"
 
 
 ################----------Test if 1 arg supplied, If no args run of CurrentDir
