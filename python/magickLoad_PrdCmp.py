@@ -92,7 +92,7 @@ def subproc_magick_l_m_jpg(imgsrc, imgdest):
     image_dest_m = imgdest.replace('.jpg', '_m.jpg')
 
     subprocess.call([
-    "convert"
+    "convert",
     imgsrc,
     "-colorspace",
     "rgb",
@@ -114,7 +114,7 @@ def subproc_magick_l_m_jpg(imgsrc, imgdest):
     ])
 
     subprocess.call([
-    "convert"
+    "convert",
     imgsrc,
     "-colorspace",
     "rgb",
