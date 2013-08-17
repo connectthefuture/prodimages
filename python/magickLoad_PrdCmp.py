@@ -187,8 +187,8 @@ tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , 
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
 archive_uploaded = os.path.join(archive , "uploaded_" + str(todaysdate))
 
-imgdest_jpg_final = os.path.join(archive_uploaded, str(todaysdate), 'JPG_RETOUCHED_ORIG')
-imgdest_png_final = os.path.join(archive_uploaded, str(todaysdate), 'PNG')
+imgdest_jpg_final = os.path.join(archive_uploaded, str(todaysdate).replace(",", ""), 'JPG_RETOUCHED_ORIG')
+imgdest_png_final = os.path.join(archive_uploaded, str(todaysdate).replace(",", ""), 'PNG')
 os.makedirs(archive_uploaded, 16877)
 os.makedirs(tmp_processing, 16877)
 os.makedirs(tmp_loading, 16877)
