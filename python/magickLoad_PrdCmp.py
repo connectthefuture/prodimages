@@ -190,9 +190,7 @@ import os,sys,re, shutil
 try:
     rootdir = sys.argv[1]
 except:
-    rootdir = '/mnt/Post_Complete/Complete_to_Load/DropFinalFilesOnly'
-
-archive_uploaded = '/mnt/Post_Complete/Complete_to_Archive'
+    rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 
 regex_CR2 = re.compile(r'.+?\.[CR2cr2]{3}')
 regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
@@ -203,7 +201,7 @@ todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 
 
-tmp_processing = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_processing" , "tmp_" + str(todaysdatefull))
+tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull))
 tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull))
 
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
