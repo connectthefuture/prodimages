@@ -181,8 +181,8 @@ todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 
 
-tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull))
-tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull))
+tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
+tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
 
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
 archive_uploaded = os.path.join(archive , "uploaded_" + str(todaysdate))
@@ -198,8 +198,14 @@ os.makedirs(imgdest_jpg_final, 16877)
 ##get all the processed files
 walkedout_tmp = recursive_dirlist(rootdir)
 for file in walkedout_tmp:
-    shutil.move(file, tmp_processing)
-
+    regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
+    #regex_png = re.compile(r'.+?\.[pngPNG]{3}')
+    if re.findall(regex_jpg,file):
+        try:
+            shutil.move(file, tmp_processing)
+        except:
+            print "Error {}".format(file)
+            
 walkedout = recursive_dirlist(tmp_processing)
 
 for filepath in walkedout:
