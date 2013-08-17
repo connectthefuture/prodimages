@@ -112,13 +112,13 @@ mv -f $f $batchDoneFolder
 done;
 
 ##########			##########	 Upload Files via FTP through cUrl
-ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
+ftpLoginFull="ftp://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
 ## weddavLogin="https://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
 
 ### for Find only jp'g' and pn'g' files
 for f in `find $uploadInProg -type f -iname \*.*g`
 do
-uploadResult=`curl -k -T $f $ftpLoginFull`
+curl -k -T $f $ftpLoginFull
 #exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'="$Today" $f
 mv -f $f $uploadComplete;
 echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt

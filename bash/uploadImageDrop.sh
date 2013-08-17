@@ -4,33 +4,36 @@
 Today=`date +%Y-%m-%d`
 batchDoneDate=`date +%Y%b%d`
 
-ftpLoginFull="imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop"
-
+ftpLoginFull="ftp://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop"
+uploadComplete="/mnt/Post_Complete/Complete_Archive/Uploaded"
+upload_arch="$uploadComplete"/"$batchDoneDate"/
+mkdir -p "$upload_arch"
 
 ################----------Test if 1 arg supplied, If no args run of CurrentDir
-testArgs1=`ls "$1" | wc -l`
-if [ "$testArgs1" -lt 1 ];
-then
-search="$1";
-else
-search=".";
-fi;
+# testArgs1=`ls "$1" | wc -l`
+# if [ "$testArgs1" -lt 1 ];
+# then
+# search="$1";
+# else
+search="$1"
+#fi;
 
 ########
 for f in `find $search -type f -iname \*.*g`
 do
 
-uploadResult=`curl -k -T $f "$ftpLoginFull"`
-echo $uploadResult
+curl -k -T "$f" "$ftpLoginFull"
+
+#echo $uploadResult
 sleep .5
 ########--------Test if Arg #2 supplied
-testArgs2=`ls "$2" | wc -l`
-
-if [ "$testArgs2" -lt 1 ];
-then
-uploadComplete="$2"
-mv -f "$f" "$uploadComplete";
-echo "$Today" "$f" "$uploadResult"  >> ./"$batchDoneDate"_uploadLog.txt
+# testArgs2=`ls "$2" | wc -l`
+#
+# if [ "$testArgs2" -lt 1 ];
+# then
+# uploadComplete="$2"
+mv -f "$f" "$upload_arch";
+echo "$Today" "$f" "$upload_arch"  >> ./"$batchDoneDate"_uploadLog.txt
 fi;
 
 done;
