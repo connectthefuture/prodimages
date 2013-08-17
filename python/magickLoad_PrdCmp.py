@@ -209,11 +209,11 @@ archive_uploaded = os.path.join(archive , "uploaded_" + str(todaysdate))
 
 imgdest_jpg_final = os.path.join(archive_uploaded, str(todaysdate), 'JPG_RETOUCHED_ORIG')
 imgdest_png_final = os.path.join(archive_uploaded, str(todaysdate), 'PNG')
-os.makedirs(archive_uploaded)
-os.makedirs(tmp_processing)
-os.makedirs(tmp_loading)
-os.makedirs(imgdest_png_final)
-os.makedirs(imgdest_jpg_final)
+os.makedirs(archive_uploaded, 16877)
+os.makedirs(tmp_processing, 16877)
+os.makedirs(tmp_loading, 16877)
+os.makedirs(imgdest_png_final, 16877)
+os.makedirs(imgdest_jpg_final, 16877)
 
 
 ##get all the processed files
