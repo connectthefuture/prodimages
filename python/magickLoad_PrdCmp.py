@@ -206,16 +206,16 @@ todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 tmp_processing = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_processing" , "tmp_" + str(todaysdatefull))
 tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull))
 
-archive = '/mnt/Post_Complete/Complete_Archive'
-archive_uploaded = os.path.join(archive , "_" + str(todaysdate))
+archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+archive_uploaded = os.path.join(archive , "uploaded_" + str(todaysdate))
 
 imgdest_jpg_final = os.path.join(archive_uploaded, str(todaysdate), 'JPG_RETOUCHED_ORIG')
 imgdest_png_final = os.path.join(archive_uploaded, str(todaysdate), 'PNG')
+os.makedirs(archive_uploaded)
 os.makedirs(tmp_processing)
 os.makedirs(tmp_loading)
 os.makedirs(imgdest_png_final)
 os.makedirs(imgdest_jpg_final)
-
 
 
 ##get all the processed files
