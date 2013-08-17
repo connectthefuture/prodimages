@@ -41,7 +41,7 @@ def rename_retouched_file(src_imgfilepath):
                 alttest = alttest + 1
                 alt = '_alt0{}'.format(str(alttest))
         if alt:
-            renamed = os.path.join(filedir, colorstyle, alt, '.' + ext)
+            renamed = os.path.join(filedir, colorstyle, alt, str('.' + ext))
         if re.findall(regex_renamed,renamed):
             try:
                 os.rename(src_imgfilepath, renamed)
