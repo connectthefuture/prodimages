@@ -33,7 +33,7 @@ def rename_retouched_file(src_imgfilepath):
         alttest = testimg.split('.')[0]
         ext = filename.split('.')[-1]
         # if its 1
-        if isdigit(alttest) & len(alttest) == 1:
+        if str.isdigit(alttest) & len(alttest) == 1:
             if alttest == 1:
                 alt = ''
             else:
