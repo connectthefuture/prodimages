@@ -189,12 +189,31 @@ archive_uploaded = os.path.join(archive , "uploaded_" + str(todaysdate))
 
 imgdest_jpg_final = os.path.join(archive_uploaded, str(todaysdate).replace(",", ""), 'JPG_RETOUCHED_ORIG')
 imgdest_png_final = os.path.join(archive_uploaded, str(todaysdate).replace(",", ""), 'PNG')
-os.makedirs(archive_uploaded, 16877)
-os.makedirs(tmp_processing, 16877)
-os.makedirs(tmp_loading, 16877)
-os.makedirs(imgdest_png_final, 16877)
-os.makedirs(imgdest_jpg_final, 16877)
 
+try:
+    os.makedirs(archive_uploaded, 16877)
+except:
+    pass
+
+try:
+    os.makedirs(tmp_processing, 16877)
+except:
+    pass
+
+try:
+    os.makedirs(tmp_loading, 16877)
+except:
+    pass
+
+try:
+    os.makedirs(imgdest_png_final, 16877)
+except:
+    pass
+
+try:
+    os.makedirs(imgdest_jpg_final, 16877)
+except:
+    pass
 ##get all the processed files
 walkedout_tmp = recursive_dirlist(rootdir)
 for file in walkedout_tmp:
