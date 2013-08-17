@@ -165,7 +165,7 @@ def sub_proc_convert_png(imgsrc_jpg,imgdest_png, tmp_processing):
 
 
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
-import os,sys,re, shutil
+import os, sys, re, shutil, datetime
 
 try:
     rootdir = sys.argv[1]
