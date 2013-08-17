@@ -215,7 +215,6 @@ os.makedirs(tmp_loading, 16877)
 os.makedirs(imgdest_png_final, 16877)
 os.makedirs(imgdest_jpg_final, 16877)
 
-
 ##get all the processed files
 walkedout_tmp = recursive_dirlist(rootdir)
 for file in walkedout_tmp:
