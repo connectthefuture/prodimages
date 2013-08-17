@@ -58,7 +58,10 @@ def rename_retouched_file(src_imgfilepath):
             except:
                 pass
     else:
-        os.rename(src_imgfilepath,imgfilepath)
+        try:
+            os.rename(src_imgfilepath,imgfilepath)
+        except:
+            print "Error{}".format(src_imgfilepath)
         return imgfilepath
         
         
