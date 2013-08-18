@@ -19,7 +19,8 @@ def recursive_dirlist(rootdir):
     # don't go into any .git directories.
     #    dirnames.remove('.git')
     return walkedlist
-testf = '/Users/JCut/Desktop/Theia/2012/Mar28-Wednesday/3181/318193601/318193601_2.jpg'
+
+
 def rename_retouched_file(src_imgfilepath):
     import os,re
     regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
