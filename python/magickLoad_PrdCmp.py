@@ -48,7 +48,7 @@ def rename_retouched_file(src_imgfilepath):
             if alt:
                 print type(filedir), type(colorstyle), type(alt), type(ext)
                 print filedir, colorstyle, alt, ext
-                renamed = os.path.join(filedir, colorstyle, alt + ext)
+                renamed = os.path.join(filedir, colorstyle + alt + ext)
                 print renamed
         except OSError:
             print "OSError"
