@@ -55,7 +55,7 @@ def rename_retouched_file(src_imgfilepath):
         if re.findall(regex_renamed,renamed):
             try:
                 print renamed
-                os.rename(src_imgfilepath, renamed)
+                os.rename(src_imgfilepath, renamed.lower())
                 if os.path.isfile(renamed):
                     renamed_img_file = renamed
                     return renamed_img_file
@@ -248,8 +248,11 @@ walkedout = recursive_dirlist(tmp_processing)
 for filepath in walkedout:
     #try:
     imgsrc_jpg = rename_retouched_file(filepath)
+    print imgsrc_jpg
     imgsrc_png = imgsrc_jpg.split('/')[-1]
+    print imgsrc_png
     imgsrc_png = imgsrc_png.replace('.jpg','.png')
+    print imgsrc_png
     sub_proc_convert_png(imgsrc_jpg, imgsrc_png, tmp_processing)
     img_jpg_final = os.path.join(imgdest_jpg_final, imgsrc_jpg)
     img_png_path = os.path.join(tmp_processing, imgsrc_png)
