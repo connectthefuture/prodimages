@@ -19,12 +19,12 @@ def recursive_dirlist(rootdir):
     # don't go into any .git directories.
     #    dirnames.remove('.git')
     return walkedlist
-
+testf = '/Users/JCut/Desktop/Theia/2012/Mar28-Wednesday/3181/318193601/318193601_2.jpg'
 def rename_retouched_file(src_imgfilepath):
     import os,re
     regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
     regex_renamed= re.compile(r'.+?/[1-9][0-9]{8}_?0?[1-6]?\.jpg')
-    imgfilepath = src_imgfilepath.lower()
+    imgfilepath = src_imgfilepath
     if re.findall(regex_coded,imgfilepath):
         filedir = imgfilepath.split('/')[:-1]
         filedir = '/'.join(filedir)
@@ -34,7 +34,7 @@ def rename_retouched_file(src_imgfilepath):
         testimg = filename.split('_')[-1]
         alttest = testimg.split('.')[0]
         ext = filename.split('.')[-1]
-        ext = '.' + ext
+        ext = '.' + ext.lower()
         # if its 1
         if str.isdigit(alttest) & len(alttest) == 1:
             if alttest == 1:
@@ -54,18 +54,22 @@ def rename_retouched_file(src_imgfilepath):
             print "OSError"
         if re.findall(regex_renamed,renamed):
             try:
+                print renamed
                 os.rename(src_imgfilepath, renamed)
                 if os.path.isfile(renamed):
                     renamed_img_file = renamed
                     return renamed_img_file
             except:
+                print "findall rneamed"
                 pass
+                
         else:
             try:
                 os.rename(src_imgfilepath,imgfilepath)
                 if os.path.isfile(renamed):
                     return imgfilepath
             except:
+                print "finad renameSSSS"
                 pass
     else:
         try:
