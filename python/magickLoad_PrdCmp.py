@@ -152,9 +152,9 @@ def subproc_magick_l_m_jpg(imgsrc, imgdest):
     image_dest_m
     ])
 
-def sub_proc_convert_png(imgsrc_jpg,imgdest_png, tmp_processing):
+def sub_proc_convert_png(imgsrc_jpg, imgdest_png, tmp_processing):
     import subprocess
-    imgdestpng = os.path.join(tmp_processing, os.path.basename(imgdestpng))
+    imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgdestpng))
     subprocess.call([
                 "convert",
                 "-format",
@@ -176,7 +176,7 @@ def sub_proc_convert_png(imgsrc_jpg,imgdest_png, tmp_processing):
                 50,
                 "-unsharp",
                 75,
-                imgdest_png
+                imgdestpng_out
                 ])
     return
 
