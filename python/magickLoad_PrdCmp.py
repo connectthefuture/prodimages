@@ -154,7 +154,7 @@ def subproc_magick_l_m_jpg(imgsrc, imgdest):
 
 def sub_proc_convert_png(imgsrc_jpg, imgdest_png, tmp_processing):
     import subprocess
-    imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgdestpng))
+    imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgdest_png))
     subprocess.call([
                 "convert",
                 "-format",
