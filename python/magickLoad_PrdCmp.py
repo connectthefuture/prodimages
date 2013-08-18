@@ -246,14 +246,16 @@ for file in walkedout_tmp:
 walkedout = recursive_dirlist(tmp_processing)
 
 for filepath in walkedout:
-    imgsrc_jpg = rename_retouched_file(filepath)
-    imgsrc_png = imgsrc_jpg.split('/')[-1]
-    imgsrc_png = imgsrc_png.replace('.jpg','.png')
-    sub_proc_convert_png(imgsrc_jpg, imgsrc_png, tmp_processing)
-    img_jpg_final = os.path.join(imgdest_jpg_final, imgsrc_jpg)
-    img_png_path = os.path.join(tmp_processing, imgsrc_png)
-    shutil.move(imgsrc_jpg, imgdest_jpg_final)
-    shutil.move(img_png_path, imgdest_png_final)
-    shutil.copy2(imgdest_png_final, tmp_loading)
-    subproc_magick_l_m_jpg(imgdest_jpg_final, os.path.join(tmp_loading, imgsrc_jpg.split('/')[-1]))
-
+    try:
+        imgsrc_jpg = rename_retouched_file(filepath)
+        imgsrc_png = imgsrc_jpg.split('/')[-1]
+        imgsrc_png = imgsrc_png.replace('.jpg','.png')
+        sub_proc_convert_png(imgsrc_jpg, imgsrc_png, tmp_processing)
+        img_jpg_final = os.path.join(imgdest_jpg_final, imgsrc_jpg)
+        img_png_path = os.path.join(tmp_processing, imgsrc_png)
+        shutil.move(imgsrc_jpg, imgdest_jpg_final)
+        shutil.move(img_png_path, imgdest_png_final)
+        shutil.copy2(imgdest_png_final, tmp_loading)
+        subproc_magick_l_m_jpg(imgdest_jpg_final, os.path.join(tmp_loading, imgsrc_jpg.split('/')[-1]))
+    except:
+        print "Error {}".format(filepath)
