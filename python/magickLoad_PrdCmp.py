@@ -45,7 +45,6 @@ def rename_retouched_file(src_imgfilepath):
                 alttest = alttest + 1
                 alt = '_alt0{}'.format(str(alttest))
         try:
-            
             if alt:
                 print type(filedir), type(colorstyle), type(alt), type(ext)
                 print filedir, colorstyle, alt, ext
@@ -63,7 +62,6 @@ def rename_retouched_file(src_imgfilepath):
             except:
                 print "findall rneamed"
                 pass
-                
         else:
             try:
                 os.rename(src_imgfilepath,imgfilepath)
@@ -238,8 +236,10 @@ for file in walkedout_tmp:
     regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
     #regex_png = re.compile(r'.+?\.[pngPNG]{3}')
     if re.findall(regex_jpg,file):
+        print "findall"
         try:
             shutil.move(file, tmp_processing)
+            print "success {}".format(file)
         except:
             print "Error {}".format(file)
             
