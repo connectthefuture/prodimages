@@ -35,7 +35,7 @@ def rename_retouched_file(src_imgfilepath):
         testimg = filename.split('_')[-1]
         alttest = testimg.split('.')[0]
         ext = filename.split('.')[-1]
-        ext = '.' + ext.lower()
+        ext = ".{}".format(ext.lower())
         # if its 1
         if str.isdigit(alttest) & len(alttest) == 1:
             if alttest == 1:
@@ -46,30 +46,31 @@ def rename_retouched_file(src_imgfilepath):
                 alt = '_alt0{}'.format(str(alttest))
         try:
             if alt:
-                print type(filedir), type(colorstyle), type(alt), type(ext)
-                print filedir, colorstyle, alt, ext
-                renamed = os.path.join(filedir, colorstyle + alt + ext)
+                #print type(filedir), type(colorstyle), type(alt), type(ext)
+                #print filedir, colorstyle, alt, ext
+                filename = "{}{}{}".format(colorstyle,alt,ext)
+                renamed = os.path.join(filedir, filename)
                 print renamed
         except OSError:
             print "OSError"
-        if re.findall(regex_renamed,renamed):
-            try:
-                print renamed
-                os.rename(src_imgfilepath, renamed.lower())
-                if os.path.isfile(renamed):
-                    renamed_img_file = renamed
-                    return renamed_img_file
-            except:
-                print "findall rneamed"
-                pass
-        else:
-            try:
-                os.rename(src_imgfilepath,imgfilepath)
-                if os.path.isfile(renamed):
-                    return imgfilepath
-            except:
-                print "finad renameSSSS"
-                pass
+        #if re.findall(regex_renamed,renamed):
+        try:
+            print renamed
+            os.rename(src_imgfilepath, renamed)
+            if os.path.isfile(renamed):
+                renamed_img_file = renamed
+                return renamed_img_file
+        except:
+            print "findall rneamed"
+            pass
+        #else:
+        try:
+            os.rename(src_imgfilepath,imgfilepath)
+            if os.path.isfile(renamed):
+                return imgfilepath
+        except:
+            print "finad renameSSSS"
+            pass
     else:
         try:
             os.rename(src_imgfilepath,imgfilepath)
@@ -249,7 +250,7 @@ for filepath in walkedout:
     #try:
     imgsrc_jpg = rename_retouched_file(filepath)
     print imgsrc_jpg
-    imgsrc_png = imgsrc_jpg.split('/')[-1]
+    imgsrc_png = str(imgsrc_jpg.split('/')[-1])
     print imgsrc_png
     imgsrc_png = imgsrc_png.replace('.jpg','.png')
     print imgsrc_png
