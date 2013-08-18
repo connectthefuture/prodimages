@@ -27,11 +27,14 @@ def rename_retouched_file(src_imgfilepath):
     imgfilepath = src_imgfilepath.lower()
     if re.findall(regex_coded,imgfilepath):
         filedir = imgfilepath.split('/')[:-1]
+        filedir = '/'.join(filedir)
+        print filedir
         filename = imgfilepath.split('/')[-1]
-        colorstyle = filename[:9]
+        colorstyle = str(filename[:9])
         testimg = filename.split('_')[-1]
         alttest = testimg.split('.')[0]
         ext = filename.split('.')[-1]
+        ext = '.' + ext
         # if its 1
         if str.isdigit(alttest) & len(alttest) == 1:
             if alttest == 1:
@@ -40,8 +43,15 @@ def rename_retouched_file(src_imgfilepath):
                 alttest = int(alttest)
                 alttest = alttest + 1
                 alt = '_alt0{}'.format(str(alttest))
-        if alt:
-            renamed = os.path.join(filedir, colorstyle, alt, str('.' + ext))
+        try:
+            
+            if alt:
+                print type(filedir), type(colorstyle), type(alt), type(ext)
+                print filedir, colorstyle, alt, ext
+                renamed = os.path.join(filedir, colorstyle, alt + ext)
+                print renamed
+        except OSError:
+            print "OSError"
         if re.findall(regex_renamed,renamed):
             try:
                 os.rename(src_imgfilepath, renamed)
