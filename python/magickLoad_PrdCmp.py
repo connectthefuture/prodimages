@@ -104,61 +104,49 @@ def subproc_magick_l_m_jpg(imgsrc, imgdest):
     outsize_l = '400x480'
     outsize_m = '200x240'
     outsize_png = '2000x2400'
-    outsize = outsize
     image_dest_l = imgdest.replace('.jpg', '_l.jpg')
     image_dest_m = imgdest.replace('.jpg', '_m.jpg')
 
     subprocess.call([
     "convert",
-    imgsrc,
-    "-colorspace",
-    "rgb",
-    "-compress",
-    "none",
     "-format",
-    "jpeg",
-    "-colorspace",
-    "srgb",
-    "-resample",
+    "jpg",
+    imgsrc,
+    "-resize",
     outsize_l,
     "-adaptive-sharpen",
-    70,
+    "70",
     "-unsharp",
-    50,
+    "50",
     "-quality",
-    100,
-    image_dest_l
+    "100",
+    image_dest_l,
     ])
 
     subprocess.call([
     "convert",
-    imgsrc,
-    "-colorspace",
-    "rgb",
-    "-compress",
-    "none",
     "-format",
-    "jpeg",
-    "-colorspace",
-    "srgb",
-    "-resample",
+    "jpg",
+    imgsrc,
+    "-resize",
     outsize_m,
     "-adaptive-sharpen",
-    60,
+    "60",
     "-unsharp",
-    40,
+    "40",
     "-quality",
-    100,
-    image_dest_m
+    "100",
+    image_dest_m,
     ])
-
+    
+    
 def sub_proc_convert_png(imgsrc_jpg, imgdest_png, tmp_processing):
     import subprocess
     imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgdest_png))
     subprocess.call([
                 "convert",
                 "-format",
-                "png",
+                "jpg",
                 imgsrc_jpg,
                 "-define",
                 "png:preserve-colormap",
@@ -170,13 +158,15 @@ def sub_proc_convert_png(imgsrc_jpg, imgdest_png, tmp_processing):
                 "png:compression-strategy=N",
                 "-define",
                 "png:compression-filter=N",
+                "-format", 
+                "png",               
                 "-quality",
-                100,
+                "100",
                 "-adaptive-sharpen",
-                50,
+                "50",
                 "-unsharp",
-                75,
-                imgdestpng_out
+                "75",
+                imgdestpng_out,
                 ])
     return
 
