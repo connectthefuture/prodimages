@@ -8,7 +8,7 @@ Created on Wed Aug  7 20:58:41 2013
 #!/usr/bin/env python
 
 def sql_query_production_numbers():
-    import sqlalchemy
+    import sqlalchemy, import datetime
     from collections import defaultdict
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1521/bfyprd11')
     connection = orcl_engine.connect()
