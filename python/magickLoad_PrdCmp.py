@@ -231,7 +231,7 @@ except:
 
 ## move to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
-[ shutil.copy2(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
+[ shutil.move(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
 
 walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.*g'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
@@ -257,13 +257,23 @@ for filepath in walkedout:
         print "Error largemed {}".format(filepath)
         pass
 
-upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.jpg'))
+upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
 for upload_file in upload_tmp_loading:
+    #### TODO
+    #### UPLOAD upload_file via ftp to imagedrop
     #upload_ftp_imagedrop(upload_file)
+    ## Then rm loading tmp dir
     try:
-        shutil.move(file, archive_uploaded)
+        shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
         
-## shutil.rmtree(tmp_processing)
-## shutil.rmtree(tmp_loading)    
+## After completed Process and Load to imagedrop 
+###  Finally Remove the 2 tmp folder trees for process and load if Empty
+upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
+if len(upload_tmp_loading_remainder) == 0:
+    shutil.rmtree(tmp_loading)
+
+upload_tmp_processing_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
+if len(upload_tmp_processing_remainder) == 0:
+    shutil.rmtree(tmp_processing)
