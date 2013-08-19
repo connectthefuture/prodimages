@@ -210,6 +210,11 @@ archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace
 imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
 imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
 
+## Test for existing files to load or kill entire process prior to dir creation
+walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
+if len(walkedout_tmp) == 0:
+    raise IOError:
+        print "Nothing to Process"
 ### Make Tmp Folders for Processing And Uploading -- tmp_dirs are dated with time(hr:min)to prevent collisions
 try:
     os.makedirs(archive_uploaded, 16877)
