@@ -213,33 +213,33 @@ imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
 ## Test for existing files to load or kill entire process prior to dir creation
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
 if len(walkedout_tmp) == 0:
-    raise IOError:
-        print "Nothing to Process"
+    print "Nothing to Process"
+else:
 ### Make Tmp Folders for Processing And Uploading -- tmp_dirs are dated with time(hr:min)to prevent collisions
-try:
-    os.makedirs(archive_uploaded, 16877)
-except:
-    pass
+    try:
+        os.makedirs(archive_uploaded, 16877)
+    except:
+        pass
 
-try:
-    os.makedirs(tmp_processing, 16877)
-except:
-    pass
+    try:
+        os.makedirs(tmp_processing, 16877)
+    except:
+        pass
 
-try:
-    os.makedirs(tmp_loading, 16877)
-except:
-    pass
+    try:
+        os.makedirs(tmp_loading, 16877)
+    except:
+        pass
 
-try:
-    os.makedirs(imgdest_png_final, 16877)
-except:
-    pass
+    try:
+        os.makedirs(imgdest_png_final, 16877)
+    except:
+        pass
 
-try:
-    os.makedirs(imgdest_jpg_final, 16877)
-except:
-    pass
+    try:
+        os.makedirs(imgdest_jpg_final, 16877)
+    except:
+        pass
 
 ###
 ## Begin Processing and compiling images for Loading
