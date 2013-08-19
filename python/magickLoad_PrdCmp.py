@@ -170,17 +170,17 @@ def sub_proc_mogrify_png(tmp_dir):
     print "Done {}".format(tmp_dir)
     return
 
-def sub_proc_curlftp_upload(filepath_to_load):
-    import subprocess,time
-    ftpLoginFull="ftp://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
-    subprocess.call[(
-    "curl",
-    "-k", 
-    "-T",
-    filepath_to_load,
-    ftpLoginFull,
-    )]
-    time.sleep(float(.5))
+## Upload to imagedrop via FTP
+def upload_to_imagedrop(file):
+    import ftplib
+    import ftplib
+    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+    fileread = open(file,'rb')                  # file to send
+    session.cwd("ImageDrop/")
+    session.storbinary('STOR ' + file, fileread, 8*1024)     # send the file
+    file.close()                                    # close file and FTP
+    session.quit()   
+
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
 import os, sys, re, shutil, datetime, glob
@@ -280,7 +280,7 @@ for upload_file in upload_tmp_loading:
     #upload_ftp_imagedrop(upload_file)
     ## Then rm loading tmp dir
     try:
-        sub_proc_curlftp_upload(upload_file)
+        upload_to_imagedrop(upload_file)
         print "Uploaded {}".format(upload_file)
         shutil.move(upload_file, archive_uploaded)
     except:

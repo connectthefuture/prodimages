@@ -39,13 +39,14 @@ def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
 ## Upload to imagedrop via FTP
 def upload_to_imagedrop(file):
     import ftplib
-    ftpup = ftplib.FTP("file3.bluefly.corp/ImageDrop")
-    ftpup.login("imagedrop", "imagedrop0")
-    ext = os.path.splitext(file)[1]
-    #if ext in (".txt", ".htm", ".html"):
-    #    ftpup.storlines("STOR " + file, open(file))
-    #else:
-    ftpup.storbinary("STOR " + file, open(file, "rb"), 8*1024)
+    import ftplib
+    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+    fileread = open(file,'rb')                  # file to send
+    session.cwd("ImageDrop/")
+    session.storbinary('STOR ' + file, fileread, 8*1024)     # send the file
+    file.close()                                    # close file and FTP
+    session.quit()
+#    ftpup.storbinary("STOR " + file, open(file, "rb"), 8*1024)
 
 
 ## Create BG image to Composite Primary over inorder to pad BC cutoffs on List page
