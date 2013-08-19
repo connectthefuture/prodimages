@@ -187,13 +187,14 @@ regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg')
 regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
 todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
+todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
 ### Define tmp and archive paths prior to Creating
 tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
 tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
 
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
-archive_uploaded = os.path.join(archive, "uploaded_" + str(todaysdate).replace(",", ""))
+archive_uploaded = os.path.join(archive, "uploaded_" + str(todaysdatearch).replace(",", ""))
 
 imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
 imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
@@ -230,7 +231,7 @@ except:
 
 ## move to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
-[ shutil.copy2(file, tmp_processing) for file in walkedout_tmp ]
+[ shutil.copy2(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
 
 walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.*g'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
@@ -239,8 +240,8 @@ walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.*g'))
 sub_proc_mogrify_png(tmp_processing)
 
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
-[ shutil.copy2(file, tmp_loading) for file in tmp_png ]
-[ shutil.move(file, imgdest_png_final) for file in tmp_png ]
+[ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
+[ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
 
 ###
 ## Create _l_m_alt from original jpgs
@@ -254,3 +255,15 @@ for filepath in walkedout:
         print "Success large med plus move {}".format(filepath)
     except:
         print "Error largemed {}".format(filepath)
+        pass
+
+upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.jpg'))
+for upload_file in upload_tmp_loading:
+    #upload_ftp_imagedrop(upload_file)
+    try:
+        shutil.move(file, archive_uploaded)
+    except:
+        print "Error moving Finals to Arch {}".format(file)
+        
+## shutil.rmtree(tmp_processing)
+## shutil.rmtree(tmp_loading)    
