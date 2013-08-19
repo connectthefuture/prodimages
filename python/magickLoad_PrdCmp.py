@@ -173,13 +173,13 @@ def sub_proc_mogrify_png(tmp_dir):
 ## Upload to imagedrop via FTP
 def upload_to_imagedrop(file):
     import ftplib
-    import ftplib
     session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file,'rb')                  # file to send
+    fileread = open(file,'rb')
+    filename = str(file.split('/')[-1])
     session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + file, fileread, 8*1024)     # send the file
-    file.close()                                    # close file and FTP
-    session.quit()   
+    session.storbinary('STOR ' + filename, fileread, 8*1024)
+    fileread.close()
+    session.quit()    
 
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
