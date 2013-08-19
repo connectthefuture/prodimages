@@ -38,44 +38,31 @@ def rename_retouched_file(src_imgfilepath):
         # if its 1
         if str.isdigit(alttest) & len(alttest) == 1:
             if alttest == '1':
-                alt = ''
+                src_img_primary = src_imgfilepath.replace('_1.','.')
+                os.rename(src_imgfilepath, src_img_primary)
+                return src_img_primary
             else:
                 alttest = int(alttest)
-                alttest = alttest + 1
+                print alttest
+                alttest = alttest - 1
                 alt = '_alt0{}'.format(str(alttest))
-        try:
-            if alt:
-                #print type(filedir), type(colorstyle), type(alt), type(ext)
-                #print filedir, colorstyle, alt, ext
-                filename = "{}{}{}".format(colorstyle,alt,ext)
-                renamed = os.path.join(filedir, filename)
-                print renamed
-        except OSError:
-            print "OSError"
-        try:
-            print renamed
-            os.rename(src_imgfilepath, renamed)
-            if os.path.isfile(renamed):
-                renamed_img_file = renamed
-                return renamed_img_file
-        except:
-            print "findall rneamed"
-            pass
-        #else:
-        try:
-            os.rename(src_imgfilepath,imgfilepath)
-            if os.path.isfile(renamed):
-                return imgfilepath
-        except:
-            print "finad renameSSSS"
-            pass
-    else:
-        try:
-            os.rename(src_imgfilepath,imgfilepath)
-        except:
-            print "Error{}".format(src_imgfilepath)
-        return imgfilepath
-        
+                print alt
+                
+                if alt:
+                        #print type(filedir), type(colorstyle), type(alt), type(ext)
+                        #print filedir, colorstyle, alt, ext
+                    filename = "{}{}{}".format(colorstyle,alt,ext)
+                    renamed = os.path.join(filedir, filename)
+                    print renamed
+        ##        except UnboundLocalError:
+        ##            print "UnboundLocalError{}".format(imgfilepath)
+                if renamed:
+                    os.rename(src_imgfilepath, renamed)
+                    if os.path.isfile(renamed):
+                        return renamed
+        else:
+            return src_imgfilepath
+            
         
 def get_exif_metadata_value(image_filepath, exiftag=None):
     from PIL import Image
@@ -121,9 +108,9 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
         "-resize",
         outsize_l,
         "-adaptive-sharpen",
-        "70",
+        "40",
         "-unsharp",
-        "50",
+        "60",
         "-quality",
         "100",
         image_dest_l,
@@ -141,9 +128,9 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
     "-resize",
     outsize_m,
     "-adaptive-sharpen",
-    "60",
+    "30",
     "-unsharp",
-    "40",
+    "50",
     "-quality",
     "100",
     image_dest_m,
@@ -187,6 +174,10 @@ def sub_proc_mogrify_png(tmp_dir):
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
 import os, sys, re, shutil, datetime, glob
 
+if sys.argv[1]:
+    rootdir = sys.argv[1]
+else:
+    rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 
 regex_CR2 = re.compile(r'.+?\.[CR2cr2]{3}')
 regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
@@ -233,27 +224,13 @@ try:
 except:
     pass
 
-
-##get all the processed files and move to tmp proccessing dir
-#walkedout_tmp = recursive_dirlist(rootdir)
-#for file in walkedout_tmp:
-#    regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
-#    #regex_png = re.compile(r'.+?\.[pngPNG]{3}')
-#    if re.findall(regex_jpg,file):
-#        print "findall"
-#        try:
-#            shutil.move(file, tmp_processing)
-#            print "success {}".format(file)
-#        except:
-#            print "Error {}".format(file)
-
-
-            
-# walkedout = recursive_dirlist(tmp_processing)
+###
+## Begin Processing and compiling images for Loading
+###
 
 ## move to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
-[ shutil.move(file, tmp_processing) for file in walkedout_tmp ]
+[ shutil.copy2(file, tmp_processing) for file in walkedout_tmp ]
 
 walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.*g'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
@@ -265,8 +242,9 @@ tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 [ shutil.copy2(file, tmp_loading) for file in tmp_png ]
 [ shutil.move(file, imgdest_png_final) for file in tmp_png ]
 
+###
 ## Create _l_m_alt from original jpgs
-
+###
 walkedout = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 for filepath in walkedout:
 ### Make _l and _m if not alt
