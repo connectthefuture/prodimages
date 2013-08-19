@@ -171,7 +171,7 @@ def sub_proc_mogrify_png(tmp_dir):
     return
 
 def sub_proc_curlftp_upload(filepath_to_load):
-    import subprocess
+    import subprocess,time
     ftpLoginFull="ftp://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
     subprocess.call[(
     "curl",
@@ -180,6 +180,7 @@ def sub_proc_curlftp_upload(filepath_to_load):
     filepath_to_load,
     ftpLoginFull,
     )]
+    time.sleep(float(.5))
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
 import os, sys, re, shutil, datetime, glob
