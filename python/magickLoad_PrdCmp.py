@@ -24,7 +24,6 @@ def recursive_dirlist(rootdir):
 def rename_retouched_file(src_imgfilepath):
     import os,re
     regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-    regex_renamed= re.compile(r'.+?/[1-9][0-9]{8}_?0?[1-6]?\.jpg')
     imgfilepath = src_imgfilepath
     if re.findall(regex_coded,imgfilepath):
         filedir = imgfilepath.split('/')[:-1]
@@ -53,7 +52,6 @@ def rename_retouched_file(src_imgfilepath):
                 print renamed
         except OSError:
             print "OSError"
-        #if re.findall(regex_renamed,renamed):
         try:
             print renamed
             os.rename(src_imgfilepath, renamed)
@@ -152,10 +150,10 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
     ])
     
     
-def sub_proc_mogrify_png(tmp_dir_processing):
-    import subprocess
+def sub_proc_mogrify_png(tmp_dir):
+    import subprocess,re,os
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
-    subprocess.call(["cd", tmp_dir_processing])
+    os.chdir(tmp_dir)
     subprocess.call([
                 "mogrify",
                 "-format",
@@ -182,6 +180,7 @@ def sub_proc_mogrify_png(tmp_dir_processing):
                 "75",
 #                imgdestpng_out,
                 ])
+    print "Done {}".format(tmp_dir)
     return
 
 ########### RUN #################
@@ -193,7 +192,6 @@ regex_CR2 = re.compile(r'.+?\.[CR2cr2]{3}')
 regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
 regex_png = re.compile(r'.+?\.[pngPNG]{3}')
 regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-regex_renamed = re.compile(r'.+?/[1-9][0-9]{8}_?0?[1-6]?\.jpg')
 regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg') 
 regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
 todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
@@ -254,29 +252,27 @@ except:
 # walkedout = recursive_dirlist(tmp_processing)
 
 ## move to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
-walkedout_tmp = glob.glob(rootdir, '*/*.*g')
-[ shutil.move(file, tmp_processing) for file in walkedout_tmp ]
+walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
+[ shutil.copy2(file, tmp_processing) for file in walkedout_tmp ]
 
-walkedout_tmp = glob.glob(tmp_processing, '*.*g')
+walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.*g'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
 
 ##  make png frpm hirez jpg then move copy to losding and orig to archive
 sub_proc_mogrify_png(tmp_processing)
 
-tmp_png = glob.glob(tmp_processing, '*.png')
+tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 [ shutil.copy2(file, tmp_loading) for file in tmp_png ]
 [ shutil.move(file, imgdest_png_final) for file in tmp_png ]
 
-## Create _l_m_alt jpgs
+## Create _l_m_alt from original jpgs
 
-walkedout = glob.glob(tmp_processing, '*.jpg')
+walkedout = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 for filepath in walkedout:
-
-    ### Make _l and _m if not alt
-    if re.findall(regex_renamed, filepath):
-        try:
-            subproc_magick_l_m_jpg(filepath, tmp_loading)
-            shutil.move(filepath, imgdest_jpg_final)
-            print "Success large med plus move {}".format(filepath)
-        except:
-            print "Error largemed {}".format(filepath)
+### Make _l and _m if not alt
+    try:
+        subproc_magick_l_m_jpg(filepath, tmp_loading)
+        shutil.move(filepath, imgdest_jpg_final)
+        print "Success large med plus move {}".format(filepath)
+    except:
+        print "Error largemed {}".format(filepath)
