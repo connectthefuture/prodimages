@@ -170,6 +170,16 @@ def sub_proc_mogrify_png(tmp_dir):
     print "Done {}".format(tmp_dir)
     return
 
+def sub_proc_curlftp_upload(filepath_to_load):
+    import subprocess
+    ftpLoginFull="ftp://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
+    subprocess.call[(
+    "curl",
+    "-k", 
+    "-T",
+    filepath_to_load,
+    ftpLoginFull,
+    )]
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
 import os, sys, re, shutil, datetime, glob
@@ -194,7 +204,7 @@ tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processi
 tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
 
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
-archive_uploaded = os.path.join(archive, "uploaded_" + str(todaysdatearch).replace(",", ""))
+archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatearch).replace(",", ""))
 
 imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
 imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
@@ -264,6 +274,8 @@ for upload_file in upload_tmp_loading:
     #upload_ftp_imagedrop(upload_file)
     ## Then rm loading tmp dir
     try:
+        sub_proc_curlftp_upload(upload_file)
+        print "Uploaded {}".format(upload_file)
         shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
