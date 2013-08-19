@@ -39,12 +39,12 @@ def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
 ## Upload to imagedrop via FTP
 def upload_to_imagedrop(file):
     import ftplib
-    import ftplib
     session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file,'rb')                  # file to send
+    fileread = open(file,'rb')
+    filename = str(file.split('/')[-1])
     session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + file, fileread, 8*1024)     # send the file
-    file.close()                                    # close file and FTP
+    session.storbinary('STOR ' + filename, fileread, 8*1024)
+    fileread.close()
     session.quit()
 #    ftpup.storbinary("STOR " + file, open(file, "rb"), 8*1024)
 

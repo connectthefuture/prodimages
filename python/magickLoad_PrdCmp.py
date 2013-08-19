@@ -196,8 +196,8 @@ regex_png = re.compile(r'.+?\.[pngPNG]{3}')
 regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
 regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg') 
 regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
-todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
+todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
 ### Define tmp and archive paths prior to Creating
