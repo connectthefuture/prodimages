@@ -84,7 +84,7 @@ ORDER BY
             metatag['XMP:Album'] = "EventID " + str(row['event_id'])
         except:
             pass
-        metatag['IPTC:Credit'] = row['product_group']
+        metatag['IPTC:Credit'] = row['product_path']
         metatag['IPTC:CopyrightNotice'] = row['brand']
         metatag['IPTC:SpecialInstructions'] = row['production_status']
         metatag['IPTC:SimilarityIndex'] = row['color_group']
@@ -138,7 +138,9 @@ def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
 def get_exif_metadata_value(image_filepath, exiftag=None, exifvalue=None):
     from PIL import Image
     import pyexiv2
-    if exifvalue = None:
+    if exifvalue:
+        pass
+    else:
         
         # Read EXIF data to initialize
         image_metadata = pyexiv2.ImageMetadata(image_filepath)
@@ -147,8 +149,8 @@ def get_exif_metadata_value(image_filepath, exiftag=None, exifvalue=None):
         exifvalue = metadata[exiftag]
         # image_metadata[exiftag] = exifvalue
         # image_metadata.write()
-    else:
-        print "Not Yet Built"
+#    else:
+#        print "Not Yet Built"
     return image_filepath
     
     
