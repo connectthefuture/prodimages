@@ -99,29 +99,41 @@ def get_exif_metadata_value(image_filepath, exiftag=None):
 
 
 ###
-def subproc_magick_l_m_jpg(imgsrc, imgdest):
-    import subprocess,os
+def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
+    import subprocess,os,re
     outsize_l = '400x480'
     outsize_m = '200x240'
     outsize_png = '2000x2400'
-    image_dest_l = imgdest.replace('.jpg', '_l.jpg')
-    image_dest_m = imgdest.replace('.jpg', '_m.jpg')
+    
+    colorstyle = str(imgsrc.split('/')[-1][:9])
+    image_dest_l = os.path.join(imgdestdir, colorstyle + '_l.jpg')
+    image_dest_m = os.path.join(imgdestdir, colorstyle + '_m.jpg')
+    
+    regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg') 
+    regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
+    
+    
+    if re.findall(regex_primary_jpg, imgsrc):
+        
+        subprocess.call([
+        "convert",
+        "-format",
+        "jpg",
+        imgsrc,
+        "-resize",
+        outsize_l,
+        "-adaptive-sharpen",
+        "70",
+        "-unsharp",
+        "50",
+        "-quality",
+        "100",
+        image_dest_l,
+        ])
 
-    subprocess.call([
-    "convert",
-    "-format",
-    "jpg",
-    imgsrc,
-    "-resize",
-    outsize_l,
-    "-adaptive-sharpen",
-    "70",
-    "-unsharp",
-    "50",
-    "-quality",
-    "100",
-    image_dest_l,
-    ])
+    if re.findall(regex_alt_jpg, imgsrc):
+        colorstyle_alt = str(imgsrc.split('/')[-1][:15])
+        image_dest_m = os.path.join(imgdestdir, colorstyle_alt + '.jpg')
 
     subprocess.call([
     "convert",
@@ -140,14 +152,16 @@ def subproc_magick_l_m_jpg(imgsrc, imgdest):
     ])
     
     
-def sub_proc_convert_png(imgsrc_jpg, imgdest_png, tmp_processing):
+def sub_proc_mogrify_png(tmp_dir_processing):
     import subprocess
-    imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgdest_png))
+    #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
+    subprocess.call(["cd", tmp_dir_processing])
     subprocess.call([
-                "convert",
+                "mogrify",
                 "-format",
-                "jpg",
-                imgsrc_jpg,
+                "png",
+                '*.jpg',
+#                imgsrc_jpg,
                 "-define",
                 "png:preserve-colormap",
                 "-define",
@@ -166,37 +180,36 @@ def sub_proc_convert_png(imgsrc_jpg, imgdest_png, tmp_processing):
                 "50",
                 "-unsharp",
                 "75",
-                imgdestpng_out,
+#                imgdestpng_out,
                 ])
     return
 
-
+########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
-import os, sys, re, shutil, datetime
+import os, sys, re, shutil, datetime, glob
 
-try:
-    rootdir = sys.argv[1]
-except:
-    rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 
 regex_CR2 = re.compile(r'.+?\.[CR2cr2]{3}')
 regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
 regex_png = re.compile(r'.+?\.[pngPNG]{3}')
 regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-regex_renamed= re.compile(r'.+?/[1-9][0-9]{8}_?0?[1-6]?\.jpg')
+regex_renamed = re.compile(r'.+?/[1-9][0-9]{8}_?0?[1-6]?\.jpg')
+regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg') 
+regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
 todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 
-
+### Define tmp and archive paths prior to Creating
 tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
 tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
 
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
-archive_uploaded = os.path.join(archive , "uploaded_" + str(todaysdate))
+archive_uploaded = os.path.join(archive, "uploaded_" + str(todaysdate).replace(",", ""))
 
-imgdest_jpg_final = os.path.join(archive_uploaded, str(todaysdate).replace(",", ""), 'JPG_RETOUCHED_ORIG')
-imgdest_png_final = os.path.join(archive_uploaded, str(todaysdate).replace(",", ""), 'PNG')
+imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
+imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
 
+### Make Tmp Folders for Processing And Uploading -- tmp_dirs are dated with time(hr:min)to prevent collisions
 try:
     os.makedirs(archive_uploaded, 16877)
 except:
@@ -221,35 +234,67 @@ try:
     os.makedirs(imgdest_jpg_final, 16877)
 except:
     pass
-##get all the processed files
-walkedout_tmp = recursive_dirlist(rootdir)
-for file in walkedout_tmp:
-    regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
-    #regex_png = re.compile(r'.+?\.[pngPNG]{3}')
-    if re.findall(regex_jpg,file):
-        print "findall"
-        try:
-            shutil.move(file, tmp_processing)
-            print "success {}".format(file)
-        except:
-            print "Error {}".format(file)
-            
-walkedout = recursive_dirlist(tmp_processing)
 
+
+##get all the processed files and move to tmp proccessing dir
+#walkedout_tmp = recursive_dirlist(rootdir)
+#for file in walkedout_tmp:
+#    regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
+#    #regex_png = re.compile(r'.+?\.[pngPNG]{3}')
+#    if re.findall(regex_jpg,file):
+#        print "findall"
+#        try:
+#            shutil.move(file, tmp_processing)
+#            print "success {}".format(file)
+#        except:
+#            print "Error {}".format(file)
+
+
+            
+# walkedout = recursive_dirlist(tmp_processing)
+
+## move to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
+walkedout_tmp = glob.glob(rootdir, '*/*.*g')
+[ shutil.move(file, tmp_processing) for file in walkedout_tmp ]
+
+walkedout_tmp = glob.glob(tmp_processing, '*.*g')
+[ rename_retouched_file(file) for file in walkedout_tmp ]
+
+
+sub_proc_mogrify_png(tmp_processing)
+
+tmp_png = glob.glob(tmp_processing, '*.png')
+[ shutil.copy2(file, tmp_loading) for file in tmp_png ]
+[ shutil.move(file, archive_uploaded) for file in tmp_png ]
+
+
+walkedout = glob.glob(tmp_processing, '*.*g')
 for filepath in walkedout:
     #try:
-    imgsrc_jpg = rename_retouched_file(filepath)
+#    imgsrc_jpg = rename_retouched_file(filepath)
     print imgsrc_jpg
-    imgsrc_png = str(imgsrc_jpg.split('/')[-1])
+    
+    imgsrc_png_name = str(filepath.split('/')[-1])
     print imgsrc_png
-    imgsrc_png = imgsrc_png.replace('.jpg','.png')
+##    ###
+    imgsrc_png = imgsrc_png.replace('.jpg','.png').split('/')[-1]
     print imgsrc_png
-    sub_proc_convert_png(imgsrc_jpg, imgsrc_png, tmp_processing)
+
+
     img_jpg_final = os.path.join(imgdest_jpg_final, imgsrc_jpg)
-    img_png_path = os.path.join(tmp_processing, imgsrc_png)
-    shutil.move(imgsrc_jpg, imgdest_jpg_final)
-    shutil.move(img_png_path, imgdest_png_final)
-    shutil.copy2(imgdest_png_final, tmp_loading)
-    subproc_magick_l_m_jpg(imgdest_jpg_final, os.path.join(tmp_loading, imgsrc_jpg.split('/')[-1]))
+    #imgsrc_png = os.path.join(tmp_processing, imgsrc_png_name)
+ 
+    ## Move files to archive then make copies and send to load
+#    shutil.move(imgsrc_jpg, imgdest_jpg_final)
+#    print "move imgsrc"
+#    shutil.move(imgsrc_png, imgdest_png_final)
+#    print "moved png to final"
+#    shutil.copy2(imgdest_png_final, tmp_loading)
+#    print "copied png to upload"
+    
+    ### Make _l and _m if not alt
+    if re.findall(regex_renamed, img_jpg_final):
+        subproc_magick_l_m_jpg(img_jpg_final, tmp_loading)
+
     #except:
     #    print "Error {}".format(filepath)
