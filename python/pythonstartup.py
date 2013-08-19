@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Sat Feb 23 22:38:40 2013
@@ -27,20 +28,24 @@ import scrapy
 Initial Directory Variables to Set at Start
 """
 dir_homedir 	        = os.path.expanduser('~')
-dir_homedir            = os.path.abspath(dir_homedir)
+dir_homedir             = os.path.abspath(dir_homedir)
+dir_studioraw 	        = os.path.abspath("/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE")
+dir_studiozimages 	    = os.path.abspath("/mnt/Production_Raw/.zImages_1")
+dir_dropfinalfiles 	    = os.path.abspath("/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly")
+dir_uploadedarch 	    = os.path.abspath("/mnt/Post_Complete/Complete_Archive/Uploaded")
 dir_zimages 	        = os.path.abspath("/mnt/Post_Ready/zImages_1")
 dir_pushfashion 	    = os.path.abspath("/mnt/Post_Ready/eFashionPush")
 dir_pushstill 	        = os.path.abspath("/mnt/Post_Ready/aPhotoPush")
 dir_sites 	            = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/sites")
-dir_apps 	            = os.path.abspath("/mnt/Dropbox/Apps")
+#dir_apps 	            = os.path.abspath("/mnt/Dropbox/Apps")
 dir_consig 	            = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment")
 dir_datacsv             = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/data/csv")
-dir_dboxapps 		    = os.path.join(dir_homedir, "Dropbox/Apps")
-dir_spydermac 		    = os.path.join(dir_homedir, "Dropbox/Dropbox_sites/SpyderMac")
-wild_csvI7files         = os.path.join(dir_datacsv, "*.csv")
-wild_jpgZImgfiles       = os.path.join(dir_zimages, "*/*.jpg")
-glob_csvI7files         = glob.glob(wild_csvI7files)
-glob_jpgZImgfiles       = glob.glob(wild_jpgZImgfiles)
+#dir_dboxapps 		    = os.path.join(dir_homedir, "Dropbox/Apps")
+#dir_spydermac 		    = os.path.join(dir_homedir, "Dropbox/Dropbox_sites/SpyderMac")
+#wild_csvI7files         = os.path.join(dir_datacsv, "*.csv")
+#wild_jpgZImgfiles       = os.path.join(dir_zimages, "*/*.jpg")
+#glob_csvI7files         = glob.glob(wild_csvI7files)
+#glob_jpgZImgfiles       = glob.glob(wild_jpgZImgfiles)
 
 
 
