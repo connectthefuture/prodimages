@@ -174,9 +174,9 @@ def sub_proc_mogrify_png(tmp_dir):
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
 import os, sys, re, shutil, datetime, glob
 
-if sys.argv[1]:
+try:
     rootdir = sys.argv[1]
-else:
+except IndexError:
     rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 
 regex_CR2 = re.compile(r'.+?\.[CR2cr2]{3}')
