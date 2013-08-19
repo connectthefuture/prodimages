@@ -37,7 +37,7 @@ def rename_retouched_file(src_imgfilepath):
         ext = ".{}".format(ext.lower())
         # if its 1
         if str.isdigit(alttest) & len(alttest) == 1:
-            if alttest == 1:
+            if alttest == '1':
                 alt = ''
             else:
                 alttest = int(alttest)
@@ -253,7 +253,7 @@ except:
 
 ## move to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
-[ shutil.copy2(file, tmp_processing) for file in walkedout_tmp ]
+[ shutil.move(file, tmp_processing) for file in walkedout_tmp ]
 
 walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.*g'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
