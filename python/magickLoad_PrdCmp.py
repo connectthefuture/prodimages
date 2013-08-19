@@ -260,41 +260,23 @@ walkedout_tmp = glob.glob(rootdir, '*/*.*g')
 walkedout_tmp = glob.glob(tmp_processing, '*.*g')
 [ rename_retouched_file(file) for file in walkedout_tmp ]
 
-
+##  make png frpm hirez jpg then move copy to losding and orig to archive
 sub_proc_mogrify_png(tmp_processing)
 
 tmp_png = glob.glob(tmp_processing, '*.png')
 [ shutil.copy2(file, tmp_loading) for file in tmp_png ]
-[ shutil.move(file, archive_uploaded) for file in tmp_png ]
+[ shutil.move(file, imgdest_png_final) for file in tmp_png ]
 
+## Create _l_m_alt jpgs
 
-walkedout = glob.glob(tmp_processing, '*.*g')
+walkedout = glob.glob(tmp_processing, '*.jpg')
 for filepath in walkedout:
-    #try:
-#    imgsrc_jpg = rename_retouched_file(filepath)
-    print imgsrc_jpg
-    
-    imgsrc_png_name = str(filepath.split('/')[-1])
-    print imgsrc_png
-##    ###
-    imgsrc_png = imgsrc_png.replace('.jpg','.png').split('/')[-1]
-    print imgsrc_png
 
-
-    img_jpg_final = os.path.join(imgdest_jpg_final, imgsrc_jpg)
-    #imgsrc_png = os.path.join(tmp_processing, imgsrc_png_name)
- 
-    ## Move files to archive then make copies and send to load
-#    shutil.move(imgsrc_jpg, imgdest_jpg_final)
-#    print "move imgsrc"
-#    shutil.move(imgsrc_png, imgdest_png_final)
-#    print "moved png to final"
-#    shutil.copy2(imgdest_png_final, tmp_loading)
-#    print "copied png to upload"
-    
     ### Make _l and _m if not alt
-    if re.findall(regex_renamed, img_jpg_final):
-        subproc_magick_l_m_jpg(img_jpg_final, tmp_loading)
-
-    #except:
-    #    print "Error {}".format(filepath)
+    if re.findall(regex_renamed, filepath):
+        try:
+            subproc_magick_l_m_jpg(filepath, tmp_loading)
+            shutil.move(filepath, imgdest_jpg_final)
+            print "Success large med plus move {}".format(filepath)
+        except:
+            print "Error largemed {}".format(filepath)
