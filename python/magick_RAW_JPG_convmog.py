@@ -15,7 +15,7 @@ def subproc_mogrify_RAWtoJPG4800h(srcdir):
     "-depth", 
     "8",
     "-density",
-    "350",
+    "350x350",
     "-profile", 
     "/usr/local/color_profiles/sRGB.icm",
     "-colorspace",
@@ -30,7 +30,7 @@ def subproc_mogrify_RAWtoJPG4800h(srcdir):
     "-define",
     'jpg:colorspace=sRGB',
     "-density",
-    "350"
+    "350x350"
     "-adaptive-sharpen",
     "30",
     "-unsharp",
@@ -45,5 +45,5 @@ if sys.argv[1]:
 else:
     srcdir = '.'
     
-
+subproc_mogrify_RAWtoJPG4800h(srcdir)
 
