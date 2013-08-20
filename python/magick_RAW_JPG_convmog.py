@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+##    "-gamma",
+##    "1.8/1.2/1.6",
 def subproc_mogrify_RAWtoJPG5616h(srcdir):
     import subprocess, os, re, sys
 
@@ -10,6 +11,8 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
 
     subprocess.call([
     "mogrify",
+    "-define",
+    'jpeg:size=3744x5616', 
     "-format",
     "jpg",
     "-depth", 
@@ -20,30 +23,28 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     "/usr/local/color_profiles/sRGB.icm",
     "-colorspace",
     "sRGB",
-    "-define",
-    'rgb:size=3744x5616', 
     '*.CR2', 
     "-define",
     'jpeg:size=3744x5616',   
     "-define",
     'jpeg:profile=/usr/local/color_profiles/sRGB.icm', 
-    "-depth", 
-    "16",
     "-define",
     'jpeg:colorspace=sRGB',
-    "-define",
-    'jpeg:fancy-upsampling=on',
+    "-sampling-factor",
+    "1x1,1x1,1x1",
     "-define",
     "jpeg:density=350x350",
-    "-auto-gamma",
-#    "-level",
-#    "0\%,100\%,1.3",
+    "-compression",
+    "none",
+    "-depth", 
+    "8",
     "-adaptive-sharpen",
     "20",
-    "-unsharp",
-    "80",
     "-quality",
     "100",
+    "-auto-gamma",
+    "-unsharp",
+    "4.2x3.5+175+0.0",
     ])
 
 import sys
