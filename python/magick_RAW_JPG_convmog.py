@@ -29,6 +29,7 @@ def subproc_mogrify_RAWtoJPG4800h(srcdir):
     'jpg:profile=/usr/local/color_profiles/sRGB.icm', 
     "-define",
     'jpg:colorspace=sRGB',
+    "-resample",
     "-density",
     "350x350",
     "-level",
