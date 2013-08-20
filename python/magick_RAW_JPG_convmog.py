@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-def subproc_mogrify_RAWtoJPG4800h(srcdir):
+def subproc_mogrify_RAWtoJPG5616h(srcdir):
     import subprocess, os, re, sys
 
 #    regex_CR2 = re.compile(r'.+?\.[CR2cr2]')
@@ -13,27 +13,31 @@ def subproc_mogrify_RAWtoJPG4800h(srcdir):
     "-format",
     "jpg",
     "-depth", 
-    "8",
+    "16",
     "-density",
     "350x350",
     "-profile", 
     "/usr/local/color_profiles/sRGB.icm",
     "-colorspace",
     "sRGB",
-    '*.CR2',
     "-define",
-    'jpg:size=3744x5616',     
+    'rgb:size=3744x5616', 
+    '*.CR2', 
     "-define",
-    'jpg:profile=/usr/local/color_profiles/sRGB.icm', 
+    'jpeg:size=3744x5616',   
     "-define",
-    'jpg:colorspace=sRGB',
+    'jpeg:profile=/usr/local/color_profiles/sRGB.icm', 
+    "-depth", 
+    "16",
+    "-define",
+    'jpeg:colorspace=sRGB',
     "-define",
     'jpeg:fancy-upsampling=on',
-    "-density",
-    "350x350",
+    "-define",
+    "jpeg:density=350x350",
     "-auto-gamma",
-    "-level",
-    "0\%,100\%,1.3",
+#    "-level",
+#    "0\%,100\%,1.3",
     "-adaptive-sharpen",
     "20",
     "-unsharp",
