@@ -30,7 +30,9 @@ def subproc_mogrify_RAWtoJPG4800h(srcdir):
     "-define",
     'jpg:colorspace=sRGB',
     "-density",
-    "350x350"
+    "350x350",
+    "-level",
+    "0\%,100\%,1.3",
     "-adaptive-sharpen",
     "30",
     "-unsharp",
