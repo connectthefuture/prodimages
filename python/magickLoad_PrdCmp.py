@@ -130,7 +130,7 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
     "-adaptive-sharpen",
     "5",
     "-unsharp",
-    "1.0x.8+60+0.1",
+    "55",
     "-quality",
     "100",
     image_dest_m,
@@ -162,9 +162,9 @@ def sub_proc_mogrify_png(tmp_dir):
                 "-quality",
                 "100",
                 "-adaptive-sharpen",
-                "1",
+                "10",
                 "-unsharp",
-                "85",
+                "55",
 #                imgdestpng_out,
                 ])
     print "Done {}".format(tmp_dir)
