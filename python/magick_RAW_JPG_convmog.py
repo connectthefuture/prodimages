@@ -19,7 +19,7 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     "-profile", 
     "/usr/local/color_profiles/AdobeRGB1998.icc",
     "-colorspace",
-    "RGB",
+    "sRGB",
     "-type",
     "TrueColor",
     "-depth", 
@@ -33,6 +33,8 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     '/usr/local/color_profiles/sRGB.icm', 
     "-colorspace",
     'sRGB',
+    "-gamma",
+    "1.3/1.7/1.8",
     "-sampling-factor",
     "1x1,1x1,1x1",
     "-density",
@@ -49,7 +51,6 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     "100",
     "-unsharp",
     "4.2x3.5+175+0.0",
-    "-auto-gamma",
     ])
 
 import sys
