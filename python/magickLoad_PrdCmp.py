@@ -107,7 +107,6 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
         imgsrc,
         "-resize",
         outsize_l,
-        "-resample",
         "-adaptive-sharpen",
         "10",
         "-unsharp",
