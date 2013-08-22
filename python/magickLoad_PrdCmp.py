@@ -107,6 +107,10 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
         imgsrc,
         "-resize",
         outsize_l,
+        "-filter",
+        "Mitchell",
+        "-compress",
+        "JPEG",
         "-adaptive-sharpen",
         "5",
         "-unsharp",
@@ -127,6 +131,10 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
     imgsrc,
     "-resize",
     outsize_m,
+    "-filter",
+    "Mitchell",
+    "-compress",
+    "JPEG",
     "-adaptive-sharpen",
     "2",
     "-unsharp",
@@ -146,7 +154,6 @@ def sub_proc_mogrify_png(tmp_dir):
                 "-format",
                 "png",
                 '*.jpg',
-#                imgsrc_jpg,
                 "-define",
                 "png:preserve-colormap",
                 "-define",
@@ -165,7 +172,6 @@ def sub_proc_mogrify_png(tmp_dir):
                 "10",
                 "-unsharp",
                 "55",
-#                imgdestpng_out,
                 ])
     print "Done {}".format(tmp_dir)
     return
@@ -174,7 +180,7 @@ def sub_proc_mogrify_png(tmp_dir):
 def upload_to_imagedrop(file):
     import ftplib
     session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file,'rb')
+    fileread = open(file, 'rb')
     filename = str(file.split('/')[-1])
     session.cwd("ImageDrop/")
     session.storbinary('STOR ' + filename, fileread, 8*1024)
