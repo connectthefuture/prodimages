@@ -6,7 +6,7 @@ Created on Tue Mar 12 11:23:55 2013
 """
 def sqlQueryEventsUpcoming():
     import sqlalchemy
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@192.168.30.165:1521/bfyprd11')
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
     querymake_eventscal = '''SELECT DISTINCT
       POMGR.EVENT.ID                             AS event_id,

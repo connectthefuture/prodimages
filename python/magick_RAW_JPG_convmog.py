@@ -16,12 +16,17 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     'jpeg:size=3744x5616',
     "-format",
     "jpg",
+<<<<<<< HEAD
     "-profile",
+=======
+    "-profile", 
+>>>>>>> e5e9380bad0337a7672eee19d85600c77b1d3f85
     "/usr/local/color_profiles/AdobeRGB1998.icc",
     "-colorspace",
     "sRGB",
     "-type",
     "TrueColor",
+<<<<<<< HEAD
     "-depth",
     "16",
     "-density",
@@ -31,6 +36,17 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     'jpeg:size=3744x5616',
     "-profile",
     '/usr/local/color_profiles/sRGB.icm',
+=======
+    "-depth", 
+    "16",
+    "-density",
+    "350x350",
+    '*.CR2', 
+    "-define",
+    'jpeg:size=3744x5616',   
+    "-profile",
+    '/usr/local/color_profiles/sRGB.icm', 
+>>>>>>> e5e9380bad0337a7672eee19d85600c77b1d3f85
     "-colorspace",
     'sRGB',
     "-auto-gamma",
