@@ -17,7 +17,7 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     "-format",
     "jpg",
     "-profile",
-    "/usr/local/color_profiles/AdobeRGB1998.icc",
+    "/usr/local/color_profiles/sRGB.icc",
     "-colorspace",
     "sRGB",
     "-type",
