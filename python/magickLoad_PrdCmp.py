@@ -47,7 +47,7 @@ def rename_retouched_file(src_imgfilepath):
                 alttest = alttest - 1
                 alt = '_alt0{}'.format(str(alttest))
                 print alt
-                
+
                 if alt:
                         #print type(filedir), type(colorstyle), type(alt), type(ext)
                         #print filedir, colorstyle, alt, ext
@@ -62,8 +62,8 @@ def rename_retouched_file(src_imgfilepath):
                         return renamed
         else:
             return src_imgfilepath
-            
-        
+
+
 def get_exif_metadata_value(image_filepath, exiftag=None):
     from PIL import Image
     import pyexiv2
@@ -89,17 +89,17 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
     outsize_l = '400x480'
     outsize_m = '200x240'
     outsize_png = '2000x2400'
-    
+
     colorstyle = str(imgsrc.split('/')[-1][:9])
     image_dest_l = os.path.join(imgdestdir, colorstyle + '_l.jpg')
     image_dest_m = os.path.join(imgdestdir, colorstyle + '_m.jpg')
-    
-    regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg') 
+
+    regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg')
     regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
-    
-    
+
+
     if re.findall(regex_primary_jpg, imgsrc):
-        
+
         subprocess.call([
         "convert",
         "-format",
@@ -108,9 +108,9 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
         "-resize",
         outsize_l,
         "-adaptive-sharpen",
-        "10",
+        "5",
         "-unsharp",
-        "30",
+        "20",
         "-quality",
         "100",
         image_dest_l,
@@ -128,15 +128,15 @@ def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
     "-resize",
     outsize_m,
     "-adaptive-sharpen",
-    "5",
+    "2",
     "-unsharp",
-    "20",
+    "10",
     "-quality",
     "100",
     image_dest_m,
     ])
-    
-    
+
+
 def sub_proc_mogrify_png(tmp_dir):
     import subprocess,re,os
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
@@ -157,8 +157,8 @@ def sub_proc_mogrify_png(tmp_dir):
                 "png:compression-strategy=N",
                 "-define",
                 "png:compression-filter=N",
-                "-format", 
-                "png",               
+                "-format",
+                "png",
                 "-quality",
                 "100",
                 "-adaptive-sharpen",
@@ -179,7 +179,7 @@ def upload_to_imagedrop(file):
     session.cwd("ImageDrop/")
     session.storbinary('STOR ' + filename, fileread, 8*1024)
     fileread.close()
-    session.quit()    
+    session.quit()
 
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
@@ -194,7 +194,7 @@ regex_CR2 = re.compile(r'.+?\.[CR2cr2]{3}')
 regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
 regex_png = re.compile(r'.+?\.[pngPNG]{3}')
 regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg') 
+regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg')
 regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
@@ -285,8 +285,8 @@ for upload_file in upload_tmp_loading:
         shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
-        
-## After completed Process and Load to imagedrop 
+
+## After completed Process and Load to imagedrop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
 upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
 if len(upload_tmp_loading_remainder) == 0:
