@@ -340,7 +340,7 @@ tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 
 ## ARCHIVED Backup
 ## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
-jpgs_to_archive = glob.glob(os.path.join(tmp_processing, '*.png'))
+jpgs_to_archive = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 [ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in jpgs_to_archive ]
 
 
