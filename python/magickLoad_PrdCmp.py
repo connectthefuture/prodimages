@@ -187,7 +187,7 @@ def pycurl_upload_imagedrop(localFilePath):
         c.setopt(pycurl.URL, ftpFilePath)
         c.setopt(pycurl.PORT , 21)
         c.setopt(pycurl.USERPWD, ftpUSERPWD)
-        c.setopt(pycurl.VERBOSE, 1)
+        ##c.setopt(pycurl.VERBOSE, 1)
         c.setopt(pycurl.FORBID_REUSE, 1)
         c.setopt(pycurl.FRESH_CONNECT, 1)
         f = open(localFilePath, 'rb')
@@ -369,9 +369,12 @@ for upload_file in upload_tmp_loading:
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
     ## Then rm loading tmp dir
     try:
-        pycurl_upload_imagedrop(upload_file)
-        print "Uploaded {}".format(upload_file)
-        shutil.move(upload_file, archive_uploaded)
+        code = pycurl_upload_imagedrop(upload_file)
+        if code:
+            print code
+        else:
+            print "Uploaded {}".format(upload_file)
+            shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
         
