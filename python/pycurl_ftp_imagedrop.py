@@ -19,6 +19,8 @@ def pycurl_upload_imagedrop(localFilePath):
         c.setopt(pycurl.PORT , 21)
         c.setopt(pycurl.USERPWD, ftpUSERPWD)
         c.setopt(pycurl.VERBOSE, 1)
+        c.setopt(pycurl.FORBID_REUSE, 1)
+        c.setopt(pycurl.FRESH_CONNECT, 1)
         f = open(localFilePath, 'rb')
         c.setopt(pycurl.INFILE, f)
         c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
@@ -27,10 +29,12 @@ def pycurl_upload_imagedrop(localFilePath):
         try:
             c.perform()
             c.close()
-            print "Successfully Sent Purge Request for --> {0}".format(localFileName)
+            print "Successfully Uploaded --> {0}".format(localFileName)
+            ## return 200
         except pycurl.error, error:
             errno, errstr = error
             print 'An error occurred: ', errstr
+            return errno
             
             
 ############# RUN ####

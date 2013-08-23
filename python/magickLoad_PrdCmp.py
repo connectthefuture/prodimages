@@ -171,7 +171,7 @@ def subproc_magick_png(imgdir):
 ##### Upload tmp_loading dir to imagedrop via FTP using Pycurl  #####
 def pycurl_upload_imagedrop(localFilePath):
     import pycurl, os
-
+    #import FileReader
     localFileName = localFilePath.split('/')[-1]
 
     mediaType = "8"
@@ -188,6 +188,8 @@ def pycurl_upload_imagedrop(localFilePath):
         c.setopt(pycurl.PORT , 21)
         c.setopt(pycurl.USERPWD, ftpUSERPWD)
         c.setopt(pycurl.VERBOSE, 1)
+        c.setopt(pycurl.FORBID_REUSE, 1)
+        c.setopt(pycurl.FRESH_CONNECT, 1)
         f = open(localFilePath, 'rb')
         c.setopt(pycurl.INFILE, f)
         c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
@@ -196,18 +198,25 @@ def pycurl_upload_imagedrop(localFilePath):
         try:
             c.perform()
             c.close()
-            print "Successfully Sent Purge Request for --> {0}".format(localFileName)
+            print "Successfully Uploaded File --> {0}".format(localFileName)
+            ## return 200
         except pycurl.error, error:
             errno, errstr = error
             print 'An error occurred: ', errstr
+            return errno
 
 
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
 import os, sys, re, shutil, datetime, glob
 
+### Can pass as sys.argv a direcectory with nested directories containing jpgs. Must have nested dirs
 try:
-    rootdir = sys.argv[1]
+    testdir = sys.argv[1]
+    if os.path.isdir(testdir):
+       rootdir = testdir
+    else:
+        rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 except IndexError:
     rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 
@@ -365,6 +374,7 @@ for upload_file in upload_tmp_loading:
         shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
+        
 
 ## After completed Process and Load to imagedrop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
