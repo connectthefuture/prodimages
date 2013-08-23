@@ -94,7 +94,7 @@ def subproc_magick_large_jpg(imgdir):
     
     subprocess.call([
     "mogrify",
-    '*.jpg[400x480]'
+    '*.jpg[400x480]',
     "-filter",
     "Mitchell",
     "-compress",
@@ -118,7 +118,7 @@ def subproc_magick_medium_jpg(imgdir):
     
     subprocess.call([
     "mogrify",
-    '*.jpg[200x240]'
+    '*.jpg[200x240]',
     "-filter",
     "Mitchell",
     "-compress",
@@ -135,7 +135,7 @@ def subproc_magick_medium_jpg(imgdir):
 
 
 ### Png Create with Mogrify globbing png directories
-def sub_proc_mogrify_png(imgdir):
+def subproc_magick_png(imgdir):
     import subprocess,re,os
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
     os.chdir(imgdir)
@@ -331,7 +331,7 @@ subproc_magick_medium_jpg(tmp_processing_m)
 ## PNG
 ##### PNG CREATE FROM RETOUCHED JPGS ## All files in Root of tmp_processing will be mogrified to PNGs leaving JPG to Arch
 ##  make png frpm hirez jpg then move copy to losding and orig to archive
-sub_proc_mogrify_png(tmp_processing)
+subproc_magick_png(tmp_processing)
 
 ### Glob created PNGs and copy to Load Dir then Store in Arch dir 
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
