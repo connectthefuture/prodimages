@@ -71,6 +71,7 @@ pattern_exifval = r'([A-Z0-9]\w+?\s?[A-Za-z]+\')'
 regex_exif = re.compile(pattern_exiftag + "=" + pattern_exifval)
 
 #pattern = re.compile(r'(\d+?[/|-]+?\d+?[/|-]+?\d+?)')
+
 #f = open(csvfile, 'rb')
 #string = re.findall(pattern, f.read())
 #sorted(string)
@@ -84,7 +85,7 @@ regex_exif = re.compile(pattern_exiftag + "=" + pattern_exifval)
 
 #startDateFrom=&startDateTo=&colorGroup=&searchBrand=&eventId=&productStatus=&merchantStatus=&inventory=&active=&store=&styleNumbers=324162301&vendorStyleNumbers=&shortName=&poHdrs=&searchCategory=&jdaCategory=&Submit=Search&exportToExcel=false&exportImages=false&solrQuery=&currentPage=0
 
-
+#### REGEX PATTERN DEFINITIONS
 ###
 ## Walk Root Directory and Return List or all Files in all Subdirs too
 def recursive_dirlist(rootdir):
@@ -104,7 +105,59 @@ def recursive_dirlist(rootdir):
     return walkedlist
 
 
-#END###### REGEX PATTERN DEFINITIONS
+
+###########          ############################          ###########################          ################
+################################################################################################################
+###########          FTP AND CURL Functions          ########          ################
+###########          ############################          ###########################          ################
+################################################################################################################
+## Upload to imagedrop via FTP Unreliable
+def upload_to_imagedrop(file):
+    import ftplib
+    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+    fileread = open(file, 'rb')
+    filename = str(file.split('/')[-1])
+    session.cwd("ImageDrop/")
+    session.storbinary('STOR ' + filename, fileread, 8*1024)
+    fileread.close()
+    session.quit()
+
+
+#### Very Reliable FTP upload to Imagedrop using PyCurl
+def pycurl_upload_imagedrop(localFilePath):
+    import pycurl, os
+    #import FileReader
+    localFileName = localFilePath.split('/')[-1]
+
+    mediaType = "8"
+    ftpURL = "ftp://file3.bluefly.corp/ImageDrop/"
+    ftpFilePath = os.path.join(ftpURL, localFileName)
+    ftpUSERPWD = "imagedrop:imagedrop0"
+
+    if localFilePath != "" and ftpFilePath != "":
+        ## Create send data
+
+        ### Send the request to Edgecast
+        c = pycurl.Curl()
+        c.setopt(pycurl.URL, ftpFilePath)
+        c.setopt(pycurl.PORT , 21)
+        c.setopt(pycurl.USERPWD, ftpUSERPWD)
+        c.setopt(pycurl.VERBOSE, 1)
+        f = open(localFilePath, 'rb')
+        c.setopt(pycurl.INFILE, f)
+        c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
+        c.setopt(pycurl.UPLOAD, 1)
+
+        try:
+            c.perform()
+            c.close()
+            print "Successfully Sent Purge Request for --> {0}".format(localFileName)
+        except pycurl.error, error:
+            errno, errstr = error
+            print 'An error occurred: ', errstr
+            
+
+#END###### FTP FUNX
 
 """
 Return Date Formatted for Inserting to MySQL db

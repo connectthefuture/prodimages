@@ -2,7 +2,7 @@
 
 ##    "-gamma",
 ##    "1.8/1.2/1.6",
-def subproc_mogrify_RAWtoJPG5616h(srcdir):
+def subproc_mogrify_RAWtoJPGshort(srcdir):
     import subprocess, os, re, sys
 
 #    regex_CR2 = re.compile(r'.+?\.[CR2cr2]')
@@ -13,43 +13,12 @@ def subproc_mogrify_RAWtoJPG5616h(srcdir):
     subprocess.call([
     "mogrify",
     "-define",
-    'jpeg:size=3744x5616',
+    'cr28:size=3744x',
     "-format",
     "jpg",
-    "-profile",
-    "/usr/local/color_profiles/sRGB.icc",
-    "-colorspace",
-    "sRGB",
-    "-type",
-    "TrueColor",
-    "-depth",
-    "16",
-    "-density",
-    "350x350",
     '*.CR2',
     "-define",
-    'jpeg:size=3744x5616',
-    "-profile",
-    '/usr/local/color_profiles/sRGB.icm',
-    "-colorspace",
-    'sRGB',
-    "-auto-gamma",
-    "-sampling-factor",
-    "1x1,1x1,1x1",
-    "-density",
-    "350x350",
-    "-filter",
-    "Mitchell",
-    "-compress",
-    "JPEG",
-    "-depth",
-    "8",
-    "-adaptive-sharpen",
-    "10",
-    "-quality",
-    "100",
-    "-unsharp",
-    "4.2x3.5+175+0.0",
+    'jpeg:size=3744x',
     ])
 
 import sys
@@ -59,3 +28,54 @@ else:
     srcdir = '.'
 
 subproc_mogrify_RAWtoJPG5616h(srcdir)
+
+
+
+def subproc_mogrify_RAWtoJPG5616h(srcdir)
+    import subprocess, os, re, sys
+
+#    regex_CR2 = re.compile(r'.+?\.[CR2cr2]')
+#    regex_jpg = re.compile(r'.+?\.[JPGjpg]')
+#    if re.findall(regex_CR2, file)
+    os.chdir(srcdir)
+
+    subprocess.call([
+    "mogrify",
+    "-define",
+    'dcraw8size=3744x5616', 
+    "-format",
+    "jpg",
+    "-depth", 
+    "16",
+    "-density",
+    "350x350",
+    "-profile", 
+    "/usr/local/color_profiles/AdobeRGB1998.icc",
+    "-colorspace",
+    "RGB",
+    '*.CR2', 
+    "-define",
+    'jpegsize=3744x5616',   
+    "-profile",
+    '/usr/local/color_profiles/sRGB.icm', 
+    "-colorspace",
+    'sRGB',
+    "-sampling-factor",
+    "1x1,1x1,1x1",
+    "-density",
+    "350x350",
+    "-filter",
+    "LanczosSharp",
+    "-compress",
+    "JPEG",
+    "-depth", 
+    "16",
+    "-resample",
+    "-adaptive-sharpen",
+    "10",
+    "-quality",
+    "100",
+    "-auto-gamma",
+    "-unsharp",
+    "4.2x3.5+175+0.0",
+    ])

@@ -83,109 +83,124 @@ def get_exif_metadata_value(image_filepath, exiftag=None):
         return metadict
 
 
-###
-def subproc_magick_l_m_jpg(imgsrc, imgdestdir):
+######## Make Images For Upload to Website ##########
+
+### Large Jpeg Mogrfy Dir with _l jpgs
+def subproc_magick_large_jpg(imgdir):
     import subprocess,os,re
-    outsize_l = '400x480'
-    outsize_m = '200x240'
-    outsize_png = '2000x2400'
 
-    colorstyle = str(imgsrc.split('/')[-1][:9])
-    image_dest_l = os.path.join(imgdestdir, colorstyle + '_l.jpg')
-    image_dest_m = os.path.join(imgdestdir, colorstyle + '_m.jpg')
-
-    regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg')
-    regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
-
-
-    if re.findall(regex_primary_jpg, imgsrc):
-
-        subprocess.call([
-        "convert",
-        "-format",
-        "jpg",
-        imgsrc,
-        "-resize",
-        outsize_l,
-        "-filter",
-        "Mitchell",
-        "-compress",
-        "none",
-        "-adaptive-sharpen",
-        "0",
-        "-unsharp",
-        "1.3x1.0+85+0.2",
-        "-quality",
-        "100",
-        image_dest_l,
-        ])
-
-    if re.findall(regex_alt_jpg, imgsrc):
-        colorstyle_alt = str(imgsrc.split('/')[-1][:15])
-        image_dest_m = os.path.join(imgdestdir, colorstyle_alt + '.jpg')
-
+    ### Change to Large jpg dir to Mogrify using Glob
+    os.chdir(imgdir)
+    
     subprocess.call([
-    "convert",
-    "-format",
-    "jpg",
-    imgsrc,
-    "-resize",
-    outsize_m,
+    "mogrify",
+    '*.jpg[400x480]'
     "-filter",
     "Mitchell",
     "-compress",
     "none",
+    "-format",
+    "jpeg",
     "-adaptive-sharpen",
-    "0",
+    "100",
     "-unsharp",
-    "1.3x1.0+85+0.2",
+    "50",
     "-quality",
     "100",
-    image_dest_m,
+    ])
+
+### Medium Jpeg Mogrfy Dir with _m jpgs
+def subproc_magick_medium_jpg(imgdir):
+    import subprocess,os,re
+
+    ### Change to Medium jpg dir to Mogrify using Glob
+    os.chdir(imgdir)
+    
+    subprocess.call([
+    "mogrify",
+    '*.jpg[200x240]'
+    "-filter",
+    "Mitchell",
+    "-compress",
+    "none",
+    "-format",
+    "jpeg",
+    "-adaptive-sharpen",
+    "100",
+    "-unsharp",
+    "50",
+    "-quality",
+    "100",
     ])
 
 
-def sub_proc_mogrify_png(tmp_dir):
+### Png Create with Mogrify globbing png directories
+def sub_proc_mogrify_png(imgdir):
     import subprocess,re,os
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
-    os.chdir(tmp_dir)
+    os.chdir(imgdir)
+    
     subprocess.call([
-                "mogrify",
-                "-format",
-                "png",
-                '*.jpg',
-                "-define",
-                "png:preserve-colormap",
-                "-define",
-                "png:format=png24",
-                "-define",
-                "png:compression-level=N",
-                "-define",
-                "png:compression-strategy=N",
-                "-define",
-                "png:compression-filter=N",
-                "-format",
-                "png",
-                "-quality",
-                "100",
-                "-adaptive-sharpen",
-                "10",
-                "-unsharp",
-                "55",
-                ])
-    print "Done {}".format(tmp_dir)
+    "mogrify",
+    "-format",
+    "png",
+    '*.jpg',
+    "-define",
+    "png:preserve-colormap",
+    "-define",
+    "png:format=png24",
+    "-define",
+    "png:compression-level=N",
+    "-define",
+    "png:compression-strategy=N",
+    "-define",
+    "png:compression-filter=N",
+    "-format",
+    "png",
+    "-quality",
+    "100",
+    "-adaptive-sharpen",
+    "50",
+    "-unsharp",
+    "75",
+    ])
+    
+    print "Done {}".format(imgdir)
     return
 
-## Upload to imagedrop via FTP
-def upload_to_imagedrop(file):
-    import ftplib
-    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file, 'rb')
-    filename = str(file.split('/')[-1])
-    session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + filename, fileread, 8*1024)
-    fileread.close()
-    session.quit()
+##### Upload tmp_loading dir to imagedrop via FTP using Pycurl  #####
+def pycurl_upload_imagedrop(localFilePath):
+    import pycurl, os
+
+    localFileName = localFilePath.split('/')[-1]
+
+    mediaType = "8"
+    ftpURL = "ftp://file3.bluefly.corp/ImageDrop/"
+    ftpFilePath = os.path.join(ftpURL, localFileName)
+    ftpUSERPWD = "imagedrop:imagedrop0"
+
+    if localFilePath != "" and ftpFilePath != "":
+        ## Create send data
+
+        ### Send the request to Edgecast
+        c = pycurl.Curl()
+        c.setopt(pycurl.URL, ftpFilePath)
+        c.setopt(pycurl.PORT , 21)
+        c.setopt(pycurl.USERPWD, ftpUSERPWD)
+        c.setopt(pycurl.VERBOSE, 1)
+        f = open(localFilePath, 'rb')
+        c.setopt(pycurl.INFILE, f)
+        c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
+        c.setopt(pycurl.UPLOAD, 1)
+
+        try:
+            c.perform()
+            c.close()
+            print "Successfully Sent Purge Request for --> {0}".format(localFileName)
+        except pycurl.error, error:
+            errno, errstr = error
+            print 'An error occurred: ', errstr
+
 
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
@@ -196,20 +211,27 @@ try:
 except IndexError:
     rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 
+
+### Regex Pattern Defs
 regex_CR2 = re.compile(r'.+?\.[CR2cr2]{3}')
 regex_jpg = re.compile(r'.+?\.[JPGjpg]{3}')
 regex_png = re.compile(r'.+?\.[pngPNG]{3}')
 regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
 regex_primary_jpg = re.compile(r'.+?/[1-9][0-9]{8}\.jpg')
 regex_alt_jpg = re.compile(r'.+?/[1-9][0-9]{8}_alt0[1-6]\.jpg')
+
+### Date Defs
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
 ### Define tmp and archive paths prior to Creating
 tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
+tmp_processing_l = os.path.join(tmp_processing, "largejpg")
+tmp_processing_m = os.path.join(tmp_processing, "mediumjpg")
 tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
 
+## Define for Creating Archive dirs
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
 archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatearch).replace(",", ""))
 
@@ -233,6 +255,16 @@ else:
         pass
 
     try:
+        os.makedirs(tmp_processing_l, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(tmp_processing_m, 16877)
+    except:
+        pass
+
+    try:
         os.makedirs(tmp_loading, 16877)
     except:
         pass
@@ -247,46 +279,90 @@ else:
     except:
         pass
 
-###
+####################################################
 ## Begin Processing and compiling images for Loading
-###
+####################################################
 
-## move to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
+
+## Move All DropFinal Files from Retouchers dirs to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
 [ shutil.move(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
 
-walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.*g'))
+### Rename Files moved into Temp Processing Floder
+walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
 
+
+## Copy Full Size Retouched Jpg to tmp Large and Med jpg folders for Glob Mogrify AND to Final Archive JPG_RETOUCHED_ORIG
+walkedout_renamed = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+
+
+## Large
+[ shutil.copy2(file, os.path.join(tmp_processing_l, os.path.basename(file))) for file in walkedout_renamed ]
+walkedout_large = glob.glob(os.path.join(tmp_processing_l, '*.jpg'))
+### Remove alt images and rename as _l
+for f in walkedout_large:
+    if re.findall(regex_alt_jpg, f):
+        os.remove(f)
+    elif re.findall(regex_primary_jpg, f):
+        f_large = f.replace('.jpg', '_l.jpg')
+        os.rename(f, f_large)
+
+## Mofrify directory of only primary renamed _l Files  to 400x480
+subproc_magick_large_jpg(tmp_processing_l)
+
+
+## Medium
+[ shutil.copy2(file, os.path.join(tmp_processing_m, os.path.basename(file))) for file in walkedout_renamed ]
+walkedout_medium = glob.glob(os.path.join(tmp_processing_m, '*.jpg'))
+### Bypass rename alt images and rename only primary jpgs as _m
+for f in walkedout_medium:
+    if re.findall(regex_primary_jpg, f):
+        f_medium = f.replace('.jpg', '_m.jpg')
+        os.rename(f, f_medium)
+
+## Mofrify directory of renamed _m Files and unrenamed alts to 200x240
+subproc_magick_medium_jpg(tmp_processing_m)
+
+####
+#### JPEGS Have Been CREATED in Each of the tmp_processing folders named _l + _m
+####
+
+## PNG
+##### PNG CREATE FROM RETOUCHED JPGS ## All files in Root of tmp_processing will be mogrified to PNGs leaving JPG to Arch
 ##  make png frpm hirez jpg then move copy to losding and orig to archive
 sub_proc_mogrify_png(tmp_processing)
 
+### Glob created PNGs and copy to Load Dir then Store in Arch dir 
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
 [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
 
+## ARCHIVED Backup
+## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
+jpgs_to_archive = glob.glob(os.path.join(tmp_processing, '*.png'))
+[ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in jpgs_to_archive ]
+
+
+###### All PNGs Created and moved to Archive plus Copy sent to Load Directory
 ###
-## Create _l_m_alt from original jpgs
+######
+#### All Files Converted for Upload, Now glob search and move to tmp loading
 ###
-walkedout = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-for filepath in walkedout:
-### Make _l and _m if not alt
-    try:
-        subproc_magick_l_m_jpg(filepath, tmp_loading)
-        shutil.move(filepath, imgdest_jpg_final)
-        print "Success large med plus move {}".format(filepath)
-    except:
-        print "Error largemed {}".format(filepath)
-        pass
+load_pngs = glob.glob(os.path.join(tmp_processing, '*.png'))
+load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
+[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_pngs ]
+[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
+
+## UPLOAD FTP with PyCurl everything in tmp_loading
+###
 
 upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
 for upload_file in upload_tmp_loading:
-    #### TODO
-    #### UPLOAD upload_file via ftp to imagedrop
-    #upload_ftp_imagedrop(upload_file)
+    #### UPLOAD upload_file via ftp to imagedrop using Pycurl
     ## Then rm loading tmp dir
     try:
-        upload_to_imagedrop(upload_file)
+        pycurl_upload_imagedrop(upload_file)
         print "Uploaded {}".format(upload_file)
         shutil.move(upload_file, archive_uploaded)
     except:
@@ -298,6 +374,7 @@ upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
 if len(upload_tmp_loading_remainder) == 0:
     shutil.rmtree(tmp_loading)
 
-upload_tmp_processing_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
-if len(upload_tmp_processing_remainder) == 0:
+upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
+upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
+if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
     shutil.rmtree(tmp_processing)
