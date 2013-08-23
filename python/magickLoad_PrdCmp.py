@@ -347,11 +347,9 @@ jpgs_to_archive = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 ###### All PNGs Created and moved to Archive plus Copy sent to Load Directory
 ###
 ######
-#### All Files Converted for Upload, Now glob search and move to tmp loading
+#### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
 ###
-load_pngs = glob.glob(os.path.join(tmp_processing, '*.png'))
 load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
-[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_pngs ]
 [ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
 
 ## UPLOAD FTP with PyCurl everything in tmp_loading
