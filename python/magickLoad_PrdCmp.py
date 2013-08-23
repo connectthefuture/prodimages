@@ -371,7 +371,7 @@ for upload_file in upload_tmp_loading:
     try:
         code = pycurl_upload_imagedrop(upload_file)
         if code:
-            print code
+            print code, upload_file
         else:
             print "Uploaded {}".format(upload_file)
             shutil.move(upload_file, archive_uploaded)
