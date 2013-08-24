@@ -368,7 +368,7 @@ load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
 
 ## UPLOAD FTP with PyCurl everything in tmp_loading
 ###
-
+import time
 upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
 for upload_file in upload_tmp_loading:
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
@@ -377,8 +377,10 @@ for upload_file in upload_tmp_loading:
         code = pycurl_upload_imagedrop(upload_file)
         if code:
             print code, upload_file
+            time.sleep(float(.8))
         else:
             print "Uploaded {}".format(upload_file)
+            time.sleep(float(.2))
             shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
