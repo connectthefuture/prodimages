@@ -18,7 +18,7 @@ def pycurl_upload_imagedrop(localFilePath):
         c.setopt(pycurl.URL, ftpFilePath)
         c.setopt(pycurl.PORT , 21)
         c.setopt(pycurl.USERPWD, ftpUSERPWD)
-        c.setopt(pycurl.VERBOSE, 1)
+        #c.setopt(pycurl.VERBOSE, 1)
         c.setopt(pycurl.FORBID_REUSE, 1)
         c.setopt(pycurl.FRESH_CONNECT, 1)
         f = open(localFilePath, 'rb')
