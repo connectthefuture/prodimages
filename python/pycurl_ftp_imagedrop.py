@@ -46,8 +46,17 @@ def pycurl_upload_imagedrop(localFilePath):
                 print "Couldnt Close Cnx"
                 pass
             return errno
-            
-            
+
+## backup for 56 then 7 curl err            
+def upload_to_imagedrop(file):
+    import ftplib
+    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+    fileread = open(file, 'rb')
+    filename = str(file.split('/')[-1])
+    session.cwd("ImageDrop/")
+    session.storbinary('STOR ' + filename, fileread, 8*1024)
+    fileread.close()
+    session.quit()            
 ############# RUN ####
 import sys,os
     

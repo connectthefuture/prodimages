@@ -216,6 +216,18 @@ def pycurl_upload_imagedrop(localFilePath):
                 pass
             return errno
 
+#####
+###
+## backup for 56 then 7 curl err            
+def upload_to_imagedrop(file):
+    import ftplib
+    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+    fileread = open(file, 'rb')
+    filename = str(file.split('/')[-1])
+    session.cwd("ImageDrop/")
+    session.storbinary('STOR ' + filename, fileread, 8*1024)
+    fileread.close()
+    session.quit()
 
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
@@ -383,10 +395,17 @@ for upload_file in upload_tmp_loading:
         code = pycurl_upload_imagedrop(upload_file)
         if code:
             print code, upload_file
-            time.sleep(float(.8))
+            time.sleep(float(3))
+            try:
+                ftpload_to_imagedrop(upload_file)
+                print "Uploaded {}".format(upload_file)
+                time.sleep(float(.3))
+                shutil.move(upload_file, archive_uploaded)
+            except:
+                pass
         else:
             print "Uploaded {}".format(upload_file)
-            time.sleep(float(.1))
+            time.sleep(float(.3))
             shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
