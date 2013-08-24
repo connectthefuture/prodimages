@@ -386,7 +386,7 @@ for upload_file in upload_tmp_loading:
             time.sleep(float(.8))
         else:
             print "Uploaded {}".format(upload_file)
-            time.sleep(float(.2))
+            time.sleep(float(.1))
             shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
