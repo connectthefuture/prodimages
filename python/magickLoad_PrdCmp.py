@@ -198,11 +198,16 @@ def pycurl_upload_imagedrop(localFilePath):
         try:
             c.perform()
             c.close()
-            print "Successfully Uploaded File --> {0}".format(localFileName)
+            print "Successfully Uploaded --> {0}".format(localFileName)
             ## return 200
         except pycurl.error, error:
             errno, errstr = error
             print 'An error occurred: ', errstr
+            try:
+                c.close()
+            except:
+                print "Couldnt Close Cnx"
+                pass
             return errno
 
 
