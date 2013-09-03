@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+"""
+Created on WED JUL 24 11:23:55 2013
+
+Functions for getting and parsing html files and pages
+
+@author: jb
+"""
+def url_get_links(targeturl):
+    import os,re,sys,requests
+    from bs4 import BeautifulSoup
+    r = requests.get(targeturl)
+    soup = BeautifulSoup(r.text)
+    ###  soup is now Full HTML of target -- Below creates/returns list of unique links
+    linklist = []
+    for link in soup.find_all('a'):
+        linklist.append(link.get('href'))
+        sorted(linklist)
+    ## Return list of unique links
+    return list(set(linklist))
+
+def soup_get_links_jpgs(soup):
+    from bs4 import BeautifulSoup
+    linklist = []
+    for link in soup.select('a[href$="jpg"]'):
+        linklist.append(link.get('href'))
+        sorted(linklist)
+    ## Return list of unique links to jpg Files
+    return list(set(linklist))
+
+
+def url_get_soup(targeturl):
+    from bs4 import BeautifulSoup
+    import requests
+    r = requests.get(targeturl)
+    soup = BeautifulSoup(r.text)
+    return soup

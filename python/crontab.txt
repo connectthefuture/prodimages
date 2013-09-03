@@ -1,0 +1,114 @@
+#CrInfo Sync pythonista "App" Folder, "PythonistaAppOnly" to SpyderMac/py_iphone hourly at the Sevens
+7	*	*	*	*	rsync --archive --compress --update /Users/johnb/Dropbox/Dropbox_sites/Apps/PythonistaAppOnly/ /Users/johnb/Dropbox/Dropbox_sites/SpyderMac/py_iphone
+56	9	*	*	1,2,3,4,5,6	rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still & rsync --archive --compress --update /mnt/Post_Ready/eFashionPush/ /mnt/Post_Ready/Retouch_Fashion
+56	18	*	*	1,2,3,4,5,6	rsync --archive --compress --update /usr/local/batchRunScripts/ /Users/johnb/Dropbox/Dropbox_sites/imageServertmp/batchRunScripts
+58	18	*	*	1,2,3,4,5,6	rsync --archive --compress --update  /mnt/Post_Ready/zProd_Server/imageServer7/scripts/ /Users/johnb/Dropbox/Dropbox_sites/imageServertmp/scripts
+59	18	*	*	1,2,3,4,5,6	rsync --archive --compress --update  /mnt/Post_Ready/zProd_Server/imageServer7/lib/ /Users/johnb/Dropbox/Dropbox_sites/imageServertmp/lib
+#CrInfo rsync DAG on ZIMAGES to imagesrvertmp..on Dropbox_sites
+2	11,19	*	*	*	/usr/bin/rsync --archive --compress --update --verbose -r --stats /mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/ ~/Dropbox/Dropbox_sites/imageServertmp/sites/queries_PHP-test1 && /usr/bin/rsync --archive --compress --update --verbose -r ~/Dropbox/Dropbox_sites/imageServertmp/sites/queries_PHP-test1/ ~/Dropbox/Dropbox_sites/imageServertmp/sites/queries_PHP-test1dbox && /usr/bin/rsync --archive --compress --update --verbose -r --stats ~/Dropbox/Dropbox_sites/imageServertmp/sites/queries_PHP-test1dbox/ ~/Dropbox/Dropbox_sites/imageServertmp/sites/queries_PHP-test1
+#CrInfo rsync DAG on ZIMAGES to imagesrvertmp..on Dropbox_sites
+18	11,19	*	*	*	/usr/bin/rsync --archive --compress --update --verbose -r ~/Dropbox/Dropbox_sites/imageServertmp/sites/queries_PHP-test1dbox/ /mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1
+#CrInfo rsync DAG on ZIMAGES to $PRODSRV/htdocs..on File7
+33	11,19	*	*	*	/usr/bin/rsync --archive --compress --update --verbose -r --stats /mnt/Post_Ready/zImages_1/dag/sites /mnt/Post_Ready/zProd_Server/imageServer7/htdocs_imgSrv/dag/sites
+#CrInfo Morning Sync Aptana(home versions) with Dreamweaver(Bfly)
+30	10	*	*	1,2,3,4,5,6	rsync --archive --compress --update /Users/johnb/Dropbox/Dropbox_sites/fullsites_only/queries_run_search/ /Users/johnb/Dropbox/Dropbox_sites/queries_run_search
+#CrInfo Nightly(AfterWork) Sync Dreamweaver(Bfly) with  Aptana(home versions)
+30	19	*	*	1,2,3,4,5,6	rsync --archive --compress --update /Users/johnb/Dropbox/Dropbox_sites/queries_run_search/ /Users/johnb/Dropbox/Dropbox_sites/fullsites_only/queries_run_search
+#CronniX 0	0	1	1	*	echo "Happy New Year!"
+#CrInfo Get all _1 images by listing dirs by reversed date then grabbing last 7 10 records(10 newest dirs) Then iterate list of dirs to find .jpg files and exec copy to zImage xfer folder. in xfer folder mogrify resize to x480height as batch. Sort into dirs based off first 4 chars of file to complete the 8pm process of PUT photo attrib to PM through cUrl.
+10	20	*	*	1,2,3,4,5,6	/usr/local/bin/FindJpgs_1_makeLowRes_gatherAll.sh
+#CrInfo twice daily - Get ALL Metadata with Exiftool for import to Database
+43	23	*	*	1,2,3,4,5,6	/usr/local/bin/FindJpgs_ALL_makeLowRes_gatherAll.sh
+#CrInfo Get all files in AM. 1st run sql for PrdInc. Then Awk search styleStringTest for style nums out putting matches to file. After which file is used as file list to iterate through and copy to todays dated Retouching Folder.
+34	5	*	*	*	/usr/local/batchRunScripts/aBetterGetter.sh
+#CrInfo Get all files in AM. 1st run sql for PrdInc. Then Awk search styleStringTest for style nums out putting matches to file. After which file is used as file list to iterate through and copy to todays dated Retouching Folder.
+#CronniX 1	6	*	*	*	/usr/local/batchRunScripts/aBetterReshootGetter.sh
+#CrInfo Copy Selects to Imageserver7 image folder tree
+#CronniX 31	6	1	1	1,2,3,4,5,6	/usr/local/batchRunScripts/daily_SortSelectsPrdSrv.sh
+#CrInfo Hourly Sync "....Push" folders on File7 with "Retouch.."(aka Archive) Folders
+#CronniX 7	9,10,11,12,13,14,15,16,17,18,19,21,0	*	*	1,2,3,4,5	/usr/local/batchRunScripts/daily_RsyncBackupPhotoArchive.sh
+#CrInfo Rsync BACKUP of FILE7 Selects and Sort
+#CronniX 33	9,19	*	*	*	/usr/local/batchRunScripts/nightly_RsyncBackupToPhotoArchive.sh
+#CronniX 0	0	1	1	*	echo "Happy New Year!"
+#CrInfo Full ImageMagick convert and upload. Reworked from Applescript to auto run.
+1,17,35	8,9,10,11,12,13,14,15,16,17,18,19,20	*	*	1,2,3,4,5,6,7	/usr/local/batchRunScripts/reworkdIMagik_fullprepLoad.sh
+#CrInfo Extract and move Remote Retouched photos to ImageMagick folders for convert and upload(currently on mini)
+#CronniX 6	8,9,10,11,12,13,14,15,16,17,18,19,22	*	*	*	/usr/local/batchRunScripts/zipUnarchiveMoveToRetouchingDirs_IMagick.sh
+#CronniX 0	0	1	1	*	echo "Happy New Year!"
+#CrInfo Fairly Self Explanatory-Unzip offSite PhotoStudio files to Post_Ready/eFashionPush
+7	1,21	*	*	*	/usr/local/batchRunScripts/zipUnarchiveMoveFromDropbox.sh
+#CrInfo FILE 6 Production_Raw On Figure file CSV generate for Import to data_imagepaths localhost:3301
+37	1	*	*	*	/usr/local/batchRunScripts/nightly_ProductionRawFile6StyleString.sh
+#CrInfo twice daily - Get all Metadata with Exiftool for import to Database
+#CronniX 15	5,23	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/run/exiftoolGatherTagsVals.sh
+#CrInfo All image Dirs scanned and cataloged individually....kinda
+#CronniX 1	1,13	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/run/batch_outputAllImageDirPaths.sh
+5	1	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/exiftool_zImagesSum_extractForImportPMA.sh
+#CrInfo Get CSV list of all files on Post_Ready for import to PhpmyAdmin DB FIXED AWK output. Output was omitting columns based on the OFS and RS. Fixed 5/15/13
+22	0,12	*	*	*	/usr/local/batchRunScripts/nightly_PhotoServerSelectArchList.sh
+#CrInfo NEEDED for GETTER SCRIPT StyleStringTestMAker=Catalog of all Files on file7 from e&a push folders
+14	3,4	*	*	*	/usr/local/batchRunScripts/styleStringTestMakerPushed.sh
+#CrInfo Import file7 path data to Mysql--NEEDED for GETTER SCRIPT StyleStringTestMAker=Catalog of all Files on file7 from e&a push folders
+1	4	*	*	*	/usr/local/batchRunScripts/styleStringImportPma.sh
+#CrInfo zImages CSV generate for Import to data_imagepaths localhost:3301
+1	6	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/default/styleStringZimagesPro.sh
+#CronniX 0	0	1	1	*	echo "Happy New Year!"
+#CrInfo Daily Import of Updated Entire Merge Style List
+0	5	*	*	*	/usr/local/batchRunScripts/importMergedStyles_pma.sh
+#CrInfo Import SKU/Sample Data to PMA-sql
+5	5	*	*	*	/usr/local/batchRunScripts/importSKUToPhpMyAdmin.sh
+#CrInfo Update Daily Import For PhpMyAdmin
+21	5,19	*	*	*	/usr/local/batchRunScripts/import_prodsnapshot.sh
+#CrInfo Update Daily Import For PhpMyAdmin
+42	5	*	*	*	/usr/local/batchRunScripts/importSampleVendorStyle_pma.sh
+#CrInfo Import sample snapshot to PMA after both product snapshot updates ending apx 7pm and 430am
+59	5,19	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/sampleAgingImportpma.sh
+#CrInfo Import updates to Production_snapshot_live data from dssprd1
+28	8,10,12,13,15,16,20	*	*	*	/usr/local/batchRunScripts/import_prodsnapshot_livedata.sh
+#CrInfo Import event colorstyle snapshot to PMA. Data not dependant on PRODUCT_SNAPSHOT
+46	7,10,11,12,13,14,15,16,17,21	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/importData/importEventStyleInfoPMA.sh
+#CrInfo Import event colorstyle PRODUCTION STATUS, used to join the snapshot and statuses to PMA. Data not dependant on PRODUCT_SNAPSHOT
+51	7,10,11,12,13,14,15,16,17,21	*	*	*	/usr/local/batchRunScripts/importEventStyleStatus.sh
+#CrInfo Import event colorstyle COPY/IMAGE INFO PRODUCTION STATUS, used to join the snapshot and statuses to PMA. Data not dependant on PRODUCT_SNAPSHOT
+55	7,10,11,12,13,14,15,16,17,21	*	*	*	/usr/local/batchRunScripts/importEventStyleStatusImgCpy.sh
+#CrInfo IMPORT PO UPCOMING INFO
+10	7,21	*	*	*	/usr/local/batchRunScripts/importPoUpcomingStatuses.sh
+#CronniX 0	0	1	1	*	echo "Happy New Year!"
+#CronniX *	*	*	*	*	*	/usr/local/batchRunScripts/dropbox_cronjobber.sh
+#CrInfo Search through Push folders for 3 digit Shot ext, rename in sequential order if found
+02	19	*	*	*	/usr/local/batchRunScripts/python3digitext_incr_photorename.py
+#CrInfo Tag all files in Photo Push Folders (a+epush) on Post_Ready using PM data
+49	4,15,19	*	*	1,2,3,4,5,6	/usr/local/batchRunScripts/TAG_PushesfromPM.sh
+#CrInfo tag Update new Fashion Pushes
+#CronniX 40	21	*	*	1,2,3,4,5,6	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/aSuperDailyUpdateTagger.sh /mnt/Post_Ready/eFashionPush
+#CrInfo Initial tag new Fashion Pushes
+#CronniX 19	19	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/aSuperInitialStaticInfoTagger.sh /mnt/Post_Ready/eFashionPush
+#CrInfo Initial Static Tag New Still & Fashion Pushes 7:14PM
+#CronniX 19	19	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/aSuperInitialStaticInfoTagger.sh /mnt/Post_Ready/aPhotoPush & /mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/aSuperInitialStaticInfoTagger.sh /mnt/Post_Ready/eFashionPush \;
+#CrInfo Update Tag New Still & Fashion Pushes 8:17PM
+#CronniX 27	20	*	*	1,2,3,4,5,6	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/aSuperDailyUpdateTagger.sh /mnt/Post_Ready/aPhotoPush & /mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/aSuperDailyUpdateTagger.sh /mnt/Post_Ready/eFashionPush \;
+#CrInfo Update Tags zImages Folder
+#CronniX 50	4	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/aSuperDailyUpdateTagger.sh /mnt/Post_Ready/zImages_1
+#CrInfo Tag all files in Daily folders on Post_Ready using PM data
+36	6	*	*	1,2,3,4,5,6	/usr/local/bin/aFullerGreatMetaTagDirect.sh /mnt/Post_Ready/Daily
+#CrInfo Update Daily Photo Attribute to PM. Only the update not the file sort which happens at midnight.
+10	19	*	*	*	/usr/local/batchRunScripts/pmUpdate_photoDate.sh
+#CrInfo Move RETOUCH tag from Keywords to IPTC:RetouchNotes
+32	18	*	*	2,3,4,5,6	exiftool -d %Y-%m-%d -overwrite_original_in_place '-IPTC:Keywords>IPTC:RetouchNotes'  /mnt/Post_Ready/eFashionPush/
+35	*	*	*	*	. /Users/johnb/.bash_profile && pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer && pmPhotoDir=/mnt/Post_Ready/zImages_1 && cd $pmPhotoXdir && exiftool -f -m -P -fast2 -'Directory='$pmPhotoDir'/%4f' $pmPhotoXdir
+#CrInfo Compile Filltek Sample Emails into CSV
+6	23	*	*	*	/usr/local/batchRunScripts/applemailCompiler.sh
+#CrInfo Mail Daily Retouch Report to All - with breakdown
+50	7	*	*	*	/usr/local/batchRunScripts/numbersDailyMailFullReport.sh
+#CrInfo Update view and send html morning Retouch email status
+56	7	*	*	*	. /Users/johnb/.bash_profile && /usr/local/batchRunScripts/bash/view_morningpush_progress.sh > /mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/retouching_daily_breakdown.html && php -f /usr/local/batchRunScripts/mail_sql/morningmail.php
+#CrInfo Update view and send html morning Retouch email status THE LAVENDER REPORT
+04	8	*	*	*	/usr/local/batchRunScripts/bash/morningEventMailIncompletes.sh
+#CrInfo Update view and send html morning Retouch email status --- ONLY USED FOR SEARCH LINK REPORT UPDATE
+59	7,10,11,12,13,14,15,16,17,21	*	*	*	/usr/local/batchRunScripts/morningEventMail.sh
+#CrInfo Update view and send html morning Retouch email status
+#CronniX 59	7	*	*	*	. /home/johnb/.bash_profile && /usr/local/batchRunScripts/bash/view_events_progress.sh > /mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/event_progress_14days.html && php -f /usr/local/batchRunScripts/php/eventmail_sp.php
+#CrInfo Mail to Conrad and myself shot counts
+#CronniX 52	8	*	*	*	/mnt/Post_Ready/zProd_Server/imageServer7/scripts/bash/numbersDailyMailPhotoOnly.sh
+#CrInfo Rsynch Kayla'sm Consignment files and Dirs to ImageServer7 consignment from Xdrive---Every 1 hr--Includes renaming of dirs to remove spaces
+51	*	*	*	*	/usr/local/batchRunScripts/rsyncConsignmentfrCompany.sh

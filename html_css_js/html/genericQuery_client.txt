@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script type="text/javascript" src="common.js"></script>
+        <script type="text/javascript" src="datepick.js"></script>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="csvtotable/js/jquery.csvToTable.js"></script>
+        <script type="text/javascript" src="csvtotable/js/jquery.tablesorter.min.js"></script>
+        <script type="text/javascript" src="csvtotable/js/jquery-1.4.2.min.js"></script>
+        <link href="site_stylesheet.css" rel="stylesheet" type="text/css" />
+        <title>GGS: General Generic Search</title>
+
+    </head>
+
+    <body>
+
+        <form action="genericQuery_server.php" id="formsearchmulti" method="post" enctype="multipart/form-data">
+        
+            <hr width="300" align="left" />
+            <h2><b>Generic Search: </b></h2>
+            <hr width="300" align="left" />
+            <!-- 
+<table>
+
+                <!~~<th align="baseline"><b>Table to Search: </b></th>
+                <tr>
+                    <td>
+                    <select name="qtable" id="qtable">
+                        <option value="data_imagepaths.zimages1_photoselects">Photos Search Primary</option>
+                        <option value="data_imports.merged_styles">Merge Search</option>
+                        <option value="data_imports.sample_snapshot">Sample Search General</option>
+                        <option value="data_imagepaths.sampleskuimport">Sample Tracking</option>
+                        <option value="data_imagepaths.sampleskuimport">Sample Inventory</option>
+                        <option value="data_imagepaths.zimages_exif99">MetaData Search</option>
+                        <option value="data_imagepaths.post_ready_original">Selects Archive Search</option>
+                        <option value="data_imagepaths.production_raw_onfigure">Outtakes Archive Search</option>
+                        <option value="" selected=selected></option>
+                    </select></td>
+                </tr>~~>
+
+               <!~~ <th align="baseline"><b>Type of Search: </b></th>
+                <tr>
+                    <td>
+                    <select name="qtype" id="qtype">
+                        <option value=simple>Basic Single Table</option>
+                        <option value=joinone>Basic plus Single Join</option>
+                        <option value=joinmulti>Multiple Table Joins</option>
+                        <option value="" selected=selected></option>
+                    </select></td>
+                </tr>~~>
+            
+                    <table width="290">
+                      <tr>
+                        <td width="190"><label>
+                          <input type="checkbox" name="searchtype" value="checkhirez" id="searchtype_0">
+                          Style Search plus HiRez</label></td>
+                          <td width="190"><label><input name="hirezvendor" type="text">Dont Enter Anything</label></td>
+                      </tr>
+                      <tr>
+                        <td><label>
+                          <input type="checkbox" name="searchtype" value="checkmerge" id="searchtype_1">
+                          Merge/Dupe Info</label></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                
+            </table>
+ -->
+
+            <table width="400" id="table_params">
+
+                <tr>
+                    <th scope="row"><b>Date: </b></th>
+                    <td colspan="3">
+                    
+                    <select name="datemo" id="date_2">
+                        <option value=01 selected=selected>January</option>
+                        <option value=02>February</option>
+                        <option value=03>March</option>
+                        <option value=04>April</option>
+                        <option value=05>May</option>
+                        <option value=06>June</option>
+                        <option value=07>July</option>
+                        <option value=08>August</option>
+                        <option value=09>September</option>
+                        <option value=10>October</option>
+                        <option value=11>November</option>
+                        <option value=12>December</option>
+                    </select>
+                    <select name="datedy" id="date_3">
+                        <option value=01>01</option>
+                        <option value=02>02</option>
+                        <option value=03>03</option>
+                        <option value=04>04</option>
+                        <option value=05>05</option>
+                        <option value=06>06</option>
+                        <option value=07>07</option>
+                        <option value=08>08</option>
+                        <option value=09>09</option>
+                        <option value=10>10</option>
+                        <option value=11>11</option>
+                        <option value=12>12</option>
+                        <option value=13>13</option>
+                        <option value=14>14</option>
+                        <option value=15>15</option>
+                        <option value=16>16</option>
+                        <option value=17>17</option>
+                        <option value=18>18</option>
+                        <option value=19>19</option>
+                        <option value=20>20</option>
+                        <option value=21>21</option>
+                        <option value=22>22</option>
+                        <option value=23>23</option>
+                        <option value=24>24</option>
+                        <option value=25>25</option>
+                        <option value=26>26</option>
+                        <option value=27>27</option>
+                        <option value=28>28</option>
+                        <option value=29>29</option>
+                        <option value=30>30</option>
+                        <option value=31>31</option>
+                    </select> 
+                
+                    <!--<select class='selectmonth' name="datemo" id="date_2">
+                        <option selected></option>
+                    </select>
+                    <select class='selectday' name="datedy" id="date_3">
+                        <option selected></option>
+                    </select>-->
+                    
+                    <select name="dateYR" id="date_1">
+                        <option value=2011>2011</option>
+                        <option value=2012>2012</option>
+                        <option value=2013 selected=selected>2013</option>
+                        <option value=2014>2014</option>
+                        <option value=2015>2015</option>
+                        <option value=2016>2016</option>
+                        <option value=2017>2017</option>
+                        <option value=2018>2018</option>
+                        <option value=2019>2019</option>
+                        <option value=2020>2020</option>
+                        <option value=2021>2021</option>
+                        <option value=2022>2022</option>
+                        <option value=2023>2023</option>
+                    </select></td><td><input name="checkdate" type="checkbox">Search Date</td>
+
+                </tr>
+                
+                <tr>
+                    <th scope="row"><b>Search Attribute: </b></th>
+                    <td>
+                    <select name="attfield_1" id="attfield_1">
+                      <!--  <option value="merge_date">Merge Date</option>-->
+                        <option value="current_style">Valid Merge Style</option>
+                      <!--  <option value="voided_style">Voided Merge Style</option>-->
+                        <option value="vendor_style">Vendor Style Number</option>
+                        <option value="colorstyle" selected="selected">Style Number - HiRez</option>
+                        <option value=""></option>
+                        <!--<option value="sample_status">Sample Status</option>
+                        <option value="status_dt">Status Date</option>
+                        <option value="sample_location">Sample Location</option>
+                        <option value="sample_id">Sample ID</option>
+                        <option value="sample_dt">Sample Create Date</option>
+                        <option value=""></option>
+                        <option value="UPS_TrackingID">UPS Tracking Number</option>
+                        <option value="Tracking_Date">Tracking Date</option>
+                        <option value="SampleID">Sample Tracking ID</option>
+                        <option value="IPTC:SampleInventory">Sample Inventory</option>
+                        <option value=""></option>
+                        <option value="colorstyle">Colorstyle</option>
+                        <option value="brand">Brand</option>
+                        <option value="gender">Gender</option>
+                        <option value="category">Apparel/Non Apparel</option>
+                        <option value="product_type">Product Type</option>
+                        <option value="level5_name">Product SubType</option>
+                        <option value="" selected=selected></option>-->
+                    </select></td>
+                    <th scope="row"><b>Value: </b></th>
+                    <td>
+                    <input id="attval_1" name="attval_1" autofocus alt="Enter The Value of the Attribute to Search For" type="text">
+                    </td>
+                    <td>
+                    <button type="submit" id="buttonsubmit" name="buttonsubmit">
+                        Submit
+                    </button></td>
+                </tr>
+                
+            </table>
+        </form>
+<p></p>
+<hr width="600" align="left">
+<hr width="600" align="left">
+<h2><b>Non-Generic Event Search: </b></h2>
+    <form action="genericEventServer.php" id="formsearchmulti2" method="post" enctype="multipart/form-data">
+    <table> 
+    
+   <!-- 
+     <tr>
+            <iframe src="https://www.google.com/calendar/embed?showTabs=0&amp;mode=AGENDA&amp;height=400&amp;wkst=1&amp;bgcolor=%23c0c0c0&amp;src=bluefly.com_ephcoshbgl8ba75ater87hqfdk%40group.calendar.google.com&amp;color=%232952A3&amp;ctz=America%2FNew_York" style=" border-width:0 " width="600" height="400" frameborder="0" scrolling="no"></iframe>
+        </tr>
+ -->
+        <tr>
+        <th scope="row"><b>Search By: </b></th>
+                    <td>
+                    <select name="eventfield_1" id="eventfield_1">
+                      <!--  <option value="merge_date">Merge Date</option>-->
+                        <option value="event_id" selected="selected">Event Id</option>
+                      <!--  <option value="voided_style">Voided Merge Style</option>-->
+                        <option value="event_group">Event Group</option>
+                        <!-- <option value="ev_start">Event Start</option> -->
+                        <option value=""></option>
+                    </select>
+                    </td>
+        <th scope="row"><b>Value: </b></th>
+                    <td>
+                    <input id="eventval_1" name="eventval_1" autofocus alt="Enter The Value of the Attribute to Search For" type="text">
+                    </td>
+                    <td>
+                    <button type="submit" id="buttonsubmit" name="buttonsubmit">
+                        Submit
+                    </button>
+                    </td>
+        </tr>
+    </table>
+    </form>
+    <tr>
+        <iframe src="Reports/event_incomplete_14days.html" title="The Lavender Report" style=" border-width:0 " width="1100" height="380" frameborder="0" scrolling="yes"></iframe>
+    </tr>
+    <p></p>
+    
+    <tr>
+        <a href="Reports/event_progress_14days.html" title="Full Event Status" target="_blank"/><b>Full Event Status Report</b></a>
+    </tr>
+    
+    <hr width="1100" align="left">
+    <hr width="1100" align="left">
+    <h2><b>Upcoming Events Calendar: </b></h2>
+    <tr>
+            <!-- <iframe src="https://www.google.com/calendar/embed?src=john.bragato%40gmail.com&amp;mode=AGENDA&amp;height=400&amp;wkst=1&amp;bgcolor=%23c0c0c0&amp;color=%232952A3&amp;ctz=America%2FNew_York" style=" border-width:2 " width="1100" height="400" frameborder="1" scrolling="no"></iframe> -->
+            <iframe src="https://www.google.com/calendar/embed?title=The%20Lavender%20Companion%20Text&amp;height=450&amp;wkst=2&amp;bgcolor=%23ccccff&amp;src=john.bragato%40gmail.com&amp;color=%2323164E&amp;ctz=America%2FNew_York" style=" border-width:0 " width="1100" height="450" frameborder="2" scrolling="no"></iframe>
+        </tr>
+    
+    <div id="view1"></div>
+
+    <!-- JavaScript -->
+    <script type="text/javascript">
+        $(function(){
+            $('#view1').csvtotable('data/compiledFullReport.csv');
+        });
+    </script>
+    
+    
+
+    <script>
+                    Months = {
+                            January:31,
+                            February:28,
+                            March:31,
+                            April:30,
+                            May:31,
+                            June:30,
+                            July:31,
+                            August:31,
+                            September:30,
+                            October:31,
+                            November:30,
+                            December:31
+                        }
+              $('.selectmonth').html('');
+              $.each(Months,function(month,days){
+                  $('.selectmonth').append('<option>'+month+'</option>');
+              });
+              
+              $('.selectmonth').change(function()
+                {
+                    selected = $('.selectmonth').val();
+                    $('.selectday').html('');
+                    $.each(Months,function(month,days) 
+                        {
+                        if (month == selected) 
+                            {
+                        for (i=1;i<=days;i++) 
+                                {
+                            $('.selectday').append('<option>'+i+'</option>');
+                                }
+                        }
+            });
+    });
+    </script>
+    </body>
+</html>

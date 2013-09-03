@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>PHP Function Input</title>
+<link rel="stylesheet" type="text/css" href="view.css" media="all">
+<script type="text/javascript" src="view.js"></script>
+<script type="text/javascript" src="calendar.js"></script>
+</head>
+<body id="main_body" >
+	
+	<img id="top" src="top.png" alt="">
+	<div id="form_container">
+	
+		<h1><a>PHP Function Input</a></h1>
+		<form id="form_491620" class="appnitro"  method="post" action="">
+					<div class="form_description">
+			<h2>PHP Function Input</h2>
+			<p>Form to Run php Scripts</p>
+		</div>						
+			<ul >
+			
+					<li id="li_5" >
+		<label class="description" for="element_5">Date </label>
+		<span>
+			<input id="element_5_1" name="element_5_1" class="element text" size="2" maxlength="2" value="" type="text"> /
+			<label for="element_5_1">DD</label>
+		</span>
+		<span>
+			<input id="element_5_2" name="element_5_2" class="element text" size="2" maxlength="2" value="" type="text"> /
+			<label for="element_5_2">MM</label>
+		</span>
+		<span>
+	 		<input id="element_5_3" name="element_5_3" class="element text" size="4" maxlength="4" value="" type="text">
+			<label for="element_5_3">YYYY</label>
+		</span>
+	
+		<span id="calendar_5">
+			<img id="cal_img_5" class="datepicker" src="images/calendar.gif" alt="Pick a date.">	
+		</span>
+		<script type="text/javascript">
+			Calendar.setup({
+			inputField	 : "element_5_3",
+			baseField    : "element_5",
+			displayArea  : "calendar_5",
+			button		 : "cal_img_5",
+			ifFormat	 : "%B %e, %Y",
+			onSelect	 : selectEuropeDate
+			});
+		</script>
+		 
+		</li>		<li id="li_7" >
+		<label class="description" for="element_7">CSV List for Input to Scripts </label>
+		<div>
+			<textarea id="element_7" name="element_7" class="element textarea large"></textarea> 
+		</div><p class="guidelines" id="guide_7"><small>Must be CSV format: value1,value2,value3,etc</small></p> 
+		</li>		<li id="li_2" >
+		<label class="description" for="element_2">Database Group </label>
+		<span>
+			<input id="element_2_1" name="element_2" class="element radio" type="radio" value="1" />
+<label class="choice" for="element_2_1">data_</label>
+<input id="element_2_2" name="element_2" class="element radio" type="radio" value="2" />
+<label class="choice" for="element_2_2">images_</label>
+<input id="element_2_3" name="element_2" class="element radio" type="radio" value="3" />
+<label class="choice" for="element_2_3">upload_</label>
+
+		</span> 
+		</li>		<li id="li_3" >
+		<label class="description" for="element_3">Database to Access </label>
+		<div>
+		<select class="element select large" id="element_3" name="element_3"> 
+			<option value="1" >images_photoselects_jpg</option>
+<option value="2" selected="selected">images_retouched_jpg</option>
+<option value="3" >upload_alt_jpg-png</option>
+<option value="4" >upload_primary_jpg-png</option>
+
+		</select>
+		</div> 
+		</li>		<li id="li_9" >
+		<label class="description" for="element_9">Script to Call </label>
+		<span>
+			<input id="element_9_1" name="element_9_1" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_9_1">imagemagick</label>
+<input id="element_9_2" name="element_9_2" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_9_2">exiftool_find</label>
+<input id="element_9_3" name="element_9_3" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_9_3">exiftool_write</label>
+
+		</span> 
+		</li>		<li class="section_break">
+			<h3>Section Break</h3>
+			<p></p>
+		</li>		<li id="li_6" >
+		<label class="description" for="element_6">Style Number </label>
+		<div>
+			<input id="element_6" name="element_6" class="element text medium" type="text" maxlength="255" value=""/> 
+		</div> 
+		</li>		<li id="li_11" >
+		<label class="description" for="element_11">filepath </label>
+		<span>
+			<input id="element_11_1" name="element_11_1" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_11_1">[SourceFile]</label>
+<input id="element_11_2" name="element_11_2" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_11_2">[File:MIMEType]</label>
+
+		</span><p class="guidelines" id="guide_11"><small>Choose if Input or Return Requires Exiftool Source File field.</small></p> 
+		</li>		<li id="li_8" >
+		<label class="description" for="element_8">Metadata Value To Write </label>
+		<div>
+			<input id="element_8" name="element_8" class="element text medium" type="text" maxlength="255" value=""/> 
+		</div> 
+		</li>		<li id="li_10" >
+		<label class="description" for="element_10">Metadata Fields to Get/Write </label>
+		<span>
+			<input id="element_10_1" name="element_10_1" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_1">[IPTC:Title]</label>
+<input id="element_10_2" name="element_10_2" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_2">[IPTC:Keywords]</label>
+<input id="element_10_3" name="element_10_3" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_3">[IPTC:Description]</label>
+<input id="element_10_4" name="element_10_4" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_4">[IPTC:Creator]</label>
+<input id="element_10_5" name="element_10_5" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_5">[IPTC:CopywriteNotice]</label>
+<input id="element_10_6" name="element_10_6" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_6">[IPTC:Source]</label>
+<input id="element_10_7" name="element_10_7" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_7">[IPTC:Instructions]</label>
+<input id="element_10_8" name="element_10_8" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_8">[XMP-dc:Subject]</label>
+<input id="element_10_9" name="element_10_9" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_9">[XMP-dc:Title]</label>
+<input id="element_10_10" name="element_10_10" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_10">[XMP-xmpDM:Composer]</label>
+<input id="element_10_11" name="element_10_11" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_11">[XMP-xmpDM:Genre]</label>
+<input id="element_10_12" name="element_10_12" class="element checkbox" type="checkbox" value="1" />
+<label class="choice" for="element_10_12">[XMP-xmpDM:Album]</label>
+
+		</span> 
+		</li>
+			
+					<li class="buttons">
+			    <input type="hidden" name="form_id" value="491620" />
+			    
+				<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+		</li>
+			</ul>
+		</form>	
+		<div id="footer">
+			Generated by <a href="http://www.phpform.org">pForm</a>
+		</div>
+	</div>
+	<img id="bottom" src="bottom.png" alt="">
+	</body>
+</html>

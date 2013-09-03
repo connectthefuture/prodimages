@@ -1,0 +1,3 @@
+# this is a comment line
+#[HEAD]'$FileName','$DirectoryName','$Basename','${EXIF:DateTimeOriginal}','$XMP:Genre','$Keywords','$XMP:Album','$IPTC:Source','$IPTC:PONumber','$IPTC:MerchantContact','$IPTC:By-Line','$IPTC:CopyrightNotice','$IPTC:Source','$IPTC:RetoucherName','$IPTC:SampleStatus','$IPTC:JobIdentifier','$IPTC:SpecialInstructions','$IPTC:SimilarityIndex'
+#[TAIL]

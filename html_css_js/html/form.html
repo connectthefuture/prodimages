@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <title><b><u>Command Center</u></b></title>
+            <link rel="stylesheet" type="text/css" href="view.css" media="all">
+                <script type="text/javascript" src="view.js"></script>
+                <script type="text/javascript" src="calendar.js"></script>
+                </head>
+                <body id="main_body" >
+
+                    <img id="top" src="top.png" alt="">
+                        <div id="form_container">
+
+                            <h1><a>PHP Function Input</a></h1>
+                            <form id="form" method="post" action="../../scripts/run/query_SecurePostData.php">
+                                <div class="form_description">
+                                    <h2><b><u>John B's GOD Center</u></b></h2>
+                                    <p><b>Form to Run php Scripts</b></p>
+                                </div>
+                                <li class="section_break">
+                                    <h2><b>Image Search</b></h2>
+                                    <p></p>
+                                </li>
+                                <li class="buttons">
+                                    <input type="hidden" name="form" value="" />
+                                    <input id="saveForm" class="button_text" type="submit" name="submit" value="Get Answers!!" />
+                                </li>                                
+
+
+                                <li id="li_5" >
+                                    <label class="description" for="date">Date </label>
+                                    <span>
+                                        <input id="date_1" name="day" class="element text" size="2" maxlength="2" value="" type="text"> /
+                                            <label for="date_1">DD</label>
+                                    </span>
+                                    <span>
+                                        <input id="date_2" name="month" class="element text" size="3" maxlength="3" value="" type="text"> /
+                                            <label for="date_2">MMM</label>
+                                    </span>
+                                    <span>
+                                        <input id="date_3" name="year" class="element text" size="4" maxlength="4" value="" type="text">
+                                            <label for="date_3">YYYY</label>
+                                    </span>
+
+                                    <span id="calendar_1">
+                                        <img id="cal_img_1" class="datepicker" src="images/calendar.gif" alt="Pick a date.">	
+                                    </span>
+                                    <script type="text/javascript">
+                                        Calendar.setup({
+                                            inputField	 : "element_5_3",
+                                            baseField    : "element_5",
+                                            displayArea  : "calendar_5",
+                                            button		 : "cal_img_5",
+                                            ifFormat	 : "%B %e, %Y",
+                                            onSelect	 : selectAmericaDate
+                                        });
+                                    </script>
+
+                                </li>
+
+
+                                <li id="li_22" >
+                                    <label class="description" for="stylesearch"><b>What fields do you want returned</b></label>
+                                    <div>
+                                        <input id="stylesearch" name="stylesearch" class="element text medium" type="text" maxlength="255" value=""/> 
+                                    </div> 
+                                </li>
+
+                                <li id="li_17" >
+                                    <label class="description" for="resultcols"><b>Fields in Search/Report</b> </label>
+                                    <span>
+                                        <input id="resultcols_0" name="resultcols[]" class="element checkbox" type="checkbox" value="brand" />
+                                        <label class="choice" for="resultcols_0">Brand</label>
+                                        <input id="resultcols_1" name="resultcols[]" class="element checkbox" type="checkbox" value="level2_name" />
+                                        <label class="choice" for="resultcols_1">Department</label>
+                                        <input id="resultcols_2" name="resultcols[]" class="element checkbox" type="checkbox" value="level3_name" />
+                                        <label class="choice" for="resultcols_2">Category</label>
+                                        <input id="resultcols_3" name="resultcols[]" class="element checkbox" type="checkbox" value="level4_name" />
+                                        <label class="choice" for="resultcols_3">Product_Type</label>
+                                        <input id="resultcols_4" name="resultcols[]" class="element checkbox" type="checkbox" value="iptc:creator" />
+                                        <label class="choice" for="resultcols_4">Photographer</label>
+                                        <input id="resultcols_5" name="resultcols[]" class="element checkbox" type="checkbox" value="photo_date" />
+                                        <label class="choice" for="resultcols_5">Photographed Date</label>
+                                        <input id="resultcols_6" name="resultcols[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:composer" />
+                                        <label class="choice" for="resultcols_6">Retoucher</label>
+                                        <input id="resultcols_7" name="resultcols[]" class="element checkbox" type="checkbox" value="copy_ready" />
+                                        <label class="choice" for="resultcols_7">Copy_Ready</label>
+                                        <input id="resultcols_8" name="resultcols[]" class="element checkbox" type="checkbox" value="xmp-dc:subject" />
+                                        <label class="choice" for="resultcols_8">XMP-dc:Subject</label>
+                                        <input id="resultcols_9" name="resultcols[]" class="element checkbox" type="checkbox" value="sample_status" />
+                                        <label class="choice" for="resultcols_9">Sample_Status</label>
+                                        <input id="resultcols_10" name="resultcols[]" class="element checkbox" type="checkbox" value="iptc:source" />
+                                        <label class="choice" for="resultcols_10">IPTC:Source</label>
+                                        <input id="resultcols_11" name="resultcols[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:genre" />
+                                        <label class="choice" for="resultcols_11">Product_Type-Genre]</label>
+                                        <input id="resultcols_12" name="resultcols[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:album" />
+                                        <label class="choice" for="resultcols_12">[Event-album]</label>
+                                    </span> 
+                                </li>
+
+                                <li id="li_12" >
+                                    <label class="description" for="level2_name">Department </label>
+                                    <div>
+                                        <select class="element select large" id="level2_name" name="level2_name"> 
+                                            <option value="womens" selected="selected">Womens</option>
+                                            <option value="mens" >Mens</option>
+                                            <option value="kids" >Kids</option>
+                                            <option value="home" >Home</option>
+                                            <option value="other" >Other</option>
+                                        </select>
+                                    </div> 
+                                </li>
+
+                                <li id="li_13" >
+                                    <label class="description" for="level3_name">Product Category </label>
+                                    <div>
+                                        <select class="element select large" id="level3_name" name="level3_name"> 
+                                            <option value="apparel" >Apparel</option>
+                                            <option value="non-apparel" selected="selected">Non-Apparel</option>
+                                        </select>
+                                    </div> 
+                                </li>
+                                <li id="li_14" >
+                                    <label class="description" for="level4_name">Product Type </label>
+                                    <div>
+                                        <select class="element select large" id="level4_name" name="level4_name"> 
+                                            <option value="handbags" selected="selected">Handbags</option>
+                                            <option value="shoes" >Shoes</option>
+                                            <option value="small_goods" >Small Goods</option>
+                                            <option value="dresses" >Dresses</option>
+                                            <option value="skirts" >Skirts</option>
+                                            <option value="sweaters" >Sweaters</option>
+                                            <option value="outerwear" >Outerwear</option>
+                                        </select>
+                                    </div> 
+                                </li>		
+
+                                <li id="li_15" >
+                                    <label class="description" for="production_status">Production Status </label>
+                                    <span>
+                                        <input id="production_status_1" name="production_status" class="element radio" type="radio" value="production_complete" />
+                                        <label class="choice" for="production_status">Production Complete</label>
+                                        <input id="production_status_2" name="production_status" class="element radio" type="radio" value="production_incomplete" />
+                                        <label class="choice" for="production_status">Production Incomplete</label>
+                                    </span> 
+
+                                </li>
+
+                                <li id="li_16" >
+                                    <label class="description" for="sample_status">Sample Status </label>
+                                    <span>
+                                        <input id="sample_status_1" name="sample_status" class="element checkbox" type="checkbox" value="production_sample_received" />
+                                        <label class="choice" for="sample_status">Production Sample Received</label>
+                                        <input id="sample_status_2" name="sample_status" class="element checkbox" type="checkbox" value="sample_sent_to_warehouse" />
+                                        <label class="choice" for="sample_status">Sample Sent To Warehouse</label>
+                                        <input id="sample_status_3" name="sample_status" class="element checkbox" type="checkbox" value="pending_sample" />
+                                        <label class="choice" for="sample_status">Pending Sample</label>
+
+                                    </span> 
+
+                                </li>
+
+                                </li>		
+
+                                <li class="section_break">
+                                    <h2><b>Database Updates and Functions</b></h2>
+                                    <p></p>
+
+                                </li>
+
+                                <li class="buttons">
+                                    <input type="hidden" name="form" value="" />
+                                    <input id="saveForm" class="button_text" type="submit" name="submit" value="Run!!" />
+                                </li>
+
+                                <li id="li_3" >
+                                    <label class="description" for="qbase">Database to Access </label>
+                                    <div>
+                                        <select class="element select large" id="qbase" name="qbase"> 
+                                            <option value="data_metadata" >DataAccess Metadata</option>
+                                            <option value="data_imagepaths" >DataAccess Imagepaths</option>
+                                            <option value="data_imports" >DataAccess PM Data</option>
+                                            <option value="images_photoselects_jpg" selected="selected">Images PhotoSelects</option>
+                                            <option value="images_retouched_jpg" >Images Retouched</option>
+                                            <option value="upload_alt_jpg-png" >Format/Upload Alts</option>
+                                            <option value="upload_primary_jpg-png" >Format/Upload Primaries</option>
+                                        </select>
+                                    </div> 
+                                </li>
+
+                                <li id="li_2" >
+                                    <label class="description" for="qtable">Table to Query </label>
+                                    <span>
+                                        <input id="dbprefix_1" name="qtable" class="element radio" type="radio" value="data" />
+                                        <label class="choice" for="qtable">data</label>
+                                        <input id="dbprefix_2" name="qtable" class="element radio" type="radio" value="images" />
+                                        <label class="choice" for="qtable" selected="selected">images</label>
+                                        <input id="dbprefix_3" name="qtable" class="element radio" type="radio" value="upload" />
+                                        <label class="choice" for="qtable">upload</label>
+                                        <input id="dbprefix_4" name="qtable" class="element radio" type="radio" value="imgsrv7_photoselects" />
+                                        <label class="choice" for="qtable">imgsrv7_photoselects</label>
+                                        <input id="dbprefix_5" name="qtable" class="element radio" type="radio" value="push_photoselects" />
+                                        <label class="choice" for="qtable">push_photoselects</label>
+                                        <input id="dbprefix_6" name="qtable" class="element radio" type="radio" value="arch_photoselects" />
+                                        <label class="choice" for="qtable">arch_photoselects</label>
+                                        <input id="dbprefix_7" name="qtable" class="element radio" type="radio" value="imagepaths_retouched" />
+                                        <label class="choice" for="qtable">imagepaths_retouched</label>
+                                        <input id="dbprefix_8" name="qtable" class="element radio" type="radio" value="data_metadata" />
+                                        <label class="choice" for="qtable">data_metadata</label>
+                                        <input id="dbprefix_8" name="qtable" class="element radio" type="radio" value="product_snapshot" />
+                                        <label class="choice" for="qtable">product_snapshot</label>
+                                    </span> 
+                                </li>
+
+
+
+                                <li id="li_7" >
+                                    <label class="description" for="csvlist">CSV List for Input to Scripts </label>
+                                    <div>
+                                        <textarea id="csvlist" name="csvlist" class="element textarea large"></textarea> 
+                                    </div><p class="guidelines" id="guide_7"><small>Must be CSV format: value1,value2,value3,etc</small></p> 
+                                </li>
+
+                                <li class="section_break">
+                                    <h2><b>Metadata Search</b></h2>
+                                    <p></p>
+                                </li>
+
+                                <li id="li_6" >
+                                    <label class="description" for="style"><b>Style Number</b></label>
+                                    <div>
+                                        <input id="style" name="style" class="element text medium" type="text" maxlength="255" value=""/> 
+                                    </div> 
+                                </li>
+
+                                <li id="li_11" >
+                                    <label class="description" for="filetype">FileType </label>
+                                    <span>
+                                        <input id="filetype_1" name="filetype" class="element checkbox" type="checkbox" value="1" />
+                                        <label class="choice" for="filetype">[SourceFile]</label>
+                                        <input id="filetype_2" name="filetype" class="element checkbox" type="checkbox" value="1" />
+                                        <label class="choice" for="filetype">[File:MIMEType]</label>
+                                    </span>
+                                    <p class="guidelines" id="guide_11"><small>Choose if Input or Return Requires Exiftool Source File field.</small></p> 
+                                </li>
+
+
+
+                                <li class="section_break">
+                                    <h2><b>Metadata Get/Write Tasks</b></h2>
+                                    <p></p>
+
+                                </li>
+
+                                <li id="li_8" >
+                                    <label class="description" for="metavalue"><b>Metadata Value To Write</b></label>
+                                    <div>
+                                        <input id="metavalue" name="metavalue" class="element text medium" type="text" maxlength="255" value=""/> 
+                                    </div> 
+                                </li>		
+
+                                <li id="li_10" >
+                                    <label class="description" for="metatag"><b>Metadata Fields to Get/Write</b> </label>
+                                    <span>
+                                        <input id="metatag_1" name="metatag[]" class="element checkbox" type="checkbox" value="IPTC:Title" />
+                                        <label class="choice" for="metatag_1">[IPTC:Title]</label>
+                                        <input id="metatag_2" name="metatag[]" class="element checkbox" type="checkbox" value="IPTC:Keywords" />
+                                        <label class="choice" for="metatag_2">[IPTC:Keywords]</label>
+                                        <input id="metatag_3" name="metatag[]" class="element checkbox" type="checkbox" value="IPTC:Description" />
+                                        <label class="choice" for="metatag_3">[IPTC:Description]</label>
+                                        <input id="metatag_4" name="metatag[]" class="element checkbox" type="checkbox" value="IPTC:Creator" />
+                                        <label class="choice" for="metatag_4">Photographer</label>
+                                        <input id="metatag_5" name="metatag[]" class="element checkbox" type="checkbox" value="photo_date" />
+                                        <label class="choice" for="metatag_5">Photographed Date</label>
+                                        <input id="metatag_6" name="metatag[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:composer" />
+                                        <label class="choice" for="metatag_6">Retoucher</label>
+                                        <input id="metatag_7" name="metatag[]" class="element checkbox" type="checkbox" value="copy_ready" />
+                                        <label class="choice" for="metatag_7">Copy_Ready</label>
+                                        <input id="metatag_8" name="metatag[]" class="element checkbox" type="checkbox" value="xmp-dc:subject" />
+                                        <label class="choice" for="metatag_8">XMP-dc:Subject</label>
+                                        <input id="metatag_9" name="metatag[]" class="element checkbox" type="checkbox" value="sample_status" />
+                                        <label class="choice" for="metatag_9">tag-9</label>
+                                        <input id="metatag_10" name="metatag[]" class="element checkbox" type="checkbox" value="iptc:source" />
+                                        <label class="choice" for="metatag_10">IPTC:Source</label>
+                                        <input id="metatag_11" name="metatag[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:genre" />
+                                        <label class="choice" for="metatag_11">Product_Type-Genre</label>
+                                        <input id="metatag_12" name="metatag[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:album" />
+                                        <label class="choice" for="metatag_12">Event-album</label>
+                                    </span> 
+                                </li>
+
+                                <li id="li_20" >
+                                    <label class="description" for="metavalue"><b>Metadata Value To Write</b></label>
+                                    <div>
+                                        <input id="metavalue" name="metavalue" class="element text medium" type="text" maxlength="255" value=""/> 
+                                    </div> 
+                                </li>
+
+                                <li id="li_19" >
+                                    <label class="description" for="metatag2"><b>Metadata Fields to Get/Write</b> </label>
+                                    <span>
+                                        <input id="metatag2_1" name="metatag2[]" class="element checkbox" type="checkbox" value="IPTC:Title" />
+                                        <label class="choice" for="metatag2_1">[IPTC:Title]</label>
+                                        <input id="metatag2_2" name="metatag2[]" class="element checkbox" type="checkbox" value="IPTC:Keywords" />
+                                        <label class="choice" for="metatag2_2">[IPTC:Keywords]</label>
+                                        <input id="metatag2_3" name="metatag2[]" class="element checkbox" type="checkbox" value="IPTC:Description" />
+                                        <label class="choice" for="metatag2_3">[IPTC:Description]</label>
+                                        <input id="metatag2_4" name="metatag2[]" class="element checkbox" type="checkbox" value="IPTC:Creator" />
+                                        <label class="choice" for="metatag2_4">Photographer</label>
+                                        <input id="metatag2_5" name="metatag2[]" class="element checkbox" type="checkbox" value="photo_date" />
+                                        <label class="choice" for="metatag2_5">Photographed Date</label>
+                                        <input id="metatag2_6" name="metatag2[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:composer" />
+                                        <label class="choice" for="metatag2_6">Retoucher</label>
+                                        <input id="metatag2_7" name="metatag2[]" class="element checkbox" type="checkbox" value="copy_ready" />
+                                        <label class="choice" for="metatag2_7">Copy_Ready</label>
+                                        <input id="metatag2_8" name="metatag2[]" class="element checkbox" type="checkbox" value="xmp-dc:subject" />
+                                        <label class="choice" for="metatag2_8">XMP-dc:Subject</label>
+                                        <input id="metatag2_9" name="metatag2[]" class="element checkbox" type="checkbox" value="IPTC:Creator" />
+                                        <label class="choice" for="metatag2_9">Photographer</label>
+                                        <input id="metatag2_10" name="metatag2[]" class="element checkbox" type="checkbox" value="iptc:source" />
+                                        <label class="choice" for="metatag2_10">IPTC:Source</label>
+                                        <input id="metatag2_11" name="metatag2[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:genre" />
+                                        <label class="choice" for="metatag2_11">Product_Type-Genre]</label>
+                                        <input id="metatag2_12" name="metatag2[]" class="element checkbox" type="checkbox" value="xmp-xmpdm:album" />
+                                        <label class="choice" for="metatag2_12">[Event-album]</label>
+                                    </span> 
+                                </li>
+
+                                <li id="li_20" >
+                                    <label class="description" for="metavalue2"><b>Metadata Value To Write</b></label>
+                                    <div>
+                                        <input id="metavalue2" name="metavalue2" class="element text medium" type="text" maxlength="255" value=""/> 
+                                    </div> 
+                                </li>
+
+
+
+
+
+                                <li class="section_break">
+                                    <h2><b>Scripts and Function Calls</b></h2>
+                                    <p></p>
+
+                                </li>
+
+                                <li id="li_9" >
+                                    <label class="description" for="runscript">Run a Script </label>
+                                    <span>
+                                        <input id="runscript_1" name="runscript" class="element checkbox" type="checkbox" value="../../scripts/run/magick_script.sh" />
+                                        <label class="choice" for="runscript">imagemagick</label>
+                                        <input id="runscript_2" name="runscript" class="element checkbox" type="checkbox" value="../../scripts/run/exifget.sh" />
+                                        <label class="choice" for="runscript">exiftool_find</label>
+                                        <input id="runscript_3" name="runscript" class="element checkbox" type="checkbox" value="../../scripts/run/exifwrite.sh" />
+                                        <label class="choice" for="runscript">exiftool_write</label>
+                                        <input id="runscript_4" name="runscript" class="element checkbox" type="checkbox" value="../../scripts/run/dbQuery_run.sh" />
+                                        <label class="choice" for="runscript">sql_query</label>
+                                    </span> 
+                                </li>
+
+                                <li id="li_18" >
+                                    <label class="description" for="scriptargs"><b>Script Args to include in Script. aka.Directories or Values</b> </label>
+                                    <span>
+                                        <input id="scriptargs_1" name="scriptargs[]" class="element checkbox" type="checkbox" value="../../tmp/imagedrop/run" />
+                                        <label class="choice" for="scriptargs_1">TmpDrop</label>
+                                        <input id="scriptargs_2" name="scriptargs[]" class="element checkbox" type="checkbox" value="IPTC:Keywords" />
+                                        <label class="choice" for="scriptargs_2">[IPTC:Keywords]</label>
+                                        <input id="scriptargs_3" name="scriptargs[]" class="element checkbox" type="checkbox" value="IPTC:Description" />
+                                        <label class="choice" for="scriptargs_3">[IPTC:Description]</label>
+                                        <input id="scriptargs_4" name="scriptargs[]" class="element checkbox" type="checkbox" value="IPTC:Creator" />
+                                        <label class="choice" for="scriptargs_4">[IPTC:Creator]</label>
+                                        <input id="scriptargs_5" name="scriptargs[]" class="element checkbox" type="checkbox" value="IPTC:CopywriteNotice" />
+                                        <label class="choice" for="scriptargs_5">[IPTC:CopywriteNotice]</label>
+                                        <input id="scriptargs_6" name="scriptargs[]" class="element checkbox" type="checkbox" value="IPTC:Source" />
+                                        <label class="choice" for="scriptargs_6">[IPTC:Source]</label>
+                                        <input id="scriptargs_7" name="scriptargs[]" class="element checkbox" type="checkbox" value="IPTC:Instructions" />
+                                        <label class="choice" for="scriptargs_7">[IPTC:Instructions]</label>
+                                        <input id="scriptargs_8" name="scriptargs[]" class="element checkbox" type="checkbox" value="XMP-dc:Subject" />
+                                        <label class="choice" for="scriptargs_8">[XMP-dc:Subject]</label>
+                                        <input id="scriptargs_9" name="scriptargs[]" class="element checkbox" type="checkbox" value="XMP-dc:Title" />
+                                        <label class="choice" for="scriptargs_9">[XMP-dc:Title]</label>
+                                        <input id="scriptargs_10" name="scriptargs[]" class="element checkbox" type="checkbox" value="XMP-xmpDM:Composer" />
+                                        <label class="choice" for="scriptargs_10">[XMP-xmpDM:Composer]</label>
+                                        <input id="scriptargs_11" name="scriptargs[]" class="element checkbox" type="checkbox" value="XMP-xmpDM:Genre" />
+                                        <label class="choice" for="scriptargs_11">[XMP-xmpDM:Genre]</label>
+                                        <input id="scriptargs_12" name="scriptargs[]" class="element checkbox" type="checkbox" value="XMP-xmpDM:Album" />
+                                        <label class="choice" for="scriptargs_12">[XMP-xmpDM:Album]</label>
+                                    </span> 
+                                </li>
+
+                                <li id="li_23" >
+                                    <label class="description" for="scriptargsvalue"><b>Metadata Value To Write</b></label>
+                                    <div>
+                                        <input id="scriptargsvalue" name="scriptargsvalue" class="element text medium" type="text" maxlength="255" value=""/> 
+                                    </div> 
+                                </li>
+
+                                <li class="section_break">
+                                    <h2><b>End</b></h2>
+                                    <p></p>
+
+                                </li>
+
+
+                                <li class="buttons">
+                                    <input type="hidden" name="form" value="" />
+
+                                    <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+                                </li>
+                                </ul>
+                            </form>	
+                            <div id="footer">
+                                Generated to use with <a href="../../"><b>jbRepoImageServer</b> </a>
+                            </div>
+                        </div>
+                    <img id="bottom" src="bottom.png" alt="">
+    </body>
+</html>
