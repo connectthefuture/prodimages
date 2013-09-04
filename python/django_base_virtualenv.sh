@@ -5,18 +5,17 @@ virtualenv_name="$1"
 DjangoProjectRoot="$2"
 
 ## 1 ## Create Virtual Env
-virtualenv ${virtualenv_name}
-cd ${virtualenv_name}
-source bin/activate
+virtualenv ${virtualenv_name} &&
+cd ${virtualenv_name} && source bin/activate;
 
 ## 2 ## New Working in Virtual Env Install Django and Create the Base Project
-cd choose_virtualenv_name
+cd ${virtualenv_name}
 bin/pip-2.7 install Django\>\=1.5
 
 
 ## 3 ## Start Django Project using django-base-templates
-django-admin.py startproject --template https://github.com/xenith/django-base-template/zipball/master --extension py,md,rst $DjangoProjectRoot
-cd $DjangoProjectRoot
+django-admin.py startproject --template https://github.com/xenith/django-base-template/zipball/master --extension py,md,rst ${DjangoProjectRoot}
+cd ${DjangoProjectRoot}
 
 
 ## 4 ## Uncomment the DB Used in this Project
