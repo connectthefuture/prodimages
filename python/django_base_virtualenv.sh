@@ -5,13 +5,13 @@ virtualenv_name="$1"
 DjangoProjectRoot="$2"
 
 ## 1 ## Create Virtual Env
-python virtualenv $virtualenv_name
-cd $virtualenv_name
+virtualenv ${virtualenv_name}
+cd ${virtualenv_name}
 source bin/activate
 
 ## 2 ## New Working in Virtual Env Install Django and Create the Base Project
 cd choose_virtualenv_name
-bin/pip-2.7 install Django>=1.5
+bin/pip-2.7 install Django\>\=1.5
 
 
 ## 3 ## Start Django Project using django-base-templates
