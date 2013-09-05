@@ -28,11 +28,19 @@ def url_download_file(url,filepath):
 def build_url_colorstyle_dict(file):
     import csv
     filedict = {}
+<<<<<<< HEAD
     with open(file, 'rb') as f:
         reader = csv.reader(f, dialect=csv)
         for row in reader:
             localdict = {}
             localdict['url'] = row[2]
+=======
+    with open(file, 'rbU') as f:
+        reader = csv.reader(f, dialect=csv)
+        for row in reader:
+            localdict = {}
+            localdict['url'] = row[0]
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
             localdict['style'] = row[1]
             filedict[row[1]] = localdict
     return filedict
@@ -51,7 +59,12 @@ except:
     file = os.path.join('/mnt/Post_Complete/.Vendor_to_Load/feeds', today + '_sku-luxury-conv.csv')
 
 ## Completed Downloads
+<<<<<<< HEAD
 upload_drop = '/mnt/Post_Complete/.Vendor_to_Load/upload_drop'
+=======
+upload_drop = '/Users/johnb/Documents/swi_1000_dload'
+## upload_drop = '/mnt/Post_Complete/.Vendor_to_Load/upload_drop'
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 daily_dir = os.path.join(upload_drop, today + '_jpgs')
 try:
     os.mkdir(daily_dir, 16877)

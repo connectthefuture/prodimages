@@ -36,6 +36,7 @@ def has_href_but_no_src(tag):
 """
 Functions for returning union, intersection of 2 lists or Unique results of 1 list
 
+<<<<<<< HEAD
 """ 
 def unique(a):
     """ return the list with duplicate elements removed """
@@ -43,6 +44,15 @@ def unique(a):
 def intersect(a, b):
     """ return the intersection of two lists """
     return list(set(a) & set(b)) 
+=======
+"""
+def unique(a):
+    """ return the list with duplicate elements removed """
+    return list(set(a))
+def intersect(a, b):
+    """ return the intersection of two lists """
+    return list(set(a) & set(b))
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 def union(a, b):
     """ return the union of two lists """
     return list(set(a) | set(b))
@@ -99,7 +109,11 @@ def url_download_read_http(targeturl):
 ###########   Download URL string AND Save tmp file obj to Local User Directory
 ###########   URL LIB 2  ###
 ###  To Change final location of SAVED Download change var downloaddir  ###
+<<<<<<< HEAD
 ###					
+=======
+###
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 def url2_download_rw_httpsave(targeturl):
     from time import time
     import urllib2, subprocess, os
@@ -115,7 +129,11 @@ def url2_download_rw_httpsave(targeturl):
     downloadfile = urllib2.urlopen(targetreq)
     downloadtmp = downloadfile[0]
     regex = re.compile(r'.+?/([A-Za-z0-9-_%]+?.jpg)')
+<<<<<<< HEAD
     imagename = re.findall(regex, targeturl) 
+=======
+    imagename = re.findall(regex, targeturl)
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     downloadfinal = os.path.join(downloaddir, imagename)
     print downloadfinal
     os.path.rename(downloadtmp, downloadfinal)
@@ -154,8 +172,13 @@ def url_download_file_http(url):
     except AttributeError:
         print "Attribute Error - Type doesnt have a property requested"
             return downloadfile
+<<<<<<< HEAD
             
 ######### 
+=======
+
+#########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #####################
 ###  END SECTION  ###
 ###########################################################################################################################################################
@@ -238,7 +261,11 @@ def html_parse_links(htmlpage, domain):
                             ###########
                             ### CSV ###
                             ###########
+<<<<<<< HEAD
                             
+=======
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #######################################
 #######################################################################
 ###########    CSV Write to file and CSV read from file delim=csv #####
@@ -260,7 +287,11 @@ def csv_write_datedOutfile(lines):
 ###########
 #### 2 ####
 ###########
+<<<<<<< HEAD
 ########### 
+=======
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ### CSV read from file
 ##
 def csv_read_file(filename, delim):
@@ -268,10 +299,17 @@ def csv_read_file(filename, delim):
         dialect = csv.Sniffer().sniff(f.read(1024))
         reader = csv.reader(f, delimiter=delim, dialect=dialect)
         rows = []
+<<<<<<< HEAD
         for row in reader: 
             rows.append(row)
         return sorted(rows)
         
+=======
+        for row in reader:
+            rows.append(row)
+        return sorted(rows)
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 
 ###### In prog/version may not work right use above
 #def csv_read_file(filename, delim):
@@ -386,7 +424,11 @@ def date_fmt_CreateDateFix(fndir):
 #    import pyexiv2
 #    metadata = pyexiv2.ImageMetadata(imgfile)
 #    metadata[xmpkey] = xmpvalue
+<<<<<<< HEAD
 #    
+=======
+#
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 
 ##################
 ###########
@@ -405,7 +447,11 @@ def date_fmt_CreateDateFix(fndir):
 ###########
 ########### Write EXIF Data from Image File
 #def writeExif(imgfile,exifkey,exifvalue):
+<<<<<<< HEAD
 #    import pyexiv2    
+=======
+#    import pyexiv2
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #    metadata = pyexiv2.ImageMetadata(imgfile)
 #    metadata[exifkey] = exifvalue
 #
@@ -421,11 +467,19 @@ def date_fmt_CreateDateFix(fndir):
 #######################################################
 ###########
 #### 4 ####
+<<<<<<< HEAD
 ########### 
 ########### Read IPTC Data from Image File
 ###
 #def readIptc(imgfile):
 #    import pyexiv2    
+=======
+###########
+########### Read IPTC Data from Image File
+###
+#def readIptc(imgfile):
+#    import pyexiv2
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #    metadata = pyexiv2.ImageMetadata(imgfile)
 #    mdataprint = metadata.read()
 #    print metadata
@@ -454,7 +508,11 @@ def metadata_get_exif(imgfile):
 ######################################################################################################################################
 ######################################################################################################################################
 ######################################################################################################################################
+<<<<<<< HEAD
 ###     Oracle Bfly Queries included - Only can run local to Bfly   ################################################################## 
+=======
+###     Oracle Bfly Queries included - Only can run local to Bfly   ##################################################################
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ##      --Reconfig Scripts to work with diff MySql/Orcl servers--    #################################################################
 ######################################################################################################################################
 ######################################################################################################################################
@@ -464,6 +522,7 @@ def metadata_get_exif(imgfile):
 ###########
 ###########
 #### 1 ####
+<<<<<<< HEAD
 ########### 
 ########### Use in loop to return Dict of colorstyle & prod attribute metadata
 ######        Then use to Create exif exec strings or Use data for Reporting as usual
@@ -492,33 +551,90 @@ def sql_query_Metatags(style,f):
         metatag['IPTC:PONumber'] = row['po_num']
         metatag['IPTC:VendorStyle'] = row['vendor_style']
         #metatag['SourceFile'] = str(f)
+=======
+###########
+########### Use in loop to return Dict of colorstyle & prod attribute metadata
+######        Then use to Create exif exec strings or Use data for Reporting as usual
+###
+def sqlQueryMetatagsSelects(style,f):
+    import sqlalchemy
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
+    connection = orcl_engine.connect()
+
+    querymake_metatags="SELECT DISTINCT POMGR_SNP.PRODUCT_COLOR.ID AS colorstyle, POMGR_SNP.BRAND.NAME AS brand, to_date(POMGR_SNP.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') AS copy_dt, POMGR_SNP.PRODUCT_FOLDER_DENORMALIZED.LABEL AS category_parent, POMGR_SNP.PRODUCT_FOLDER.LABEL AS category_sub, MAX(ATG_SNP.EVENT.ID) AS event_id, POMGR_SNP.LK_PRODUCT_STATUS.NAME AS production_status, MAX(ATG_SNP.EVENT.EVENT_DESCRIPTION) AS event_title, MAX(to_date(POMGR_SNP.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')) AS sample_dt, MAX(POMGR_SNP.LK_SAMPLE_STATUS.NAME) AS sample_status, MAX(POMGR_SNP.PO_LINE.PO_HDR_ID) AS po_num, POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style FROM POMGR_SNP.PRODUCT_COLOR LEFT JOIN ATG_SNP.EVENT_PRODUCT_COLOR ON POMGR_SNP.PRODUCT_COLOR.ID = ATG_SNP.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID INNER JOIN POMGR_SNP.LK_PRODUCT_STATUS ON POMGR_SNP.PRODUCT_COLOR.PRODUCTION_STATUS_ID = POMGR_SNP.LK_PRODUCT_STATUS.ID LEFT JOIN ATG_SNP.EVENT ON ATG_SNP.EVENT_PRODUCT_COLOR.EVENT_ID = ATG_SNP.EVENT.ID INNER JOIN POMGR_SNP.PRODUCT ON POMGR_SNP.PRODUCT_COLOR.PRODUCT_ID = POMGR_SNP.PRODUCT.ID INNER JOIN POMGR_SNP.PRODUCT_FOLDER ON POMGR_SNP.PRODUCT.PRODUCT_FOLDER_ID = POMGR_SNP.PRODUCT_FOLDER.ID INNER JOIN POMGR_SNP.BRAND ON POMGR_SNP.PRODUCT.BRAND_ID = POMGR_SNP.BRAND.ID INNER JOIN POMGR_SNP.PRODUCT_FOLDER_DENORMALIZED ON POMGR_SNP.PRODUCT_FOLDER.PARENT_PRODUCT_FOLDER_ID = POMGR_SNP.PRODUCT_FOLDER_DENORMALIZED.ID LEFT JOIN POMGR_SNP.SAMPLE ON POMGR_SNP.PRODUCT_COLOR.ID = POMGR_SNP.SAMPLE.PRODUCT_COLOR_ID LEFT JOIN POMGR_SNP.SAMPLE_TRACKING ON POMGR_SNP.SAMPLE.ID = POMGR_SNP.SAMPLE_TRACKING.SAMPLE_ID LEFT JOIN POMGR_SNP.LK_SAMPLE_STATUS ON POMGR_SNP.SAMPLE_TRACKING.STATUS_ID = POMGR_SNP.LK_SAMPLE_STATUS.ID LEFT JOIN POMGR_SNP.PO_LINE ON POMGR_SNP.PRODUCT_COLOR.ID = POMGR_SNP.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR_SNP.PRODUCT_COLOR.ID = '" + style + "' GROUP BY POMGR_SNP.PRODUCT_COLOR.ID, POMGR_SNP.BRAND.NAME, to_date(POMGR_SNP.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD'), POMGR_SNP.PRODUCT_FOLDER_DENORMALIZED.LABEL, POMGR_SNP.PRODUCT_FOLDER.LABEL, POMGR_SNP.LK_PRODUCT_STATUS.NAME, POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE ORDER BY POMGR_SNP.PRODUCT_COLOR.ID DESC"
+
+    result = connection.execute(querymake_metatags)
+    metatags = {}
+    for row in result:
+        metatag = {}
+#        metatag['colorstyle'] = row['colorstyle']
+        metatag['IPTC:PONumber'] = row['po_num']
+        metatag['IPTC:VendorStyle'] = row['vendor_style']
+        metatag['IPTC:Brand'] = row['brand']
+        metatag['Keywords'] = row['brand']
+        metatag['XMP:Genre'] = row['category_parent']
+        metatag['IPTC:ProductType'] = row['category_sub']
+        metatag['EventID'] = row['event_id']
+        try:
+            metatag['XMP:Album'] = "EventID " + str(row['event_id'])
+        except:
+            pass
+        metatag['IPTC:Credit'] = row['event_title']
+        metatag['IPTC:CopyrightNotice'] = row['production_status']
+#        metatag['IPTC:SpecialInstructions'] = '{:%d-%m-%Y}'.format(row['copy_dt'])
+#        metatag['IPTC:SpecialInstructions'] = row['copy_dt']
+        metatag['IPTC:SimilarityIndex'] = row['sample_status']
+#        metatag['IPTC:SampleStatusDate'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
+#        metatag['IPTC:Source'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
+#        metatag['IPTC:SampleStatusDate'] = row['sample_dt']
+#        metatag['IPTC:Source'] = row['sample_dt']
+#        metatag['SourceFile'] = f
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
         ## file path as dict KEY
         metatags[f] = metatag
         ## colorstyle as dict KEY
         #metatags[row['colorstyle']] = metatag
+<<<<<<< HEAD
         
     connection.close()
     return metatags
 
+=======
+
+    connection.close()
+    return metatags
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ###---------###
 
 ##################
 ###########
 #### 2 ####
+<<<<<<< HEAD
 ########### 
+=======
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ########### Query Mysql DB using 2 attribs. Filed(ie. 'colorstyle', param(ie.'302332901'))
 ###
 def sql_query_StylesAttribute(searchField,searchParam):
     import sqlalchemy
     #engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imagepaths')
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     engine = sqlalchemy.create_engine('mysql://root:root@localhost/data_imagepaths')
     connection = engine.connect()
 
     ## Create Query
     #querymake = "select * from product_snapshot where " + searchField + " like %" + searchParam + "%"
     querymake = "select * from product_snapshot where " + searchField + " = " + searchParam
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imagepaths')
     #querymake = "select * from " + searchtable + " where " + searchField + " = " + searchParam
     #result = connection.execute("select * from product_snapshot where brand = 'Gucci'")
@@ -538,7 +654,11 @@ def sql_query_StylesAttribute(searchField,searchParam):
 ##################
 ###########
 #### 3 ####
+<<<<<<< HEAD
 ########### 
+=======
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ########### Query EVENTS Mysql DB using 2 attribs. Filed(ie. 'colorstyle', param(ie.'302332901'))
 ###
 def sql_query_EventsGeneral(searchtable,searchField,searchParam):
@@ -547,7 +667,11 @@ def sql_query_EventsGeneral(searchtable,searchField,searchParam):
     #import sys
     #import csv
     #ret = {}
+<<<<<<< HEAD
     ##  Create Sql Engine and Connection Obj -- Connected  --- 
+=======
+    ##  Create Sql Engine and Connection Obj -- Connected  ---
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     ##  Includes local replicated server & remote connections
     #engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imagepaths')
     engine = sqlalchemy.create_engine('mysql://root:root@192.168.21.111:3301/data_imports')
@@ -555,7 +679,11 @@ def sql_query_EventsGeneral(searchtable,searchField,searchParam):
 
     ## Create Query
     #querymake = "select * from product_snapshot where " + searchField + " like %" + searchParam + "%"
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     querymake = "select * from " + searchtable + " where " + searchField + " = " + searchParam
     #result = connection.execute("select * from product_snapshot where brand = 'Gucci'")
     result = connection.execute(querymake)
@@ -563,19 +691,32 @@ def sql_query_EventsGeneral(searchtable,searchField,searchParam):
     ### Print Results of Query
     for row in result:
         print "colorstyle:",        row['colorstyle']
+<<<<<<< HEAD
         print "event group:",       row['event_group']        
         print "event id:",          row['event_id']
         print "event title:",       row['event_title']        
         print "event start:",       row['ev_start']
         #print "production status:", row['production_status']        
         
+=======
+        print "event group:",       row['event_group']
+        print "event id:",          row['event_id']
+        print "event title:",       row['event_title']
+        print "event start:",       row['ev_start']
+        #print "production status:", row['production_status']
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     connection.close()
     return rowsss
 
 ##################
 ###########
 #### 4 ####
+<<<<<<< HEAD
 ########### 
+=======
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ########### Upcoming Events in Dict by Colorstyle Key ### Nothing is Passed to Function ## Its obviously limited in scope ###
 ###
 def sql_query_EventsUpcoming():
@@ -586,7 +727,11 @@ def sql_query_EventsUpcoming():
     result = connection.execute(querymake_eventscal)
     events = {}
     for row in result:
+<<<<<<< HEAD
         event = {}        
+=======
+        event = {}
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
         event['ID'] = row['ID']
         event['START_DATE'] = row['START_DATE']
         event['EVENT_DESCRIPTION'] = row['EVENT_DESCRIPTION']
@@ -599,20 +744,32 @@ def sql_query_EventsUpcoming():
 ##################
 ###########
 #### 5 ####
+<<<<<<< HEAD
 ########### 
+=======
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ########### Primary Consignment to Bfly image renamer -- Genrates Dict of input -- Iterate for multi-key Dict
 ###
 def sqlQueryConsigRename(vnum, ponum):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
+<<<<<<< HEAD
     connection = orcl_engine.connect()    
+=======
+    connection = orcl_engine.connect()
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 
     querymake_consig_stylefix="SELECT POMGR_SNP.PRODUCT_COLOR.ID AS colorstyle, POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR_SNP.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR_SNP.PRODUCT_COLOR INNER JOIN POMGR_SNP.PO_LINE ON POMGR_SNP.PRODUCT_COLOR.ID = POMGR_SNP.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE LIKE '" + vnum + "%' AND POMGR_SNP.PO_LINE.PO_HDR_ID = '" + ponum + "'"
 
     result = connection.execute(querymake_consig_stylefix)
     consigstyles = {}
     for row in result:
+<<<<<<< HEAD
         consigstyle = {}        
+=======
+        consigstyle = {}
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
         consigstyle['colorstyle'] = row['colorstyle']
         #consigstyle['vendor_style'] = row['vendor_style']
         consigstyles[row['vendor_style']] = consigstyle
@@ -620,18 +777,28 @@ def sqlQueryConsigRename(vnum, ponum):
     #print consigstyles
     connection.close()
     return consigstyles
+<<<<<<< HEAD
     
     
 ##################
 ###########
 #### 6 ####
 ########### 
+=======
+
+
+##################
+###########
+#### 6 ####
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ########### Return Dict of Colorstyle -- with sku value -- Inputing sku
 ###
 def sqlQuerySkuColorstyleConvert(sku):
     import sqlalchemy
     #sku = str(sku)
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
+<<<<<<< HEAD
     connection = orcl_engine.connect()    
     
     querymake_consig_stylefix="SELECT Distinct POMGR_SNP.SKU.PRODUCT_COLOR_ID AS colorstyle, POMGR_SNP.SKU.SKU_CODE AS sku FROM POMGR_SNP.SKU WHERE POMGR_SNP.SKU.SKU_CODE LIKE '" + sku + "' ORDER by POMGR_SNP.SKU.PRODUCT_COLOR_ID ASC"
@@ -644,6 +811,20 @@ def sqlQuerySkuColorstyleConvert(sku):
         #consigstyle['vendor_style'] = row['vendor_style']
         consigstyles[row['sku']] = consigstyle
         
+=======
+    connection = orcl_engine.connect()
+
+    querymake_consig_stylefix="SELECT Distinct POMGR_SNP.SKU.PRODUCT_COLOR_ID AS colorstyle, POMGR_SNP.SKU.SKU_CODE AS sku FROM POMGR_SNP.SKU WHERE POMGR_SNP.SKU.SKU_CODE LIKE '" + sku + "' ORDER by POMGR_SNP.SKU.PRODUCT_COLOR_ID ASC"
+
+    result = connection.execute(querymake_consig_stylefix)
+    consigstyles = {}
+    for row in result:
+        consigstyle = {}
+        consigstyle['colorstyle'] = row['colorstyle']
+        #consigstyle['vendor_style'] = row['vendor_style']
+        consigstyles[row['sku']] = consigstyle
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     #print consigstyles
     connection.close()
     return consigstyles
@@ -651,7 +832,11 @@ def sqlQuerySkuColorstyleConvert(sku):
 ##################
 ###########
 #### 7 ####
+<<<<<<< HEAD
 ########### 
+=======
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ########### Return Dict of PO -key -- with colorstyle value -- Inputing PO
 ###
 def sqlQueryReturnStylesbyPO(ponum):
@@ -721,8 +906,13 @@ def pycurl_upload_imagedrop(localFilePath):
         c.setopt(pycurl.INFILE, f)
         c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
         c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(localFilePath))
+<<<<<<< HEAD
 #        c.setopt(pycurl.READFUNCTION, f.read());        
 #        c.setopt(pycurl.READDATA, f.read()); 
+=======
+#        c.setopt(pycurl.READFUNCTION, f.read());
+#        c.setopt(pycurl.READDATA, f.read());
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
         c.setopt(pycurl.UPLOAD, 1L)
 
         try:
@@ -762,7 +952,11 @@ def pycurl_upload_imagedrop(localFilePath):
 ###########
 ###########
 #### 1 ####
+<<<<<<< HEAD
 ########### 
+=======
+###########
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ########### Start WebServer at http://localhost:8111
 ###
 
@@ -854,7 +1048,11 @@ def pycurl_upload_imagedrop(localFilePath):
 ################################################################                                                                        ########################################
 ################################################################                                                                        ########################################
 ################################################################                Execute Above Function Definitions Below                ########################################
+<<<<<<< HEAD
 ################################################################                                                                        ########################################                
+=======
+################################################################                                                                        ########################################
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 ################################################################                                                                        ########################################
 ################################################################################################################################################################################
 ################################################################################################################################################################################
@@ -931,12 +1129,17 @@ def pycurl_upload_imagedrop(localFilePath):
 #def file_readwrite_FileFormatted(input_list,outfilename):
 #    #ret = {}
 #    from datetime import datetime
+<<<<<<< HEAD
 #    from string import Formatter    
+=======
+#    from string import Formatter
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #    from os import path
 #    dt = unicode(datetime.today())
 #    print dt
 #    Formatter()
 #    date = '{:.10}'.format(dt)
+<<<<<<< HEAD
 #    print date    
 #    dir_homedir = path.expanduser('~')
 #    
@@ -944,6 +1147,15 @@ def pycurl_upload_imagedrop(localFilePath):
 #    #frd  = file()
 #    print myfile    
 #    #fwrt = file(myfile, 'w+')     
+=======
+#    print date
+#    dir_homedir = path.expanduser('~')
+#
+#    myfile = unicode(path.join(dir_homedir, 'Pictures/' + outfilename + '-' + date + '.txt'))
+#    #frd  = file()
+#    print myfile
+#    #fwrt = file(myfile, 'w+')
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #    wrt = open(myfile, 'w+')
 #    for line in fn:
 #        sline = str(line)
@@ -969,12 +1181,20 @@ def pycurl_upload_imagedrop(localFilePath):
 ###################### Misc Notes and Snips to End(EOF) ############################
 ##################################################################################
 ##################################################################################
+<<<<<<< HEAD
 ###################### 
+=======
+######################
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 
 ## Original Root Html file parsed for html files in site root html
 #sublink = getlinkfrmhtml(siteroot, htmlfile1, regex)
 
+<<<<<<< HEAD
     ##<----##### New Html File sub1 from Harvested Link from orig html file  
+=======
+    ##<----##### New Html File sub1 from Harvested Link from orig html file
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #linkedreader = url2_download_read_http(sublink)
 #linkedreader = linkedreader[0]
 
@@ -994,11 +1214,19 @@ def pycurl_upload_imagedrop(localFilePath):
 #			print line.strip('')
 #			linkedpath = re.findall(regex, line)
 #			for line in linkedpath:
+<<<<<<< HEAD
 #				
 #				if line:
 #					linkedpath = str(line)
 #					pageurl = str(siteroot + linkedpath)
 #					
+=======
+#
+#				if line:
+#					linkedpath = str(line)
+#					pageurl = str(siteroot + linkedpath)
+#
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
 #					print pageurl
 #				else:
 #					continue
@@ -1009,7 +1237,11 @@ def pycurl_upload_imagedrop(localFilePath):
 #		for line in newf:
 #			print line
     ####
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
     #[IMG][/IMG]
     #regex = re.compile(r'src="([^"]+)"') ##
 
