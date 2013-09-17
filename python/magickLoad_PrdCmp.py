@@ -270,7 +270,19 @@ archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace
 imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
 imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
 
-## Test for existing files to load or kill entire process prior to dir creation
+###################
+## Create Lock File
+###################
+#locker = os.path.join(rootdir, 'LOCKED.lock')
+#if os.path.isfile(locker):
+#    break
+#else:
+#    with open(locker, 'wb') as f:
+#        f.write(todaysdatefull)
+#        f.close()
+
+###########
+## Test for ex
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
 if len(walkedout_tmp) == 0:
     print "Nothing to Process"
@@ -421,3 +433,10 @@ upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.
 upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
 if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
     shutil.rmtree(tmp_processing)
+
+    
+###################
+## Remove Lock file
+###################
+#if os.path.isfile(locker):
+#    os.remove(locker)

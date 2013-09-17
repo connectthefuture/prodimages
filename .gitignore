@@ -2,7 +2,7 @@
 *.pyd
 benchtree
 build
-<<<<<<< HEAD
+
 =======
 .gitattributes
 
@@ -52,4 +52,4 @@ nosetests.xml
 .project
 .pydevproject
 .metadata
->>>>>>> 00d5c280c263b375d191833004cfc6cf50e480b0
+
