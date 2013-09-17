@@ -202,7 +202,7 @@ for k,v in fulldict.iteritems():
         sqlinsert_choose_test = v['file_path']
         #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
         regex_productionraw = re.compile(r'.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
-        regex_productionraw_zimages = re.compile(r'^/studio_thumbs/[0-9]{4}/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
+        regex_productionraw_zimages = re.compile(r'.*?studio_thumbs.*?[0-9]{4}/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/studio_raw/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
@@ -210,15 +210,16 @@ for k,v in fulldict.iteritems():
 
 ## ProdRaw Thumbs
         if re.findall(regex_productionraw_zimages, sqlinsert_choose_test):
-                    connection.execute("""INSERT INTO production_raw_zimages (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
-                    print "Successful Insert production_raw_onfigure --> {0}".format(k)
+            connection.execute("""INSERT INTO production_raw_zimages (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            print "Successful Insert regex_productionraw_zimages --> {0}".format(k)
 ## ProdRaw RAW
-        elif re.findall(regex_productionraw, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
-            print "Successful Insert production_raw_onfigure --> {0}".format(k)
+#        elif re.findall(regex_productionraw, sqlinsert_choose_test):
+#            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+#            print "Successful Insert production_raw_onfigure --> {0}".format(k)
 
         else:
             print "Database Table not Found for Inserting {0}".format(k)
-
+    #except OSError:
     except sqlalchemy.exc.IntegrityError:
         print "Duplicate Entry {0}".format(k)
+        pass
