@@ -43,10 +43,10 @@ def organize_files_by_4digit(pathname,destdir=None):
         
         
 import os, sys, re, shutil
-##if __name__ == "__main__":
-if sys.arg[1]:
+if __name__ == "__main__":
+##if sys.argv[1]:
     try:
-        rootdir = sys.arg[1]
+        rootdir = sys.argv[1]
     except:
         print "Sys Arg 1 must be the directory with files to organize"
 
