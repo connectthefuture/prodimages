@@ -1,4 +1,47 @@
 #!/usr/bin/env python
+###
+## Extract All Metadata from Image File as Dict using PIL
+def get_exif(file_path):
+    from PIL import Image
+    from PIL.ExifTags import TAGS
+    exifdata = {}
+    im = Image.open(file_path)
+    info = im._getexif()
+    for tag, value in info.items():
+        decoded = TAGS.get(tag, tag)
+        exifdata[decoded] = value
+    return exifdata
+
+
+###
+## Write Single Metadata Tag/Value to Imagefile using pyexiv2
+def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
+    from PIL import Image
+    import pyexiv2
+    # Read EXIF data to initialize
+    image_metadata = pyexiv2.ImageMetadata(image_filepath)
+    image_metadata.read()
+    # Add and Write new Tag to File
+    image_metadata[exiftag] = exifvalue
+    image_metadata.write()
+    return image_filepath
+
+
+def get_exif_metadata_value(image_filepath, exiftag=None, exifvalue=None):
+    from PIL import Image
+    import pyexiv2
+    if exifvalue:
+
+        # Read EXIF data to initialize
+        image_metadata = pyexiv2.ImageMetadata(image_filepath)
+        metadata = image_metadata.read()
+        # Add and Write new Tag to File
+        exifvalue = metadata[exiftag]
+        # image_metadata[exiftag] = exifvalue
+        # image_metadata.write()
+    else:
+        print "Not Yet Built"
+    return image_filepath
 
 ###
 ## Walk Root Directory and Return List or all Files in all Subdirs too
@@ -41,21 +84,25 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 shot_number = shot_number.split('.')[0]
                 ext = filename.split('.')[-1]
                 try:
-                    path_date = file_path.split('/')[6][:6]
-                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
-                    if re.findall(regex_date, path_date):
-                        photo_date = path_date
-                    else:
-                        try:
-                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-                        except KeyError:
-                            try:
-                                photo_date = get_exif(file_path)['DateTime'][:10]
-                            except KeyError:
-                                photo_date = '0000-00-00'
-                            except IOError:
-                                photo_date = '0000-00-00'
-                                print "IOError on {0}".format(line)
+                    ##path_date = file_path.split('/')[6][:6]
+                    ##path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
+                    ##if re.findall(regex_date, path_date):
+                    ##    photo_date = path_date
+                    try:
+                        photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                    except KeyError:
+                        photo_date = get_exif(file_path)['DateTime'][:10]
+                    ##else:
+#                        try:
+#                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+#                        except KeyError:
+#                            try:
+#                                photo_date = get_exif(file_path)['DateTime'][:10]
+#                            except KeyError:
+#                                photo_date = '0000-00-00'
+#                            except IOError:
+#                                photo_date = '0000-00-00'
+#                                print "IOError on {0}".format(line)
                 except AttributeError:
                     photo_date = '0000-00-00'
                 except IOError:
@@ -72,16 +119,18 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 stylestringsdict[file_path] = stylestringsdict_tmp
                 file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
                 file_path_reletive = file_path.replace('JPG', 'jpg')
-                ## Format CSV Rows
-                row = "{0},{1},{2},{3},{4}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
-                print row
-                stylestrings.append(row)
+                ## Format CSV Rows Returning list instead of dict
+                #row = "{0},{1},{2},{3},{4}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
+                #print row
+                #stylestrings.append(row)
             except IOError:
                 print "IOError on {0}".format(line)
             #except AttributeError:
             #    print "AttributeError on {0}".format(line)
     return stylestringsdict
     
+
+
 
 ############################ Run ######################################################## Run ############################
 ############################ Run ######################################################## Run ############################
