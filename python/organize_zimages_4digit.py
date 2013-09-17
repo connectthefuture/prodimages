@@ -42,8 +42,9 @@ def organize_files_by_4digit(pathname,destdir=None):
         shutil.move(pathname,zimages_filepath)
         
         
-
-if __name__ == "__main__":
+import os, sys, re, shutil
+##if __name__ == "__main__":
+if sys.arg[1]:
     try:
         rootdir = sys.arg[1]
     except:
