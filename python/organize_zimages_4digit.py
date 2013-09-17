@@ -17,12 +17,12 @@ def recursive_dirlist(rootdir):
     return walkedlist
 
 
-def organize_files_by_4digit(pathname,destdir=None):
+def organize_files_by_4digit(pathname,destdir):
     import os, sys, re, shutil
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
-    pathname = sys.arg[1]
-    if not destdir():
-        destdir = sys.argv[2]
+    #pathname = sys.argv[1]
+    #if not destdir():
+    #    destdir = sys.argv[2]
     if os.path.isfile(pathname):
         #try:
         infile = os.path.abspath(pathname)
