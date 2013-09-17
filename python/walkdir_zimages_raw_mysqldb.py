@@ -24,58 +24,14 @@ def recursive_dirlist(rootdir):
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
     regex_Raw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.CR2$')
+    regex_zjpg = re.compile(r'^/.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
         stylestringsdict_tmp = {}
-        if re.findall(regex_productionraw_Exports,line):
-            try:
-
-                file_path = line
-                filename = file_path.split('/')[-1]
-                colorstyle = filename.split('_')[0]
-                alt = file_path.split('_')[-1]
-                ext = filename.split('.')[-1]
-                try:
-                    path_date = file_path.split('/')[6][:6]
-                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
-                    if re.findall(regex_date, path_date):
-                        photo_date = path_date
-                    else:
-                        try:
-                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-                        except KeyError:
-                            try:
-                                photo_date = get_exif(file_path)['DateTime'][:10]
-                            except KeyError:
-                                photo_date = '0000-00-00'
-                        except IOError:
-                            photo_date = '0000-00-00'
-                            print "IOError on {0}".format(line)
-                except AttributeError:
-                    photo_date = '0000-00-00'
-                except IOError:
-                    print "IOError on {0}".format(line)
-                    photo_date = '0000-00-00'
-                photo_date = str(photo_date)
-                photo_date = photo_date.replace(':','-')
-                stylestringsdict_tmp['colorstyle'] = colorstyle
-                stylestringsdict_tmp['photo_date'] = photo_date
-                stylestringsdict_tmp['file_path'] = file_path
-                stylestringsdict_tmp['alt'] = alt
-                stylestringsdict[file_path] = stylestringsdict_tmp
-                file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-                file_path_reletive = file_path.replace('JPG', 'jpg')
-                                ## Format CSV Rows
-                row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
-                print row
-                stylestrings.append(row)
-            except IOError:
-                print "IOError on {0}".format(line)
-
-        elif re.findall(regex_Raw,line):
+        if re.findall(regex_zjpg,line):
             try:
                 file_path = line
                 filename = file_path.split('/')[-1]
@@ -109,6 +65,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
                 stylestringsdict_tmp['photo_date'] = photo_date
+                file_path = file_path.replace('/mnt/Production_Raw/.zImages_1/', '/studio_thumbs/')
                 stylestringsdict_tmp['file_path'] = file_path
                 stylestringsdict_tmp['alt'] = alt
                 stylestringsdict_tmp['shot_number'] = shot_number
@@ -189,13 +146,14 @@ for k,v in stylestringsdict.iteritems():
 for k,v in fulldict.iteritems():
     try:
 
-        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+        ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
         connection = mysql_engine.connect()
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
         #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
         regex_productionraw = re.compile(r'.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
-        regex_productionraw_zimages = re.compile(r'^/.+?Raw/\.zImages_1/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
+        regex_productionraw_zimages = re.compile(r'^/.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/studio_raw/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
         regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
         regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
