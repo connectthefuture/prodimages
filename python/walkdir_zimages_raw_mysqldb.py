@@ -132,9 +132,9 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
 from PIL import Image
 import os,sys,re
 
-if sys.argv[1]:
+try:
     rootdir = sys.argv[1]
-else:
+except:
     rootdir = '/mnt/Production_Raw/.zImages_1/'
 walkedout = recursive_dirlist(rootdir)
 
