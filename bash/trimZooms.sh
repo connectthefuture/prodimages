@@ -39,7 +39,7 @@ dname=`dirname $f`
 convert $f -format jpg -profile $srgb_webrdy -crop \
   `convert "$f" -virtual-pixel edge -blur 0x15 -fuzz 1% -trim \
    -format '%wx%h%O' \
-   info:` -background white +repage -gravity center -resize '800x' -profile $srgb_webrdy -background white +repage -extent '820x984' -colorspace sRGB -unsharp 15 -quality 85 "$f"_new.jpg
+   info:` -background white +repage -gravity center -resize '500x' -profile $srgb_webrdy -background white +repage -extent '600x720' -colorspace sRGB -unsharp 15 -quality 85 "$f"_new.jpg
 #fi ;
 
 
