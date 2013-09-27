@@ -19,8 +19,8 @@ def test_return_coefficients(focallength,coefficients):
         if item['focal'] == focallength:
             tmp_found = {}
             tmp_found['a'] = item['a']
-            tmp_found['b'] = item['a']
-            tmp_found['c'] = item['a']
+            tmp_found['b'] = item['b']
+            tmp_found['c'] = item['c']
             tmp_found['d'] = 1 - item['a'] - item['b'] - item['c']
             foundce[item['focal']] = tmp_found
     return foundce
