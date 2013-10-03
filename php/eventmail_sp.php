@@ -10,7 +10,7 @@
 	if(isset($_POST['mailfrom'])) $mailfrom   		= $_POST['mailfrom'];
 	    else $mailfrom  =   "john.bragato@gmail.com";
 	if(isset($_POST['mailto'])) $mailto   			= $_POST['mailto'];
-        else $mailto  =   "john.bragato@bluefly.com,stephen.parker@bluefly.com,jacqueline.wahba@bluefly.com,james.hoetker@bluefly.com,meghan.mcbride@bluefly.com,conrad.sanderson@bluefly.com,desiree.guery@bluefly.com";
+        else $mailto  =   "john.bragato@bluefly.com,stephen.parker@bluefly.com,jacqueline.wahba@bluefly.com,james.hoetker@bluefly.com,lydia.jeanlouis.temp@bluefly.com,conrad.sanderson@bluefly.com,desiree.guery@bluefly.com";
 	if(isset($_POST['mailsubject'])) $mailsubject   = $_POST['mailsubject'];
         else $mailsubject  =   "Upcoming Event Status Report";
 	if(isset($_POST['mailbody'])) $mailbody   		= $_POST['mailbody'];
