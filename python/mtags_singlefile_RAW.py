@@ -68,7 +68,7 @@ def sqlQueryMetatags(style,f):
     ORDER BY
       POMGR_SNP.PRODUCT_COLOR.ID DESC"""
 
-##   --RENAME INPUT VARIABLE PRIOR TO QUERY
+## RENAME INPUT VARIABLE PRIOR TO QUERY
     querymake_metatags = querymake_metatags.replace('COLORSTYLESEARCH', str(style))
     result = connection.execute(querymake_metatags)
     metatags = {}
