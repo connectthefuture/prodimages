@@ -200,41 +200,47 @@ def write_metadata_file(filename):
 import sys
 import os
 import glob
+import re
 import sqlalchemy
 
 filename=os.path.abspath(sys.argv[1])
+regex_CR2_JPGS = re.compile(r'.*?\.[jpgJPGCR2]{3}$')
 
+## Only Process CR2s and JPGs
+if re.findall(regex_CR2_JPGS, filename):
+    metadict = get_dbinfo_for_metatags_singlefile(filename)
+    exiftags = []
+    exifdict = {}
+    for k,v in metadict.items():
+        metatags = []
 
-metadict = get_dbinfo_for_metatags_singlefile(filename)
-exiftags = []
-exifdict = {}
-for k,v in metadict.items():
-    metatags = []
+        for val in v:
+            #m = []
+            filename = str(k)
+            exiftag = val
+            exifvalue = v[val]
+            #exifpart = str(' -' + "'" + str(exiftag) + "=" + str(exifvalue) + "'" + ''),
+            exifpart = "-'{exiftag}'='{exifvalue}'".format(exiftag=exiftag,exifvalue=exifvalue)
+            metatags.append(exifpart)
+            #print metatags
+            #m.append(exifpart)
+            #print val,v[val]
+        #exifdict[filename] = [x for x in metatags]
+        #metatags = (str(tag) for tag in metatags)
+        exifdict[filename] = " ".join(metatags)
 
-    for val in v:
-        #m = []
-        filename = str(k)
-        exiftag = val
-        exifvalue = v[val]
-        #exifpart = str(' -' + "'" + str(exiftag) + "=" + str(exifvalue) + "'" + ''),
-        exifpart = "-'{exiftag}'='{exifvalue}'".format(exiftag=exiftag,exifvalue=exifvalue)
-        metatags.append(exifpart)
-        #print metatags
-        #m.append(exifpart)
-        #print val,v[val]
-    #exifdict[filename] = [x for x in metatags]
-    #metatags = (str(tag) for tag in metatags)
-    exifdict[filename] = " ".join(metatags)
+    execlist = []
+    for key,value in exifdict.iteritems():
+        execstring = "exiftool -m -overwrite_original_in_place -fast2 -q {0} {1}".format(value,key)
+        execlist.append(execstring)
 
-execlist = []
-for key,value in exifdict.iteritems():
-    execstring = "exiftool -m -overwrite_original_in_place -fast2 -q {0} {1}".format(value,key)
-    execlist.append(execstring)
+    for line in execlist:
+        try:
+            os.system(line)
+            print line
+        except:
+            pass
+else:
+    pass
 
-for line in execlist:
-    try:
-        os.system(line)
-        print line
-    except:
-        pass
 
