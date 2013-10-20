@@ -1,0 +1,51 @@
+[user]
+	name = johnb
+	email = john.bragato@bluefly.com
+[core]
+	excludesfile = /Users/johnb/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+
+[alias]
+   	st = status
+   	ci = commit
+   	co = checkout
+   	br = branch
+
+[color]
+   	ui = auto
+   	
+[push]
+	default = upstream
+
+[remote "origin"]
+    fetch = +refs/heads/*:refs/remotes/origin/* 
+
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+    
+[branch "develop"]
+    remote = origin
+    merge  = refs/heads/develop 
+
+[color "branch"] 
+    current = yellow bold 
+    local = green bold 
+    remote = cyan bold
+
+[color "diff"] 
+    meta = yellow bold 
+    frag = magenta bold 
+    old = red bold 
+    new = green bold 
+    whitespace = red reverse 
+
+[color "status"] 
+    added = green bold 
+    changed = yellow bold
+    untracked = red bold
