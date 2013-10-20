@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import os, sys, re, csv
-
-import imap_get_attachments_gmail_UNSEEN-Diffed
-
-imap_get_attachments_gmail_UNSEEN-Diffed()
-
-echo "imap_get_attachments_gmail_UNSEEN-Diffed Done!"
+#
+#import imap_get_attachments_gmail_UNSEENDiffed
+#
+#imap_get_attachments_gmail_UNSEENDiffed()
+#
+## echo "imap_get_attachments_gmail_UNSEEN-Diffed Done!"
 
 
 def sqlQuery_geturl_ifmissing_image(style):
@@ -59,6 +59,30 @@ def url_download_file(url,filepath):
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
         
     
+
+def write_excel_error_log():
+    import csv
+    import xlrd
+    import sys
+    import os
+
+    homedir = os.path.expanduser("~")
+    csvfile = os.path.join(homedir, "zimages1_photoselects.csv")
+    outfile = os.path.join(homedir, "outfile.csv")
+
+    xlfile = open((os.path.join(homedir, "compiledutf.csv")), 'rb')
+
+
+    book = xlrd.open_workbook(xlfile)
+    sh = book.sheet_by_index(0)
+
+    convWriter = csv.writer(sys.stdout)
+
+    for rowx in range(sh.ncols):
+        convWriter.writerow(xlfile)
+        
+
+
 #####
 
 csvfile = '/Volumes/Post_Complete/.Vendor_to_Load/feeds/sku-conv.csv'
