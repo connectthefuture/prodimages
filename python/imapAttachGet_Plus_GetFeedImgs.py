@@ -60,19 +60,19 @@ def url_download_file(url,filepath):
         
     
 
-def write_excel_error_log():
+def write_excel_error_log(csvfile):
     import csv
     import xlrd
     import sys
     import os
 
+
     homedir = os.path.expanduser("~")
-    csvfile = os.path.join(homedir, "zimages1_photoselects.csv")
+    #csvfile = os.path.join(homedir, "zimages1_photoselects.csv")
     outfile = os.path.join(homedir, "outfile.csv")
+    xlfile = open((os.path.join(homedir, "compiled.csv")), 'rb')
 
-    xlfile = open((os.path.join(homedir, "compiledutf.csv")), 'rb')
-
-
+    
     book = xlrd.open_workbook(xlfile)
     sh = book.sheet_by_index(0)
 
