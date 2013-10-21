@@ -56,8 +56,8 @@ def url_download_file(url,filepath):
 import os,sys
 
 try:
-#    ponum = sys.argv[1]
-    ponum = '119854'
+    ponum = sys.argv[1]
+#    ponum = '119071'
 except:
     print "Enter a PO Number as 1st Arg or Nothing will Happen"
 
