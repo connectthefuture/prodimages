@@ -27,6 +27,7 @@ def url_download_file(url,filepath):
     error_check = urllib.urlopen(url)
     urlcode_value = error_check.getcode()
     print urlcode_value
+    
     if urlcode_value == 200:
         urllib.urlretrieve(url, filepath)
         print "Retrieved: " + url + " ---> " + filepath
@@ -36,12 +37,27 @@ def url_download_file(url,filepath):
         url_split = '-'.join(url_split)       
         url_parent = url.split('/')[:-1]
         url_parent = '/'.join(url_parent)
-        url = os.path.join(url_parent, url_split)
+        
         try:
-            urllib.urlretrieve(url, filepath)
-            print "Retrieved: " + url + " ---> " + filepath
+            url = os.path.join(url_parent, url_split)
+            error_check = urllib.urlopen(url)
+            urlcode_value = error_check.getcode()
+            #print urlcode_value
+            
+            if urlcode_value == 200:
+                urllib.urlretrieve(url, filepath)
+                print "On 2nd Attempt, Retrieved: " + url + " ---> " + filepath
+
+            elif urlcode_value == 404: 
+                print "Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
+            
+            else:
+                print "Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
+        
+        
         except:
-            print "Failed {0} on 2nd Try".format(url)
+            print "Failed {0} on 2nd Attempt".format(url)
+    
     else:
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
         
@@ -56,8 +72,8 @@ def url_download_file(url,filepath):
 import os,sys
 
 try:
-#    ponum = sys.argv[1]
-    ponum = '119854'
+    ponum = sys.argv[1]
+    #ponum = '119071'
 except:
     print "Enter a PO Number as 1st Arg or Nothing will Happen"
 
