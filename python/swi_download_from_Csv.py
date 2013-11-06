@@ -93,9 +93,9 @@ for k,v in filedict.iteritems():
     vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
     vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
     
-    colorstyle = k + ".jpg"
-    colorstyle_back = k + "_1.jpg"
-    colorstyle_side = k + "_2.jpg"
+    colorstyle = k + "_1.jpg"
+    colorstyle_back = k + "_2.jpg"
+    colorstyle_side = k + "_3.jpg"
     
     colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle)
     colorstyle_back_file = os.path.join(os.path.abspath(os.curdir), colorstyle_back)
