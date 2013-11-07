@@ -104,9 +104,9 @@ for k,v in filedict.iteritems():
     if imagefalse:
         try:            
         #print imagefalse,vendor_url, colorstyle_file
-            url_download_file(vendor_url,colorstyle_file)
+            #url_download_file(vendor_url,colorstyle_file)
             url_download_file(vendor_url_back,colorstyle_back_file)
-            url_download_file(vendor_url_side,colorstyle_side_file)
+            #url_download_file(vendor_url_side,colorstyle_side_file)
         except:
             print "Failed {}{}".format(vendor_url,colorstyle_file)
             #print swiurl
