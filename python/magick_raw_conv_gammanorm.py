@@ -68,9 +68,13 @@ def sqlQueryMetatags(style,f):
     ORDER BY
       POMGR_SNP.PRODUCT_COLOR.ID DESC"""
 
-## RENAME INPUT VARIABLE PRIOR TO QUERY
+##   --POMGR_SNP.PRODUCT_COLOR.MODIFIED_DATE >= TRUNC(SysDate - 365)
+
+##   --RENAME INPUT VARIABLE PRIOR TO QUERY
     querymake_metatags = querymake_metatags.replace('COLORSTYLESEARCH', str(style))
     result = connection.execute(querymake_metatags)
+    
+
     metatags = {}
     for row in result:
         metatag = {}
@@ -155,6 +159,7 @@ def get_exif_metadata_value(image_filepath, exiftag=None, exifvalue=None):
 #        print "Not Yet Built"
     return image_filepath
 
+
 def write_metadata_file(filename):
     import sys
     import os
@@ -183,64 +188,110 @@ def write_metadata_file(filename):
         #metatags = (str(tag) for tag in metatags)
         exifdict[filename] = " ".join(metatags)
 
-    execlist = []
-    for key,value in exifdict.iteritems():
-        execstring = "exiftool -m -overwrite_original_in_place -fast2 -q {0} {1}".format(value,key)
-        execlist.append(execstring)
+        execlist = []
+        for key,value in exifdict.iteritems():
+            execstring = "exiftool -m -overwrite_original_in_place -fast2 -q {0} {1}".format(value,key)
+            execlist.append(execstring)
 
-    for line in execlist:
-        try:
-            os.system(line)
-            print line
-        except:
-            pass
+        for line in execlist:
+            try:
+                os.system(line)
+                print line
+            except:
+                pass
+
+def recursive_dirlist(rootdir):
+    import os, re
+    regex_raw = re.compile(r'.+?.CR2$')
+    regex_jpg = re.compile(r'.+?.jpg$')
+    walkedlist = []
+    for dirname, subdirnames, filenames in os.walk(rootdir):
+        # append path of all filenames to walkedlist
+        for filename in filenames:
+            file_path = os.path.abspath(os.path.join(dirname, filename))
+            if os.path.isfile(file_path):
+                if re.findall(regex_raw, file_path):
+                    walkedlist.append(file_path)
+    # Advanced usage:
+    # editing the 'dirnames' list will stop os.walk() from recursing into there.
+    #if '.git' in dirnames:
+    # don't go into any .git directories.
+    #    dirnames.remove('.git')
+    return walkedlist
+
+
+### Identify the FocalLength
+def subproc_identify_focallength(filepath):
+    import subprocess, os, re, sys
+    focallength = subprocess.call([
+    "identify",
+    "-format",
+    '%[EXIF:FocalLength]',
+    filepath,
+    ])
+    print 
+    return str(focallength)
+
+
+### Better Gamma Output    
+def subproc_convert_rawtojpgshort(filepath):
+    import subprocess, os, re, sys
+    dngcmd = str("dng:" + filepath)
+    outfile = filepath.replace('.CR2','.jpg')
+    
+    
+    subprocess.call([
+    "convert",
+    "-define",
+    'dng:size=3744x',
+    dngcmd,
+    "-depth", 
+    "16",
+    "-density",
+    "350x350",
+    "-profile", 
+    "/usr/local/color_profiles/AdobeRGB1998.icc",
+    "-colorspace",
+    "LAB",
+    "-filter",
+    "LanczosSharp",
+    "-distort",
+    'Barrel', 
+    "0.0 0.0 -0.025",
+##    "-level",
+##    "0%,100%,1.5",
+    "-colorspace",
+    'sRGB',
+    "-channel",
+    "RGBA",
+    "-gamma",
+    "1.8/1.4/1.6",
+    "-normalize",
+    "-auto-level",
+    "-unsharp", 
+    "0x0.75+0.75+0.008",
+    outfile,
+    ])
+    return outfile
+
 
 ##################### Begin CMDS ##############
 
 import sys
 import os
 import glob
-import re
 import sqlalchemy
 
-filename=os.path.abspath(sys.argv[1])
-regex_CR2_JPGS = re.compile(r'.*?\.[jpgJPGCR2]{3}$')
-
-## Only Process CR2s and JPGs
-if re.findall(regex_CR2_JPGS, filename):
-    metadict = get_dbinfo_for_metatags_singlefile(filename)
-    exiftags = []
-    exifdict = {}
-    for k,v in metadict.items():
-        metatags = []
-
-        for val in v:
-            #m = []
-            filename = str(k)
-            exiftag = val
-            exifvalue = v[val]
-            #exifpart = str(' -' + "'" + str(exiftag) + "=" + str(exifvalue) + "'" + ''),
-            exifpart = "-'{exiftag}'='{exifvalue}'".format(exiftag=exiftag,exifvalue=exifvalue)
-            metatags.append(exifpart)
-            #print metatags
-            #m.append(exifpart)
-            #print val,v[val]
-        #exifdict[filename] = [x for x in metatags]
-        #metatags = (str(tag) for tag in metatags)
-        exifdict[filename] = " ".join(metatags)
-
-    execlist = []
-    for key,value in exifdict.iteritems():
-        execstring = "exiftool -m -overwrite_original_in_place -fast2 -q {0} {1}".format(value,key)
-        execlist.append(execstring)
-
-    for line in execlist:
-        try:
-            os.system(line)
-            print line
-        except:
-            pass
+if sys.argv[1]:
+    rootdir = sys.argv[1]
 else:
-    pass
+    rootdir = '.'
 
+raw_to_convert = recursive_dirlist(rootdir)
 
+for filename in raw_to_convert:
+    try:
+        subproc_convert_rawtojpgshort(filename)
+    except:
+        print "Failed to Convert {}".format(filename)
+        

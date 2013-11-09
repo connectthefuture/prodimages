@@ -6,7 +6,12 @@ def sqlQueryConsigRename(vnum, ponum):
 #    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()    
-    
+    #print "InputVnum"
+    #print vnum
+    vnum = str(vnum).replace(':','/')
+
+    #print "vnumtoQUERY"
+    #print vnum
     querymake_consig_stylefix="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.VENDOR_STYLE LIKE '" + vnum + "%' AND POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "'"
     
     result = connection.execute(querymake_consig_stylefix)
@@ -14,8 +19,21 @@ def sqlQueryConsigRename(vnum, ponum):
     for row in result:
         consigstyle = {}        
         consigstyle['colorstyle'] = row['colorstyle']
+        stytest = row['colorstyle']
+
+        #print "vnumENDQUERY"
+        str(row['vendor_style'])
+        #print stytest
+#############################################################
+
+        ## The Gucci GG4404/S ETC.jpg Fix
         #consigstyle['vendor_style'] = row['vendor_style']
-        consigstyles[row['vendor_style']] = consigstyle
+        vendor_style = str(row['vendor_style']).replace(':','/')
+        #print vendor_style
+        consigstyles[vendor_style] = consigstyle
+
+#############################################################
+
         
     #print consigstyles
     connection.close()
@@ -44,6 +62,7 @@ def keyvalue_dict_rename(keyvalue_dictlist,directory):
     for alldicts in keyvalue_dictlist:
         for k,v in alldicts.iteritems():
             oldname = k
+            oldname = oldname.replace('/',':')
             oldpath = os.path.join(renaming_basedir,oldname)
             newname = v['colorstyle']
             newname = str(newname)
@@ -60,7 +79,8 @@ def keyvalue_dict_rename(keyvalue_dictlist,directory):
                         print "Renamed: " + oldfile + " ---> " + newfile
                     except:
                         print "Failed: " + oldfile + " ---> " + newfile
-
+                else:
+                    print "Cannot Rename \vFile with name {0} Doesnt Match Vendor Style {1}".format(oldname,vendnum)
 ## Execute Query Return K/V dict
 def run_SQL_Query(vendor_styles_list,directory):
     import sqlalchemy
@@ -106,3 +126,4 @@ keyvalue_dict_rename(vendor_style_bfly_dictlist,directory)
 #print vendor_style_bfly_dictlist
 
 
+print vendor_style_bfly_dictlist
