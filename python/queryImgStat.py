@@ -24,9 +24,9 @@ def sqlQuery_ReturnImgStatus(style):
 
 import os,sys,csv
 
-styleslist = '/Users/JCut/Documents/styles.txt'
+#styleslist = '/Users/JCut/Documents/styles.txt'
 
-#styleslist = '/home/johnb/Documents/styles.txt'
+styleslist = '/home/johnb/Documents/styles.txt'
 
 missingdict = {}
 with open(styleslist,'rbU') as f:
