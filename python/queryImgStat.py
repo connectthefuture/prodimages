@@ -34,7 +34,6 @@ with open(styleslist,'rbU') as f:
     
     for row in reader:
         #try:
-        for r in row:
-            colorstyle = row
+        for style in row:
             if sqlQuery_ReturnImgStatus(style):
                 print style
