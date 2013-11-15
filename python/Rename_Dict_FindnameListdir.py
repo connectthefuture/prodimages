@@ -22,7 +22,7 @@ def sqlQueryConsigRename(vnum, ponum):
         stytest = row['colorstyle']
 
         #print "vnumENDQUERY"
-        str(row['vendor_style'])
+        #str(row['vendor_style'])
         #print stytest
 #############################################################
 
@@ -33,11 +33,35 @@ def sqlQueryConsigRename(vnum, ponum):
         consigstyles[vendor_style] = consigstyle
 
 #############################################################
-
         
     #print consigstyles
     connection.close()
     return consigstyles
+
+
+
+def add_1_tojpgs(directory):
+    import re,os
+    sorted_dir_list = sorted(os.listdir(directory))
+    regex_missing_1 = re.compile(r'.+?_[1-6]\.[jpgJPG]{3}$')
+    for filepath in sorted_dir_list:
+        filepath = os.path.abspath(filepath)
+        if not re.findall(regex_missing_1, filepath):
+            print 'FOUND with Not {}'.format(filepath)
+            ext = filepath.split('.')[-1]
+            ### First Normalize the .JPG ext if capitailized
+            if ext.isupper():
+                filepath_noext = ''.join(filepath.split('.')[:-1])
+                ext = ext.lower()
+                filepath_lowerjpg = os.path.join(filepath_noext, '.' + ext)
+                os.rename(filepath, filepath_lowerjpg)
+                filepath = filepath_lowerjpg
+            ### Now normailzed, add the _1 to any file without _#.jpg    
+            newpath = filepath.replace('.jpg', '_1.jpg')
+            os.rename(filepath, newpath)
+        else:
+            pass
+
 
 
 def vendor_styles_from_filename(directory):
@@ -112,6 +136,9 @@ except IndexError:
     print "Directory Arg Not Supplied"
     
     #break
+
+### Normalize file extention to conform to _1.jpg etc. xxxxx.JPG or xxxxx.jpg both become _1.jpg
+add_1_tojpgs(directory)
 
 ## Get vendor style name from listing input Directory
 vendor_styles_list = vendor_styles_from_filename(directory)
