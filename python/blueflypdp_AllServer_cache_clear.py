@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 def url_get_links(targeturl):
     import os,re,sys,requests
     from bs4 import BeautifulSoup
