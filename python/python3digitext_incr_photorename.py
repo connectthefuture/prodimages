@@ -47,7 +47,7 @@ dir_pushstill = '/mnt/Post_Ready/aPhotoPush'
 dir_pushfashion = '/mnt/Post_Ready/eFashionPush'
 
 pushstillfiles = glob.glob(os.path.join(dir_pushstill, '*/*/*.jpg'))
-pushfashionfiles = glob.glob(os.path.join(dir_pushfashion, '*/*.jpg'))
+pushfashionfiles = glob.glob(os.path.join(dir_pushfashion, '*/*/*.jpg'))
 
 regex_3 = re.compile(r'.+?/[2-9][0-9]{8}_[0-9]{3}.jpg')
 
@@ -62,3 +62,22 @@ foundlistfashion = find_regex_list(regex_3,pushfashionfiles)
 for f in foundlistfashion:
     print f
     found3digit_rename(f)
+
+
+### 2nd Try for Stragglers
+## Now try 1 dir higher
+pushstillfiles = glob.glob(os.path.join(dir_pushstill, '*/*.jpg'))
+pushfashionfiles = glob.glob(os.path.join(dir_pushfashion, '*/*.jpg'))
+
+foundliststill = find_regex_list(regex_3,pushstillfiles)
+
+for f in foundliststill:
+    print f
+    found3digit_rename(f)
+    
+foundlistfashion = find_regex_list(regex_3,pushfashionfiles)
+
+for f in foundlistfashion:
+    print f
+    found3digit_rename(f)
+
