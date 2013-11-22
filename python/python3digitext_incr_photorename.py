@@ -47,7 +47,7 @@ dir_pushstill = '/mnt/Post_Ready/aPhotoPush'
 dir_pushfashion = '/mnt/Post_Ready/eFashionPush'
 
 pushstillfiles = glob.glob(os.path.join(dir_pushstill, '*/*/*.jpg'))
-pushfashionfiles = glob.glob(os.path.join(dir_pushfashion, '*/*/*.jpg'))
+pushfashionfiles = glob.glob(os.path.join(dir_pushfashion, '*/*.jpg'))
 
 regex_3 = re.compile(r'.+?/[2-9][0-9]{8}_[0-9]{3}.jpg')
 
