@@ -21,7 +21,7 @@ readline.parse_and_bind("tab: complete")
 import sqlalchemy
 from bs4 import BeautifulSoup
 import requests
-import scrapy
+# import scrapy
 #import MySQLdb
 
 """
