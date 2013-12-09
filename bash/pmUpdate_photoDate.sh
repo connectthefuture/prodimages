@@ -5,7 +5,15 @@ pmPhotoDir=/mnt/Post_Ready/zImages_1
 pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
 
 
-fileList=`find ${pushStill} ${pushFashion} -type f -cmin -1000 -iname \*_1.jpg`
+
+#####  ONLY UPDATES STILL LIFE SETS PHOTO ATTRIB -- USE SEP PYTHON SCRIPT FOR FASHION
+## Or uncomment next line
+#fileList=`find ${pushStill} ${pushFashion} -type f -cmin -1000 -iname \*_1.jpg`
+
+dailydirname=`date +"%m%d%y"`
+
+fileList=`find ${pushStill}/${dailydirname}_* -type f -cmin -1000 -iname \*_1.jpg`
+
 
 for f in $fileList
 do
