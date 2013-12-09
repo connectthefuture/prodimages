@@ -149,25 +149,28 @@ for style in styleslist:
     #print urlcode_value
     #try: #if urlcode_value == 200:
     colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle + ext_PNG)
-    url_download_file(netsrv101_url_file, colorstyle_file)
+    try:
+        url_download_file(netsrv101_url_file, colorstyle_file)
     
-    alt = 0   
-    for x in range(1,6):
-        try:
-            alt = x   
-            ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
-            colorstylealt = colorstyle + ext_ALT
-            colorstyle_filealt = os.path.join(os.path.abspath(os.curdir), colorstylealt)
-            
-            netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
-            
-            #error_check = urllib.urlopen(netsrv101_url_filealt)
-            #urlcode_value = error_check.getcode()
-            #if urlcode_value == 200:
-            if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
-                url_download_file(netsrv101_url_filealt, colorstyle_filealt)
-        except IOError:
-            pass           
+        alt = 0   
+        for x in range(1,6):
+            try:
+                alt = x   
+                ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
+                colorstylealt = colorstyle + ext_ALT
+                colorstyle_filealt = os.path.join(os.path.abspath(os.curdir), colorstylealt)
+                
+                netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
+                
+                #error_check = urllib.urlopen(netsrv101_url_filealt)
+                #urlcode_value = error_check.getcode()
+                #if urlcode_value == 200:
+                if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
+                    url_download_file(netsrv101_url_filealt, colorstyle_filealt)
+            except IOError:
+                pass        
+    except IOError:
+        pass   
 #    print netsrv101_url_filealt
 #print netsrv101_url_file
 
