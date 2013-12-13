@@ -76,6 +76,7 @@ def alt_send_POST_localis(colorstyle, version, POSTURL):
 
 
 def send_purge_request_localis(colorstyle, version, POSTURL):
+    import re
     if colorstyle != "" and version != "":
         import pycurl,json
         #BNCPHP = "http://clearcache.bluefly.corp/BnCClear2.php"
@@ -88,7 +89,16 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         #})
 #       
         POSTURL_Referer = POSTURL.replace('Clear2.php', 'Clear1.php')
-        data = "style={0}&version={1}".format(colorstyle, version) 
+        
+        regex = re.compile(r'.+?Mobile.+?')
+        if re.findall(regex, POSTURL)
+            data = "style={0}".format(colorstyle)
+            # Replace Previous Line with uncommenting next line when versioning is added to mobile
+            # Currently only need to POST Colorstyle to PHP script       
+            ## data = "style={0}&version={1}".format(colorstyle, version)
+        else:
+            data = "style={0}&version={1}".format(colorstyle, version) 
+        
         head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
         head_content_len= "Content-length: {0}".format(str(len(data)))
         #head_accept = 'Accept: text/html'
