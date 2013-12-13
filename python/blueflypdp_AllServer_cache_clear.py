@@ -55,7 +55,7 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         POSTURL_Referer = POSTURL.replace('Clear2.php', 'Clear1.php')
         
         regex = re.compile(r'.+?Mobile.+?')
-        if re.findall(regex, POSTURL)
+        if re.findall(regex, POSTURL):
             data = "style={0}".format(colorstyle)
             # Replace Previous Line with uncommenting next line when versioning is added to mobile
             # Currently only need to POST Colorstyle to PHP script       
