@@ -43,10 +43,11 @@ def return_cleaned_bfly_urls(text):
 
     
     
-def send_purge_request_localis(colorstyle, version):
+def send_purge_request_localis(colorstyle, version, POSTURL):
     if colorstyle != "" and version != "":
         import pycurl,json
-        BNCPHP = "http://clearcache.bluefly.corp/BFClear2.php"
+        
+        #BNCPHP = "http://clearcache.bluefly.corp/BFClear2.php"
         #POSTDATA = "'style={colorstyle}&version={version}'".format(colorstyle=colorstyle, version=version)
         #POSTDATA = "'{colorstyle} {version}'".format(colorstyle=colorstyle, version=version)
         ## Create send data
@@ -54,16 +55,17 @@ def send_purge_request_localis(colorstyle, version):
         #'style' : colorstyle,
         #'version' : version
         #})
-#       
+        POSTURL_Referer = POSTURL.replace('Clear2.php', 'Clear1.php')
+        
         data = "style={0}&version={1}".format(colorstyle, version) 
         head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
         head_content_len= "Content-length: {0}".format(str(len(data)))
         #head_accept = 'Accept: text/html'
         head_accept = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
         head_useragent = 'User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0'
-        head_referer = 'Referer: http://clearcache.bluefly.corp/BnCClear1.php'
+        head_referer = 'Referer: {0}'.format(POSTURL_Referer)
         c = pycurl.Curl()
-        c.setopt(c.URL, BNCPHP)
+        c.setopt(c.URL, POSTURL)
         c.setopt(pycurl.HEADER, 0)
         #c.setopt(pycurl.INFOTYPE_HEADER_OUT, 1)
         #c.setopt(pycurl.RETURNTRANSFER, 1)
@@ -190,7 +192,7 @@ versioned_links = return_versioned_urls(pdp_urllist)
 
 #print versioned_links
 count = 0
-if len(versioned_links) <= 100:
+if len(versioned_links) <= 150:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     for url_purge_local in versioned_links:
@@ -200,7 +202,10 @@ if len(versioned_links) <= 100:
         version = version.pop()[-1].split('=')[-1]
         #print "{0} and version num {1}".format(colorstyle,version)
         #try:
-        send_purge_request_localis(colorstyle,version)
+        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+        POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
         #except:
         #    print sys.stderr().read()
     for url_purge in versioned_links:

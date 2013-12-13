@@ -12,7 +12,7 @@ pmPhotoXdir=/mnt/Post_Ready/zImages_1/xxFer
 
 dailydirname=`date +"%m%d%y"`
 
-fileList=`find ${pushStill}/${dailydirname}_* -type f -cmin -1000 -iname \*_1.jpg`
+fileList=`find ${pushStill}/${dailydirname}_* -type f -cmin -1200 -iname \*_1.jpg`
 
 
 for f in $fileList
