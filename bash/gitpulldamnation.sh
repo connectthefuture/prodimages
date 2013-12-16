@@ -9,7 +9,7 @@ PWD=/home/johnb/virtualenvs/DAMNATION/src
 echo `date` >> ~/.damnationgit.log
 
 
-cd /home/johnb/virtualenvs/DAMNATION/src && git pull damorigin master >> ~/.damnationgit.log
+cd /home/johnb/virtualenvs/DAMNATION/src && git pull origin master >> ~/.damnationgit.log
 
 sleep 7
 
