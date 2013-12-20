@@ -43,8 +43,6 @@ def found3digit_rename(filename):
         os.rename(oldname,newname)
         return
 
-        import re
-
 
 def splitswim_updatepm(file_path):
     import re
@@ -70,8 +68,10 @@ def splitswim_updatepm(file_path):
         except:
             pass
         print primarystyle,secondarystyle
-        return primarystyle, secondarystyle
-
+        try:
+            return primarystyle, secondarystyle
+        except:
+            pass
 
 
 ##############################RUN###########################
@@ -100,6 +100,7 @@ colorstyles_unique = []
 #stylestringsdict = {}
 for line in globrawdir:
     #stylestringsdict_tmp = {}
+    swimpair = splitswim_updatepm(line):
     if re.findall(regex_raw,line):
         try:
             file_path = line
@@ -124,18 +125,17 @@ for line in globrawdir:
         except AttributeError:
             print "AttributeError on {0}".format(line)
     ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot
-    elif swimpair = splitswim_updatepm(line):
-        if swimpair:
-            primarystyle     = swimpair[0]
-            secondarystyle   = swimpair[1]
-            if primarystyle not in colorstyles_unique:
-                print "YAY_SWIMTOP-->{).format(primarystyle)
-                colorstyles_unique.append(primarystyle)
-                colorstyles_unique = sorted(colorstyles_unique)
-            if secondarystyle not in colorstyles_unique:
-                print "YAY_SWIMBOTTOM-->{).format(secondarystyle)
-                colorstyles_unique.append(secondarystyle)
-                colorstyles_unique = sorted(colorstyles_unique)                
+    elif swimpair:
+        primarystyle     = swimpair[0]
+        secondarystyle   = swimpair[1]
+        if primarystyle not in colorstyles_unique:
+            print "YAY_SWIMTOP-->{).format(primarystyle)
+            colorstyles_unique.append(primarystyle)
+            colorstyles_unique = sorted(colorstyles_unique)
+        if secondarystyle not in colorstyles_unique:
+            print "YAY_SWIMBOTTOM-->{).format(secondarystyle)
+            colorstyles_unique.append(secondarystyle)
+            colorstyles_unique = sorted(colorstyles_unique)                
 
 ############ Send Shots to PM API to update photodate
 
