@@ -151,9 +151,9 @@ import shutil
 if globexportdir:
     try:
         for f in globexportdir:
-        found3digit_rename(f)
+            found3digit_rename(f)
     except:
-        print 'Faild'.format(f)
+        print 'Faild'
 
 ### Get ShootDir Name from last "f" in previous glob and rename ops, then create if not exist
 ## eFashionPush Dir to Create for Exports used below 
