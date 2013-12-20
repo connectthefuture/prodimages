@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os, sys, re, csv
 
 def update_pm_photodate(colorstyle):
@@ -46,6 +47,11 @@ def found3digit_rename(filename):
 
 
 def splitswim_updatepm(file_path):
+    import re
+    #regex_multistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+    regex_multistyle = re.compile(r'^.+?/(?P<primary>[1-9][0-9]{8})_[b-zB-Z][a-zA-Z]+?_?(?P<secondary>[1-9][0-9]{8})_[1]\.[jpgJPGCR2]{3}$')
+    regex_split       = re.compile(r'[b-zB-Z][a-zA-Z]{1,10}')
+
     if re.findall(regex_multistyle, file_path):
         fname                 = file_path.split('/')[-1]
         secondarycat          = re.split(regex_split, fname)
@@ -83,9 +89,6 @@ eFashion_root = '/mnt/Post_Ready/eFashionPush'
 regex = re.compile(r'.*?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
-#regex_multistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-regex_multistyle = re.compile(r'^.+?/(?P<primary>[1-9][0-9]{8})_[b-zB-Z][a-zA-Z]+?_?(?P<secondary>[1-9][0-9]{8})_[1]\.[jpgJPGCR2]{3}$')
-regex_split       = re.compile(r'[b-zB-Z][a-zA-Z]{1,10}')
 
 basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/', todaysfolder + '*')
 globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
@@ -120,20 +123,18 @@ for line in globrawdir:
         except AttributeError:
             print "AttributeError on {0}".format(line)
     ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot
-    elif:
-        for file_path in file_paths:
-            lst = splitswim_updatepm(file_path) 
-            if lst:
-                primarystyle     = lst[0]
-                secondarystyle   = lst[1]
-                if primarystyle not in colorstyles_unique:
-                    print primarystyle
-                    colorstyles_unique.append(primarystyle)
-                    colorstyles_unique = sorted(colorstyles_unique)
-                if secondarystyle not in colorstyles_unique:
-                    print primarystyle
-                    colorstyles_unique.append(secondarystyle)
-                    colorstyles_unique = sorted(colorstyles_unique)                
+    elif lst = splitswim_updatepm(file_path):
+        if lst:
+            primarystyle     = lst[0]
+            secondarystyle   = lst[1]
+            if primarystyle not in colorstyles_unique:
+                print "YAY_SWIMTOP-->{).format(primarystyle)
+                colorstyles_unique.append(primarystyle)
+                colorstyles_unique = sorted(colorstyles_unique)
+            if secondarystyle not in colorstyles_unique:
+                print "YAY_SWIMBOTTOM-->{).format(secondarystyle)
+                colorstyles_unique.append(secondarystyle)
+                colorstyles_unique = sorted(colorstyles_unique)                
 
 ############ Send Shots to PM API to update photodate
 
