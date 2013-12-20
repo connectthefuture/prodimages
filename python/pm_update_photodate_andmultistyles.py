@@ -165,7 +165,7 @@ if globexportdir:
 
 # eFashion_name = file_path.split('/')[6]
 
-eFashion_name = 121913
+eFashion_name = str(121913)
 
 # eFashion_name = file_path.split('/')[6]
 
