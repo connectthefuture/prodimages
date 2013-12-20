@@ -47,7 +47,6 @@ def found3digit_rename(filename):
 def splitswim_updatepm(file_path):
     import re
     #regex_multistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-    regex_multistyle = re.compile(r'^.+?/(?P<primary>[1-9][0-9]{8})_[b-zB-Z][a-zA-Z]+?_?(?P<secondary>[1-9][0-9]{8})_[1].*?\.[jpgJPGCR2]{3}$')
     regex_split       = re.compile(r'[b-zB-Z][a-zA-Z]{1,10}')
 
     if re.findall(regex_multistyle, file_path):
@@ -159,17 +158,9 @@ if globexportdir:
 ## eFashionPush Dir to Create for Exports used below 
 
 
-# eFashion_name = file_path.split('/')[6]
+# ------------      eFashion_name = file_path.split('/')[6]
 
-# eFashion_name = file_path.split('/')[6]
-
-# eFashion_name = file_path.split('/')[6]
-
-eFashion_name = str(121913)
-
-# eFashion_name = file_path.split('/')[6]
-
-# eFashion_name = file_path.split('/')[6]
+eFashion_name = '121913'
 
 eFashion_dir = os.path.join(eFashion_root, eFashion_name)
 # if not os.path.isdir(eFashion_dir):
