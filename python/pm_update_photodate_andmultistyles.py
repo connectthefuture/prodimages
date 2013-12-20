@@ -129,11 +129,11 @@ for line in globrawdir:
         primarystyle     = swimpair[0]
         secondarystyle   = swimpair[1]
         if primarystyle not in colorstyles_unique:
-            print "YAY_SWIMTOP-->{).format(primarystyle)
+            print "YAY_SWIMTOP-->{0)".format(primarystyle)
             colorstyles_unique.append(primarystyle)
             colorstyles_unique = sorted(colorstyles_unique)
         if secondarystyle not in colorstyles_unique:
-            print "YAY_SWIMBOTTOM-->{).format(secondarystyle)
+            print "YAY_SWIMBOTTOM-->{0)".format(secondarystyle)
             colorstyles_unique.append(secondarystyle)
             colorstyles_unique = sorted(colorstyles_unique)                
 
