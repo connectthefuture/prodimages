@@ -49,7 +49,7 @@ def found3digit_rename(filename):
 def splitswim_updatepm(file_path):
     import re
     #regex_multistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-    regex_multistyle = re.compile(r'^.+?/(?P<primary>[1-9][0-9]{8})_[b-zB-Z][a-zA-Z]+?_?(?P<secondary>[1-9][0-9]{8})_[1]\.[jpgJPGCR2]{3}$')
+    regex_multistyle = re.compile(r'^.+?/(?P<primary>[1-9][0-9]{8})_[b-zB-Z][a-zA-Z]+?_?(?P<secondary>[1-9][0-9]{8})_[1].*?\.[jpgJPGCR2]{3}$')
     regex_split       = re.compile(r'[b-zB-Z][a-zA-Z]{1,10}')
 
     if re.findall(regex_multistyle, file_path):
@@ -57,10 +57,10 @@ def splitswim_updatepm(file_path):
         secondarycat          = re.split(regex_split, fname)
         primarystyle          = fname[:9]
         secondarystyle        = fname[-10:-1]
-        #m = re.match(r"(\d+)\.?(\d+)?", "24")
+        # m = re.match(r"(\d+)\.?(\d+)?", "24")
         m = re.match(regex_multistyle,file_path)
-        m.groups('0')   # Now, the second group defaults to '0'.
-        #groupdict([default])
+        # m.groups('0')   # Now, the second group defaults to '0'.
+        # groupdict([m])
         primarystyle = m.groups('0')[0]
         secondarystyle = m.groups('0')[1]
 
@@ -79,8 +79,9 @@ def splitswim_updatepm(file_path):
 from PIL import Image
 import os, sys, re, glob, datetime
 
-todaysdate = str(datetime.date.today())
-todaysfolder = "{0}{1}{2}_".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
+#todaysdate = str(datetime.date.today())
+todaysdate      = '2013-12-18'
+todaysfolder    = "{0}{1}{2}_".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
 
 eFashion_root = '/mnt/Post_Ready/eFashionPush'
 #rootdir = sys.argv[1]
@@ -123,10 +124,10 @@ for line in globrawdir:
         except AttributeError:
             print "AttributeError on {0}".format(line)
     ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot
-    elif lst = splitswim_updatepm(file_path):
-        if lst:
-            primarystyle     = lst[0]
-            secondarystyle   = lst[1]
+    elif swimpair = splitswim_updatepm(line):
+        if swimpair:
+            primarystyle     = swimpair[0]
+            secondarystyle   = swimpair[1]
             if primarystyle not in colorstyles_unique:
                 print "YAY_SWIMTOP-->{).format(primarystyle)
                 colorstyles_unique.append(primarystyle)
