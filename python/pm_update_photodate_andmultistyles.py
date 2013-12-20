@@ -149,16 +149,31 @@ for colorstyle in colorstyles_unique:
 import shutil
 
 if globexportdir:
-    for f in globexportdir:
+    try:
+        for f in globexportdir:
         found3digit_rename(f)
-
+    except:
+        print 'Faild'.format(f)
 
 ### Get ShootDir Name from last "f" in previous glob and rename ops, then create if not exist
 ## eFashionPush Dir to Create for Exports used below 
-eFashion_name = file_path.split('/')[6]
+
+
+# eFashion_name = file_path.split('/')[6]
+
+# eFashion_name = file_path.split('/')[6]
+
+# eFashion_name = file_path.split('/')[6]
+
+eFashion_name = 121913
+
+# eFashion_name = file_path.split('/')[6]
+
+# eFashion_name = file_path.split('/')[6]
+
 eFashion_dir = os.path.join(eFashion_root, eFashion_name)
-if not os.path.isdir(eFashion_dir):
-    os.makedirs(eFashion_dir, 16877)
+# if not os.path.isdir(eFashion_dir):
+#     os.makedirs(eFashion_dir, 16877)
 
 
 ## Refresh and Get Renamed files then copy to eFashion Dir
