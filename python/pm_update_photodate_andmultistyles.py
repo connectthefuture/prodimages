@@ -100,7 +100,7 @@ colorstyles_unique = []
 #stylestringsdict = {}
 for line in globrawdir:
     #stylestringsdict_tmp = {}
-    swimpair = splitswim_updatepm(line):
+    swimpair = splitswim_updatepm(line)
     if re.findall(regex_raw,line):
         try:
             file_path = line
