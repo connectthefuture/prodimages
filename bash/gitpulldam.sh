@@ -9,7 +9,7 @@ PWD=/home/johnb/virtualenvs/DJDAM/src
 echo `date` >> ~/.djdamgit.log
 
 
-cd /home/johnb/virtualenvs/DJDAM/src && git pull origin bootstrap3update >> ~/.djdamgit.log
+cd /home/johnb/virtualenvs/DJDAM/src && git pull origin master >> ~/.djdamgit.log
 
 sleep 7
 
