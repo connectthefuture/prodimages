@@ -52,6 +52,8 @@ todaysdate = str(datetime.date.today())
 todaysfolder = "{0}{1}{2}_".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
 
 eFashion_root = '/mnt/Post_Ready/eFashionPush'
+aPhoto_root = '/mnt/Post_Ready/aPhotoPush'
+
 #rootdir = sys.argv[1]
 #walkedout = recursive_dirlist(rootdir)
 
@@ -59,14 +61,21 @@ regex = re.compile(r'.*?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/', todaysfolder + '*')
+basedirstill = os.path.join(aPhoto_root, todaysfolder + '*')
+
+
 globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
 globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
+
+globstilldir = glob.glob(os.path.join(basedirstill, "*/*.jpg"))
 #curl -d sample_image=Y -d photographed_date=now -X PUT http://ccapp101.l3.bluefly.com:8080/photo/"$outName"
 
+globalldirs = globrawdir + globstilldir
 
 colorstyles_unique = []
 #stylestringsdict = {}
-for line in globrawdir:
+
+for line in globalldirs:
     #stylestringsdict_tmp = {}
     if re.findall(regex_raw,line):
 

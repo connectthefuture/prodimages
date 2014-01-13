@@ -228,7 +228,7 @@ else:
 
 #print generated_links
 count = 0
-if len(edgecast_listurls) <= 100:
+if len(edgecast_listurls) <= 550:
 
     #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
