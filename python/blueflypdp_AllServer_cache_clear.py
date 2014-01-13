@@ -167,16 +167,16 @@ for colorstyle in colorstyle_list:
             pdp_urllist.append(link)
             ## Create list page urls for Edgecast
             if alturl not in link:
-                oldlistpg = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
-                newlistpg = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
-                
+                oldlistpg =     'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
+                newlistpg =     'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
+                pmlistpg  =     'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60'.format(colorstyle)
 #                newlistpg = '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt01.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt02.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt03.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt04.pct&outputx=1800&outputy=2160&level=1&ver=1'.format(colorstyle, version)
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt05.pct&outputx=1800&outputy=2160&level=1&ver=1'.format(colorstyle, version)
 #                
-#                
+#                pmlistpage='http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode=331460101&width=50&height=60'
 #                
 #                '/mgen/Bluefly/altimage.ms?img=325084201_alt05.jpg&w=75&h=89&ver=1'.format(colorstyle, version)
 #                
@@ -188,7 +188,7 @@ for colorstyle in colorstyle_list:
                 
                 edgecast_listurls.append(oldlistpg)
                 edgecast_listurls.append(newlistpg)
-
+                edgecast_listurls.append(pmlistpg)
 
 
 
