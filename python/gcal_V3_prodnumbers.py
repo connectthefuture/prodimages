@@ -45,9 +45,34 @@ if credentials is None or credentials.invalid == True:
 http = httplib2.Http()
 http = credentials.authorize(http)
 
+prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
+
 # Build a service object for interacting with the API.
 service = build(serviceName='calendar', version='v3', http=http)
 
+
+## Getting Event Info
+#page_token = None
+#try:    
+#    while True:
+#        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
+#        for event in events['items']:
+#            print event['summary']
+#        page_token = events.get('nextPageToken')
+#        if not page_token:
+#            break
+#except:
+#    page_token = None
+#    while True:
+#        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
+#        for event in events['items']:
+#            print event['summary']
+#        page_token = events.get('nextPageToken')
+#        if not page_token:
+#            break
+
+#calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
+#cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
 
 #############################Get Data to send to API###########################
 from python.gcal_functions import stillcomplete, fashioncomplete, sql_query_production_numbers
@@ -59,33 +84,6 @@ fashioncomplete_dict   = fashioncomplete()
 
 lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
 ##############################################################################
-
-
-prodnumscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
-
-page_token = None
-try:    
-    while True:
-        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
-        for event in events['items']:
-            print event['summary']
-        page_token = events.get('nextPageToken')
-        if not page_token:
-            break
-except:
-    page_token = None
-    while True:
-        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
-        for event in events['items']:
-            print event['summary']
-        page_token = events.get('nextPageToken')
-        if not page_token:
-            break
-
-
-#calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
-#cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
-
 
 for iterdict in lotsofdicts():
     count = 0
@@ -120,7 +118,7 @@ for iterdict in lotsofdicts():
                 lockv = v['role']
                 
                 event = {
-                  'summary': 'Appointment',
+                  'summary': 'ProductionNumbers',
                   'description': descfull,
                   'location': lockv,
                   'colorId': '9',
@@ -144,5 +142,9 @@ for iterdict in lotsofdicts():
                   ],
                 }
                 
-                
+                created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
+                print created_event['id']
+            except:
+                print 'ERROR {}'.format(event)
+                pass
                 
