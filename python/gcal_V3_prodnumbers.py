@@ -85,7 +85,7 @@ fashioncomplete_dict   = fashioncomplete()
 lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
 ##############################################################################
 
-for iterdict in lotsofdicts():
+for iterdict in lotsofdicts:
     count = 0
     for k,v in iterdict.iteritems():
         import datetime, time
