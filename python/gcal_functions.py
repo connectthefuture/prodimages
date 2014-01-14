@@ -292,6 +292,8 @@ def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.brag
 
 
 def fashioncomplete():
+    import datetime
+    from collections import defaultdict
     ######  Recursively search Photo Folders and get counts of shots by date
     ## rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
     rootdir_fashion = '/mnt/Post_Ready/eFashionPush'
@@ -331,6 +333,8 @@ def fashioncomplete():
 
 
 def stillcomplete():
+    import datetime
+    from collections import defaultdict
     ######  Recursively search Photo Folders and get counts of shots by date
     ## rootdir_still = '/mnt/Post_Ready/Retouch_Still'
     rootdir_still = '/mnt/Post_Ready/aPhotoPush'
