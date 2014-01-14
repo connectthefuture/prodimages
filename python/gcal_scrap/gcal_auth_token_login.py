@@ -6,49 +6,48 @@ Created on Sun Aug  4 21:33:00 2013
 @author: JCut
 """
 
-calendarId = 'john.bragato@gmail.com'
+#calendarId = 'john.bragato@gmail.com'
+#
+#import google_calendar
+#import pprint
+#
+#def getEvents(pageToken=None):
+#    events = google_calendar.service.events().list(
+#        calendarId=calendarId,
+#        singleEvents=True,
+#        maxResults=1000,
+#        orderBy='startTime',
+#        timeMin='2012-11-01T00:00:00-08:00',
+#        timeMax='2012-11-30T00:00:00-08:00',
+#        pageToken=pageToken,
+#        ).execute()
+#    return events
+#
+#def main():
+#    events = getEvents()
+#    while True:
+#        for event in events['items']:
+#            pprint.pprint(event)
+#        page_token = events.get('nextPageToken')
+#        if page_token:
+#            events = getEvents(page_token)
+#        else:
+#            break
+#
+#if __name__ == '__main__':
+#    main()
 
-import google_calendar
-import pprint
-
-def getEvents(pageToken=None):
-    events = google_calendar.service.events().list(
-        calendarId=calendarId,
-        singleEvents=True,
-        maxResults=1000,
-        orderBy='startTime',
-        timeMin='2012-11-01T00:00:00-08:00',
-        timeMax='2012-11-30T00:00:00-08:00',
-        pageToken=pageToken,
-        ).execute()
-    return events
-
-def main():
-    events = getEvents()
-    while True:
-        for event in events['items']:
-            pprint.pprint(event)
-        page_token = events.get('nextPageToken')
-        if page_token:
-            events = getEvents(page_token)
-        else:
-            break
-
-if __name__ == '__main__':
-    main()
-
-client_id='222573514309.apps.googleusercontent.com'
-client_secret='r4BerSFPl7p6bHr2uYK4MHik'
-user_agent='gcal_tests/v01'
-developerKey='AIzaSyB101MP8UXS7I8jIgJ0IYEDhr3arua5mB0'
-
-import os.path
-here = os.path.dirname(os.path.realpath('/Users/JCut/Dropbox/Dropbox_sites/SpyderMac'))
+client_id='602650560689-t9op6jug4o8bnnqdk4g9seuov81geng8.apps.googleusercontent.com'
+client_secret='KZs6LFNI6QMI4QrvIRstiXgN'
+user_agent='Python2.7'
+BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
+SERVERdeveloperKey='AIzaSyAl-c2wS_cZ1lr57J3BPU3GDv7-2pu64uo'
+import os
+here = os.path.dirname(os.path.realpath(os.path.curdir))
 storage_file = os.path.join(here, 'calendar.dat')
 
 import gflags
 import httplib2
-
 from apiclient.discovery import build
 from oauth2client.file import Storage
 from oauth2client.client import OAuth2WebServerFlow
