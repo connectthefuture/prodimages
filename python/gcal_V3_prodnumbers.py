@@ -98,12 +98,13 @@ for iterdict in lotsofdicts:
                 desckv = str(v['total'])
                 desckv = desckv.replace('&', 'And')
                 desckv = desckv.replace('%', ' Percent')
-                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
-                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
-                sdatekvsplit = sdatekvraw.split(",")
-                edatekvsplit = edatekvraw.split(",")
-                sdatekv = map(int,sdatekvsplit)
-                edatekv = map(int,edatekvsplit)
+#                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
+#                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
+#                sdatekvsplit = sdatekvraw.split(",")
+#                edatekvsplit = edatekvraw.split(",")
+#                sdatekv = map(int,sdatekvsplit)
+#                edatekv = map(int,edatekvsplit)
+                
                 titleid = '{0} - {1}'.format(desckv,titlekv)
                 #if v['total'] < 200:
                 #    congrats = '<>'
@@ -123,11 +124,11 @@ for iterdict in lotsofdicts:
                   'location': lockv,
                   'colorId': '9',
                   'start': {
-                    'dateTime': time.mktime(sdatekv),
+                    'dateTime': k.isoformat(),
                     'timeZone': 'America/New_York'
                   },
                   'end': {
-                    'dateTime': time.mktime(edatekv),
+                    'dateTime': k.isoformat(),
                     'timeZone': 'America/New_York'
                   },
                 #  'recurrence': [
