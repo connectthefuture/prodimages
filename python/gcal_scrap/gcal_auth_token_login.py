@@ -44,8 +44,8 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import run
 
 
-redirect_uri='urn:ietf:wg:oauth:2.0:oob
-http://localhost'
+#redirect_uri='urn:ietf:wg:oauth:2.0:oob
+#http://localhost'
 client_id='924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
 client_secret='rqZxYuy0Cht37rJ0GSZ05YoY'
 user_agent='Python2.7'
@@ -53,7 +53,7 @@ BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
 SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
 import os
 here = os.path.dirname(os.path.realpath(os.path.curdir))
-storage_file = os.path.join(here, 'batchRunScripts', 'calendar.dat')
+storage_file = os.path.join('/usr/local', 'batchRunScripts', 'calendar.dat')
 
 
 FLAGS = gflags.FLAGS
@@ -94,26 +94,43 @@ http = credentials.authorize(http)
 service = build(serviceName='calendar', version='v3', http=http) ##,developerKey=SERVERdeveloperKey)
 
 
-#vents = service.events().list(calendarId='primary').execute()
+#events = service.events().list(calendarId='primary').execute()
+
+#ProdNumbersId = 'k8oohvl27sq3u0odgafpbmdl6s'
+
+prodnumscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
+
+
 
 page_token = None
-while True:
-  events = service.events().list(calendarId='primary', pageToken=page_token).execute()
-  for event in events['items']:
-    print event['summary']
-  page_token = events.get('nextPageToken')
-  if not page_token:
-    break
+try:    
+    while True:
+        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
+        for event in events['items']:
+            print event['summary']
+        page_token = events.get('nextPageToken')
+        if not page_token:
+            break
+except:
+    page_token = None
+    while True:
+        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
+        for event in events['items']:
+            print event['summary']
+        page_token = events.get('nextPageToken')
+        if not page_token:
+            break
+
 
 #calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
-
+cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
 
 
 event = {
   'summary': 'Appointment',
-  'description': descfull
+  'description': descfull,
   'location': lockv,
-  'colorId': lockv,
+  'colorId': '9',
   'start': {
     'dateTime': time.mktime(sdatekv),
     'timeZone': 'America/New_York'
@@ -127,7 +144,7 @@ event = {
 #  ],
   'attendees': [
     {
-      'email': 'attendeeEmail',
+      'email': 'james.hoetker@bluefly.com',
       # Other attendee's data...
     },
     # ...
