@@ -116,13 +116,27 @@ for iterdict in lotsofdicts:
                 descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
                 descfull = str(descfull)
                 count += 1
-                lockv = v['role']
                 
+                ## Choose Color of Event Based on Role
+                lockv = v['role']
+                if lockv == 'Production':
+                    colorId = '9'
+                elif lockv == 'Copy'
+                    colorId = '8'
+                elif lockv == 'Retouching'
+                    colorId = '7'
+                elif lockv == 'Fashion'
+                    colorId = '6'
+                elif lockv == 'Still'
+                    colorId = '5'
+                elif lockv == 'Samples_Received'
+                    colorId = '4'
+
                 event = {
-                  'summary': 'ProductionNumbers',
+                  'summary': titleid,
                   'description': descfull,
                   'location': lockv,
-                  'colorId': '9',
+                  'colorId': colorId,
                   'start': {
                     'dateTime': k.isoformat(),
                     'timeZone': 'America/New_York'
