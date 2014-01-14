@@ -36,16 +36,6 @@ Created on Sun Aug  4 21:33:00 2013
 #
 #if __name__ == '__main__':
 #    main()
-
-client_id='602650560689-t9op6jug4o8bnnqdk4g9seuov81geng8.apps.googleusercontent.com'
-client_secret='KZs6LFNI6QMI4QrvIRstiXgN'
-user_agent='Python2.7'
-BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
-SERVERdeveloperKey='AIzaSyAl-c2wS_cZ1lr57J3BPU3GDv7-2pu64uo'
-import os
-here = os.path.dirname(os.path.realpath(os.path.curdir))
-storage_file = os.path.join(here, 'calendar.dat')
-
 import gflags
 import httplib2
 from apiclient.discovery import build
@@ -53,7 +43,21 @@ from oauth2client.file import Storage
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import run
 
+
+redirect_uri='urn:ietf:wg:oauth:2.0:oob
+http://localhost'
+client_id='924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
+client_secret='rqZxYuy0Cht37rJ0GSZ05YoY'
+user_agent='Python2.7'
+BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
+SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
+import os
+here = os.path.dirname(os.path.realpath(os.path.curdir))
+storage_file = os.path.join(here, 'batchRunScripts', 'calendar.dat')
+
+
 FLAGS = gflags.FLAGS
+
 
 # Set up a Flow object to be used if we need to authenticate. This
 # sample uses OAuth 2.0, and we set up the OAuth2WebServerFlow with
@@ -87,4 +91,45 @@ http = credentials.authorize(http)
 # Build a service object for interacting with the API. Visit
 # the Google APIs Console
 # to get a developerKey for your own application.
-service = build(serviceName='calendar', version='v3', http=http, developerKey=developerKey)
+service = build(serviceName='calendar', version='v3', http=http) ##,developerKey=SERVERdeveloperKey)
+
+
+#vents = service.events().list(calendarId='primary').execute()
+
+page_token = None
+while True:
+  events = service.events().list(calendarId='primary', pageToken=page_token).execute()
+  for event in events['items']:
+    print event['summary']
+  page_token = events.get('nextPageToken')
+  if not page_token:
+    break
+
+#calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
+
+
+
+event = {
+  'summary': 'Appointment',
+  'description': descfull
+  'location': lockv,
+  'colorId': lockv,
+  'start': {
+    'dateTime': time.mktime(sdatekv),
+    'timeZone': 'America/New_York'
+  },
+  'end': {
+    'dateTime': time.mktime(edatekv),
+    'timeZone': 'America/New_York'
+  },
+#  'recurrence': [
+#    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
+#  ],
+  'attendees': [
+    {
+      'email': 'attendeeEmail',
+      # Other attendee's data...
+    },
+    # ...
+  ],
+}
