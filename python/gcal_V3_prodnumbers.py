@@ -144,7 +144,7 @@ for iterdict in lotsofdicts:
                 
                 created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
                 print created_event['id']
-            except:
+            except OSError:
                 print 'ERROR {}'.format(event)
                 pass
                 
