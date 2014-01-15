@@ -121,15 +121,15 @@ for iterdict in lotsofdicts:
                 lockv = v['role']
                 if lockv == 'Production':
                     colorId = '9'
-                elif lockv == 'Copy'
+                elif lockv == 'Copy':
                     colorId = '8'
-                elif lockv == 'Retouching'
+                elif lockv == 'Retouching':
                     colorId = '7'
-                elif lockv == 'Fashion'
+                elif lockv == 'Fashion':
                     colorId = '6'
-                elif lockv == 'Still'
+                elif lockv == 'Still':
                     colorId = '5'
-                elif lockv == 'Samples_Received'
+                elif lockv == 'Samples_Received':
                     colorId = '4'
 
                 event = {
