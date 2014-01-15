@@ -148,13 +148,13 @@ for iterdict in lotsofdicts:
                 #  'recurrence': [
                 #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
                 #  ],
-                  'attendees': [
-                    {
-                      'email': 'james.hoetker@bluefly.com',
-                      # Other attendee's data...
-                    },
-                    # ...
-                  ],
+#                  'attendees': [
+#                    {
+#                      'email': 'james.hoetker@bluefly.com',
+#                      # Other attendee's data...
+#                    },
+#                    # ...
+#                  ],
                 }
                 
                 created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
