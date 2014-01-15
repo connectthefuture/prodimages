@@ -151,21 +151,21 @@ for k,v in future_events.iteritems():
         event_end = value['ev_end']
         ## Choose Color of Event Based on Role
         
-        titlekv = count_complete/count_total
-        if titlekv > .98:
+        teststatus = count_complete/count_total
+        if teststatus > .98:
             colorId = '9'
-        elif titlekv > .90:
+        elif teststatus > .90:
             colorId = '8'
-        elif titlekv > .70:
+        elif teststatus > .70:
             colorId = '7'
-        elif titlekv > .50:
+        elif teststatus > .50:
             colorId = '6'
-        elif titlekv > .30:
+        elif teststatus > .30:
             colorId = '5'
         else:
             colorId = '4'
         
-        lockv = titlekv
+        lockv = pmurl
         event = {
           'summary': titleid,
           'description': descfull,
