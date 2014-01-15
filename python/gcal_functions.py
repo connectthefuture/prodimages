@@ -138,6 +138,71 @@ def sql_query_production_numbers():
     return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict
 
 
+def sqlQueryEventsUpcoming():
+    import sqlalchemy
+    from collections import defaultdict
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
+    connection = orcl_engine.connect()
+    querymake_eventscal = '''SELECT DISTINCT
+      POMGR.EVENT.ID                             AS event_id,
+      POMGR.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID AS colorstyle,
+      POMGR.LK_EVENT_PRODUCT_CATEGORY.NAME       AS prod_category,
+      POMGR.EVENT.EVENT_DESCRIPTION              AS event_title,
+      POMGR.EVENT.START_DATE                     AS ev_start,
+      POMGR.EVENT.END_DATE                       AS ev_end,
+      POMGR.LK_PRODUCT_STATUS.NAME               AS production_status,
+      POMGR.EVENT.CATEGORY                       AS category_id
+    FROM
+      POMGR.EVENT_PRODUCT_COLOR
+    LEFT JOIN POMGR.EVENT
+    ON
+      POMGR.EVENT_PRODUCT_COLOR.EVENT_ID = POMGR.EVENT.ID
+    INNER JOIN POMGR.LK_EVENT_PRODUCT_CATEGORY
+    ON
+      POMGR.EVENT.PRODUCT_CATEGORY_ID = POMGR.LK_EVENT_PRODUCT_CATEGORY.ID
+    LEFT JOIN POMGR.PRODUCT_COLOR
+    ON
+      POMGR.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
+    LEFT JOIN POMGR.LK_PRODUCT_STATUS
+    ON
+      POMGR.PRODUCT_COLOR.PRODUCTION_STATUS_ID = POMGR.LK_PRODUCT_STATUS.ID
+    WHERE
+      POMGR.EVENT.START_DATE >= TRUNC(SysDate)
+    GROUP BY
+      POMGR.EVENT.ID,
+      POMGR.EVENT_PRODUCT_COLOR.PRODUCT_COLOR_ID,
+      POMGR.LK_EVENT_PRODUCT_CATEGORY.NAME,
+      POMGR.EVENT.EVENT_DESCRIPTION,
+      POMGR.EVENT.START_DATE,
+      POMGR.EVENT.END_DATE,
+      POMGR.LK_PRODUCT_STATUS.NAME,
+      POMGR.EVENT.CATEGORY'''
+    result = connection.execute(querymake_eventscal)
+
+    events = {}
+    styles = defaultdict(list)
+    for row in result:
+        event = {}
+        event['event_id'] = row['event_id']
+        event['prod_category'] = row['prod_category']
+        event['event_title'] = row['event_title']
+        event['category_id'] = row['category_id']
+        event['ev_start'] = row['ev_start']
+        event['ev_end'] = row['ev_end']
+        event['production_status'] = row['production_status']
+
+        status = str(row['production_status'])
+        colorstyle = str(row['colorstyle'])
+
+        stylestatus = (colorstyle,status)
+        styles[row['event_id']].append(stylestatus)
+        events[row['event_id']] = event
+
+    connection.close()
+    return events, styles
+
+
+
 ## Walk Root Directory and Return List or all Files in all Subdirs too
 def recursive_dirlist(rootdir):
     import os
@@ -222,7 +287,6 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
             #except AttributeError:
             #    print "AttributeError on {0}".format(line)
     return stylestringsdict
-
 
 
 def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
@@ -374,3 +438,79 @@ def stillcomplete():
     #    stillcomplete_dict['Role'] = 'Still_Photo'
     #    fashioncomplete_dict['shot_count'] = len(v)
     return stillcomplete_dict
+
+
+
+
+
+              # event = {
+              #   "end": {
+              #   },
+              #   "start": {
+              #   },
+              #   "gadget": {
+              #       "display": "",
+              #       "preferences": {
+              #           "": ""
+              #           },
+              #       "type": "",
+              #       "title": "",
+              #       "width": "",
+              #       "iconLink": "",
+              #       "link": "",
+              #       "height": ""
+              #       },
+              #   "sequence": "",
+              #   "description": "",
+              #   "colorId": "",
+              #   "htmlLink": "",
+              #   "source": {
+              #       "url": "",
+              #       "title": ""
+              #       },
+              #   "id": "",
+              #   "creator": {
+              #       "displayName": "",
+              #       "self": false,
+              #       "email": "",
+              #       "id": ""
+              #   },
+              #   "location": "",
+              #   "summary": "",
+              #   "status": "",
+              #   "hangoutLink": "",
+              #   "kind": "calendar#event",
+              #   "organizer": {
+              #       "displayName": "",
+              #       "email": "",
+              #       "id": "",
+              #       "self": false
+              #       },
+              #   "updated": "",
+              #   "reminders": {
+              #       "overrides": [
+              #           {
+              #           "method": "",
+              #           "minutes": ""
+              #           }
+              #       ],
+              #       "useDefault": false
+              #   },
+              #   "created": "",
+              #   "attendees": [
+              #       {
+              #       "email": "",
+              #       "displayName": "",
+              #       "id": "",
+              #       "organizer": false,
+              #       "resource": false,
+              #       "responseStatus": "",
+              #       "additionalGuests": "",
+              #       "optional": false,
+              #       "self": false,
+              #       "comment": ""
+              #       }
+              #   ]
+              #   }
+
+

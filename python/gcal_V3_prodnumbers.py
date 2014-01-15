@@ -113,25 +113,26 @@ for iterdict in lotsofdicts:
                 #        congrats = '<-->'
                 #    else:
                 #        congrats = '<-*->'
-                descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
+                descfull = '{0} Total for {1} is {2}'.format(titlekv, str(k)[:10], desckv)
                 descfull = str(descfull)
                 count += 1
                 
                 ## Choose Color of Event Based on Role
-                lockv = v['role']
-                if lockv == 'Production':
+                titlekv = v['role']
+                if titlekv == 'Retouching':
                     colorId = '9'
-                elif lockv == 'Copy':
+                elif titlekv == 'Production':
                     colorId = '8'
-                elif lockv == 'Retouching':
+                elif titlekv == 'Copy':
                     colorId = '7'
-                elif lockv == 'Fashion':
+                elif titlekv == 'Fashion':
                     colorId = '6'
-                elif lockv == 'Still':
+                elif titlekv == 'Still':
                     colorId = '5'
-                elif lockv == 'Samples_Received':
+                elif titlekv == 'Samples_Received':
                     colorId = '4'
-
+                
+                lockv = titlekv
                 event = {
                   'summary': titleid,
                   'description': descfull,
