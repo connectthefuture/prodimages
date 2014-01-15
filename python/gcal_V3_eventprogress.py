@@ -159,11 +159,11 @@ for k,v in future_events.iteritems():
         elif teststatus > .70:
             colorId = '7'
         elif teststatus > .50:
-            colorId = '6'
-        elif teststatus > .30:
-            colorId = '5'
-        else:
             colorId = '4'
+        elif teststatus > .30:
+            colorId = '3'
+        else:
+            colorId = '2'
         
         lockv = pmurl
         event = {
