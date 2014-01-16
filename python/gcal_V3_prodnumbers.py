@@ -113,37 +113,36 @@ for iterdict in lotsofdicts:
                 #        congrats = '<-->'
                 #    else:
                 #        congrats = '<-*->'
-                descfull = '{0} Total for {1} is {2}'.format(titlekv, str(k)[:10], desckv)
+                descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
                 descfull = str(descfull)
                 count += 1
                 
                 ## Choose Color of Event Based on Role
-                titlekv = v['role']
-                if titlekv == 'Retouching':
+                lockv = v['role']
+                if lockv == 'Production':
                     colorId = '9'
-                elif titlekv == 'Production':
+                elif lockv == 'Copy':
                     colorId = '8'
-                elif titlekv == 'Copy':
+                elif lockv == 'Retouching':
                     colorId = '7'
-                elif titlekv == 'Fashion':
+                elif lockv == 'Fashion':
                     colorId = '6'
-                elif titlekv == 'Still':
+                elif lockv == 'Still':
                     colorId = '5'
-                elif titlekv == 'Samples_Received':
+                elif lockv == 'Samples_Received':
                     colorId = '4'
-                
-                lockv = titlekv
+
                 event = {
                   'summary': titleid,
                   'description': descfull,
                   'location': lockv,
                   'colorId': colorId,
                   'start': {
-                    'dateTime': k.isoformat(),
+                    'date': "{0:%Y-%m-%d}".format(k.date()),
                     'timeZone': 'America/New_York'
                   },
                   'end': {
-                    'dateTime': k.isoformat(),
+                    'date': "{0:%Y-%m-%d}".format(k.date()),
                     'timeZone': 'America/New_York'
                   },
                 #  'recurrence': [

@@ -167,9 +167,10 @@ for colorstyle in colorstyle_list:
             pdp_urllist.append(link)
             ## Create list page urls for Edgecast
             if alturl not in link:
-                oldlistpg =     'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
-                newlistpg =     'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
-                pmlistpg  =     'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60'.format(colorstyle)
+                oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
+                newlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
+                pdpg  =         'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
+                pmlistpg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60'.format(colorstyle)
 #                newlistpg = '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt01.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt02.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt03.pct&outputx=1800&outputy=2160&level=1&ver=1'
@@ -188,6 +189,7 @@ for colorstyle in colorstyle_list:
                 
                 edgecast_listurls.append(oldlistpg)
                 edgecast_listurls.append(newlistpg)
+                edgecast_listurls.append(pdpg)
                 edgecast_listurls.append(pmlistpg)
 
 
@@ -198,7 +200,7 @@ versioned_links = return_versioned_urls(pdp_urllist)
 
 #print versioned_links
 count = 0
-if len(versioned_links) <= 150:
+if len(versioned_links) <= 550:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     for url_purge_local in versioned_links:
@@ -219,7 +221,7 @@ if len(versioned_links) <= 150:
         #csv_write_datedOutfile(url_purge)
 
 else:
-    print "Failed -- Over 100 URLs Submitted"    
+    print "Failed -- Over 550 URLs Submitted"    
 
 
 
@@ -250,7 +252,7 @@ if len(edgecast_listurls) <= 550:
         #csv_write_datedOutfile(url_purge)
 
 else:
-    print "Failed -- Over 100 URLs Submitted"    
+    print "Failed -- Over 550 URLs Submitted"    
 
 
 #print edgecast_listurls

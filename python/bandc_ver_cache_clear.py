@@ -115,7 +115,16 @@ listpage_urllist = url_get_links(url_catid)
 ## Parse urllist returning only versioned List page images
 versioned_links = return_versioned_urls(listpage_urllist)
 #count = 0
-if len(versioned_links) <= 100:
+
+## purge prev if not deployed yet
+if not versioned_links:
+    url_catid = 'http://prev.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
+    listpage_urllist = url_get_links(url_catid)
+    versioned_links = return_versioned_urls(listpage_urllist)
+    
+
+
+if len(versioned_links) <= 200:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9]+?)')
 #    for url_purge_local in versioned_links:
@@ -132,4 +141,4 @@ if len(versioned_links) <= 100:
         csv_write_datedOutfile(url_purge)
 
 else:
-    print "Failed -- Over 100 URLs Submitted"    
+    print "Failed -- Over 200 URLs Submitted"    
