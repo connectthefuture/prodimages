@@ -211,7 +211,7 @@ if len(versioned_links) <= 250:
         #except:
         #    print sys.stderr().read()
     for url_purge in versioned_links:
-        send_purge_request_edgecast(url_purge[0])
+        send_purge_request_edgecast(url_purge[0].replace('http://is.', 'http://cdn.is.'))
         csv_write_datedOutfile(url_purge)
 
 else:
