@@ -56,7 +56,7 @@ prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
 service = build(serviceName='calendar', version='v3', http=http)
 
 
-# Getting Event Info
+# Getting All Event Ids
 page_token = None
 events_list = []
 try:    
@@ -81,6 +81,7 @@ except:
         if not page_token:
             break
 
+## Delete all Events by ID prior to reup
 for event in events_list:
     service.events().delete(calendarId=prodnumberscal, eventId=event).execute()
     
