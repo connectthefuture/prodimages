@@ -15,8 +15,13 @@ user_agent='Python2.7'
 BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
 SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
 
-here = os.path.dirname(os.path.realpath(os.path.curdir))
-storage_file = os.path.join('/usr/local', 'batchRunScripts', 'calendar.dat')
+
+
+batchRunScripts = os.path.join('/usr/local', 'batchRunScripts')
+os.chdir(batchRunScripts)
+
+#here = os.path.dirname(os.path.realpath(os.path.curdir))
+storage_file = os.path.join(batchRunScripts, 'calendar.dat')
 
 ############################
 FLAGS = gflags.FLAGS
@@ -51,26 +56,35 @@ prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
 service = build(serviceName='calendar', version='v3', http=http)
 
 
-## Getting Event Info
-#page_token = None
-#try:    
-#    while True:
-#        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
-#        for event in events['items']:
-#            print event['summary']
-#        page_token = events.get('nextPageToken')
-#        if not page_token:
-#            break
-#except:
-#    page_token = None
-#    while True:
-#        events = service.events().list(calendarId=prodnumscal, pageToken=page_token).execute()
-#        for event in events['items']:
-#            print event['summary']
-#        page_token = events.get('nextPageToken')
-#        if not page_token:
-#            break
+# Getting Event Info
+page_token = None
+events_list = []
+try:    
+    while True:
+        events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
+        for event in events['items']:
+            event_id = event['id']
+            events_list.append(event_id)
+            #print event_id
+        page_token = events.get('nextPageToken')
+        if not page_token:
+            break
+except:
+    page_token = None
+    while True:
+        events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
+        for event in events['items']:
+            event_id = event['id']
+            events_list.append(event_id)
+            #print event_id
+        page_token = events.get('nextPageToken')
+        if not page_token:
+            break
 
+for event in events_list:
+    service.events().delete(calendarId=prodnumberscal, eventId=event).execute()
+    
+print "Deleted all Events"    
 #calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
 #cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
 
@@ -127,6 +141,8 @@ for iterdict in lotsofdicts:
                     colorId = '7'
                 elif lockv == 'Fashion':
                     colorId = '6'
+                    print descfull
+                    
                 elif lockv == 'Still':
                     colorId = '5'
                 elif lockv == 'Samples_Received':
