@@ -144,7 +144,7 @@ import os,sys,re
 try:
     rootdir = sys.argv[1]
 except:
-    rootdir = '/mnt/Production_Raw/.zImages_1/'
+    rootdir = '/mnt/MEDIAREPO/'
 walkedout = recursive_dirlist(rootdir)
 
 #regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
@@ -204,7 +204,9 @@ for k,v in fulldict.iteritems():
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
         #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
-        regex_mediarepo = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpgJPG]$
+        regex_mediarepo_imgs  = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpegJPEG]{3,4}$')
+        regex_mediarepo_vids  = re.compile(r'^.+?MEDIAREPO.+?\.[MmpPEe34KkVvOo]{3,4}$')
+        regex_mediarepo_music = re.compile(r'^.+?MEDIAREPO.+?\.[MmPp34]{3,4}$')
         regex_productionraw = re.compile(r'.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_zimages = re.compile(r'.*?studio_thumbs.*?[0-9]{4}/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/studio_raw/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
@@ -213,9 +215,14 @@ for k,v in fulldict.iteritems():
         regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
 ## ProdRaw Thumbs
-        if re.findall(regex_productionraw_zimages, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO production_raw_zimages (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
-            print "Successful Insert regex_productionraw_zimages --> {0}".format(k)
+        if re.findall(regex_mediarepo_imgs, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO home_mediarepo_imgs (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            print "Successful Insert home_mediarepo_imgs --> {0}".format(k)
+
+        if re.findall(regex_mediarepo_music, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO home_mediarepo_music (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            print "Successful Insert home_mediarepo_music --> {0}".format
+
 ## ProdRaw RAW
 #        elif re.findall(regex_productionraw, sqlinsert_choose_test):
 #            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
