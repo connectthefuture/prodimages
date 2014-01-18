@@ -199,7 +199,7 @@ for k,v in fulldict.iteritems():
     try:
 
         ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@127.0.0.1:3301/www_django')
         connection = mysql_engine.connect()
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
@@ -216,11 +216,11 @@ for k,v in fulldict.iteritems():
 
 ## ProdRaw Thumbs
         if re.findall(regex_mediarepo_imgs, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO home_mediarepo_imgs (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            connection.execute("""INSERT INTO home_mediarepo_imgs (id, name, photo_date, file_path, alt) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
             print "Successful Insert home_mediarepo_imgs --> {0}".format(k)
 
         if re.findall(regex_mediarepo_music, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO home_mediarepo_music (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            connection.execute("""INSERT INTO home_mediarepo_music (id, name, modify_date, file_path, album) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
             print "Successful Insert home_mediarepo_music --> {0}".format
 
 ## ProdRaw RAW
