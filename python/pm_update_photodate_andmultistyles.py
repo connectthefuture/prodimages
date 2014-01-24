@@ -74,30 +74,43 @@ def splitswim_updatepm(file_path):
 
 
 ##############################RUN###########################
-    
 from PIL import Image
 import os, sys, re, glob, datetime
 
-#todaysdate = str(datetime.date.today())
-todaysdate      = '2013-12-18'
-todaysfolder    = "{0}{1}{2}_".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
+todaysdate = str(datetime.date.today())
+todaysfolder = "{0}{1}{2}_".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
 
 eFashion_root = '/mnt/Post_Ready/eFashionPush'
+aPhoto_root = '/mnt/Post_Ready/aPhotoPush'
+
 #rootdir = sys.argv[1]
 #walkedout = recursive_dirlist(rootdir)
 
 regex = re.compile(r'.*?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
-
 basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/', todaysfolder + '*')
-globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
-globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
-#curl -d sample_image=Y -d photographed_date=now -X PUT http://ccapp101.l3.bluefly.com:8080/photo/"$outName"
+basedirstill = os.path.join(aPhoto_root, todaysfolder + '*')
+
+flag = ''
+if sys.argv[1]:
+    globrawdir = os.path.abspath(sys.argv[1])
+    globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
+    globstilldir = '.' 
+    flagged = 'SET'# glob.glob(os.path.join(basedirstill, "*/*.jpg"))
+else:
+    globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
+    globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
+
+    globstilldir = glob.glob(os.path.join(basedirstill, "*/*.jpg"))
+    #curl -d sample_image=Y -d photographed_date=now -X PUT http://ccapp101.l3.bluefly.com:8080/photo/"$outName"
+
+    globalldirs = globrawdir + globstilldir
+
 
 colorstyles_unique = []
 #stylestringsdict = {}
-for line in globrawdir:
+for line in globalldirs:
     #stylestringsdict_tmp = {}
     swimpair = splitswim_updatepm(line)
     if re.findall(regex_raw,line):
@@ -145,14 +158,16 @@ for colorstyle in colorstyles_unique:
         print "FAILED UPDATE for {0}".format(colorstyle)
 
 ########### Check for Exports Remove Shot Number & and Move to eFashionPush ##########
-import shutil
+if not flagged:
+    
+    import shutil
 
-if globexportdir:
-    try:
-        for f in globexportdir:
-            found3digit_rename(f)
-    except:
-        print 'Faild'
+    if globexportdir:
+        try:
+            for f in globexportdir:
+                found3digit_rename(f)
+        except:
+            print 'Faild'
 
 ### Get ShootDir Name from last "f" in previous glob and rename ops, then create if not exist
 ## eFashionPush Dir to Create for Exports used below 
@@ -160,16 +175,18 @@ if globexportdir:
 
 # ------------      eFashion_name = file_path.split('/')[6]
 
-eFashion_name = '121913'
+#eFashion_name = '121913'
 
-eFashion_dir = os.path.join(eFashion_root, eFashion_name)
+    eFashion_dir = os.path.join(eFashion_root, eFashion_name)
 # if not os.path.isdir(eFashion_dir):
 #     os.makedirs(eFashion_dir, 16877)
 
 
 ## Refresh and Get Renamed files then copy to eFashion Dir
-globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
+    globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
 
-if globexportdir:
-    for f in globexportdir:
-        shutil.copy2(f, eFashion_dir)
+    if globexportdir:
+        for f in globexportdir:
+            shutil.copy2(f, eFashion_dir)
+else:
+    pass
