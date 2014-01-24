@@ -33,7 +33,7 @@ def subproc_pad_to_x480(file,destdir):
 
 
 ######################
-destdir = sys.argv[1]
+destdir = os.path.abspath(sys.argv[1])
 
 ######################
 
