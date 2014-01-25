@@ -121,9 +121,24 @@ colorstyles_unique = []
 #stylestringsdict = {}
 for line in globalldirs:
     #stylestringsdict_tmp = {}
-    swimpair = splitswim_updatepm(line)
+    regex_fullmultistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[b-zB-Z][a-zA-Z]{1,10}[1-9][0-9]{8}_[1-6].+?\.CR2')
     
-    if re.findall(regex_raw,line):
+    
+    if re.findall(regex_fullmultistyle, line):
+        
+        swimpair = splitswim_updatepm(line)
+        primarystyle     = swimpair[0]
+        secondarystyle   = swimpair[1]
+        if primarystyle not in colorstyles_unique:
+            print "YAY_SWIMTOP-->{0)".format(primarystyle)
+            colorstyles_unique.append(primarystyle)
+            colorstyles_unique = sorted(colorstyles_unique)
+        if secondarystyle not in colorstyles_unique:
+            print "YAY_SWIMBOTTOM-->{0)".format(secondarystyle)
+            colorstyles_unique.append(secondarystyle)
+            colorstyles_unique = sorted(colorstyles_unique)
+
+    elif re.findall(regex_raw,line):
         try:
             file_path = line
             filename = file_path.split('/')[-1]
@@ -146,18 +161,7 @@ for line in globalldirs:
             print "IOError on {0}".format(line)
         except AttributeError:
             print "AttributeError on {0}".format(line)
-    ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot
-    elif swimpair:
-        primarystyle     = swimpair[0]
-        secondarystyle   = swimpair[1]
-        if primarystyle not in colorstyles_unique:
-            print "YAY_SWIMTOP-->{0)".format(primarystyle)
-            colorstyles_unique.append(primarystyle)
-            colorstyles_unique = sorted(colorstyles_unique)
-        if secondarystyle not in colorstyles_unique:
-            print "YAY_SWIMBOTTOM-->{0)".format(secondarystyle)
-            colorstyles_unique.append(secondarystyle)
-            colorstyles_unique = sorted(colorstyles_unique)                
+    ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot             
     else:
         try:
             file_path = line
