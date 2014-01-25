@@ -193,33 +193,32 @@ for colorstyle in colorstyles_unique:
 if not flagged:
     try:
         
-    import shutil
+        import shutil
 
-    if globexportdir:
-        try:
+        if globexportdir:
+            try:
+                for f in globexportdir:
+                    found3digit_rename(f)
+            except:
+                print 'Faild'
+
+    ### Get ShootDir Name from last "f" in previous glob and rename ops, then create if not exist
+    ## eFashionPush Dir to Create for Exports used below 
+
+        eFashion_name = file_path.split('/')[6]
+
+    #eFashion_name = '121913'
+
+        eFashion_dir = os.path.join(eFashion_root, eFashion_name)
+    # if not os.path.isdir(eFashion_dir):
+    #     os.makedirs(eFashion_dir, 16877)
+
+
+    ## Refresh and Get Renamed files then copy to eFashion Dir
+        globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
+
+        if globexportdir:
             for f in globexportdir:
-                found3digit_rename(f)
-        except:
-            print 'Faild'
-
-### Get ShootDir Name from last "f" in previous glob and rename ops, then create if not exist
-## eFashionPush Dir to Create for Exports used below 
-
-
-    eFashion_name = file_path.split('/')[6]
-
-#eFashion_name = '121913'
-
-    eFashion_dir = os.path.join(eFashion_root, eFashion_name)
-# if not os.path.isdir(eFashion_dir):
-#     os.makedirs(eFashion_dir, 16877)
-
-
-## Refresh and Get Renamed files then copy to eFashion Dir
-    globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
-
-    if globexportdir:
-        for f in globexportdir:
-            shutil.copy2(f, eFashion_dir)
-else:
-    pass
+                shutil.copy2(f, eFashion_dir)
+    else:
+        pass
