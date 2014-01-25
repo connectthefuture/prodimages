@@ -46,33 +46,37 @@ def found3digit_rename(filename):
 
 def splitswim_updatepm(file_path):
     import re
+    regex_fullmultistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[b-zB-Z][a-zA-Z]{1,10}[1-9][0-9]{8}_[1-6].+?\.CR2')
     #regex_multistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg')
     regex_split       = re.compile(r'[b-zB-Z][a-zA-Z]{1,10}')
 
-    if re.findall(regex_multistyle, file_path):
-        fname                 = file_path.split('/')[-1]
-        secondarycat          = re.split(regex_split, fname)
-        primarystyle          = fname[:9]
-        secondarystyle        = fname[-10:-1]
-        # m = re.match(r"(\d+)\.?(\d+)?", "24")
-        m = re.match(regex_multistyle,file_path)
-        # m.groups('0')   # Now, the second group defaults to '0'.
-        # groupdict([m])
-        primarystyle = m.groups('0')[0]
-        secondarystyle = m.groups('0')[1]
-
+    if re.findall(regex_fullmultistyle, file_path):
+        print "Multistyle".format(file_path)
         try:
-            secondarycategory = fname.split('_')[2]
-            print secondarycategory,"SECOND"
-        except:
-            pass
-        print primarystyle,secondarystyle
-        try:
-            return primarystyle, secondarystyle
-        except:
-            pass
+            fname                 = file_path.split('/')[-1]
+            secondarycat          = re.split(regex_split, fname)
+            primarystyle          = secondarycat[0][:9]
+            secondarystyle        = secondarycat[1][:9]
+            # m = re.match(r"(\d+)\.?(\d+)?", "24")
+            #m = re.match(regex_fullmultistyle,file_path)
+            # m.groups('0')   # Now, the second group defaults to '0'.
+            # groupdict([m])
+            #primarystyle = m.groups('0')[0]
+            #secondarystyle = m.groups('0')[1]
 
-
+#            try:
+#                secondarycategory = fname.split('_')[2]
+#                print secondarycategory,"SECOND"
+#            except:
+#                pass
+#            print primarystyle,secondarystyle
+            try:
+                return primarystyle, secondarystyle
+            except:
+                pass
+        except OSError:
+            print "FailedSwimSplit {}".format(file_path)
+            pass
 ##############################RUN###########################
 from PIL import Image
 import os, sys, re, glob, datetime
@@ -92,11 +96,16 @@ regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/', todaysfolder + '*')
 basedirstill = os.path.join(aPhoto_root, todaysfolder + '*')
 
-flag = ''
-if sys.argv[1]:
-    globrawdir = os.path.abspath(sys.argv[1])
-    globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
-    globstilldir = '.' 
+flagged = ''
+try:
+    args = sys.argv[1]
+except:
+    args = ''
+
+if args:
+    globalldirs = os.path.abspath(sys.argv[1])
+    #globexportdir = os.path.abspath(sys.argv[1])#glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
+    #globstilldir = os.path.abspath(sys.argv[1])#'.' 
     flagged = 'SET'# glob.glob(os.path.join(basedirstill, "*/*.jpg"))
 else:
     globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
@@ -113,6 +122,7 @@ colorstyles_unique = []
 for line in globalldirs:
     #stylestringsdict_tmp = {}
     swimpair = splitswim_updatepm(line)
+    
     if re.findall(regex_raw,line):
         try:
             file_path = line
@@ -148,8 +158,30 @@ for line in globalldirs:
             print "YAY_SWIMBOTTOM-->{0)".format(secondarystyle)
             colorstyles_unique.append(secondarystyle)
             colorstyles_unique = sorted(colorstyles_unique)                
+    else:
+        try:
+            file_path = line
+            filename = file_path.split('/')[-1]
+            colorstyle = filename.split('_')[0]
+            alt = filename.split('_')[1]
+            #shot_ext = file_path.split('_')[-1]
+            #shot_number = shot_ext.split('.')[0]
+            #ext = shot_ext.split('.')[-1]
+            
+            
+            ## Unique Styles Only
+            if colorstyle not in colorstyles_unique:
+                print colorstyle
+                colorstyles_unique.append(colorstyle)
+                colorstyles_unique = sorted(colorstyles_unique)
+            else:
+                print "Already Accounted {0}".format(colorstyle)
+        except IOError:
+            print "IOError on {0}".format(line)
+        except AttributeError:
+            print "AttributeError on {0}".format(line)
 
-############ Send Shots to PM API to update photodate
+        ############ Send Shots to PM API to update photodate
 
 for colorstyle in colorstyles_unique:
     try:
