@@ -123,67 +123,71 @@ for line in globalldirs:
     #stylestringsdict_tmp = {}
     regex_fullmultistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[b-zB-Z][a-zA-Z]{1,10}[1-9][0-9]{8}_[1-6].+?\.CR2')
     
-    
-    if re.findall(regex_fullmultistyle, line):
+    try:
+        if re.findall(regex_fullmultistyle, line):
+            
+            swimpair = splitswim_updatepm(line)
+            primarystyle     = swimpair[0]
+            secondarystyle   = swimpair[1]
+            if primarystyle not in colorstyles_unique:
+                print "YAY_SWIMTOP-->{0}".format(primarystyle)
+                colorstyles_unique.append(primarystyle)
+                colorstyles_unique = sorted(colorstyles_unique)
+            if secondarystyle not in colorstyles_unique:
+                print "YAY_SWIMBOTTOM-->{0}".format(secondarystyle)
+                colorstyles_unique.append(secondarystyle)
+                colorstyles_unique = sorted(colorstyles_unique)
+
+        elif re.findall(regex_raw,line):
+            try:
+                file_path = line
+                filename = file_path.split('/')[-1]
+                colorstyle = filename.split('_')[0]
+                alt = filename.split('_')[1]
+                shot_ext = file_path.split('_')[-1]
+                shot_number = shot_ext.split('.')[0]
+                ext = shot_ext.split('.')[-1]
+                
+                
+                ## Unique Styles Only
+                if colorstyle not in colorstyles_unique:
+                    print colorstyle
+                    colorstyles_unique.append(colorstyle)
+                    colorstyles_unique = sorted(colorstyles_unique)
+                else:
+                    print "Already Accounted {0}".format(colorstyle)
+
+            except IOError:
+                print "IOError on {0}".format(line)
+            except AttributeError:
+                print "AttributeError on {0}".format(line)
+        ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot             
+        else:
+            try:
+                file_path = line
+                filename = file_path.split('/')[-1]
+                colorstyle = filename.split('_')[0]
+                alt = filename.split('_')[1]
+                #shot_ext = file_path.split('_')[-1]
+                #shot_number = shot_ext.split('.')[0]
+                #ext = shot_ext.split('.')[-1]
+                
+                
+                ## Unique Styles Only
+                if colorstyle not in colorstyles_unique:
+                    print colorstyle
+                    colorstyles_unique.append(colorstyle)
+                    colorstyles_unique = sorted(colorstyles_unique)
+                else:
+                    print "Already Accounted {0}".format(colorstyle)
+            except IOError:
+                print "IOError on {0}".format(line)
+            except AttributeError:
+                print "AttributeError on {0}".format(line)
+    except:
+        print "Error appending {}".format(line)
+        pass
         
-        swimpair = splitswim_updatepm(line)
-        primarystyle     = swimpair[0]
-        secondarystyle   = swimpair[1]
-        if primarystyle not in colorstyles_unique:
-            print "YAY_SWIMTOP-->{0)".format(primarystyle)
-            colorstyles_unique.append(primarystyle)
-            colorstyles_unique = sorted(colorstyles_unique)
-        if secondarystyle not in colorstyles_unique:
-            print "YAY_SWIMBOTTOM-->{0)".format(secondarystyle)
-            colorstyles_unique.append(secondarystyle)
-            colorstyles_unique = sorted(colorstyles_unique)
-
-    elif re.findall(regex_raw,line):
-        try:
-            file_path = line
-            filename = file_path.split('/')[-1]
-            colorstyle = filename.split('_')[0]
-            alt = filename.split('_')[1]
-            shot_ext = file_path.split('_')[-1]
-            shot_number = shot_ext.split('.')[0]
-            ext = shot_ext.split('.')[-1]
-            
-            
-            ## Unique Styles Only
-            if colorstyle not in colorstyles_unique:
-                print colorstyle
-                colorstyles_unique.append(colorstyle)
-                colorstyles_unique = sorted(colorstyles_unique)
-            else:
-                print "Already Accounted {0}".format(colorstyle)
-
-        except IOError:
-            print "IOError on {0}".format(line)
-        except AttributeError:
-            print "AttributeError on {0}".format(line)
-    ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot             
-    else:
-        try:
-            file_path = line
-            filename = file_path.split('/')[-1]
-            colorstyle = filename.split('_')[0]
-            alt = filename.split('_')[1]
-            #shot_ext = file_path.split('_')[-1]
-            #shot_number = shot_ext.split('.')[0]
-            #ext = shot_ext.split('.')[-1]
-            
-            
-            ## Unique Styles Only
-            if colorstyle not in colorstyles_unique:
-                print colorstyle
-                colorstyles_unique.append(colorstyle)
-                colorstyles_unique = sorted(colorstyles_unique)
-            else:
-                print "Already Accounted {0}".format(colorstyle)
-        except IOError:
-            print "IOError on {0}".format(line)
-        except AttributeError:
-            print "AttributeError on {0}".format(line)
 
         ############ Send Shots to PM API to update photodate
 
