@@ -191,7 +191,8 @@ for colorstyle in colorstyles_unique:
 
 ########### Check for Exports Remove Shot Number & and Move to eFashionPush ##########
 if not flagged:
-    
+    try:
+        
     import shutil
 
     if globexportdir:
@@ -205,7 +206,7 @@ if not flagged:
 ## eFashionPush Dir to Create for Exports used below 
 
 
-# ------------      eFashion_name = file_path.split('/')[6]
+    eFashion_name = file_path.split('/')[6]
 
 #eFashion_name = '121913'
 
