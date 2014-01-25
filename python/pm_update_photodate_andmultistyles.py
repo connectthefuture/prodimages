@@ -129,14 +129,14 @@ for line in globalldirs:
             swimpair = splitswim_updatepm(line)
             primarystyle     = swimpair[0]
             secondarystyle   = swimpair[1]
-            if primarystyle not in colorstyles_unique:
-                print "YAY_SWIMTOP-->{0}".format(primarystyle)
-                colorstyles_unique.append(primarystyle)
-                colorstyles_unique = sorted(colorstyles_unique)
-            if secondarystyle not in colorstyles_unique:
-                print "YAY_SWIMBOTTOM-->{0}".format(secondarystyle)
-                colorstyles_unique.append(secondarystyle)
-                colorstyles_unique = sorted(colorstyles_unique)
+            #if primarystyle not in colorstyles_unique:
+            print "YAY_SWIMTOP-->{0}".format(primarystyle)
+            colorstyles_unique.append(primarystyle)
+            colorstyles_unique = sorted(colorstyles_unique)
+            #if secondarystyle not in colorstyles_unique:
+            print "YAY_SWIMBOTTOM-->{0}".format(secondarystyle)
+            colorstyles_unique.append(secondarystyle)
+            colorstyles_unique = sorted(colorstyles_unique)
 
         elif re.findall(regex_raw,line):
             try:
@@ -190,7 +190,7 @@ for line in globalldirs:
         
 
         ############ Send Shots to PM API to update photodate
-
+colorstyles_unique = set(sorted(colorstyles_unique))
 for colorstyle in colorstyles_unique:
     try:
         update_pm_photodate(colorstyle)
