@@ -220,5 +220,5 @@ if not flagged:
         if globexportdir:
             for f in globexportdir:
                 shutil.copy2(f, eFashion_dir)
-    else:
+    except:
         pass
