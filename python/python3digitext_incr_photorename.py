@@ -55,15 +55,21 @@ foundliststill = find_regex_list(regex_3,pushstillfiles)
 
 for f in foundliststill:
     print f
-    found3digit_rename(f)
-    
+    try:
+        found3digit_rename(f)
+    except:
+        print 'Failed {}'.format(f)
+        pass
+        
 foundlistfashion = find_regex_list(regex_3,pushfashionfiles)
 
 for f in foundlistfashion:
-    print f
-    found3digit_rename(f)
-
-
+    try:    
+        found3digit_rename(f)
+    except:
+        print 'Failed {}'.format(f)
+        pass
+        
 ### 2nd Try for Stragglers
 ## Now try 1 dir higher
 pushstillfiles = glob.glob(os.path.join(dir_pushstill, '*/*.jpg'))
@@ -73,11 +79,18 @@ foundliststill = find_regex_list(regex_3,pushstillfiles)
 
 for f in foundliststill:
     print f
-    found3digit_rename(f)
-    
+    try:
+        found3digit_rename(f)
+    except:
+        print 'Failed {}'.format(f)
+        pass
+
 foundlistfashion = find_regex_list(regex_3,pushfashionfiles)
 
 for f in foundlistfashion:
-    print f
-    found3digit_rename(f)
-
+    try:    
+        found3digit_rename(f)
+    except:
+        print 'Failed {}'.format(f)
+        pass
+        
