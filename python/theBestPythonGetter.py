@@ -36,11 +36,15 @@ for row in result:
             
             ### Separate anything the is Pending a second shot from Still Life
             if re.findall(regex_pending, row):
-                pending_folder = os.path.join(today_folder, 'PENDING')
-                ## Make the pending dir in today
-                if not os.path.isdir(pending_folder):
-                    os.mkdir(pending_folder, 16877)
-                dest_file = os.path.join(pending_folder, file_name)
+                try:
+                    
+                    pending_folder = os.path.join(today_folder, 'PENDING')
+                    ## Make the pending dir in today
+                    if not os.path.isdir(pending_folder):
+                        os.mkdir(pending_folder, 16877)
+                    dest_file = os.path.join(pending_folder, file_name)
+                except:
+                    print "Failed {0}".format(file_path)    
                 
             shutil.copy2(file_path, dest_file)
             #os.chmod(dest_file,00755)
