@@ -44,7 +44,7 @@ for row in result:
                         os.mkdir(pending_folder, 16877)
                     dest_file = os.path.join(pending_folder, file_name)
                 except:
-                    print "Failed {0}".format(file_path)    
+                    print "Failed Pend Loop{0}".format(file_path)    
                 
             shutil.copy2(file_path, dest_file)
             #os.chmod(dest_file,00755)
