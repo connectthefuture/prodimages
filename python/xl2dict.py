@@ -34,6 +34,6 @@ for rowout in outdict.items():
         try:
             for valn,valv in val.items()[:]:
                 lines = rowout[0],valn,valv,
-                csv_write_datedOutfile(lines)
+                csv_write_datedOutfile(lines.encode('ascii', 'ignore'))
         except AttributeError:
             pass
