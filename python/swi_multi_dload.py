@@ -77,7 +77,7 @@ import os,sys
 #except:
 #    print "Enter a PO Number as 1st Arg or Nothing will Happen"
 import csv
-file = '/mnt/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
+file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
 
 polist = []
 with open(file, 'rbU') as f:
@@ -101,17 +101,33 @@ for stylesDict in stylesDictsDict:
     for k,v in stylesDict.iteritems():
             
         vendor_url = "http://admin.swisswatchintl.com/Z/{0}.jpg".format(k)
-        vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
         vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
+        vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
+        vendor_url_boxset = vendor_url.replace('.jpg', '-boxset.jpg')
+        vendor_url_scale = vendor_url.replace('.jpg', '-scale.jpg')
+        vendor_url_wrist = vendor_url.replace('.jpg', '-wrist.jpg')
+        
+
         
         style = str(v['colorstyle'])
-        colorstyle =  style + "_1.jpg"
-        colorstyle_side = style  + "_2.jpg"
-        colorstyle_back = style  + "_3.jpg"
+        colorstyle = ''
+        colorstyle =  style +         "_1.jpg"
+        colorstyle_side = style  +    "_2.jpg"
+        colorstyle_back = style  +    "_3.jpg"
+        colorstyle_boxset = style  +  "_4.jpg"
+        colorstyle_scale = style  +   "_5.jpg"
+        colorstyle_wrist = style  +   "_6.jpg"
         
         colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle)
-        colorstyle_back_file = os.path.join(os.path.abspath(os.curdir), colorstyle_back)
         colorstyle_side_file = os.path.join(os.path.abspath(os.curdir), colorstyle_side)
+        colorstyle_back_file = os.path.join(os.path.abspath(os.curdir), colorstyle_back)
+        colorstyle_boxset_file = os.path.join(os.path.abspath(os.curdir), colorstyle_boxset)
+        colorstyle_scale_file = os.path.join(os.path.abspath(os.curdir), colorstyle_scale)
+        colorstyle_wrist_file = os.path.join(os.path.abspath(os.curdir), colorstyle_wrist)
+
+
+
+## _1
         #imagefalse = sqlQuery_GetStyleVendor_ByPO()
         #if imagefalse:
 #        try:            
@@ -120,18 +136,70 @@ for stylesDict in stylesDictsDict:
 #        except:
 #            print "Failed {}{}".format(vendor_url,colorstyle_file)
 #            #print swiurl
-        try:            
-        #print imagefalse,vendor_url, colorstyle_file
-            url_download_file(vendor_url_back,colorstyle_back_file)
-        except:
-            print "Failed {}{}".format(vendor_url,colorstyle_back_file)
 
-
+## _2
         try:            
-        #print imagefalse,vendor_url, colorstyle_file
+#        #print imagefalse,vendor_url, colorstyle_file
             url_download_file(vendor_url_side,colorstyle_side_file)
+            print "Downloaded {}".format(colorstyle_side_file)
         except:
             print "Failed {}{}".format(vendor_url,colorstyle_side_file)
+
+## _3
+        try:            
+#        #print imagefalse,vendor_url, colorstyle_file
+            url_download_file(vendor_url_back,colorstyle_back_file)
+            print "Downloaded {}".format(colorstyle_back_file)
+        except:
+            try:
+                url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-clasp'))
+                print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
+            except:
+                try:
+                   url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
+                except:
+                    print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
+
+## _4
+        try:            
+        #print imagefalse,vendor_url, colorstyle_file
+            url_download_file(vendor_url_boxset,colorstyle_boxset_file)
+            print "Downloaded {}".format(colorstyle_boxset_file)
+        except:
+            try:
+                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-boxopen'))
+                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-boxopen'))
+            except:
+                try:
+                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-boxclosed'))
+                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-boxclosed'))
+                except:
+                    print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
+
+
+## _5
+        try:            
+        #print imagefalse,vendor_url, colorstyle_file
+            url_download_file(vendor_url_scale,colorstyle_scale_file)
+            print "Downloaded {}".format(colorstyle_scale_file)
+        except:
+            print "Failed {}{}".format(vendor_url,colorstyle_scale_file)
+
+## _6
+        try:            
+        #print imagefalse,vendor_url, colorstyle_file
+            url_download_file(vendor_url_wrist,colorstyle_wrist_file)
+            print "Downloaded {}".format(colorstyle_wrist_file)
+        except:
+            try:
+                url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-strap'))
+            except:
+                try:
+                    url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-extra1'))
+                except:
+                    print "Failed {}{}".format(vendor_url,colorstyle_wrist_file.replace('-wrist','-extra1'))
+                    
+
 
 #
 #for stylesDict in stylesDictsDict:
