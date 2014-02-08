@@ -66,23 +66,28 @@ def recursive_dirlist(rootdir):
 
 
 ###
-## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
+## Convert Walked Dir List To Lines with path,photo_date,stylenum,dimensions. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
     regex_Raw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.CR2$')
     regex_zjpg = re.compile(r'^/.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
+    regex_mediarepo_imgs  = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpegJPEG]{3,4}$')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
         stylestringsdict_tmp = {}
-        if re.findall(regex_zjpg,line):
+        if re.findall(regex_mediarepo_imgs, line):
             try:
                 file_path = line
                 filename = file_path.split('/')[-1]
-                colorstyle = filename.split('_')[0]
-                alt = file_path.split('_')[-2]
+                name = filename.split('_')[0]
+                try:
+                    dimensions = get_exif(file_path)['ImageSize']
+                except:
+                    dimensions = 'not_available'
+                    print 'No ImageSize exif field'
                 shot_number = file_path.split('_')[-1]
                 shot_number = shot_number.split('.')[0]
                 ext = filename.split('.')[-1]
@@ -92,9 +97,16 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                     ##if re.findall(regex_date, path_date):
                     ##    photo_date = path_date
                     try:
-                        photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                        photo_date = get_exif(file_path)['FileModificationDate\/Time'][:10]
                     except KeyError:
-                        photo_date = get_exif(file_path)['DateTime'][:10]
+                        try:
+                            photo_date = get_exif(file_path)['DateTime'][:10]
+                        except KeyError:
+                            photo_date = '0000-00-00'
+                    #try:
+                    #    file_type = get_exif(file_path)['FileType'][:10]
+                    #except KeyError:
+                    #    photo_date = get_exif(file_path)['DateTime'][:10]
                     ##else:
 #                        try:
 #                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
@@ -113,17 +125,17 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                     photo_date = '0000-00-00'
                 photo_date = str(photo_date)
                 photo_date = photo_date.replace(':','-')
-                stylestringsdict_tmp['colorstyle'] = colorstyle
+                stylestringsdict_tmp['name'] = name
                 stylestringsdict_tmp['photo_date'] = photo_date
                 file_path = file_path.replace('/mnt/Production_Raw/.zImages_1/', '/studio_thumbs/')
                 stylestringsdict_tmp['file_path'] = file_path
-                stylestringsdict_tmp['alt'] = alt
+                stylestringsdict_tmp['dimensions'] = dimensions
                 stylestringsdict_tmp['shot_number'] = shot_number
                 stylestringsdict[file_path] = stylestringsdict_tmp
                 file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
                 file_path_reletive = file_path.replace('JPG', 'jpg')
                 ## Format CSV Rows Returning list instead of dict
-                #row = "{0},{1},{2},{3},{4}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
+                #row = "{0},{1},{2},{3},{4}".format(name,photo_date,file_path_reletive,dimensions,shot_number)
                 #print row
                 #stylestrings.append(row)
             except IOError:
@@ -173,20 +185,20 @@ import sqlalchemy
 fulldict = {}
 for k,v in stylestringsdict.iteritems():
     dfill = {}
-    colorstyle = v['colorstyle']
-    alt = v['alt']
-    dfill['colorstyle'] = v['colorstyle']
+    name = v['name']
+    dimensions = v['dimensions']
+    dfill['name'] = v['name']
     dfill['photo_date'] = v['photo_date']
     file_path = k
     file_path = file_path.replace('/mnt/Production_Raw/.zImages_1/', '/studio_thumbs/')
     file_path = file_path.replace('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/studio_raw/')
 #     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
 #     if re.findall(regex_productionraw_Exports, file_path):
-#         file_pathz = os.path.join('/mnt/Production_Raw/.zImages_1', colorstyle[:4], colorstyle, '_' + v['alt'], '.jpg')
+#         file_pathz = os.path.join('/mnt/Production_Raw/.zImages_1', name[:4], name, '_' + v['dimensions'], '.jpg')
 #         if os.path.isfile(file_pathz):
 #             file_path = file_pathz
     dfill['file_path'] = file_path
-    dfill['alt'] = v['alt']
+    dfill['dimensions'] = v['dimensions']
     try:
         dfill['shot_number'] = v['shot_number']
     except:
@@ -216,16 +228,16 @@ for k,v in fulldict.iteritems():
 
 ## ProdRaw Thumbs
         if re.findall(regex_mediarepo_imgs, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO home_mediarepo_imgs (id, name, photo_date, file_path, alt) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            connection.execute("""INSERT INTO home_mediarepo_imgs (id, name, photo_date, file_path, dimensions) VALUES (%s, %s, %s, %s, %s)""", v['name'], v['photo_date'], v['file_path'],  v['dimensions'], v['shot_number'])
             print "Successful Insert home_mediarepo_imgs --> {0}".format(k)
 
         if re.findall(regex_mediarepo_music, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO home_mediarepo_music (id, name, modify_date, file_path, album) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            connection.execute("""INSERT INTO home_mediarepo_music (id, name, modify_date, file_path, duration) VALUES (%s, %s, %s, %s, %s)""", v['name'], v['photo_date'], v['file_path'],  v['dimensions'], v['shot_number'])
             print "Successful Insert home_mediarepo_music --> {0}".format
 
 ## ProdRaw RAW
 #        elif re.findall(regex_productionraw, sqlinsert_choose_test):
-#            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+#            connection.execute("""INSERT INTO production_raw_onfigure (name, photo_date, file_path, dimensions, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['name'], v['photo_date'], v['file_path'],  v['dimensions'], v['shot_number'])
 #            print "Successful Insert production_raw_onfigure --> {0}".format(k)
 
         else:
