@@ -18,7 +18,7 @@ try:
     if os.path.isdir(outdir):
         shutil.makedirs(outdir)
 except:
-    print "EXCEPTION"
+    pass#print "EXCEPTION DIR"
 
 
 subprocess.call([
