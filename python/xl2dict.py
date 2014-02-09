@@ -19,9 +19,9 @@ def readxl_outputdict(workbk=None):
     #convWriter = csv.writer(sys.stdout,delimiter=',', dialect='excel')
     numcols=sh.ncols
     outdict = {}
-    for rx in range(sh.nrows):
+    for rx in xrange(sh.nrows):
         rowdict = {}    
-        for cx in range(sh.ncols):
+        for cx in xrange(sh.ncols):
             rowhead = sh.cell_value(rowx=0,colx=cx)
             rowval = sh.cell_value(rowx=rx,colx=cx)
             rowdict[rowhead] = rowval
@@ -52,3 +52,6 @@ workbk = sys.argv[1]
 outdict = readxl_outputdict(workbk)
 compiled_rows = compile_outdict_by_rowkeys(outdict)
 
+for k,v in compiled_rows.iteritems():
+    for val in v:
+        print k,val,v[val]
