@@ -13,20 +13,36 @@ def csv_write_datedOutfile(lines):
 def readxl_outputdict(workbk=None):         
     import csv,xlrd,sys
 #    workbk = sys.argv[1]
-book = xlrd.open_workbook(workbk)##sys.argv[1])
-sh = book.sheet_by_index(0)
+    book = xlrd.open_workbook(workbk)##sys.argv[1])
+    sh = book.sheet_by_index(0)
 
-#convWriter = csv.writer(sys.stdout,delimiter=',', dialect='excel')
-numcols=sh.ncols
-outdict = {}
-for rx in range(sh.nrows):
-    rowdict = {}    
-    for cx in range(sh.ncols):
-        rowhead = sh.cell_value(rowx=0,colx=cx)
-        rowval = sh.cell_value(rowx=rx,colx=cx)
-        rowdict[rowhead] = rowval
-        outdict[rx] = rowdict
-return outdict
+    #convWriter = csv.writer(sys.stdout,delimiter=',', dialect='excel')
+    numcols=sh.ncols
+    outdict = {}
+    for rx in range(sh.nrows):
+        rowdict = {}    
+        for cx in range(sh.ncols):
+            rowhead = sh.cell_value(rowx=0,colx=cx)
+            rowval = sh.cell_value(rowx=rx,colx=cx)
+            rowdict[rowhead] = rowval
+            outdict[rx] = rowdict
+    return outdict
+
+
+def compile_outdict_by_rowkeys(outdict):
+    from collections import defaultdict
+    d = defaultdict(list)
+    for r in outdict.items():
+        dd = defaultdict(dict)
+        for val in r[1].items():
+            try:
+                print r[0],val[0],val[1]
+                dd[val[0]]=val[1]
+                d[r[0]] = dd
+                #csv_write_datedOutfile(lines.encode('ascii', 'replace'))
+            except AttributeError:
+                pass
+    return d
 
 ###########
 import sys,os
@@ -34,16 +50,5 @@ import sys,os
 workbk = sys.argv[1]
 
 outdict = readxl_outputdict(workbk)
-
-
-for rowout in outdict.items():
-    #print k,
-    for val in rowout:
-        try:
-            for valn,valv in val.items()[:]:
-                lines = rowout[0],valn,valv,
-                print lines,
-                #csv_write_datedOutfile(lines.encode('ascii', 'replace'))
-        except AttributeError:
-            pass
+compiled_rows = compile_outdict_by_rowkeys(outdict)
 
