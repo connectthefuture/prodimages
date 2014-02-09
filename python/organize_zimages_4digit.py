@@ -44,17 +44,19 @@ def organize_files_by_4digit(pathname,destdir):
         
 import os, sys, re, shutil
 if __name__ == "__main__":
-##if sys.argv[1]:
-    try:
-        rootdir = sys.argv[1]
-    except:
-        print "Sys Arg 1 must be the directory with files to organize"
 
     try:
         destdir = sys.argv[2]
     except:
         destdir = '/mnt/Production_Raw/.zImages_1'
-
-    filepaths = recursive_dirlist(rootdir)
-    for pathname in filepaths:
-        organize_files_by_4digit(pathname,destdir=destdir)
+    ##if sys.argv[1]:
+    try:
+        if os.path.isdir(sys.argv[1]):
+            rootdir = sys.argv[1]
+            filepaths = recursive_dirlist(rootdir)
+            for pathname in filepaths:
+                organize_files_by_4digit(pathname,destdir=destdir)
+        elif os.path.isfile(sys.argv[1]):
+            organize_files_by_4digit(os.path.abspath(sys.argv[1]),destdir=destdir)
+    except:
+        print "Sys Arg 1 must be the Root directory with files to organize"
