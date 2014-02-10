@@ -65,12 +65,12 @@ if __name__ == "__main__":
         except:
             print "Sys Arg 1 must be the Root directory with files to organize"
 
-    if len(sys.argv[1:]) >= 3:
-        if os.path.isdir(sys.argv[:][0]):
-            destdir=sys.argv[1]
-        else:
-            destdir = '/mnt/Production_Raw/.zImages_1'
-        
-        arglist = sys.argv[1:]
-        for f in arglist:
-            organize_files_by_4digit(os.path.abspath(f), destdir=destdir)
+#    if len(sys.argv[1:]) >= 3:
+#        if os.path.isdir(sys.argv[:][0]):
+#            destdir=sys.argv[1]
+#        else:
+#            destdir = '/mnt/Production_Raw/.zImages_1'
+#        
+#        arglist = sys.argv[1:]
+#        for f in arglist:
+#            organize_files_by_4digit(os.path.abspath(f), destdir=destdir)
