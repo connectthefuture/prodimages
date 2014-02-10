@@ -68,6 +68,7 @@ if __name__ == "__main__":
         try:
             g='/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/*/OUTPUT/*CR2.jpg'
             globbed_output_jpgs = glob.glob(g)
+            print globbed_output_jpgs
             if len(globbed_output_jpgs) > 0:
                 for f in globbed_output_jpgs: 
                     try:
