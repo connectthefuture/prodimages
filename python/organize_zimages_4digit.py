@@ -52,7 +52,7 @@ if __name__ == "__main__":
     except:
         destdir = '/mnt/Production_Raw/.zImages_1'
     
-    if len(sys.argv[1:]) <= 2 and sys.argv[1] != 'GLOBOUT':
+    if sys.argv[1] != 'GLOBOUT':
         try:
             if os.path.isdir(sys.argv[1]):
                 rootdir = sys.argv[1]
