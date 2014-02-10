@@ -44,7 +44,7 @@ def organize_files_by_4digit(pathname,destdir):
         
 import os, sys, re, shutil,glob
 if __name__ == "__main__":
-    destdir = ''
+    destdir = '/mnt/Production_Raw/.zImages_1'
     try:
         if len(sys.argv[1:]) <= 2:
         
