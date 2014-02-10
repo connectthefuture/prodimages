@@ -72,6 +72,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
     regex_Raw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.CR2$')
     regex_zjpg = re.compile(r'^/.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
+    regex_OUTPUT_jpgs = re.compile(r'^/.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?CR2\.[jpgJPG]{3}$')
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
     stylestrings = []
     stylestringsdict = {}
