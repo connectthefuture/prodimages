@@ -115,12 +115,12 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
                 stylestringsdict_tmp['photo_date'] = photo_date
-                file_path = file_path.replace('/Volumes/Production_Raw/.zImages_1/', '/studio_thumbs/')
+                file_path = file_path.replace('/mnt/Production_Raw/.zImages_1/', '/studio_thumbs/')
                 stylestringsdict_tmp['file_path'] = file_path
                 stylestringsdict_tmp['alt'] = alt
                 stylestringsdict_tmp['shot_number'] = shot_number
                 stylestringsdict[file_path] = stylestringsdict_tmp
-                file_path_reletive = file_path.replace('/Volumes/Post_Ready/zImages_1/', '/zImages/')
+                file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
                 file_path_reletive = file_path.replace('JPG', 'jpg')
                 ## Format CSV Rows Returning list instead of dict
                 #row = "{0},{1},{2},{3},{4}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
@@ -144,7 +144,7 @@ import os,sys,re
 try:
     rootdir = sys.argv[1]
 except:
-    rootdir = '/Volumes/Production_Raw/.zImages_1/'
+    rootdir = '/mnt/Production_Raw/.zImages_1/'
 walkedout = recursive_dirlist(rootdir)
 
 #regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
@@ -179,11 +179,11 @@ for k,v in stylestringsdict.iteritems():
     dfill['colorstyle'] = v['colorstyle']
     dfill['photo_date'] = v['photo_date']
     file_path = k
-    file_path = file_path.replace('/Volumes/Production_Raw/.zImages_1/', '/studio_thumbs/')
-    file_path = file_path.replace('/Volumes/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/studio_raw/')
+    file_path = file_path.replace('/mnt/Production_Raw/.zImages_1/', '/studio_thumbs/')
+    file_path = file_path.replace('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/studio_raw/')
 #     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
 #     if re.findall(regex_productionraw_Exports, file_path):
-#         file_pathz = os.path.join('/Volumes/Production_Raw/.zImages_1', colorstyle[:4], colorstyle, '_' + v['alt'], '.jpg')
+#         file_pathz = os.path.join('/mnt/Production_Raw/.zImages_1', colorstyle[:4], colorstyle, '_' + v['alt'], '.jpg')
 #         if os.path.isfile(file_pathz):
 #             file_path = file_pathz
     dfill['file_path'] = file_path
