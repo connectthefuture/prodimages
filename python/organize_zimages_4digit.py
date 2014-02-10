@@ -66,7 +66,8 @@ if __name__ == "__main__":
     elif sys.argv[1] == 'GLOBOUT':
         destdir = '/mnt/Production_Raw/.zImages_1'
         try:
-            globbed_output_jpgs = glob.glob(os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*_*/*/OUTPUT*', '*.jpg'))
+            g='/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/*/OUTPUT/*CR2.jpg'
+            globbed_output_jpgs = glob.glob(g)
             if len(globbed_output_jpgs) > 0:
                 for f in globbed_output_jpgs: 
                     try:
