@@ -69,12 +69,12 @@ if __name__ == "__main__":
             g='/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/*/OUTPUT/*CR2.jpg'
             globbed_output_jpgs = glob.glob(g)
             print globbed_output_jpgs
-            if len(globbed_output_jpgs) > 0:
-                for f in globbed_output_jpgs: 
-                    try:
-                        organize_files_by_4digit(os.path.abspath(f),destdir=destdir)
-                    except:
-                        pass
+            ##if len(globbed_output_jpgs) > 0:
+            for f in globbed_output_jpgs: 
+                try:
+                    organize_files_by_4digit(os.path.abspath(f),destdir=destdir)
+                except:
+                    pass
         except:
             pass
 
