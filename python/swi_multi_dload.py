@@ -183,7 +183,10 @@ for stylesDict in stylesDictsDict:
             url_download_file(vendor_url_scale,colorstyle_scale_file)
             print "Downloaded {}".format(colorstyle_scale_file)
         except:
-            print "Failed {}{}".format(vendor_url,colorstyle_scale_file)
+            try:
+                url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-strap'))
+                print "Downloaded {}".format(colorstyle_wrist_file.replace('-wrist','-strap'))
+            except:
 
 ## _6
         try:            
@@ -193,9 +196,11 @@ for stylesDict in stylesDictsDict:
         except:
             try:
                 url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-strap'))
+                print "Downloaded {}".format(colorstyle_wrist_file.replace('-wrist','-strap'))
             except:
                 try:
                     url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-extra1'))
+                    print "Downloaded {}".format(colorstyle_wrist_file.replace('-wrist','-extra1'))
                 except:
                     print "Failed {}{}".format(vendor_url,colorstyle_wrist_file.replace('-wrist','-extra1'))
                     
