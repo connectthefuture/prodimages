@@ -176,31 +176,30 @@ for colorstyle in colorstyle_list:
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt03.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt04.pct&outputx=1800&outputy=2160&level=1&ver=1'.format(colorstyle, version)
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt05.pct&outputx=1800&outputy=2160&level=1&ver=1'.format(colorstyle, version)
-                 
-                
-                pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt01t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                
-                pdpalt02z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt02l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt02t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt02.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-
-                pdpalt03z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt03l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt03t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt03.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
- 
-                pdpalt04z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt04l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt04t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt04.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                
-                pdpalt05z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt05l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
-                pdpalt05t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt05.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                
-                
-                for alturls in [pdpalt01z,pdpalt01l,pdpalt01t,pdpalt02z,pdpalt02l,pdpalt02t,pdpalt03z,pdpalt03l,pdpalt03t,pdpalt04z,pdpalt04l,pdpalt04t,pdpalt05z,pdpalt05l,pdpalt05t]:
-                    edgecast_listurls.append(alturls)  
+#                
+#                pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt01t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+#                
+#                pdpalt02z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt02l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt02t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt02.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+#
+#                pdpalt03z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt03l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt03t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt03.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+# 
+#                pdpalt04z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt04l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt04t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt04.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+#                
+#                pdpalt05z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt05l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+#                pdpalt05t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt05.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+#                
+#                
+#                for alturls in [pdpalt01z,pdpalt01l,pdpalt01t,pdpalt02z,pdpalt02l,pdpalt02t,pdpalt03z,pdpalt03l,pdpalt03t,pdpalt04z,pdpalt04l,pdpalt04t,pdpalt05z,pdpalt05l,pdpalt05t]:
+#                    edgecast_listurls.append(alturls)  
 #                pmlistpage='http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode=331460101&width=50&height=60'
 #                
 #                '/mgen/Bluefly/altimage.ms?img=325084201_alt05.jpg&w=75&h=89&ver=1'.format(colorstyle, version)
