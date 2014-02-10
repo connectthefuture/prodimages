@@ -204,7 +204,7 @@ for k,v in fulldict.iteritems():
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
         #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
-        regex_mediarepo = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpgJPG]$
+        #regex_mediarepo = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpgJPG]$')
         regex_productionraw = re.compile(r'.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_zimages = re.compile(r'.*?studio_thumbs.*?[0-9]{4}/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/studio_raw/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
