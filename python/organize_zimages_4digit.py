@@ -42,7 +42,7 @@ def organize_files_by_4digit(pathname,destdir):
         shutil.move(pathname,zimages_filepath)
         
         
-import os, sys, re, shutil
+import os, sys, re, shutil,glob
 if __name__ == "__main__":
     destdir = ''
     try:
@@ -51,9 +51,8 @@ if __name__ == "__main__":
             destdir = sys.argv[2]
     except:
         destdir = '/mnt/Production_Raw/.zImages_1'
-    ##if sys.argv[1]:
     
-    if len(sys.argv[1:]) <= 2:
+    if len(sys.argv[1:]) <= 2 and sys.argv[1] != 'GLOBOUT':
         try:
             if os.path.isdir(sys.argv[1]):
                 rootdir = sys.argv[1]
@@ -64,8 +63,23 @@ if __name__ == "__main__":
                 organize_files_by_4digit(os.path.abspath(sys.argv[1]),destdir=destdir)
         except:
             print "Sys Arg 1 must be the Root directory with files to organize"
+    elif sys.argv[1] == 'GLOBOUT':
+        destdir = '/mnt/Production_Raw/.zImages_1'
+        try:
+            globbed_output_jpgs = glob.glob(os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*_*/*/OUTPUT*', '*.jpg'))
+            if len(globbed_output_jpgs) > 0:
+                for f in globbed_output_jpgs: 
+                    try:
+                        organize_files_by_4digit(os.path.abspath(f),destdir=destdir)
+                    except:
+                        pass
+        except:
+            pass
 
-#    if len(sys.argv[1:]) >= 3:
+                    
+    
+    
+    #if len(sys.argv[1:]) >= 3:
 #        if os.path.isdir(sys.argv[:][0]):
 #            destdir=sys.argv[1]
 #        else:
