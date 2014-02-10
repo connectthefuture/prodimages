@@ -72,20 +72,19 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
     regex_Raw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.CR2$')
     regex_zjpg = re.compile(r'^/.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
-    regex_OUTPUT_jpgs = re.compile(r'^/.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?CR2\.[jpgJPG]{3}$')
+    regex_ZOUTPUT_jpgs = re.compile(r'^/.+?/Production_Raw/\..+?/.*?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?CR2\.[jpgJPG]{3}$')        
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
         stylestringsdict_tmp = {}
-        if re.findall(regex_zjpg,line):
+        if re.findall(regex_ZOUTPUT_jpgs,line):
             try:
                 file_path = line
                 filename = file_path.split('/')[-1]
-                colorstyle = filename.split('_')[0]
-                alt = file_path.split('_')[-2]
-                shot_number = file_path.split('_')[-1]
-                shot_number = shot_number.split('.')[0]
+                colorstyle = filename[:9]
+                alt = filename.split('_')[1]
+                shot_number = filename.split('_')[2]
                 ext = filename.split('.')[-1]
                 try:
                     ##path_date = file_path.split('/')[6][:6]
@@ -116,12 +115,12 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
                 stylestringsdict_tmp['photo_date'] = photo_date
-                file_path = file_path.replace('/mnt/Production_Raw/.zImages_1/', '/studio_thumbs/')
+                file_path = file_path.replace('/Volumes/Production_Raw/.zImages_1/', '/studio_thumbs/')
                 stylestringsdict_tmp['file_path'] = file_path
                 stylestringsdict_tmp['alt'] = alt
                 stylestringsdict_tmp['shot_number'] = shot_number
                 stylestringsdict[file_path] = stylestringsdict_tmp
-                file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+                file_path_reletive = file_path.replace('/Volumes/Post_Ready/zImages_1/', '/zImages/')
                 file_path_reletive = file_path.replace('JPG', 'jpg')
                 ## Format CSV Rows Returning list instead of dict
                 #row = "{0},{1},{2},{3},{4}".format(colorstyle,photo_date,file_path_reletive,alt,shot_number)
@@ -145,7 +144,7 @@ import os,sys,re
 try:
     rootdir = sys.argv[1]
 except:
-    rootdir = '/mnt/Production_Raw/.zImages_1/'
+    rootdir = '/Volumes/Production_Raw/.zImages_1/'
 walkedout = recursive_dirlist(rootdir)
 
 #regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
@@ -155,6 +154,7 @@ regex = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[
 regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
 ## Parse Walked Directory Paths Output stylestringssdict
 stylestringsdict = walkeddir_parse_stylestrings_out(walkedout)
+regex_ZOUTPUT_jpgs = re.compile(r'^/.+?/Production_Raw/\..+?/.*?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?CR2\.[jpgJPG]{3}$')        
 
 ## Write CSV List to dated file for Impor t to MySQL
 #csv_write_datedOutfile(stylestrings)
@@ -179,11 +179,11 @@ for k,v in stylestringsdict.iteritems():
     dfill['colorstyle'] = v['colorstyle']
     dfill['photo_date'] = v['photo_date']
     file_path = k
-    file_path = file_path.replace('/mnt/Production_Raw/.zImages_1/', '/studio_thumbs/')
-    file_path = file_path.replace('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/studio_raw/')
+    file_path = file_path.replace('/Volumes/Production_Raw/.zImages_1/', '/studio_thumbs/')
+    file_path = file_path.replace('/Volumes/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/', '/studio_raw/')
 #     regex_productionraw_Exports = re.compile(r'^/.+?/ON_FIGURE/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
 #     if re.findall(regex_productionraw_Exports, file_path):
-#         file_pathz = os.path.join('/mnt/Production_Raw/.zImages_1', colorstyle[:4], colorstyle, '_' + v['alt'], '.jpg')
+#         file_pathz = os.path.join('/Volumes/Production_Raw/.zImages_1', colorstyle[:4], colorstyle, '_' + v['alt'], '.jpg')
 #         if os.path.isfile(file_pathz):
 #             file_path = file_pathz
     dfill['file_path'] = file_path
@@ -206,6 +206,7 @@ for k,v in fulldict.iteritems():
         sqlinsert_choose_test = v['file_path']
         #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
         #regex_mediarepo = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpgJPG]$')
+        regex_ZOUTPUT_jpgs = re.compile(r'^/.+?/Production_Raw/\..+?/.*?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?CR2\.[jpgJPG]{3}$')        
         regex_productionraw = re.compile(r'.+?/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_zimages = re.compile(r'.*?studio_thumbs.*?[0-9]{4}/[0-9]{9}_[1-9]_?[0-9]{1,4}?.+?\.[jpgJPGCR2]{3}$')
         regex_productionraw_Exports = re.compile(r'^/.+?/studio_raw/.+?SELECTS/.*?[0-9]{9}_[1-9]\.[jpgJPG]{3}$')
@@ -216,11 +217,11 @@ for k,v in fulldict.iteritems():
 ## ProdRaw Thumbs
         if re.findall(regex_productionraw_zimages, sqlinsert_choose_test):
             connection.execute("""INSERT INTO production_raw_zimages (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
-            print "Successful Insert regex_productionraw_zimages --> {0}".format(k)
-## ProdRaw RAW
-#        elif re.findall(regex_productionraw, sqlinsert_choose_test):
-#            connection.execute("""INSERT INTO production_raw_onfigure (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
-#            print "Successful Insert production_raw_onfigure --> {0}".format(k)
+            print "Successful Insert production_raw_zimages --> {0}".format(k)
+# ProdRaw RAW
+        elif re.findall(regex_ZOUTPUT_jpgs, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO production_raw_zimages (colorstyle, photo_date, file_path, alt, shot_number) VALUES (%s, %s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'], v['shot_number'])
+            print "Successful Insert production_raw_zimages_ZOUT --> {0}".format(k)
 
         else:
             print "Database Table not Found for Inserting {0}".format(k)
