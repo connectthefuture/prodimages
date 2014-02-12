@@ -18,9 +18,16 @@ def get_exif(file_path):
 def get_exif_datecreate(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
-        datecreated = et.get_metadata_batch(image_filepath)[1]['XMP:DateCreated'][:10].replace(':','-')
+        datecreated = et.get_metadata(image_filepath)[1]['XMP:DateCreated'][:10].replace(':','-')
     return datecreated
     
+
+def get_exif_all_data(image_filepath):
+    import exiftool
+    with exiftool.ExifTool() as et:
+        metadata = et.get_metadata(image_filepath)[1]#['XMP:DateCreated'][:10].replace(':','-')
+    return metadata
+
 ###
 ## Write Single Metadata Tag/Value to Imagefile using pyexiv2
 def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
