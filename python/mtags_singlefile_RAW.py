@@ -108,8 +108,10 @@ def get_dbinfo_for_metatags_singlefile(f):
     import os
     metafield_dict = {}
     listed = []
-    stylefile = os.path.basename(f)
-    style = stylefile.split('_')[0]
+    stylefile = f.split('/')[-1]
+    style = stylefile[:9]
+    #stylefile = os.path.basename(f)
+    #style = stylefile.split('_')[0]
     #print style, f
     ### string = key/val as k=filepath, val=all metadata as k/v pairs
     exiftoolstring = sqlQueryMetatags(style,f)
