@@ -90,7 +90,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
     stylestringsdict = {}
     for line in walkeddir_list:
         stylestringsdict_tmp = {}
-        if re.findall(regex_consigConvertedPNG,line):
+        if re.findall(regex_consigANY,line):
             try:
                 file_path = line
                 filename = file_path.split('/')[-1]
@@ -265,7 +265,7 @@ for k,v in fulldict.iteritems():
         regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
 ## ProdRaw Thumbs
-        if re.findall(regex_consigConvertedPNG, sqlinsert_choose_test):
+        if re.findall(regex_consigANY, sqlinsert_choose_test):
             connection.execute("""INSERT INTO post_ready_consignment (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s )""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
             print "Successful Insert post_ready_consignment --> {0}".format(k)
 # ProdRaw RAW
