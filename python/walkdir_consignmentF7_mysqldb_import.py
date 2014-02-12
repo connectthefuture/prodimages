@@ -16,7 +16,7 @@ def get_exif(file_path):
     return exifdata
 
 
-def get_exif_datecreate(image_filepath):
+def get_PNG_datecreate(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
         datecreated = et.get_metadata(image_filepath)['PNG:datecreate'][:10]
@@ -121,17 +121,28 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                     pass
                 
                 #shot_number = filename.split('_')[2]
-                ext = filename.split('.')[-1]
+                ext = filename.split('.')[-1].lower()
                 try:
                     ##path_date = file_path.split('/')[6][:6]
                     ##path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
                     ##if re.findall(regex_date, path_date):
                     ##    photo_date = path_date
-                    try:
+                    if ext == 'png':
+                        try:
                         #photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-                        photo_date = get_exif_datecreate(file_path)
-                    except KeyError:
-                        photo_date = get_exif(file_path)['DateTime'][:10]
+                            photo_date = get_PNG_datecreate(file_path)
+                        except:
+                            pass
+                    if ext == 'jpg':
+                        try:
+                            photo_date = get_exif_all_data(file_path)['EXIF:CreateDate'][:10]
+                        
+                        except KeyError:
+                            try:
+                                
+                                photo_date = get_exif_all_data(file_path)['XMP:CreateDate'][:10]
+                            except:
+                                photo_date = '0000-00-00'
                     ##else:
 #                        try:
 #                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
