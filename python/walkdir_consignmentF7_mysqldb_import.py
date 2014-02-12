@@ -25,7 +25,7 @@ def get_exif_datecreate(image_filepath):
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
-        metadata = et.get_metadata(image_filepath)[1]#['XMP:DateCreated'][:10].replace(':','-')
+        metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
     return metadata
 
 ###
