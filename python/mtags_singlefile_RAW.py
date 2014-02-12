@@ -80,12 +80,19 @@ def sqlQueryMetatags(style,f):
         metatag['IPTC:Brand'] = row['brand']
         metatag['XMP:Genre'] = row['color_group']
         metatag['IPTC:ProductType'] = row['category_sub']
+        
         metatag['EventID'] = row['event_id']
         try:
             metatag['XMP:Album'] = "EventID " + str(row['event_id'])
         except:
             pass
-        metatag['IPTC:Credit'] = row['product_path']
+        
+        metatag['IPTC:Credit'] = row['vendor_style']
+        try:
+            metatag['XMP:Artist'] = row['product_path']        
+        except:
+            pass        
+        
         metatag['IPTC:CopyrightNotice'] = row['brand']
         metatag['IPTC:SpecialInstructions'] = row['production_status']
         metatag['Keywords'] = row['category_parent']
