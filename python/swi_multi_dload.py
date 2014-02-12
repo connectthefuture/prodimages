@@ -32,12 +32,23 @@ def url_download_file(url,filepath):
         urllib.urlretrieve(url, filepath)
         print "Retrieved: " + url + " ---> " + filepath
     elif urlcode_value == 404:
+        try:
+            backupurl = url.replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
+            error_check = urllib.urlopen(backupurl)
+            backup_urlcode_value = error_check.getcode()
+        except:
+            pass
         url_split = url.split('/')[-1]
         url_split = url_split.split('-')[1:]
         url_split = '-'.join(url_split)       
         url_parent = url.split('/')[:-1]
         url_parent = '/'.join(url_parent)
-        
+        try:
+            backup_spliturl = os.path.join(url_parent, url_split).replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
+            error_check = urllib.urlopen(backup_spliturl)
+            backup_spliturlcode_value = error_check.getcode()
+        except:
+            pass
         try:
             url = os.path.join(url_parent, url_split)
             error_check = urllib.urlopen(url)
@@ -48,13 +59,15 @@ def url_download_file(url,filepath):
                 urllib.urlretrieve(url, filepath)
                 print "On 2nd Attempt, Retrieved: " + url + " ---> " + filepath
 
-            elif urlcode_value == 404: 
-                print "Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
-            
+            elif backup_urlcode_value == 200: 
+                urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
+                print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
+            elif backup_spliturlcode_value == 200: 
+                urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_H.jpg'))
+                print "Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
             else:
-                print "Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
-        
-        
+                print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
+                print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)    
         except:
             print "Failed {0} on 2nd Attempt".format(url)
     
@@ -187,7 +200,7 @@ for stylesDict in stylesDictsDict:
                 url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-strap'))
                 print "Downloaded {}".format(colorstyle_wrist_file.replace('-wrist','-strap'))
             except:
-
+                 print "Failed {}{}".format(vendor_url,colorstyle_colorstyle_scale_file)
 ## _6
         try:            
         #print imagefalse,vendor_url, colorstyle_file
