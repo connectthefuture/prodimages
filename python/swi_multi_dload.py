@@ -117,8 +117,8 @@ for stylesDict in stylesDictsDict:
         vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
         vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
         vendor_url_boxset = vendor_url.replace('.jpg', '-boxset.jpg')
-        vendor_url_scale = vendor_url.replace('.jpg', '-scale.jpg')
-        vendor_url_wrist = vendor_url.replace('.jpg', '-wrist.jpg')
+        vendor_url_straps = vendor_url.replace('.jpg', '-straps.jpg')
+        vendor_url_main = vendor_url.replace('.jpg', '-main.jpg')
         
 
         
@@ -128,15 +128,15 @@ for stylesDict in stylesDictsDict:
         colorstyle_side = style  +    "_2.jpg"
         colorstyle_back = style  +    "_3.jpg"
         colorstyle_boxset = style  +  "_4.jpg"
-        colorstyle_scale = style  +   "_5.jpg"
-        colorstyle_wrist = style  +   "_6.jpg"
+        colorstyle_straps = style  +   "_5.jpg"
+        colorstyle_main = style  +   "_6.jpg"
         
         colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle)
         colorstyle_side_file = os.path.join(os.path.abspath(os.curdir), colorstyle_side)
         colorstyle_back_file = os.path.join(os.path.abspath(os.curdir), colorstyle_back)
         colorstyle_boxset_file = os.path.join(os.path.abspath(os.curdir), colorstyle_boxset)
-        colorstyle_scale_file = os.path.join(os.path.abspath(os.curdir), colorstyle_scale)
-        colorstyle_wrist_file = os.path.join(os.path.abspath(os.curdir), colorstyle_wrist)
+        colorstyle_straps_file = os.path.join(os.path.abspath(os.curdir), colorstyle_straps)
+        colorstyle_main_file = os.path.join(os.path.abspath(os.curdir), colorstyle_main)
 
 
 
@@ -180,12 +180,12 @@ for stylesDict in stylesDictsDict:
             print "Downloaded {}".format(colorstyle_boxset_file)
         except:
             try:
-                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-boxopen'))
-                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-boxopen'))
+                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-box'))
+                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-box'))
             except:
                 try:
-                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-boxclosed'))
-                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-boxclosed'))
+                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-BOX'))
+                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-BOX'))
                 except:
                     print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
 
@@ -193,29 +193,29 @@ for stylesDict in stylesDictsDict:
 ## _5
         try:            
         #print imagefalse,vendor_url, colorstyle_file
-            url_download_file(vendor_url_scale,colorstyle_scale_file)
-            print "Downloaded {}".format(colorstyle_scale_file)
+            url_download_file(vendor_url_straps,colorstyle_straps_file)
+            print "Downloaded {}".format(colorstyle_straps_file)
         except:
             try:
-                url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-strap'))
-                print "Downloaded {}".format(colorstyle_wrist_file.replace('-wrist','-strap'))
+                url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
+                print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
             except:
-                 print "Failed {}{}".format(vendor_url,colorstyle_colorstyle_scale_file)
+                 print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
 ## _6
         try:            
         #print imagefalse,vendor_url, colorstyle_file
-            url_download_file(vendor_url_wrist,colorstyle_wrist_file)
-            print "Downloaded {}".format(colorstyle_wrist_file)
+            url_download_file(vendor_url_main,colorstyle_main_file)
+            print "Downloaded {}".format(colorstyle_main_file)
         except:
             try:
-                url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-strap'))
-                print "Downloaded {}".format(colorstyle_wrist_file.replace('-wrist','-strap'))
+                url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
+                print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
             except:
                 try:
-                    url_download_file(vendor_url_wrist,colorstyle_wrist_file.replace('-wrist','-extra1'))
-                    print "Downloaded {}".format(colorstyle_wrist_file.replace('-wrist','-extra1'))
+                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
+                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
                 except:
-                    print "Failed {}{}".format(vendor_url,colorstyle_wrist_file.replace('-wrist','-extra1'))
+                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
                     
 
 
