@@ -249,7 +249,5 @@ if re.findall(regex_CR2_JPGS, filename):
             print line
         except:
             pass
-else:
-    pass
 
 
