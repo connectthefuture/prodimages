@@ -282,7 +282,7 @@ if len(edgecast_listurls) <= 550:
         #except:
         #    print sys.stderr().read()
 ####
-    for url_purge in edgecast_listurls:
+    for url_purge in set(sorted(edgecast_listurls)):
         send_purge_request_edgecast(url_purge)
         #csv_write_datedOutfile(url_purge)
 
