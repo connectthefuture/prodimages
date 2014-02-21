@@ -222,10 +222,10 @@ for colorstyle in colorstyle_list:
 #                
 #                
                 
-                edgecast_listurls.append(oldlistpg)
-                edgecast_listurls.append(newlistpg)
-                edgecast_listurls.append(pdpg)
-                edgecast_listurls.append(pmlistpg)
+            edgecast_listurls.append(oldlistpg)
+            edgecast_listurls.append(newlistpg)
+            edgecast_listurls.append(pdpg)
+            edgecast_listurls.append(pmlistpg)
 
 
 
