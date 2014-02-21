@@ -177,6 +177,11 @@ for colorstyle in colorstyle_list:
                 newlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
                 pdpg  =         'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                 pmlistpg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60'.format(colorstyle)
+                edgecast_listurls.append(oldlistpg)
+                edgecast_listurls.append(newlistpg)
+                edgecast_listurls.append(pdpg)
+                edgecast_listurls.append(pmlistpg)
+
 #                newlistpg = '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt01.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt02.pct&outputx=1800&outputy=2160&level=1&ver=1'
 #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt03.pct&outputx=1800&outputy=2160&level=1&ver=1'
@@ -222,11 +227,6 @@ for colorstyle in colorstyle_list:
 #                
 #                
                 
-            edgecast_listurls.append(oldlistpg)
-            edgecast_listurls.append(newlistpg)
-            edgecast_listurls.append(pdpg)
-            edgecast_listurls.append(pmlistpg)
-
 
 
 
