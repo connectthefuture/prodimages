@@ -193,7 +193,7 @@ for colorstyle in colorstyle_list:
                     edgecast_listurls.append(pdpalt01z)
                     pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt01l)
-                    print "SUCCESS"
+                    print "SUCCESS1"
                     #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                 
                 ### ALT 2
@@ -202,26 +202,28 @@ for colorstyle in colorstyle_list:
                     edgecast_listurls.append(pdpalt02z)
                     pdpalt02l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt02l)
-                
+                    print "SUCCESS2"
                 ### ALT 3
                 if testurl.replace('_alt01','_alt03') in pdp_urllist:
                     pdpalt03z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt03z)
                     pdpalt03l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt03l)
+                    print "SUCCESS3"
                 ### ALT 4
                 if testurl.replace('_alt01','_alt04') in pdp_urllist:
                     pdpalt04z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt04z)
                     pdpalt04l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt04l)
+                    print "SUCCESS4"
                 ### ALT 5
                 if testurl.replace('_alt01','_alt05') in pdp_urllist:
                     pdpalt05z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt05z)
                     pdpalt05l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpalt05l)
-                
+                    print "SUCCESS5"
                 ## Unique Set
                 edgecast_listurls = list(set(edgecast_listurls))
                 print pdp_urllist
