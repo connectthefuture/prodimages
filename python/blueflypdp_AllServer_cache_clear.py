@@ -11,7 +11,7 @@ def url_get_links(targeturl):
         linklist.append(link.get('src'))
         sorted(linklist)
     ## Return list of unique links
-    return set(linklist)
+    return list(set(linklist))
 
 
 
