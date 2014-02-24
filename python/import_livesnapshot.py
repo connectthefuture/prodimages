@@ -57,10 +57,10 @@ import sqlalchemy
 livesnapshot = sqlQuerylivesnapshot()
 
 ## Truncate Prior to Inserting new data
-mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-connection1 = mysql_engine.connect()
-trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-connection1.close()
+#mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+#connection1 = mysql_engine.connect()
+#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+#connection1.close()
 
 ## Trunc www_django vers wont TRUNC du to Foreign Keys
 #mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
