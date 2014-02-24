@@ -128,12 +128,17 @@ try:
     if not os.path.isdir(eFashion_dir):
         os.makedirs(eFashion_dir, 16877)
 
-
+except:
+    pass
+    
 ## Refresh and Get Renamed files then copy to eFashion Dir
 globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
 
 if globexportdir:
-    for f in globexportdir:
-        shutil.copy2(f, eFashion_dir)
+    try:
         
-
+        for f in globexportdir:
+            shutil.copy2(f, eFashion_dir)
+        
+    except:
+        pass
