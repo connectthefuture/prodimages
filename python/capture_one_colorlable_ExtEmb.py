@@ -40,6 +40,8 @@ mdata         = get_exif_all_data(filepath)
 capture1data  = get_exif_all_data(capture1settings)
 
 
-mdata                   = sorted(mdata.items())capture1data            = sorted(capture1data.items())capture_one_colortag    = capture_one_colorconv(capture1data.get('XML:Color_tag_index'))
+#mdata                   = sorted(mdata.items())#capture1data            = sorted(capture1data.items())
+
+capture_one_colortag    = capture_one_colorconv(capture1data.get('XML:Color_tag_index'))
 capture_one_rating      = capture1data.get('XML:Rating')
 
