@@ -57,16 +57,16 @@ import sqlalchemy
 livesnapshot = sqlQuerylivesnapshot()
 
 ## Truncate Prior to Inserting new data
-mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-connection1 = mysql_engine.connect()
-trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-connection1.close()
+#mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+#connection1 = mysql_engine.connect()
+#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+#connection1.close()
 
 ## Trunc www_django vers
-mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-connectiondj = mysql_engine_dj.connect()
-trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-connectiondj.close()
+#mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+#connectiondj = mysql_engine_dj.connect()
+#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+#connectiondj.close()
 
 for k,v in livesnapshot.iteritems():
     try:
@@ -76,10 +76,6 @@ for k,v in livesnapshot.iteritems():
         connection_data = mysql_engine_data.connect()
         connection_www = mysql_engine_www.connect()
         
-        try:
-            connection_data.execute(trunc_table)
-        except:
-            pass
         try:
             connection_data.execute("""INSERT INTO product_snapshot_live (colorstyle, brand, production_status, po_number, sample_status, status_dt, copy_ready_dt, image_ready_dt, production_complete_dt, start_dt, orig_start_dt, gender, category, product_type, sample_image_dt, vendor_style, color, product_subtype, sample_id, sku, track_number, track_dt, sample_location, track_user, po_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
         except sqlalchemy.exc.IntegrityError:
@@ -107,6 +103,7 @@ for k,v in livesnapshot.iteritems():
                         status_dt               = VALUES(status_dt), 
                         sample_status           = VALUES(sample_status);
                                """, v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
+            print "Updated Entry {0}".format(k)
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         
