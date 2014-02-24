@@ -122,10 +122,11 @@ if globexportdir:
 
 ### Get ShootDir Name from last "f" in previous glob and rename ops, then create if not exist
 ## eFashionPush Dir to Create for Exports used below 
-eFashion_name = file_path.split('/')[6]
-eFashion_dir = os.path.join(eFashion_root, eFashion_name)
-if not os.path.isdir(eFashion_dir):
-    os.makedirs(eFashion_dir, 16877)
+try:
+    eFashion_name = file_path.split('/')[6]
+    eFashion_dir = os.path.join(eFashion_root, eFashion_name)
+    if not os.path.isdir(eFashion_dir):
+        os.makedirs(eFashion_dir, 16877)
 
 
 ## Refresh and Get Renamed files then copy to eFashion Dir
