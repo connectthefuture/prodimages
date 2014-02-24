@@ -25,6 +25,54 @@ def capture_one_colorconv(colortagindex):
     return capture_one_colortag
 
 
+
+
+#print os.environ
+
+
+#var="exiftool -if '$jpgfromraw' -b -jpgfromraw -w %d%f_%ue.jpg -execute -if '$previewimage' -b -previewimage -w %d%f_%ue.jpg -execute -tagsfromfile @ -srcfile %d%f_%ue.jpg -overwrite_original -common_args --ext jpg DIR"
+
+
+#exifcmd = list(var.split(' '))
+def extract_preselect_jpg_fr_RAW(rawimgdir,cp1indx):
+    import os,sys,subprocess,shutil
+    
+    #rawimgdir = os.path.abspath(os.path.dirname(rawimgdir))
+    outdir = os.path.join(rawimgdir,'../../PRESELECT_OUTPUT')
+    try:
+        if os.path.isdir(outdir):
+            shutil.makedirs(outdir)
+    except:
+        pass
+    if cp1indx >= 3:
+        
+        subprocess.call([
+                
+                 'exiftool',
+                 '-if',
+                 '$jpgfromraw',
+                 '-b',
+                 '-jpgfromraw',
+                 '-w',
+                 '%d/../../PRESELECT_OUTPUT/%f_%ue.jpg',
+                 '-execute',
+                 '-if',
+                 '$previewimage',
+                 '-b',
+                 '-previewimage',
+                 '-w',
+                 '%d/../../PRESELECT_OUTPUT/%f_%ue.jpg',
+                 '-execute',
+                 '-tagsfromfile',
+                 '@',
+                 '-srcfile',
+                 '%d/../../PRESELECT_OUTPUT/%f_%ue.jpg',
+                 '-overwrite_original',
+                 '-common_args',
+                 '-ext',
+                 'CR2',
+                 rawimgdir])
+
 ######################   
 import os,sys,re
 # from collections import defaultdict
@@ -47,5 +95,6 @@ capture_one_rating      = capture1data.get('XML:Rating')
 
 if int(cp1indx) >= 3:
     cp1indx
+    extract_preselect_jpg_fr_RAW(filepath)
     print "{1}: {0}\t\n\vRating {2}".format(filepath, capture_one_colortag, capture_one_rating)
 
