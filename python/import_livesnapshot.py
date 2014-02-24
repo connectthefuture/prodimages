@@ -95,7 +95,7 @@ for k,v in livesnapshot.iteritems():
                         status_dt               = VALUES(status_dt), 
                         sample_status           = VALUES(sample_status);
                                """, v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
-            print "Updated Entry {0}".format(k)
+            #print "Updated Entry {0}".format(k)
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         
@@ -121,7 +121,7 @@ for k,v in livesnapshot.iteritems():
                         status_dt               = VALUES(status_dt), 
                         sample_status           = VALUES(sample_status);
                                """, v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
-            print "Updated Entry {0}".format(k)
+            #print "Updated Entry {0}".format(k)
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         
