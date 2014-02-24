@@ -268,18 +268,21 @@ if len(versioned_links) <= 550:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     for url_purge_local in versioned_links:
-        colorstyle = re.findall(regex, url_purge_local[0])
-        colorstyle = colorstyle.pop()[1]
-        version  = re.findall(regex, url_purge_local[0])
-        version = version.pop()[-1].split('=')[-1]
-        #print "{0} and version num {1}".format(colorstyle,version)
-        #try:
-        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-        POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-        #except:
-        #    print sys.stderr().read()
+        try:
+            colorstyle = re.findall(regex, url_purge_local[0])
+            colorstyle = colorstyle.pop()[1]
+            version  = re.findall(regex, url_purge_local[0])
+            version = version.pop()[-1].split('=')[-1]
+            #print "{0} and version num {1}".format(colorstyle,version)
+            #try:
+            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+            #except:
+            #    print sys.stderr().read()
+        except IndexError:
+            pass
     for url_purge in versioned_links:
         send_purge_request_edgecast(url_purge[0])
         #csv_write_datedOutfile(url_purge)
