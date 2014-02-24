@@ -49,7 +49,7 @@ def recursive_dirlist(rootdir):
 
 
 ####
-regex = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPG]{3}$')
+regex = re.compile(r'^/.+?/ON_FIGURE/.+?RAW.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPG]{3}$')
 
 rootdir - sys.argv[1]
 

@@ -204,6 +204,30 @@ def write_metadata_file(filename):
         except:
             pass
 
+def organize_files_by_4digit(pathname,destdir):
+    import os, sys, re, shutil
+    regex_jpeg = re.compile(r'.+?\.[a-zA-Z]{3}$')
+    #pathname = sys.argv[1]
+    #if not destdir():
+    #    destdir = sys.argv[2]
+    if os.path.isfile(pathname):
+        #try:
+        infile = os.path.abspath(pathname)
+        filename, ext = os.path.splitext(infile)
+        new_name = filename## zimages_name[:4]
+        ext_dir = os.path.join(destdir, ext)
+        new_filepath = os.path.join(ext_dir, new_name)
+        #print infile, zimages_filepath
+
+        ## Try to make 4 digit directory or pass if already present
+        try:
+            os.mkdir(ext_dir, 16877)
+        except OSError:
+            pass
+        
+        shutil.move(pathname,new_filepath)
+
+
 ##################### Begin CMDS ##############
 
 import sys
@@ -249,7 +273,4 @@ if re.findall(regex_CR2_JPGS, filename):
             print line
         except:
             pass
-else:
-    pass
-
 
