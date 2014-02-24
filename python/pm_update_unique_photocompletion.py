@@ -18,6 +18,41 @@ def update_pm_photodate(colorstyle):
     ])
 
 
+def splitswim_updatepm(file_path):
+    import re
+    regex_fullmultistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[b-zB-Z][a-zA-Z]{1,10}[1-9][0-9]{8}_[1-6].+?\.CR2')
+    #regex_multistyle = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+    regex_split       = re.compile(r'[b-zB-Z][a-zA-Z]{1,10}')
+
+    if re.findall(regex_fullmultistyle, file_path):
+        print "Multistyle".format(file_path)
+        try:
+            fname                 = file_path.split('/')[-1]
+            secondarycat          = re.split(regex_split, fname)
+            primarystyle          = secondarycat[0][:9]
+            secondarystyle        = secondarycat[1][:9]
+            # m = re.match(r"(\d+)\.?(\d+)?", "24")
+            #m = re.match(regex_fullmultistyle,file_path)
+            # m.groups('0')   # Now, the second group defaults to '0'.
+            # groupdict([m])
+            #primarystyle = m.groups('0')[0]
+            #secondarystyle = m.groups('0')[1]
+
+#            try:
+#                secondarycategory = fname.split('_')[2]
+#                print secondarycategory,"SECOND"
+#            except:
+#                pass
+#            print primarystyle,secondarystyle
+            try:
+                return primarystyle, secondarystyle
+            except:
+                pass
+        except OSError:
+            print "FailedSwimSplit {}".format(file_path)
+            pass
+
+
 def found3digit_rename(filename):
     import os
     #print filename
