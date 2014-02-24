@@ -41,8 +41,11 @@ capture1data  = get_exif_all_data(capture1settings)
 
 
 #mdata                   = sorted(mdata.items())#capture1data            = sorted(capture1data.items())
-
-capture_one_colortag    = capture_one_colorconv(capture1data.get('XML:Color_tag_index'))
+cp1indx                 = capture1data.get('XML:Color_tag_index')
+capture_one_colortag    = capture_one_colorconv(cp1indx)
 capture_one_rating      = capture1data.get('XML:Rating')
 
-print capture_one_colortag, capture_one_rating
+if int(cp1indx) >= 3:
+    cp1indx
+    print "{0}\tColorTag {1}: \vRating {2}".format(filepath, capture_one_colortag, capture_one_rating)
+
