@@ -58,9 +58,15 @@ livesnapshot = sqlQuerylivesnapshot()
 
 ## Truncate Prior to Inserting new data
 mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-connection = mysql_engine.connect()
+connection1 = mysql_engine.connect()
 trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-connection.close()
+connection1.close()
+
+## Trunc www_django vers
+mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+connectiondj = mysql_engine_dj.connect()
+trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+connectiondj.close()
 
 for k,v in livesnapshot.iteritems():
     try:
