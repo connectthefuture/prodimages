@@ -24,10 +24,10 @@ def return_versioned_urls(text):
         testfind =  regex.findall(line)
         testswatch = regex_swatch.findall(line)
         if testfind:
-            listurls.append(testfind)
+            listurls.append(line)
             #print testfind
         if testswatch:
-            listurls.append(testswatch)
+            listurls.append(line)
     return listurls
     
     
