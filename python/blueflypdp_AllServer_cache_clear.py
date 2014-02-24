@@ -18,16 +18,16 @@ def url_get_links(targeturl):
 def return_versioned_urls(text):
     import os,sys,re
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
-    #regex_swatch = re.compile(r'http://cdn.is.bluefly.com/mgen/Bluefly/swatch.ms.*')
+    regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=[0-9]{9}&width=49&height=59.*$')
     listurls = []
     for line in text:
         testfind =  regex.findall(line)
-        #testswatch = regex_swatch.findall(line)
+        testswatch = re.findall(regex_swatch,line)
         if testfind:
             listurls.append(testfind)
             #print testfind
-        #if testswatch:
-        #    listurls.append(testswatch)
+        if testswatch:
+            listurls.append(testswatch)
     return listurls
     
     
