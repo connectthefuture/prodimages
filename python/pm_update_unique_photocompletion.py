@@ -59,6 +59,7 @@ aPhoto_root = '/mnt/Post_Ready/aPhotoPush'
 
 regex = re.compile(r'.*?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
+regex_still = re.compile(r'.*?aPhotoPush/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/', todaysfolder + '*')
 basedirstill = os.path.join(aPhoto_root, todaysfolder + '*')
@@ -101,7 +102,30 @@ for line in globalldirs:
             print "IOError on {0}".format(line)
         except AttributeError:
             print "AttributeError on {0}".format(line)
+    
+    elif re.findall(regex_still,line):
+        try:
+            file_path = line
+            filename = file_path.split('/')[-1]
+            colorstyle = filename.split('_')[0]
+            alt = filename.split('_')[1]
+            shot_ext = file_path.split('_')[-1]
+            #shot_number = shot_ext.split('.')[0]
+            ext = shot_ext.split('.')[-1]
+            
+            
+            ## Unique Styles Only
+            if colorstyle not in colorstyles_unique:
+                print colorstyle
+                colorstyles_unique.append(colorstyle)
+                colorstyles_unique = sorted(colorstyles_unique)
+            else:
+                print "Already Accounted {0}".format(colorstyle)
 
+        except IOError:
+            print "IOError on {0}".format(line)
+        except AttributeError:
+            print "AttributeError on {0}".format(line)
 
 
 ############ Send Shots to PM API to update photodate
