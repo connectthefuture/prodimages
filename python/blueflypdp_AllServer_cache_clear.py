@@ -24,10 +24,10 @@ def return_versioned_urls(text):
         testfind =  regex.findall(line)
         testswatch = regex_swatch.findall(line)
         if testfind:
-            listurls.append(line)
+            listurls.append(testfind)
             #print testfind
         if testswatch:
-            listurls.append(line)
+            listurls.append(testswatch)
     return listurls
     
     
@@ -41,8 +41,7 @@ def return_cleaned_bfly_urls(text):
         if testfind:
             listurls.append(testfind)
             #print testfind
-        else:
-            pass
+
     return listurls
 
     
