@@ -22,7 +22,7 @@ def return_versioned_urls(text):
     listurls = []
     for line in text:
         testfind =  regex.findall(line)
-        testswatch = re.findall(regex_swatch,line)
+        testswatch = regex_swatch.findall(line)
         if testfind:
             listurls.append(testfind)
             #print testfind
