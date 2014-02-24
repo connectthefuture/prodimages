@@ -47,5 +47,5 @@ capture_one_rating      = capture1data.get('XML:Rating')
 
 if int(cp1indx) >= 3:
     cp1indx
-    print "{0}\tColorTag {1}: \vRating {2}".format(filepath, capture_one_colortag, capture_one_rating)
+    print "{1}: {0}\t\n\vRating {2}".format(filepath, capture_one_colortag, capture_one_rating)
 
