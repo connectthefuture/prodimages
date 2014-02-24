@@ -273,8 +273,3 @@ if re.findall(regex_CR2_JPGS, filename):
             print line
         except:
             pass
-<<<<<<< HEAD
-=======
-
->>>>>>> ee408c243c0e734d59dab738a2bb1463b707f340
-
