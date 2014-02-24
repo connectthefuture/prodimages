@@ -58,8 +58,9 @@ aPhoto_root = '/mnt/Post_Ready/aPhotoPush'
 #walkedout = recursive_dirlist(rootdir)
 
 regex = re.compile(r'.*?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
-regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
-regex_still = re.compile(r'.*?aPhotoPush/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
+#regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
+regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[CR2]{3}$')
+regex_still = re.compile(r'.*?/aPhotoPush/.+?/[0-9]{9}_[1].*?\.[jpgJPG]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/', todaysfolder + '*')
 basedirstill = os.path.join(aPhoto_root, todaysfolder + '*')
