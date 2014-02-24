@@ -19,11 +19,7 @@ def get_exif(file_path):
 def get_PNG_datecreate(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
-<<<<<<< Updated upstream
         datecreated = et.get_metadata(image_filepath)['PNG:datecreate'][:10]
-=======
-        datecreated = et.get_metadata(image_filepath)['XMP:DateCreated'][:10].replace(':','-')
->>>>>>> Stashed changes
     return datecreated
 
 
