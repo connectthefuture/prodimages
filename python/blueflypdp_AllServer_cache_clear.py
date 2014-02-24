@@ -194,11 +194,13 @@ for colorstyle in colorstyle_list:
                 edgecast_listurls.append(pdpZOOM)
                 
                 ### ALT 1
-                pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-                edgecast_listurls.append(pdpalt01z)
-                pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
-                edgecast_listurls.append(pdpalt01l)
-                
+                if 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version) in edgecast_listurls:
+                    
+                    pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+                    edgecast_listurls.append(pdpalt01z)
+                    pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+                    edgecast_listurls.append(pdpalt01l)
+                    print "SUCCESS"
                 ### ALT 2
                 pdpalt02z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                 edgecast_listurls.append(pdpalt02z)
