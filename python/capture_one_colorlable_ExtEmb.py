@@ -45,3 +45,4 @@ capture1data  = get_exif_all_data(capture1settings)
 capture_one_colortag    = capture_one_colorconv(capture1data.get('XML:Color_tag_index'))
 capture_one_rating      = capture1data.get('XML:Rating')
 
+print capture_one_colortag, capture_one_rating
