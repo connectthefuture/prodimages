@@ -94,7 +94,9 @@ aPhoto_root = '/mnt/Post_Ready/aPhotoPush'
 
 regex = re.compile(r'.*?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
 #regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[jpgJPGCR2]{3}$')
-regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[CR2]{3}$')
+#regex_raw = re.compile(r'.*?/RAW/.+?/[0-9]{9}_[1].*?\.[CR2]{3}$')
+regex_raw = re.compile(r'.*?/RAW.*?/.+?/[0-9]{9}.*?\.[CR2]{3}$')
+
 regex_still = re.compile(r'.*?/aPhotoPush/.+?/[0-9]{9}_[1].*?\.[jpgJPG]{3}$')
 #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/*/', todaysfolder + '*')
@@ -115,29 +117,50 @@ colorstyles_unique = []
 for line in globalldirs:
     #stylestringsdict_tmp = {}
     if re.findall(regex_raw,line):
+    
+        testswim = splitswim_updatepm(line)
+        if testswim:
+            swim1 = testswim[0]
+            swim2 = testswim[1]
+            try:
+                ## Unique Styles Only
+                if swim1 not in colorstyles_unique:
+                    colorstyles_unique.append(swim1)
+                    #colorstyles_unique = sorted(colorstyles_unique)
+                if swim2 not in colorstyles_unique:
+                    colorstyles_unique.append(swim2)
+                    #colorstyles_unique = sorted(colorstyles_unique)
+                else:
+                    print "Already Accounted MULTI{0}".format(colorstyle)
 
-        try:
-            file_path = line
-            filename = file_path.split('/')[-1]
-            colorstyle = filename.split('_')[0]
-            alt = filename.split('_')[1]
-            shot_ext = file_path.split('_')[-1]
-            shot_number = shot_ext.split('.')[0]
-            ext = shot_ext.split('.')[-1]
-            
-            
-            ## Unique Styles Only
-            if colorstyle not in colorstyles_unique:
-                print colorstyle
-                colorstyles_unique.append(colorstyle)
-                colorstyles_unique = sorted(colorstyles_unique)
-            else:
-                print "Already Accounted {0}".format(colorstyle)
+            except IOError:
+                print "IOError on {0}".format(line)
+            except AttributeError:
+                print "AttributeError on {0}".format(line)
+        
+        else:
+            try:
+                file_path = line
+                filename = file_path.split('/')[-1]
+                colorstyle = filename.split('_')[0]
+                alt = filename.split('_')[1]
+                shot_ext = file_path.split('_')[-1]
+                shot_number = shot_ext.split('.')[0]
+                ext = shot_ext.split('.')[-1]
+                
+                
+                ## Unique Styles Only
+                if colorstyle not in colorstyles_unique:
+                    print colorstyle
+                    colorstyles_unique.append(colorstyle)
+                    colorstyles_unique = sorted(colorstyles_unique)
+                else:
+                    print "Already Accounted {0}".format(colorstyle)
 
-        except IOError:
-            print "IOError on {0}".format(line)
-        except AttributeError:
-            print "AttributeError on {0}".format(line)
+            except IOError:
+                print "IOError on {0}".format(line)
+            except AttributeError:
+                print "AttributeError on {0}".format(line)
     
     elif re.findall(regex_still,line):
         try:
