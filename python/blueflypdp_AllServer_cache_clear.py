@@ -179,7 +179,7 @@ for colorstyle in colorstyle_list:
                 oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
                 newlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
                 pdpg  =         'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
-                pmlistpg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60'.format(colorstyle)
+                pmlistpg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
                 edgecast_listurls.append(oldlistpg)
                 edgecast_listurls.append(newlistpg)
                 edgecast_listurls.append(pdpg)
