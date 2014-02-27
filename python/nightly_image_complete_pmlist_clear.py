@@ -105,7 +105,7 @@ if len(imagelist) <= 6550:
         try:
             colorstyle = f
 
-            #send_purge_request_localis(colorstyle)
+            send_purge_request_localis(colorstyle)
             count -= 1
             print "{} Remaining styles to clear LOCAL IS".format(count)
             #except:
