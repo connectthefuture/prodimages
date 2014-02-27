@@ -89,7 +89,7 @@ def daily_img_complete_list():
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     cnx = orcl_engine.connect()
-    results=cnx.execute('''select id from pomgr.product_color where image_ready_dt >= sysdate - 10''')
+    results=cnx.execute('''select id from pomgr.product_color where image_ready_dt >= sysdate - 2''')
     reslist = [ r[0] for r in results ]
     return reslist
     
