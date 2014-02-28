@@ -84,6 +84,7 @@ from PIL import Image
 import os, sys, re, glob, datetime
 
 todaysdate = str(datetime.date.today())
+#todaysdate = '2014-01-27'
 todaysfolder = "{0}{1}{2}_".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
 
 eFashion_root = '/mnt/Post_Ready/eFashionPush'
@@ -188,12 +189,20 @@ for line in globalldirs:
 
 
 ############ Send Shots to PM API to update photodate
-
+regex_style=re.compile(r'^[0-9]{9}$')
+colorstyles_unique = set(sorted(colorstyles_unique))
+count = 0
 for colorstyle in colorstyles_unique:
-    try:
-        update_pm_photodate(colorstyle)
-    except:
-        print "FAILED UPDATE for {0}".format(colorstyle)
+    if regex_style.findall(colorstyle):
+        try:
+            print colorstyle
+            #count += 1
+            import time
+            #print count
+            time.sleep(.5)
+            update_pm_photodate(colorstyle)
+        except:
+            print "FAILED UPDATE for {0}".format(colorstyle)
 
 ########### Check for Exports Remove Shot Number & and Move to eFashionPush ##########
 import shutil
@@ -205,7 +214,7 @@ if globexportdir:
 
 ### Get ShootDir Name from last "f" in previous glob and rename ops, then create if not exist
 ## eFashionPush Dir to Create for Exports used below 
-eFashion_name = file_path.split('/')[6]
+eFashion_name = todaysfolder + 'BC_SET_B'#file_path.split('/')[6]
 eFashion_dir = os.path.join(eFashion_root, eFashion_name)
 if not os.path.isdir(eFashion_dir):
     os.makedirs(eFashion_dir, 16877)
