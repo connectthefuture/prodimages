@@ -38,12 +38,12 @@ def splitswim_updatepm(file_path):
             #primarystyle = m.groups('0')[0]
             #secondarystyle = m.groups('0')[1]
 
-#            try:
-#                secondarycategory = fname.split('_')[2]
-#                print secondarycategory,"SECOND"
-#            except:
-#                pass
-#            print primarystyle,secondarystyle
+            #try:
+            #secondarycategory = fname.split('_')[2]
+            #print secondarycategory,"SECOND"
+            #except:
+            #pass
+            #print primarystyle,secondarystyle
             try:
                 return primarystyle, secondarystyle
             except:
