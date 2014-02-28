@@ -85,7 +85,7 @@ def capture1_preandselect(filepath):
 #exifcmd = list(var.split(' '))
 
 ############################################ RUN ############################################ RUN ############################################ RUN ######################
-import os, re, sys, sqlalchemy
+import os, re, sys, sqlalchemy, datetime
 
 
 
