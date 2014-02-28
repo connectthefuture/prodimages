@@ -111,10 +111,11 @@ basedir = os.path.join('/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/' + to
 
 
 
-if sys.argv[0]:
+try:
     rootdir = sys.argv[1]
-else:
+except IndexError:
     rootdir = os.path.join(basedir,'RAW')
+
 
 rawfiles = recursive_dirlist_CR2(rootdir)
 
