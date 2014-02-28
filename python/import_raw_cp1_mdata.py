@@ -58,7 +58,7 @@ def capture1_preandselect(filepath):
         filename                = os.path.basename(filepath)
         ### RAW image metadata
         mdata                   = get_exif_all_data(filepath)
-        raw_file_keywords       = mdata.get('IPTC:Keywords')
+        raw_file_keywords       = mdata.get('Keywords')
         ### cp1 XML data
         capture1settings        = "{0}/CaptureOne/Settings50/{1}.cos".format(directory,filename)
         capture1data            = get_exif_all_data(capture1settings)
@@ -79,7 +79,7 @@ def capture1_preandselect(filepath):
             ret_dict['cp1_colortag']          = capture_one_colortag
             ret_dict['cp1_settings_filepath'] = capture1settings
             ret_dict['cp1_rating']            = capture_one_rating
-            ret_dict['model_keywords_iptc']   = raw_file_keywords
+            ret_dict['cp1_other_data']        = raw_file_keywords
     return ret_dict
 
 #exifcmd = list(var.split(' '))
@@ -145,8 +145,8 @@ for k,v in raw_settings_dict.iteritems():
             ## ProdRaw Metadata Extracted and added to DB
             if re.findall(regex_productionraw, sqlinsert_choose_test):
                 connection.execute("""
-                                    INSERT INTO production_raw_cp1_data (colorstyle, filepath, alt, shot_number, cp1_colortag, cp1_settings_filepath, cp1_rating, model_keywords_iptc) 
-                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s )""", v['colorstyle'], v['filepath'], v['alt'], v['shot_number'], v['cp1_colortag'], v['cp1_settings_filepath'],  v['cp1_rating'], v['model_keywords_iptc'])
+                                    INSERT INTO production_raw_cp1_data (colorstyle, filepath, alt, shot_number, cp1_colortag, cp1_settings_filepath, cp1_rating, cp1_other_data) 
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s )""", v['colorstyle'], v['filepath'], v['alt'], v['shot_number'], v['cp1_colortag'], v['cp1_settings_filepath'],  v['cp1_rating'], v['cp1_other_data'])
                 print "Successful Insert production_raw_cp1_data --> {0}".format(k)
             
             else:
