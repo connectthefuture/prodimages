@@ -83,7 +83,7 @@ def found3digit_rename(filename):
 from PIL import Image
 import os, sys, re, glob, datetime
 
-todaysdate = str(datetime.date.today())
+todaysdate = '2014-01-27'#str(datetime.date.today())
 #todaysdate = '2014-01-27'
 todaysfolder = "{0}{1}{2}_".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
 
