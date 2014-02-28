@@ -154,7 +154,7 @@ for line in globalldirs:
                 if colorstyle not in colorstyles_unique:
                     print colorstyle
                     colorstyles_unique.append(colorstyle)
-                    colorstyles_unique = sorted(colorstyles_unique)
+                    #colorstyles_unique = sorted(colorstyles_unique)
                 else:
                     print "Already Accounted {0}".format(colorstyle)
 
@@ -167,7 +167,7 @@ for line in globalldirs:
         try:
             file_path = line
             filename = file_path.split('/')[-1]
-            colorstyle = filename.split('_')[0]
+            colorstyle = filename[:9]
             alt = filename.split('_')[1]
             shot_ext = file_path.split('_')[-1]
             #shot_number = shot_ext.split('.')[0]
@@ -199,7 +199,7 @@ for colorstyle in colorstyles_unique:
             #count += 1
             import time
             #print count
-            time.sleep(.5)
+            time.sleep(.125)
             update_pm_photodate(colorstyle)
         except:
             print "FAILED UPDATE for {0}".format(colorstyle)
