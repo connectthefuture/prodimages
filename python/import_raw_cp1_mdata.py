@@ -121,10 +121,12 @@ rawfiles = recursive_dirlist_CR2(rootdir)
 
 raw_settings_dict = {}
 for f in rawfiles:
-    cp1xmldata = capture1_preandselect(f)
-    if cp1xmldata:
-        raw_settings_dict[f] = cp1xmldata
-        
+    try:
+        cp1xmldata = capture1_preandselect(f)
+        if cp1xmldata:
+            raw_settings_dict[f] = cp1xmldata
+    except:
+        pass
 #raw_selected_yellowgreen = {}
 #for k,v in raw_settings_dict.iteritems():
 #    if v:
@@ -134,7 +136,6 @@ for f in rawfiles:
 for k,v in raw_settings_dict.iteritems():
     if v['cp1_colortag']:
         try:
-
             ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
             mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
             connection = mysql_engine.connect()
