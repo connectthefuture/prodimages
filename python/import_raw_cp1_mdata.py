@@ -73,7 +73,7 @@ def capture1_preandselect(filepath):
             #extract_preselect_jpg_fr_RAW(filepath)
             #print "{1}: {0}\t\n\vRating {2}".format(filepath, capture_one_colortag, capture_one_rating)
             ret_dict['colorstyle']            = filepath.split('/')[-1][:9]
-            ret_dict['filepath']              = filepath
+            ret_dict['file_path']             = filepath
             ret_dict['alt']                   = filepath.split('/')[-1].split('_')[1]
             ret_dict['shot_number']           = filepath.split('/')[-1].split('_')[2].split('.')[0]
             ret_dict['cp1_colortag']          = capture_one_colortag
@@ -147,8 +147,8 @@ for k,v in raw_settings_dict.iteritems():
             ## ProdRaw Metadata Extracted and added to DB
             if re.findall(regex_productionraw, sqlinsert_choose_test):
                 connection.execute("""
-                                    INSERT INTO production_raw_cp1_data (colorstyle, filepath, alt, shot_number, cp1_colortag, cp1_settings_filepath, cp1_rating, cp1_other_data) 
-                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s )""", v['colorstyle'], v['filepath'], v['alt'], v['shot_number'], v['cp1_colortag'], v['cp1_settings_filepath'],  v['cp1_rating'], v['cp1_other_data'])
+                                    INSERT INTO production_raw_cp1_data (colorstyle, file_path, alt, shot_number, cp1_colortag, cp1_settings_filepath, cp1_rating, cp1_other_data) 
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s )""", v['colorstyle'], v['file_path'], v['alt'], v['shot_number'], v['cp1_colortag'], v['cp1_settings_filepath'],  v['cp1_rating'], v['cp1_other_data'])
                 print "Successful Insert production_raw_cp1_data --> {0}".format(k)
             
             else:
