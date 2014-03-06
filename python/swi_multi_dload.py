@@ -24,52 +24,61 @@ def sqlQuery_GetStyleVendor_ByPO(ponum):
                      
 def url_download_file(url,filepath):
     import urllib
+    
+    ## Split Vendor # to try again on fail
+    url_split = url.split('/')[-1]
+    url_split = url_split.split('-')[1:]
+    url_split = '-'.join(url_split)       
+    url_parent = url.split('/')[:-1]
+    url_parent = '/'.join(url_parent)
+    backupurl = url.replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
+    backup_spliturl = os.path.join(url_parent, url_split).replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
+    
+    
     error_check = urllib.urlopen(url)
     urlcode_value = error_check.getcode()
     print urlcode_value
     
+    
+    ### PRIMARY URL, AKA /Z/
     if urlcode_value == 200:
         urllib.urlretrieve(url, filepath)
         print "Retrieved: " + url + " ---> " + filepath
+    
     elif urlcode_value == 404:
-        try:
-            backupurl = url.replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
-            error_check = urllib.urlopen(backupurl)
-            backup_urlcode_value = error_check.getcode()
-        except:
-            pass
-        url_split = url.split('/')[-1]
-        url_split = url_split.split('-')[1:]
-        url_split = '-'.join(url_split)       
-        url_parent = url.split('/')[:-1]
-        url_parent = '/'.join(url_parent)
-        try:
-            backup_spliturl = os.path.join(url_parent, url_split).replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
-            error_check = urllib.urlopen(backup_spliturl)
-            backup_spliturlcode_value = error_check.getcode()
-        except:
-            pass
-        try:
-            url = os.path.join(url_parent, url_split)
-            error_check = urllib.urlopen(url)
-            urlcode_value = error_check.getcode()
-            #print urlcode_value
-            
-            if urlcode_value == 200:
-                urllib.urlretrieve(url, filepath)
-                print "On 2nd Attempt, Retrieved: " + url + " ---> " + filepath
+        
+        ### Split URL, /Z/
+        #try:
+        urlsplit = os.path.join(url_parent, url_split)
+        error_check = urllib.urlopen(urlsplit)
+        split_urlcode_value = error_check.getcode()        
+        
+        ### Backup URL, AKA /H/
+        error_check = urllib.urlopen(backupurl)
+        backup_urlcode_value = error_check.getcode()
 
-            elif backup_urlcode_value == 200: 
-                urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
-                print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
-            elif backup_spliturlcode_value == 200: 
-                urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_H.jpg'))
-                print "Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
-            else:
-                print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
-                print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)    
-        except:
-            print "Failed {0} on 2nd Attempt".format(url)
+        ### BackupSplit
+        error_check = urllib.urlopen(backup_spliturl)
+        backup_spliturlcode_value = error_check.getcode()
+        
+
+            
+        if split_urlcode_value == 200:
+            urllib.urlretrieve(urlsplit, filepath)
+            print "On 2nd Attempt, Retrieved: " + urlsplit + " ---> " + filepath
+            
+        elif backup_urlcode_value == 200: 
+            urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
+            print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
+        elif backup_spliturlcode_value == 200: 
+            urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
+            print "Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
+        else:
+            print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
+            print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)    
+        
+#        except:
+#            print "Failed {0} on 2nd Attempt".format(url)
     
     else:
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
@@ -90,15 +99,22 @@ import os,sys
 #except:
 #    print "Enter a PO Number as 1st Arg or Nothing will Happen"
 import csv
-file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
 
-polist = []
-with open(file, 'rbU') as f:
-    reader = csv.reader(f, dialect=csv)    
-    for ponumber in reader:
-        polist.append(ponumber[1])
+
+try:
+    polist = set(list(sys.argv[:]))
+except:
     
-polist = set(polist)
+    file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
+
+    polist = []
+    with open(file, 'rbU') as f:
+        reader = csv.reader(f, dialect=csv)    
+        for ponumber in reader:
+            polist.append(ponumber[1])
+        
+
+
 
 stylesDictsDict = []
 for ponum in polist:
@@ -124,12 +140,12 @@ for stylesDict in stylesDictsDict:
         
         style = str(v['colorstyle'])
         colorstyle = ''
-        colorstyle =  style +         "_1.jpg"
-        colorstyle_side = style  +    "_2.jpg"
-        colorstyle_back = style  +    "_3.jpg"
-        colorstyle_boxset = style  +  "_4.jpg"
-        colorstyle_straps = style  +   "_5.jpg"
-        colorstyle_main = style  +   "_6.jpg"
+        colorstyle =  style          +   "_1.jpg"
+        colorstyle_side = style      +   "_2.jpg"
+        colorstyle_back = style      +   "_3.jpg"
+        colorstyle_boxset = style    +   "_4.jpg"
+        colorstyle_straps = style    +   "_5.jpg"
+        colorstyle_main = style      +   "_6.jpg"
         
         colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle)
         colorstyle_side_file = os.path.join(os.path.abspath(os.curdir), colorstyle_side)
@@ -140,27 +156,28 @@ for stylesDict in stylesDictsDict:
 
 
 
-## _1
+        ## _1
         #imagefalse = sqlQuery_GetStyleVendor_ByPO()
         #if imagefalse:
-#        try:            
-#        #print imagefalse,vendor_url, colorstyle_file
-#            url_download_file(vendor_url,colorstyle_file)
-#        except:
-#            print "Failed {}{}".format(vendor_url,colorstyle_file)
-#            #print swiurl
-
-## _2
         try:            
-#        #print imagefalse,vendor_url, colorstyle_file
+        #print imagefalse,vendor_url, colorstyle_file
+            url_download_file(vendor_url,colorstyle_file)
+        except:
+            print "Failed {}{}".format(vendor_url,colorstyle_file)
+
+            #print swiurl
+        ## IF THE PRIMARY EXISTS, TRY THE REST, ELSE MOVE TO NEXT STYLE
+        ## _2
+        try:            
+    #        #print imagefalse,vendor_url, colorstyle_file
             url_download_file(vendor_url_side,colorstyle_side_file)
             print "Downloaded {}".format(colorstyle_side_file)
         except:
             print "Failed {}{}".format(vendor_url,colorstyle_side_file)
 
-## _3
+    ## _3
         try:            
-#        #print imagefalse,vendor_url, colorstyle_file
+    #        #print imagefalse,vendor_url, colorstyle_file
             url_download_file(vendor_url_back,colorstyle_back_file)
             print "Downloaded {}".format(colorstyle_back_file)
         except:
@@ -173,7 +190,7 @@ for stylesDict in stylesDictsDict:
                 except:
                     print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
 
-## _4
+    ## _4
         try:            
         #print imagefalse,vendor_url, colorstyle_file
             url_download_file(vendor_url_boxset,colorstyle_boxset_file)
@@ -190,35 +207,34 @@ for stylesDict in stylesDictsDict:
                     print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
 
 
-## _5
-        try:            
-        #print imagefalse,vendor_url, colorstyle_file
-            url_download_file(vendor_url_straps,colorstyle_straps_file)
-            print "Downloaded {}".format(colorstyle_straps_file)
-        except:
-            try:
-                url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
-                print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
-            except:
-                 print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
-## _6
-        try:            
-        #print imagefalse,vendor_url, colorstyle_file
-            url_download_file(vendor_url_main,colorstyle_main_file)
-            print "Downloaded {}".format(colorstyle_main_file)
-        except:
-            try:
-                url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
-                print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
+    ## _5
+            try:            
+            #print imagefalse,vendor_url, colorstyle_file
+                url_download_file(vendor_url_straps,colorstyle_straps_file)
+                print "Downloaded {}".format(colorstyle_straps_file)
             except:
                 try:
-                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
-                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
+                    url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
+                    print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
                 except:
-                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
-                    
+                     print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
+    ## _6
+            try:            
+            #print imagefalse,vendor_url, colorstyle_file
+                url_download_file(vendor_url_main,colorstyle_main_file)
+                print "Downloaded {}".format(colorstyle_main_file)
+            except:
+                try:
+                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
+                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
+                except:
+                    try:
+                        url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
+                        print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
+                    except:
+                        print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
 
-
+        
 #
 #for stylesDict in stylesDictsDict:
 #    for k,v in stylesDict.iteritems():
