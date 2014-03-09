@@ -10,7 +10,7 @@ Today=`date +%Y-%m-%d`
 if [ "$#" -lt 1 ];
 then
     rootdir=/mnt/Production_Raw/.zImages_1
-    dirs=`find "$rootdir" -type d -wholename \*/[3-9][0-9][0-9][0-9]/\* -maxdepth 1`
+    dirs=`find "$rootdir" -type d -wholename \*/[3-9][0-9][0-9][0-9]/\* -maxdepth 1 -atime -3`
     #identify -precision 5 -define identify:locate=maximum -define identify:limit=3
 
 else if [ "$#" -gt 1 ];
@@ -19,9 +19,9 @@ then
 
 else
     ## If the sysargv1 listing has more jpgs than directories, dont decend dirs and do the root dir only
-    dirs=`find "$1" -type d -maxdepth 1 -wholename \*/[3-9][0-9][0-9][0-9]/\*`
+    dirs=`find "$1" -type d -wholename \*/[3-9][0-9][0-9][0-9]/\* -maxdepth 1 -atime -3`
     
-    if [ `echo "$dirs" | wc -l` -lt `find "$dirs" -name \*\.jp[g$] -atime -3 -maxdepth 1 | wc -l` ];
+    if [ `echo "$dirs" | wc -l` -lt `find "$dirs" -name \*\.jp[g$] -maxdepth 1 -atime -3 | wc -l` ];
     then
         dirs="$1"
     fi;
@@ -31,7 +31,7 @@ fi;
 
 for d in "$dirs"; 
 do 
-for f in `find "$d" -type f`; 
+for f in `find "$d" -type f -maxdepth 1 -atime -3`; 
 do 
     convert -auto-orient "$f" -resize 600x \
         -filter Mitchell -compress none -colorspace srgb \
