@@ -39,7 +39,7 @@ for d in "$dirs"; do
 for f in `find "$d" -type f -wholename \*\/[^.]\*\.jp[g$] -maxdepth 1`; do 
 ## First Test if a thumb has already been made and skip if exists since it is a long process and waste to redo
 #if [[ `test -f "$f"_thumb` -gt 0 ]]; then
-    echo $f
+    #echo $f
     convert "$f" -auto-orient \
         -background "rgb(255,255,255)" \
         -filter Mitchell \
@@ -47,7 +47,7 @@ for f in `find "$d" -type f -wholename \*\/[^.]\*\.jp[g$] -maxdepth 1`; do
         -unsharp 10% \
         -quality 65% "$f"_thumb.jpg; 
     
-    echo "MAKINGTHUMb77"
+    #echo "MAKINGTHUMb77"
 # -filter sinc \
 # -set filter:window=jinc \
 # -set filter:lobes=8 \
