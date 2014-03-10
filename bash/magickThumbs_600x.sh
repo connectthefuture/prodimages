@@ -20,7 +20,7 @@ elif [ "$#" -gt 1 ]; then
     dirs="$@"  
     ##=`find "$@" -type d -maxdepth 1 -wholename \*/[3-9][0-9][0-9][0-9]/\*`
 
-else
+elif [ "$#" -eq 1 ]; then
     ## If the sysargv1 listing has more jpgs than directories, dont decend dirs and do the root dir only
     echo "3"
     #dirs=`find "'"$1"'" -type d -wholename \*/[3-9][0-9][0-9][0-9]/\* -maxdepth 1 -atime -3`
@@ -36,19 +36,27 @@ fi;
 for d in "$dirs"; do
     #echo "33Find"
 
-for f in `find "$d" -type f -maxdepth 1 -atime -43`; do 
+for f in `find "$d" -type f -wholename \*\/[^.]\*\.jp[g$] -maxdepth 2`; do 
 ## First Test if a thumb has already been made and skip if exists since it is a long process and waste to redo
-if [[ `test -f "$f"_thumb` -gt 0 ]]; then
+#if [[ `test -f "$f"_thumb` -gt 0 ]]; then
+    echo $f
+    convert "$f" -auto-orient \
+        -background "rgb(255,255,255)" \
+        -filter Mitchell \
+        -resize 600x \
+        -unsharp 10% \
+        -quality 65% "$f"_thumb.jpg; 
     
-    convert -auto-orient "$f" -resize 600x \
-        -filter Mitchell -compress  -colorspace srgb \
-        -format jpeg -adaptive-sharpen 100 -unsharp 50 \
-        -quality 60 "$f"_thumb ; 
-         echo "MAKINGTHUMb77"
+    echo "MAKINGTHUMb77"
+# -filter sinc \
+# -set filter:window=jinc \
+# -set filter:lobes=8 \
+# -resize 150%
 
-else
-    echo "$f"_thumb"AlreadyExists"
-fi;
+#-draw 'bezier 20,50 45,100 45,0 70,50'
+#else
+#    echo "$f"_thumb"AlreadyExists"
+#fi;
 
 done; 
 done;
