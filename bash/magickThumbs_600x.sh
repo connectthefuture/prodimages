@@ -35,7 +35,7 @@ for f in `find "$1" -type f -wholename \*\/[^.]\*\[0-9].jp[g$] -mindepth 1 -maxd
             echo ThumbExists_"$f"
     
     elif [ ! -s "$f"_thumb ]; then
-        echo "$f"_thumb     
+        echo Created"$f"_thumb     
         convert "$f" -auto-orient \
             -background "rgb(255,255,255)" \
             -filter Mitchell \
