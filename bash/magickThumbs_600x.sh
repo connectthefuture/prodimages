@@ -28,10 +28,13 @@ Today=`date +%Y-%m-%d`
 #for d in "$dirs"; do
 #    #echo "33Find"
 #    echo $d
-for f in `find "$1" -type f -wholename \*\/[^.]\*\.jp[g$] -mindepth 1 -maxdepth 1`; do 
+for f in `find "$1" -type f -wholename \*\/[^.]\*\[0-9].jp[g$] -mindepth 1 -maxdepth 1`; do 
 ## First Test if a thumb has already been made and skip if exists since it is a long process and waste to redo
 #if [[ `test -f "$f"_thumb` -gt 0 ]]; then
-    if [ ! -f "$f"_thumb ]; then
+    if [ -f $f_thumb ]; then
+        echo ThumbExists_"$f"
+        
+    elif [ ! -f $f_thumb ]; then
         echo "$f"_thumb     
         convert "$f" -auto-orient \
             -background "rgb(255,255,255)" \
@@ -39,8 +42,7 @@ for f in `find "$1" -type f -wholename \*\/[^.]\*\.jp[g$] -mindepth 1 -maxdepth 
             -resize 600x \
             -unsharp 10% \
             -quality 65% "$f"_thumb.jpg; 
-    elif [ -f "$f"_thumb ]; then
-        echo ThumbExists_"$f"
+
     fi;
 
 done;
