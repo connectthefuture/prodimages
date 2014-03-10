@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 
-
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
@@ -88,7 +87,8 @@ mdata         = get_exif_all_data(filepath)
 capture1data  = get_exif_all_data(capture1settings)
 
 
-#mdata                   = sorted(mdata.items())#capture1data            = sorted(capture1data.items())
+#mdata                   = sorted(mdata.items())
+#capture1data            = sorted(capture1data.items())
 cp1indx                 = capture1data.get('XML:Color_tag_index')
 capture_one_colortag    = capture_one_colorconv(cp1indx)
 capture_one_rating      = capture1data.get('XML:Rating')
