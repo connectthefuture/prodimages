@@ -4,7 +4,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-    querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT null"
+    querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT is null"
 
 
     result = connection.execute(querymake_StylesByPO)
@@ -89,7 +89,7 @@ import os,sys
 #    print "Enter a PO Number as 1st Arg or Nothing will Happen"
 
 try:
-    polist = set(list(sys.argv[:]))
+    polist = set(list(sys.argv[1:]))
 except:
     import csv
     file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
@@ -99,7 +99,7 @@ except:
         for ponumber in reader:
             polist.append(ponumber[1])
 
-
+print polist
 stylesDictsDict = []
 for ponum in polist:
     try:
