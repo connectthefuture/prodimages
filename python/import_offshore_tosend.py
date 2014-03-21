@@ -6,60 +6,26 @@ Created on sun March 18 14:48:56 2014
 
 @author: jbragato
 """
+#orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
+
 def sqlQueryOffshoreStatus():
     import sqlalchemy
-    #orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     connection = orcl_engine.connect()
-
-    querymake_offshore_ready="""SELECT DISTINCT
-                              POMGR_SNP.PRODUCT_SNAPSHOT.COLORSTYLE                         AS "colorstyle",
-                              POMGR_SNP.PRODUCT_SNAPSHOT.VENDOR_STYLE_NO                    AS "vendor_style",
-                              SUM(POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD)                   AS "received_ct",
-                              SUM(POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND)             AS "available_ct",
-                              POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME                        AS "gender",
-                              POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME                        AS "category",
-                              POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME                        AS "product_type",
-                              POMGR_SNP.PRODUCT_SNAPSHOT.ACTIVE                             AS "active",
-                              POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE                         AS "start_dt",
-                              POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY                        AS "image_ready_dt"
-                            FROM
-                              POMGR_SNP.PRODUCT_SNAPSHOT
-                            WHERE
-                              POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE        < TRUNC(SysDate)
-                            AND 
-                              POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD       > 0
-                            AND 
-                              POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND > 0
-                            GROUP BY
-                              POMGR_SNP.PRODUCT_SNAPSHOT.COLORSTYLE,
-                              POMGR_SNP.PRODUCT_SNAPSHOT.VENDOR_STYLE_NO,
-                              POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME,
-                              POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME,
-                              POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME,
-                              POMGR_SNP.PRODUCT_SNAPSHOT.ACTIVE,
-                              POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE,
-                              POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY
-                            ORDER BY
-                              "colorstyle" DESC"""
+    querymake_offshore_ready='''POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME AS "gender", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME AS "category", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME AS "product_type", POMGR_SNP.PRODUCT_SNAPSHOT.ACTIVE AS "active", POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE AS "start_dt", POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY AS "image_ready_dt" FROM POMGR_SNP.PRODUCT_SNAPSHOT WHERE POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE < TRUNC(SysDate) AND POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD > 0 AND POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND > 0 GROUP BY POMGR_SNP.PRODUCT_SNAPSHOT.COLORSTYLE, POMGR_SNP.PRODUCT_SNAPSHOT.VENDOR_STYLE_NO, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.ACTIVE, POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE, POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY ORDER BY "colorstyle" DESC'''
     result = connection.execute(querymake_offshore_ready)
     offshore_ready = {}
     for row in result:
         offshore_ready_tmp = {}
-        offshore_ready_tmp['colorstyle']              = row['colorstyle']
-        offshore_ready_tmp['vendor_style']            = row['vendor_style']
-        offshore_ready_tmp['received_ct']             = row['received_ct']
-        offshore_ready_tmp['available_ct']            = row['available_ct']
-        offshore_ready_tmp['gender']                  = row['gender']
-        offshore_ready_tmp['category']                = row['category']
-        offshore_ready_tmp['product_type']            = row['product_type']
-        offshore_ready_tmp['active']                  = row['active']
-        offshore_ready_tmp['start_dt']                = row['start_dt']
-        offshore_ready_tmp['image_ready_dt']          = row['image_ready_dt']
-        #print "Found Style {0}".format(row['colorstyle'])
-        ## colorstyle as dict KEY
+        offshore_ready_tmp['colorstyle'] = ['colorstyle']
+        offshore_ready_tmp['vendor_style'] = row['vendor_style']
+        offshore_ready_tmp['received_ct'] = row['received_ct']
+        offshore_ready_tmp['available_ct'] = row['available_ct']
+        offshore_ready_tmp['gender'] = row['gender']
+        offshore_ready_tmp['category'] = row['category']
+        offshore_ready_tmp['product_type'] = row['product_type']
+        offshore_ready_tmp['active'] = row['active']
         offshore_ready[row['colorstyle']] = offshore_ready_tmp
-
     connection.close()
     return offshore_ready
 
@@ -96,8 +62,8 @@ for k,v in offshore_styles.iteritems():
         ### www_django
         try:
             print "Begin Execute"
-            startdt = datetime.date(v['start_dt'])
-            imgdt = datetime.date(v['image_ready_dt'])
+            startdt = v['start_dt']
+            imgdt =   v['image_ready_dt']
             connection_www.execute("""
                     INSERT INTO offshore_status 
                         (colorstyle, vendor_style, received_ct, available_ct, gender, category, product_type, active, start_dt, image_ready_dt)
