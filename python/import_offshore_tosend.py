@@ -72,6 +72,8 @@ for k,v in offshore_styles.iteritems():
     except sqlalchemy.exc.DatabaseError:
         continue
         print "DBERR" + k
+
+
         
         ## must move this section above similar www_django one    
         ## data_imagepaths
