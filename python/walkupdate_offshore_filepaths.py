@@ -42,19 +42,35 @@ def csv_write_datedOutfile(lines):
     for line in lines:
         with open(f, 'ab+') as csvwritefile:
             writer = csv.writer(csvwritefile, delimiter='\n')
-            writer.writerows([lines])
+            writer.writerows(lines)
 
 ############################ Run ######################################################## Run ############################
 ############################ Run ######################################################## Run ############################
 
 from PIL import Image
-import os,sys,re
+import os,sys,re,shutil
 
 rootdir = sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
 regex = re.compile(r'^/.+?\.[a-zA-Z2]{3}$')
+regex_india_ready = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/.*?[0-9]{9}\.[pngPNG]{3}$')
+regex_india_prezipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/batch_[0-9]{6}/.*?\.[pngPNG]{3}$')
+regex_india_prezip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/batch_[0-9]{6}\.[zipZIP]{3}$')
+
+regex_india_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned/batch_[0-9]{6}\.[zipZIP]{3}$')
+regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned/batch_[0-9]{6}/.*?\.[pngPNG]{3}$')
+
+regex_l_uploading = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/3_ListPage_to_Load/.*?[0-9]{9}_l\.[jpgJPG]{3}$')
+
+regex_arch_l_uploded = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/JPG/[0-9]{9}_[LP]\.[jpgJPG]{3}$')
+regex_arch_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/ZIP/batch_[0-9]{6}\.[zipZIP]{3}$')
+regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/PNG/batch_[0-9]{6}/.*?_LP.[pngPNG]{3}$')
 #regex = re.compile(r'.+?/.[jpgJPG]{3}$')
+outsource_senddir1     = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending'
+outsource_returndir2   = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned'
+outsource_largejpgdir3 = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/3_ListPage_to_Load'
+outsource_archdir4     = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive'
 
 stylestrings = []
 stylestringsdict = {}
@@ -62,31 +78,44 @@ for line in walkedout:
     stylestringsdict_tmp = {}
     if re.findall(regex,line):
         try:
-            file_path = line
-            filename = file_path.split('/')[-1]
-            colorstyle = filename.split('_')[0]
-            alt_ext = file_path.split('_')[-1]
-            alt = alt_ext.split('.')[0]
-            ext = alt_ext.split('.')[-1]
+            file_path      = line
+            filename       = file_path.split('/')[-1]
+            directorypath  = os.path.dirname(file_path)
+            zip_groupdir   = directorypath.split('/')[-2]
+            colorstyle     = filename[:9]
+            ext            = filename.split('.')[-1]
+            archivedir     = ext.upper()
+            archivehash4   = filename[:4]
 
-            try:
-                photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-            except KeyError:
-                try:
-                    photo_date = get_exif(file_path)['DateTime'][:10]
-                except KeyError:
-                    photo_date = 0000-00-00
+            file_path_pre     = os.path.join(outsource_senddir1, archivedir, filename)
+            file_path_post    = os.path.join(outsource_returndir2, zip_groupdir, filename)
+            file_path_zip  = os.path.join(outsource_senddir1, zip_groupdir)
+            file_path_prezip  = os.path.join(outsource_senddir1, zip_groupdir + ext)
+            file_path_postzip  = os.path.join(outsource_archdir4, archivedir, zip_groupdir + ext)
 
-            photo_date = photo_date.replace(':','-')
+#            try:
+#                photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+#            except KeyError:
+#                try:
+#                    photo_date = get_exif(file_path)['DateTime'][:10]
+#                except KeyError:
+#                    photo_date = 0000-00-00
+#            photo_date = photo_date.replace(':','-')
+
+            stylestringsdict_tmp['file_path_pre'] = file_path_pre
+            stylestringsdict_tmp['file_path_post'] = file_path_post
+            stylestringsdict_tmp['file_path_zip'] = file_path_zip
+            stylestringsdict_tmp['file_path_prezip'] = file_path_prezip
+            stylestringsdict_tmp['file_path_postzip'] = file_path_postzip
             stylestringsdict_tmp['colorstyle'] = colorstyle
-            stylestringsdict_tmp['photo_date'] = photo_date
-            stylestringsdict_tmp['file_path'] = file_path
-            stylestringsdict_tmp['alt'] = alt
+            stylestringsdict_tmp['archivedir'] = archivedir
+            stylestringsdict_tmp['zip_groupdir'] = zip_groupdir
+            stylestringsdict_tmp['directorypath'] = directorypath
             stylestringsdict[file_path] = stylestringsdict_tmp
-            file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
+#file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
             file_path_reletive = file_path.replace('JPG', 'jpg')
-            ## Format CSV Rows
-            row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
+# Format CSV Rows
+            row = "{0},{1},{2},{3},{4}".format(colorstyle,zip_groupdir,file_path_pre,file_path_post,file_path_zip)
             print row
             stylestrings.append(row)
         except IOError:
@@ -97,19 +126,19 @@ for line in walkedout:
 ## Write CSV List to dated file for Import to MySQL
 #csv_write_datedOutfile(stylestrings)
 
-
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy
-
 ## First compile the SQL Fields as key value pairs
 fulldict = {}
 for k,v in stylestringsdict.iteritems():
     dfill = {}
     dfill['colorstyle'] = v['colorstyle']
-    dfill['photo_date'] = v['photo_date']
+    #dfill['photo_date'] = v['photo_date']
     file_path = k
-    file_path = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-    file_path = file_path.replace('/mnt/Post_Ready/Retouch_', '/Retouch_')
+    if regex_india_ready.findall(file_path):
+        file_path = file_path.replace('/mnt/Post_Complete/SendReceive_BGRemoval/1_Sending', '/Retouch_')
+    elif 
+        file_path = file_path.replace('/mnt/Post_Complete/SendReceive_BGRemoval/2_Returned', '/zImages/')
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     fulldict[k] = dfill
@@ -124,20 +153,6 @@ for k,v in fulldict.iteritems():
         ## /mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-
-        regex_india_ready = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/.*?[0-9]{9}\.[pngPNG]{3}$')
-        regex_india_prezipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/batch_[0-9]{6}/.*?\.[pngPNG]{3}$')
-        regex_india_prezip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/batch_[0-9]{6}\.[zipZIP]{3}$')
-
-        regex_india_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned/batch_[0-9]{6}\.[zipZIP]{3}$')
-        regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned/batch_[0-9]{6}/.*?\.[pngPNG]{3}$')
-
-        regex_l_uploading = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/3_ListPage_to_Load/.*?[0-9]{9}_l\.[jpgJPG]{3}$')
-
-        regex_arch_l_uploded = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/JPG/[0-9]{9}_[LP]\.[jpgJPG]{3}$')
-        regex_arch_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/ZIP/batch_[0-9]{6}\.[zipZIP]{3}$')
-        regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/PNG/batch_[0-9]{6}/.*?_LP.[pngPNG]{3}$')
-
 
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
