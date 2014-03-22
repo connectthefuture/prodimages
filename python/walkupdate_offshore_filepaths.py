@@ -135,8 +135,9 @@ for k,v in stylestringsdict.iteritems():
     dfill['colorstyle'] = v['colorstyle']
     #dfill['photo_date'] = v['photo_date']
     file_path = k
-    dfill['file_path'] = file_path
-    dfill['alt'] = v['alt']
+    dfill['file_path_pre'] = v['file_path_pre']
+    dfill['file_path_post'] = v['file_path_post']
+    dfill['file_path_zip'] = v['file_path_zip']
     fulldict[k] = dfill
 
 
