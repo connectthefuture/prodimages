@@ -75,7 +75,7 @@ for k,v in offshore_styles.iteritems():
                         active = VALUES(active), 
                         start_dt = VALUES(start_dt),
                         image_ready_dt = VALUES(image_ready_dt); 
-                        """, v['colorstyle'], v['vendor_style'], v['received_ct'], 
+                        """, str(k), v['vendor_style'], v['received_ct'], 
                              v['available_ct'], v['gender'], v['category'], v['product_type'], 
                              v['active'], ['start_dt'], ['image_ready_dt'])
             print "Successful Insert offshore_status --> {0}".format(k)
