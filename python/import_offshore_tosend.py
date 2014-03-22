@@ -58,7 +58,7 @@ for k,v in offshore_styles.iteritems():
         mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
         connection_data = mysql_engine_data.connect()
-        connection_www = mysql_engine_www.connect()
+        
         print "Connext"
         try:
             print "Begin Execute"
