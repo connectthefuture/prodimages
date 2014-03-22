@@ -25,6 +25,7 @@ def sqlQueryOffshoreStatus():
         offshore_ready_tmp['category'] = row['category']
         offshore_ready_tmp['product_type'] = row['product_type']
         offshore_ready_tmp['active'] = row['active']
+        offshore_ready_tmp['start_dt'] = row['start_dt']
         offshore_ready[row['colorstyle']] = offshore_ready_tmp
     connection.close()
     return offshore_ready
@@ -53,19 +54,16 @@ for k,v in offshore_styles.iteritems():
     import datetime
     print "Off"
     try:
-
         mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
         connection_data = mysql_engine_data.connect()
         connection_www = mysql_engine_www.connect()
         print "Connext"
-        ### www_django
         try:
             print "Begin Execute"
             startdt = v['start_dt']
             imgdt =   v['image_ready_dt']
-            connection_www.execute("""
-                    INSERT INTO offshore_status 
+            connection_www.execute("""INSERT INTO offshore_status 
                         (colorstyle, vendor_style, received_ct, available_ct, gender, category, product_type, active, start_dt, image_ready_dt)
                         (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
                     ON DUPLICATE KEY UPDATE 
@@ -82,13 +80,8 @@ for k,v in offshore_styles.iteritems():
                              v['available_ct'], v['gender'], v['category'], v['product_type'], 
                              v['active'], startdt, imgdt)
             print "Successful Insert offshore_status --> {0}".format(k)
-            #print "Updated Entry {0}".format(k)
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
-
-
-
-
     except sqlalchemy.exc.IntegrityError:
         print "Duplicate Entry {0}".format(k)
     except sqlalchemy.exc.DatabaseError:
