@@ -87,7 +87,7 @@ for line in walkedout:
             archivedir     = ext.upper()
             archivehash4   = filename[:4]
 
-            file_path_pre     = os.path.join(outsource_senddir1, archivedir, filename)
+            file_path_pre     = os.path.join(outsource_senddir1, filename)
             file_path_post    = os.path.join(outsource_returndir2, zip_groupdir, filename)
             file_path_zip  = os.path.join(outsource_senddir1, zip_groupdir)
             file_path_prezip  = os.path.join(outsource_senddir1, zip_groupdir + ext)
@@ -135,10 +135,6 @@ for k,v in stylestringsdict.iteritems():
     dfill['colorstyle'] = v['colorstyle']
     #dfill['photo_date'] = v['photo_date']
     file_path = k
-    if regex_india_ready.findall(file_path):
-        file_path = file_path.replace('/mnt/Post_Complete/SendReceive_BGRemoval/1_Sending', '/Retouch_')
-    elif 
-        file_path = file_path.replace('/mnt/Post_Complete/SendReceive_BGRemoval/2_Returned', '/zImages/')
     dfill['file_path'] = file_path
     dfill['alt'] = v['alt']
     fulldict[k] = dfill
@@ -148,23 +144,20 @@ for k,v in stylestringsdict.iteritems():
 for k,v in fulldict.iteritems():
     try:
 
-        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@localhost:3301/www_django')
+#        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
         connection = mysql_engine.connect()
         ## /mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
 
-        if re.findall(regex_photoselects, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
-            print "Successful Insert Push_Photoselecs --> {0}".format(k)
+        if re.findall(regex, sqlinsert_choose_test):
+            connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'],  v['file_path_zip'])
+            print "Successful Insert Outsource_Zip --> {0}".format(k)
 
         elif re.findall(regex_postreadyoriginal, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO post_ready_original (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
-            print "Successful Insert to Post_Ready_Originals --> {0}".format(k)
-
-        elif re.findall(regex_zimages, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO zimages1_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
-            print "Successful Insert to Zimages --> {0}".format(k)
+            connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'])
+            print "Successful Insert to Outsource_Status --> {0}".format(k)
 
         else:
             print "Database Table not Found for Inserting {0}".format(k)
