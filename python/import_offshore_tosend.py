@@ -17,7 +17,7 @@ def sqlQueryOffshoreStatus():
     offshore_ready = {}
     for row in result:
         offshore_ready_tmp = {}
-        offshore_ready_tmp['colorstyle'] = ['colorstyle']
+        offshore_ready_tmp['colorstyle'] = row['colorstyle']
         offshore_ready_tmp['vendor_style'] = row['vendor_style']
         offshore_ready_tmp['received_ct'] = row['received_ct']
         offshore_ready_tmp['available_ct'] = row['available_ct']
