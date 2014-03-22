@@ -50,7 +50,8 @@ def csv_write_datedOutfile(lines):
 from PIL import Image
 import os,sys,re,shutil
 
-rootdir = sys.argv[1]
+rootdir = '/mnt/Post_Complete/SendReceive_BGRemoval' 
+#sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
 regex = re.compile(r'^/.+?\.[a-zA-Z2]{3}$')
