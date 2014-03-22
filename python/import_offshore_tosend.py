@@ -62,9 +62,9 @@ for k,v in offshore_styles.iteritems():
         print "Connext"
         try:
             print "Begin Execute"
-            connection_www.execute("""INSERT INTO offshore_status 
-                        (colorstyle, vendor_style, received_ct, available_ct, gender, category, product_type, active, start_dt, image_ready_dt)
-                        (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
+            connection_www.execute("""
+                        INSERT INTO offshore_status (colorstyle, vendor_style, received_ct, available_ct, gender, category, product_type, active, start_dt, image_ready_dt)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
                     ON DUPLICATE KEY UPDATE 
                         vendor_style = VALUES(vendor_style), 
                         received_ct = VALUES(received_ct), 
