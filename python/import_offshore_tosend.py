@@ -26,6 +26,7 @@ def sqlQueryOffshoreStatus():
         offshore_ready_tmp['product_type'] = row['product_type']
         offshore_ready_tmp['active'] = row['active']
         offshore_ready_tmp['start_dt'] = row['start_dt']
+        offshore_ready_tmp['image_ready_dt'] = row['image_ready_dt']
         offshore_ready[row['colorstyle']] = offshore_ready_tmp
     connection.close()
     return offshore_ready
@@ -61,21 +62,19 @@ for k,v in offshore_styles.iteritems():
         print "Connext"
         try:
             print "Begin Execute"
-            startdt = v['start_dt']
-            imgdt =   v['image_ready_dt']
             connection_www.execute("""INSERT INTO offshore_status 
                         (colorstyle, vendor_style, received_ct, available_ct, gender, category, product_type, active, start_dt, image_ready_dt)
                         (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
                     ON DUPLICATE KEY UPDATE 
-                        vendor_style       = VALUES(vendor_style), 
-                        received_ct        = VALUES(received_ct), 
-                        available_ct       = VALUES(available_ct), 
-                        gender             = VALUES(gender), 
-                        category           = VALUES(category),
-                        product_type       = VALUES(product_type),                        
-                        active             = VALUES(active), 
-                        start_dt           = VALUES(start_dt),
-                        image_ready_dt     = VALUES(image_ready_dt); 
+                        vendor_style = VALUES(vendor_style), 
+                        received_ct = VALUES(received_ct), 
+                        available_ct = VALUES(available_ct), 
+                        gender = VALUES(gender), 
+                        category = VALUES(category),
+                        product_type = VALUES(product_type),                        
+                        active = VALUES(active), 
+                        start_dt = VALUES(start_dt),
+                        image_ready_dt = VALUES(image_ready_dt); 
                         """, v['colorstyle'], v['vendor_style'], v['received_ct'], 
                              v['available_ct'], v['gender'], v['category'], v['product_type'], 
                              v['active'], startdt, imgdt)
