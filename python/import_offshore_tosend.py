@@ -51,6 +51,7 @@ print "Offshore Gotten"
 #trunc_table = """TRUNCATE TABLE offshore_status"""
 #connectiondj.close()
 
+
 for k,v in offshore_styles.iteritems():
     import datetime
     print "Off"
