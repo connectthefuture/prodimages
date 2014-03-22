@@ -62,9 +62,7 @@ for k,v in offshore_styles.iteritems():
         print "Connext"
         try:
             print "Begin Execute"
-            connection_www.execute("""
-                        INSERT INTO offshore_status (colorstyle, vendor_style, received_ct, available_ct, gender, category, product_type, active, start_dt, image_ready_dt)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s)""", str(k), v['vendor_style'], v['received_ct'], v['available_ct'], v['gender'], v['category'], v['product_type'], v['active'], ['start_dt'], ['image_ready_dt'])
+            connection_www.execute("""INSERT INTO offshore_status (colorstyle, vendor_style, received_ct, available_ct, gender, category, product_type, active, start_dt, image_ready_dt) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s)""", str(k), v['vendor_style'], v['received_ct'], v['available_ct'], v['gender'], v['category'], v['product_type'], v['active'], ['start_dt'], ['image_ready_dt'])
             print "Successful Insert offshore_status --> {0}".format(k)
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
