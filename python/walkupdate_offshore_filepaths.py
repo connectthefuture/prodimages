@@ -53,8 +53,8 @@ import os,sys,re
 rootdir = sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
-regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
-#regex = re.compile(r'.+?\.[jpgJPG]{3}$')
+regex = re.compile(r'^/.+?\.[a-zA-Z2]{3}$')
+#regex = re.compile(r'.+?/.[jpgJPG]{3}$')
 
 stylestrings = []
 stylestringsdict = {}
@@ -121,12 +121,23 @@ for k,v in fulldict.iteritems():
 
         mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
         connection = mysql_engine.connect()
-\\File7\post_complete\Complete_Archive\SendReceive_BGRemoval\1_SendIng
+        ## /mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
         sqlinsert_choose_test = v['file_path']
-        regex_india_ready = re.compile(r'^/mnt/Post_Complete/*//.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
-        regex_india_send = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
-        regex_l_uploaded = re.compile(r'^/zImages.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+
+        regex_india_ready = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/.*?[0-9]{9}\.[pngPNG]{3}$')
+        regex_india_prezipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/batch_[0-9]{6}/.*?\.[pngPNG]{3}$')
+        regex_india_prezip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending/batch_[0-9]{6}\.[zipZIP]{3}$')
+
+        regex_india_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned/batch_[0-9]{6}\.[zipZIP]{3}$')
+        regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned/batch_[0-9]{6}/.*?\.[pngPNG]{3}$')
+
+        regex_l_uploading = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/3_ListPage_to_Load/.*?[0-9]{9}_l\.[jpgJPG]{3}$')
+
+        regex_arch_l_uploded = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/JPG/[0-9]{9}_[LP]\.[jpgJPG]{3}$')
+        regex_arch_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/ZIP/batch_[0-9]{6}\.[zipZIP]{3}$')
+        regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/PNG/batch_[0-9]{6}/.*?_LP.[pngPNG]{3}$')
+
 
         if re.findall(regex_photoselects, sqlinsert_choose_test):
             connection.execute("""INSERT INTO push_photoselects (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
