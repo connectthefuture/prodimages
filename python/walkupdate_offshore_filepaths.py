@@ -38,7 +38,7 @@ def csv_write_datedOutfile(lines):
     import csv,datetime,os
     dt = str(datetime.datetime.now())
     today = dt.split(' ')[0]
-    f = os.path.join(os.path.expanduser('~'), today + '_stylestrings.csv')
+    f = os.path.join(os.path.expanduser('~'), today + '_datastrings.csv')
     for line in lines:
         with open(f, 'ab+') as csvwritefile:
             writer = csv.writer(csvwritefile, delimiter='\n')
@@ -66,6 +66,7 @@ regex_l_uploading = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceiv
 
 regex_arch_l_uploded = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/JPG/[0-9]{9}_[LP]\.[jpgJPG]{3}$')
 regex_arch_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/ZIP/batch_[0-9]{6}\.[zipZIP]{3}$')
+regex_arch_archpng = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/PNG/[0-9]{9}_[LP]\.[pngPNG]{3}$')
 regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/PNG/batch_[0-9]{6}/.*?_LP.[pngPNG]{3}$')
 #regex = re.compile(r'.+?/.[jpgJPG]{3}$')
 outsource_senddir1     = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending'
@@ -73,10 +74,10 @@ outsource_returndir2   = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemo
 outsource_largejpgdir3 = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/3_ListPage_to_Load'
 outsource_archdir4     = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive'
 
-stylestrings = []
-stylestringsdict = {}
+datastrings = []
+datastringsdict = {}
 for line in walkedout:
-    stylestringsdict_tmp = {}
+    datastringsdict_tmp = {}
     if re.findall(regex,line):
         try:
             file_path      = line
@@ -93,7 +94,7 @@ for line in walkedout:
             file_path_zip      = os.path.join(outsource_senddir1, zip_groupdir)
             file_path_prezip   = os.path.join(outsource_senddir1, zip_groupdir + ext)
             file_path_postzip  = os.path.join(outsource_archdir4, archivedir, zip_groupdir + ext)
-
+            file_path_archpng  = os.path.join(outsource_archdir4, "PNG", colorstyle + "_LP.png")
 #            try:
 #                photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
 #            except KeyError:
@@ -103,35 +104,36 @@ for line in walkedout:
 #                    photo_date = 0000-00-00
 #            photo_date = photo_date.replace(':','-')
 
-            stylestringsdict_tmp['file_path_pre'] = file_path_pre
-            stylestringsdict_tmp['file_path_post'] = file_path_post
-            stylestringsdict_tmp['file_path_zip'] = file_path_zip
-            stylestringsdict_tmp['file_path_prezip'] = file_path_prezip
-            stylestringsdict_tmp['file_path_postzip'] = file_path_postzip
-            stylestringsdict_tmp['colorstyle'] = colorstyle
-            stylestringsdict_tmp['archivedir'] = archivedir
-            stylestringsdict_tmp['zip_groupdir'] = zip_groupdir
-            stylestringsdict_tmp['directorypath'] = directorypath
-            stylestringsdict[file_path] = stylestringsdict_tmp
+            datastringsdict_tmp['file_path_pre'] = file_path_pre
+            datastringsdict_tmp['file_path_post'] = file_path_post
+            datastringsdict_tmp['file_path_zip'] = file_path_zip
+            datastringsdict_tmp['file_path_prezip'] = file_path_prezip
+            datastringsdict_tmp['file_path_postzip'] = file_path_postzip
+            datastringsdict_tmp['file_path_archpng'] = file_path_archpng
+            datastringsdict_tmp['colorstyle'] = colorstyle
+            datastringsdict_tmp['archivedir'] = archivedir
+            datastringsdict_tmp['zip_groupdir'] = zip_groupdir
+            datastringsdict_tmp['directorypath'] = directorypath
+            datastringsdict[file_path] = datastringsdict_tmp
 #file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
             file_path_reletive = file_path.replace('JPG', 'jpg')
 # Format CSV Rows
             row = "{0},{1},{2},{3},{4}".format(colorstyle,zip_groupdir,file_path_pre,file_path_post,file_path_zip)
-            print row
-            stylestrings.append(row)
+            #print row
+            datastrings.append(row)
         except IOError:
             print "IOError on {0}".format(line)
         except AttributeError:
             print "AttributeError on {0}".format(line)
 
 ## Write CSV List to dated file for Import to MySQL
-#csv_write_datedOutfile(stylestrings)
+#csv_write_datedOutfile(datastrings)
 
 #Iterate through Dict of Walked Directory, then Import to MySql DB
 import sqlalchemy
 ## First compile the SQL Fields as key value pairs
 fulldict = {}
-for k,v in stylestringsdict.iteritems():
+for k,v in datastringsdict.iteritems():
     dfill = {}
     dfill['colorstyle'] = v['colorstyle']
     #dfill['photo_date'] = v['photo_date']
@@ -139,9 +141,11 @@ for k,v in stylestringsdict.iteritems():
     dfill['file_path_pre'] = v['file_path_pre']
     dfill['file_path_post'] = v['file_path_post']
     dfill['file_path_zip'] = v['file_path_zip']
+    dfill['file_path_prezip'] = v['file_path_prezip']
+    dfill['file_path_postzip'] = v['file_path_postzip']
     fulldict[k] = dfill
 
-
+print fulldict.items()
 ## Take the compiled k/v pairs and Format + Insert into MySQL DB
 for k,v in fulldict.iteritems():
     try:
@@ -151,16 +155,41 @@ for k,v in fulldict.iteritems():
         connection = mysql_engine.connect()
         ## /mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending
         ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
-        sqlinsert_choose_test = v['file_path']
+        sqlinsert_choose_test = k
 
-        if re.findall(regex, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'],  v['file_path_zip'])
-            print "Successful Insert Outsource_Zip --> {0}".format(k)
+##zip ready to send
+        if re.findall(regex_india_prezip, sqlinsert_choose_test):
+            
+            if os.path.isfile(v['file_path_prezip']):
+                connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'],  v['file_path_prezip'])
+                print "Successful Insert Outsource_Zip --> {0}".format(k)
+                connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'])
+                print "Successful Insert to Outsource_Status --> {0}".format(k)
+            else:
+                print "File Doesnt Exist --> {0}".format(v['file_path_prezip'])
 
-        elif re.findall(regex_postreadyoriginal, sqlinsert_choose_test):
-            connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'])
-            print "Successful Insert to Outsource_Status --> {0}".format(k)
+## zip returned and ready to convert to _l and load
+        elif re.findall(regex_india_postzip, sqlinsert_choose_test):
 
+            if os.path.isfile(v['file_path_postzip']):
+                connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'],  v['file_path_postzip'])
+                print "Successful Insert Outsource_Zip --> {0}".format(k)
+                connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'])
+                print "Successful Insert to Outsource_Status --> {0}".format(k)
+            else:
+                 print "File Doesnt Exist --> {0}".format(v['file_path_postzip'])
+
+### Png ready to be packed and sent once quota reached
+        elif re.findall(regex_india_ready, sqlinsert_choose_test):
+            
+            if os.path.isfile(v['file_path_pre']):
+                connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_archpng'])
+                print "Successful Insert to Outsource_Status --> {0}".format(k)
+                connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre) VALUES (%s, %s)""", v['colorstyle'], v['file_path_pre'])
+                print "Successful Insert to Outsource_Status --> {0}".format(k)
+            else:
+                print "Error entering --> {0}\t File doesnt seem to Exist".format(v['file_path_pre'])
+        
         else:
             print "Database Table not Found for Inserting {0}".format(k)
 
