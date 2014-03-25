@@ -88,10 +88,10 @@ for line in walkedout:
             archivedir     = ext.upper()
             archivehash4   = filename[:4]
 
-            file_path_pre     = os.path.join(outsource_senddir1, filename)
-            file_path_post    = os.path.join(outsource_returndir2, zip_groupdir, filename)
-            file_path_zip  = os.path.join(outsource_senddir1, zip_groupdir)
-            file_path_prezip  = os.path.join(outsource_senddir1, zip_groupdir + ext)
+            file_path_pre      = os.path.join(outsource_senddir1, filename)
+            file_path_post     = os.path.join(outsource_returndir2, zip_groupdir, filename)
+            file_path_zip      = os.path.join(outsource_senddir1, zip_groupdir)
+            file_path_prezip   = os.path.join(outsource_senddir1, zip_groupdir + ext)
             file_path_postzip  = os.path.join(outsource_archdir4, archivedir, zip_groupdir + ext)
 
 #            try:
