@@ -174,7 +174,7 @@ for k,v in fulldict.iteritems():
         elif re.findall(regex_india_postzip, sqlinsert_choose_test):
             #print "POSTZIP"
         #if os.path.isfile(v['file_path_postzip']):
-            connection.execute("""INSERT INTO offshore_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_post'],  k)
+            connection.execute("""INSERT INTO offshore_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_post'],  k)
             print "Successful Insert offshore_Zip --> {0}".format(k)
             connection.execute("""INSERT INTO offshore_status (colorstyle,  file_path_post) VALUES (%s, %s)""", v['colorstyle'],  k)
             print "Successful Insert to offshore_Status --> {0}".format(k)
