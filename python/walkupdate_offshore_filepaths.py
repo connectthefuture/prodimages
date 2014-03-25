@@ -195,6 +195,6 @@ for k,v in fulldict.iteritems():
         else:
             print "Database Table not Found for Inserting {0}".format(k)
 
-    except sqlalchemy.exc.IntegrityError:
+    except OSError:#sqlalchemy.exc.IntegrityError:
         print "Duplicate Entry {0}".format(k)
         
