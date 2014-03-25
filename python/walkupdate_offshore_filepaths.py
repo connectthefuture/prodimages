@@ -160,24 +160,25 @@ for k,v in fulldict.iteritems():
 ##zip ready to send
         if re.findall(regex_india_prezip, sqlinsert_choose_test):
             
-            if os.path.isfile(v['file_path_prezip']):
-                connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'],  v['file_path_prezip'])
-                print "Successful Insert Outsource_Zip --> {0}".format(k)
-                connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'])
-                print "Successful Insert to Outsource_Status --> {0}".format(k)
-            else:
-                print "File Doesnt Exist --> {0}".format(v['file_path_prezip'])
+            #if os.path.isfile(v['file_path_prezip']):
+            connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'], k)
+            print "Successful Insert Outsource_Zip --> {0}".format(k)
+            
+            connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], k, v['file_path_post'])
+            print "Successful Insert to Outsource_Status --> {0}".format(k)
+            #else:
+                #print "File Doesnt Exist --> {0}".format(v['file_path_prezip'])
 
 ## zip returned and ready to convert to _l and load
         elif re.findall(regex_india_postzip, sqlinsert_choose_test):
 
-            if os.path.isfile(v['file_path_postzip']):
-                connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'],  v['file_path_postzip'])
-                print "Successful Insert Outsource_Zip --> {0}".format(k)
-                connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'])
-                print "Successful Insert to Outsource_Status --> {0}".format(k)
-            else:
-                 print "File Doesnt Exist --> {0}".format(v['file_path_postzip'])
+        #if os.path.isfile(v['file_path_postzip']):
+        #    connection.execute("""INSERT INTO outsource_zip (colorstyle, file_path_pre, file_path_post, file_path_zip) VALUES (%s, %s, %s, %s)""", v['colorstyle'], v['file_path_pre'], v['file_path_post'],  k)
+            print "Successful Insert Outsource_Zip --> {0}".format(k)
+            connection.execute("""INSERT INTO outsource_status (colorstyle, file_path_pre, file_path_post) VALUES (%s, %s, %s)""", v['colorstyle'], v['file_path_pre'], k)
+            print "Successful Insert to Outsource_Status --> {0}".format(k)
+        #else:
+        #     print "File Doesnt Exist --> {0}".format(v['file_path_postzip'])
 
 ### Png ready to be packed and sent once quota reached
         elif re.findall(regex_india_ready, sqlinsert_choose_test):
