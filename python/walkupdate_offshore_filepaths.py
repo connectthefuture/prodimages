@@ -222,16 +222,17 @@ for k,v in fulldict.iteritems():
             else:
                 os.rename(sqlinsert_choose_test, finaltest)
             
-            connection.execute("""INSERT INTO offshore_status (colorstyle, file_path_post) VALUES (%s, %s)
-            ON DUPLICATE KEY UPDATE 
+            if os.path.isfile(finaltest):
+                connection.execute("""INSERT INTO offshore_status (colorstyle, file_path_post) VALUES (%s, %s)
+                ON DUPLICATE KEY UPDATE 
                             file_path_post       = VALUES(file_path_post); 
                             """, v['colorstyle'], finaltest)
-            print "Successful Insert to offshore_Status --> {0}".format(finaltest)
-            connection.execute("""INSERT INTO offshore_zip (colorstyle, file_path_post) VALUES (%s, %s)
-            ON DUPLICATE KEY UPDATE 
+                print "Successful Insert to offshore_Status --> {0}".format(finaltest)
+                connection.execute("""INSERT INTO offshore_zip (colorstyle, file_path_post) VALUES (%s, %s)
+                ON DUPLICATE KEY UPDATE 
                             file_path_post       = VALUES(file_path_post); 
                             """, v['colorstyle'], finaltest)
-            print "Successful Insert to offshore_Status --> {0}".format(finaltest)            
+                print "Successful Insert to offshore_Status --> {0}".format(finaltest)            
         
         else:
             print "Database Table not Found for Inserting {0}".format(k)
