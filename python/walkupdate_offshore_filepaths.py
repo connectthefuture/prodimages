@@ -143,6 +143,7 @@ for k,v in datastringsdict.iteritems():
     dfill['file_path_zip'] = v['file_path_zip']
     dfill['file_path_prezip'] = v['file_path_prezip']
     dfill['file_path_postzip'] = v['file_path_postzip']
+    dfill['file_path_archpng'] = v['file_path_archpng']
     fulldict[k] = dfill
 
 print fulldict.items()
