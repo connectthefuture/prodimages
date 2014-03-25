@@ -216,18 +216,22 @@ for k,v in fulldict.iteritems():
             #    print "Error entering --> {0}\t File doesnt seem to Exist".format(v['file_path_pre'])
         
         elif re.findall(regex_india_postzipdir,sqlinsert_choose_test):
-            os.rename(sqlinsert_choose_test, sqlinsert_choose_test.replace('.png', '_LP.png'))
+            finaltest = sqlinsert_choose_test.replace('.png', '_LP.png')
+            if os.path.isfile(finaltest):
+                pass
+            else:
+                os.rename(sqlinsert_choose_test, finaltest)
             
             connection.execute("""INSERT INTO offshore_status (colorstyle, file_path_post) VALUES (%s, %s)
             ON DUPLICATE KEY UPDATE 
                             file_path_post       = VALUES(file_path_post); 
-                            """, v['colorstyle'], sqlinsert_choose_test.replace('.png', '_LP.png'))
-            print "Successful Insert to offshore_Status --> {0}".format(sqlinsert_choose_test.replace('.png', '_LP.png'))
+                            """, v['colorstyle'], finaltest)
+            print "Successful Insert to offshore_Status --> {0}".format(finaltest)
             connection.execute("""INSERT INTO offshore_zip (colorstyle, file_path_post) VALUES (%s, %s)
             ON DUPLICATE KEY UPDATE 
                             file_path_post       = VALUES(file_path_post); 
-                            """, v['colorstyle'], sqlinsert_choose_test.replace('.png', '_LP.png'))
-            print "Successful Insert to offshore_Status --> {0}".format(sqlinsert_choose_test.replace('.png', '_LP.png'))            
+                            """, v['colorstyle'], finaltest)
+            print "Successful Insert to offshore_Status --> {0}".format(finaltest)            
         
         else:
             print "Database Table not Found for Inserting {0}".format(k)
