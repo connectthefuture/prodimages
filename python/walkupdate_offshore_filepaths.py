@@ -50,7 +50,7 @@ def csv_write_datedOutfile(lines):
 from PIL import Image
 import os,sys,re,shutil
 
-rootdir = '/mnt/Post_Complete/SendReceive_BGRemoval' 
+rootdir = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval' 
 #sys.argv[1]
 walkedout = recursive_dirlist(rootdir)
 
