@@ -216,7 +216,7 @@ for k,v in fulldict.iteritems():
             #    print "Error entering --> {0}\t File doesnt seem to Exist".format(v['file_path_pre'])
         
         elif re.findall(regex_india_postzipdir,sqlinsert_choose_test):
-            finaltest = sqlinsert_choose_test.replace('.png', '_LP.png')
+            finaltest = sqlinsert_choose_test.replace('.png', '_LP.png').replace('_LP_LP.png','_LP.png')
             if os.path.isfile(finaltest):
                 pass
             else:
