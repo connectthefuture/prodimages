@@ -67,7 +67,7 @@ regex_l_uploading = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceiv
 regex_arch_l_uploded = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/JPG/[0-9]{9}_[LP]\.[jpgJPG]{3}$')
 regex_arch_postzip = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/ZIP/batch_[0-9]{6}\.[zipZIP]{3}$')
 regex_arch_archpng = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/PNG/[0-9]{9}_[LP]\.[pngPNG]{3}$')
-regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/ZIP/batch_[0-9]{6}/.*?_LP.[pngPNG]{3}$')
+regex_india_postzipdir = re.compile(r'^/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/ZIP/batch_[0-9]{6}/0-9]{9}_?L?P?.[pngPNG]{3}$')
 #regex = re.compile(r'.+?/.[jpgJPG]{3}$')
 offshore_senddir1     = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending'
 offshore_returndir2   = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned'
@@ -216,17 +216,18 @@ for k,v in fulldict.iteritems():
             #    print "Error entering --> {0}\t File doesnt seem to Exist".format(v['file_path_pre'])
         
         elif re.findall(regex_india_postzipdir,sqlinsert_choose_test):
+            os.rename(sqlinsert_choose_test, sqlinsert_choose_test.replace('.png', '_LP.png'))
             
             connection.execute("""INSERT INTO offshore_status (colorstyle, file_path_post) VALUES (%s, %s)
             ON DUPLICATE KEY UPDATE 
                             file_path_post       = VALUES(file_path_post); 
-                            """, v['colorstyle'], k)
-            print "Successful Insert to offshore_Status --> {0}".format(k)
+                            """, v['colorstyle'], sqlinsert_choose_test.replace('.png', '_LP.png'))
+            print "Successful Insert to offshore_Status --> {0}".format(sqlinsert_choose_test.replace('.png', '_LP.png'))
             connection.execute("""INSERT INTO offshore_zip (colorstyle, file_path_post) VALUES (%s, %s)
             ON DUPLICATE KEY UPDATE 
                             file_path_post       = VALUES(file_path_post); 
-                            """, v['colorstyle'], k)
-            print "Successful Insert to offshore_Status --> {0}".format(k)            
+                            """, v['colorstyle'], sqlinsert_choose_test.replace('.png', '_LP.png'))
+            print "Successful Insert to offshore_Status --> {0}".format(sqlinsert_choose_test.replace('.png', '_LP.png'))            
         
         else:
             print "Database Table not Found for Inserting {0}".format(k)
