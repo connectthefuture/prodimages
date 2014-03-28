@@ -65,14 +65,14 @@ def pycurl_upload_indiadrop(localfilepath):
 
 
     
-def pycurl_download_indiaComplete(zipfilename, saveDir=None):
+def pycurl_download_indiaComplete(zipfilename, savedir=None):
     import pycurl, os
     #import FileReader
-    if not saveDir:
-        saveDir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned')
+    if not savedir:
+        savedir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/2_Returned')
     
     localfilename = "{0}".format(zipfilename)
-    localfilepath = os.path.join(saveDir, localfilename)
+    localfilepath = os.path.join(savedir, localfilename)
     
     mediaType = "8"
     ftpURL = r'ftp://prepressoutsourcing.com//Pick/'
