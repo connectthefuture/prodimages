@@ -214,7 +214,8 @@ for k,v in fulldict.iteritems():
             print "Successful Insert to offshore_Status --> {0}".format(k)
             #else:
             #    print "Error entering --> {0}\t File doesnt seem to Exist".format(v['file_path_pre'])
-        
+
+### Returned files Archived after _l file created and loaded   
         elif re.findall(regex_india_postzipdir,sqlinsert_choose_test):
             finaltest = sqlinsert_choose_test.replace('.png', '_LP.png').replace('_LP_LP.png','_LP.png')
             if os.path.isfile(finaltest):
