@@ -22,7 +22,7 @@ def pycurl_upload_indiadrop(localfilepath):
 
     mediaType = "8"
     
-    ftpURL = r'ftp://prepressoutsourcing.com//Pick/'
+    ftpURL = r'ftp://prepressoutsourcing.com//Drop/'
     ftpUSERPWD = "bf:B1002#@F"
 
     ftpfilepath = os.path.join(ftpURL, localfilename)
@@ -64,7 +64,7 @@ def pycurl_upload_indiadrop(localfilepath):
             return errno
 
 
-    
+
 def pycurl_download_indiaComplete(zipfilename, savedir=None):
     import pycurl, os
     #import FileReader

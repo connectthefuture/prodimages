@@ -140,7 +140,7 @@ for k,v in raw_settings_dict.iteritems():
             mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
             connection = mysql_engine.connect()
             ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
-            sqlinsert_choose_test = v['filepath']
+            sqlinsert_choose_test = v['file_path']
             regex_productionraw = re.compile(r'^/.*?/RAW.*?/.+?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[a-zA-Z2]{3}$')
             #regex_mediarepo = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpgJPG]$')
 
