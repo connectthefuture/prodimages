@@ -116,7 +116,7 @@ try:
 except IndexError:
     rootdir = os.path.join(basedir,'RAW')
 
-
+print rootdir
 rawfiles = recursive_dirlist_CR2(rootdir)
 
 raw_settings_dict = {}

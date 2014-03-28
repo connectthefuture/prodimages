@@ -606,4 +606,5 @@
         <File name="mtags_singlefile.py" />
         <File name="mtags_singlefile_RAW.py" />
     </Project>
+    <Project name="DJDAM" />
 </NotepadPlus>
