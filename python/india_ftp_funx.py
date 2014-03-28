@@ -14,6 +14,16 @@ def upload_to_indiaDrop(localfilepath):
     session.quit() 
     
     
+def listcontents_indiaDrop(remotedir):
+    import ftplib
+    session = ftplib.FTP('prepressoutsourcing.com', 'bf', 'B1002#@F')
+    session.cwd(remotedir)
+    dirlist = session.dir()
+    #session.storbinary('STOR ' + filename, fileread, 8*1024)
+    fileread.close()
+    session.quit() 
+    return dirlist
+
 
 def pycurl_upload_indiadrop(localfilepath):
     import pycurl, os
@@ -75,7 +85,7 @@ def pycurl_download_indiaComplete(zipfilename, savedir=None):
     localfilepath = os.path.join(savedir, localfilename)
     
     mediaType = "8"
-    ftpURL = r'ftp://prepressoutsourcing.com//Pick/'
+    ftpURL = 'prepressoutsourcing.com/Pick/'
     
     ftpfilepath = os.path.join(ftpURL, localfilename)
     ftpUSERPWD = "bf:B1002#@F"
