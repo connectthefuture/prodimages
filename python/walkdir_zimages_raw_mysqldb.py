@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-#!/usr/bin/env python
-###
 ## Extract All Metadata from Image File as Dict using PIL
 def get_exif(file_path):
     from PIL import Image
