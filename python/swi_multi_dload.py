@@ -168,44 +168,44 @@ for stylesDict in stylesDictsDict:
                 except:
                     print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
 
-        ##_4
-        try:            
-            url_download_file(vendor_url_boxset,colorstyle_boxset_file)
-            print "Downloaded {}".format(colorstyle_boxset_file)
-        except:
-            try:
-                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-box'))
-                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-box'))
-            except:
-                try:
-                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-BOX'))
-                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-BOX'))
-                except:
-                    print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
-
-        ## _5
-        try:            
-            url_download_file(vendor_url_straps,colorstyle_straps_file)
-            print "Downloaded {}".format(colorstyle_straps_file)
-        except:
-            try:
-                url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
-                print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
-            except:
-                 print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
-        
-        ## _6
-        try:            
-            url_download_file(vendor_url_main,colorstyle_main_file)
-            print "Downloaded {}".format(colorstyle_main_file)
-        except:
-            try:
-                url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
-                print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
-            except:
-                try:
-                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
-                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
-                except:
-                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
+#        ##_4
+#        try:            
+#            url_download_file(vendor_url_boxset,colorstyle_boxset_file)
+#            print "Downloaded {}".format(colorstyle_boxset_file)
+#        except:
+#            try:
+#                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-box'))
+#                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-box'))
+#            except:
+#                try:
+#                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-BOX'))
+#                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-BOX'))
+#                except:
+#                    print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
+#
+#        ## _5
+#        try:            
+#            url_download_file(vendor_url_straps,colorstyle_straps_file)
+#            print "Downloaded {}".format(colorstyle_straps_file)
+#        except:
+#            try:
+#                url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
+#                print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
+#            except:
+#                 print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
+#        
+#        ## _6
+#        try:            
+#            url_download_file(vendor_url_main,colorstyle_main_file)
+#            print "Downloaded {}".format(colorstyle_main_file)
+#        except:
+#            try:
+#                url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
+#                print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
+#            except:
+#                try:
+#                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
+#                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
+#                except:
+#                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
 
