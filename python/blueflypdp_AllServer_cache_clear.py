@@ -264,7 +264,7 @@ versioned_links = return_versioned_urls(pdp_urllist)
 
 #print versioned_links
 count = 0
-if len(versioned_links) <= 550:
+if len(versioned_links) <= 2550:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     for url_purge_local in versioned_links:
@@ -297,7 +297,7 @@ else:
 
 #print generated_links
 count = 0
-if len(edgecast_listurls) <= 550:
+if len(edgecast_listurls) <= 2550:
 
     #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
