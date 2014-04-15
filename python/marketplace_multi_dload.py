@@ -49,6 +49,12 @@ from magick_cropandpad_x480 import subproc_pad_to_x480  as magickcrop480
 from magick_cropandpad_x480 import subproc_pad_to_x1200 as magickcrop1200
 
 imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
+if os.path.isdir(imagedir):
+    pass
+else:
+    imagedir = os.path.join(os.path.abspath(os.curdir()), 'images_downloaded')
+    os.mkdir(imagedir, 0755)
+
 
 vaultstyles=sqlQuery_GetIMarketplaceImgs()
 for k,v in vaultstyles.iteritems():
