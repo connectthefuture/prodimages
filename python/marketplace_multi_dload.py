@@ -49,11 +49,11 @@ from magick_cropandpad_x480 import subproc_pad_to_x480  as magickcrop480
 from magick_cropandpad_x480 import subproc_pad_to_x1200 as magickcrop1200
 
 imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
-if os.path.isdir(imagedir):
-    pass
-else:
-    imagedir = os.path.join(os.path.abspath(os.curdir()), 'images_downloaded')
-    os.mkdir(imagedir, 0755)
+#if os.path.isdir(imagedir):
+#    pass
+#else:
+#    imagedir = os.path.join(os.path.abspath(os.curdir), 'images_downloaded')
+#    os.mkdir(imagedir, 0755 )
 
 
 vaultstyles=sqlQuery_GetIMarketplaceImgs()
@@ -71,7 +71,12 @@ for k,v in vaultstyles.iteritems():
         #with open(destpath,'wb') as f:
             #f.write(requests.get(image_url).content)
         print image_url, destpath.split('/')[-1].replace('.jpg','_1200.jpg')
-        urllib.urlretrieve(image_url, destpath)
+        error_check = urllib.urlopen(image_url)
+        urlcode_value = error_check.getcode()
+        print urlcode_value
+            
+        if urlcode_value == 200:
+            urllib.urlretrieve(image_url, destpath)
         #magickcrop1200(destpath, imagedir)#, os.path.join(imagedir,colorstyle + '_1200.jpg')) #os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_1200.jpg'))))
         #magickcrop480(destpath, os.path.join(imagedir,colorstyle + '_l.jpg'))   # os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_l.jpg'))))
         #magickcrop480(destpath, os.path.join(imagedir,colorstyle + '_m.jpg'))   #os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_m.jpg'))))
