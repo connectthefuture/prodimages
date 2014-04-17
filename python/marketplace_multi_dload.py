@@ -11,7 +11,6 @@ def sqlQuery_GetIMarketplaceImgs(ponum=None):
         (POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL)
         and (
         POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%VAULT%' 
-        --AND POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT IS NULL 
         AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') 
         ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last"""  
     ## 
@@ -86,7 +85,7 @@ for k,v in vaultstyles.iteritems():
     if image_url:
         #with open(destpath,'wb') as f:
             #f.write(requests.get(image_url).content)
-        print image_url, destpath #.split('/')[-1].replace('.jpg','_1200.jpg')
+        print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
         error_check = urllib.urlopen(image_url)
         urlcode_value = error_check.getcode()
         print urlcode_value
