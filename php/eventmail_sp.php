@@ -8,7 +8,7 @@
 //	require_once('/opt/local/lib/php/pear/Mail/smtp.php');
 	
 	if(isset($_POST['mailfrom'])) $mailfrom   		= $_POST['mailfrom'];
-	    else $mailfrom  =   "john.bragato@gmail.com";
+	    else $mailfrom  =   "john.bragato@bluefly.com";
 	if(isset($_POST['mailto'])) $mailto   			= $_POST['mailto'];
         else $mailto  =   "john.bragato@bluefly.com,stephen.parker@bluefly.com,jacqueline.wahba@bluefly.com,james.hoetker@bluefly.com,lydia.jeanlouis.temp@bluefly.com,conrad.sanderson@bluefly.com,steven.vaz@bluefly.com";
 	if(isset($_POST['mailsubject'])) $mailsubject   = $_POST['mailsubject'];
@@ -94,8 +94,8 @@
 // 	}
 // 	//else
 	//{
-	//$htmlbody	= shell_exec("cat " . "~/Dropbox/Dropbox_sites/Dreamweaver_sites/1test.html");
-	//$textbody	= shell_exec("cat " . "~/Dropbox/Dropbox_sites/Dreamweaver_sites/1test.html");
+	//$htmlbody	= shell_exec("cat " . "~/Dropbox/Dropbox_sites/1test.html");
+	//$textbody	= shell_exec("cat " . "~/Dropbox/Dropbox_sites/1test.html");
 	//}
 
 	$attachment = "/mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/event_progress_14days.html";
@@ -122,8 +122,8 @@
 	$smtp_params['host'] = 'ssl://smtp.gmail.com';
 	$smtp_params['port'] = '465';
 	$smtp_params['auth'] = true;
-	$smtp_params['username'] = 'john.bragato';
-	$smtp_params['password'] = 'yankee17';
+	$smtp_params['username'] = 'john.bragato@bluefly.com';
+	$smtp_params['password'] = 'forty000one';
 	$smtp_params['persist'] = true;
 	
 	$mail =& Mail::factory('smtp', $smtp_params);
