@@ -44,14 +44,19 @@ def compile_outdict_by_rowkeys(outdict):
                 pass
     return d
 
-###########
-import sys,os
+############################################
+def main():
+    import sys,os
+    
+    workbk = sys.argv[1]
+    
+    outdict = readxl_outputdict(workbk)
+    compiled_rows = compile_outdict_by_rowkeys(outdict)
+    
+    for k,v in compiled_rows.iteritems():
+        for val in v:
+            print k,val,v[val]
+############################################
 
-workbk = sys.argv[1]
-
-outdict = readxl_outputdict(workbk)
-compiled_rows = compile_outdict_by_rowkeys(outdict)
-
-for k,v in compiled_rows.iteritems():
-    for val in v:
-        print k,val,v[val]
+if __name__ == '__main__': 
+    main()
