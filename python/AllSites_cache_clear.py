@@ -265,7 +265,7 @@ versioned_links = return_versioned_urls(pdp_urllist)
 #print versioned_links
 count = 0
 if not versioned_links:
-    print "Product is not Live. Skipping Edgecast CDN Purge. Clearing local only."
+    print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
 #    for colorstyle in colorstyle_list:
 #        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
 #        POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
@@ -294,6 +294,7 @@ elif len(versioned_links) <= 2550:
             #except:
             #    print sys.stderr().read()
         except IndexError:
+            print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
 #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
 #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
 #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
