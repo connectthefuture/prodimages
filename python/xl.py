@@ -1,4 +1,4 @@
-x#!/usr/bin/python
+#!/usr/bin/python
 
 import csv,xlrd,sys
 book = xlrd.open_workbook('/Users/johnb/Desktop/SampleInProgressReport.xls')##sys.argv[1])
