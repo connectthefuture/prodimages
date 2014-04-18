@@ -266,13 +266,13 @@ versioned_links = return_versioned_urls(pdp_urllist)
 count = 0
 if not versioned_links:
     print "Product is not Live. Skipping Edgecast CDN Purge. Clearing local only."
-    for colorstyle in colorstyle_list:
-        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-        POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-        POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-        send_purge_request_localis(colorstyle,version,POSTURL_BC)
-        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+#    for colorstyle in colorstyle_list:
+#        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+#        POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+#        POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+#        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+#        send_purge_request_localis(colorstyle,version,POSTURL_BC)
+#        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
 elif len(versioned_links) <= 2550:
 
