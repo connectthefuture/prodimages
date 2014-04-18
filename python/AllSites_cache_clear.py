@@ -264,7 +264,17 @@ versioned_links = return_versioned_urls(pdp_urllist)
 
 #print versioned_links
 count = 0
-if len(versioned_links) <= 2550:
+if not versioned_links:
+    print "Product is not Live. Skipping Edgecast CDN Purge. Clearing local only."
+    for colorstyle in colorstyle_list:
+        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+        POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+        POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+        send_purge_request_localis(colorstyle,version,POSTURL_BC)
+        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+
+elif len(versioned_links) <= 2550:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     for url_purge_local in versioned_links:
@@ -284,12 +294,12 @@ if len(versioned_links) <= 2550:
             #except:
             #    print sys.stderr().read()
         except IndexError:
-            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-            send_purge_request_localis(colorstyle,version,POSTURL_BC)
-            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+#            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+#            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+#            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+#            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+#            send_purge_request_localis(colorstyle,version,POSTURL_BC)
+#            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
             pass
     for url_purge in versioned_links:
         send_purge_request_edgecast(url_purge[0])
