@@ -127,8 +127,8 @@
 	$smtp_params['host'] = 'ssl://smtp.gmail.com';
 	$smtp_params['port'] = '465';
 	$smtp_params['auth'] = true;
-	$smtp_params['username'] = 'john.bragato';
-	$smtp_params['password'] = 'yankee17';
+	$smtp_params['username'] = 'john.bragato@bluefly.com';
+	$smtp_params['password'] = 'forty000one';
 	$smtp_params['persist'] = true;
 	
 	$mail =& Mail::factory('smtp', $smtp_params);
