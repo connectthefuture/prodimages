@@ -10,7 +10,7 @@ def sqlQuery_GetIMarketplaceImgs(ponum=None):
         query_marketplace_inprog = """SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE 
         (POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL)
         and (
-        POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%VAULT%' 
+        POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID not LIKE '%VAULT%' 
         AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') 
         ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last"""  
     ## 
@@ -61,7 +61,8 @@ imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
 #    imagedir = os.path.join(os.path.abspath(os.curdir), 'images_downloaded')
 #    os.mkdir(imagedir, 0755 )
 
-
+countimage = 0
+countstyle = 0
 vaultstyles=sqlQuery_GetIMarketplaceImgs()
 for k,v in vaultstyles.iteritems():
     colorstyle = v['colorstyle']
@@ -89,9 +90,15 @@ for k,v in vaultstyles.iteritems():
         error_check = urllib.urlopen(image_url)
         urlcode_value = error_check.getcode()
         print urlcode_value
-            
+
         if urlcode_value == 200:
             urllib.urlretrieve(image_url, destpath)
+            countimage += 1
+            print "Image Download Count: {}".format(countimage)
+            if alt_number == 1:
+                countstyle += 1
+            print "Total New Styles Downloaded: {}".format(countstyle)
+             
         #magickcrop1200(destpath, imagedir)#, os.path.join(imagedir,colorstyle + '_1200.jpg')) #os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_1200.jpg'))))
         #magickcrop480(destpath, os.path.join(imagedir,colorstyle + '_l.jpg'))   # os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_l.jpg'))))
         #magickcrop480(destpath, os.path.join(imagedir,colorstyle + '_m.jpg'))   #os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_m.jpg'))))
