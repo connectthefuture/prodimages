@@ -34,6 +34,6 @@ sleep .5
 # uploadComplete="$2"
 mv -f "$f" "$upload_arch";
 echo "$Today" "$f" "$upload_arch"  >> ./"$batchDoneDate"_uploadLog.txt
-fi;
+#fi;
 
 done;
