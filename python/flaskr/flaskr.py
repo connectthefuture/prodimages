@@ -7,14 +7,15 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 
+
 # Define locatiom of Runtime instance dir to house sqlite db
-app = Flask(__name__, instance_path='/home/johnb/virtualenvs/DJDAM/src/flaskr/instance')
+# app = Flask(__name__, instance_path='/home/johnb/virtualenvs/DJDAM/src/flaskr/instance')
 # create our little application
 app = Flask(__name__) 
 app.config.from_object(__name__)
 # Load default config and override config from an environment variable
 app.config.update(dict(
-    DATABASE=os.path.join(instance_path, 'flaskr.db'), 
+    DATABASE=os.path.join(app.root_path, 'flaskr.db'), 
     DEBUG=True, 
     SECRET_KEY='development key', 
     USERNAME='admin', 
