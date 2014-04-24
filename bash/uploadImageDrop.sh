@@ -4,7 +4,7 @@
 Today=`date +%Y-%m-%d`
 batchDoneDate=`date +%Y%b%d`
 
-ftpLoginFull="ftp://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop"
+ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop -u imagedrop:imagedrop0"
 uploadComplete="/mnt/Post_Complete/Complete_Archive/Uploaded"
 upload_arch="$uploadComplete"/"$batchDoneDate"/
 mkdir -p "$upload_arch"
