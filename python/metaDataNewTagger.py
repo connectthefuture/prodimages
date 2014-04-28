@@ -76,7 +76,15 @@ globtoconvert = glob.glob(os.path.join(os.path.realpath(glbdir), '*/*/*.jpg'))
 
 for f in globtoconvert:
     stylefile = os.path.basename(f)
-    style = stylefile.split('_')[0]
+    try:
+        style = stylefile.split('_')[0]
+        if style.isdigit():
+            pass
+        else:
+            style = stylefile.split('.')[0][:9]
+    except:
+        print "Error --> {}".format(f)
+        pass
     #print style, f
     ### string = key/val as k=filepath, val=all metadata as k/v pairs
     exiftoolstring = sqlQueryMetatags(style,f)

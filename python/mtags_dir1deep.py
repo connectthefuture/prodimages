@@ -80,7 +80,7 @@ glbdir = sys.argv[1]
 #glbdir='/mnt/Post_Ready/aPhotoPush'
 #glbdir = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117257'
 #globtoconvert = os.path.join('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117147', '*.jpg')
-globtoconvert = glob.glob(os.path.join(os.path.realpath(glbdir), '*.jpg'))
+globtoconvert = glob.glob(os.path.join(os.path.realpath(glbdir), '*.??g'))
 #print globtoconvert
 
 
@@ -89,7 +89,7 @@ def get_dbinfo_for_metatags_filelist(filelist):
     listed = []
     for f in filelist:
         stylefile = os.path.basename(f)
-        style = stylefile.split('_')[0]
+        style = stylefile.split('_')[0].strip('.png').strip('.jpg')
         #print style, f
         ### string = key/val as k=filepath, val=all metadata as k/v pairs
         exiftoolstring = sqlQueryMetatags(style,f)
