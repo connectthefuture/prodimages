@@ -69,7 +69,7 @@ def imagepath_dbprep(recursed_output=None):
                 stylestringsdict[file_path] = stylestringsdict_tmp
                 #row = "{0},{1},{2},{3},{4}".format(colorstyle,photo_date,file_path,alt,shot_number)
                 #print row
-                stylestringslist.append([row])
+                #stylestringslist.append([row])
             except IOError:
                 print "IOError on {0}".format(line)
     #return stylestringslist
