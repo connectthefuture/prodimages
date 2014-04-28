@@ -102,19 +102,19 @@ def insert_pymongo(**kwargs):
 def main(rootdir):
     import os,sys,re
 
-recursedout = recursive_dirlist(rootdir)                   
-mongo_insertlist = imagepath_dbprep(recursedout)
+    recursedout = recursive_dirlist(rootdir)                   
+    mongo_insertlist = imagepath_dbprep(recursedout)
 
-# Insert list
-for insrt in mongo_insertlist:        
-    # Insert a New Document
-    colorstyle  = insrt['colorstyle']
-    photo_date  = insrt['photo_date']
-    file_path   = insrt['file_path']
-    alt         = insrt['alt']
-    shot_number = insrt['shot_number']
-    insert_pymongo(colorstyle=colorstyle, photo_date=photo_date, file_path=file_path, alt=alt, shot_number=shot_number)
-
+    # Insert list
+    for insrt in mongo_insertlist:        
+        # Insert a New Document
+        colorstyle  = insrt['colorstyle']
+        photo_date  = insrt['photo_date']
+        file_path   = insrt['file_path']
+        alt         = insrt['alt']
+        shot_number = insrt['shot_number']
+        insert_pymongo(colorstyle=colorstyle, photo_date=photo_date, file_path=file_path, alt=alt, shot_number=shot_number)
+    
 
 if __name__ == 'main': 
     rootdir = ''
