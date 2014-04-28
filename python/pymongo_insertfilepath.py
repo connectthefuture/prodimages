@@ -108,13 +108,14 @@ def main(rootdir):
     # Insert list
     for insrt in mongo_insertlist:        
         # Insert a New Document
-        colorstyle = insrt[0], 
-        photo_date = insrt[1], 
-        file_path = insrt[2], 
-        alt = insrt[3], 
-        shot_number = insrt[4]
-        
-        insert_pymongo(insrt)
+        row = insrt[0].split(',')
+        for attr in row:
+            colorstyle = attr[0], 
+            photo_date = attr[1], 
+            file_path = attr[2], 
+            alt = attr[3], 
+            shot_number = attr[4]
+            insert_pymongo(colorstyle=colorstyle, photo_date=photo_date, file_path=file_path, alt=alt, shot_number=shot_number)
 
 
 if __name__ == 'main': 
