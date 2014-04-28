@@ -91,21 +91,21 @@ def insert_pymongo(**kwargs):
     mongo_db = mongo['testimages']
     mongo_collection = mongo_db['imagecollection']
     # Returns the '_id' key associated with the newly created document
-    insert_id = mongo_collection.insert({'colorstyle': colorstyle,
+    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,
                                          'photo_date': photo_date,
                                          'file_path': file_path,
                                          'alt': alt,
                                          'shot_number': shot_number
                                         })
+    return new_insertobj_id
 
 ############# RUN ##############
 def main(rootdir):
     import os,sys,re
     recursedout = recursive_dirlist(rootdir)                   
     mongo_insertdict = imagepath_dbprep(recursedout)
-    # Insert list
     for k,v in mongo_insertdict.iteritems():        
-        # Insert a New Document
+        # Insert/Create a New Document
         colorstyle  = v['colorstyle']
         photo_date  = v['photo_date']
         file_path   = v['file_path']
