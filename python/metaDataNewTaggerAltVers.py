@@ -133,12 +133,16 @@ def sqlQueryMetatags(style,f):
     
     
 def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
-    import pyexiv2
+    import pyexiv2, os
     # Read EXIF data to initialize
     image_metadata = pyexiv2.ImageMetadata(image_filepath)
     image_metadata.read()
     # Add and Write new Tag to File
+    image_metadata.modified = True
+    image_metadata.writable = os.access(image_filepath, os.W_OK)
     image_metadata[exiftag] = [exifvalue]
+    #image_metadata[exiftag] = pyexiv2.ExifTag(exiftag, exifvalue)
+    
     print image_metadata[exiftag], image_metadata
     image_metadata.write()
     return image_filepath    
