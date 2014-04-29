@@ -102,20 +102,22 @@ def sqlQueryMetatags(style,f):
         metatag = {}
 #        metatag['colorstyle'] = row['colorstyle']
 #        metatag['IPTC:PONumber'] = row['po_num']
-        metatag['IPTC:VendorStyle'] = row['vendor_style']
-        metatag['IPTC:Brand'] = row['brand']
-        metatag['XMP:Genre'] = row['color_group']
-        metatag['IPTC:ProductType'] = row['category_sub']
-        metatag['EventID'] = row['event_id']
+        #metatag['IPTC:VendorStyle'] = row['vendor_style']
+        metatag['Xmp.xmpDM.artist'] = row['vendor_style']
+        #metatag['IPTC:Brand'] = row['brand']
+        metatag['Xmp.xmpDM.genre'] = row['color_group']
+        #metatag['IPTC:ProductType'] = row['category_sub']
+        metatag['Iptc.Application2.Source'] = row['category_sub']
+        #metatag['EventID'] = row['event_id']
         try:
-            metatag['XMP:Album'] = "EventID " + str(row['event_id'])
+            metatag['Xmp.xmpDM.album'] = "EventID " + str(row['event_id'])
         except:
             pass
-        metatag['IPTC:Credit'] = row['product_path']
-        metatag['IPTC:CopyrightNotice'] = row['brand']
-        metatag['IPTC:SpecialInstructions'] = row['production_status']
-        metatag['Keywords'] = row['category_parent']
-        metatag['IPTC:Source'] = row['shot_list_dt']
+        metatag['Iptc.Application2.Credit'] = row['product_path']
+        metatag['Iptc.Application2.Copyright'] = row['brand']
+        metatag['Iptc.Application2.SpecialInstructions'] = row['production_status']
+        metatag['Iptc.Application2.Keywords'] = row['category_parent']
+        #metatag['Iptc.Application2.Source'] = row['shot_list_dt']
 #        metatag['IPTC:SpecialInstructions'] = '{:%Y-%m-%d}'.format(metatag['brand_editorial'])
 #        metatag['IPTC:SampleStatusDate'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
 #        metatag['IPTC:Source'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
@@ -136,7 +138,7 @@ def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
     image_metadata = pyexiv2.ImageMetadata(image_filepath)
     image_metadata.read()
     # Add and Write new Tag to File
-    image_metadata[exiftag] = exifvalue
+    image_metadata[exiftag] = [exifvalue]
     print image_metadata[exiftag], image_metadata
     image_metadata.write()
     return image_filepath    
@@ -148,6 +150,7 @@ def get_exif_all_data(image_filepath):
         #['XMP:DateCreated'][:10].replace(':','-')
     return metadata
         
+
 ##############################
 import sys
 import os
@@ -159,6 +162,7 @@ glbdir = sys.argv[1]
 #globtoconvert = os.path.join('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117147', '*.jpg')
 globtoconvert = glob.glob(os.path.join(os.path.abspath(glbdir), '*.??g'))
 #print globtoconvert
+import pyexiv2
 
 for f in globtoconvert:
     stylefile = os.path.basename(f)
@@ -182,12 +186,16 @@ for f in globtoconvert:
             image_filepath = f
             exiftag        = tag
             exifvalue      = values[tag]
+            print values
             print image_filepath, exiftag, exifvalue
             try:
                 embed_exif_metadata(image_filepath, exiftag=exiftag, exifvalue=exifvalue)
                 print "Success Embedded {0} = {1} --> {2}".format(exiftag, exifvalue, image_filepath)
+            except pyexiv2.xmp.XmpValueError:
+                print "XMP ValueError {0}-{1}".format(exiftag, exifvalue, image_filepath)
+                pass    
             except IndexError:
                 print "Index ERROR WHILE EMBEDDING {0} = {1} --> {2}".format(exiftag, exifvalue, image_filepath)
-            except KeyError:
+            except IOError:
                 print "Key ERROR WHILE EMBEDDING {0} = {1} --> {2}".format(exiftag, exifvalue, image_filepath)
             
