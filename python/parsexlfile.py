@@ -12,11 +12,8 @@ def csv_write_datedOutfile(lines):
 
 def readxl_outputdict(workbk=None):         
     import csv,xlrd,sys
-#    workbk = sys.argv[1]
-    book = xlrd.open_workbook(workbk)##sys.argv[1])
+    book = xlrd.open_workbook(workbk)
     sh = book.sheet_by_index(0)
-
-    #convWriter = csv.writer(sys.stdout,delimiter=',', dialect='excel')
     numcols=sh.ncols
     outdict = {}
     for rx in xrange(sh.nrows):
@@ -39,7 +36,6 @@ def compile_outdict_by_rowkeys(outdict):
                 print r[0],val[0],val[1]
                 dd[val[0]]=val[1]
                 d[r[0]] = dd
-                #csv_write_datedOutfile(lines.encode('ascii', 'replace'))
             except AttributeError:
                 pass
     return d
@@ -47,32 +43,30 @@ def compile_outdict_by_rowkeys(outdict):
 ############################################
 
 import sys,os
-xlfile=sys.argv[1]
 
 workbk = xlfile
 
 outdict = readxl_outputdict(workbk)
 compiled_rows = compile_outdict_by_rowkeys(outdict)
 
-for k,v in compiled_rows.iteritems():
-    for val in v:
-        print k,val,v[val]
-
+#for k,v in compiled_rows.iteritems():
+#    for val in v:
+#        print k,val,v[val]
+#
 
 import os, urllib
-for row in compiled_rows.items():
+for k,v in compiled_rows.items():
     rootdir = os.path.abspath('.')
-    bfly = row['bfly']
-    vendor = row['SKU']
-    main = row['MainImageURL']
-    alt1 = row['OtherImageURL1']
-    alt2= row['OtherImageURL2']
+    bfly = v['bfly']
+    vendor = v['SKU']
+    main = v['MainImageURL']
+    alt1 = v['OtherImageURL1']
+    alt2= v['OtherImageURL2']
     try:
         error_check = urllib.urlopen(main)
         urlcode_value = error_check.getcode()
         print urlcode_value
         
-        ### PRIMARY URL, AKA /Z/
         if urlcode_value == 200:
             urllib.urlretrieve(main, os.path.join(rootdir,bfly+"_1"+".jpg"))
     except:
@@ -82,7 +76,6 @@ for row in compiled_rows.items():
         urlcode_value = error_check.getcode()
         print urlcode_value
         
-        ### PRIMARY URL, AKA /Z/
         if urlcode_value == 200:
             urllib.urlretrieve(alt1, os.path.join(rootdir,bfly+"_2"+".jpg"))
     except:
@@ -92,7 +85,6 @@ for row in compiled_rows.items():
         urlcode_value = error_check.getcode()
         print urlcode_value
         
-        ### PRIMARY URL, AKA /Z/
         if urlcode_value == 200:
             urllib.urlretrieve(alt12, os.path.join(rootdir,bfly+"_3"+".jpg"))
     except:
