@@ -7,4 +7,9 @@ IFS=$'\n'
 lines=($(cat $FILE)) # array
 IFS=$old_IFS
 
-for line in "${lines[@]}"; do echo $line; done
+for line in "${lines[@]}"; do echo $line | xargs ; done 
+
+
+
+( set -f; IFS='
+'; exec /bin/bash $(cat <FILE) )

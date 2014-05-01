@@ -45,8 +45,9 @@ def compile_outdict_by_rowkeys(outdict):
     return d
 
 ############################################
-def main():
+
 import sys,os
+xlfile=sys.argv[1]
 
 workbk = xlfile
 
@@ -56,7 +57,44 @@ compiled_rows = compile_outdict_by_rowkeys(outdict)
 for k,v in compiled_rows.iteritems():
     for val in v:
         print k,val,v[val]
-############################################
 
-if __name__ == '__main__': 
-    main()
+
+import os, urllib
+for row in compiled_rows.items():
+    rootdir = os.path.abspath('.')
+    bfly = row['bfly']
+    vendor = row['SKU']
+    main = row['MainImageURL']
+    alt1 = row['OtherImageURL1']
+    alt2= row['OtherImageURL2']
+    try:
+        error_check = urllib.urlopen(main)
+        urlcode_value = error_check.getcode()
+        print urlcode_value
+        
+        ### PRIMARY URL, AKA /Z/
+        if urlcode_value == 200:
+            urllib.urlretrieve(main, os.path.join(rootdir,bfly+"_1"+".jpg"))
+    except:
+        pass
+    try:
+        error_check = urllib.urlopen(alt1)
+        urlcode_value = error_check.getcode()
+        print urlcode_value
+        
+        ### PRIMARY URL, AKA /Z/
+        if urlcode_value == 200:
+            urllib.urlretrieve(alt1, os.path.join(rootdir,bfly+"_2"+".jpg"))
+    except:
+        pass
+    try:
+        error_check = urllib.urlopen(alt12)
+        urlcode_value = error_check.getcode()
+        print urlcode_value
+        
+        ### PRIMARY URL, AKA /Z/
+        if urlcode_value == 200:
+            urllib.urlretrieve(alt12, os.path.join(rootdir,bfly+"_3"+".jpg"))
+    except:
+        pass
+        
