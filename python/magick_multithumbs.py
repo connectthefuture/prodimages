@@ -3,7 +3,7 @@
 def subproc_multithumbs_8_4_2(filepath,destdir,eight=None):
     import subprocess, os
     
-    fname = filepath.split("/")[-1].split('.')[0].strip('_LP').replace('_1.','.').lower()
+    fname = filepath.split("/")[-1].split('.')[0].lower().replace('_1.','.')
     ext = filepath.split(".")[-1]
     
     if eight:
@@ -100,7 +100,7 @@ def subproc_multithumbs_8_4_2(filepath,destdir,eight=None):
         ##'mpr:copy-of-huge-original-resize"163x163!>"-writesample-163x163.jpg'
         #])
         
-import sys,os, datetime
+import sys,os, datetime, glob
 todaysdirdate = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d_%f')
 
 originaldir = os.path.abspath(sys.argv[1])
@@ -123,3 +123,16 @@ if not os.path.isdir(destdir):
 print destdir        
 for filepath in listeddir:
     subproc_multithumbs_8_4_2(os.path.abspath(filepath),destdir)
+
+allfiles_list = []
+converteddir = glob.glob(os.path.join(destdir, '*[0-9]???????[0-9]_[lmz].jpg'))
+pngs_in_originaldir = glob.glob(os.path.join(originaldir, '*[0-9]???????[0-9].png'))
+
+for f in converteddir:
+    allfiles_list.append(os.path.abspath(f))
+
+for f in pngs_in_originaldir:
+    allfiles_list.append(os.path.abspath(f))
+
+
+print sorted(allfiles_list)
