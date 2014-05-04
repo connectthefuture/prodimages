@@ -1,0 +1,114 @@
+#!/usr/bin/env python
+
+def subproc_multithumbs_8_4_2(filepath,destdir):
+    import subprocess, os
+    
+    fname = filepath.split("/")[-1].split('.')[0].strip('_LP').replace('_1.','.').lower()
+    ext = filepath.split(".")[-1]
+    
+    outfile_z = os.path.join(destdir, fname + "_z.jpg")    
+    outfile_l = os.path.join(destdir, fname + "_l.jpg")    
+    outfile_m = os.path.join(destdir, fname + "_m.jpg")
+    #try:            
+    subprocess.call([
+        'convert', 
+        filepath, 
+        '-format', 
+        ext,
+        #'-quality',
+        #'85',
+#        '-colorspace',
+#        'rgb',
+#        '+profile',
+#        '-filter',
+#        'Lanczos',
+        '-write',
+        'mpr:copy-of-original',
+        '+delete',
+        ##'mpr:copy-of-huge-original-crop"3000x2000+0+480"-resize"200x125!>"-writethumb1-extract.jpg+delete',
+        #'mpr:copy-of-huge-original-crop"2000x1500+280+220"-resize"75x75!>"-writethumb2-extract.jpg+delete',
+        #
+        ## Zoom Largest Jpeg
+            'mpr:copy-of-original',
+            '-format', 
+            'jpg',
+#            '-colorspace',
+#            'sRGB',
+            '-channel', 
+            'RGBA',
+            '-resize',
+            '800x960',
+            #'compress', 
+            #'none', 
+            '-unsharp',
+            '2x0.5+0.5+0', 
+            '-quality', 
+            '100',
+            '-write',
+            outfile_z,
+            '+delete',
+        ## Large Jpeg
+            'mpr:copy-of-original',
+            '-format', 
+            'jpg',
+#            '-colorspace',
+#            'sRGB',
+            '-channel', 
+            'RGBA',
+            '-resize',
+            '400x480',
+            #'compress', 
+            #'none', 
+            '-unsharp',
+            '2x0.5+0.5+0', 
+            '-quality', 
+            '100',
+            '-write',
+            outfile_l,
+            '+delete',
+        ## Medium Jpeg
+            'mpr:copy-of-original',
+            '-format', 
+            'jpg',
+#            '-colorspace',
+#            'sRGB',
+            '-channel', 
+            'RGBA',
+            '-resize',
+            '200x240',
+            #'compress', 
+            #'none', 
+            '-unsharp',
+            '2x0.5+0.5+0', 
+            '-quality', 
+            '100',
+            '-write',
+            outfile_m,
+            '+delete',
+        #str('mpr:copy-of-huge-original-resize"1000x1200"-writesample-1000x1200_z.jpg+delete'),
+        #str('mpr:copy-of-huge-original-resize"800x960"-writesample-800x960_x.jpg+delete'),
+        #str('mpr:copy-of-huge-original-resize"400x480"-writesample-400x480_l.jpg+delete'),
+        #str('mpr:copy-of-huge-original '-resize', '"200x240"','-writesample','-200x240_m.jpg+delete'),
+        ##'mpr:copy-of-huge-original-resize"163x163!>"-writesample-163x163.jpg'
+        ])
+        
+import sys,os
+originaldir = os.path.abspath(sys.argv[1])
+os.chdir(originaldir)
+listeddir = os.listdir(originaldir)
+
+destdir = ''
+try:
+    destdir = os.path.abspath(sys.argv[2])
+except IndexError:
+    destdir = os.path.join(originaldir, 'converteddir')
+
+if not os.path.isdir(destdir):
+    try:
+        os.makedirs(destdir)
+    except:
+        print "Failed {}".format(destdir)
+        pass
+print destdir        
+for filepath in listeddir:
+    subproc_multithumbs_8_4_2(os.path.abspath(filepath),destdir)

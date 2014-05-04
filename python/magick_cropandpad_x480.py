@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+ 
 def subproc_pad_to_x480(file,destdir):
     import subprocess, os
     
