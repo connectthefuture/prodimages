@@ -2,10 +2,10 @@
 
 . ~/.bash_profile
 
-PWD=/usr/local/batchRunScripts/offshore_image_processes
+PWD=/usr/local/batchRunScripts/offshore-processes
 
 echo `date` >> ~/.offshoreprocsgit.log
 
-cd /usr/local/batchRunScripts/offshore_image_processes && git pull origin master >> ~/.offshoreprocsgit.log
+cd /usr/local/batchRunScripts/offshore-processes && git pull origin master >> ~/.offshoreprocsgit.log
 
 
