@@ -63,8 +63,8 @@ def build_url_colorstyle_dict(file):
             except:
                 bflyfield = 'colorstyle'
                 
-            localdict['images'] = row[2]
-            localdict['BLUEFLY'] = row[1]
+            localdict[urlfield] = row[4]
+            localdict[bflyfield] = row[1]
             filedict[row[1]] = localdict
     return filedict
 
@@ -99,7 +99,7 @@ filedict = build_url_colorstyle_dict(file)
 for k,v in filedict.iteritems():
     os.chdir(daily_dir)
     
-    vendor_url = v['url']
+    vendor_url = v[sys.argv[2]]
     vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
     vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
     
