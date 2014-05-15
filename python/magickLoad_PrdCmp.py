@@ -237,7 +237,7 @@ import os, sys, re, shutil, datetime, glob
 try:
     testdir = sys.argv[1]
     if os.path.isdir(testdir):
-       rootdir = testdir
+        rootdir = testdir
     else:
         rootdir = '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
 except IndexError:
