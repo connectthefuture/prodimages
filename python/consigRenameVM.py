@@ -7,6 +7,7 @@ author: jb
 """
 
 def sqlQueryConsigRename(vnum, ponum):
+    import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     connection = orcl_engine.connect()    
 #    querymake_consig_stylefix="select pomgr_snp.product_snapshot.colorstyle, pomgr_snp.product_snapshot.vendor_style_no from pomgr_snp.product_snapshot where pomgr_snp.product_snapshot.po_hdr = ponum AND vendor_style_no = vnum"    
@@ -34,8 +35,11 @@ def sqlQueryConsigRename(vnum, ponum):
     return consigstyles
     #return consigstyle['bfly_name']
 
-#dir_conv = ('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion')
 
+######## RUN
+import os,sys,re,glob
+
+#dir_conv = ('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion')
 dir_conv = ('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117147')
 
 globtoconvert = glob.glob(os.path.join(dir_conv, '*.jpg'))
