@@ -1,13 +1,13 @@
+#!/usr/bin/env python 
 # -*- coding: utf-8 -*-
 """
 Created on Fri Mar  8 01:20:40 2013
 
-@author: jb
+author: jb
 """
 
-SELECT POMGR_SNP.PRODUCT_COLOR.ID AS colorstyle, POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR_SNP.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR_SNP.PRODUCT_COLOR INNER JOIN POMGR_SNP.PO_LINE ON POMGR_SNP.PRODUCT_COLOR.ID = POMGR_SNP.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE LIKE 'AMH8500E%' AND POMGR_SNP.PO_LINE.PO_HDR_ID = '116912'
-
 def sqlQueryConsigRename(vnum, ponum):
+    import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     connection = orcl_engine.connect()    
 #    querymake_consig_stylefix="select pomgr_snp.product_snapshot.colorstyle, pomgr_snp.product_snapshot.vendor_style_no from pomgr_snp.product_snapshot where pomgr_snp.product_snapshot.po_hdr = ponum AND vendor_style_no = vnum"    
@@ -35,8 +35,11 @@ def sqlQueryConsigRename(vnum, ponum):
     return consigstyles
     #return consigstyle['bfly_name']
 
-#dir_conv = ('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion')
 
+######## RUN
+import os,sys,re,glob
+
+#dir_conv = ('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion')
 dir_conv = ('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117147')
 
 globtoconvert = glob.glob(os.path.join(dir_conv, '*.jpg'))
