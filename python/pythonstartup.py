@@ -84,7 +84,27 @@ regex_exif = re.compile(pattern_exiftag + "=" + pattern_exifval)
 
 
 #startDateFrom=&startDateTo=&colorGroup=&searchBrand=&eventId=&productStatus=&merchantStatus=&inventory=&active=&store=&styleNumbers=324162301&vendorStyleNumbers=&shortName=&poHdrs=&searchCategory=&jdaCategory=&Submit=Search&exportToExcel=false&exportImages=false&solrQuery=&currentPage=0
-
+pythonpath = ['',
+             '/usr/local/bin',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/pip-1.5.4-py2.7.egg',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/mechanize-0.2.6.dev_20140516-py2.7.egg',
+             '/usr/local/lib/python2.7/site-packages/pip-1.5.4-py2.7.egg',
+             '/usr/local/lib/python2.7/site-packages/mechanize-0.2.6.dev_20140516-py2.7.egg',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python27.zip',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload',
+             '/Users/JCut/Library/Python/2.7/lib/python/site-packages',
+             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/Orange/orng',
+             '/Library/Python/2.7/site-packages',
+             '/usr/local/lib/python2.7/site-packages',
+             '/usr/local/lib/python2.7/site-packages/Orange/orng',
+             '/usr/local/lib/python2.7/site-packages/IPython/extensions',
+             '~/.ipython']
 #### REGEX PATTERN DEFINITIONS
 ###
 ## Walk Root Directory and Return List or all Files in all Subdirs too
