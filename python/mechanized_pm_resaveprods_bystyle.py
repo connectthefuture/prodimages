@@ -127,6 +127,10 @@ class MyBrowser(mechanize.Browser, object):
         self.select_form(nr=0)
         self._username = _username
         self._password = _password
+        br.open(self.url)
+        for form in br.forms():
+            if form.name == form_to_get:
+                save_style_form = br.select_form(self.form_to_get)
         self.submit()
         
     def pm_url(self):
@@ -223,8 +227,10 @@ class VpnbflyMyBrowser(MyBrowser):
         
         #super(VpnbflyMyBrowser, self).
         self.form.controls[1] = self.uname
+        self['username'] = self.uname
         #super(VpnbflyMyBrowser, self)
         self.form.controls[2] = self.pword
+        self['password'] = self.pword
         self.submit()
     
     def login_pm(self):
