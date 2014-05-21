@@ -50,7 +50,7 @@ class PrettifyHandler(mechanize.BaseHandler):
             response = mechanize.response_seek_wrapper(response)
         # only use BeautifulSoup if response is html
         if response.info().dict.has_key('content-type') and ('html' in response.info().dict['content-type']):
-            soup = MinimalSoup (response.get_data())
+            soup = MinimalSoup(response.get_data())
             response.set_data(soup.prettify())
         return response
 
@@ -109,30 +109,23 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.select_form(nr=0)
         self.form['j_username'] = self.uname
         self.form['j_password'] = self.pword
-        
         # Referer 
         self.addheaders = [('Referer', '{0}'.format(self.url_login_vpnpm))]
         # Content Type is form
         self.addheaders = [('Content-Type', 'application/x-www-form-urlencoded')]
-       
         self.submit()
-    
-    
+
     def login_pm(self):
         """Login to pm when on local bfly network"""
         self.open(self.url_login_pm)
+        
         self.select_form(nr=0)
         self.form['j_username'] = self.uname
-        self.form['j_password'] = self.pword
-        #for form in self.forms():
-            #if form.name == form_to_get:
-                #save_style_form = self.select_form(self.form_to_get)       
+        self.form['j_password'] = self.pword       
         # Referer 
         self.addheaders = [('Referer', '{0}'.format(self.url_login_pm))]
-        
         # Content Type is form
-        self.addheaders = [('Content-Type', 'application/x-www-form-urlencoded')]
-        
+        self.addheaders = [('Content-Type', 'application/x-www-form-urlencoded')]        
         self.submit()
     
     # Logout Vpn
@@ -151,14 +144,16 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
         
     def submit_save_proddesc(self):
         """ Plug a list of styes to go to om prddeet page and submit save"""
-        self.login_pm_vpn
+        self.login_pm_vpn()
         _proddesc_style_url = self.get_url_vpnproddesc()
         self.open(_proddesc_style_url)
+        
         ## Preprocess Response to Account for Bad HTML         
         _response = self.response() 
         headers = _response.info()  
         headers['Referer'] = '{0}'.format(_proddesc_style_url)]
         headers["Content-type"] = "text/html; charset=utf-8"
+        
         _response.set_data(_response.get_data().replace("<!---", "<!--"))
         self.set_response(_response)
         self.select_form(name='editProductDetailsForm')
