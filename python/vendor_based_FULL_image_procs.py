@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#!/usr/bin/env python
 import os, sys, re, csv
 
 
@@ -51,22 +54,25 @@ def subproc_magick_large_jpg(imgdir):
 
     ### Change to Large jpg dir to Mogrify using Glob
     os.chdir(imgdir)
-    
     subprocess.call([
-    "mogrify",
+    'mogrify',
+    '-colorspace',
+    'LAB',
     '*.jpg[400x480]',
-    "-filter",
-    "Mitchell",
-    "-compress",
-    "none",
-    "-format",
-    "jpeg",
-    "-adaptive-sharpen",
-    "100",
-    "-unsharp",
-    "50",
-    "-quality",
-    "100",
+    '-filter',
+    'LanczosSharp',
+    '-compress',
+    'none',
+    '-format',
+    'jpeg',
+    '-adaptive-sharpen',
+    '20',
+    '-colorspace',
+    'sRGB',
+    '-unsharp',
+    '2x0.5+0.5+0', 
+    '-quality', 
+    '95',
     ])
 
 ### Medium Jpeg Mogrfy Dir with _m jpgs
@@ -77,20 +83,24 @@ def subproc_magick_medium_jpg(imgdir):
     os.chdir(imgdir)
     
     subprocess.call([
-    "mogrify",
+    'mogrify',
+    '-colorspace',
+    'LAB',
     '*.jpg[200x240]',
-    "-filter",
-    "Mitchell",
-    "-compress",
-    "none",
-    "-format",
-    "jpeg",
-    "-adaptive-sharpen",
-    "100",
-    "-unsharp",
-    "50",
-    "-quality",
-    "100",
+    '-filter',
+    'LanczosSharp',
+    '-compress',
+    'none',
+    '-format',
+    'jpeg',
+    '-adaptive-sharpen',
+    '20',
+    '-colorspace',
+    'sRGB',
+    '-unsharp',
+    '2x0.5+0.5+0', 
+    '-quality', 
+    '95',
     ])
 
 
@@ -101,31 +111,35 @@ def subproc_magick_png(imgdir):
     os.chdir(imgdir)
     
     subprocess.call([
-    "mogrify",
-    "-format",
-    "png",
+    'mogrify',
+    '-format',
+    'png',
     '*.jpg',
-    "-define",
-    "png:preserve-colormap",
-    "-define",
-    "png:format=png24",
-    "-define",
-    "png:compression-level=N",
-    "-define",
-    "png:compression-strategy=N",
-    "-define",
-    "png:compression-filter=N",
-    "-format",
-    "png",
-    "-quality",
-    "100",
-    "-adaptive-sharpen",
-    "50",
-    "-unsharp",
-    "75",
+    '-define',
+    'png:preserve-colormap',
+    '-define',
+    'png:format=png24',
+    '-define',
+    'png:compression-level=N',
+    '-define',
+    'png:compression-strategy=N',
+    '-define',
+    'png:compression-filter=N',
+    '-format',
+    'png',
+    '-quality',
+    '100',
+    '-adaptive-sharpen',
+    '50',
+    '-colorspace',
+    'sRGB',
+    '-unsharp',
+    '2x0.5+0.5+0', 
+    '-quality', 
+    '95',
     ])
     
-    print "Done {}".format(imgdir)
+    print 'Done {}'.format(imgdir)
     return
 
 
@@ -280,13 +294,7 @@ walkedout_tmp = glob.glob(os.path.join(rootdir, '*.*g'))
 walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
 
-
-## Copy Full Size Retouched Jpg to tmp Large and Med jpg folders for Glob Mogrify AND to Final Archive JPG_RETOUCHED_ORIG
-walkedout_renamed = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-
-
-
-
+### Image Processing BEGIN ####
 
 ####### FRAGRANCENET ALT PROCESS DETOUR ####
 def query_vendors_styles(vendorname):
@@ -298,26 +306,32 @@ def query_vendors_styles(vendorname):
     ## POMGR.INVENTORY.AVAL_ON_HAND,
     # querymake_vendor_po_DSSPRD1 = "SELECT POMGR_SNP.PRODUCT_COLOR.ID AS colorstyle, POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR_SNP.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR_SNP.PRODUCT_COLOR INNER JOIN POMGR_SNP.PO_LINE ON POMGR_SNP.PRODUCT_COLOR.ID = POMGR_SNP.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE LIKE '" + vnum + "%' AND POMGR_SNP.PO_LINE.PO_HDR_ID = '" + ponum + "'"
     # querymake_vendors_styles = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_hdr_id, POMGR.VENDOR.NAME AS vendor_name, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ACTIVE, POMGR.VENDOR.THIRD_SUPPLIER_ID, POMGR.LK_PO_TYPE.NAME AS po_type, POMGR.PRODUCT_COLOR.CREATED_DATE as create_dt, POMGR.PRODUCT_COLOR.MODIFIED_DATE as modify_dt, POMGR.PRODUCT_DETAIL.MATERIAL as material, POMGR.PRODUCT_DETAIL.LONG_DESCRIPTION as description, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID WHERE POMGR.VENDOR.NAME LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(vendorname)
-    querymake_vendors_product_details = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_hdr_id, POMGR.VENDOR.NAME AS vendor_name, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ACTIVE, POMGR.VENDOR.THIRD_SUPPLIER_ID, POMGR.LK_PO_TYPE.NAME AS po_type, POMGR.PRODUCT_COLOR.CREATED_DATE as create_dt, POMGR.PRODUCT_COLOR.MODIFIED_DATE as modify_dt, POMGR.PRODUCT_DETAIL.MATERIAL as material, POMGR.PRODUCT_COLOR_DETAIL.SHORT_NAME as short_name, POMGR.PRODUCT_DETAIL.LONG_DESCRIPTION as description, POMGR.PRODUCT_COLOR_DETAIL.BULLET_1 as bullet1, POMGR.PRODUCT_COLOR_DETAIL.BULLET_2 as bullet2, POMGR.PRODUCT_COLOR_DETAIL.BULLET_3 as bullet3, POMGR.PRODUCT_COLOR_DETAIL.BULLET_4 as bullet4, POMGR.PRODUCT_COLOR_DETAIL.BULLET_5 as bullet5, POMGR.PRODUCT_COLOR_DETAIL.BULLET_6 as bullet6, POMGR.PRODUCT_COLOR_DETAIL.BULLET_7 as bullet7, POMGR.PRODUCT_COLOR_DETAIL.BULLET_8 as bullet8, POMGR.PRODUCT_COLOR_DETAIL.BULLET_9 as bullet9, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.VENDOR.NAME LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(vendorname)
     #querymake_vendors_productimage_details = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_hdr_id, POMGR.VENDOR.NAME AS vendor_name, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ACTIVE, POMGR.VENDOR.THIRD_SUPPLIER_ID, POMGR.LK_PO_TYPE.NAME AS po_type, POMGR.PRODUCT_COLOR.CREATED_DATE as create_dt, POMGR.PRODUCT_COLOR.MODIFIED_DATE as modify_dt, POMGR.PRODUCT_DETAIL.MATERIAL as material, POMGR.PRODUCT_COLOR_DETAIL.SHORT_NAME as short_name, POMGR.PRODUCT_DETAIL.LONG_DESCRIPTION as description, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as alt1, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as alt2, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as alt3, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as alt4, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as alt5, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.VENDOR.NAME LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(vendorname)
+    querymake_vendors_product_details = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_hdr_id, POMGR.VENDOR.NAME AS vendor_name, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ACTIVE, POMGR.VENDOR.THIRD_SUPPLIER_ID, POMGR.LK_PO_TYPE.NAME AS po_type, POMGR.PRODUCT_COLOR.CREATED_DATE as create_dt, POMGR.PRODUCT_COLOR.MODIFIED_DATE as modify_dt, POMGR.PRODUCT_DETAIL.MATERIAL as material, POMGR.PRODUCT_COLOR_DETAIL.SHORT_NAME as short_name, POMGR.PRODUCT_DETAIL.LONG_DESCRIPTION as description, POMGR.PRODUCT_COLOR_DETAIL.BULLET_1 as bullet1, POMGR.PRODUCT_COLOR_DETAIL.BULLET_2 as bullet2, POMGR.PRODUCT_COLOR_DETAIL.BULLET_3 as bullet3, POMGR.PRODUCT_COLOR_DETAIL.BULLET_4 as bullet4, POMGR.PRODUCT_COLOR_DETAIL.BULLET_5 as bullet5, POMGR.PRODUCT_COLOR_DETAIL.BULLET_6 as bullet6, POMGR.PRODUCT_COLOR_DETAIL.BULLET_7 as bullet7, POMGR.PRODUCT_COLOR_DETAIL.BULLET_8 as bullet8, POMGR.PRODUCT_COLOR_DETAIL.BULLET_9 as bullet9, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.VENDOR.NAME LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(vendorname)
 
     result = connection.execute(querymake_vendors_product_details)
     styles = {}
     for row in result:
-        style = {}
-        style['vendor_name'] = row['vendor_name']
-        style['short_name'] = row['short_name']
-        style['version'] = row['version']
-
-        styles[row['colorstyle']] = style
+        style_info = {}
+        style_info['vendor_name'] = row['vendor_name']
+        style_info['short_name'] = row['short_name']
+        style_info['version'] = row['version']
+        # Convert Colorstyle to string then set as KEY
+        styles[str(row['colorstyle'])] = style_info
         
     #print consigstyles
     connection.close()
     return styles
 
-fragrancenet_imgs = [ f for f in walked_out_
-####### END FRAGRANCENET DETOUR ############
+####### END FRAGRANCENET DETOUR  FUNC DESCS############
 
+## Move Fragrance net images to special location leaving basic processing on the remainder
+walkedout_renamed = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+fragrancenet_imgs = [ f for f in walkedout_renamed
+
+
+
+###########   END DETOUR ###############################
 ## Copy Full Size Retouched Jpg to tmp Large and Med jpg folders for Glob Mogrify AND to Final Archive JPG_RETOUCHED_ORIG
 walkedout_renamed_wout_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 
