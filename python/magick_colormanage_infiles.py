@@ -14,6 +14,7 @@ cmyk_FOGRA27coat='/usr/local/color_profiles/standard/CoatedFOGRA27.icc'
 adobe98='/usr/local/color_profiles/standard/AdobeRGB1998.icc'
 srgb_webrdy='/usr/local/color_profiles/standard/sRGB.icm'
 
+
 regex_geometry = re.compile(r'^Geometry.+?$')
 
 def metadata_dimension_pair(inputfile):
@@ -70,5 +71,6 @@ def metadata_dimension_pair(inputfile):
 ####### RUN
 if __name__ == "__main__":
     import sys
-    metadata_dimension_pair(sys.argv[1])
+    metadata = metadata_dimension_pair(sys.argv[1])
+    print metadata
     
