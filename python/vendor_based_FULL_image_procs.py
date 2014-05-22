@@ -49,72 +49,105 @@ def rename_retouched_file(src_imgfilepath):
 ######## Make Images For Upload to Website ##########
 
 ### Large Jpeg Mogrfy Dir with _l jpgs
-def subproc_magick_large_jpg(imgdir):
+def subproc_magick_large_jpg(img):
     import subprocess,os,re
 
     ### Change to Large jpg dir to Mogrify using Glob
-    os.chdir(imgdir)
+    os.chdir(os.path.dirname(img))
     subprocess.call([
-    'mogrify',
+    'convert',
     '-colorspace',
-    'LAB',
-    '*.jpg[400x480]',
-    '-filter',
-    'LanczosSharp',
-    '-compress',
-    'none',
-    '-format',
-    'jpeg',
-    '-adaptive-sharpen',
-    '20',
-    '-colorspace',
-    'sRGB',
+    'RGB',
+    img,
+    '-crop',
+    str(
+    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+    ,
+    '+repage',
+    '-gravity',
+    'center',
+    '-background',
+    'white',
+    '-extent',
+    '500x600',
+    if float(round(rgbmean,2)) > float(230):
+        '-modulate',
+        '90,110',     
+    elif float(round(rgbmean,2)) > float(200):    
+        '-modulate',
+        '110,100', 
+    elif float(round(rgbmean,2)) > float(150):    
+        '-modulate',
+        '120,105',     
+    else:    
+        '-modulate',
+        '130,105',
+    #"-auto-level",
+    #"-normalize", 
     '-unsharp',
-    '2x0.5+0.5+0', 
+    '2.0x1.7+0.5+0.0', 
     '-quality', 
     '95',
+    os.path.join('.',img.split('/')[-1])
     ])
 
 ### Medium Jpeg Mogrfy Dir with _m jpgs
-def subproc_magick_medium_jpg(imgdir):
+def subproc_magick_medium_jpg(img):
     import subprocess,os,re
 
     ### Change to Medium jpg dir to Mogrify using Glob
-    os.chdir(imgdir)
+    os.chdir(os.path.dirname(img))
     
     subprocess.call([
-    'mogrify',
+    'convert',
     '-colorspace',
-    'LAB',
-    '*.jpg[200x240]',
-    '-filter',
-    'LanczosSharp',
-    '-compress',
-    'none',
-    '-format',
-    'jpeg',
-    '-adaptive-sharpen',
-    '20',
-    '-colorspace',
-    'sRGB',
+    'RGB',
+    img,
+    '-crop',
+    str(
+    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+    ,
+    '+repage',
+    '-gravity',
+    'center',
+    '-background',
+    'white',
+    '-extent',
+    '500x600',
+    if float(round(rgbmean,2)) > float(230):
+        '-modulate',
+        '90,110',     
+    elif float(round(rgbmean,2)) > float(200):    
+        '-modulate',
+        '110,100', 
+    elif float(round(rgbmean,2)) > float(150):    
+        '-modulate',
+        '120,105',     
+    else:    
+        '-modulate',
+        '130,105',
+    #"-auto-level",
+    #"-normalize", 
     '-unsharp',
-    '2x0.5+0.5+0', 
+    '2.0x1.7+0.5+0.0', 
     '-quality', 
     '95',
+    os.path.join('.',img.split('/')[-1])
     ])
 
 
 ### Png Create with Mogrify globbing png directories
-def subproc_magick_png(imgdir):
+def subproc_magick_png(img):
     import subprocess,re,os
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
-    os.chdir(imgdir)
+    os.chdir(os.path.dirname(img))
     
+    rgbmean = float(128)
     subprocess.call([
-    'mogrify',
+    'convert',
     '-format',
     'png',
-    '*.jpg',
+    img,
     '-define',
     'png:preserve-colormap',
     '-define',
@@ -127,19 +160,30 @@ def subproc_magick_png(imgdir):
     'png:compression-filter=N',
     '-format',
     'png',
+    if float(round(rgbmean,2)) > float(230):
+        '-modulate',
+        '90,110',     
+    elif float(round(rgbmean,2)) > float(200):    
+        '-modulate',
+        '110,100', 
+    elif float(round(rgbmean,2)) > float(150):    
+        '-modulate',
+        '120,105',     
+    else:    
+        '-modulate',
+        '130,105',
     '-quality',
     '100',
-    '-adaptive-sharpen',
-    '50',
     '-colorspace',
     'sRGB',
     '-unsharp',
-    '2x0.5+0.5+0', 
+    '2x1.7+0.5+0', 
     '-quality', 
     '95',
+    os.path.join('.',img.split('/')[-1])
     ])
     
-    print 'Done {}'.format(imgdir)
+    print 'Done {}'.format(img)
     return
 
 

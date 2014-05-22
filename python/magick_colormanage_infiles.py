@@ -23,9 +23,10 @@ def metadata_info_dict(inputfile):
     fname=os.path.basename(inputfile)
     dname=os.path.dirname(inputfile)
     regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
-    regex_border_clr   = re.compile(r'.*?Bordercolor.*?$')
+    regex_mean   = re.compile(r'.*?mean.*?$')
     regex_colorspace  = re.compile(r'.*?Colorspace.*?$')
-    
+    regex_mean  = re.compile(r'.*?Mean.*?$')
+
     metadata=subprocess.check_output(['identify', 
                                        '-verbose', 
                                         inputfile
@@ -39,7 +40,7 @@ def metadata_info_dict(inputfile):
     metadata_width    = float(g_width[0])
     metadata_height   = float(g_height[0])
     
-    dominantclr_list = subprocess.check_output(['convert', 
+    dominantclr_list = subprocess.call(['convert', 
                                                 inputfile, 
                                                 '-posterize',
                                                 '3',
@@ -51,9 +52,9 @@ def metadata_info_dict(inputfile):
                                                 ])
                     
     dominantclr_list = metadata.replace(' ','').split('\n')
-    borderclr = [ borderclr.split(':')[-1][:] for borderclr in dominantclr_list if regex_border_clr.findall(borderclr) ]
+    mean_tot = sorted(dominantclr_list[0].split(' ')[0])#[ borderclr.split(':')[-1][:] for borderclr in dominantclr_list if regex_border_clr.findall(borderclr) ]
     colorspace = [ colorspace.split(':')[-1][:] for colorspace in dominantclr_list if regex_colorspace.findall(colorspace) ]
-    
+    print dominantclr_list
     aspect_ratio =  metadata_height/metadata_width
     aspect_ratio = "{0:.2f}".format(round(aspect_ratio,2))
     
@@ -77,11 +78,150 @@ def metadata_info_dict(inputfile):
         orientation    = 'bnc'
         
     fileinfo['orientation'] = orientation
-    fileinfo['borderclr'] = borderclr[0]
+    fileinfo['mean'] = mean_tot[0]
     fileinfo['colorspace'] = colorspace[0]
     metadict[inputfile] = fileinfo
     return metadict
+
+
+## Image Processing Funx
+def subproc_magick_large_jpg(img):
+    import subprocess,os,re
+
+    ### Change to Large jpg dir to Mogrify using Glob
+    os.chdir(os.path.dirname(img))
     
+    # Get avg color intensity then adjust per group
+    rgbmean = float(128)
+    if float(round(rgbmean,2)) > float(230):
+        modval = '90,110'     
+    elif float(round(rgbmean,2)) > float(200):    
+        modval = '110,100' 
+    elif float(round(rgbmean,2)) > float(150):
+        modval = '120,105'     
+    else: 
+        modval = '130,105'
+
+    subprocess.call([
+    'convert',
+    '-colorspace',
+    'RGB',
+    img,
+    '-crop',
+    str(
+    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+    ,
+    '+repage',
+    '-gravity',
+    'center',
+    '-background',
+    'white',
+    '-extent',
+    '500x600',
+    '-modulate',
+    modval,
+    #"-auto-level",
+    #"-normalize", 
+    '-unsharp',
+    '2.0x1.7+0.5+0.0', 
+    '-quality', 
+    '95',
+    os.path.join('.',img.split('/')[-1])
+    ])
+
+### Medium Jpeg Mogrfy Dir with _m jpgs
+def subproc_magick_medium_jpg(img):
+    import subprocess,os,re
+
+    ### Change to Medium jpg dir to Mogrify using Glob
+    os.chdir(os.path.dirname(img))
+    
+    # Get avg color intensity then adjust per group
+    rgbmean = float(128)
+    if float(round(rgbmean,2)) > float(230):
+        modval = '90,110',     
+    elif float(round(rgbmean,2)) > float(200):    
+        modval = '110,100',
+    elif float(round(rgbmean,2)) > float(150):    
+        modval = '120,105',
+    else:    
+        modval = '130,105',
+
+    subprocess.call([
+    'convert',
+    '-colorspace',
+    'RGB',
+    img,
+    '-crop',
+    str(
+    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+    ,
+    '+repage',
+    '-gravity',
+    'center',
+    '-background',
+    'white',
+    '-extent',
+    '500x600',  
+    '-modulate',
+    modval,
+    #"-auto-level",
+    #"-normalize", 
+    '-unsharp',
+    '2.0x1.7+0.5+0.0', 
+    '-quality', 
+    '95',
+    os.path.join('.',img.split('/')[-1])
+    ])
+
+
+### Png Create with Mogrify globbing png directories
+def subproc_magick_png(img):
+    import subprocess,re,os
+    #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
+    os.chdir(os.path.dirname(img))
+    
+    rgbmean = float(128)
+    if float(round(rgbmean,2)) > float(230):
+        modval = '90,110',     
+    elif float(round(rgbmean,2)) > float(200):    
+        modval = '110,100',
+    elif float(round(rgbmean,2)) > float(150):    
+        modval = '120,105',
+    else:    
+        modval = '130,105',
+    subprocess.call([
+    'convert',
+    '-format',
+    'png',
+    img,
+    '-define',
+    'png:preserve-colormap',
+    '-define',
+    'png:format=png24',
+    '-define',
+    'png:compression-level=N',
+    '-define',
+    'png:compression-strategy=N',
+    '-define',
+    'png:compression-filter=N',
+    '-format',
+    'png',
+    '-modulate',
+    modval,
+    '-quality',
+    '100',
+    '-colorspace',
+    'sRGB',
+    '-unsharp',
+    '2x1.7+0.5+0', 
+    '-quality', 
+    '95',
+    os.path.join('.',img.split('/')[-1])
+    ])
+    
+    print 'Done {}'.format(img)
+    return
 ####### RUN
 if __name__ == "__main__":
     import sys
