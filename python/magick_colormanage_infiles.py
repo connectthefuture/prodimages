@@ -15,9 +15,7 @@ adobe98='/usr/local/color_profiles/standard/AdobeRGB1998.icc'
 srgb_webrdy='/usr/local/color_profiles/standard/sRGB.icm'
 
 
-regex_geometry = re.compile(r'^Geometry.+?$')
-
-def metadata_dimension_pair(inputfile):
+def metadata_info_dict(inputfile):
     import os,sys,re,subprocess,glob
     regex_geometry = re.compile(r'^Geometry.+?$')
     metadict = {}
@@ -62,15 +60,31 @@ def metadata_dimension_pair(inputfile):
     fileinfo['width'] = "{0:.0f}".format(round(metadata_width,2))
     fileinfo['height'] = "{0:.0f}".format(round(metadata_height,2))
     fileinfo['aspect'] = aspect_ratio
+    orientation        = 'standard'
+    
+    if float(round(metadata_height/metadata_width,2)) == float(round(1.00,2)):
+        orientation    = 'square'
+    elif float(round(metadata_height/metadata_width,2)) > float(round(1.00,2)):
+        orientation    = 'portait'
+    elif float(round(metadata_height/metadata_width,2)) < float(round(1.00,2)):
+        orientation    = 'landscape'
+    
+    if float(round(metadata_height/metadata_width,2)) == float(1.2):
+        orientation    = 'standard'
+        if g_width[0] == '2000' and g_height[0] == '2400':
+            orientation = 'bfly'
+    if float(round(metadata_height/metadata_width,2)) == float(1.25):
+        orientation    = 'bnc'
+        
+    fileinfo['orientation'] = orientation
     fileinfo['borderclr'] = borderclr
     fileinfo['colorspace'] = colorspace
     metadict[inputfile] = fileinfo
-    
     return metadict
     
 ####### RUN
 if __name__ == "__main__":
     import sys
-    metadata = metadata_dimension_pair(sys.argv[1])
+    metadata = metadata_info_dict(sys.argv[1])
     print metadata
     
