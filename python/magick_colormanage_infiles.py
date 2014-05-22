@@ -51,8 +51,8 @@ def metadata_info_dict(inputfile):
                                                 ])
                     
     dominantclr_list = metadata.replace(' ','').split('\n')
-    borderclr = [ borderclr.split(':')[-1] for borderclr in dominantclr_list if regex_border_clr.findall(borderclr) ]
-    colorspace = [ colorspace.split(':')[-1] for colorspace in dominantclr_list if regex_colorspace.findall(colorspace) ]
+    borderclr = [ borderclr.split(':')[-1][:] for borderclr in dominantclr_list if regex_border_clr.findall(borderclr) ]
+    colorspace = [ colorspace.split(':')[-1][:] for colorspace in dominantclr_list if regex_colorspace.findall(colorspace) ]
     
     aspect_ratio =  metadata_height/metadata_width
     aspect_ratio = "{0:.2f}".format(round(aspect_ratio,2))
@@ -77,8 +77,8 @@ def metadata_info_dict(inputfile):
         orientation    = 'bnc'
         
     fileinfo['orientation'] = orientation
-    fileinfo['borderclr'] = borderclr
-    fileinfo['colorspace'] = colorspace
+    fileinfo['borderclr'] = borderclr[0]
+    fileinfo['colorspace'] = colorspace[0]
     metadict[inputfile] = fileinfo
     return metadict
     
