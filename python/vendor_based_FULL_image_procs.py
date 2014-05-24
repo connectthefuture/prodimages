@@ -262,6 +262,7 @@ todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 tmp_processing = os.path.join("/mnt/Post_Complete/.Vendor_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
 tmp_processing_l = os.path.join(tmp_processing, "largejpg")
 tmp_processing_m = os.path.join(tmp_processing, "mediumjpg")
+tmp_processing_special = os.path.join(tmp_processing, "special")
 tmp_loading = os.path.join("/mnt/Post_Complete/.Vendor_to_Load/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
 
 ## Define for Creating Archive dirs
@@ -307,6 +308,11 @@ else:
 
     try:
         os.makedirs(tmp_processing_m, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(tmp_processing_special, 16877)
     except:
         pass
 
@@ -367,14 +373,57 @@ def query_vendors_styles(vendorname):
     connection.close()
     return styles
 
+## fragrance png 
+def magick_fragrance_proc_png(img, destdir):
+    import os, subprocess
+    infile =   os.path.abspath(f)
+    outfile = os.path.join(destdir, os.path.basename(f).replace('.jpg', '.png'))
+
+
+    return outfile
+
+## fragrance large png 
+def magick_fragrance_proc_lrg(img, destdir):
+    import os, subprocess
+    infile =   os.path.abspath(f)
+    outfile = os.path.join(destdir, os.path.basename(f).replace('.jpg', '_l.jpg'))
+
+
+    return outfile
+
+## fragrance medium jpg
+def magick_fragrance_proc_med(img, destdir):
+    import os, subprocess
+    infile =   os.path.abspath(f)
+    outfile = os.path.join(destdir, os.path.basename(f).replace('.jpg', '_m.jpg'))
+
+
+    return outfile
+
 ####### END FRAGRANCENET DETOUR  FUNC DESCS############
 
 ## Move Fragrance net images to special location leaving basic processing on the remainder
-walkedout_renamed = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-fragrancenet_imgs = [ f for f in walkedout_renamed
+walkedout_renamed_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+fragrancenet_styles = query_vendors_styles('Fragrancenet')
+fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
+
+## Process only fragrance net images to enhance low Rez photo then archive orig
+for special_img in fragrancenet_imgs:
+    magick_fragrance_proc_png(special_img, tmp_processing_special)
+    magick_fragrance_proc_lrg(special_img, tmp_processing_special)
+    magick_fragrance_proc_med(special_img, tmp_processing_special)
+    
+    ## special processed original files move to archive dir making only standard processing files in proc dir
+    shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
 
 
+## all process special files move to upload dir
+special_processed = glob.glob(os.path.join(tmp_processing_special, '*.??g'))
+[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in special_processed ]
 
+
+####
+#### Detour Ends fairly uneventfully
 ###########   END DETOUR ###############################
 ## Copy Full Size Retouched Jpg to tmp Large and Med jpg folders for Glob Mogrify AND to Final Archive JPG_RETOUCHED_ORIG
 walkedout_renamed_wout_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
