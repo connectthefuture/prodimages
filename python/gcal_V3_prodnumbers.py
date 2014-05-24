@@ -413,7 +413,7 @@ for iterdict in lotsofdicts:
                 
                 ##TODO: rework choose color process below with following 3 line of code 
                 # keycode =  v['role']
-                #functions = {9: 'Production', 8: Copy', 7: Retouching'}
+                #functions = {9: 'Production', 8: 'Copy', 7: 'Retouching'}
                 #functions.get(keycode, unknown_key_pressed)()
 
                 ## Choose Color of Event Based on Role
