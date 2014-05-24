@@ -411,6 +411,11 @@ for iterdict in lotsofdicts:
                 descfull = str(descfull)
                 count += 1
                 
+                ##TODO: rework choose color process below with following 3 line of code 
+                # keycode =  v['role']
+                #functions = {9: 'Production', 8: Copy', 7: Retouching'}
+                #functions.get(keycode, unknown_key_pressed)()
+
                 ## Choose Color of Event Based on Role
                 lockv = v['role']
                 if lockv == 'Production':
