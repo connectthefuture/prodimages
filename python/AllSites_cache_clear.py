@@ -266,16 +266,18 @@ def main():
     #print versioned_links
     count = 0
     if not versioned_links:
-        print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
+        for x in xrange.__reversed__(xrange(5)):
+            print "Product is not Live. Skipping Edgecast CDN Purge Will Do Local Purge in ... {0}".format(x+1)
+            time.sleep(.75)
     #    for colorstyle in colorstyle_list:
-    #        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-    #        POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-    #        POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
     #        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
     #        send_purge_request_localis(colorstyle,version,POSTURL_BC)
     #        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
-    elif len(versioned_links) <= 2550:
+    elif len(versioned_links) <= 4550:
 
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
