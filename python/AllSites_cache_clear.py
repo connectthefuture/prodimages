@@ -314,7 +314,7 @@ def main():
             #csv_write_datedOutfile(url_purge)
 
     else:
-        print "Failed -- Over 550 URLs Submitted"    
+        print "Failed -- Over 4550 URLs Submitted"    
 
 
 
@@ -323,7 +323,7 @@ def main():
 
     #print generated_links
     count = 0
-    if len(edgecast_listurls) <= 2550:
+    if len(edgecast_listurls) <= 3550:
 
         #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
@@ -345,7 +345,7 @@ def main():
             #csv_write_datedOutfile(url_purge)
 
     else:
-        print "Failed -- Over 550 URLs Submitted"    
+        print "Failed -- Over 3550 URLs Submitted"    
 
 
 #print edgecast_listurls
