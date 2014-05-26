@@ -237,7 +237,7 @@ def get_image_color_minmax(img):
     'convert',
     img, 
     '-median',
-    '5', 
+    '3', 
     '+dither', 
     '-colors',
     '2', 
@@ -255,40 +255,149 @@ def get_image_color_minmax(img):
     
     
     ## Prepare cleaned output as list or dict
-    colormax = str(ret).split('\n')[0].strip(' ')
-    colormax =  re.sub(re.compile(r',\W'),',',colormax).replace(':','',1).split(' ')
-    colormin = str(ret).split('\n')[1].strip(' ')
-    colormin =  re.sub(re.compile(r',\W'),',',colormin).replace(':','',1).split(' ')
+    colorlow = str(ret).split('\n')[0].strip(' ')
+    colorlow =  re.sub(re.compile(r',\W'),',',colorlow).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
+    colorhigh = str(ret).split('\n')[1].strip(' ')
+    colorhigh =  re.sub(re.compile(r',\W'),',',colorhigh).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
     
-    fields_top =  ['min_thresh', 'max_thresh']
-    fields_level2  =  ['mean_avg', 'rgb_vals', 'webcolor_id', 'color_profile_vals']
+    fields_top =  ['low_rgb_avg', 'high_rgb_avg']
+    fields_level2  =  ['total_pixels', 'rgb_vals', 'webcolor_id', 'color_profile_vals']
     # x = { zip(field.split(','),color.split(',')) for color in colormin }
-    colormin  = zip(fields_level2,colormin)
-    colormax  = zip(fields_level2,colormax)
+    colorlow  = zip(fields_level2,colorlow)
+    colorhigh  = zip(fields_level2,colorhigh)
     
-    coloravgs = colormin,colormax
-    colordata = zip(fields_top, coloravgs)
     
-    return colordata
+    if len(colorhigh) == len(colorlow):
+        coloravgs = dict(colorlow),dict(colorhigh)
+        colordata = zip(fields_top, coloravgs)
+        colordata = dict(colordata)
+        colordata['comp_level'] = 'InRange'
+        return colordata
+            
+    elif len(colorhigh) < len(colorlow):
+        coloravgs = dict(colorlow)
+        colordata = {}
+        colordata[fields_top[0]] = coloravgs
+        colordata[fields_top[1]] = {'total_pixels': 0}
+        colordata['comp_level'] = 'Bright'
+        return colordata
+
+    elif len(colorhigh) > len(colorlow):
+        coloravgs = dict(colorhigh)
+        colordata = {}
+        colordata[fields_top[1]] = coloravgs
+        colordata[fields_top[0]] == {'total_pixels': 0}
+        colordata['comp_level'] = 'Dark'
+        return colordata
 
 
-def magick_fragrance_proc_lrg(img, destdir=None):
+def evaluate_color_values(colordata):
+    high_range_pixels = ''
+    low_range_pixels  = ''
+    high_range_pixels = float((colordata['high_rgb_avg']['total_pixels']))
+    low_range_pixels   = float((colordata['low_rgb_avg']['total_pixels']))
+    try:
+        
+        if low_range_pixels >= high_range_pixels and high_range_pixels != 0:
+            r,g,b = colordata['high_rgb_avg']['rgb_vals'].split(',')
+            r,g,b = float(r),float(g),float(b)
+            high_avg = float(round((r+b+g)/3,2))
+            r,g,b = colordata['low_rgb_avg']['rgb_vals'].split(',')
+            r,g,b = float(r),float(g),float(b)
+            low_avg = float(round((r+b+g)/3,2))
+            #print low_range_pixels, high_range_pixels
+            ratio   =  round(float(float(low_range_pixels)/float(high_range_pixels)),2)
+            print high_avg/(low_avg*ratio)
+            return high_avg,low_avg,ratio, 'LOW' 
+            
+        elif low_range_pixels < high_range_pixels and low_range_pixels != 0:
+            r,g,b = colordata['high_rgb_avg']['rgb_vals'].split(',')
+            r,g,b = float(r),float(g),float(b)
+            high_avg = float(round((r+b+g)/3,2))
+            r,g,b = colordata['low_rgb_avg']['rgb_vals'].split(',')
+            r,g,b = float(r),float(g),float(b)
+            low_avg = float(round((r+b+g)/3,2))
+            #print low_range_pixels, high_range_pixels
+            ratio   =  round(float(float(low_range_pixels)/float(high_range_pixels)),2)
+            print low_avg/(high_avg*ratio)
+            return high_avg,low_avg,ratio, 'HIGH' 
+    except TypeError:
+        print "Type Error"
+        pass
+    except ValueError:
+            print "Value Error", colordata
+            pass
+
+def sort_files_by_values(directory):
+    import os,glob    
+    filevalue_dict = {}
+    #if type(directory) == 'list':
+    fileslist = directory
+    #elif os.path.isdir(directory):
+    #    fileslist = glob.glob(os.path.join(os.path.abspath(directory), '*.??g'))
+
+    for f in fileslist: 
+        values = {}
+        colordata = get_image_color_minmax(f)
+        try: 
+            high,low,ratio, ratio_range = evaluate_color_values(colordata)
+            values['ratio'] = ratio
+            values['ratio_range'] = ratio_range
+            if ratio_range == 'LOW':
+                values['low'] = low #*ratio
+                values['high'] = high 
+            if ratio_range  == 'HIGH':
+                values['high'] = high #*ratio
+                values['low'] = low
+                
+            filevalue_dict[f] = values
+        except TypeError:
+            filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
+            pass
+    return filevalue_dict
+        
+
+def magick_fragrance_proc_lrg(img, rgbmean=None, destdir=None):
     import subprocess,os,re
 
     if not destdir:
         destdir = '.'
     ### Change to Large jpg dir to Mogrify using Glob
     os.chdir(os.path.dirname(img))
-    rgbmean = get_image_color_minmax(img)
+    ratio_range = rgbmean['ratio_range']
+    if ratio_range != 'OutOfRange':
+        high        = rgbmean['high']
+        low         = rgbmean['low']
+        ratio       = rgbmean['ratio']
+    #rgbmean = float(128)
+    #rgbmean = get_image_color_minmax(img)
+    if ratio_range == 'LOW':
+        if float(round(high,2)) > float(240):
+            modulater = '-modulate'
+            modulate = '105,100'  
+        elif float(round(high,2)) > float(200):    
+            modulater = '-modulate'
+            modulate = '115,110'
+        elif float(round(high,2)) > float(150):    
+            modulater = '-modulate'
+            modulate =  '120,110'    
+        else:    
+            modulater = '-gamma'
+            modulate =  '1.4' #'120,110'    
     
-    if float(round(rgbmean,2)) > float(230):
-        modulate = '90,110'  
-    elif float(round(rgbmean,2)) > float(200):    
-        modulate = '110,100'
-    elif float(round(rgbmean,2)) > float(150):    
-        modulate = '120,105'    
-    else:    
-        modulate =' 130,105'
+    elif ratio_range == 'HIGH':
+        if float(round(high,2)) > float(230):
+            modulater = '-modulate'
+            modulate = '100,100'  
+        elif float(round(high,2)) > float(200):    
+            modulater = '-modulate'
+            modulate = '105,100'
+        elif float(round(high,2)) > float(150):    
+            modulater = '-modulate'
+            modulate = '110,105'      
+    elif ratio_range == 'OutOfRange':
+        modulater = '-modulate'
+        modulate = '100,100'
     
     subprocess.call([
     'convert',
@@ -306,10 +415,14 @@ def magick_fragrance_proc_lrg(img, destdir=None):
     'white',
     '-extent',
     '500x600',
-    '-modulate',
+    modulater,
     modulate,
-    #"-auto-level",
-    #"-normalize", 
+    "-auto-level",
+    #"-normalize",
+    '-filter',
+    'Lanczos',
+    '-resize',
+    '400x480', 
     '-unsharp',
     '2.0x1.7+0.5+0.0', 
     '-quality', 
@@ -318,7 +431,7 @@ def magick_fragrance_proc_lrg(img, destdir=None):
     ])
 
 ### Medium Jpeg conver Dir with _m jpgs
-def magick_fragrance_proc_med(img, destdir=None):
+def magick_fragrance_proc_med(img, rgbmean=None, destdir=None):
     import subprocess,os,re
 
     if not destdir:
@@ -326,16 +439,42 @@ def magick_fragrance_proc_med(img, destdir=None):
 
     ### Change to Medium jpg dir to Mogrify using Glob
     os.chdir(os.path.dirname(img))
-    rgbmean = get_image_color_minmax(img)
+    ratio_range = rgbmean['ratio_range']
+    if ratio_range != 'OutOfRange':
+        high        = rgbmean['high']
+        low         = rgbmean['low']
+        ratio       = rgbmean['ratio']
+    #rgbmean = float(128)
+    #rgbmean = get_image_color_minmax(img)
+    if ratio_range == 'LOW':
+        if float(round(high,2)) > float(240):
+            modulater = '-modulate'
+            modulate = '105,100'  
+        elif float(round(high,2)) > float(200):    
+            modulater = '-modulate'
+            modulate = '115,110'
+        elif float(round(high,2)) > float(150):    
+            modulater = '-gamma'
+            modulate =  '1.25' #'120,110'    
+        else:    
+            modulater = '-gamma'
+            modulate =  '1.4' #'120,110'    
+
+    elif ratio_range == 'HIGH':
+        if float(round(high,2)) > float(230):
+            modulater = '-modulate'
+            modulate = '100,100'  
+        elif float(round(high,2)) > float(200):    
+            modulater = '-modulate'
+            modulate = '105,100'
+        elif float(round(high,2)) > float(150):    
+            modulater = '-modulate'
+            modulate = '110,105'      
+    elif ratio_range == 'OutOfRange':
+        modulater = '-modulate'
+        modulate = '100,100'
     
-    if float(round(rgbmean,2)) > float(230):
-        modulate = '90,110'  
-    elif float(round(rgbmean,2)) > float(200):    
-        modulate = '110,100'
-    elif float(round(rgbmean,2)) > float(150):    
-        modulate = '120,105'    
-    else:    
-        modulate =' 130,105'
+        
     
     subprocess.call([
         'convert',
@@ -353,57 +492,84 @@ def magick_fragrance_proc_med(img, destdir=None):
         'white',
         '-extent',
         '500x600',
-        '-modulate',
+        modulater,
         modulate,
-        #"-auto-level",
-        #"-normalize", 
+        "-auto-level",
+        #"-normalize",
+        '-filter',
+        'Lanczos',
+        '-resize',
+        '300x360',
         '-unsharp',
         '2.0x1.7+0.5+0.0', 
         '-quality', 
         '95',
-        os.path.join('.',img.split('/')[-1][:9] + '_m.jpg')
+        os.path.join(destdir,img.split('/')[-1][:9] + '_m.jpg')
         ])
 
 
 ### Png Create with convert 
-def magick_fragrance_proc_png(img, destdir=None):
+def magick_fragrance_proc_png(img, rgbmean=None, destdir=None):
     import subprocess,os,re
 
     if not destdir:
         destdir = '.'
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
-    
+    ratio_range = rgbmean['ratio_range']
+    if ratio_range != 'OutOfRange':
+        high        = rgbmean['high']
+        low         = rgbmean['low']
+        ratio       = rgbmean['ratio']
     #rgbmean = float(128)
-    rgbmean = get_image_color_minmax(img)
+    #rgbmean = get_image_color_minmax(img)
+    if ratio_range == 'LOW':
+        if float(round(high,2)) > float(240):
+            modulater = '-modulate'
+            modulate = '105,100'  
+        elif float(round(high,2)) > float(200):    
+            modulater = '-modulate'
+            modulate = '115,110'
+        elif float(round(high,2)) > float(150):    
+            modulater = '-modulate'
+            modulate =  '120,110'    
+        else:    
+            modulater = '-gamma'
+            modulate = '1.2'
+
+    elif ratio_range == 'HIGH':
+        if float(round(high,2)) > float(230):
+            modulater = '-modulate'
+            modulate = '100,100'  
+        elif float(round(high,2)) > float(200):    
+            modulater = '-modulate'
+            modulate = '105,100'
+        elif float(round(high,2)) > float(150):    
+            modulater = '-modulate'
+            modulate = '110,105'      
+    elif ratio_range == 'OutOfRange':
+        modulater = '-modulate'
+        modulate = '100,100'
     
-    if float(round(rgbmean,2)) > float(230):
-        modulate = '90,110'  
-    elif float(round(rgbmean,2)) > float(200):    
-        modulate = '110,100'
-    elif float(round(rgbmean,2)) > float(150):    
-        modulate = '120,105'    
-    else:    
-        modulate =' 130,105'
-    
+    format = img.split('.')[-1]
     subprocess.call([
         'convert',
         '-format',
-        'png',
+        format,
         img,
         '-define',
         'png:preserve-colormap',
-        '-define',
-        'png:format=png24',
-        '-define',
-        'png:compression-level=N',
-        '-define',
-        'png:compression-strategy=N',
-        '-define',
-        'png:compression-filter=N',
+#        '-define',
+#        'png:format=png24',
+#        '-define',
+#        'png:compression-level=N',
+#        '-define',
+#        'png:compression-strategy=N',
+#        '-define',
+#        'png:compression-filter=N',
         '-format',
         'png',
-        '-modulate',
+        modulater,
         modulate,
         '-quality',
         '100',
@@ -413,22 +579,27 @@ def magick_fragrance_proc_png(img, destdir=None):
         '2x1.7+0.5+0', 
         '-quality', 
         '95',
-        os.path.join('.',img.split('/')[-1][:9] + '.png')
+        os.path.join(destdir,img.split('/')[-1][:9] + '.png')
         ])
     
     print 'Done {}'.format(img)
-    return####### END FRAGRANCENET DETOUR  FUNC DESCS############
+    return
+    
+####### END FRAGRANCENET DETOUR  FUNC DESCS############
 
 ## Move Fragrance net images to special location leaving basic processing on the remainder
-walkedout_renamed_special = glob.glob(os.path.join(tmp_processing, '*.??g'))
+walkedout_renamed_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 fragrancenet_styles = query_vendors_styles('Fragrancenet')
 fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
 
 ## Process only fragrance net images to enhance low Rez photo then archive orig
-for special_img in fragrancenet_imgs:
-    magick_fragrance_proc_png(special_img, tmp_processing_special)
-    magick_fragrance_proc_lrg(special_img, tmp_processing_special)
-    magick_fragrance_proc_med(special_img, tmp_processing_special)
+img_dict = sort_files_by_values(fragrancenet_imgs)
+for k,v in img_dict.items():
+    special_img = k
+    rgbmean     = v.items()
+    magick_fragrance_proc_png(special_img, rgbmean=dict(rgbmean), destdir=tmp_processing_special)
+    magick_fragrance_proc_lrg(special_img, rgbmean=dict(rgbmean), destdir=tmp_processing_special)
+    magick_fragrance_proc_med(special_img, rgbmean=dict(rgbmean), destdir=tmp_processing_special)
     
     ## special processed original files move to archive dir making only standard processing files in proc dir
     shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
