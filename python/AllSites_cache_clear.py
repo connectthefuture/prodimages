@@ -267,15 +267,15 @@ def main():
     count = 0
     if not versioned_links:
         for x in xrange.__reversed__(xrange(5)):
-            print "Product is not Live. Skipping Edgecast CDN Purge Will Do Local Purge in ... {0}".format(x+1)
-            time.sleep(.75)
-    #    for colorstyle in colorstyle_list:
+            print "Product is not Live. Skipping Edgecast CDN Purge Commencing Local Purge of {0} styles in ... {1}".format(len(colorstyle_list), x+1)
+            time.sleep(.85)
+        for colorstyle in colorstyle_list:
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-    #        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-    #        send_purge_request_localis(colorstyle,version,POSTURL_BC)
-    #        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+            send_purge_request_localis(colorstyle,version,POSTURL_BC)
+            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
     elif len(versioned_links) <= 4550:
 
@@ -301,13 +301,16 @@ def main():
                 #except:
                 #    print sys.stderr().read()
             except IndexError:
-                print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
-    #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-    #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-    #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-    #            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-    #            send_purge_request_localis(colorstyle,version,POSTURL_BC)
-    #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+                for x in xrange.__reversed__(xrange(5)):
+                    print "Product is not Live. Skipping Edgecast CDN Purge Will Do Local Purge in ... {0}".format(x+1)
+                    time.sleep(.75)
+#                POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+#                POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+#                POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+#                version = '1'
+#                send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+#                send_purge_request_localis(colorstyle,version,POSTURL_BC)
+#                send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
                 pass
         for url_purge in versioned_links:
             send_purge_request_edgecast(url_purge[0])
