@@ -266,6 +266,7 @@ def main():
     #print versioned_links
     count = 0
     if not versioned_links:
+        import time
         for x in xrange.__reversed__(xrange(5)):
             print "Product is not Live. Skipping Edgecast CDN Purge Commencing Local Purge of {0} styles in ... {1}".format(len(colorstyle_list), x+1)
             time.sleep(.85)
