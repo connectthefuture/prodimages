@@ -529,13 +529,13 @@ def magick_fragrance_proc_png(img, rgbmean=None, destdir=None):
             modulate = '105,100'  
         elif float(round(high,2)) > float(200):    
             modulater = '-modulate'
-            modulate = '115,110'
+            modulate = '110,110'
         elif float(round(high,2)) > float(150):    
             modulater = '-modulate'
-            modulate =  '120,110'    
+            modulate =  '115,110'    
         else:    
-            modulater = '-gamma'
-            modulate = '1.2'
+            modulater = '-modulate'
+            modulate =  '120,110' 
 
     elif ratio_range == 'HIGH':
         if float(round(high,2)) > float(230):
