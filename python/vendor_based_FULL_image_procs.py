@@ -420,7 +420,7 @@ def magick_fragrance_proc_png(img, destdir=None):
     return####### END FRAGRANCENET DETOUR  FUNC DESCS############
 
 ## Move Fragrance net images to special location leaving basic processing on the remainder
-walkedout_renamed_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+walkedout_renamed_special = glob.glob(os.path.join(tmp_processing, '*.??g'))
 fragrancenet_styles = query_vendors_styles('Fragrancenet')
 fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
 
