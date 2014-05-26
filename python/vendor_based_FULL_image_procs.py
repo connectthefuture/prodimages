@@ -48,146 +48,7 @@ def rename_retouched_file(src_imgfilepath):
 
 ######## Make Images For Upload to Website ##########
 
-### Large Jpeg Mogrfy Dir with _l jpgs
-def subproc_magick_large_jpg(img):
-    import subprocess,os,re
-
-    ### Change to Large jpg dir to Mogrify using Glob
-    os.chdir(os.path.dirname(img))
-    subprocess.call([
-    'convert',
-    '-colorspace',
-    'RGB',
-    img,
-    '-crop',
-    str(
-    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-    ,
-    '+repage',
-    '-gravity',
-    'center',
-    '-background',
-    'white',
-    '-extent',
-    '500x600',
-    if float(round(rgbmean,2)) > float(230):
-        '-modulate',
-        '90,110',     
-    elif float(round(rgbmean,2)) > float(200):    
-        '-modulate',
-        '110,100', 
-    elif float(round(rgbmean,2)) > float(150):    
-        '-modulate',
-        '120,105',     
-    else:    
-        '-modulate',
-        '130,105',
-    #"-auto-level",
-    #"-normalize", 
-    '-unsharp',
-    '2.0x1.7+0.5+0.0', 
-    '-quality', 
-    '95',
-    os.path.join('.',img.split('/')[-1])
-    ])
-
-### Medium Jpeg Mogrfy Dir with _m jpgs
-def subproc_magick_medium_jpg(img):
-    import subprocess,os,re
-
-    ### Change to Medium jpg dir to Mogrify using Glob
-    os.chdir(os.path.dirname(img))
-    
-    subprocess.call([
-    'convert',
-    '-colorspace',
-    'RGB',
-    img,
-    '-crop',
-    str(
-    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-    ,
-    '+repage',
-    '-gravity',
-    'center',
-    '-background',
-    'white',
-    '-extent',
-    '500x600',
-    if float(round(rgbmean,2)) > float(230):
-        '-modulate',
-        '90,110',     
-    elif float(round(rgbmean,2)) > float(200):    
-        '-modulate',
-        '110,100', 
-    elif float(round(rgbmean,2)) > float(150):    
-        '-modulate',
-        '120,105',     
-    else:    
-        '-modulate',
-        '130,105',
-    #"-auto-level",
-    #"-normalize", 
-    '-unsharp',
-    '2.0x1.7+0.5+0.0', 
-    '-quality', 
-    '95',
-    os.path.join('.',img.split('/')[-1])
-    ])
-
-
-### Png Create with Mogrify globbing png directories
-def subproc_magick_png(img):
-    import subprocess,re,os
-    #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
-    os.chdir(os.path.dirname(img))
-    
-    rgbmean = float(128)
-    subprocess.call([
-    'convert',
-    '-format',
-    'png',
-    img,
-    '-define',
-    'png:preserve-colormap',
-    '-define',
-    'png:format=png24',
-    '-define',
-    'png:compression-level=N',
-    '-define',
-    'png:compression-strategy=N',
-    '-define',
-    'png:compression-filter=N',
-    '-format',
-    'png',
-    if float(round(rgbmean,2)) > float(230):
-        '-modulate',
-        '90,110',     
-    elif float(round(rgbmean,2)) > float(200):    
-        '-modulate',
-        '110,100', 
-    elif float(round(rgbmean,2)) > float(150):    
-        '-modulate',
-        '120,105',     
-    else:    
-        '-modulate',
-        '130,105',
-    '-quality',
-    '100',
-    '-colorspace',
-    'sRGB',
-    '-unsharp',
-    '2x1.7+0.5+0', 
-    '-quality', 
-    '95',
-    os.path.join('.',img.split('/')[-1])
-    ])
-    
-    print 'Done {}'.format(img)
-    return
-
-
-#### Upload to usr:imagedrop pwd:imagedrop0
+# Upload to usr:imagedrop pwd:imagedrop0
 def pycurl_upload_imagedrop(localFilePath):
     import pycurl, os
     localFileName = localFilePath.split('/')[-1]
@@ -351,12 +212,7 @@ def query_vendors_styles(vendorname):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')    
     connection = orcl_engine.connect()
-    ## POMGR.INVENTORY.TOTAL_WH_RCVD_QTY,
-    ## POMGR.INVENTORY.SOLD,
-    ## POMGR.INVENTORY.AVAL_ON_HAND,
-    # querymake_vendor_po_DSSPRD1 = "SELECT POMGR_SNP.PRODUCT_COLOR.ID AS colorstyle, POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR_SNP.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR_SNP.PRODUCT_COLOR INNER JOIN POMGR_SNP.PO_LINE ON POMGR_SNP.PRODUCT_COLOR.ID = POMGR_SNP.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE LIKE '" + vnum + "%' AND POMGR_SNP.PO_LINE.PO_HDR_ID = '" + ponum + "'"
-    # querymake_vendors_styles = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_hdr_id, POMGR.VENDOR.NAME AS vendor_name, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ACTIVE, POMGR.VENDOR.THIRD_SUPPLIER_ID, POMGR.LK_PO_TYPE.NAME AS po_type, POMGR.PRODUCT_COLOR.CREATED_DATE as create_dt, POMGR.PRODUCT_COLOR.MODIFIED_DATE as modify_dt, POMGR.PRODUCT_DETAIL.MATERIAL as material, POMGR.PRODUCT_DETAIL.LONG_DESCRIPTION as description, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID WHERE POMGR.VENDOR.NAME LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(vendorname)
-    #querymake_vendors_productimage_details = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_hdr_id, POMGR.VENDOR.NAME AS vendor_name, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ACTIVE, POMGR.VENDOR.THIRD_SUPPLIER_ID, POMGR.LK_PO_TYPE.NAME AS po_type, POMGR.PRODUCT_COLOR.CREATED_DATE as create_dt, POMGR.PRODUCT_COLOR.MODIFIED_DATE as modify_dt, POMGR.PRODUCT_DETAIL.MATERIAL as material, POMGR.PRODUCT_COLOR_DETAIL.SHORT_NAME as short_name, POMGR.PRODUCT_DETAIL.LONG_DESCRIPTION as description, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as alt1, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as alt2, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as alt3, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as alt4, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as alt5, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.VENDOR.NAME LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(vendorname)
+
     querymake_vendors_product_details = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_hdr_id, POMGR.VENDOR.NAME AS vendor_name, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ACTIVE, POMGR.VENDOR.THIRD_SUPPLIER_ID, POMGR.LK_PO_TYPE.NAME AS po_type, POMGR.PRODUCT_COLOR.CREATED_DATE as create_dt, POMGR.PRODUCT_COLOR.MODIFIED_DATE as modify_dt, POMGR.PRODUCT_DETAIL.MATERIAL as material, POMGR.PRODUCT_COLOR_DETAIL.SHORT_NAME as short_name, POMGR.PRODUCT_DETAIL.LONG_DESCRIPTION as description, POMGR.PRODUCT_COLOR_DETAIL.BULLET_1 as bullet1, POMGR.PRODUCT_COLOR_DETAIL.BULLET_2 as bullet2, POMGR.PRODUCT_COLOR_DETAIL.BULLET_3 as bullet3, POMGR.PRODUCT_COLOR_DETAIL.BULLET_4 as bullet4, POMGR.PRODUCT_COLOR_DETAIL.BULLET_5 as bullet5, POMGR.PRODUCT_COLOR_DETAIL.BULLET_6 as bullet6, POMGR.PRODUCT_COLOR_DETAIL.BULLET_7 as bullet7, POMGR.PRODUCT_COLOR_DETAIL.BULLET_8 as bullet8, POMGR.PRODUCT_COLOR_DETAIL.BULLET_9 as bullet9, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.VENDOR.NAME LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(vendorname)
 
     result = connection.execute(querymake_vendors_product_details)
@@ -373,34 +229,195 @@ def query_vendors_styles(vendorname):
     connection.close()
     return styles
 
-## fragrance png 
-def magick_fragrance_proc_png(img, destdir):
-    import os, subprocess
-    infile =   os.path.abspath(f)
-    outfile = os.path.join(destdir, os.path.basename(f).replace('.jpg', '.png'))
+
+## fragrance mean color for processing levels 
+def get_image_color_minmax(img):
+    import subprocess, os, sys, re
+    ret = subprocess.check_output([
+    'convert',
+    img, 
+    '-median',
+    '5', 
+    '+dither', 
+    '-colors',
+    '2', 
+    '-trim', 
+    '+repage',  
+    '-gravity', 
+    'center', 
+    '-crop', 
+    '50%', 
+    '-depth', 
+    '8', 
+    '-format',
+    '%c', 
+    'histogram:info:-'])
+    
+    
+    ## Prepare cleaned output as list or dict
+    colormax = str(ret).split('\n')[0].strip(' ')
+    colormax =  re.sub(re.compile(r',\W'),',',colormax).replace(':','',1).split(' ')
+    colormin = str(ret).split('\n')[1].strip(' ')
+    colormin =  re.sub(re.compile(r',\W'),',',colormin).replace(':','',1).split(' ')
+    
+    fields_top =  ['min_thresh', 'max_thresh']
+    fields_level2  =  ['mean_avg', 'rgb_vals', 'webcolor_id', 'color_profile_vals']
+    # x = { zip(field.split(','),color.split(',')) for color in colormin }
+    colormin  = zip(fields_level2,colormin)
+    colormax  = zip(fields_level2,colormax)
+    
+    coloravgs = colormin,colormax
+    colordata = zip(fields_top, coloravgs)
+    
+    return colordata
 
 
-    return outfile
+def magick_fragrance_proc_lrg(img, destdir=None):
+    import subprocess,os,re
 
-## fragrance large png 
-def magick_fragrance_proc_lrg(img, destdir):
-    import os, subprocess
-    infile =   os.path.abspath(f)
-    outfile = os.path.join(destdir, os.path.basename(f).replace('.jpg', '_l.jpg'))
+    if not destdir:
+        destdir = '.'
+    ### Change to Large jpg dir to Mogrify using Glob
+    os.chdir(os.path.dirname(img))
+    rgbmean = get_image_color_minmax(img)
+    
+    if float(round(rgbmean,2)) > float(230):
+        modulate = '90,110'  
+    elif float(round(rgbmean,2)) > float(200):    
+        modulate = '110,100'
+    elif float(round(rgbmean,2)) > float(150):    
+        modulate = '120,105'    
+    else:    
+        modulate =' 130,105'
+    
+    subprocess.call([
+    'convert',
+    '-colorspace',
+    'RGB',
+    img,
+    '-crop',
+    str(
+    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+    ,
+    '+repage',
+    '-gravity',
+    'center',
+    '-background',
+    'white',
+    '-extent',
+    '500x600',
+    '-modulate',
+    modulate,
+    #"-auto-level",
+    #"-normalize", 
+    '-unsharp',
+    '2.0x1.7+0.5+0.0', 
+    '-quality', 
+    '95',
+    os.path.join(destdir,img.split('/')[-1][:9] + '_l.jpg')
+    ])
+
+### Medium Jpeg conver Dir with _m jpgs
+def magick_fragrance_proc_med(img, destdir=None):
+    import subprocess,os,re
+
+    if not destdir:
+        destdir = '.'
+
+    ### Change to Medium jpg dir to Mogrify using Glob
+    os.chdir(os.path.dirname(img))
+    rgbmean = get_image_color_minmax(img)
+    
+    if float(round(rgbmean,2)) > float(230):
+        modulate = '90,110'  
+    elif float(round(rgbmean,2)) > float(200):    
+        modulate = '110,100'
+    elif float(round(rgbmean,2)) > float(150):    
+        modulate = '120,105'    
+    else:    
+        modulate =' 130,105'
+    
+    subprocess.call([
+        'convert',
+        '-colorspace',
+        'RGB',
+        img,
+        '-crop',
+        str(
+        subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+        ,
+        '+repage',
+        '-gravity',
+        'center',
+        '-background',
+        'white',
+        '-extent',
+        '500x600',
+        '-modulate',
+        modulate,
+        #"-auto-level",
+        #"-normalize", 
+        '-unsharp',
+        '2.0x1.7+0.5+0.0', 
+        '-quality', 
+        '95',
+        os.path.join('.',img.split('/')[-1][:9] + '_m.jpg')
+        ])
 
 
-    return outfile
+### Png Create with convert 
+def magick_fragrance_proc_png(img, destdir=None):
+    import subprocess,os,re
 
-## fragrance medium jpg
-def magick_fragrance_proc_med(img, destdir):
-    import os, subprocess
-    infile =   os.path.abspath(f)
-    outfile = os.path.join(destdir, os.path.basename(f).replace('.jpg', '_m.jpg'))
-
-
-    return outfile
-
-####### END FRAGRANCENET DETOUR  FUNC DESCS############
+    if not destdir:
+        destdir = '.'
+    #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
+    os.chdir(os.path.dirname(img))
+    
+    #rgbmean = float(128)
+    rgbmean = get_image_color_minmax(img)
+    
+    if float(round(rgbmean,2)) > float(230):
+        modulate = '90,110'  
+    elif float(round(rgbmean,2)) > float(200):    
+        modulate = '110,100'
+    elif float(round(rgbmean,2)) > float(150):    
+        modulate = '120,105'    
+    else:    
+        modulate =' 130,105'
+    
+    subprocess.call([
+        'convert',
+        '-format',
+        'png',
+        img,
+        '-define',
+        'png:preserve-colormap',
+        '-define',
+        'png:format=png24',
+        '-define',
+        'png:compression-level=N',
+        '-define',
+        'png:compression-strategy=N',
+        '-define',
+        'png:compression-filter=N',
+        '-format',
+        'png',
+        '-modulate',
+        modulate,
+        '-quality',
+        '100',
+        '-colorspace',
+        'sRGB',
+        '-unsharp',
+        '2x1.7+0.5+0', 
+        '-quality', 
+        '95',
+        os.path.join('.',img.split('/')[-1][:9] + '.png')
+        ])
+    
+    print 'Done {}'.format(img)
+    return####### END FRAGRANCENET DETOUR  FUNC DESCS############
 
 ## Move Fragrance net images to special location leaving basic processing on the remainder
 walkedout_renamed_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
@@ -425,6 +442,7 @@ special_processed = glob.glob(os.path.join(tmp_processing_special, '*.??g'))
 ####
 #### Detour Ends fairly uneventfully
 ###########   END DETOUR ###############################
+
 ## Copy Full Size Retouched Jpg to tmp Large and Med jpg folders for Glob Mogrify AND to Final Archive JPG_RETOUCHED_ORIG
 walkedout_renamed_wout_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 
