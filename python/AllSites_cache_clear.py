@@ -271,6 +271,7 @@ def main():
             print "Product is not Live. Skipping Edgecast CDN Purge Commencing Local Purge of {0} styles in ... {1}".format(len(colorstyle_list), x+1)
             time.sleep(.85)
         for colorstyle in colorstyle_list:
+            version= "1"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
