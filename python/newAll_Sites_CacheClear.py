@@ -186,7 +186,7 @@ def main():
     for colorstyle in colorstyle_list:
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
-        version =  query_version_number(colorstyle)['version']
+        version =  query_version_number(colorstyle)[colorstyle]['version']
         ## static standard urls
         oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
@@ -232,7 +232,7 @@ def main():
                 if vertest[:4] == 'ver=':
                     version = vertest[-1]
                 else:
-                    version =  query_version_number(colorstyle)['version']
+                    version =  query_version_number(colorstyle)[colorstyle]['version']
                 ## Create list page urls for Edgecast
                 if alturl not in link:
                     oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
@@ -326,7 +326,7 @@ def main():
     if not versioned_links:
         print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
-            version =  query_version_number(colorstyle)['version']
+            version =  query_version_number(colorstyle)[colorstyle]['version']
             POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll1.php"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
@@ -336,7 +336,7 @@ def main():
             #send_purge_request_localis(colorstyle,version,POSTURL_BC)
             send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
-    elif len(versioned_links) <= 2550:
+    elif len(versioned_links) <= 4550:
 
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
@@ -382,7 +382,7 @@ def main():
 
     #print generated_links
     count = 0
-    if len(edgecast_listurls) <= 2550:
+    if len(edgecast_listurls) <= 4550:
 
         #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
@@ -404,7 +404,7 @@ def main():
             #csv_write_datedOutfile(url_purge)
 
     else:
-        print "Failed -- Over 550 URLs Submitted"    
+        print "Failed -- Over 4550 URLs Submitted"    
 
 
 #print edgecast_listurls
