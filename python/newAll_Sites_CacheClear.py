@@ -211,12 +211,20 @@ def main():
             edgecast_listurls.append(pdpalt01z)
             edgecast_listurls.append(pdpalt01l)
             edgecast_listurls.append(pdpaltthumb)         
-            # local urls to clear
-            pdp_urllist.append(oldlistpg)
-            pdp_urllist.append(newlistpg)
-            pdp_urllist.append(pdpg)
-            pdp_urllist.append(pmlistpg)
             
+            ## Standard urls to clear
+            #pdp_urllist.append(oldlistpg)
+            #pdp_urllist.append(newlistpg)
+            #pdp_urllist.append(pdpg)
+            #pdp_urllist.append(pmlistpg)
+            ## version urls using db query not scraped
+            #pdp_urllist.append(pdpZOOMthumb)
+            #pdp_urllist.append(pdpZOOM)
+            #pdp_urllist.append(pdpalt01z)
+            #pdp_urllist.append(pdpalt01l)
+            #pdp_urllist.append(pdpaltthumb)
+
+
         for link in found_links:
             if colorstyle in link:
                 pdp_urllist.append(link)
