@@ -359,7 +359,8 @@ def sort_files_by_values(directory):
 
 def magick_fragrance_proc_lrg(img, rgbmean=None, destdir=None):
     import subprocess,os,re
-
+    modulater = ''
+    modulate = ''
     if not destdir:
         destdir = '.'
     ### Change to Large jpg dir to Mogrify using Glob
@@ -440,7 +441,9 @@ def magick_fragrance_proc_lrg(img, rgbmean=None, destdir=None):
 ### Medium Jpeg conver Dir with _m jpgs
 def magick_fragrance_proc_med(img, rgbmean=None, destdir=None):
     import subprocess,os,re
-
+    modulater = ''
+    modulate = ''
+    
     if not destdir:
         destdir = '.'
 
@@ -525,7 +528,8 @@ def magick_fragrance_proc_med(img, rgbmean=None, destdir=None):
 ### Png Create with convert 
 def magick_fragrance_proc_png(img, rgbmean=None, destdir=None):
     import subprocess,os,re
-
+    modulater = ''
+    modulate = ''
     if not destdir:
         destdir = '.'
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
