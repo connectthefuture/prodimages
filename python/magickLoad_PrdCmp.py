@@ -157,12 +157,20 @@ def subproc_magick_png(imgdir):
     "png:compression-filter=N",
     "-format",
     "png",
-    "-quality",
-    "100",
-    "-adaptive-sharpen",
-    "50",
-    "-unsharp",
-    "75",
+## new
+    "-colorspace",
+    "RGB",
+    "-filter",
+    "Spline",
+    "-define",
+    "filter:blur=0.88549061701764",
+    '-unsharp',
+    '2x2.4+0.5+0', 
+    "-colorspace",
+    "sRGB",
+    '-quality', 
+    '100',
+## new
     ])
     
     print "Done {}".format(imgdir)
