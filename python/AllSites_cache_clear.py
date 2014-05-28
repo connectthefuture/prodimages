@@ -303,12 +303,13 @@ def main():
                 #except:
                 #    print sys.stderr().read()
             except IndexError:
+                import time
                 for x in xrange.__reversed__(xrange(5)):
                     print "Product is not Live. Skipping Edgecast CDN Purge Will Do Local Purge in ... {0}".format(x+1)
                     time.sleep(.75)
-#                POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-#                POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-#                POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+                POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+                POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+                POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
 #                version = '1'
 #                send_purge_request_localis(colorstyle,version,POSTURL_BFY)
 #                send_purge_request_localis(colorstyle,version,POSTURL_BC)
