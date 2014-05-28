@@ -408,7 +408,7 @@ def magick_fragrance_proc_lrg(img, rgbmean=None, destdir=None):
     str(
     subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
     ,
-    '+repage',
+    #'+repage',
     '-gravity',
     'center',
     '-background',
@@ -492,7 +492,7 @@ def magick_fragrance_proc_med(img, rgbmean=None, destdir=None):
         str(
         subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
         ,
-        '+repage',
+        #'+repage',
         '-gravity',
         'center',
         '-background',
