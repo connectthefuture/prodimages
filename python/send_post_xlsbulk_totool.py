@@ -15,7 +15,7 @@ def readxl_outputdict(workbk=None):
         for cx in xrange(sh.ncols):
             rowhead = sh.cell_value(rowx=0,colx=cx)
             rowval = sh.cell_value(rowx=rx,colx=cx)
-            if rowval == '':
+            if rowval is not '':
                 print rowval
                 rowdict[rowhead] = rowval
                 outdict[rx] = rowdict
