@@ -37,8 +37,12 @@ def compile_outdict_by_rowkeys(outdict):
         for val in r[1].items():
             try:
                 if type(val[1]) == float:
-                    value = int(val[1])#"{0:.0}".format(val[1])
-                    print value
+                    value = str(int(val[1]))#"{0:.0}".format(val[1])
+                    if len(value) == 9:
+                        print "Style {0}".format(value)
+                    else:
+                        print "PO# {0}".format(value)
+                        
                 else:
                     value = val[1]
                 #print type(val[1])
@@ -53,7 +57,7 @@ def compile_outdict_by_rowkeys(outdict):
 
 ############################################
 def main():
-    import sys,os
+    import sys,os,re
 
     try:
         workbk = sys.argv[1]
@@ -62,13 +66,23 @@ def main():
         workbk = xlfile
     outdict = readxl_outputdict(workbk)
     compiled_rows = compile_outdict_by_rowkeys(outdict)
-
+    regex_url = re.compile(r'.*?[.][jJpPnNgG]{3}')
     for k,v in compiled_rows.iteritems():
-        for val in v:
-            print k,val,v[val]
+        #for val in v:
+        #    print v[val]#, k,val
+        if re.findall(regex_url,k[v]):
+            bflystyle = v['Style#']
+            mainurl = v['Main Image']
+            alturl1 = v['Additional Image URL 1']
+            alturl2 = v['Additional Image URL 2']
+            alturl3 = v['Additional Image URL 3']
+            alturl4 = v['Additional Image URL 4']
+            alturl5 = v['Additional Image URL 5']
+            print k[v]        
+        
 ############################################
 
 if __name__ == '__main__': 
     main()
-    #x = main()
-    #print x
+    x = main()
+    print x
