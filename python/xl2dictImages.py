@@ -38,10 +38,10 @@ def compile_outdict_by_rowkeys(outdict):
             try:
                 if type(val[1]) == float:
                     value = str(int(val[1]))#"{0:.0}".format(val[1])
-                    if len(value) == 9:
-                        print "Style {0}".format(value)
-                    else:
-                        print "PO# {0}".format(value)
+#                    if len(value) == 9:
+#                        print "Style {0}".format(value)
+#                    else:
+#                        print "PO# {0}".format(value)
                         
                 else:
                     value = val[1]
@@ -55,9 +55,28 @@ def compile_outdict_by_rowkeys(outdict):
                 pass
     return d
 
+def output_imgurl_dict(dictinclurls):
+    from collections import defaultdict
+    import re
+    colorstyles_vendorimgs = defaultdict(list)
+    regex_url = re.compile(r'.*?[.][jJpPnNgG]{3}$')
+    regex_colorstyle = re.compile(r'^[1-9][0-9]{8}$')
+    for k,v in dictinclurls.iteritems():
+        imageurls = []
+        for val in v:
+            if re.findall(regex_url,v[val]):
+                imgurl =  v[val]#, k,val
+                imageurls.append(imgurl)
+            if re.findall(regex_colorstyle,v[val]):
+                style = v[val]
+                colorstyles_vendorimgs[style] = imageurls
+    return colorstyles_vendorimgs
+
 ############################################
+############################################
+
 def main():
-    import sys,os,re
+    import sys
 
     try:
         workbk = sys.argv[1]
@@ -66,23 +85,10 @@ def main():
         workbk = xlfile
     outdict = readxl_outputdict(workbk)
     compiled_rows = compile_outdict_by_rowkeys(outdict)
-    regex_url = re.compile(r'.*?[.][jJpPnNgG]{3}')
-    for k,v in compiled_rows.iteritems():
-        #for val in v:
-        #    print v[val]#, k,val
-        if re.findall(regex_url,k[v]):
-            bflystyle = v['Style#']
-            mainurl = v['Main Image']
-            alturl1 = v['Additional Image URL 1']
-            alturl2 = v['Additional Image URL 2']
-            alturl3 = v['Additional Image URL 3']
-            alturl4 = v['Additional Image URL 4']
-            alturl5 = v['Additional Image URL 5']
-            print k[v]        
-        
-############################################
+    colorstyle_vendorimages = output_imgurl_dict(compiled_rows)
+    
 
 if __name__ == '__main__': 
     main()
     x = main()
-    print x
+    #print x
