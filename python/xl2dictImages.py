@@ -86,7 +86,9 @@ def main():
     outdict = readxl_outputdict(workbk)
     compiled_rows = compile_outdict_by_rowkeys(outdict)
     colorstyle_vendorimages = output_imgurl_dict(compiled_rows)
-    
+    for k,v in colorstyle_vendorimages.iteritems():
+        
+        print k, sorted(v)
 
 if __name__ == '__main__': 
     main()
