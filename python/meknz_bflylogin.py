@@ -63,7 +63,7 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.url_login_vpn         = 'https://vpn.bluefly.com/login.html'
         self.url_login_cgi         = 'https://vpn.bluefly.com/dana-na/auth/url_0/welcome.cgi'
         self.url_login_bypass_JSAM = 'https://vpn.bluefly.com/dana/home/starter.cgi?startpageonly=1'
-        self.url_login_pm          = 'https://pm.bluefly.corp/login.html'
+        self.url_login_pm          = 'http://pm.bluefly.corp/login.html'
         self.url_login_vpnpm       = 'https://vpn.bluefly.com/manager/,DanaInfo=pm.bluefly.corp+login.html'
         self.url_logout_vpn        = 'https://vpn.bluefly.com/dana-na/auth/logout.cgi'
 
@@ -142,7 +142,7 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
         
     # Generate Pm Product Detail URL when Passed self.style ( for self.style in style_list: self.get_url_proddesc()    ) or style?not sure
     def get_url_proddesc(self):
-        self.pmurl_style    = "https://pm.bluefly.corp/productdetails.html?id={0}".format(self.style)
+        self.pmurl_style    = "http://pm.bluefly.corp/manager/product/productdetails.html?id={0}".format(self.style)
         return self.pmurl_style
     
     def get_url_vpnproddesc(self):
