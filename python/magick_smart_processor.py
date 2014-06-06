@@ -101,7 +101,13 @@ def get_image_dimensions(img):
     metadata=subprocess.check_output(['identify','-verbose', img])
             
     metadata_list = metadata.replace(' ','').split('\n')
+    
+    g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
+    g_height = [ g.split(':')[-1].split('+')[0].split('x')[1] for g in metadata_list if regex_geometry.findall(g) ]
+    
+    dimensions = '{0}x{1}'.format(g_width,g_height)
 
+    ## Vertical Portrait orientation or exact Square for taller images
     if int(dimensions.split('x')[1]) <= int(dimensions.split('x')[-1]):
         if int(dimensions.split('x')[1]) < 2000:
             vert_horiz = "x2400"
@@ -119,7 +125,7 @@ def get_image_dimensions(img):
             vert_horiz = "x480"
             dimensions = "400x480"
     
-    
+    ## Landscape Orientation for wider images  
     elif int(dimensions.split('x')[1]) > int(dimensions.split('x')[-1]):
         if int(dimensions.split('x')[-1]) < 2400:
             vert_horiz = "2000x"
@@ -158,13 +164,12 @@ def subproc_magick_large_jpg(img, destdir=None):
         destdir = os.path.abspath(destdir)
         
     dimensions = ''
-    
-    if int(dimensions.split('x')[1]) <= int(dimensions.split('x')[-1]):
-        vert_horiz = "x480"
-    elif int(dimensions.split('x')[1]) > int(dimensions.split('x')[-1]):
-        vert_horiz = "400x"
+    ## Get variable values for processing
+    vert_horiz, dimensions = get_image_dimensions(img)
 
-    dimensions = "400x480"
+    if not dimensions:
+        vert_horiz = 'x480'
+        dimensions = "400x480"
     
     subprocess.call([
     'convert',
@@ -199,6 +204,7 @@ def subproc_magick_large_jpg(img, destdir=None):
     #os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
     ])
 
+
 ### Medium Jpeg Convert to  _l jpgs
 def subproc_magick_medium_jpg(img, destdir=None):
     import subprocess,os,re
@@ -212,13 +218,12 @@ def subproc_magick_medium_jpg(img, destdir=None):
         destdir = os.path.abspath(destdir)
 
     dimensions = ''
-    
-    if int(dimensions.split('x')[1]) <= int(dimensions.split('x')[-1]):
-        vert_horiz = "x360"
-    elif int(dimensions.split('x')[1]) > int(dimensions.split('x')[-1]):
-        vert_horiz = "300x"
+    ## Get variable values for processing
+    vert_horiz, dimensions = get_image_dimensions(img)
 
-    dimensions = "300x360"
+    if not dimensions:
+        vert_horiz = 'x360'
+        dimensions = "300x360"
     
     subprocess.call([
         'convert',
@@ -264,8 +269,13 @@ def subproc_magick_png(img):
     else:
         destdir = os.path.abspath(destdir)
 
-    vert_horiz, dimensions = '', '',
+    dimensions = ''
+    ## Get variable values for processing
+    vert_horiz, dimensions = get_image_dimensions(img)
 
+    if not dimensions:
+        dimensions = '100%'
+        vert_horiz = '100%'
 
     subprocess.call([
         'convert',
