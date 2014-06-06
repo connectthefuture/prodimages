@@ -174,17 +174,19 @@ def main():
                 version = ''
                 if vertest[:4] == 'ver=':
                     version = vertest[-1]
-                
-                ## Create list page urls for Edgecast
+                ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
-                    oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
-                    newlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
-                    pdpg  =         'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
-                    pmlistpg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+                    oldlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
+                    newlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
+                    pdpg          =  'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
+                    pmlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+                    pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
+
                     edgecast_listurls.append(oldlistpg)
                     edgecast_listurls.append(newlistpg)
                     edgecast_listurls.append(pdpg)
                     edgecast_listurls.append(pmlistpg)
+                    edgecast_listurls.append(pmeventimg)
 
                 if version:
                     ### ZOOM HI REZ

@@ -192,6 +192,7 @@ def main():
         newlistpg = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
         pdpg = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
         pmlistpg  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+        pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
         pdpZOOMthumb ='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
         pdpZOOM   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version) 
         pdpaltthumb ='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
@@ -204,6 +205,7 @@ def main():
             edgecast_listurls.append(newlistpg)
             edgecast_listurls.append(pdpg)
             edgecast_listurls.append(pmlistpg)
+            edgecast_listurls.append(pmeventimg)
             ## version urls using db query not scraped
             edgecast_listurls.append(pdpZOOMthumb)
             edgecast_listurls.append(pdpZOOM)
@@ -233,17 +235,18 @@ def main():
                     version = vertest[-1]
                 else:
                     version =  query_version_number(colorstyle)[colorstyle]['version']
-                ## Create list page urls for Edgecast
+                ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
                     oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
                     newlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
                     pdpg  =         'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                     pmlistpg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+                    pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
                     edgecast_listurls.append(oldlistpg)
                     edgecast_listurls.append(newlistpg)
                     edgecast_listurls.append(pdpg)
                     edgecast_listurls.append(pmlistpg)
-
+                    edgecast_listurls.append(pmeventimg)
                 if version:
                     ### ZOOM HI REZ
                     pdpZOOM   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
