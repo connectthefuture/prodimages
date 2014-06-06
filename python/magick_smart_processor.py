@@ -91,6 +91,7 @@ def metadata_info_dict(inputfile):
     metadict[inputfile] = fileinfo
     return metadict
 
+
 # return image demensions only
 def get_image_dimensions(img):
     import os,sys,re,subprocess,glob
