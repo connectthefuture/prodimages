@@ -77,6 +77,8 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.url_proddesc   = self.get_url_proddesc    
         self.url_vpnproddesc = self.get_url_vpnproddesc
 
+        self.url_prodmerge    = self.get_url_prodmerge()    
+        self.url_vpmprodmerge = self.get_url_vpmprodmerge()
 
     def login_vpn(self):
         ## Login to Remote VPN network with auth
@@ -144,11 +146,22 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
     def get_url_proddesc(self):
         self.pmurl_style    = "http://pm.bluefly.corp/manager/product/productdetails.html?id={0}".format(self.style)
         return self.pmurl_style
-    
+
     def get_url_vpnproddesc(self):
         self.vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+productdetails.html?id={0}".format(self.style)
         return self.vpnpmurl_style
         
+
+    def get_url_prodmerge(self):
+        self.pmurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
+        return self.pmurl_style
+
+    def get_url_vpnprodmerge(self):
+        self.vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+mergecolorstyle.html?id={0}".format(self.style)
+        return self.pmurl_style
+
+
+
     def submit_save_proddesc(self):
         #pmurlpdp = self.get_url_vpnproddesc()
         pmurlpdp = self.get_url_proddesc()
