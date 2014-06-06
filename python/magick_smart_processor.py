@@ -1,6 +1,5 @@
 #/usr/bin/env python
 
-
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
     ret = subprocess.check_output([
@@ -83,8 +82,8 @@ def metadata_info_dict(inputfile):
         orientation    = 'bnc'
         
     fileinfo['orientation'] = orientation
-    fileinfo['mean'] = mean_tot[0]
-    fileinfo['colorspace'] = colorspace[0]
+    #fileinfo['mean'] = mean_tot[0]
+    #fileinfo['colorspace'] = colorspace[0]
     metadict[inputfile] = fileinfo
     return metadict
 
@@ -93,6 +92,7 @@ def metadata_info_dict(inputfile):
 def get_image_dimensions(img):
     import os,sys,re,subprocess,glob
     dimensions = ''
+    regex_geometry = re.compile(r'^Geometry.+?$')
     regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
 
     metadata=subprocess.check_output(['identify','-verbose', img])
@@ -115,7 +115,7 @@ def get_image_dimensions(img):
         elif int(dimensions.split('x')[1]) < 1400 and int(dimensions.split('x')[1]) > 1000:
             vert_horiz = "x1200"
             dimensions = "1000x1200"
-        elif int(dimensions.split('x')[1]) < 1000 and int(dimensions.split('x')[1]) > 600
+        elif int(dimensions.split('x')[1]) < 1000 and int(dimensions.split('x')[1]) > 600:
             vert_horiz = "x720"
             dimensions = "600x720"
         else:
@@ -323,12 +323,20 @@ def subproc_magick_png(img):
 import sys,glob,shutil,os
 #root_img_dir = os.path.abspath(sys.argv[1])
 root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
+destdir = '/Users/johnb/Pictures'
+
 if os.path.isdir(root_img_dir):
-    for img in glob.glob(os.path.join(root_img_dir,'*.jpg')):
-        subproc_magick_large_jpg(img)
+    for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
+        subproc_magick_large_jpg(img, destdir=destdir)
         #subproc_magick_medium_jpg(imgdir)
         #subproc_magick_png(root_img_dir)
 else:
     img = root_img_dir
+    
+    #subproc_magick_large_jpg(img, destdir=destdir)
+    #subproc_magick_medium_jpg(imgdir)
+    #subproc_magick_png(root_img_dir)
+    metadict = metadata_info_dict(img)
+    dimens = get_image_dimensions(img)
     test_img = get_image_color_minmax(img)
     
