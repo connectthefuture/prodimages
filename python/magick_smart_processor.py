@@ -49,12 +49,9 @@ def metadata_info_dict(inputfile):
     fname=os.path.basename(inputfile)
     dname=os.path.dirname(inputfile)
     regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
+    
+    metadata=subprocess.check_output(['identify', '-verbose', inputfile])
 
-    metadata=subprocess.check_output(['identify', 
-                                       '-verbose', 
-                                        inputfile
-                                        ])
-            
     metadata_list = metadata.replace(' ','').split('\n')
     
     g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
@@ -77,7 +74,7 @@ def metadata_info_dict(inputfile):
         orientation    = 'portait'
     elif float(round(metadata_height/metadata_width,2)) < float(round(1.00,2)):
         orientation    = 'landscape'
-    
+
     if float(round(metadata_height/metadata_width,2)) == float(1.2):
         orientation    = 'standard'
         if g_width[0] == '2000' and g_height[0] == '2400':
@@ -92,7 +89,7 @@ def metadata_info_dict(inputfile):
     return metadict
 
 
-# return image demensions only
+# return image demensions and vert_hoiz variables only
 def get_image_dimensions(img):
     import os,sys,re,subprocess,glob
     dimensions = ''
@@ -156,7 +153,6 @@ def subproc_magick_large_jpg(img, destdir=None):
     import subprocess,os,re
 
     os.chdir(os.path.dirname(img))
-    #rgbmean = get_image_color_minmax(img)
     
     if not destdir:
         destdir = os.path.abspath('.')
