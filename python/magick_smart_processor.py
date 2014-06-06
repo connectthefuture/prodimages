@@ -102,7 +102,7 @@ def get_image_dimensions(img):
     g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
     g_height = [ g.split(':')[-1].split('+')[0].split('x')[1] for g in metadata_list if regex_geometry.findall(g) ]
     
-    dimensions = '{0}x{1}'.format(g_width,g_height)
+    dimensions = '{0}x{1}'.format(g_width[0],g_height[0])
 
     ## Vertical Portrait orientation or exact Square for taller images
     if int(dimensions.split('x')[1]) <= int(dimensions.split('x')[-1]):
@@ -257,7 +257,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
 
 
 ### Png Create with Convert and aspect 
-def subproc_magick_png(img):
+def subproc_magick_png(img, destdir=None):
     import subprocess,re,os
 
     if not destdir:
@@ -333,9 +333,9 @@ if os.path.isdir(root_img_dir):
 else:
     img = root_img_dir
     
-    #subproc_magick_large_jpg(img, destdir=destdir)
-    #subproc_magick_medium_jpg(imgdir)
-    #subproc_magick_png(root_img_dir)
+    subproc_magick_large_jpg(img, destdir=destdir)
+    subproc_magick_medium_jpg(img, destdir=destdir)
+    subproc_magick_png(img, destdir=destdir)
     metadict = metadata_info_dict(img)
     dimens = get_image_dimensions(img)
     test_img = get_image_color_minmax(img)
