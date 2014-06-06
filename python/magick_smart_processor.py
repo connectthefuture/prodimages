@@ -250,7 +250,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         ,
         
         #'-trim', 
-        '+repage',
+        #'+repage',
 		"-filter",
         "Cosine",
         "-define",
@@ -269,7 +269,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         "-format",
         "jpeg",
         '-unsharp',
-        '2x2.2+0.5+0', 
+        '2x1.9+0.5+0', 
         '-quality', 
         '95',
         #os.path.join(destdir, img.split('/')[-1])
@@ -298,6 +298,7 @@ def subproc_magick_png(img, destdir=None):
 	if len(img.split('/')[-1].split('.')[0]) > 11:
 		outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
+	ext = img.split('.')[-1][0]
     subprocess.call([
         'convert',
         "-colorspace",
@@ -309,6 +310,8 @@ def subproc_magick_png(img, destdir=None):
         str(
         subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
         ,
+        '-format',
+        'png',
         '-define',
         'png:preserve-colormap',
         '-define',
@@ -335,7 +338,7 @@ def subproc_magick_png(img, destdir=None):
         "-colorspace",
         "sRGB",
         '-unsharp',
-        '2x2.9+0.5+0', 
+        '2x3.0+0.5+0', 
         '-quality', 
         '100',
         os.path.join(destdir, img.split('/')[-1])
