@@ -1,12 +1,15 @@
 #/usr/bin/env python
 
-#get_aspect_ratio(img):
-#    from PIL import Image
-#    imgdata = magic.from_file(img)
-#    dimensions = '300x360'
-#    dimensions1 = '600x330'
-#    w,h = dimensions.split('x')
-#    aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+def get_aspect_ratio(img):
+        from PIL import Image
+        im = Image.open(img)
+        w,h = im.size
+        im.close()
+        #imgdata = magic.from_file(img)
+        #dimensions = '300x360'
+        #dimensions1 = '600x330'
+        #w,h = dimensions.split('x')
+        aspect_ratio = str(round(float(int(h))/float(int(w)),2))
 #
 #
 #
