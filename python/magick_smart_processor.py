@@ -1,5 +1,18 @@
 #/usr/bin/env python
 
+#get_aspect_ratio(img):
+#    from PIL import Image
+#    imgdata = magic.from_file(img)
+#    dimensions = '300x360'
+#    dimensions1 = '600x330'
+#    w,h = dimensions.split('x')
+#    aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+#
+#
+#
+#
+
+
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
     ret = subprocess.check_output([
@@ -194,8 +207,10 @@ def get_image_dimensions(img):
 ### Large Jpeg Convert to  _l jpgs
 def subproc_magick_large_jpg(img, destdir=None):
     import subprocess,os,re
-    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-    regex_alt = re.compile(r'.+?/[1-9][0-9]{8}_\w+?0[1-6]\.jpg')
+    regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
+    regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
+    regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
+    
     os.chdir(os.path.dirname(img))
     
     ## Destination name if Alt or Not
@@ -215,42 +230,46 @@ def subproc_magick_large_jpg(img, destdir=None):
             vert_horiz = 'x480'
             dimensions = "400x480"
         
-        subprocess.call([
-        'convert',
-        '-colorspace',
-        'RGB',
-        img,
-        '-crop',
-        str(
-        subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-        ,
-        '-trim', 
-        "+repage",
-        "-filter",
-        "Cosine",
-        "-define",
-        "filter:blur=0.88549061701764",
-        "-distort",
-        "Resize",
-        vert_horiz,
-        '-background',
-        'white',
-        '-gravity',
-        'center',
-        '-extent', 
-        dimensions,
-        "-colorspace",
-        "sRGB",
-        "-format",
-        "jpeg",
-        '-unsharp',
-        '2x2.3+0.5+0', 
-        '-quality', 
-        '95',
-        outfile
-        ])
-        return outfile
-    
+        dimensions = "400x480"
+        
+        if regex_valid_style.findall(img):
+            subprocess.call([
+            'convert',
+            '-colorspace',
+            'RGB',
+            img,
+            '-crop',
+            str(
+            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            ,
+            '-trim', 
+            "+repage",
+            "-filter",
+            "Cosine",
+            "-define",
+            "filter:blur=0.88549061701764",
+            "-distort",
+            "Resize",
+            vert_horiz,
+            '-background',
+            'white',
+            '-gravity',
+            'center',
+            '-extent', 
+            dimensions,
+            "-colorspace",
+            "sRGB",
+            "-format",
+            "jpeg",
+            '-unsharp',
+            '2x2.3+0.5+0', 
+            '-quality', 
+            '95',
+            outfile
+            ])
+            return outfile
+        else:
+            return img
     ## No alt _L size needed
     else:
         pass
@@ -262,9 +281,10 @@ def subproc_magick_large_jpg(img, destdir=None):
 ### Medium Jpeg Convert to  _l jpgs
 def subproc_magick_medium_jpg(img, destdir=None):
     import subprocess,os,re
-    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-    regex_alt = re.compile(r'.+?/[1-9][0-9]{8}_\w+?0[1-6]\.jpg')
-
+    regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
+    regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
+    regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
+       
     os.chdir(os.path.dirname(img))
     #rgbmean = get_image_color_minmax(img)
     
@@ -283,54 +303,60 @@ def subproc_magick_medium_jpg(img, destdir=None):
     ## Get variable values for processing
     vert_horiz, dimensions = get_image_dimensions(img)
 
-    if not dimensions:
+    if dimensions.split('x')[0]:
         vert_horiz = 'x360'
         dimensions = "300x360"
     
-    subprocess.call([
-        'convert',
-        '-colorspace',
-        'RGB',
-        img,
-        '-crop',
-        str(
-        subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-        ,
-        #+repage
-        '-trim', 
-        "-filter",
-        "Cosine",
-        "-define",
-        "filter:blur=0.88549061701764",
-        "-distort",
-        "Resize",
-        vert_horiz,
-        '-background',
-        'white',
-        '-gravity',
-        'center',
-        '-extent', 
-        dimensions,
-        "-colorspace",
-        "sRGB",
-        "-format",
-        "jpeg",
-        '-unsharp',
-        '2x2.2+0.5+0', 
-        '-quality', 
-        '95',
-        #os.path.join(destdir, img.split('/')[-1])
-        outfile
-        ])
-    return outfile
+        dimensions = "300x360"
+    
+    if regex_valid_style.findall(img):
 
+        subprocess.call([
+            'convert',
+            '-colorspace',
+            'RGB',
+            img,
+            '-crop',
+            str(
+            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            ,
+            #+repage
+            '-trim', 
+            "-filter",
+            "Cosine",
+            "-define",
+            "filter:blur=0.88549061701764",
+            "-distort",
+            "Resize",
+            vert_horiz,
+            '-background',
+            'white',
+            '-gravity',
+            'center',
+            '-extent', 
+            dimensions,
+            "-colorspace",
+            "sRGB",
+            "-format",
+            "jpeg",
+            '-unsharp',
+            '2x2.2+0.5+0', 
+            '-quality', 
+            '95',
+            #os.path.join(destdir, img.split('/')[-1])
+            outfile
+            ])
+        return outfile
+    else:
+        return img
 
 ### Png Create with Convert and aspect 
 def subproc_magick_png(img, destdir=None):
     import subprocess,re,os
-    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-    regex_alt = re.compile(r'.+?/[1-9][0-9]{8}_\w+?0[1-6]\.jpg')
-    
+    regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
+    regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
+    regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
+     
     os.chdir(os.path.dirname(img))
 
     ## Destination name
@@ -348,70 +374,79 @@ def subproc_magick_png(img, destdir=None):
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
-
-    subprocess.call([
-        'convert',
-        "-colorspace",
-        "RGB",
-        '-format',
-        'png',
-        img,
-        '-crop',
-        str(
-        subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-        ,
-        '-define',
-        'png:preserve-colormap',
-        '-define',
-        'png:format=png24',
-        # '-define',
-        # 'png:compression-level=N',
-        # '-define',
-        # 'png:compression-strategy=N',
-        # '-define',
-        # 'png:compression-filter=N',
-        "-filter",
-        "Spline",
-        "-define",
-        "filter:blur=0.88549061701764",
-        "-distort",
-        "Resize",
-        vert_horiz,
-        '-background',
-        'white',
-        '-gravity',
-        'center',
-        '-extent', 
-        dimensions,
-        "-colorspace",
-        "sRGB",
-        '-unsharp',
-        '2x2.4+0.5+0', 
-        '-quality', 
-        '100',
-        outfile
-        ])
+        
+    if regex_valid_style.findall(img):
+        
+        subprocess.call([
+            'convert',
+            "-colorspace",
+            "RGB",
+            '-format',
+            'png',
+            img,
+            '-crop',
+            str(
+            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            ,
+            '-define',
+            'png:preserve-colormap',
+            '-define',
+            'png:format=png24',
+            # '-define',
+            # 'png:compression-level=N',
+            # '-define',
+            # 'png:compression-strategy=N',
+            # '-define',
+            # 'png:compression-filter=N',
+            "-filter",
+            "Spline",
+            "-define",
+            "filter:blur=0.88549061701764",
+            "-distort",
+            "Resize",
+            vert_horiz,
+            '-background',
+            'white',
+            '-gravity',
+            'center',
+            '-extent', 
+            dimensions,
+            "-colorspace",
+            "sRGB",
+            '-unsharp',
+            '2x2.4+0.5+0', 
+            '-quality', 
+            '100',
+            outfile
+            ])
     
-    print 'Done {}'.format(outfile)
-    return outfile
-
+        print 'Done {}'.format(outfile)
+        return outfile
+    else:
+        return img
 
 #############################
 
 #############################
 import sys,glob,shutil,os,re
-root_img_dir = os.path.abspath(sys.argv[1])
-regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
+regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
+regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
+
 #root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
+root_img_dir = os.path.abspath(sys.argv[1])
 destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
 
 if os.path.isdir(root_img_dir):
     for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
-        subproc_magick_large_jpg(img, destdir=destdir)
-        subproc_magick_medium_jpg(img, destdir=destdir)
-        subproc_magick_png(img, destdir=destdir)
+        pngout = subproc_magick_png(img, destdir=destdir)
+        subproc_magick_large_jpg(pngout, destdir=destdir)
+        subproc_magick_medium_jpg(pngout, destdir=destdir)
+        #subproc_magick_large_jpg(img, destdir=destdir)
+        #subproc_magick_medium_jpg(img, destdir=destdir)
+
 else:
     img = root_img_dir
     if regex_coded.findall(img):
