@@ -194,70 +194,90 @@ def get_image_dimensions(img):
 ### Large Jpeg Convert to  _l jpgs
 def subproc_magick_large_jpg(img, destdir=None):
     import subprocess,os,re
-
+    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+    regex_alt = re.compile(r'.+?/[1-9][0-9]{8}_\w+?0[1-6]\.jpg')
     os.chdir(os.path.dirname(img))
     
+    ## Destination name if Alt or Not
     if not destdir:
         destdir = os.path.abspath('.')
     else:
         destdir = os.path.abspath(destdir)
+
+    if not regex_alt.findall(img):
+        outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
+
+        dimensions = ''
+        ## Get variable values for processing
+        vert_horiz, dimensions = get_image_dimensions(img)
+
+        if not dimensions:
+            vert_horiz = 'x480'
+            dimensions = "400x480"
         
-    dimensions = ''
-    ## Get variable values for processing
-    vert_horiz, dimensions = get_image_dimensions(img)
-
-    if not dimensions:
-        vert_horiz = 'x480'
-        dimensions = "400x480"
+        subprocess.call([
+        'convert',
+        '-colorspace',
+        'RGB',
+        img,
+        '-crop',
+        str(
+        subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+        ,
+        '-trim', 
+        "+repage",
+        "-filter",
+        "Cosine",
+        "-define",
+        "filter:blur=0.88549061701764",
+        "-distort",
+        "Resize",
+        vert_horiz,
+        '-background',
+        'white',
+        '-gravity',
+        'center',
+        '-extent', 
+        dimensions,
+        "-colorspace",
+        "sRGB",
+        "-format",
+        "jpeg",
+        '-unsharp',
+        '2x2.3+0.5+0', 
+        '-quality', 
+        '95',
+        outfile
+        ])
+        return outfile
     
-    subprocess.call([
-    'convert',
-    '-colorspace',
-    'RGB',
-    img,
-    '-crop',
-    str(
-    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-    ,
-    '-trim', 
-    "+repage",
-    "-filter",
-    "Cosine",
-    "-define",
-    "filter:blur=0.88549061701764",
-    "-distort",
-    "Resize",
-    vert_horiz,
-    '-background',
-    'white',
-    '-gravity',
-    'center',
-    '-extent', 
-    dimensions,
-    "-colorspace",
-    "sRGB",
-    "-format",
-    "jpeg",
-    '-unsharp',
-    '2x2.3+0.5+0', 
-    '-quality', 
-    '95',
-    #os.path.join(destdir, img.split('/')[-1])
-    os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
-    ])
+    ## No alt _L size needed
+    else:
+        pass
+    
 
 
+# 
+###
 ### Medium Jpeg Convert to  _l jpgs
 def subproc_magick_medium_jpg(img, destdir=None):
     import subprocess,os,re
+    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+    regex_alt = re.compile(r'.+?/[1-9][0-9]{8}_\w+?0[1-6]\.jpg')
 
     os.chdir(os.path.dirname(img))
     #rgbmean = get_image_color_minmax(img)
     
+    ## Destination name if Alt or Not
     if not destdir:
         destdir = os.path.abspath('.')
     else:
         destdir = os.path.abspath(destdir)
+
+    if regex_alt.findall(img):
+        outfile = os.path.join(destdir, img.split('/')[-1])
+    else:
+        outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
 
     dimensions = ''
     ## Get variable values for processing
@@ -300,18 +320,26 @@ def subproc_magick_medium_jpg(img, destdir=None):
         '-quality', 
         '95',
         #os.path.join(destdir, img.split('/')[-1])
-        os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
+        outfile
         ])
+    return outfile
 
 
 ### Png Create with Convert and aspect 
 def subproc_magick_png(img, destdir=None):
     import subprocess,re,os
+    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+    regex_alt = re.compile(r'.+?/[1-9][0-9]{8}_\w+?0[1-6]\.jpg')
+    
+    os.chdir(os.path.dirname(img))
 
+    ## Destination name
     if not destdir:
         destdir = os.path.abspath('.')
     else:
         destdir = os.path.abspath(destdir)
+
+    outfile = os.path.join(destdir, img.split('/')[-1])
 
     dimensions = ''
     ## Get variable values for processing
@@ -361,29 +389,29 @@ def subproc_magick_png(img, destdir=None):
         '2x2.4+0.5+0', 
         '-quality', 
         '100',
-        os.path.join(destdir, img.split('/')[-1])
+        outfile
         ])
     
-    print 'Done {}'.format(img)
-    return
+    print 'Done {}'.format(outfile)
+    return outfile
 
 
 #############################
 
 #############################
 import sys,glob,shutil,os,re
-#root_img_dir = os.path.abspath(sys.argv[1])
+root_img_dir = os.path.abspath(sys.argv[1])
 regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-destdir = '/Users/johnb/Pictures'
+#root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
+destdir = os.path.abspath(sys.argv[1]) #'/Users/johnb/Pictures'
 
 if os.path.isdir(root_img_dir):
     for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
         subproc_magick_large_jpg(img, destdir=destdir)
-        subproc_magick_medium_jpg(imgdir)
-        subproc_magick_png(root_img_dir)
+        subproc_magick_medium_jpg(img, destdir=destdir)
+        subproc_magick_png(img, destdir=destdir)
 else:
     img = root_img_dir
     if regex_coded.findall(img):
@@ -392,6 +420,7 @@ else:
     subproc_magick_large_jpg(img, destdir=destdir)
     subproc_magick_medium_jpg(img, destdir=destdir)
     subproc_magick_png(img, destdir=destdir)
-    metadict = metadata_info_dict(img)
-    dimens = get_image_dimensions(img)
-    test_img = get_image_color_minmax(img)
+    #metadict = metadata_info_dict(img)
+    #dimens = get_image_dimensions(img)
+    #test_img = get_image_color_minmax(img)
+    
