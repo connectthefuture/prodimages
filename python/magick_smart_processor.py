@@ -87,6 +87,47 @@ def metadata_info_dict(inputfile):
     metadict[inputfile] = fileinfo
     return metadict
 
+def rename_retouched_file(src_imgfilepath):
+    import os,re
+    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+    imgfilepath = src_imgfilepath
+    if re.findall(regex_coded,imgfilepath):
+        filedir = imgfilepath.split('/')[:-1]
+        filedir = '/'.join(filedir)
+        print filedir
+        filename = imgfilepath.split('/')[-1]
+        colorstyle = str(filename[:9])
+        testimg = filename.split('_')[-1]
+        alttest = testimg.split('.')[0]
+        ext = filename.split('.')[-1]
+        ext = ".{}".format(ext.lower())
+        # if its 1
+        if str.isdigit(alttest) & len(alttest) == 1:
+            if alttest == '1':
+                src_img_primary = src_imgfilepath.replace('_1.','.')
+                os.rename(src_imgfilepath, src_img_primary)
+                return src_img_primary
+            else:
+                alttest = int(alttest)
+                print alttest
+                alttest = alttest - 1
+                alt = '_alt0{}'.format(str(alttest))
+                print alt
+
+                if alt:
+                        #print type(filedir), type(colorstyle), type(alt), type(ext)
+                        #print filedir, colorstyle, alt, ext
+                    filename = "{}{}{}".format(colorstyle,alt,ext)
+                    renamed = os.path.join(filedir, filename)
+                    print renamed
+        ##        except UnboundLocalError:
+        ##            print "UnboundLocalError{}".format(imgfilepath)
+                if renamed:
+                    os.rename(src_imgfilepath, renamed)
+                    if os.path.isfile(renamed):
+                        return renamed
+        else:
+            return src_imgfilepath
 
 # return image demensions and vert_hoiz variables only
 def get_image_dimensions(img):
@@ -95,59 +136,54 @@ def get_image_dimensions(img):
     regex_geometry = re.compile(r'^Geometry.+?$')
     regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
 
-    metadata=subprocess.check_output(['identify', '-verbose', img])
-
+    metadata=subprocess.check_output(['identify','-verbose', img])
+            
     metadata_list = metadata.replace(' ','').split('\n')
-
+    
     g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
     g_height = [ g.split(':')[-1].split('+')[0].split('x')[1] for g in metadata_list if regex_geometry.findall(g) ]
-
+    
     dimensions = '{0}x{1}'.format(g_width[0],g_height[0])
 
     ## Vertical Portrait orientation or exact Square for taller images
-    if dimensions == "2000x2400":
-	    vert_horiz = "2000x2400"
-	    dimensions = "2000x2400"
-    else:
-	    xdelim = 'x'
-	    if int(dimensions.split(xdelim)[1]) <= int(dimensions.split(xdelim)[-1]):
-	        if int(dimensions.split(xdelim)[1]) > 2000:
-	            vert_horiz = "x2400"
-	            dimensions = "2000x2400"
-	        elif int(dimensions.split(xdelim)[1]) < 2000 and int(dimensions.split(xdelim)[1]) > 1400:
-	            vert_horiz = "x1680"
-	            dimensions = "1400x1680"
-	        elif int(dimensions.split(xdelim)[1]) < 1400 and int(dimensions.split(xdelim)[1]) > 1000:
-	            vert_horiz = "x1200"
-	            dimensions = "1000x1200"
-	        elif int(dimensions.split(xdelim)[1]) < 1000 and int(dimensions.split(xdelim)[1]) > 600:
-	            vert_horiz = "x720"
-	            dimensions = "600x720"
-	        else:
-	            vert_horiz = "x480"
-	            dimensions = "400x480"
+    xdelim = 'x'
+    if int(dimensions.split(xdelim)[1]) <= int(dimensions.split(xdelim)[-1]):
+        if int(dimensions.split(xdelim)[1]) > 2000:
+            vert_horiz = "x2400"
+            dimensions = "2000x2400"
+        elif int(dimensions.split(xdelim)[1]) < 2000 and int(dimensions.split(xdelim)[1]) > 1400:
+            vert_horiz = "x1680"
+            dimensions = "1400x1680"
+        elif int(dimensions.split(xdelim)[1]) < 1400 and int(dimensions.split(xdelim)[1]) > 1000:
+            vert_horiz = "x1200"
+            dimensions = "1000x1200"
+        elif int(dimensions.split(xdelim)[1]) < 1000 and int(dimensions.split(xdelim)[1]) > 600:
+            vert_horiz = "x720"
+            dimensions = "600x720"
+        else:
+            vert_horiz = "x480"
+            dimensions = "400x480"
+    
+    ## Landscape Orientation for wider images  
+    elif int(dimensions.split(xdelim)[1]) > int(dimensions.split(xdelim)[-1]):
+        if int(dimensions.split(xdelim)[-1]) > 2400:
+            vert_horiz = "2000x"
+            dimensions = "2000x2400"
 
-	    ## Landscape Orientation for wider images  
-	    elif int(dimensions.split(xdelim)[1]) > int(dimensions.split(xdelim)[-1]):
-	        if int(dimensions.split(xdelim)[-1]) > 2400:
-	            vert_horiz = "2000x"
-	            dimensions = "2000x2400"
+        elif int(dimensions.split(xdelim)[-1]) < 2400 and int(dimensions.split(xdelim)[-1]) > 1680:
+            vert_horiz = "1400x"
+            dimensions = "1400x1680"
+        
+        elif int(dimensions.split(xdelim)[-1]) < 1680 and int(dimensions.split(xdelim)[-1]) > 1200:
+            vert_horiz = "1000x"
+            dimensions = "1000x1200"
 
-	        elif int(dimensions.split(xdelim)[-1]) < 2400 and int(dimensions.split(xdelim)[-1]) > 1680:
-	            vert_horiz = "1400x"
-	            dimensions = "1400x1680"
-	        
-	        elif int(dimensions.split(xdelim)[-1]) < 1680 and int(dimensions.split(xdelim)[-1]) > 1200:
-	            vert_horiz = "1000x"
-	            dimensions = "1000x1200"
-
-	        elif int(dimensions.split(xdelim)[-1]) < 1200 and int(dimensions.split(xdelim)[-1]) > 720:
-	            vert_horiz = "600x"
-	            dimensions = "600x720"
-	        else:
-	            vert_horiz = "400x"
-	            dimensions = "400x480"
-	
+        elif int(dimensions.split(xdelim)[-1]) < 1200 and int(dimensions.split(xdelim)[-1]) > 720:
+            vert_horiz = "600x"
+            dimensions = "600x720"
+        else:
+            vert_horiz = "400x"
+            dimensions = "400x480"
     print vert_horiz, dimensions
     return vert_horiz, dimensions
 
@@ -170,49 +206,45 @@ def subproc_magick_large_jpg(img, destdir=None):
     ## Get variable values for processing
     vert_horiz, dimensions = get_image_dimensions(img)
 
-    if dimensions:
+    if not dimensions:
         vert_horiz = 'x480'
         dimensions = "400x480"
     
-	outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
-	#if len(img.split('/')[-1].split('.')[0]) > 11:
-		#outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0]) + '.jpg')
-
     subprocess.call([
-	    'convert',
-	    '-colorspace',
-	    'RGB',
-	    img,
-	    '-crop',
-	    str(
-	    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-	    ,
-#	    '-trim', 
-#	    "+repage",
-	    "-filter",
-	    "Cosine",
-	    "-define",
-	    "filter:blur=0.88549061701764",
-	    "-distort",
-	    "Resize",
-	    vert_horiz,
-	    '-background',
-	    'white',
-	    '-gravity',
-	    'center',
-	    '-extent', 
-	    dimensions,
-	    "-colorspace",
-	    "sRGB",
-	    "-format",
-	    "jpeg",
-	    '-unsharp',
-	    '2x2.3+0.5+0', 
-	    '-quality', 
-	    '95',
-	    #os.path.join(destdir, img.split('/')[-1])
-	    outfile #os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
-	    ])
+    'convert',
+    '-colorspace',
+    'RGB',
+    img,
+    '-crop',
+    str(
+    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+    ,
+    '-trim', 
+    "+repage",
+    "-filter",
+    "Cosine",
+    "-define",
+    "filter:blur=0.88549061701764",
+    "-distort",
+    "Resize",
+    vert_horiz,
+    '-background',
+    'white',
+    '-gravity',
+    'center',
+    '-extent', 
+    dimensions,
+    "-colorspace",
+    "sRGB",
+    "-format",
+    "jpeg",
+    '-unsharp',
+    '2x2.3+0.5+0', 
+    '-quality', 
+    '95',
+    #os.path.join(destdir, img.split('/')[-1])
+    os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
+    ])
 
 
 ### Medium Jpeg Convert to  _l jpgs
@@ -231,14 +263,10 @@ def subproc_magick_medium_jpg(img, destdir=None):
     ## Get variable values for processing
     vert_horiz, dimensions = get_image_dimensions(img)
 
-    if dimensions:
+    if not dimensions:
         vert_horiz = 'x360'
         dimensions = "300x360"
     
-	outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
-	if len(img.split('/')[-1].split('.')[0]) > 11:
-		outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.jpg')
-		
     subprocess.call([
         'convert',
         '-colorspace',
@@ -248,10 +276,9 @@ def subproc_magick_medium_jpg(img, destdir=None):
         str(
         subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
         ,
-        
-        #'-trim', 
-        #'+repage',
-		"-filter",
+        #+repage
+        '-trim', 
+        "-filter",
         "Cosine",
         "-define",
         "filter:blur=0.88549061701764",
@@ -269,11 +296,11 @@ def subproc_magick_medium_jpg(img, destdir=None):
         "-format",
         "jpeg",
         '-unsharp',
-        '2x1.9+0.5+0', 
+        '2x2.2+0.5+0', 
         '-quality', 
         '95',
         #os.path.join(destdir, img.split('/')[-1])
-        outfile
+        os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
         ])
 
 
@@ -294,11 +321,6 @@ def subproc_magick_png(img, destdir=None):
         dimensions = '100%'
         vert_horiz = '100%'
 
-	outfile = os.path.join(destdir, img.split('/')[-1][:9])
-	if len(img.split('/')[-1].split('.')[0]) > 11:
-		outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
-
-	ext = img.split('.')[-1][0]
     subprocess.call([
         'convert',
         "-colorspace",
@@ -310,8 +332,6 @@ def subproc_magick_png(img, destdir=None):
         str(
         subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
         ,
-        '-format',
-        'png',
         '-define',
         'png:preserve-colormap',
         '-define',
@@ -338,7 +358,7 @@ def subproc_magick_png(img, destdir=None):
         "-colorspace",
         "sRGB",
         '-unsharp',
-        '2x3.0+0.5+0', 
+        '2x2.4+0.5+0', 
         '-quality', 
         '100',
         os.path.join(destdir, img.split('/')[-1])
@@ -347,32 +367,31 @@ def subproc_magick_png(img, destdir=None):
     print 'Done {}'.format(img)
     return
 
-#######################################################################################
-#######################################################################################
-import sys,glob,shutil,os
 
-def main():
+#############################
 
-	root_img_dir = os.path.abspath(sys.argv[1])
-	#root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-	destdir 	=  os.path.abspath(sys.argv[2])
-	#destdir 	= '/Users/johnb/Pictures'
+#############################
+import sys,glob,shutil,os,re
+#root_img_dir = os.path.abspath(sys.argv[1])
+regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
+destdir = '/Users/johnb/Pictures'
 
-	## if argv[1] is a directory run a loop
-	if os.path.isdir(root_img_dir):
-	    for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
-		subproc_magick_large_jpg(img, destdir=destdir)
-		subproc_magick_medium_jpg(img, destdir=destdir)
-		subproc_magick_png(img, destdir=destdir)
-
-	elif os.path.isfile(root_img_dir):
-	    img = root_img_dir
-	    subproc_magick_large_jpg(img, destdir=destdir)
-	    subproc_magick_medium_jpg(img, destdir=destdir)
-	    subproc_magick_png(img, destdir=destdir)
-	    metadict = metadata_info_dict(img)
-	    dimens = get_image_dimensions(img)
-	    test_img = get_image_color_minmax(img)
-
-if __name__ == '__main__':
-	main()
+if os.path.isdir(root_img_dir):
+    for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
+        if regex_coded.findall(img):
+            img = rename_retouched_file(img)
+        subproc_magick_large_jpg(img, destdir=destdir)
+        subproc_magick_medium_jpg(imgdir)
+        subproc_magick_png(root_img_dir)
+else:
+    img = root_img_dir
+    if regex_coded.findall(img):
+        img = rename_retouched_file(img)
+    
+    subproc_magick_large_jpg(img, destdir=destdir)
+    subproc_magick_medium_jpg(img, destdir=destdir)
+    subproc_magick_png(img, destdir=destdir)
+    metadict = metadata_info_dict(img)
+    dimens = get_image_dimensions(img)
+    test_img = get_image_color_minmax(img)
