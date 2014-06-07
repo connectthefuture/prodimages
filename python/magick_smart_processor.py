@@ -403,7 +403,7 @@ import sys,glob,shutil,os,re
 root_img_dir = os.path.abspath(sys.argv[1])
 regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
 #root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-destdir = os.path.abspath(sys.argv[1]) #'/Users/johnb/Pictures'
+destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
 
 if os.path.isdir(root_img_dir):
     for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
