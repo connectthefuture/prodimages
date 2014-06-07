@@ -128,13 +128,13 @@ def rename_retouched_file(src_imgfilepath):
                 print alt
 
                 if alt:
-                        #print type(filedir), type(colorstyle), type(alt), type(ext)
-                        #print filedir, colorstyle, alt, ext
+                    #print type(filedir), type(colorstyle), type(alt), type(ext)
+                    #print filedir, colorstyle, alt, ext
                     filename = "{}{}{}".format(colorstyle,alt,ext)
                     renamed = os.path.join(filedir, filename)
                     print renamed
-        ##        except UnboundLocalError:
-        ##            print "UnboundLocalError{}".format(imgfilepath)
+                    ##except UnboundLocalError:
+                    ##print "UnboundLocalError{}".format(imgfilepath)
                 if renamed:
                     os.rename(src_imgfilepath, renamed)
                     if os.path.isfile(renamed):
