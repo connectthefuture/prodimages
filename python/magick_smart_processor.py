@@ -19,7 +19,6 @@ def get_dimensions(img):
 #
 #
 
-
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
     ret = subprocess.check_output([
@@ -60,16 +59,16 @@ def get_image_color_minmax(img):
     return colordata
 
 # Return Image data dict
-def metadata_info_dict(inputfile):
+def metadata_info_dict(img):
     import os,sys,re,subprocess,glob
     regex_geometry = re.compile(r'^Geometry.+?$')
     metadict = {}
     fileinfo = {}
-    fname=os.path.basename(inputfile)
-    dname=os.path.dirname(inputfile)
+    fname=os.path.basename(img)
+    dname=os.path.dirname(img)
     regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
     
-    metadata=subprocess.check_output(['identify', '-verbose', inputfile])
+    metadata=subprocess.check_output(['identify', '-verbose', img])
 
     metadata_list = metadata.replace(' ','').split('\n')
     
@@ -104,13 +103,13 @@ def metadata_info_dict(inputfile):
     fileinfo['orientation'] = orientation
     #fileinfo['mean'] = mean_tot[0]
     #fileinfo['colorspace'] = colorspace[0]
-    metadict[inputfile] = fileinfo
+    metadict[img] = fileinfo
     return metadict
 
-def rename_retouched_file(src_imgfilepath):
+def rename_retouched_file(img):
     import os,re
     regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
-    imgfilepath = src_imgfilepath
+    imgfilepath = img
     if re.findall(regex_coded,imgfilepath):
         filedir = imgfilepath.split('/')[:-1]
         filedir = '/'.join(filedir)
@@ -124,8 +123,8 @@ def rename_retouched_file(src_imgfilepath):
         # if its 1
         if str.isdigit(alttest) & len(alttest) == 1:
             if alttest == '1':
-                src_img_primary = src_imgfilepath.replace('_1.','.')
-                os.rename(src_imgfilepath, src_img_primary)
+                src_img_primary = img.replace('_1.','.')
+                os.rename(img, src_img_primary)
                 return src_img_primary
             else:
                 alttest = int(alttest)
@@ -143,11 +142,11 @@ def rename_retouched_file(src_imgfilepath):
                     ##except UnboundLocalError:
                     ##print "UnboundLocalError{}".format(imgfilepath)
                 if renamed:
-                    os.rename(src_imgfilepath, renamed)
+                    os.rename(img, renamed)
                     if os.path.isfile(renamed):
                         return renamed
         else:
-            return src_imgfilepath
+            return img
 
 # return image demensions and vert_hoiz variables only
 def get_imagesize_variables(img):
@@ -282,10 +281,9 @@ def subproc_magick_large_jpg(img, destdir=None):
         pass
     
 
-
 # 
 ###
-### Medium Jpeg Convert to  _l jpgs
+### Medium Jpeg Convert to  _m jpgs
 def subproc_magick_medium_jpg(img, destdir=None):
     import subprocess,os,re
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
@@ -308,13 +306,19 @@ def subproc_magick_medium_jpg(img, destdir=None):
 
     dimensions = ''
     ## Get variable values for processing
-    vert_horiz, dimensions = get_imagesize_variables(img)
-
-    if dimensions.split('x')[0]:
-        vert_horiz = 'x360'
-        dimensions = "300x360"
+    aspect_ratio = get_aspect_ratio(img)
+    dimensions = get_dimensions(img)
+    width  = dimensions[0]
+    height = dimensions[1]
     
-        dimensions = "300x360"
+    if aspect_ratio == '1.2':
+        vert_horiz = '300x360'
+    elif float(int(aspect_ratio)) > float(int('1.2')):
+        vert_horiz = 'x360'
+    else:
+        vert_horiz = '360x'
+    
+    dimensions = '300x360'
     
     if regex_valid_style.findall(img):
 
