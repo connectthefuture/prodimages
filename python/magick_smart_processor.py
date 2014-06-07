@@ -1,15 +1,19 @@
 #/usr/bin/env python
 
 def get_aspect_ratio(img):
-        from PIL import Image
-        im = Image.open(img)
-        w,h = im.size
-        im.close()
-        #imgdata = magic.from_file(img)
-        #dimensions = '300x360'
-        #dimensions1 = '600x330'
-        #w,h = dimensions.split('x')
-        aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+    from PIL import Image
+    im = Image.open(img)
+    w,h = im.size
+    aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+    return aspect_ratio
+
+def get_dimensions(img):
+    from PIL import Image
+    im = Image.open(img)
+    w,h = im.size
+    dimensions = "{0}x{1}".format(int(w),int(h))
+    return dimensions
+
 #
 #
 #
@@ -146,7 +150,7 @@ def rename_retouched_file(src_imgfilepath):
             return src_imgfilepath
 
 # return image demensions and vert_hoiz variables only
-def get_image_dimensions(img):
+def get_imagesize_variables(img):
     import os,sys,re,subprocess,glob
     dimensions = ''
     regex_geometry = re.compile(r'^Geometry.+?$')
@@ -227,7 +231,7 @@ def subproc_magick_large_jpg(img, destdir=None):
 
         dimensions = ''
         ## Get variable values for processing
-        vert_horiz, dimensions = get_image_dimensions(img)
+        vert_horiz, dimensions = get_imagesize_variables(img)
 
         if not dimensions:
             vert_horiz = 'x480'
@@ -304,7 +308,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
 
     dimensions = ''
     ## Get variable values for processing
-    vert_horiz, dimensions = get_image_dimensions(img)
+    vert_horiz, dimensions = get_imagesize_variables(img)
 
     if dimensions.split('x')[0]:
         vert_horiz = 'x360'
@@ -372,7 +376,7 @@ def subproc_magick_png(img, destdir=None):
 
     dimensions = ''
     ## Get variable values for processing
-    vert_horiz, dimensions = get_image_dimensions(img)
+    vert_horiz, dimensions = get_imagesize_variables(img)
 
     if not dimensions:
         dimensions = '100%'
@@ -459,6 +463,6 @@ else:
     subproc_magick_medium_jpg(img, destdir=destdir)
     subproc_magick_png(img, destdir=destdir)
     #metadict = metadata_info_dict(img)
-    #dimens = get_image_dimensions(img)
+    #dimens = get_imagesize_variables(img)
     #test_img = get_image_color_minmax(img)
     
