@@ -277,7 +277,7 @@ def subproc_magick_large_jpg(img, destdir=None):
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.3+0.5+0', 
+            '2x1.24+0.5+0', 
             '-quality', 
             '95',
             outfile
@@ -343,17 +343,17 @@ def subproc_magick_medium_jpg(img, destdir=None):
             # CENTERING & Trim
             '-background',
             'white',
-#            '-gravity',
-#            'center',
-#            '-trim',
-#            '+repage',
+            #'-gravity',
+            #'center',
+            #'-trim',
+            #'+repage',
             #"-filter",
             #"Mitchell",
             "-filter",
             "Spline",
-            "-filter",
-            #"Catrom",
             #"-filter",
+            #"Catrom",
+            "-filter",
             "Cosine",
             "-define",
             #"filter:blur=0.88549061701764", # SHARPER
@@ -368,7 +368,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.2+0.5+0', 
+            '2x1.1+0.5+0', 
             '-quality', 
             '95',
             #os.path.join(destdir, img.split('/')[-1])
@@ -423,7 +423,7 @@ def subproc_magick_png(img, destdir=None):
         vert_horiz = '100%'
     
     print dimensions,vert_horiz, width, height, aspect_ratio
-    
+    #imgformat = img.split('.')[-1]
     if regex_valid_style.findall(img):        
         subprocess.call([
             'convert',
@@ -459,8 +459,8 @@ def subproc_magick_png(img, destdir=None):
             "-define",
             "filter:support=8",
             "-define",
-            #"filter:blur=0.625",
-            "filter:blur=0.88549061701764",
+            "filter:blur=0.625",
+            #"filter:blur=0.88549061701764",
             "-distort",
             "Resize",
             vert_horiz,
