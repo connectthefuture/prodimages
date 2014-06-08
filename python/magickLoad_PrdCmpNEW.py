@@ -15,11 +15,11 @@ def get_dimensions(img):
     return dimensions
 
 
-def get_exif_metadata_value(img, exiftag=None):
+def get_exif_metadata_value(image_filepath, exiftag=None):
     #from PIL import Image
     import pyexiv2
     # Read EXIF data to initialize
-    image_metadata = pyexiv2.ImageMetadata(img)
+    image_metadata = pyexiv2.ImageMetadata(image_filepath)
     metadata = image_metadata.read()
     # Add and Write new Tag to File
     if exiftag:
@@ -33,6 +33,9 @@ def get_exif_metadata_value(img, exiftag=None):
             metadict[mtag] = mvalue
         return metadict
 
+
+##### ##### ##### ########## ##### ##### #####
+##### ##### ##### ########## ##### ##### #####
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
@@ -120,10 +123,6 @@ def metadata_info_dict(img):
     fileinfo['colorspace'] = colorspace[0]
     metadict[img] = fileinfo
     return metadict
-
-
-##### ##### ##### ########## ##### ##### #####
-##### ##### ##### ########## ##### ##### #####
 
 def rename_retouched_file(img):
     import os,re
@@ -506,37 +505,234 @@ def subproc_magick_png(img, destdir=None):
 
 #############################
 
+##### Upload tmp_loading dir to imagedrop via FTP using Pycurl  #####
+def pycurl_upload_imagedrop(img):
+    import pycurl, os
+    #import FileReader
+    localFileName = localFilePath.split('/')[-1]
+
+    mediaType = "8"
+    ftpURL = "ftp://file3.bluefly.corp/ImageDrop/"
+    ftpFilePath = os.path.join(ftpURL, localFileName)
+    ftpUSERPWD = "imagedrop:imagedrop0"
+
+    if localFilePath != "" and ftpFilePath != "":
+        ## Create send data
+
+        ### Send the request to Edgecast
+        c = pycurl.Curl()
+        c.setopt(pycurl.URL, ftpFilePath)
+        #c.setopt(pycurl.PORT , 21)
+        c.setopt(pycurl.USERPWD, ftpUSERPWD)
+        #c.setopt(pycurl.VERBOSE, 1)
+        c.setopt(c.CONNECTTIMEOUT, 5)
+        c.setopt(c.TIMEOUT, 8)
+        c.setopt(c.FAILONERROR, True)
+        #c.setopt(pycurl.FORBID_REUSE, 1)
+        #c.setopt(pycurl.FRESH_CONNECT, 1)
+        f = open(localFilePath, 'rb')
+        c.setopt(pycurl.INFILE, f)
+        c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
+        c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(localFilePath))
+        #c.setopt(pycurl.READFUNCTION, f.read());        
+        #c.setopt(pycurl.READDATA, f.read()); 
+        c.setopt(pycurl.UPLOAD, 1L)
+
+        try:
+            c.perform()
+            c.close()
+            print "Successfully Uploaded --> {0}".format(localFileName)
+            ## return 200
+        except pycurl.error, error:
+            errno, errstr = error
+            print 'An error occurred: ', errstr
+            try:
+                c.close()
+            except:
+                print "Couldnt Close Cnx"
+                pass
+            return errno
+
+#####
+###
+## backup for 56 then 7 curl err            
+def upload_to_imagedrop(img):
+    import ftplib
+    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+    fileread = open(file, 'rb')
+    filename = str(file.split('/')[-1])
+    session.cwd("ImageDrop/")
+    session.storbinary('STOR ' + filename, fileread, 8*1024)
+    fileread.close()
+    session.quit()
+
 #############################
-import sys,glob,shutil,os,re
+import sys,glob,shutil,os,re,datetime
 regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
 regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
 regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-#root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-root_img_dir = os.path.abspath(sys.argv[1])
-destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
 
-# Process Directory of images as sysarg 1, Dest sysarg 2
-if os.path.isdir(root_img_dir):
-    for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
+### Date Defs
+todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
+todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+
+### Define tmp and archive paths prior to Creating
+tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
+tmp_processing_l = os.path.join(tmp_processing, "largejpg")
+tmp_processing_m = os.path.join(tmp_processing, "mediumjpg")
+tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
+
+## Define for Creating Archive dirs
+archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatearch).replace(",", ""))
+
+imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
+imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
+
+###################
+## Create Lock File
+###################
+#locker = os.path.join(rootdir, 'LOCKED.lock')
+#if os.path.isfile(locker):
+#    break
+#else:
+#    with open(locker, 'wb') as f:
+#        f.write(todaysdatefull)
+#        f.close()
+
+try:
+    root_img_dir = os.path.abspath(sys.argv[1])
+    destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
+    tmp_processing = root_img_dir
+    tmp_loading = destdir
+except:
+    root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/DropFinalFiles_Only'
+    destdir      =  tmp_loading
+
+###########
+## Test for ex
+#root_img_dir =  tmp_processing
+walkedout_tmp = glob.glob(os.path.join(root_img_dir, '*/*.*g'))
+if len(walkedout_tmp) == 0:
+    print "Nothing to Process"
+else:
+### Make Tmp Folders for Processing And Uploading -- tmp_dirs are dated with time(hr:min)to prevent collisions
+    try:
+        os.makedirs(archive_uploaded, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(tmp_processing, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(tmp_processing_l, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(tmp_processing_m, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(tmp_loading, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(imgdest_png_final, 16877)
+    except:
+        pass
+
+    try:
+        os.makedirs(imgdest_jpg_final, 16877)
+    except:
+        pass
+
+####################################################
+## Begin Processing and compiling images for Loading
+####################################################
+
+## Move All DropFinal Files from Retouchers dirs to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
+walkedout_tmp = glob.glob(os.path.join(root_img_dir, '*/*.*g'))
+[ shutil.move(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
+
+
+### Rename Files moved into Temp Processing Floder
+walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+[ rename_retouched_file(file) for file in walkedout_tmp ]
+
+if os.path.isdir(tmp_processing):
+    for img in glob.glob(os.path.join(tmp_processing,'*.??g')):
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
-        pngout = subproc_magick_png(img, destdir=destdir)
-        subproc_magick_large_jpg(pngout, destdir=destdir)
-        subproc_magick_medium_jpg(pngout, destdir=destdir)
+        pngout = subproc_magick_png(img, destdir=tmp_processing)
+        subproc_magick_large_jpg(pngout, destdir=tmp_loading)
+        subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
         #subproc_magick_large_jpg(img, destdir=destdir)
         #subproc_magick_medium_jpg(img, destdir=destdir)
 
-# Process Single images as sysarg 1, Dest sysarg 2
-else:
-    img = root_img_dir
-    if regex_coded.findall(img):
-        img = rename_retouched_file(img)
-    
-    subproc_magick_large_jpg(img, destdir=destdir)
-    subproc_magick_medium_jpg(img, destdir=destdir)
-    subproc_magick_png(img, destdir=destdir)
+
     #metadict = metadata_info_dict(img)
     #dimens = get_imagesize_variables(img)
     #test_img = get_image_color_minmax(img)
-    
+
+
+### Glob created PNGs and copy to Load Dir then Store in Arch dir 
+tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
+[ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
+[ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
+
+## ARCHIVED Backup
+## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
+
+###### All PNGs Created and moved to Archive plus Copy sent to Load Directory
+###
+######
+#### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
+###
+#load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
+#[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
+
+## UPLOAD FTP with PyCurl everything in tmp_loading
+###
+import time
+upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
+for upload_file in upload_tmp_loading:
+    #### UPLOAD upload_file via ftp to imagedrop using Pycurl
+    ## Then rm loading tmp dir
+    try:
+        code = pycurl_upload_imagedrop(upload_file)
+        if code:
+            print code, upload_file
+            time.sleep(float(3))
+            try:
+                ftpload_to_imagedrop(upload_file)
+                print "Uploaded {}".format(upload_file)
+                time.sleep(float(.3))
+                shutil.move(upload_file, archive_uploaded)
+            except:
+                pass
+        else:
+            print "Uploaded {}".format(upload_file)
+            time.sleep(float(.3))
+            shutil.move(upload_file, archive_uploaded)
+    except:
+        print "Error moving Finals to Arch {}".format(file)
+        
+
+## After completed Process and Load to imagedrop
+###  Finally Remove the 2 tmp folder trees for process and load if Empty
+upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
+if len(upload_tmp_loading_remainder) == 0:
+    shutil.rmtree(tmp_loading)
+
+upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
+upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
+if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
+    shutil.rmtree(tmp_processing)
