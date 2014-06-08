@@ -254,8 +254,13 @@ def subproc_magick_large_jpg(img, destdir=None):
             str(
             subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
             ,
-            #'-trim', 
-            #"+repage",
+            # CENTERING & Trim
+            '-background',
+            'white',
+#            '-gravity',
+#            'center',
+#            '-trim',
+#            '+repage',
             "-filter",
             "Cosine",
             "-define",
@@ -264,10 +269,6 @@ def subproc_magick_large_jpg(img, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-background',
-            'white',
-            '-gravity',
-            'center',
             '-extent', 
             dimensions,
             "-colorspace",
@@ -338,13 +339,13 @@ def subproc_magick_medium_jpg(img, destdir=None):
             str(
             subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
             ,
-            #+repage
+            # CENTERING & Trim
             '-background',
-                        'white',
-                        '-gravity',
-                        'center',
-            '-trim',
-            '+repage',
+            'white',
+#            '-gravity',
+#            'center',
+#            '-trim',
+#            '+repage',
             "-filter",
             "Cosine",
             "-define",
@@ -353,7 +354,6 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            
             '-extent', 
             dimensions,
             "-colorspace",
@@ -410,13 +410,14 @@ def subproc_magick_png(img, destdir=None):
         #h = float(round(h,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(width),int(h))
         print "H",h, aspect_ratio
+    
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
+    
     print dimensions,vert_horiz, width, height, aspect_ratio
     
-    if regex_valid_style.findall(img):
-        
+    if regex_valid_style.findall(img):        
         subprocess.call([
             'convert',
             "-colorspace",
@@ -454,7 +455,7 @@ def subproc_magick_png(img, destdir=None):
             "-colorspace",
             "sRGB",
             '-unsharp',
-            '2x2.4+0.5+0', 
+            '2x2.7+0.5+0', 
             '-quality', 
             '100',
             outfile
