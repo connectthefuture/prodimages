@@ -14,10 +14,8 @@ def get_dimensions(img):
     dimensions = "{0}x{1}".format(int(w),int(h))
     return dimensions
 
-#
-#
-#
-#
+##### ##### ##### ########## ##### ##### #####
+##### ##### ##### ########## ##### ##### #####
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
@@ -101,8 +99,8 @@ def metadata_info_dict(img):
         orientation    = 'bnc'
         
     fileinfo['orientation'] = orientation
-    #fileinfo['mean'] = mean_tot[0]
-    #fileinfo['colorspace'] = colorspace[0]
+    fileinfo['mean'] = mean_tot[0]
+    fileinfo['colorspace'] = colorspace[0]
     metadict[img] = fileinfo
     return metadict
 
@@ -257,11 +255,14 @@ def subproc_magick_large_jpg(img, destdir=None):
             # CENTERING & Trim
             '-background',
             'white',
-#            '-gravity',
-#            'center',
-#            '-trim',
-#            '+repage',
+            #'-gravity',
+            #'center',
+            #'-trim',
+            #'+repage',
             "-filter",
+            "Spline",
+            "-filter",
+            #"Catrom",
             "Cosine",
             "-define",
             #"filter:blur=0.88549061701764", # SHARPER
@@ -349,6 +350,10 @@ def subproc_magick_medium_jpg(img, destdir=None):
             #"-filter",
             #"Mitchell",
             "-filter",
+            "Spline",
+            "-filter",
+            #"Catrom",
+            #"-filter",
             "Cosine",
             "-define",
             #"filter:blur=0.88549061701764", # SHARPER
@@ -444,16 +449,18 @@ def subproc_magick_png(img, destdir=None):
             "-filter",
             "Spline",
             #"-filter",
+            #"Catrom",
+            #"-filter",
             #"Mitchell",
             #"-define",
             #"filter:filter=QuadraticJinc",
-            #"-define", 
-            #"filter:win-support=12",
-            #"-define",
-            #"filter:support=8",
+            "-define", 
+            "filter:win-support=12",
             "-define",
-            "filter:blur=0.625",
-            #"filter:blur=0.88549061701764",
+            "filter:support=8",
+            "-define",
+            #"filter:blur=0.625",
+            "filter:blur=0.88549061701764",
             "-distort",
             "Resize",
             vert_horiz,
