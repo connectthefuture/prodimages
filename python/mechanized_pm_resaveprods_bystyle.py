@@ -2,51 +2,6 @@ import mechanize
 import cookielib
 import os,sys,re,glob
 
-url = sys.argv[1]
-
-# Browser
-br = mechanize.Browser()
-
-# Cookie Jar
-cj = cookielib.LWPCookieJar()
-br.set_cookiejar(cj)
-
-# Browser options
-br.set_handle_equiv(True)
-br.set_handle_gzip(True)
-br.set_handle_redirect(True)
-br.set_handle_referer(True)
-br.set_handle_robots(False)
-
-# Follows refresh 0 but not hangs on refresh > 0
-br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
-
-# Want debugging messages?
-#br.set_debug_http(True)
-#br.set_debug_redirects(True)
-#br.set_debug_responses(True)
-
-# User-Agent (this is cheating, ok?)
-br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-
-
-
-styles_list = ['336407001','336406101','336404301','336403901','336403501','336403301','336401501','336401001','336359101','336358901','336249301','336249101','336186901','335742901','335742801','335742701','335742301','325497201']
-
-
-pmstyle_urls = []
-vpnpmstyle_urls = []
-
-for style in styles_list:
-    pmurl_style    = "http://pm.bluefly.corp/manager/product/productdetails.html?id={0}".format(style)
-    pmstyle_urls.append(pmurl_style)
-    vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+productdetails.html?id={0}".format(style)
-    vpnpmstyle_urls.append(vpnpmurl_style)
-
-## Login
-uname = 'johnb'
-pword = '$cutler2377'
-pmurl_login = 'http://pm.bluefly.corp/login.html'
 
 def login_pm(url):
     pm_login = br.open(url)
@@ -54,33 +9,47 @@ def login_pm(url):
     
 
 
-import mechanize
-import cookielib
+import mechanize, cookielib
+import os,sys,re
 
 class MyBrowser(mechanize.Browser, object):
 
     def __init__(self):
         super(MyBrowser, self).__init__()
         
-        
         # Cookie Jar
         self.cj = cookielib.LWPCookieJar()
         self.set_cookiejar(self.cj)
         # Opts
-        self.set_handle_robots(False)
-        self.set_proxies({"http" : "http://proxy.me.com:80"})
+        self.set_debug_http(True)
+        self.set_debug_redirects(True)
+        self.set_debug_responses(True)
         self.set_handle_equiv(True)
         self.set_handle_gzip(True)
         self.set_handle_redirect(True)
         self.set_handle_referer(True)
         self.set_handle_robots(False)
+        #self.set_proxies({"http" : "http://proxy.me.com:80"})
+
         # Follows refresh 0 but not hangs on refresh > 0
         self.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
-        # User-Agent 
-        self.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+
+        # HTTP Headers to Pass in request -- Uncomment no more than 1 of each
         
+        # Accept
+        #self.addheaders = [('Accept', 'text/html')]
+        #self.addheaders = [('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')]
+        
+        # Content
+        self.addheaders = [('Content-Type', 'text/html')]
+        #self.addheaders = [('Content-Type', 'application/x-www-form-urlencoded')]
+        #self.addheaders = [('Content-length', '{0}'.format(str(len(data))))]
+        
+        # User-Agent 
+        # self.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+        self.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0')]
 
-
+        
 
 from BeautifulSoup import MinimalSoup 
 class PrettifyHandler(mechanize.BaseHandler):
@@ -113,14 +82,17 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
             self.style = ''
             pass
         
-        self.url_proddesc   = self.get_url_proddesc    
-        self.url_vpnproddesc = self.get_url_vpnproddesc
+        self.url_proddesc   = self.get_url_proddesc()    
+        self.url_vpnproddesc = self.get_url_vpnproddesc()
 
+        self.url_prodmerge    = self.get_url_prodmerge()    
+        self.url_vpmprodmerge = self.get_url_vpmprodmerge()
 
     def login_vpn(self):
         ## Login to Remote VPN network with auth
         self.open(self.url_login_vpn)
-        self.select_form(nr=0)
+        #self.select_form(nr=0)
+        self.select_form('frmLogin')
         self.form['username'] = self.uname
         self.form['password'] = self.pword
         
@@ -160,7 +132,8 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
     def login_pm(self):
         ## Login to pm when on local bfly network
         self.open(self.url_login_pm)
-        self.select_form(nr=0)
+        #self.select_form(nr=0)
+        self.select_form('frmLogin')
         self.form['j_username'] = self.uname
         self.form['j_password'] = self.pword
         #for form in self.forms():
@@ -183,11 +156,12 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
     def get_url_proddesc(self):
         self.pmurl_style    = "http://pm.bluefly.corp/manager/product/productdetails.html?id={0}".format(self.style)
         return self.pmurl_style
-    
+
     def get_url_vpnproddesc(self):
         self.vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+productdetails.html?id={0}".format(self.style)
         return self.vpnpmurl_style
         
+
     def submit_save_proddesc(self):
         #pmurlpdp = self.get_url_vpnproddesc()
         pmurlpdp = self.get_url_proddesc()
@@ -209,85 +183,70 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.submit()
 
 
-class BrowserSecureSessBrowser(mechanize.Browser):
-    import sys, mechanize, os
-    
-    def __init__(self):
-        self.uname = uname
-        self.pword = pword
-        self.url   = url 
-        self.br    = browser_init
-        
-    
-    def browser_init(self):
-        # Browser
-        self.br = mechanize.Browser()
+#    def get_url_prodmerge(self):
+#        self.pmurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
+#        return self.pmurl_style
+#
+#    def get_url_vpnprodmerge(self):
+#        self.vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+mergecolorstyle.html?id={0}".format(self.style)
+#        return self.pmurl_style
 
-        # Cookie Jar
-        cj = cookielib.LWPCookieJar()
-        self.br.set_cookiejar(cj)
 
-        # Browser options
-        self.br.set_handle_equiv(True)
-        self.br.set_handle_gzip(True)
-        self.br.set_handle_redirect(True)
-        self.br.set_handle_referer(True)
-        self.br.set_handle_robots(False)
+###########################
+###########################
+###########################
 
-        # Follows refresh 0 but not hangs on refresh > 0
-        self.br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+url = sys.argv[1]
 
-        # Want debugging messages?
-        #self.br.set_debug_http(True)
-        #self.br.set_debug_redirects(True)
-        #self.br.set_debug_responses(True)
+# Browser
+br = mechanize.Browser()
 
-        # User-Agent (this is cheating, ok?)
-        self.br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-        
-        return self.br
-      
-    def login(self):
-        
-        return self
+# Cookie Jar
+cj = cookielib.LWPCookieJar()
+br.set_cookiejar(cj)
 
-###############
-class PMSecureSessBrowser(BrowserSecureSessBrowser):
-    
-    def __init__(self):
-        self.uname = self.BrowserSecureSessBrowser
-        self.pword = sys.argv[2]
-        self.url   = 'http://pm.bluefly.corp/login.html'    
-        self.form_to_get = 'editProductDetailsForm'
-        
-    def save_pmstyle(self):
-        
-        # Browser
-        br = mechanize.Browser()
+# Browser options
+br.set_handle_equiv(True)
+br.set_handle_gzip(True)
+br.set_handle_redirect(True)
+br.set_handle_referer(True)
+br.set_handle_robots(False)
 
-        # Cookie Jar
-        
+# Follows refresh 0 but not hangs on refresh > 0
+br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
 
-        # Browser options
-        br.set_handle_equiv(True)
-        br.set_handle_gzip(True)
-        br.set_handle_redirect(True)
-        br.set_handle_referer(True)
-        br.set_handle_robots(False)
+# Want debugging messages?
+# br.set_debug_http(True)
+#br.set_debug_redirects(True)
+#br.set_debug_responses(True)
 
-        # Follows refresh 0 but not hangs on refresh > 0
-        br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
-        br.open(self.url)
-        for form in br.forms():
-            if form.name == form_to_get:
-                save_style_form = br.select_form(self.form_to_get)
-                #save_style_form =     
-    
+# User-Agent (this is cheating, ok?)
+br.addheaders = [('User-agent',
+                  'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
 
+styles_list = ['336407001', '336406101', '336404301', '336403901', '336403501', '336403301', '336401501',
+               '336401001', '336359101', '336358901', '336249301', '336249101', '336186901', '335742901',
+               '335742801', '335742701', '335742301', '325497201']
+
+pmstyle_urls = []
+vpnpmstyle_urls = []
+
+for style in styles_list:
+    pmurl_style = "http://pm.bluefly.corp/manager/product/productdetails.html?id={0}".format(style)
+    pmstyle_urls.append(pmurl_style)
+    vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+productdetails.html?id={0}".format(
+        style)
+    vpnpmstyle_urls.append(vpnpmurl_style)
+
+## Login
+uname = 'johnb'
+pword = '$cutle1r2377'
+pmurl_login = 'http://pm.bluefly.corp/login.html'
 
 ## VPN FORM ELEMENT NAMES
 #br.form['username'] = uname
 #br.form['password'] = pword
+
 
 ## PM FORM ELEMENT NAMES FOR LOGIN
 br.form['j_username'] = uname

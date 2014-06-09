@@ -130,7 +130,7 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
     
     # Logout Vpn
     def logout_vpn(self):
-    """Login out from vpn remote"""
+        """Login out from vpn remote"""
         self.open(self.url_logout_vpn)
     
     # Generate Pm Product Detail URL when Passed self.style ( for self.style in style_list: self.get_url_proddesc()    ) or style?not sure
@@ -145,13 +145,13 @@ class VpnbflyMyBrowser(MyBrowser, PrettifyHandler):
     def submit_save_proddesc(self):
         """ Plug a list of styes to go to om prddeet page and submit save"""
         self.login_pm_vpn()
-        _proddesc_style_url = self.get_url_vpnproddesc()
+        _proddesc_style_url = self.get_url_proddesc()
         self.open(_proddesc_style_url)
         
         ## Preprocess Response to Account for Bad HTML         
         _response = self.response() 
         headers = _response.info()  
-        headers['Referer'] = '{0}'.format(_proddesc_style_url)]
+        headers['Referer'] = '{0}'.format(_proddesc_style_url)
         headers["Content-type"] = "text/html; charset=utf-8"
         
         _response.set_data(_response.get_data().replace("<!---", "<!--"))
