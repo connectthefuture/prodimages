@@ -2,7 +2,7 @@
 
 
 """
-Created on sun jul 22 14:48:56 2013
+Created on mo jun 9 20:48:56 2014
 
 @author: jb
 """
@@ -117,7 +117,7 @@ for k,v in importdata.iteritems():
                         (colorstyle, vendor_style, po_number, material, bullet_1, bullet_2, bullet_3, bullet_4, bullet_5, bullet_6, bullet_7, bullet_8, bullet_9, short_name, long_description, country_origin, return_policy_id, copy_ready_dt, care_instructions_id, color_group_id)
                         (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     ON DUPLICATE KEY UPDATE 
-                        material       = VALUES(material), 
+                        material  = VALUES(material), 
                         bullet_1  = VALUES(bullet_1), 
                         bullet_2  = VALUES(bullet_2), 
                         bullet_3  = VALUES(bullet_3), 
