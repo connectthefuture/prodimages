@@ -75,7 +75,7 @@ def sqlQueryToolData():
         importdata_tmp['copy_ready_dt'] = row['copy_ready_dt']
         importdata_tmp['care_instructions_id'] = row['care_instructions_id']
         importdata_tmp['color_group_id'] = row['color_group_id']
-        
+        print row['colorstyle']
 
         ## colorstyle as dict KEY
         importdata[row['colorstyle']] = importdata_tmp
@@ -143,7 +143,7 @@ for k,v in importdata.iteritems():
 
         try:
             connection_www.execute('INSERT INTO excel_tool_data(colorstyle, vendor_style, po_number, material, bullet_1, bullet_2, bullet_3, bullet_4, bullet_5, bullet_6, bullet_7, bullet_8, bullet_9, short_name, long_description, country_origin, return_policy_id, copy_ready_dt, care_instructions_id, color_group_id)'.format(v['colorstyle'], v['vendor_style'],v['po_number'], v['material'], v['bullet_1'], v['bullet_2'], v['bullet_3'], v['bullet_4'], v['bullet_5'], v['bullet_6'], v['bullet_7'], v['bullet_8'], v['bullet_9'], v['short_name'], v['long_description'], v['country_origin'], v['return_policy_id'], v['copy_ready_dt'], v['care_instructions_id'], v['color_group_id']))
-                            
+                
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         
