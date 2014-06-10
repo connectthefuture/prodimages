@@ -179,9 +179,9 @@ for k,v in importdata.iteritems():
 
     except sqlalchemy.exc.IntegrityError:
         print "Duplicate Entry {0}".format(k)
-    except sqlalchemy.exc.DatabaseError:
-        continue
-        print "DBERR" + k
+    # except sqlalchemy.exc.DatabaseError:
+    #     continue
+    #     print "DBERR" + k
 
 #     except KeyError:
 #         continue
