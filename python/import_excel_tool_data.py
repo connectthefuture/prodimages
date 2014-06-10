@@ -45,12 +45,13 @@ def sqlQueryToolData():
       ON POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
       LEFT JOIN POMGR.PRODUCT
       ON POMGR.PRODUCT.ID = POMGR.PRODUCT_COLOR.PRODUCT_ID
+      WHERE POMGR.PRODUCT.MODIFIED_DATE > trunc(sysdate - 4)
       ORDER BY POMGR.PRODUCT_COLOR.VENDOR_STYLE,
         POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last
       )
     SELECT *
     FROM data
-    where data.vendor_style is not null"""
+    WHERE data.vendor_style is not null"""
 
     result = connection.execute(querymake_tooldata)
     importdata = {}
