@@ -147,7 +147,7 @@ for k,v in importdata.iteritems():
                         (colorstyle, vendor_style, po_number, material, bullet_1, bullet_2, bullet_3, bullet_4, bullet_5, bullet_6, bullet_7, bullet_8, bullet_9, short_name, long_description, country_origin, return_policy_id, copy_ready_dt, care_instructions_id, color_group_id)
                         (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     ON DUPLICATE KEY UPDATE 
-                        material       = VALUES(material), 
+                        material  = VALUES(material), 
                         bullet_1  = VALUES(bullet_1), 
                         bullet_2  = VALUES(bullet_2), 
                         bullet_3  = VALUES(bullet_3), 
@@ -165,6 +165,10 @@ for k,v in importdata.iteritems():
                         care_instructions_id = VALUES(care_instructions_id), 
                         color_group_id        = VALUES(color_group_id);
                                """, v['colorstyle'], v['vendor_style'], v['po_number'], v['material'], v['bullet_1'], v['bullet_2'], v['bullet_3'], v['bullet_4'], v['bullet_5'], v['bullet_6'], v['bullet_7'], v['bullet_8'], v['bullet_9'], v['short_name'], v['long_description'], v['country_origin'], v['return_policy_id'], v['copy_ready_dt'], v['care_instructions_id'], v['color_group_id'])
+<<<<<<< HEAD
+=======
+                print "Inserted {0}".format(k)
+>>>>>>> 659b25fba7f95e03a6739d15ede425c7be3fe330
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         
