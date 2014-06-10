@@ -49,7 +49,8 @@ def sqlQueryToolData():
         POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last
       )
     SELECT *
-    FROM data"""
+    FROM data
+    where data.vendor_style is not null"""
 
     result = connection.execute(querymake_tooldata)
     importdata = {}
