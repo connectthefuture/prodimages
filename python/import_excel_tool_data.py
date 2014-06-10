@@ -104,6 +104,7 @@ importdata = sqlQueryToolData()
 #connectiondj.close()
 
 for k,v in importdata.iteritems():
+    print k,v, "BEGIN"
     try:
 
         mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
