@@ -143,7 +143,25 @@ for k,v in importdata.iteritems():
         
 
         try:
-            connection_www.execute("""INSERT INTO excel_tool_data (colorstyle, vendor_style, po_number, material, bullet_1, bullet_2, bullet_3, bullet_4, bullet_5, bullet_6, bullet_7, bullet_8, bullet_9, short_name, long_description, country_origin, return_policy_id, copy_ready_dt, care_instructions_id, color_group_id) (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE material  = VALUES(material), bullet_1  = VALUES(bullet_1), bullet_2  = VALUES(bullet_2), bullet_3  = VALUES(bullet_3), bullet_4  = VALUES(bullet_4), bullet_5  = VALUES(bullet_5), bullet_6  = VALUES(bullet_6), bullet_7  = VALUES(bullet_7), bullet_8  = VALUES(bullet_8), bullet_9  = VALUES(bullet_9), short_nam= VALUES(short_name), long_description = VALUES(long_description), country_origin = VALUES(country_origin), return_policy_id= VALUES(return_policy_id), copy_ready_dt = VALUES(copy_ready_dt), care_instructions_id = VALUES(care_instructions_id), color_group_id = VALUES(color_group_id);""", v['colorstyle'], v['vendor_style'], v['po_number'], v['material'], v['bullet_1'], v['bullet_2'], v['bullet_3'], v['bullet_4'], v['bullet_5'], v['bullet_6'], v['bullet_7'], v['bullet_8'], v['bullet_9'], v['short_name'], v['long_description'], v['country_origin'], v['return_policy_id'], v['copy_ready_dt'], v['care_instructions_id'], v['color_group_id'])
+            connection_www.execute("""INSERT INTO excel_tool_data (colorstyle, vendor_style, po_number, material, bullet_1, bullet_2, bullet_3, bullet_4, bullet_5, bullet_6, bullet_7, bullet_8, bullet_9, short_name, long_description, country_origin, return_policy_id, copy_ready_dt, care_instructions_id, color_group_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+            ON DUPLICATE KEY UPDATE 
+            material  = VALUES(material), 
+            bullet_1  = VALUES(bullet_1), 
+            bullet_2  = VALUES(bullet_2), 
+            bullet_3  = VALUES(bullet_3), 
+            bullet_4  = VALUES(bullet_4), 
+            bullet_5  = VALUES(bullet_5), 
+            bullet_6  = VALUES(bullet_6),
+            bullet_7  = VALUES(bullet_7), 
+            bullet_8  = VALUES(bullet_8), 
+            bullet_9  = VALUES(bullet_9), 
+            short_nam= VALUES(short_name), 
+            long_description = VALUES(long_description), 
+            country_origin = VALUES(country_origin), 
+            return_policy_id= VALUES(return_policy_id), 
+            copy_ready_dt = VALUES(copy_ready_dt), 
+            care_instructions_id = VALUES(care_instructions_id), 
+            color_group_id = VALUES(color_group_id);""", v['colorstyle'], v['vendor_style'], v['po_number'], v['material'], v['bullet_1'], v['bullet_2'], v['bullet_3'], v['bullet_4'], v['bullet_5'], v['bullet_6'], v['bullet_7'], v['bullet_8'], v['bullet_9'], v['short_name'], v['long_description'], v['country_origin'], v['return_policy_id'], v['copy_ready_dt'], v['care_instructions_id'], v['color_group_id'])
 
             print "Inserted {0}".format(k)
 
