@@ -155,7 +155,7 @@ for k,v in importdata.iteritems():
             bullet_7  = VALUES(bullet_7), 
             bullet_8  = VALUES(bullet_8), 
             bullet_9  = VALUES(bullet_9), 
-            short_nam= VALUES(short_name), 
+            short_name = VALUES(short_name), 
             long_description = VALUES(long_description), 
             country_origin = VALUES(country_origin), 
             return_policy_id= VALUES(return_policy_id), 
