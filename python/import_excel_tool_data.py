@@ -170,7 +170,7 @@ for k,v in importdata.iteritems():
         
         
         
-        #print "Successful Insert Push_Photoselecs --> {0}".format(k)
+        #print "Successful Insaert Push_Photoselecs --> {0}".format(k)
 
 
     except sqlalchemy.exc.IntegrityError:
