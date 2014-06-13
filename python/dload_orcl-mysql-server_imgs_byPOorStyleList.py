@@ -22,7 +22,7 @@ def sqlQuery_styles_bypo(po_number):
 
 def readxl_outputdict(workbk=None):         
     import csv,xlrd,sys
-#    workbk = sys.argv[1]
+    #workbk = sys.argv[1]
     book = xlrd.open_workbook(workbk)##sys.argv[1])
     sh = book.sheet_by_index(0)
 
