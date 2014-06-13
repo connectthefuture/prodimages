@@ -130,7 +130,8 @@ def main():
             if returned_files:
                 for returned_file in returned_files:
                     os.rename = (returned_file, returned_file.replace(oldstyle,newnum))
-                
+                    print "Renamed: " + returned_file + " ---> " + returned_file.replace(oldstyle,newnum)
+
 ###############################
 
 if __name__ == '__main__': 
