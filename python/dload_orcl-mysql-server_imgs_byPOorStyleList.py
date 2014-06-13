@@ -42,12 +42,11 @@ def sqlQuery_styles_bypo(po_number):
 
 def url_download_file(url,filepath):
     import urllib
-    error_check = urllib.urlopen(url)
-    urlcode_value = error_check.getcode()
-    print urlcode_value
+    #error_check = urllib.urlopen(url)
+    #urlcode_value = error_check.getcode()
+    #print urlcode_value
     
-    if urlcode_value == 200:
-        urllib.urlretrieve(url, filepath)
+    if urllib.urlretrieve(url, filepath):
         print "Retrieved: " + url + " ---> " + filepath
 
 
@@ -95,7 +94,7 @@ def main():
     po_number = ''
 
     args = arg_parser_simple()
-
+    args = ['135330', '135810']
     try:
         if len(args) > 2:
             styles_list = args
@@ -123,11 +122,14 @@ def main():
         newstyles_list, newstyles_dict = sqlQuery_styles_bypo(new_po)
         oldstyles_list, oldstyles_dict = sqlQuery_styles_bypo(old_po)
         
-        for oldnum in oldstyles_list:
-            returned_files = download_server_imgs(oldnum)
-            newnum = newstyles_dict[oldstyles_dict.get(oldnum)]
-            for returned_file in returned_files:
-                os.rename = (returned_file, returned_file.replace(oldnum,newnum))
+        for k,v in oldstyles_dict.iteritems():
+            oldstyle = oldstyles_dict.get(k)
+            newstyle = newstyles_dict.get(k)
+            returned_files = ''
+            returned_files = download_server_imgs(oldstyle)
+            if returned_files:
+                for returned_file in returned_files:
+                    os.rename = (returned_file, returned_file.replace(oldstyle,newnum))
                 
 ###############################
 
