@@ -44,13 +44,13 @@ def url_download_file(url,filepath):
     import urllib
     #error_check = urllib.urlopen(url)
     #urlcode_value = error_check.getcode()
-    #print urlcode_value
-    
+    #print urlcode_value    
     if urllib.urlretrieve(url, filepath):
         print "Retrieved: " + url + " ---> " + filepath
 
 
 def download_server_imgs(style):
+    import ftplib, urllib
     netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
     colorstyle = str(style)
     ext_PNG     = '.png'
@@ -58,28 +58,32 @@ def download_server_imgs(style):
 
     netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext_PNG)
     colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle + ext_PNG)
-    try:
-        url_download_file(netsrv101_url_file, colorstyle_file)    
-        alt = 0   
-        for x in range(1,6):
-            try:
-                alt = x   
-                ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
-                colorstylealt = colorstyle + ext_ALT
-                colorstyle_filealt = os.path.join(os.path.abspath(os.curdir), colorstylealt)
-                
-                netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
-                
-                if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
-                    url_download_file(netsrv101_url_filealt, colorstyle_filealt)
-                    return True
-                else:
-                    return
-            except IOError:
+    #try:
+    url_download_file(netsrv101_url_file, colorstyle_file)    
+    alt = 0
+    imgs = []   
+    for x in range(1,6):
+        try:
+            alt = x   
+            ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
+            colorstylealt = colorstyle + ext_ALT
+            colorstyle_filealt = os.path.join(os.path.abspath(os.curdir), colorstylealt)
+            
+            netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
+            
+            if urllib.urlretrieve(netsrv101_url_filealt, colorstyle_filealt) == None:
+                xf = url_download_file(netsrv101_url_filealt, colorstyle_filealt)
+                imgs.append(xf)
+                #return True
+            else:
                 pass
-                return False
-    except IOError:
-        pass
+        except IOError:
+            pass
+            return None
+    if imgs:
+        return imgs
+#    except IOError:
+#        pass
 
  
 ######################################## ##### ########################################
@@ -87,7 +91,7 @@ def download_server_imgs(style):
 ######################################## ##### ########################################
 
 def main():
-    import os,sys
+    import os,sys,shutil
     old_po = ''        
     new_po = ''
     styles_list = ''
@@ -122,16 +126,32 @@ def main():
         newstyles_list, newstyles_dict = sqlQuery_styles_bypo(new_po)
         oldstyles_list, oldstyles_dict = sqlQuery_styles_bypo(old_po)
         
+        #renamed_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), new_po)
+        #os.makedirs(renamed_dir)
+                
         for k,v in oldstyles_dict.iteritems():
-            oldstyle = oldstyles_dict.get(k)
-            newstyle = newstyles_dict.get(k)
+            oldstyle = str(oldstyles_dict.get(k))
+            newstyle = str(newstyles_dict.get(k))
+            print oldstyle,newstyle
+            oldstylepng = oldstyle + '.png'
+            newstylepng = newstyle + '.png'
             returned_files = ''
-            returned_files = download_server_imgs(oldstyle)
-            if returned_files:
-                for returned_file in returned_files:
-                    os.rename = (returned_file, returned_file.replace(oldstyle,newnum))
-                    print "Renamed: " + returned_file + " ---> " + returned_file.replace(oldstyle,newnum)
-
+            download_server_imgs(oldstyle)
+            shutil.copy(oldstylepng, newstylepng)
+#
+#            print returned_files
+#            if returned_files:
+#                for returned_file in returned_files:
+#                    os.rename = (returned_file, returned_file.replace(oldstyle,newstyle))
+#                    print "Renamed: " + returned_file + " ---> " + returned_file.replace(oldstyle,newstyle)
+#            else:
+#                try:
+#                    oldstylepng = oldstyle + '.png'
+#                    os.rename = (oldstylepng, oldstylepng.replace(oldstyle,newstyle))
+#                    print "Renamed: " + returned_file + " ---> " + returned_file.replace(oldstyle,newstyle)
+#                except TypeE:
+#                    pass
+#
 ###############################
 
 if __name__ == '__main__': 
