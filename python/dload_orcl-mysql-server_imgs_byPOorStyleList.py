@@ -14,7 +14,7 @@ def arg_parser_simple():
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
 
-    args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
+    args1 = args[0].split(' ') #('\n')   #(','.join(str(arg) for arg in args)).split('\n')
     return args1
 
 
@@ -25,7 +25,7 @@ def sqlQuery_styles_bypo(po_number):
 
     connection = engine_cnx.connect()
     #querymake_styles_bypoMySQL = "SELECT colorstyle FROM product_snapshot_live WHERE po_number like '{0}' AND image_ready_dt IS NOT NULL ORDER BY colorstyle".format(po_number)
-    querymake_StylesByPO_Oracle="SELECT DISTINCT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PO_HDR_ID in ('{0}') order by POMGR.PRODUCT_COLOR.VENDOR_STYLE asc".format(po_number)
+    querymake_StylesByPO_Oracle="SELECT DISTINCT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID in ('{0}') order by POMGR.PRODUCT_COLOR.VENDOR_STYLE asc".format(po_number)
 
     result = connection.execute(querymake_StylesByPO_Oracle)
     colorstyles_list = []
