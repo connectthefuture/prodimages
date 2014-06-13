@@ -105,7 +105,7 @@ def main():
         elif len(args) == 1:
             po_number = args[0]
             print po_number
-            styles_list = sqlQuery_GetStyleVendor_ByPO(po_number)
+            styles_list = sqlQuery_styles_bypo(po_number)
     except OSError:
         print "Enter at least PO Number as 1st Arg or Nothing will Happen"
 
