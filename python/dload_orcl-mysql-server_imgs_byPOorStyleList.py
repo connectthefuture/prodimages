@@ -28,11 +28,12 @@ def sqlQuery_styles_bypo(po_number):
     querymake_StylesByPO_Oracle="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '{0}' order by POMGR.PRODUCT_COLOR.VENDOR_STYLE asc".format(po_number)
 
     result = connection.execute(querymake_StylesByPO_Oracle)
+    
     colorstyles_list = []
     vendor_colorstyle_kv = {}
     
     for row in result:
-        vendor_colorstyle_kv['vendor_style'] = row['colorstyle']
+        vendor_colorstyle_kv[row['vendor_style']] = row['colorstyle']
         colorstyles_list.append(row['colorstyle'])
     connection.close()
 
