@@ -25,7 +25,7 @@ def sqlQuery_styles_bypo(po_number):
 
     connection = engine_cnx.connect()
     #querymake_styles_bypoMySQL = "SELECT colorstyle FROM product_snapshot_live WHERE po_number like '{0}' AND image_ready_dt IS NOT NULL ORDER BY colorstyle".format(po_number)
-    querymake_StylesByPO_Oracle="SELECT DISTINCT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID in ('{0}') order by POMGR.PRODUCT_COLOR.VENDOR_STYLE asc".format(po_number)
+    querymake_StylesByPO_Oracle="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '{0}' order by POMGR.PRODUCT_COLOR.VENDOR_STYLE asc".format(po_number)
 
     result = connection.execute(querymake_StylesByPO_Oracle)
     colorstyles_list = []
@@ -36,7 +36,7 @@ def sqlQuery_styles_bypo(po_number):
         colorstyles_list.append(row['colorstyle'])
     connection.close()
 
-    return list(set(sorted(colorstyles_list))), vendor_colorstyle_kv
+    return sorted(colorstyles_list)), vendor_colorstyle_kv
 
 
 def url_download_file(url,filepath):
