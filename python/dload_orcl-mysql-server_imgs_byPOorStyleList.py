@@ -36,7 +36,7 @@ def sqlQuery_styles_bypo(po_number):
         colorstyles_list.append(row['colorstyle'])
     connection.close()
 
-    return sorted(colorstyles_list)), vendor_colorstyle_kv
+    return sorted(colorstyles_list), vendor_colorstyle_kv
 
 
 def url_download_file(url,filepath):
