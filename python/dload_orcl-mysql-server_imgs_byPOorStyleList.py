@@ -124,7 +124,7 @@ def main():
         
         for oldnum in oldstyles_list:
             returned_files = download_server_imgs(oldnum)
-            newnum = newstyles_dict[oldstyles_dict.get(oldnum))]
+            newnum = newstyles_dict[oldstyles_dict.get(oldnum)]
             for returned_file in returned_files:
                 os.rename = (returned_file, returned_file.replace(oldnum,newnum))
                 
