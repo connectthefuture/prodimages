@@ -1,23 +1,9 @@
 #!/usr/bin/env python
+
 import os, sys, re, csv
 
 
-def sqlQuery_styles_bypo(po_number):
-    import sqlalchemy, sys
-    #engine_cnx = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-    engine_cnx = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
 
-    connection = engine_cnx.connect()
-    #querymake_styles_bypoMySQL = "SELECT colorstyle FROM product_snapshot_live WHERE po_number like '{0}' AND image_ready_dt IS NOT NULL ORDER BY colorstyle".format(po_number)
-    querymake_StylesByPO_Oracle="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PO_HDR_ID in ('{0}') order by POMGR.PRODUCT_COLOR.VENDOR_STYLE asc".format(po_number)
-
-    result = connection.execute(querymake_StylesByPO_Oracle)
-    colorstyles_list = []
-    for row in result:
-        colorstyles_list.append(row['colorstyle'])
-    connection.close()
-
-    return set(sorted(colorstyles_list))
 
 
 def readxl_outputdict(workbk=None):         
@@ -38,7 +24,6 @@ def readxl_outputdict(workbk=None):
             outdict[rx] = rowdict
     return outdict
 
-
 def compile_outdict_by_rowkeys(outdict):
     from collections import defaultdict
     d = defaultdict(list)
@@ -48,10 +33,10 @@ def compile_outdict_by_rowkeys(outdict):
             try:
                 if type(val[1]) == float:
                     value = str(int(val[1]))#"{0:.0}".format(val[1])
-#                    if len(value) == 9:
-#                        print "Style {0}".format(value)
-#                    else:
-#                        print "PO# {0}".format(value)
+                    #if len(value) == 9:
+                    #   print "Style {0}".format(value)
+                    #else:
+                        #print "PO# {0}".format(value)
                 else:
                     value = val[1]
                 #print type(val[1])
@@ -77,7 +62,7 @@ def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
     session.quit()
     
 
-def download_imgsrv_png(styles_list, alts=None):
+def download_imgsrv_png_force(styles_list, alts=None):
     styles_list = []
 
     for style in styles_list:
@@ -129,74 +114,42 @@ def download_imgsrv_png(styles_list, alts=None):
                 except:
                     return None
 
+######################################## ##### ########################################
+######################################## Order ########################################
+######################################## ##### ########################################
+
+def arg_parser_simple():
+    import os,sys, urllib
+
+    args = sys.argv[1:]
+
+    regex_r = re.compile(r'.*?\r.*?')
+    regex_n = re.compile(r'.*?\n.*?')
+
+    args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
+    return args1
 
 
-###############################
-import os,sys
+def sqlQuery_styles_bypo(po_number):
+    import sqlalchemy, sys
+    #engine_cnx = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+    engine_cnx = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
 
+    connection = engine_cnx.connect()
+    #querymake_styles_bypoMySQL = "SELECT colorstyle FROM product_snapshot_live WHERE po_number like '{0}' AND image_ready_dt IS NOT NULL ORDER BY colorstyle".format(po_number)
+    querymake_StylesByPO_Oracle="SELECT DISTINCT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PO_HDR_ID in ('{0}') order by POMGR.PRODUCT_COLOR.VENDOR_STYLE asc".format(po_number)
 
-def main():
-    import sys
-
-    po_number = sys.argv[1]
-    styles_list = []
+    result = connection.execute(querymake_StylesByPO_Oracle)
+    colorstyles_list = []
+    vendor_colorstyle_kv = {}
     
-    if type(po_number) == list:
-        styles_list = []
-        print 'LIST'
-    else:
-        styles_list = sqlQuery_styles_bypo(po_number)
-        print styles_list
-        try:
-            new_po = sys.argv[2]
-            newstyles_list = sqlQuery_styles_bypo(new_po)
-            print newstyles_list
-        except IOError:
-            newstyles_list = ''
-        #colorstyle_vendorimages = output_imgurl_dict(compiled_rows)
-        if  not newstyles_list:    
-            for style in styles_list:
-                download_imgsrv_png(style, alts=None)
-
-        else:
-            rename_dict = dict(zip(styles_list,newstyles_list))
-            for oldnum, newnum in rename_dict.iteritems():
-                returned_file = download_imgsrv_png(oldnum, alts=None)
-                os.rename = (returned_file, returned_file.replace(oldnum,newnum))
-                
-    #outdict = readxl_outputdict(workbk)
-    #compiled_rows = compile_outdict_by_rowkeys(outdict)
-    #colorstyle_vendorimages = output_imgurl_dict(compiled_rows)
-#    for k,v in colorstyle_vendorimages.iteritems():
-#        
-#        print k, sorted(v)
-
-if __name__ == '__main__': 
-    main()
-    #x = main()
-    #print x
-
-#!/usr/bin/env python
-import os, sys, re, csv
-
-
-def sqlQuery_GetStyleVendor_ByPO(ponum):
-    import sqlalchemy
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
-    #orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
-    connection = orcl_engine.connect()
-    querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "'"
-
-    # AND POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE like '%vendornum%'"
-    result = connection.execute(querymake_StylesByPO)
-    styles = {}
-    styleslist = []
     for row in result:
-        style = row['colorstyle']
-        styleslist.append(style)
+        vendor_colorstyle_kv['vendor_style'] = row['colorstyle']
+        colorstyles_list.append(row['colorstyle'])
     connection.close()
-    return styleslist
-                        
+
+    return list(set(sorted(colorstyles_list))), vendor_colorstyle_kv
+
 
 def url_download_file(url,filepath):
     import urllib
@@ -240,36 +193,58 @@ def download_server_imgs(style):
     except IOError:
         pass
 
+ 
 
-#### Run ###
-def arg_parser_simple():
-    import os,sys, urllib
+######################################## ##### ########################################
+########################################  Run  ########################################
+######################################## ##### ########################################
 
-    args = sys.argv[1:]
+def main():
+    import os,sys
+    old_po = ''        
+    new_po = ''
+    styles_list = ''
+    po_number = ''
 
-    regex_r = re.compile(r'.*?\r.*?')
-    regex_n = re.compile(r'.*?\n.*?')
+    args = arg_parser_simple()
 
-    args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
+    try:
+        if len(args) > 2:
+            styles_list = args
+            print len(styles_list)
+        elif len(args) == 2:
+            old_po = args[0]        
+            new_po = args[1]
+        elif len(args) == 1:
+            po_number = args[0]
+            print po_number
+            styles_list = sqlQuery_GetStyleVendor_ByPO(po_number)
+    except OSError:
+        print "Enter at least PO Number as 1st Arg or Nothing will Happen"
 
+    if styles_list:
+        for style in styles_list:
+            download_server_imgs(style)
 
+    elif po_number:
+        styles_list = sqlQuery_styles_bypo(po_number)
+        for style in styles_list:
+            download_server_imgs(style)
 
-
-
-try:
-    if len(args1) >= 2:
-        styleslist = args1
-        print "HELLO Greater 2"
-        print len(styleslist)
+    elif new_po:
+        newstyles_list, newstyles_dict = sqlQuery_styles_bypo(new_po)
+        oldstyles_list, oldstyles_dict = sqlQuery_styles_bypo(old_po)
         
-    elif len(args1) == 1:
-        ponum = args[0]
-        print ponum
-        styleslist = sqlQuery_GetStyleVendor_ByPO(ponum)
-except OSError:
-    print "Enter at least PO Number as 1st Arg or Nothing will Happen"
+        for oldnum in oldstyles_list:
+            returned_files = download_server_imgs(oldnum)
+            newnum = newstyles_dict[oldstyles_dict.get(oldnum))]
+            for returned_file in returned_files:
+                os.rename = (returned_file, returned_file.replace(oldnum,newnum))
+                
+###############################
 
-for style in styleslist:
+if __name__ == '__main__': 
+    main()
+    #x = main()
+    #print x
 
-
-        return False
