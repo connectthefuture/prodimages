@@ -615,7 +615,7 @@ def subproc_magick_large_jpg(img, destdir=None):
             subprocess.call([
             'convert',
             '-colorspace',
-            'RGB',
+            'sRGB',
             img,
             '-crop',
             str(
@@ -702,7 +702,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         subprocess.call([
             'convert',
             '-colorspace',
-            'RGB',
+            'LAB',
             img,
             '-crop',
             str(
@@ -773,7 +773,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             ratio       = rgbmean['ratio']
         except KeyError:
             pass
-    
+
     #rgbmean = float(128)
     #rgbmean = get_image_color_minmax(img)
     if ratio_range == 'LOW':
@@ -866,8 +866,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             # 'png:compression-strategy=N',
             # '-define',
             # 'png:compression-filter=N',
-            '-format',
-            'png',
             modulater,
             modulate,
             "-filter",
