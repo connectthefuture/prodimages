@@ -750,7 +750,9 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     modulate = ''
     #imgdestpng_out = os.path.join(root_img_dir, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
-    ratio_range = rgbmean['ratio_range']
+    if not rgbmean:
+        ratio_range = 'OutOfRange'
+    
     if ratio_range != 'OutOfRange':
         high        = rgbmean['high']
         low         = rgbmean['low']
@@ -899,32 +901,39 @@ regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
 #root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
 root_img_dir = os.path.abspath(sys.argv[1])
-destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
 
+try:
+    destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
+    if not os.path.isdir(destdir):
+        os.makedirs(destdir)
+except IndexError:
+    destdir = os.path.join(root_img_dir, 'output')
+    os.makedirs(destdir)
 
-walkedout_renamed_special = glob.glob(os.path.join(root_img_dir, '*.??g'))
-#fragrancenet_styles = query_vendors_styles('Fragrancenet')
-#fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
+# walkedout_renamed_special = glob.glob(os.path.join(root_img_dir, '*.??g'))
+# #fragrancenet_styles = query_vendors_styles('Fragrancenet')
+# #fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
 
-## Process only fragrance net images to enhance low Rez photo then archive orig
-img_dict = sort_files_by_values(walkedout_renamed_special)
-for k,v in img_dict.items():
-    special_img = k
-    rgbmean     = v.items()
-    pngout = subproc_magick_png(special_img, rgbmean=dict(rgbmean), destdir=destdir)
-    subproc_magick_large_jpg(pngout, destdir=destdir)
-    subproc_magick_medium_jpg(pngout, destdir=destdir)
+# ## Process only fragrance net images to enhance low Rez photo then archive orig
+# img_dict = sort_files_by_values(walkedout_renamed_special)
+# for k,v in img_dict.items():
+#     special_img = k
+#     rgbmean     = v.items()
+#     pngout = subproc_magick_png(special_img, rgbmean=dict(rgbmean), destdir=destdir)
+#     subproc_magick_large_jpg(pngout, destdir=destdir)
+#     subproc_magick_medium_jpg(pngout, destdir=destdir)
 
-    #magick_fragrance_proc_lrg(pngout, rgbmean=dict(rgbmean), destdir=destdir)
-    #magick_fragrance_proc_med(pngout, rgbmean=dict(rgbmean), destdir=destdir)
+#     #magick_fragrance_proc_lrg(pngout, rgbmean=dict(rgbmean), destdir=destdir)
+#     #magick_fragrance_proc_med(pngout, rgbmean=dict(rgbmean), destdir=destdir)
     
-    ## special processed original files move to archive dir making only standard processing files in proc dir
-    #shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
+#     ## special processed original files move to archive dir making only standard processing files in proc dir
+#     #shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
 
 
 ## all process special files move to upload dir
-special_processed = glob.glob(os.path.join(root_img_dir, '*.??g'))
+# special_processed = glob.glob(os.path.join(root_img_dir, '*.??g'))
 #[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in special_processed ]
+
 
 
 # Process Directory of images as sysarg 1, Dest sysarg 2
@@ -945,11 +954,9 @@ else:
     img = root_img_dir
     if regex_coded.findall(img):
         img = rename_retouched_file(img)
-    
-    subproc_magick_large_jpg(img, destdir=destdir)
-    subproc_magick_medium_jpg(img, destdir=destdir)
-    subproc_magick_png(img, destdir=destdir)
+    pngout = subproc_magick_png(img, destdir=destdir)
+    subproc_magick_large_jpg(pngout, destdir=destdir)
+    subproc_magick_medium_jpg(pngout, destdir=destdir)
     #metadict = metadata_info_dict(img)
     #dimens = get_imagesize_variables(img)
     #test_img = get_image_color_minmax(img)
-        
