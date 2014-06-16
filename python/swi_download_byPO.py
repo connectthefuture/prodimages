@@ -57,7 +57,7 @@ def url_download_file(url,filepath):
         
         except:
             print "Failed {0} on 2nd Attempt".format(url)
-    
+            pass
     else:
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
         
