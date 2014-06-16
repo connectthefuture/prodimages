@@ -919,7 +919,7 @@ except IndexError:
         os.makedirs(destdir)
     except OSError:
         pass
-
+ 
 # walkedout_renamed_special = glob.glob(os.path.join(root_img_dir, '*.??g'))
 # #fragrancenet_styles = query_vendors_styles('Fragrancenet')
 # #fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
