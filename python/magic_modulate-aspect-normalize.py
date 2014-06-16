@@ -246,7 +246,8 @@ def sort_files_by_values(directory):
     fileslist = directory
     #elif os.path.isdir(directory):
     #    fileslist = glob.glob(os.path.join(os.path.abspath(directory), '*.??g'))
-
+ 
+    count = len(fileslist)
     for f in fileslist: 
         values = {}
         colordata = get_image_color_minmax(f)
@@ -262,14 +263,19 @@ def sort_files_by_values(directory):
                 values['low'] = low
                 
             filevalue_dict[f] = values
+            count -= 1
+            print "{0} Files Remaining".format(count)
         except TypeError:
             filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
+            count -= 1
+            print "{0} Files Remaining-TypeError".format(count)
             pass
         except ZeroDivisionError:
             filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
+            count -= 1
+            print "{0} Files Remaining-ZeroDivision".format(count)
             pass
     return filevalue_dict
-        
 
 def magick_fragrance_proc_lrg(img, rgbmean=None, destdir=None):
     import subprocess,os,re
