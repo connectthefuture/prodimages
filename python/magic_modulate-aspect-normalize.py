@@ -754,6 +754,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
     modulater = ''
     modulate = ''
+    ratio_range = ''
     #imgdestpng_out = os.path.join(root_img_dir, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
     if not rgbmean:
