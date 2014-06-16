@@ -761,9 +761,19 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         ratio_range = 'OutOfRange'
     
     if ratio_range != 'OutOfRange':
-        high        = rgbmean['high']
-        low         = rgbmean['low']
-        ratio       = rgbmean['ratio']
+        try:
+            high        = rgbmean['high']
+        except KeyError:
+            pass    
+        try:
+            low         = rgbmean['low']
+        except KeyError:
+            pass
+        try:
+            ratio       = rgbmean['ratio']
+        except KeyError:
+            pass
+    
     #rgbmean = float(128)
     #rgbmean = get_image_color_minmax(img)
     if ratio_range == 'LOW':
