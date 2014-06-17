@@ -492,8 +492,10 @@ def magick_fragrance_proc_png(img, rgbmean=None, destdir=None):
     format = img.split('.')[-1]
     subprocess.call([
         'convert',
+        "-colorspace",
+        "LAB",
         '-format',
-        format,
+        'png',
         img,
         '-define',
         'png:preserve-colormap',
