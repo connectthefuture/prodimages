@@ -223,6 +223,9 @@ root_img_dir = os.path.abspath(sys.argv[1])
     
 
 imgs = [ f for f in glob.glob(os.path.join(root_img_dir, '*.??g')) ]
+#walkedout_renamed_special = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+#fragrancenet_styles = query_vendors_styles('Fragrancenet')
+#imgsfrag = [ f for f in imgs if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
 
 ## Process only fragrance net images to enhance low Rez photo then archive orig
 img_dict = sort_files_by_values(imgs)
