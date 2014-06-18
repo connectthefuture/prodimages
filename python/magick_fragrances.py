@@ -69,14 +69,14 @@ def subproc_magick_large_jpg(img):
     'center',
     '-background',
     'white',
-    '-extent',
-    '500x600',
+    #'-extent',
+    #'500x600',
     '-modulate',
     modulate,
     #"-auto-level",
     #"-normalize", 
-    '-unsharp',
-    '2.0x1.7+0.5+0.0', 
+    #'-unsharp',
+    #'2.0x1.7+0.5+0.0', 
     '-quality', 
     '95',
     os.path.join('.',img.split('/')[-1])
@@ -113,8 +113,8 @@ def subproc_magick_medium_jpg(img):
         'center',
         '-background',
         'white',
-        '-extent',
-        '500x600',
+        #'-extent',
+        #'500x600',
         '-modulate',
         modulate,
         #"-auto-level",
@@ -168,8 +168,8 @@ def subproc_magick_png(img):
         '100',
         '-colorspace',
         'sRGB',
-        '-unsharp',
-        '2x1.7+0.5+0', 
+        #'-unsharp',
+        #'2x1.7+0.5+0', 
         '-quality', 
         '95',
         os.path.join('.',img.split('/')[-1])
@@ -179,13 +179,13 @@ def subproc_magick_png(img):
     return
 
 import sys,glob,shutil,os
-#root_img_dir = os.path.abspath(sys.argv[1])
-root_img_dir = '/Users/JCut/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
+root_img_dir = os.path.abspath(sys.argv[1])
+#root_img_dir = '/Users/JCut/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
 if os.path.isdir(root_img_dir):
-    for img in glob.glob(os.path.join(root_img_dir,'*.jpg')):
+    for img in glob.glob(os.path.join(root_img_dir,'*.??g')):
         subproc_magick_large_jpg(img)
-        #subproc_magick_medium_jpg(imgdir)
-        #subproc_magick_png(root_img_dir)
+        subproc_magick_medium_jpg(img)
+        subproc_magick_png(img)
 else:
     img = root_img_dir
     test_img = get_image_color_minmax(img)
