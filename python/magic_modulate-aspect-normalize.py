@@ -324,7 +324,7 @@ def magick_fragrance_proc_lrg(img, rgbmean=None, destdir=None):
     subprocess.call([
     'convert',
     '-colorspace',
-    'RGB',
+    'sRGB',
     img,
     '-crop',
     str(
@@ -410,7 +410,7 @@ def magick_fragrance_proc_med(img, rgbmean=None, destdir=None):
     subprocess.call([
         'convert',
         '-colorspace',
-        'RGB',
+        'sRGB',
         img,
         '-crop',
         str(
