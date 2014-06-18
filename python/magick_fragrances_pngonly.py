@@ -123,6 +123,9 @@ def sort_files_by_values(directory):
         except TypeError:
             filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
             pass
+        except ZeroDivisionError:
+            filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
+            pass
     return filevalue_dict
 
 ### Png Create with Mogrify globbing png directories
