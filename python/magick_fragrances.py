@@ -189,4 +189,4 @@ if os.path.isdir(root_img_dir):
 else:
     img = root_img_dir
     test_img = get_image_color_minmax(img)
-    
+    print test_img
