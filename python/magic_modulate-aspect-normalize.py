@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os, sys, re, csv
 
 def get_aspect_ratio(img):
@@ -643,8 +644,6 @@ def subproc_magick_large_jpg(img, destdir=None):
             vert_horiz,
             '-extent', 
             dimensions,
-            '-background',
-            'white',
             "-colorspace",
             "sRGB",
             "-format",
@@ -733,11 +732,8 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-background',
-            'white',
             '-extent', 
             dimensions,
-            "+repage",
             "-colorspace",
             "sRGB",
             "-format",
@@ -899,7 +895,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             'center',
             '-extent', 
             dimensions,
-            "+repage",
             "-colorspace",
             "sRGB",
             '-unsharp',
