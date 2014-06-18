@@ -160,94 +160,25 @@ def main():
 
     ## Get all Img links on PDP and append only the primary image urls and versions
     ## Then tack the generated urls for edgecast to list
-    pdp_urllist = []
     edgecast_listurls = []
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
     for colorstyle in colorstyle_list:
-        if colorstyle in link:
-            oldlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
-            newlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
-            pdpg          =  'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
-            pmlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
-            pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
+        oldlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
+        newlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
+        pdpg          =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
+        pmlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+        pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
 
-            edgecast_listurls.append(oldlistpg)
-            edgecast_listurls.append(newlistpg)
-            edgecast_listurls.append(pdpg)
-            edgecast_listurls.append(pmlistpg)
-            edgecast_listurls.append(pmeventimg)
-            
-    #print versioned_links
-    count = 0
-    if not versioned_links:
-        import time
-        for x in xrange.__reversed__(xrange(5)):
-            print "Product is not Live. Skipping Edgecast CDN Purge Commencing Local Purge of {0} styles in ... {1}".format(len(colorstyle_list), x+1)
-            time.sleep(.85)
-        for colorstyle in colorstyle_list:
-            version= "1"
-            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-            send_purge_request_localis(colorstyle,version,POSTURL_BC)
-            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-
-    elif len(versioned_links) <= 4550:
-
-        regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
-        for url_purge_local in versioned_links:
-            try:
-                colorstyle = re.findall(regex, url_purge_local[0])
-                colorstyle = colorstyle.pop()[1]
-                version  = re.findall(regex, url_purge_local[0])
-                version = version.pop()[-1].split('=')[-1]
-                #print "{0} and version num {1}".format(colorstyle,version)
-                #try:
-                POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll1.php"
-                POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-                POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-                POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-                
-                send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
-                #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-                #send_purge_request_localis(colorstyle,version,POSTURL_BC)
-                #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-                
-                #except:
-                #    print sys.stderr().read()
-            except IndexError:
-                import time
-                for x in xrange.__reversed__(xrange(5)):
-                    print "Product is not Live. Skipping Edgecast CDN Purge Will Do Local Purge in ... {0}".format(x+1)
-                    time.sleep(.75)
-                POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-                POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-                POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-#                version = '1'
-#                send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-#                send_purge_request_localis(colorstyle,version,POSTURL_BC)
-#                send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-                pass
-        for url_purge in versioned_links:
-            send_purge_request_edgecast(url_purge[0])
-            #csv_write_datedOutfile(url_purge)
-
-    else:
-        print "Failed -- Over 4550 URLs Submitted"    
-
-
-
-    ## Now clear links from the generated urls
-    #generated_links = return_cleaned_bfly_urls(edgecast_listurls)
-
-    #print generated_links
+        edgecast_listurls.append(oldlistpg)
+        edgecast_listurls.append(newlistpg)
+        edgecast_listurls.append(pdpg)
+        edgecast_listurls.append(pmlistpg)
+        edgecast_listurls.append(pmeventimg)
+        
     count = 0
     if len(edgecast_listurls) <= 3550:
-
         #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
-
     ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
     #
     #    for url_purge_local in edgecast_listurls:
