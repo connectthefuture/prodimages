@@ -618,7 +618,7 @@ def subproc_magick_large_jpg(img, destdir=None):
             subprocess.call([
             'convert',
             '-colorspace',
-            'sRGB',
+            'LAB',
             img,
             '-crop',
             str(
@@ -644,10 +644,10 @@ def subproc_magick_large_jpg(img, destdir=None):
             vert_horiz,
             '-extent', 
             dimensions,
-            "-colorspace",
-            "sRGB",
             "-format",
-            "jpeg",
+            "jpg",
+            "-colorspace",
+             "sRGB",
             '-unsharp',
             '2x1.24+0.5+0', 
             '-quality', 
@@ -734,10 +734,11 @@ def subproc_magick_medium_jpg(img, destdir=None):
             vert_horiz,
             '-extent', 
             dimensions,
-            "-colorspace",
-            "sRGB",
+            
             "-format",
-            "jpeg",
+            "jpg",
+            "-colorspace",
+             "sRGB",
             '-unsharp',
             '2x1.1+0.5+0', 
             '-quality', 
@@ -761,7 +762,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     #imgdestpng_out = os.path.join(root_img_dir, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
     if not rgbmean:
-        ratio_range = 'OutOfRange'
+         ratio_range = 'OutOfRange'
     
     if ratio_range != 'OutOfRange':
         try:
@@ -851,7 +852,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         subprocess.call([
             'convert',
             "-colorspace",
-            "RGB",
+            "LAB",
             '-format',
             'png',
             img,
@@ -889,10 +890,10 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-background',
-            'white',
             '-gravity',
             'center',
+            '-background',
+            'white',
             '-extent', 
             dimensions,
             "-colorspace",
