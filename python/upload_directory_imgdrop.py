@@ -115,3 +115,11 @@ for upload_file in upload_tmp_loading:
         shutil.move(upload_file, tmp_failed)
         pass
 
+try:
+    if sys.argv[2]:
+        finaldir = os.path.abspath(sys.argv[2])
+        for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
+            shutil.move(f, finaldir)
+except:
+    pass
+        
