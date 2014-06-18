@@ -4,6 +4,7 @@
 def pycurl_upload_imagedrop(img):
     import pycurl, os
     #import FileReader
+    localFilePath = os.path.abspath(img)
     localFileName = localFilePath.split('/')[-1]
 
     mediaType = "8"
@@ -93,6 +94,7 @@ for upload_file in upload_tmp_loading:
         code = pycurl_upload_imagedrop(upload_file)
         if code == '200':
             shutil.move(upload_file, archive_uploaded)
+            print "1stTryOK"
         elif code:
             print code, upload_file
             time.sleep(float(.3))
@@ -108,7 +110,7 @@ for upload_file in upload_tmp_loading:
             print "Uploaded {}".format(upload_file)
             time.sleep(float(.3))
             shutil.move(upload_file, archive_uploaded)
-    except:
+    except OSError:
         print "Error moving Finals to Arch {}".format(file)
         shutil.move(upload_file, tmp_failed)
         pass
