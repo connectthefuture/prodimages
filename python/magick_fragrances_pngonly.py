@@ -147,16 +147,16 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if ratio_range == 'LOW':
         if float(round(high,2)) > float(240):
             modulater = '-modulate'
-            modulate = '105,100'  
+            modulate = '104,100'  
         elif float(round(high,2)) > float(200):    
             modulater = '-modulate'
-            modulate = '110,110'
+            modulate = '107,110'
         elif float(round(high,2)) > float(150):    
             modulater = '-modulate'
-            modulate =  '115,110'    
+            modulate =  '110,110'    
         else:    
             modulater = '-modulate'
-            modulate =  '120,110' 
+            modulate =  '112,110' 
 
     elif ratio_range == 'HIGH':
         if float(round(high,2)) > float(230):
@@ -164,10 +164,13 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             modulate = '100,100'  
         elif float(round(high,2)) > float(200):    
             modulater = '-modulate'
-            modulate = '105,100'
+            modulate = '103,100'
         elif float(round(high,2)) > float(150):    
             modulater = '-modulate'
-            modulate = '110,105'      
+            modulate = '105,105'     
+        else:    
+            modulater = '-modulate'
+            modulate =  '108,107'  
     elif ratio_range == 'OutOfRange':
         modulater = '-modulate'
         modulate = '100,100'
@@ -229,7 +232,7 @@ img_dict = sort_files_by_values(imgs)
 for k,v in img_dict.items():
     img = k
     rgbmean     = v.items()
-    magick_fragrance_proc_png(img, rgbmean=dict(rgbmean), destdir=root_img_dir)
+    subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=root_img_dir)
     #magick_fragrance_proc_lrg(special_img, rgbmean=dict(rgbmean), destdir=tmp_processing_special)
     #magick_fragrance_proc_med(special_img, rgbmean=dict(rgbmean), destdir=tmp_processing_special)
     
