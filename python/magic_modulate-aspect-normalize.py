@@ -536,7 +536,7 @@ def magick_fragrance_proc_png(img, rgbmean=None, destdir=None):
 
 def rename_retouched_file(img):
     import os,re
-    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.jpg')
+    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.??[gG]')
     imgfilepath = img
     if re.findall(regex_coded,imgfilepath):
         filedir = imgfilepath.split('/')[:-1]
@@ -580,7 +580,7 @@ def rename_retouched_file(img):
 ### End Data extract Funx, below processors
 #
 
-### Large Jpeg Convert to  _l jpgs
+### Large Jpeg Convert to  _l ??[gG]s
 def subproc_magick_large_jpg(img, destdir=None):
     import subprocess,os,re
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
@@ -618,7 +618,7 @@ def subproc_magick_large_jpg(img, destdir=None):
             subprocess.call([
             'convert',
             '-colorspace',
-            'LAB',
+            'sRGB',
             img,
             '-crop',
             str(
@@ -644,10 +644,10 @@ def subproc_magick_large_jpg(img, destdir=None):
             vert_horiz,
             '-extent', 
             dimensions,
-            "-format",
-            "jpg",
             "-colorspace",
-             "sRGB",
+            "sRGB",
+            "-format",
+            "jpeg",
             '-unsharp',
             '2x1.24+0.5+0', 
             '-quality', 
@@ -734,11 +734,10 @@ def subproc_magick_medium_jpg(img, destdir=None):
             vert_horiz,
             '-extent', 
             dimensions,
-            
-            "-format",
-            "jpg",
             "-colorspace",
-             "sRGB",
+            "sRGB",
+            "-format",
+            "jpeg",
             '-unsharp',
             '2x1.1+0.5+0', 
             '-quality', 
@@ -762,7 +761,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     #imgdestpng_out = os.path.join(root_img_dir, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
     if not rgbmean:
-         ratio_range = 'OutOfRange'
+        ratio_range = 'OutOfRange'
     
     if ratio_range != 'OutOfRange':
         try:
@@ -817,7 +816,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     else:
         destdir = os.path.abspath(destdir)
 
-    outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
+    outfile = os.path.join(destdir, img.split('/')[-1])
 
     dimensions = ''
     ## Get variable values for processing
@@ -851,7 +850,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if regex_valid_style.findall(img):        
         subprocess.call([
             'convert',
-  
+            "-colorspace",
+            "RGB",
             '-format',
             'png',
             img,
@@ -889,13 +889,14 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-gravity',
-            'center',
             '-background',
             'white',
+            '-gravity',
+            'center',
             '-extent', 
             dimensions,
-
+            "-colorspace",
+            "sRGB",
             '-unsharp',
             '2x2.7+0.5+0', 
             '-quality', 
@@ -912,7 +913,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
 #############################
 import sys,glob,shutil,os,re
-regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
+regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
 regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
 regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
@@ -960,9 +961,11 @@ except IndexError:
 if os.path.isdir(root_img_dir):
     img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??g')))
     for k,v in img_dict.items():
-        special_img = k
+        img = k
+        if regex_coded.findall(img):
+            img = rename_retouched_file(img)
         rgbmean     = v.items()
-        pngout = subproc_magick_png(special_img, rgbmean=dict(rgbmean), destdir=destdir)
+        pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
         subproc_magick_large_jpg(pngout, destdir=destdir)
         subproc_magick_medium_jpg(pngout, destdir=destdir)
 
