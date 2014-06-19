@@ -851,8 +851,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if regex_valid_style.findall(img):        
         subprocess.call([
             'convert',
-            "-colorspace",
-            "LAB",
+  
             '-format',
             'png',
             img,
@@ -896,8 +895,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             'white',
             '-extent', 
             dimensions,
-            "-colorspace",
-            "sRGB",
+
             '-unsharp',
             '2x2.7+0.5+0', 
             '-quality', 
