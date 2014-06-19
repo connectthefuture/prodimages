@@ -817,7 +817,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     else:
         destdir = os.path.abspath(destdir)
 
-    outfile = os.path.join(destdir, img.split('/')[-1])
+    outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
     dimensions = ''
     ## Get variable values for processing
