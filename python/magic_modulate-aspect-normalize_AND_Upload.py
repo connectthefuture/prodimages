@@ -634,7 +634,8 @@ except IndexError:
         os.makedirs(destdir)
     except OSError:
         pass
- 
+
+##For separating by vendor
 # walkedout_renamed_special = glob.glob(os.path.join(root_img_dir, '*.??g'))
 # #fragrancenet_styles = query_vendors_styles('Fragrancenet')
 # #fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
@@ -642,20 +643,20 @@ except IndexError:
 # ## Process only fragrance net images to enhance low Rez photo then archive orig
 # img_dict = sort_files_by_values(walkedout_renamed_special)
 # for k,v in img_dict.items():
-#     special_img = k
-#     rgbmean     = v.items()
-#     pngout = subproc_magick_png(special_img, rgbmean=dict(rgbmean), destdir=destdir)
-#     subproc_magick_large_jpg(pngout, destdir=destdir)
-#     subproc_magick_medium_jpg(pngout, destdir=destdir)
+      #special_img = k
+      #rgbmean     = v.items()
+      #pngout = subproc_magick_png(special_img, rgbmean=dict(rgbmean), destdir=destdir)
+      #subproc_magick_large_jpg(pngout, destdir=destdir)
+      #subproc_magick_medium_jpg(pngout, destdir=destdir)
 
-#     #magick_fragrance_proc_lrg(pngout, rgbmean=dict(rgbmean), destdir=destdir)
-#     #magick_fragrance_proc_med(pngout, rgbmean=dict(rgbmean), destdir=destdir)
+      #magick_fragrance_proc_lrg(pngout, rgbmean=dict(rgbmean), destdir=destdir)
+      #magick_fragrance_proc_med(pngout, rgbmean=dict(rgbmean), destdir=destdir)
     
-#     ## special processed original files move to archive dir making only standard processing files in proc dir
-#     #shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
+      ## special processed original files move to archive dir making only standard processing files in proc dir
+      #shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
 
 
-## all process special files move to upload dir
+# all process special files move to upload dir
 # special_processed = glob.glob(os.path.join(root_img_dir, '*.??g'))
 #[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in special_processed ]
 
@@ -715,6 +716,7 @@ except:
 
 
 import time
+#### UPLOAD upload_file via ftp to imagedrop using Pycurl
 upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
 for upload_file in upload_tmp_loading:
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
