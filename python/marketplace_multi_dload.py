@@ -67,6 +67,7 @@ import requests
 
 ## Create image dir Root if not exist
 imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
+badurldir = os.path.join(imagedir,'error404')
 
 if os.path.isdir(imagedir):
     pass
@@ -114,3 +115,14 @@ for k,v in vaultstyles.iteritems():
                 countstyle += 1
             print "Total New Styles Downloaded: {}".format(countstyle)
 
+        elif urlcode_value == 404:
+            if os.path.isdir(badurldir):
+                pass
+            else:
+                try:
+                    os.makedirs(badurldir, 16877)
+                except:
+                    pass
+
+            with open(os.path.join(os.path.abspath(badurldir), colorstyle + '_error404.txt') as f:
+              f.write("{0}\n".format(colorstyle + urlcode_value))
