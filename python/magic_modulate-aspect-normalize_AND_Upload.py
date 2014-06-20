@@ -663,12 +663,12 @@ except IndexError:
 
 # Process Directory of images as sysarg 1, Dest sysarg 2
 if os.path.isdir(root_img_dir):
+    imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
     img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
 
     for k,v in img_dict.items():
         try:
             img = k
-            #img = rename_retouched_file(img)
             rgbmean     = v.items()
             pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
             subproc_magick_large_jpg(pngout, destdir=destdir)
