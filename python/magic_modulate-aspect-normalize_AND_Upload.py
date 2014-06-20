@@ -63,6 +63,52 @@ def upload_to_imagedrop(img):
     fileread.close()
     session.quit()
 
+
+def rename_retouched_file(img):
+    import os,re
+    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.[jJpPnNgG]{3}')
+    imgfilepath = img
+
+    if re.findall(regex_coded,imgfilepath):
+        filedir = imgfilepath.split('/')[:-1]
+        filedir = '/'.join(filedir)
+        print filedir
+        filename = imgfilepath.split('/')[-1]
+        colorstyle = str(filename[:9])
+        testimg = filename.split('_')[-1]
+        alttest = testimg.split('.')[0]
+        ext = filename.split('.')[-1]
+        ext = ".{}".format(ext.lower())
+        # if its 1
+        if str.isdigit(alttest) & len(alttest) == 1:
+            if alttest == '1':
+                src_img_primary = img.replace('_1.','.')
+                os.rename(img, src_img_primary)
+                return src_img_primary
+            else:
+                alttest = int(alttest)
+                print alttest
+                alttest = alttest - 1
+                alt = '_alt0{}'.format(str(alttest))
+                print alt
+
+                if alt:
+                    #print type(filedir), type(colorstyle), type(alt), type(ext)
+                    #print filedir, colorstyle, alt, ext
+                    filename = "{}{}{}".format(colorstyle,alt,ext)
+                    renamed = os.path.join(filedir, filename)
+                    print renamed
+                    ##except UnboundLocalError:
+                    ##print "UnboundLocalError{}".format(imgfilepath)
+                if renamed:
+                    os.rename(img, renamed)
+                    if os.path.isfile(renamed):
+                        return renamed
+        else:
+            return img
+
+################# Begin Image functions
+
 def get_aspect_ratio(img):
     from PIL import Image
     im = Image.open(img)
@@ -95,114 +141,6 @@ def get_exif_metadata_value(img, exiftag=None):
         for mtag, mvalue in metadata.iteritems():
             metadict[mtag] = mvalue
         return metadict
-
-# return image demensions and vert_hoiz variables only
-def get_imagesize_variables(img):
-    import os,sys,re,subprocess,glob
-    dimensions = ''
-    regex_geometry = re.compile(r'^Geometry.+?$')
-    regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
-
-    metadata=subprocess.check_output(['identify','-verbose', img])
-            
-    metadata_list = metadata.replace(' ','').split('\n')
-    
-    g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
-    g_height = [ g.split(':')[-1].split('+')[0].split('x')[1] for g in metadata_list if regex_geometry.findall(g) ]
-    
-    dimensions = '{0}x{1}'.format(g_width[0],g_height[0])
-
-    ## Vertical Portrait orientation or exact Square for taller images
-    xdelim = 'x'
-    if int(dimensions.split(xdelim)[1]) <= int(dimensions.split(xdelim)[-1]):
-        if int(dimensions.split(xdelim)[1]) > 2000:
-            vert_horiz = "x2400"
-            dimensions = "2000x2400"
-        elif int(dimensions.split(xdelim)[1]) < 2000 and int(dimensions.split(xdelim)[1]) > 1400:
-            vert_horiz = "x1680"
-            dimensions = "1400x1680"
-        elif int(dimensions.split(xdelim)[1]) < 1400 and int(dimensions.split(xdelim)[1]) > 1000:
-            vert_horiz = "x1200"
-            dimensions = "1000x1200"
-        elif int(dimensions.split(xdelim)[1]) < 1000 and int(dimensions.split(xdelim)[1]) > 600:
-            vert_horiz = "x720"
-            dimensions = "600x720"
-        else:
-            vert_horiz = "x480"
-            dimensions = "400x480"
-    
-    ## Landscape Orientation for wider images  
-    elif int(dimensions.split(xdelim)[1]) > int(dimensions.split(xdelim)[-1]):
-        if int(dimensions.split(xdelim)[-1]) > 2400:
-            vert_horiz = "2000x"
-            dimensions = "2000x2400"
-
-        elif int(dimensions.split(xdelim)[-1]) < 2400 and int(dimensions.split(xdelim)[-1]) > 1680:
-            vert_horiz = "1400x"
-            dimensions = "1400x1680"
-        
-        elif int(dimensions.split(xdelim)[-1]) < 1680 and int(dimensions.split(xdelim)[-1]) > 1200:
-            vert_horiz = "1000x"
-            dimensions = "1000x1200"
-
-        elif int(dimensions.split(xdelim)[-1]) < 1200 and int(dimensions.split(xdelim)[-1]) > 720:
-            vert_horiz = "600x"
-            dimensions = "600x720"
-        else:
-            vert_horiz = "400x"
-            dimensions = "400x480"
-    print vert_horiz, dimensions
-    return vert_horiz, dimensions
-
-
-# Return Image data dict
-def metadata_info_dict(img):
-    import os,sys,re,subprocess,glob
-    regex_geometry = re.compile(r'^Geometry.+?$')
-    metadict = {}
-    fileinfo = {}
-    fname=os.path.basename(img)
-    dname=os.path.dirname(img)
-    regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
-    
-    metadata=subprocess.check_output(['identify', '-verbose', img])
-
-    metadata_list = metadata.replace(' ','').split('\n')
-    
-    g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
-    g_height = [ g.split(':')[-1].split('+')[0].split('x')[1] for g in metadata_list if regex_geometry.findall(g) ]
-    
-    metadata_width    = float(g_width[0])
-    metadata_height   = float(g_height[0])
-    
-    aspect_ratio =  metadata_height/metadata_width
-    aspect_ratio = "{0:.2f}".format(round(aspect_ratio,2))
-    
-    fileinfo['width'] = "{0:.0f}".format(round(metadata_width,2))
-    fileinfo['height'] = "{0:.0f}".format(round(metadata_height,2))
-    fileinfo['aspect'] = aspect_ratio
-    orientation        = 'standard'
-    
-    if float(round(metadata_height/metadata_width,2)) == float(round(1.00,2)):
-        orientation    = 'square'
-    elif float(round(metadata_height/metadata_width,2)) > float(round(1.00,2)):
-        orientation    = 'portait'
-    elif float(round(metadata_height/metadata_width,2)) < float(round(1.00,2)):
-        orientation    = 'landscape'
-
-    if float(round(metadata_height/metadata_width,2)) == float(1.2):
-        orientation    = 'standard'
-        if g_width[0] == '2000' and g_height[0] == '2400':
-            orientation = 'bfly'
-    if float(round(metadata_height/metadata_width,2)) == float(1.25):
-        orientation    = 'bnc'
-        
-    fileinfo['orientation'] = orientation
-    fileinfo['mean'] = mean_tot[0]
-    fileinfo['colorspace'] = colorspace[0]
-    metadict[img] = fileinfo
-    return metadict
-
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
@@ -339,304 +277,9 @@ def sort_files_by_values(directory):
             pass
     return filevalue_dict
 
-def magick_fragrance_proc_lrg(img, rgbmean=None, destdir=None):
-    import subprocess,os,re
-    modulater = ''
-    modulate = ''
-    if not destdir:
-        destdir = '.'
-    ### Change to Large jpg dir to Mogrify using Glob
-    os.chdir(os.path.dirname(img))
-    ratio_range = rgbmean['ratio_range']
-    if ratio_range != 'OutOfRange':
-        high        = rgbmean['high']
-        low         = rgbmean['low']
-        ratio       = rgbmean['ratio']
-    #rgbmean = float(128)
-    #rgbmean = get_image_color_minmax(img)
-    if ratio_range == 'LOW':
-        if float(round(high,2)) > float(240):
-            modulater = '-modulate'
-            modulate = '105,100'  
-        elif float(round(high,2)) > float(200):    
-            modulater = '-modulate'
-            modulate = '115,110'
-        elif float(round(high,2)) > float(150):    
-            modulater = '-modulate'
-            modulate =  '120,110'    
-        else:    
-            modulater = '-gamma'
-            modulate =  '1.4' #'120,110'    
-    
-    elif ratio_range == 'HIGH':
-        if float(round(high,2)) > float(230):
-            modulater = '-modulate'
-            modulate = '100,100'  
-        elif float(round(high,2)) > float(200):    
-            modulater = '-modulate'
-            modulate = '105,100'
-        elif float(round(high,2)) > float(150):    
-            modulater = '-modulate'
-            modulate = '110,105'      
-    elif ratio_range == 'OutOfRange':
-        modulater = '-modulate'
-        modulate = '100,100'
-    
-    subprocess.call([
-    'convert',
-    '-colorspace',
-    'sRGB',
-    img,
-    '-crop',
-    str(
-    subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-    ,
-    #'+repage',
-    '-gravity',
-    'center',
-    '-background',
-    'white',
-    '-extent',
-    '500x600',
-    modulater,
-    modulate,
-    #"-auto-level",
-    #"-normalize",
-    "-colorspace",
-    "RGB",
-    "-filter",
-    "Cosine",
-    "-define",
-    "filter:blur=0.88549061701764",
-    "-distort",
-    "Resize",
-    '400x480',
-    "-colorspace",
-    "sRGB",
-    '-unsharp',
-    '2x2.3+0.5+0', 
-    '-quality', 
-    '95',
-    os.path.join(destdir,img.split('/')[-1][:9] + '_l.jpg')
-    ])
-
-### Medium Jpeg conver Dir with _m jpgs
-def magick_fragrance_proc_med(img, rgbmean=None, destdir=None):
-    import subprocess,os,re
-    modulater = ''
-    modulate = ''
-    
-    if not destdir:
-        destdir = '.'
-
-    ### Change to Medium jpg dir to Mogrify using Glob
-    os.chdir(os.path.dirname(img))
-    ratio_range = rgbmean['ratio_range']
-    if ratio_range != 'OutOfRange':
-        high        = rgbmean['high']
-        low         = rgbmean['low']
-        ratio       = rgbmean['ratio']
-    #rgbmean = float(128)
-    #rgbmean = get_image_color_minmax(img)
-    if ratio_range == 'LOW':
-        if float(round(high,2)) > float(240):
-            modulater = '-modulate'
-            modulate = '105,100'  
-        elif float(round(high,2)) > float(200):    
-            modulater = '-modulate'
-            modulate = '115,110'
-        elif float(round(high,2)) > float(150):    
-            modulater = '-gamma'
-            modulate =  '1.15' #'120,110'    
-        else:    
-            modulater = '-gamma'
-            modulate =  '1.2' #'120,110'    
-
-    elif ratio_range == 'HIGH':
-        if float(round(high,2)) > float(230):
-            modulater = '-modulate'
-            modulate = '100,100'  
-        elif float(round(high,2)) > float(200):    
-            modulater = '-modulate'
-            modulate = '105,100'
-        elif float(round(high,2)) > float(150):    
-            modulater = '-modulate'
-            modulate = '110,105'      
-    elif ratio_range == 'OutOfRange':
-        modulater = '-modulate'
-        modulate = '100,100'
-    
-        
-    
-    subprocess.call([
-        'convert',
-        '-colorspace',
-        'sRGB',
-        img,
-        '-crop',
-        str(
-        subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-        ,
-        #'+repage',
-        '-gravity',
-        'center',
-        '-background',
-        'white',
-        '-extent',
-        '500x600',
-        modulater,
-        modulate,
-        
-        #"-normalize",
-        "-colorspace",
-        "RGB",
-        "-filter",
-        "Cosine",
-        "-define",
-        "filter:blur=0.88549061701764",
-        "-distort",
-        "Resize",
-        '300x360',
-        "-colorspace",
-        "sRGB",
-        '-unsharp',
-        '2x2.2+0.5+0', 
-        '-quality', 
-        '95',
-        os.path.join(destdir,img.split('/')[-1][:9] + '_m.jpg')
-        ])
-
-
-### Png Create with convert 
-def magick_fragrance_proc_png(img, rgbmean=None, destdir=None):
-    import subprocess,os,re
-    modulater = ''
-    modulate = ''
-    if not destdir:
-        destdir = '.'
-    #imgdestpng_out = os.path.join(root_img_dir, os.path.basename(imgsrc_jpg))
-    os.chdir(os.path.dirname(img))
-    ratio_range = rgbmean['ratio_range']
-    if ratio_range != 'OutOfRange':
-        high        = rgbmean['high']
-        low         = rgbmean['low']
-        ratio       = rgbmean['ratio']
-    #rgbmean = float(128)
-    #rgbmean = get_image_color_minmax(img)
-    if ratio_range == 'LOW':
-        if float(round(high,2)) > float(240):
-            modulater = '-modulate'
-            modulate = '105,100'  
-        elif float(round(high,2)) > float(200):    
-            modulater = '-modulate'
-            modulate = '110,110'
-        elif float(round(high,2)) > float(150):    
-            modulater = '-modulate'
-            modulate =  '115,110'    
-        else:    
-            modulater = '-modulate'
-            modulate =  '120,110' 
-
-    elif ratio_range == 'HIGH':
-        if float(round(high,2)) > float(230):
-            modulater = '-modulate'
-            modulate = '100,100'  
-        elif float(round(high,2)) > float(200):    
-            modulater = '-modulate'
-            modulate = '105,100'
-        elif float(round(high,2)) > float(150):    
-            modulater = '-modulate'
-            modulate = '110,105'      
-    elif ratio_range == 'OutOfRange':
-        modulater = '-modulate'
-        modulate = '100,100'
-    
-    format = img.split('.')[-1]
-    subprocess.call([
-        'convert',
-        "-colorspace",
-        "LAB",
-        '-format',
-        format,
-        img,
-        '-define',
-        'png:preserve-colormap',
-#        '-define',
-#        'png:format=png24',
-#        '-define',
-#        'png:compression-level=N',
-#        '-define',
-#        'png:compression-strategy=N',
-#        '-define',
-#        'png:compression-filter=N',
-        modulater,
-        modulate,
-#        "-colorspace",
-#        "RGB",
-        "-filter",
-        "Spline",
-        "-define",
-        "filter:blur=0.88549061701764",
-        '-unsharp',
-        '2x2.6+0.5+0',
-        '-format',
-        'png', 
-        "-colorspace",
-        "sRGB",
-        '-quality', 
-        '100',
-        os.path.join(destdir,img.split('/')[-1][:9] + '.png')
-        ])
-    
-    print 'Done {}'.format(img)
-    return
-
 
 ##### ##### ##### ########## ##### ##### #####
 ##### ##### ##### ########## ##### ##### #####
-
-def rename_retouched_file(img):
-    import os,re
-    regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.??[gG]')
-    imgfilepath = img
-    if re.findall(regex_coded,imgfilepath):
-        filedir = imgfilepath.split('/')[:-1]
-        filedir = '/'.join(filedir)
-        print filedir
-        filename = imgfilepath.split('/')[-1]
-        colorstyle = str(filename[:9])
-        testimg = filename.split('_')[-1]
-        alttest = testimg.split('.')[0]
-        ext = filename.split('.')[-1]
-        ext = ".{}".format(ext.lower())
-        # if its 1
-        if str.isdigit(alttest) & len(alttest) == 1:
-            if alttest == '1':
-                src_img_primary = img.replace('_1.','.')
-                os.rename(img, src_img_primary)
-                return src_img_primary
-            else:
-                alttest = int(alttest)
-                print alttest
-                alttest = alttest - 1
-                alt = '_alt0{}'.format(str(alttest))
-                print alt
-
-                if alt:
-                    #print type(filedir), type(colorstyle), type(alt), type(ext)
-                    #print filedir, colorstyle, alt, ext
-                    filename = "{}{}{}".format(colorstyle,alt,ext)
-                    renamed = os.path.join(filedir, filename)
-                    print renamed
-                    ##except UnboundLocalError:
-                    ##print "UnboundLocalError{}".format(imgfilepath)
-                if renamed:
-                    os.rename(img, renamed)
-                    if os.path.isfile(renamed):
-                        return renamed
-        else:
-            return img
-
 
 ### End Data extract Funx, below processors
 #
@@ -1020,7 +663,8 @@ except IndexError:
 
 # Process Directory of images as sysarg 1, Dest sysarg 2
 if os.path.isdir(root_img_dir):
-    img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??g')))
+    img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
+
     for k,v in img_dict.items():
         try:
             img = k
