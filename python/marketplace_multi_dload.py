@@ -125,7 +125,7 @@ for k,v in vaultstyles.iteritems():
                     pass
             try:
                 with open(os.path.join(os.path.abspath(badurldir), colorstyle + '_error404.txt'), 'wb+') as f:
-                f.write("{0}\n".format(colorstyle + urlcode_value))
+                    f.write("{0}\n".format(colorstyle + urlcode_value))
             except:
                 'Print Failed write 404 file'
                 pass
