@@ -384,7 +384,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         destdir = os.path.abspath(destdir)
 
     if regex_alt.findall(img):
-        outfile = os.path.join(destdir, img.split('/')[-1])
+        outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.jpg')
     else:
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
 
