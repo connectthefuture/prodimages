@@ -113,6 +113,11 @@ for upload_file in upload_tmp_loading:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.3))
                 shutil.move(upload_file, archive_uploaded)
+        except shutil.Error:
+            try:
+                shutil.move(upload_file, tmp_failed)
+            except:
+                pass
         except OSError:
             print "Error moving Finals to Arch {}".format(file)
             shutil.move(upload_file, tmp_failed)
