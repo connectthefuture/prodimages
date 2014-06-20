@@ -66,7 +66,9 @@ def upload_to_imagedrop(img):
 
 ## UPLOAD FTP with PyCurl everything in tmp_loading
 import os, sys, re, csv, shutil, glob
-
+regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
+regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
+regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
 try:
     root_dir = sys.argv[1]
@@ -90,30 +92,33 @@ upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
 for upload_file in upload_tmp_loading:
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
     ## Then rm loading tmp dir
-    try:
-        code = pycurl_upload_imagedrop(upload_file)
-        if code == '200':
-            shutil.move(upload_file, archive_uploaded)
-            print "1stTryOK"
-        elif code:
-            print code, upload_file
-            time.sleep(float(.3))
-            try:
-                ftpload_to_imagedrop(upload_file)
+    if regex_valid_style.findall(upload_file):
+        try:
+            code = pycurl_upload_imagedrop(upload_file)
+            if code == '200':
+                shutil.move(upload_file, archive_uploaded)
+                print "1stTryOK"
+            elif code:
+                print code, upload_file
+                time.sleep(float(.3))
+                try:
+                    ftpload_to_imagedrop(upload_file)
+                    print "Uploaded {}".format(upload_file)
+                    time.sleep(float(.3))
+                    shutil.move(upload_file, archive_uploaded)
+                except:
+                    shutil.move(upload_file, tmp_failed)
+                    pass
+            else:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.3))
                 shutil.move(upload_file, archive_uploaded)
-            except:
-                shutil.move(upload_file, tmp_failed)
-                pass
-        else:
-            print "Uploaded {}".format(upload_file)
-            time.sleep(float(.3))
-            shutil.move(upload_file, archive_uploaded)
-    except OSError:
-        print "Error moving Finals to Arch {}".format(file)
+        except OSError:
+            print "Error moving Finals to Arch {}".format(file)
+            shutil.move(upload_file, tmp_failed)
+            pass
+    else:
         shutil.move(upload_file, tmp_failed)
-        pass
 
 try:
     if sys.argv[2]:
