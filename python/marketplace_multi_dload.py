@@ -69,13 +69,13 @@ imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
 
 countimage = 0
 countstyle = 0
-vaultstyles=sqlQuery_GetIMarketplaceImgs(po_number='135050')
+vaultstyles=sqlQuery_GetIMarketplaceImgs(vendor='', vendor_brand='', po_number='')
 for k,v in vaultstyles.iteritems():
-    colorstyle = v['colorstyle']
-    image_url  = v['image_url']
-    po_number    = v['po_number']
+    colorstyle  = v['colorstyle']
+    image_url   = v['image_url']
+    po_number   = v['po_number']
     vendor_name = v['vendor_name']
-    alt_number = v['alt']
+    alt_number  = v['alt']
     ext = '.jpg'
     if alt_number:
         bfly_ext = "_{0}{1}".format(alt_number,ext)
@@ -104,8 +104,4 @@ for k,v in vaultstyles.iteritems():
             if alt_number == 1:
                 countstyle += 1
             print "Total New Styles Downloaded: {}".format(countstyle)
-             
-        #magickcrop1200(destpath, imagedir)#, os.path.join(imagedir,colorstyle + '_1200.jpg')) #os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_1200.jpg'))))
-        #magickcrop480(destpath, os.path.join(imagedir,colorstyle + '_l.jpg'))   # os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_l.jpg'))))
-        #magickcrop480(destpath, os.path.join(imagedir,colorstyle + '_m.jpg'))   #os.path.abspath(os.path.join(imagedir, destpath.split('/')[-1].replace('.jpg','_m.jpg'))))
-        
+
