@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None):
     import sqlalchemy,sys
