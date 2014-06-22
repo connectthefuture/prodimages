@@ -67,8 +67,8 @@ import requests
 
 ## Create image dir Root if not exist
 try:
-    imagedir = os.path.abspath(os.path.join('/mnt/Post_Complete/Complete_Archive', 'Pictures'))
-
+    imagedir = os.path.abspath(os.path.join('/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/'
+, 'Pictures'))
 except:
     imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
 
