@@ -69,13 +69,14 @@ import requests
 try:
     imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 except:
-    imagedir = os.path.abspath(os.path.join('/mnt/Post_Complete/.Vendor_to_Load', 'Pictures'))
+    #imagedir = os.path.abspath(os.path.join('/mnt/Post_Complete/.Vendor_to_Load', 'Pictures'))
+    imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
 
 if os.path.isdir(imagedir):
     pass
 else:
     try:
-        os.makedirs(imagedir, 16877)
+        os.makedirs(imagedir, 493)
     except:
         pass
 
@@ -123,7 +124,7 @@ for k,v in vaultstyles.iteritems():
                 pass
             else:
                 try:
-                    os.makedirs(badurldir, 16877)
+                    os.makedirs(badurldir, 493)
                 except:
                     pass
             try:
