@@ -67,10 +67,10 @@ import requests
 
 ## Create image dir Root if not exist
 try:
-    imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
-    #imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
+    #imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
+    imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 except:
-    imagedir = os.path.abspath(os.path.join('/mnt/Post_Complete/.Vendor_to_Load', 'Pictures'))
+    imagedir = os.path.abspath(os.path.join('/mnt/Post_Complete/Complete_Archive', 'Pictures'))
 
 if os.path.isdir(imagedir):
     pass
