@@ -66,7 +66,10 @@ import os,re,sys,urllib
 import requests
 
 ## Create image dir Root if not exist
-imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
+try:
+    imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
+except:
+    imagedir = os.path.abspath(os.path.join('/home/johnb', 'Pictures'))
 
 if os.path.isdir(imagedir):
     pass
