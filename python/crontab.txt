@@ -35,7 +35,7 @@ PRODSRV=$POSTREADY/zProd_Server/imageServer7
 SHELL=/bin/bash
 TODAY=`date +%Y%b%d`
 TODAY_REG=`date +%Y-%m-%d`
-PYTHONPATH=/usr/local/batchRunScripts/python
+PYTHONPATH=/usr/local/batchRunScripts/python:/usr/local/lib/python2.7/dist-packages
 PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
 #
 ## Debugging Output Scripts in tmp dir
@@ -200,7 +200,8 @@ PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
 #################################################################
 #########################################
 ##  Updates Primary DB with PM Data  ####
-43  19,6    *    *    *   /usr/local/batchRunScripts/offshore-processes/import_offshore_tosend.py ## 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
+43  19,6    *    *    *   /usr/local/batchRunScripts/offshore-processes/import_offshore_tosend.py 
+## 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
 #
 #
 ## WALK SEND AND RECEIVE DIRS --> Get and INSERT or try UPDATE Send-Receive Folders File Paths
@@ -221,7 +222,9 @@ PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
 #### Scan Pick(up) folder for Completed bg rm and dload unzip process and archive
 ## --> RETURN
 ## TODO:Update offshore_status return_dt accordingly
-12  0    *    *    *   /usr/local/batchRunScripts/offshore-processes/full_process_RETURN-multi_revcommit.py ## 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
+12  0    *    *    *   /usr/local/batchRunScripts/offshore-processes/full_process_RETURN-multi_revcommit.py 
+#
+## 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
 #
 ### Clear New Images via Edgecast
 42  3    *    *    *   /usr/local/batchRunScripts/bash/cronjob_nightly_india_cache_clear.sh 2>&1 /var/log/edgecast_indiaclr.log && date >> /var/log/edgecast_indiaclr.log
@@ -237,7 +240,7 @@ PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
 #
 ##################################################################
 #### Marketplace Import Process and Load Vendor Images
-56 23 	*		* 		*	/usr/local/batchRunScripts/python/cronjob_marketplace_nightly_improcload.py 2>&1 /var/log/marketplaceupload.log && date >> /var/log/marketplaceupload.log
+40 2 	*		* 		*	/usr/local/batchRunScripts/python/cronjob_marketplace_nightly_improcload.py 2>&1 /var/log/marketplaceupload.log && date >> /var/log/marketplaceupload.log
 #
 #
 ###################################################################################
