@@ -69,7 +69,7 @@ import requests
 try:
     imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 except:
-    imagedir = os.path.abspath(os.path.join('/home/johnb', 'Pictures'))
+    imagedir = os.path.abspath(os.path.join('/mnt/Post_Complete/.Vendor_to_Load', 'Pictures'))
 
 if os.path.isdir(imagedir):
     pass
