@@ -136,3 +136,11 @@ for k,v in vaultstyles.iteritems():
             except:
                 'Print Failed write 404 file'
                 pass
+
+######## Process Images and Load #####
+dirlist = []
+[dirlist.append(g) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
+import subprocess
+for d in dirlist:
+    subprocess.call(['/usr/local/batchRunScripts/python/magic_modulate-aspect-normalize_AND_Upload.py', d])
+
