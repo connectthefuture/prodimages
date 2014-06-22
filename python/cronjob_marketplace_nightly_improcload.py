@@ -4,13 +4,13 @@
 def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None):
     import sqlalchemy,sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
-    #orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
-    if not vendor and not vendor_brand and not po_number:
-        arg = sys.argv[1]
-        if arg.isdigit():
-            po_number = arg
-        else:
-            vendor = arg
+    # orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
+    # if not vendor and not vendor_brand and not po_number:
+    #     arg = sys.argv[1]
+    #     if arg.isdigit():
+    #         po_number = arg
+    #     else:
+    #         vendor = arg
 
     connection = orcl_engine.connect()
     if po_number:
