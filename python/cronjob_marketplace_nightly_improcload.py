@@ -139,7 +139,7 @@ for k,v in vaultstyles.iteritems():
 
 ######## Process Images and Load Downloaded files in VendorNAme-->POnumber subdir of main images dir #####
 dirlist = []
-[dirlist.append(g) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
+[dirlist.append(os.path.abspath(g)) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
 import subprocess
 for d in dirlist:
     subprocess.call(['/usr/local/batchRunScripts/python/magic_modulate-aspect-normalize_AND_Upload.py', d])
