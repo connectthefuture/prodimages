@@ -206,7 +206,6 @@ for link in found_links:
         email_img1     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
         email_img2     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
 
-
         edgecast_listurls.append(oldlistpg)
         edgecast_listurls.append(newlistpg)
         edgecast_listurls.append(pdpg)
