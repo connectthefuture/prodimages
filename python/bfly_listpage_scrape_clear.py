@@ -242,10 +242,12 @@ for k,v in clrversions.iteritems():
     try:
         colorstyle = k
         version = v
+        POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
         POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
         POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+        #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+        #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+        send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
             #except:
             #    print sys.stderr().read()
     except IndexError:

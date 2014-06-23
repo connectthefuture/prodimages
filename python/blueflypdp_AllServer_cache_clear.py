@@ -282,6 +282,7 @@ if len(versioned_links) <= 2550:
             version = version.pop()[-1].split('=')[-1]
             #print "{0} and version num {1}".format(colorstyle,version)
             #try:
+            #POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
             send_purge_request_localis(colorstyle,version,POSTURL_BFY)
