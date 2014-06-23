@@ -227,7 +227,7 @@ for colorstyle in colorstyles:
         edgecast_listurls.append(pdpZOOM)
         testurl='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
         ### ALT 1
-        if testurl in pdp_urllist:
+        if testurl in edgecast_listurls:
             pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
             edgecast_listurls.append(pdpalt01z)
             pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
