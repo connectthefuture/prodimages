@@ -217,7 +217,7 @@ for link in found_links:
         edgecast_listurls.append(email_img1)
         edgecast_listurls.append(email_img2)
 
-colorstyles = list(set([colorstyles.sorted()])
+colorstyles = list(set([colorstyles.sorted()]))
 clrversions = query_version_number(colorstyles)
 
 for colorstyle in colorstyles:
