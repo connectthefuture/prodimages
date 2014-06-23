@@ -156,7 +156,7 @@ alturl = 'altimage.ms'
 
 ## Get all Img links on PDP and append only the primary image urls and versions
 ## Then tack the generated urls for edgecast to list
-pdp_urllist = []
+list_urllist = []
 edgecast_listurls = []
 regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
@@ -173,7 +173,7 @@ bflylist_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sos
 
 found_links = url_get_links(bflylist_url)
 for link in found_links:
-    pdp_urllist.append(link)
+    list_urllist.append(link)
     colorstyle=link.split('/prodImage.ms?productCode=')[-1][:9]
 
     ## Create list page urls for Edgecast
@@ -191,11 +191,11 @@ for link in found_links:
 
 
 ## Parse urllist returning only versioned List page images
-versioned_links = return_versioned_urls(pdp_urllist)
+versioned_links = return_versioned_urls(list_urllist)
 
 #print versioned_links
 count = 0
-if len(versioned_links) <= 2550:
+if len(versioned_links) <= 5000:
 
     regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     for url_purge_local in versioned_links:
@@ -219,7 +219,7 @@ if len(versioned_links) <= 2550:
         #csv_write_datedOutfile(url_purge)
 
 else:
-    print "Failed -- Over 550 URLs Submitted"    
+    print "Failed -- Over 5000 URLs Submitted"    
 
 
 
@@ -228,7 +228,7 @@ else:
 
 #print generated_links
 count = 0
-if len(edgecast_listurls) <= 2550:
+if len(edgecast_listurls) <= 5000:
 
     #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
@@ -250,7 +250,7 @@ if len(edgecast_listurls) <= 2550:
         #csv_write_datedOutfile(url_purge)
 
 else:
-    print "Failed -- Over 550 URLs Submitted"    
+    print "Failed -- Over 5000 URLs Submitted"    
 
 
 #print edgecast_listurls
