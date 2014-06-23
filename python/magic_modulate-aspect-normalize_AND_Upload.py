@@ -409,7 +409,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         subprocess.call([
             'convert',
             '-colorspace',
-            'LAB',
+            'sRGB',
             img,
             '-crop',
             str(
