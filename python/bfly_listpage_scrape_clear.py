@@ -44,8 +44,26 @@ def return_cleaned_bfly_urls(text):
 
     return listurls
 
-    
-    
+
+def query_version_number(colorstyle):
+    import sqlalchemy
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')    
+    connection = orcl_engine.connect()
+    if type(colorstyle) == list:
+        querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID in ({0}) ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyles)
+
+    result = connection.execute(querymake_version_number)
+    styles = {}
+    for row in result:
+        #style_info = {}
+        #style_info['version'] = row['version']
+        # Convert Colorstyle to string then set as KEY
+        styles[str(row['colorstyle'])] = row['version']
+
+    connection.close()
+    return styles
+
+   
 def send_purge_request_localis(colorstyle, version, POSTURL):
     if colorstyle != "" and version != "":
         import pycurl,json
@@ -172,56 +190,64 @@ except IndexError:
 bflylist_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
 
 found_links = url_get_links(bflylist_url)
+colorstyles = []
 for link in found_links:
     list_urllist.append(link)
     colorstyle=link.split('/prodImage.ms?productCode=')[-1][:9]
-
-    ## Create list page urls for Edgecast
-    if alturl not in link:
+    if colorstyle.isdigit():
+        colorstyles.append(colorstyle)
+        ## Create list page urls for Edgecast
         oldlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
         pdpg          =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
         pmlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
         pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)				
+        email_img     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
+
         edgecast_listurls.append(oldlistpg)
         edgecast_listurls.append(newlistpg)
         edgecast_listurls.append(pdpg)
         edgecast_listurls.append(pmlistpg)
         edgecast_listurls.append(pmeventimg)
+        edgecast_listurls.append(email_img)
 
+clrversions = query_version_number(colorstyles)
+
+for colorstyle in colorstyles:
+    version = clrversion.get(colorstyle)
+    if version:
+        ### ZOOM HI REZ
+        pdpZOOM   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+        edgecast_listurls.append(pdpZOOM)
+        testurl='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+        ### ALT 1
+        if testurl in pdp_urllist:
+            pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+            edgecast_listurls.append(pdpalt01z)
+            pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+            edgecast_listurls.append(pdpalt01l)
+            print "SUCCESS1"
+            #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
 
 ## Parse urllist returning only versioned List page images
-versioned_links = return_versioned_urls(list_urllist)
+#versioned_links = return_versioned_urls(list_urllist)
 
 #print versioned_links
-count = 0
-if len(versioned_links) <= 5000:
-
-    regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
-    for url_purge_local in versioned_links:
-        try:
-            colorstyle = re.findall(regex, url_purge_local[0])
-            colorstyle = colorstyle.pop()[1]
-            version  = re.findall(regex, url_purge_local[0])
-            version = version.pop()[-1].split('=')[-1]
-            #print "{0} and version num {1}".format(colorstyle,version)
-            #try:
-            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+#count = 0
+#if len(versioned_links) <= 5000:
+for k,v in clrversions.iteritems():
+    try:
+        colorstyle = k
+        version = v
+        POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+        POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+        send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+        send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
             #except:
             #    print sys.stderr().read()
-        except IndexError:
-            pass
-    for url_purge in versioned_links:
-        send_purge_request_edgecast(url_purge[0])
-        #csv_write_datedOutfile(url_purge)
-
-else:
-    print "Failed -- Over 5000 URLs Submitted"    
-
-
+    except IndexError:
+        pass
+    #csv_write_datedOutfile(url_purge)
 
 ## Now clear links from the generated urls
 #generated_links = return_cleaned_bfly_urls(edgecast_listurls)

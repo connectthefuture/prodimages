@@ -198,7 +198,8 @@ def main():
         pdpaltthumb ='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
         pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
         pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)       
-        
+        email_img     = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
+
         if not found_links:
             # remote cdn to clear
             edgecast_listurls.append(oldlistpg)
@@ -212,6 +213,8 @@ def main():
             edgecast_listurls.append(pdpalt01z)
             edgecast_listurls.append(pdpalt01l)
             edgecast_listurls.append(pdpaltthumb)         
+            edgecast_listurls.append(email_img)
+
             
             ## Standard urls to clear
             #pdp_urllist.append(oldlistpg)

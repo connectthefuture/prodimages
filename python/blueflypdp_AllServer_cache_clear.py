@@ -181,12 +181,15 @@ for colorstyle in colorstyle_list:
                 pdpg          =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                 pmlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
                 pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)				
+                email_img     = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
+
                 edgecast_listurls.append(oldlistpg)
                 edgecast_listurls.append(newlistpg)
                 edgecast_listurls.append(pdpg)
                 edgecast_listurls.append(pmlistpg)
                 edgecast_listurls.append(pmeventimg)
-
+                edgecast_listurls.append(email_img)
+            
             if version:
                 ### ZOOM HI REZ
                 pdpZOOM   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
