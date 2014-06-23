@@ -169,27 +169,25 @@ regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
 # num_styles = '1000'
 #urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
-urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format('1000')
+bflylist_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format('1000')
 
-for url in urls_to_scrape:
-    bflylist_url = url   #"http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
-    found_links = url_get_links(bflylist_url)
-    for link in found_links:
-        pdp_urllist.append(link)
-        colorstyle=link.split('/prodImage.ms?productCode=')[-1][:9]
-    
-        ## Create list page urls for Edgecast
-        if alturl not in link:
-            oldlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
-            newlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
-            pdpg          =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
-            pmlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
-            pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)				
-            edgecast_listurls.append(oldlistpg)
-            edgecast_listurls.append(newlistpg)
-            edgecast_listurls.append(pdpg)
-            edgecast_listurls.append(pmlistpg)
-            edgecast_listurls.append(pmeventimg)
+found_links = url_get_links(bflylist_url)
+for link in found_links:
+    pdp_urllist.append(link)
+    colorstyle=link.split('/prodImage.ms?productCode=')[-1][:9]
+
+    ## Create list page urls for Edgecast
+    if alturl not in link:
+        oldlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
+        newlistpg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
+        pdpg          =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
+        pmlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+        pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)				
+        edgecast_listurls.append(oldlistpg)
+        edgecast_listurls.append(newlistpg)
+        edgecast_listurls.append(pdpg)
+        edgecast_listurls.append(pmlistpg)
+        edgecast_listurls.append(pmeventimg)
 
 
 ## Parse urllist returning only versioned List page images
