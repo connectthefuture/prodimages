@@ -141,7 +141,6 @@ def send_purge_request_edgecast(mediaPath):
 ############ RUN ###########
 
 import sys,re,os
-colorstyle_list = sys.argv[1:]
 
 alturl = 'altimage.ms'
 
@@ -150,8 +149,6 @@ alturl = 'altimage.ms'
 ## Join Catid to BC Url
 #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
 #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
-
-http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=1000&cp=2&sosc=true
 
 #www.bluefly.com/Harrison-pink-check-classic-fit-dress-shirt/p/323108302/detail.fly
 
@@ -162,7 +159,16 @@ http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=1000&cp=2&sosc=true
 pdp_urllist = []
 edgecast_listurls = []
 regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
-urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=1000&cp=2&sosc=true'
+
+# How many list page styles to create list page to scrape from 96 is one full page
+try:
+    num_styles = sys.argv[1]
+except IndexError:
+    num_styles = '96'
+    pass
+
+urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
+
 for url in urls_to_scrape:
     bflylist_url = url   #"http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
     found_links = url_get_links(bflylist_url)
