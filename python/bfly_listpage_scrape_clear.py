@@ -161,13 +161,15 @@ edgecast_listurls = []
 regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
 # How many list page styles to create list page to scrape from 96 is one full page
-try:
-    num_styles = sys.argv[1]
-except IndexError:
-    num_styles = '96'
-    pass
+# try:
+#     num_styles = sys.argv[1]
+# except IndexError:
+#     num_styles = '96'
+#     pass
 
-urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
+# num_styles = '1000'
+#urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
+urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format('1000')
 
 for url in urls_to_scrape:
     bflylist_url = url   #"http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
