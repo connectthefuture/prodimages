@@ -220,7 +220,7 @@ for link in found_links:
 clrversions = query_version_number(colorstyles)
 
 for colorstyle in colorstyles:
-    version = clrversion.get(colorstyle)
+    version = clrversions.get(colorstyle)
     if version:
         ### ZOOM HI REZ
         pdpZOOM   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
