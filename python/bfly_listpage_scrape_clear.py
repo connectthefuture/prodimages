@@ -199,6 +199,7 @@ else:
     except IndexError:
         bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
 
+print 'Scraping -->' + bfly_url
 found_links = url_get_links(bfly_url)
 colorstyles = []
 for link in found_links:
