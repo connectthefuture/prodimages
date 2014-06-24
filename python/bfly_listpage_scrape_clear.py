@@ -192,14 +192,14 @@ except IndexError:
 # num_styles = '1000'
 #urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
 if num_styles.isdigit():
-    bflylist_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
+    bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
 else:
     try:
-        bflylist_url = sys.argv[1]
+        bfly_url = sys.argv[1]
     except IndexError:
-        bflylist_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
+        bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
 
-found_links = url_get_links(bflylist_url)
+found_links = url_get_links(bfly_url)
 colorstyles = []
 for link in found_links:
     list_urllist.append(link)
