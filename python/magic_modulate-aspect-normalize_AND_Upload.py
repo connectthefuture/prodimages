@@ -624,8 +624,12 @@ def upload_imagedrop(root_dir):
     tmp_failed = os.path.join(root_dir, 'failed_upload')
     try:
         os.makedirs(archive_uploaded, 16877)
-    except:
-        pass
+    except OSError:
+        try:
+            shutil.rmtree(archive_uploaded, ignore_errors = True)
+            os.makedirs(archive_uploaded, 16877)
+        except:
+            pass
 
     try:
         os.makedirs(tmp_failed, 16877)
@@ -755,7 +759,8 @@ def main():
     ## UPLOAD FTP with PyCurl everything in tmp_loading
     # [ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
     
-    upload_imagedrop(root_dir)
+    upload_imagedrop(root_img_dir)
+
 
 if __name__ == '__main__':
     main()
