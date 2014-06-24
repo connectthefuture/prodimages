@@ -77,7 +77,12 @@ except:
     # imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 
 if os.path.isdir(imagedir):
-    pass
+    ## Remove previous days imports only from the PO dir prior to new import
+    remove_prior_import = glob.glob(os.path.join(imagedir, '*/*/*.jpg'))
+    try:
+        [ os.remove(f) for f in remove_prior_import ] 
+    except:
+        pass
 else:
     try:
         os.makedirs(imagedir, 16877)
