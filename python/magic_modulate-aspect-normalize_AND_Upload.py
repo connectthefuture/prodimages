@@ -560,10 +560,10 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             '-format',
             'png',
             img,
-            # '-crop',
-            # str(
-            # subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-            # ,
+            '-crop',
+            str(
+            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            ,
             '-define',
             'png:preserve-colormap',
             '-define',
@@ -584,13 +584,13 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             #"Mitchell",
             #"-define",
             #"filter:filter=QuadraticJinc",
-            #"-define", 
-            #"filter:win-support=12",
-            #"-define",
-            #"filter:support=8",
+            "-define", 
+            "filter:win-support=12",
             "-define",
-            #"filter:blur=0.625",
-            "filter:blur=0.88549061701764",
+            "filter:support=8",
+            "-define",
+            "filter:blur=0.625",
+            #"filter:blur=0.88549061701764",
             "-distort",
             "Resize",
             vert_horiz,
@@ -617,19 +617,15 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 #############################
 #############################
 
-def upload_imagedrop(root_dir):
+def upload_imagedrop(root_dir)
     import os, sys, re, csv, shutil, glob
     ## Make the success and fail dirs
     archive_uploaded = os.path.join(root_dir, 'uploaded')
     tmp_failed = os.path.join(root_dir, 'failed_upload')
     try:
         os.makedirs(archive_uploaded, 16877)
-    except OSError:
-        try:
-            shutil.rmtree(archive_uploaded, ignore_errors = True)
-            os.makedirs(archive_uploaded, 16877)
-        except:
-            pass
+    except:
+        pass
 
     try:
         os.makedirs(tmp_failed, 16877)
@@ -759,8 +755,7 @@ def main():
     ## UPLOAD FTP with PyCurl everything in tmp_loading
     # [ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
     
-    upload_imagedrop(destdir)
-
+    upload_imagedrop(root_img_dir)
 
 if __name__ == '__main__':
     main()
