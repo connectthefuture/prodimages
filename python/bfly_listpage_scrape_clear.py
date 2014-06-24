@@ -269,7 +269,7 @@ for k,v in clrversions.iteritems():
 
 #print generated_links
 count = 0
-if len(edgecast_listurls) <= 5000:
+if len(edgecast_listurls) <= 12000:
 
     #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
@@ -291,7 +291,7 @@ if len(edgecast_listurls) <= 5000:
         #csv_write_datedOutfile(url_purge)
 
 else:
-    print "Failed -- Over 5000 URLs Submitted"    
+    print "Failed -- Over 12000 URLs Submitted"    
 
 
 #print edgecast_listurls
