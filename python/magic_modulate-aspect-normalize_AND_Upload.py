@@ -759,7 +759,7 @@ def main():
     ## UPLOAD FTP with PyCurl everything in tmp_loading
     # [ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
     
-    upload_imagedrop(root_img_dir)
+    upload_imagedrop(destdir)
 
 
 if __name__ == '__main__':
