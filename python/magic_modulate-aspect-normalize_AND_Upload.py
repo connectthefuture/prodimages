@@ -617,7 +617,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 #############################
 #############################
 
-def upload_imagedrop(root_dir)
+def upload_imagedrop(root_dir):
     import os, sys, re, csv, shutil, glob
     ## Make the success and fail dirs
     archive_uploaded = os.path.join(root_dir, 'uploaded')
