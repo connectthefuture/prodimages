@@ -192,7 +192,13 @@ except IndexError:
 # num_styles = '1000'
 #urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
 if num_styles.isdigit():
-    bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
+    try:
+        if sys.argv[2].isdigit() and len(sys.argv[2]) < 2:
+            bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp={1}&sosc=true'.format(num_styles, sys.argv[2])
+    except:
+        bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
+        pass
+
 else:
     try:
         bfly_url = sys.argv[1]
