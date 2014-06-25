@@ -646,8 +646,16 @@ def upload_imagedrop(root_dir):
         try:
             code = pycurl_upload_imagedrop(upload_file)
             if code == '200':
-                shutil.move(upload_file, archive_uploaded)
-                print "1stTryOK"
+                try:
+                    shutil.move(upload_file, archive_uploaded)
+                    time.sleep(float(.3))
+                    print "1stTryOK"
+                except:
+                    dst_file = upload_file.replace(root_dir, archive_uploaded)
+                    if os.path.exists(dst_file):
+                        os.remove(dst_file)
+                    shutil.move(upload_file, archive_uploaded)
+                    pass
             elif code:
                 print code, upload_file
                 time.sleep(float(.3))
