@@ -191,17 +191,32 @@ except IndexError:
 
 # num_styles = '1000'
 #urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
+regex_url = re.compile(r'$http://www\.[bB].+?')
+
 if num_styles.isdigit():
     try:
-        if sys.argv[2].isdigit() and len(sys.argv[2]) < 2:
+        arg = sys.argv[2]
+        if arg.isdigit() and len(arg) < 2:
             bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp={1}&sosc=true'.format(num_styles, sys.argv[2])
+        elif re.findall(regex_url, arg):
+            url = arg
+            bfly_url = '{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(url,numstyles)
     except:
         bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
         pass
 
 else:
     try:
-        bfly_url = sys.argv[1]
+        arg = sys.argv[1]
+        if re.findall(regex_url, arg):
+            bfly_url = arg
+        else:
+            try:
+                val = sys.argv[2]
+            except IndexError:
+                dept = arg
+                bfly_url = 'http://www.bluefly.com/a/{0}'.format(dept)
+                bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
     except IndexError:
         bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
 
