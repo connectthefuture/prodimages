@@ -201,13 +201,14 @@ if num_styles.isdigit():
             bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp={1}&sosc=true'.format(num_styles, page)
         elif re.findall(regex_url, arg):
             url = arg
-            bfly_url = '{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(url,num_styles = sys.argv[3])
+            bfly_url = '{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(url,num_styles)
         else:
-            dept = arg
-            bfly_url = 'http://www.bluefly.com/designer-{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(dept,num_styles = sys.argv[3])
+            dept = arg.replace(' ','-').replace('_','-').replace('&','')
+            bfly_url = 'http://www.bluefly.com/designer-{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(dept,num_styles)
             try:
                 val = sys.argv[3]
-                bfly_url = 'http://www.bluefly.com/{0}/{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles = sys.argv[3])            
+                val = val.replace(' ','-').replace('_','-').replace('&','').lower()
+                bfly_url = 'http://www.bluefly.com/{0}/{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles)            
             except IndexError:
                 pass
     except:
@@ -223,13 +224,13 @@ else:
             slug = 'designer'
             try:
                 brand = sys.argv[2]
-                brand = brand.replace(' ','-').replace('_','-').replace('&','')
+                brand = brand.replace(' ','-').replace('_','-').replace('&','').lower()
                 try:
                     num_styles = sys.argv[3]
                     q = '?so=new&vl=l&ppp={0}&cp=1'.format(num_styles)
                     bfly_url = 'http://www.bluefly.com/{0}/{1}{2}'.format(slug,brand, q)
                 except IndexError:
-                    bfly_url = 'http://www.bluefly.com/{0}/{1}'.format(slug,brand.replace(' ','-').replace('_','-').replace('&',''))
+                    bfly_url = 'http://www.bluefly.com/{0}/{1}'.format(slug,brand)
             
             except IndexError:
                 bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
