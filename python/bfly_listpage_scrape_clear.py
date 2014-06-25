@@ -191,7 +191,7 @@ except IndexError:
 
 # num_styles = '1000'
 #urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
-regex_url = re.compile(r'$http://www\.[bB].+?')
+regex_url = re.compile(r'http://www\.[bB][eElL].+')
 
 if num_styles.isdigit():
     try:
