@@ -210,8 +210,11 @@ if num_styles.isdigit():
                 val = val.replace(' ','-').replace('_','-').replace('&','').lower()
                 bfly_url = 'http://www.bluefly.com/{0}/{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles)            
             except IndexError:
+                print 'Using Default New Arrivals URL with {} Styles'.format(num_styles)
+                bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
                 pass
     except:
+        print 'Using Default New Arrivals URL with {} Styles'.format(num_styles)
         bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
         pass
 
@@ -233,11 +236,13 @@ else:
                     bfly_url = 'http://www.bluefly.com/{0}/{1}'.format(slug,brand)
             
             except IndexError:
+                print 'Using Default New Arrivals URL with 48 Styles'
                 bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
-
                 pass
     except IndexError:
+        print 'Using Default New Arrivals URL with 48 Styles'
         bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
+        pass
 
 print 'Scraping -->' + bfly_url
 found_links = url_get_links(bfly_url)
