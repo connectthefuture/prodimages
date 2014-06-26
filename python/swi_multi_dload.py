@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 def sqlQuery_GetStyleVendor_ByPO(ponum):
     import sqlalchemy
