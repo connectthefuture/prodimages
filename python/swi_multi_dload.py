@@ -108,12 +108,16 @@ except:
 
 print polist
 stylesDictsDict = []
-for ponum in polist:
-    try:
-        stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum)
-        stylesDictsDict.append(stylesDict)
-    except:
-        pass
+if polist:
+    for ponum in polist:
+        try:
+            stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum)
+            stylesDictsDict.append(stylesDict)
+        except:
+            pass
+else:
+    stylesDictsDict = sqlQuery_GetStyleVendor_ByPO(ponum=None)
+
 
 maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
 if maclinux_prefix == 'Users':
