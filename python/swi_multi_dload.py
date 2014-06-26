@@ -117,8 +117,6 @@ if polist:
             pass
 else:
     stylesDictsDict = sqlQuery_GetStyleVendor_ByPO(ponum=None)
-
-
 maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
 if maclinux_prefix == 'Users':
     destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
@@ -141,6 +139,10 @@ except:
 print destdir
 
 for stylesDict in stylesDictsDict:
+    if type(stylesDictsDict) == 'dict'
+        stylesDict = stylesDictsDict
+    else:
+        pass
     for k,v in stylesDict.iteritems():
             
         vendor_url = "http://admin.swisswatchintl.com/Z/{0}.jpg".format(k)
