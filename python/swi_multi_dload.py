@@ -108,6 +108,24 @@ for ponum in polist:
     except:
         pass
 
+maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
+if maclinux_prefix == 'Users'
+    destdir=os.path.join(maclinux_prefix,'/Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+elif maclinux_prefix == 'home':
+    destdir=os.path.join(maclinux_prefix,'/Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+else:
+    destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+
+try:
+    os.makedirs(destdir)
+except OSError:
+    pass
+except:
+    destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+    try:
+        os.makedirs(destdir)
+    except OSError:
+        pass
 
 for stylesDict in stylesDictsDict:
     for k,v in stylesDict.iteritems():
@@ -130,12 +148,12 @@ for stylesDict in stylesDictsDict:
         colorstyle_main = style      +   "_6.jpg"
         
 
-        colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle)
-        colorstyle_side_file = os.path.join(os.path.abspath(os.curdir), colorstyle_side)
-        colorstyle_back_file = os.path.join(os.path.abspath(os.curdir), colorstyle_back)
-        colorstyle_boxset_file = os.path.join(os.path.abspath(os.curdir), colorstyle_boxset)
-        colorstyle_straps_file = os.path.join(os.path.abspath(os.curdir), colorstyle_straps)
-        colorstyle_main_file = os.path.join(os.path.abspath(os.curdir), colorstyle_main)
+        colorstyle_file = os.path.join(os.path.abspath(destdir), colorstyle)
+        colorstyle_side_file = os.path.join(os.path.abspath(destdir), colorstyle_side)
+        colorstyle_back_file = os.path.join(os.path.abspath(destdir), colorstyle_back)
+        colorstyle_boxset_file = os.path.join(os.path.abspath(destdir), colorstyle_boxset)
+        colorstyle_straps_file = os.path.join(os.path.abspath(destdir), colorstyle_straps)
+        colorstyle_main_file = os.path.join(os.path.abspath(destdir), colorstyle_main)
 
 
         #imagefalse = sqlQuery_GetStyleVendor_ByPO()
