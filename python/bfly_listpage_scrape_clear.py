@@ -208,7 +208,7 @@ if num_styles.isdigit():
             url = arg
             bfly_url = '{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(url,num_styles)
         else:
-            dept = arg.replace(' ','-').replace('_','-').replace('&','')
+            dept = arg.replace(' ','-').replace('_','-').replace('&','').lower()
             bfly_url = 'http://www.bluefly.com/designer-{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(dept,num_styles)
             try:
                 val = sys.argv[3]
