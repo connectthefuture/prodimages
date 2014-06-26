@@ -2,11 +2,15 @@
 # -*- coding: utf-8 -*-
 
 def sqlQuery_GetStyleVendor_ByPO(ponum):
-    import sqlalchemy
+    import sqlalchemy, sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-    querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT is null"
-
+    try:
+        if sys.argv[1]:
+            querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT is null"
+    except IndexError:
+        ## Get all missing Styles vs above which takes a PO list
+        querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE PRODUCT_COLOR.IMAGE_READY_DT is null"
 
     result = connection.execute(querymake_StylesByPO)
     styles = {}
@@ -111,20 +115,20 @@ for ponum in polist:
 
 maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
 if maclinux_prefix == 'Users':
-    destdir=os.path.join(maclinux_prefix,'/Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    destdir=os.path.join('Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
 elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
-    destdir=os.path.join(maclinux_prefix,'/Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    destdir=os.path.join('mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
 else:
     destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
 
 try:
-    os.makedirs(destdir)
+    os.makedirs(destdir, 16877)
 except OSError:
     pass
 except:
     destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
     try:
-        os.makedirs(destdir)
+        os.makedirs(destdir, 16877)
     except OSError:
         pass
         
