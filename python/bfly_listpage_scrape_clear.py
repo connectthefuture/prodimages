@@ -213,7 +213,7 @@ if num_styles.isdigit():
             try:
                 val = sys.argv[3]
                 val = val.replace(' ','-').replace('_','-').replace('&','').lower()
-                bfly_url = 'http://www.bluefly.com/{0}/{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles)            
+                bfly_url = 'http://www.bluefly.com/{0}/apparel/designer-{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles)            
             except IndexError:
                 print 'Using Default New Arrivals URL with {} Styles'.format(num_styles)
                 bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
@@ -250,7 +250,22 @@ else:
         pass
 
 print 'Scraping -->' + bfly_url
-found_links = url_get_links(bfly_url)
+found_links = ''
+try:
+    found_links = url_get_links(bfly_url)
+except:
+    print 'Zero Links found at {}'.format(bfly_url)
+    try:
+        found_links = url_get_links(bfly_url.replace('apparel','shoes'))
+    except:
+        print 'Zero Links found at {}'.format(bfly_url.replace('apparel','shoes'))
+
+if len(found_links) == 0:
+    try:
+        found_links = url_get_links(bfly_url.replace('apparel','handbags-accessories'))
+    except:
+        print 'Zero Links found at {}'.format(bfly_url.replace('apparel','handbags-accessories'))
+
 colorstyles = []
 for link in found_links:
     list_urllist.append(link)
