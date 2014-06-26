@@ -139,7 +139,7 @@ except:
 print destdir
 
 for stylesDict in stylesDictsDict:
-    if type(stylesDictsDict) == 'dict':
+    if type(stylesDictsDict) == dict:
         stylesDict = stylesDictsDict
     else:
         pass
