@@ -127,6 +127,8 @@ except:
         os.makedirs(destdir)
     except OSError:
         pass
+        
+print destdir
 
 for stylesDict in stylesDictsDict:
     for k,v in stylesDict.iteritems():
