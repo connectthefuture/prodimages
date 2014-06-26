@@ -112,7 +112,7 @@ for ponum in polist:
 maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
 if maclinux_prefix == 'Users':
     destdir=os.path.join(maclinux_prefix,'/Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
-elif maclinux_prefix == 'home':
+elif maclinux_prefix == 'home' or maclinu_prefix == 'root':
     destdir=os.path.join(maclinux_prefix,'/Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
 else:
     destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
