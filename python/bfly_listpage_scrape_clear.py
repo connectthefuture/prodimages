@@ -206,7 +206,11 @@ if num_styles.isdigit():
             bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp={1}&sosc=true'.format(num_styles, page)
         elif re.findall(regex_url, arg):
             url = arg
-            bfly_url = '{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(url,num_styles)
+            try:
+                order = sys.argv[3]
+                bfly_url = '{0}?so={1}&vl=l&ppp={2}&cp=1&sosc=true'.format(url,order,num_styles)
+            except IndexError:
+                bfly_url = '{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(url,num_styles)
         else:
             dept = arg.replace(' ','-').replace('_','-').replace('&','').lower()
             bfly_url = 'http://www.bluefly.com/designer-{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(dept,num_styles)
@@ -255,20 +259,8 @@ else:
 
 print 'Scraping -->' + bfly_url
 found_links = ''
-try:
-    found_links = url_get_links(bfly_url)
-except:
-    print 'Zero Links found at {}'.format(bfly_url)
-    try:
-        found_links = url_get_links(bfly_url.replace('apparel','shoes'))
-    except:
-        print 'Zero Links found at {}'.format(bfly_url.replace('apparel','shoes'))
 
-if len(found_links) == 0:
-    try:
-        found_links = url_get_links(bfly_url.replace('apparel','handbags-accessories'))
-    except:
-        print 'Zero Links found at {}'.format(bfly_url.replace('apparel','handbags-accessories'))
+found_links = url_get_links(bfly_url)
 
 colorstyles = []
 for link in found_links:
