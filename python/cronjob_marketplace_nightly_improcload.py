@@ -70,7 +70,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None):
 ############################################################ RUN ##################################################
 import os,re,sys,urllib, glob, re
 import requests
-regex_SWI = re.compile(r'^/.+?[SWI]{3}$')
+regex_SWI = re.compile(r'^/.+?[SWI]{3}.+?$')
 ## Create image dir Root if not exist
 try:
     #imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'MARKETPLACE'))
