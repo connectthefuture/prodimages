@@ -50,11 +50,12 @@ if credentials is None or credentials.invalid == True:
 http = httplib2.Http()
 http = credentials.authorize(http)
 
-prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
+#prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
+prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/'
+# prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
 
 # Build a service object for interacting with the API.
 service = build(serviceName='calendar', version='v3', http=http)
-
 
 # Getting All Event Ids
 page_token = None
