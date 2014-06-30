@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import os, sys, re, csv
 ##### Upload tmp_loading dir to imagedrop via FTP using Pycurl  #####
 def pycurl_upload_imagedrop(img):
@@ -559,10 +560,10 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             '-format',
             'png',
             img,
-            '-crop',
-            str(
-            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-            ,
+            # '-crop',
+            # str(
+            # subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            # ,
             '-define',
             'png:preserve-colormap',
             '-define',
@@ -583,13 +584,13 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             #"Mitchell",
             #"-define",
             #"filter:filter=QuadraticJinc",
-            "-define", 
-            "filter:win-support=12",
+            #"-define", 
+            #"filter:win-support=12",
+            #"-define",
+            #"filter:support=8",
             "-define",
-            "filter:support=8",
-            "-define",
-            "filter:blur=0.625",
-            #"filter:blur=0.88549061701764",
+            #"filter:blur=0.625",
+            "filter:blur=0.88549061701764",
             "-distort",
             "Resize",
             vert_horiz,
@@ -614,142 +615,160 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         return img
 
 #############################
-
 #############################
-import sys,glob,shutil,os,re
-regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
-regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
-regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-#root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-root_img_dir = os.path.abspath(sys.argv[1])
-
-try:
-    destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
-    if not os.path.isdir(destdir):
-        os.makedirs(destdir)
-except IndexError:
-    destdir = os.path.join(root_img_dir, 'output')
+def upload_imagedrop(root_dir):
+    import os, sys, re, csv, shutil, glob
+    ## Make the success and fail dirs
+    archive_uploaded = os.path.join(root_dir, 'uploaded')
+    tmp_failed = os.path.join(root_dir, 'failed_upload')
     try:
-        os.makedirs(destdir)
+        os.makedirs(archive_uploaded, 16877)
     except OSError:
+        try:
+            shutil.rmtree(archive_uploaded, ignore_errors = True)
+            os.makedirs(archive_uploaded, 16877)
+        except:
+            pass
+
+    try:
+        os.makedirs(tmp_failed, 16877)
+    except:
         pass
 
-##For separating by vendor
-# walkedout_renamed_special = glob.glob(os.path.join(root_img_dir, '*.??g'))
-# #fragrancenet_styles = query_vendors_styles('Fragrancenet')
-# #fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
 
-# ## Process only fragrance net images to enhance low Rez photo then archive orig
-# img_dict = sort_files_by_values(walkedout_renamed_special)
-# for k,v in img_dict.items():
-      #special_img = k
-      #rgbmean     = v.items()
-      #pngout = subproc_magick_png(special_img, rgbmean=dict(rgbmean), destdir=destdir)
-      #subproc_magick_large_jpg(pngout, destdir=destdir)
-      #subproc_magick_medium_jpg(pngout, destdir=destdir)
-
-      #magick_fragrance_proc_lrg(pngout, rgbmean=dict(rgbmean), destdir=destdir)
-      #magick_fragrance_proc_med(pngout, rgbmean=dict(rgbmean), destdir=destdir)
-    
-      ## special processed original files move to archive dir making only standard processing files in proc dir
-      #shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
-
-
-# all process special files move to upload dir
-# special_processed = glob.glob(os.path.join(root_img_dir, '*.??g'))
-#[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in special_processed ]
-
-
-
-# Process Directory of images as sysarg 1, Dest sysarg 2
-if os.path.isdir(root_img_dir):
-    imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
-    img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
-
-    for k,v in img_dict.items():
-        try:
-            img = k
-            rgbmean     = v.items()
-            pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
-            subproc_magick_large_jpg(pngout, destdir=destdir)
-            subproc_magick_medium_jpg(pngout, destdir=destdir)
-        except AttributeError:
-            pass
-        
-        #subproc_magick_large_jpg(img, destdir=destdir)
-        #subproc_magick_medium_jpg(img, destdir=destdir)
-
-# Process Single images as sysarg 1, Dest sysarg 2
-else:
-    img = root_img_dir
-    if regex_coded.findall(img):
-        img = rename_retouched_file(img)
-    pngout = subproc_magick_png(img, destdir=destdir)
-    subproc_magick_large_jpg(pngout, destdir=destdir)
-    subproc_magick_medium_jpg(pngout, destdir=destdir)
-    #metadict = metadata_info_dict(img)
-    #dimens = get_imagesize_variables(img)
-    #test_img = get_image_color_minmax(img)
-
-
-###### Uploader separate
-## UPLOAD FTP with PyCurl everything in tmp_loading
-#[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
-
-import os, sys, re, csv, shutil, glob
-
-#
-root_dir = destdir
-## Make the success and fail dirs
-archive_uploaded = os.path.join(root_dir, 'uploaded')
-tmp_failed = os.path.join(root_dir, 'failed_upload')
-try:
-    os.makedirs(archive_uploaded, 16877)
-except:
-    pass
-
-try:
-    os.makedirs(tmp_failed, 16877)
-except:
-    pass
-
-
-import time
-#### UPLOAD upload_file via ftp to imagedrop using Pycurl
-upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
-for upload_file in upload_tmp_loading:
+    import time
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
-    ## Then rm loading tmp dir
-    try:
-        code = pycurl_upload_imagedrop(upload_file)
-        if code == '200':
-            shutil.move(upload_file, archive_uploaded)
-            print "1stTryOK"
-        elif code:
-            print code, upload_file
-            time.sleep(float(.3))
-            try:
-                ftpload_to_imagedrop(upload_file)
+    upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
+    for upload_file in upload_tmp_loading:
+        #### UPLOAD upload_file via ftp to imagedrop using Pycurl
+        ## Then rm loading tmp dir
+        try:
+            code = pycurl_upload_imagedrop(upload_file)
+            if code == '200':
+                try:
+                    shutil.move(upload_file, archive_uploaded)
+                    time.sleep(float(.3))
+                    print "1stTryOK"
+                except:
+                    dst_file = upload_file.replace(root_dir, archive_uploaded)
+                    if os.path.exists(dst_file):
+                        os.remove(dst_file)
+                    shutil.move(upload_file, archive_uploaded)
+                    pass
+            elif code:
+                print code, upload_file
+                time.sleep(float(.3))
+                try:
+                    ftpload_to_imagedrop(upload_file)
+                    print "Uploaded {}".format(upload_file)
+                    time.sleep(float(.3))
+                    shutil.move(upload_file, archive_uploaded)
+                except:
+                    shutil.move(upload_file, tmp_failed)
+                    pass
+            else:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.3))
                 shutil.move(upload_file, archive_uploaded)
-            except:
-                shutil.move(upload_file, tmp_failed)
-                pass
-        else:
-            print "Uploaded {}".format(upload_file)
-            time.sleep(float(.3))
-            shutil.move(upload_file, archive_uploaded)
-    except OSError:
-        print "Error moving Finals to Arch {}".format(file)
-        shutil.move(upload_file, tmp_failed)
+        except OSError:
+            print "Error moving Finals to Arch {}".format(file)
+            shutil.move(upload_file, tmp_failed)
+            pass
+
+    try:
+        if os.path.isdir(sys.argv[2]):
+            finaldir = os.path.abspath(sys.argv[2])
+            for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
+                shutil.move(f, finaldir)
+    except:
         pass
 
-try:
-    if sys.argv[2]:
-        finaldir = os.path.abspath(sys.argv[2])
-        for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
-            shutil.move(f, finaldir)
-except:
-    pass
+#############################
+#############################
+def main():
+    import sys,glob,shutil,os,re
+    regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
+    regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
+    regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
+
+    #root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
+    root_img_dir = os.path.abspath(sys.argv[1])
+
+    try:
+        destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
+        if not os.path.isdir(destdir):
+            os.makedirs(destdir)
+    except IndexError:
+        destdir = os.path.join(root_img_dir, 'output')
+        try:
+            os.makedirs(destdir)
+        except OSError:
+            pass
+
+    ##For separating by vendor
+    # walkedout_renamed_special = glob.glob(os.path.join(root_img_dir, '*.??g'))
+    # #fragrancenet_styles = query_vendors_styles('Fragrancenet')
+    # #fragrancenet_imgs = [ f for f in walkedout_renamed_special if fragrancenet_styles.get(os.path.basename(f)[:9]) ]
+
+    # ## Process only fragrance net images to enhance low Rez photo then archive orig
+    # img_dict = sort_files_by_values(walkedout_renamed_special)
+    # for k,v in img_dict.items():
+          #special_img = k
+          #rgbmean     = v.items()
+          #pngout = subproc_magick_png(special_img, rgbmean=dict(rgbmean), destdir=destdir)
+          #subproc_magick_large_jpg(pngout, destdir=destdir)
+          #subproc_magick_medium_jpg(pngout, destdir=destdir)
+
+          #magick_fragrance_proc_lrg(pngout, rgbmean=dict(rgbmean), destdir=destdir)
+          #magick_fragrance_proc_med(pngout, rgbmean=dict(rgbmean), destdir=destdir)
+        
+          ## special processed original files move to archive dir making only standard processing files in proc dir
+          #shutil.move(special_img, os.path.join(imgdest_jpg_final, os.path.basename(special_img)))
+
+
+    # all process special files move to upload dir
+    # special_processed = glob.glob(os.path.join(root_img_dir, '*.??g'))
+    #[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in special_processed ]
+
+
+    # Process Directory of images as sysarg 1, Dest sysarg 2
+    if os.path.isdir(root_img_dir):
+        imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
+        img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
+
+        for k,v in img_dict.items():
+            try:
+                img = k
+                rgbmean     = v.items()
+                pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
+                subproc_magick_large_jpg(pngout, destdir=destdir)
+                subproc_magick_medium_jpg(pngout, destdir=destdir)
+            except AttributeError:
+                pass
+            
+            #subproc_magick_large_jpg(img, destdir=destdir)
+            #subproc_magick_medium_jpg(img, destdir=destdir)
+
+    # Process Single images as sysarg 1, Dest sysarg 2
+    else:
+        img = root_img_dir
+        if regex_coded.findall(img):
+            img = rename_retouched_file(img)
+        pngout = subproc_magick_png(img, destdir=destdir)
+        subproc_magick_large_jpg(pngout, destdir=destdir)
+        subproc_magick_medium_jpg(pngout, destdir=destdir)
+        #metadict = metadata_info_dict(img)
+        #dimens = get_imagesize_variables(img)
+        #test_img = get_image_color_minmax(img)
+
+
+    ###### Uploader separate
+    ## UPLOAD FTP with PyCurl everything in tmp_loading
+    # [ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
+    
+    upload_imagedrop(destdir)
+
+
+if __name__ == '__main__':
+    main()

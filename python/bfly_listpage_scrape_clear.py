@@ -56,14 +56,19 @@ def query_version_number(colorstyle):
     else:
         querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID like '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyle)
 
-    result = connection.execute(querymake_version_number)
-    styles = {}
-    for row in result:
-        #style_info = {}
-        #style_info['version'] = row['version']
-        # Convert Colorstyle to string then set as KEY
-        styles[str(row['colorstyle'])] = row['version']
-
+    try:
+        result = connection.execute(querymake_version_number)
+    
+    
+        styles = {}
+        for row in result:
+            #style_info = {}
+            #style_info['version'] = row['version']
+            # Convert Colorstyle to string then set as KEY
+            styles[str(row['colorstyle'])] = row['version']
+    except sqlalchemy.exc.DatabaseError:
+        print 'This Search needs to have more than 1 style, \nyou returned zero or 1 style'
+    
     connection.close()
     return styles
 
@@ -191,16 +196,72 @@ except IndexError:
 
 # num_styles = '1000'
 #urls_to_scrape = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=2&sosc=true'.format(num_styles)
+regex_url = re.compile(r'http://www\.[bB][eElL].+')
+
 if num_styles.isdigit():
-    bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
+    try:
+        arg = sys.argv[2]
+        if arg.isdigit() and len(arg) < 2:
+            page = sys.argv[2]
+            bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp={1}&sosc=true'.format(num_styles, page)
+        elif re.findall(regex_url, arg):
+            url = arg
+            try:
+                order = sys.argv[3]
+                bfly_url = '{0}?so={1}&vl=l&ppp={2}&cp=1&sosc=true'.format(url,order,num_styles)
+            except IndexError:
+                bfly_url = '{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(url,num_styles)
+        else:
+            dept = arg.replace(' ','-').replace('_','-').replace('&','').lower()
+            bfly_url = 'http://www.bluefly.com/designer-{0}?so=new&vl=l&ppp={1}&cp=1&sosc=true'.format(dept,num_styles)
+            try:
+                val = sys.argv[3]
+                val = val.replace(' ','-').replace('_','-').replace('&','').lower()
+                apparel = '/apparel/'
+                if dept == 'mens':
+                    bfly_url = 'http://www.bluefly.com/{0}{3}designer-{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles,apparel) 
+                else:
+                    bfly_url = 'http://www.bluefly.com/{0}/designer-{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles)       
+            except IndexError:
+                print 'Using Default New Arrivals URL with {} Styles'.format(num_styles)
+                bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
+                pass
+    except:
+        print 'Using Default New Arrivals URL with {} Styles'.format(num_styles)
+        bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
+        pass
+
 else:
     try:
-        bfly_url = sys.argv[1]
+        arg = sys.argv[1]
+        if re.findall(regex_url, arg):
+            bfly_url = arg
+        elif arg == 'designer' or arg == 'D' or arg == 'brand':
+            slug = 'designer'
+            try:
+                brand = sys.argv[2]
+                brand = brand.replace(' ','-').replace('_','-').replace('&','').lower()
+                try:
+                    num_styles = sys.argv[3]
+                    q = '?so=new&vl=l&ppp={0}&cp=1'.format(num_styles)
+                    bfly_url = 'http://www.bluefly.com/{0}/{1}{2}'.format(slug,brand, q)
+                except IndexError:
+                    bfly_url = 'http://www.bluefly.com/{0}/{1}'.format(slug,brand)
+            
+            except IndexError:
+                print 'Using Default New Arrivals URL with 48 Styles'
+                bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
+                pass
     except IndexError:
+        print 'Using Default New Arrivals URL with 48 Styles'
         bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
+        pass
 
 print 'Scraping -->' + bfly_url
+found_links = ''
+
 found_links = url_get_links(bfly_url)
+
 colorstyles = []
 for link in found_links:
     list_urllist.append(link)
