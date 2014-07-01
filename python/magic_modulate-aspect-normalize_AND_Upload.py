@@ -673,8 +673,8 @@ def main():
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
     #root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-    root_img_dir = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/vendor_dropoff/marketplace/137550/' #/mnt/Post_Complete/Complete_Archive/MARKETPLACE/vendor_dropoff/marketplace/137550/'# os.path.abspath(sys.argv[1])
-
+    #root_img_dir = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/vendor_dropoff/marketplace/137550/' #/mnt/Post_Complete/Complete_Archive/MARKETPLACE/vendor_dropoff/marketplace/137550/'# os.path.abspath(sys.argv[1])
+    root_img_dir = sys.argv[1]
     try:
         destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
         if not os.path.isdir(destdir):
