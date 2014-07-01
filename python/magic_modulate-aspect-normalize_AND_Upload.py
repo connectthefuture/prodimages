@@ -719,6 +719,8 @@ def main():
 
         for k,v in img_dict.items():
             try:
+                import pdb
+                pdb.set_trace()
                 img = k
                 rgbmean     = v.items()
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
