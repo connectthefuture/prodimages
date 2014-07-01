@@ -78,7 +78,7 @@ for emailid in items:
 
 #import imaplib
 #mail = imaplib.IMAP4_SSL('imap.gmail.com')
-#mail.login('john.bragato@gmail.com', 'yankee17')
+#mail.login('john.bragato@gmail.com', '')
 #mail.list()
 # Out: list of "folders" aka labels in gmail.
 #mail.select("inbox") # connect to inbox.

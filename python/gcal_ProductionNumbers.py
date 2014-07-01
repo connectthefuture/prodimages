@@ -254,7 +254,7 @@ def gcal_insert_bc_event(titleid, descfull, lockv, sdatekv, edatekv):
         print "FAILED"
 
 ##
-def gcal_login_jb(myemail='john.bragato@gmail.com', password='yankee17'):
+def gcal_login_jb(myemail='john.bragato@gmail.com', password=''):
     from GoogleCalendar import GoogleCalendarMng
     import xml
     gCalMNG = GoogleCalendarMng()
@@ -275,7 +275,7 @@ def get_google_event_data(event):
     return editing_url, title_4digit, title, content
 
 ##
-def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password='yankee17'):
+def delete_gcalendar_event(titleid, calendar_name='Default1', myemail='john.bragato@gmail.com', password=''):
     from GoogleCalendar import GoogleCalendarMng
     import xml
     gCalMNG = GoogleCalendarMng()
