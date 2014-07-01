@@ -530,7 +530,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     #imgformat = img.split('.')[-1]
     if regex_valid_style.findall(img):
         print os.path.abspath(img), outfile        
-        subprocess.call([
+        try:
+            subprocess.call([
             'convert',
             "-colorspace",
             "RGB",
@@ -585,9 +586,11 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             '100',
             outfile
             ])
-    
-        print 'Done {}'.format(outfile)
-        return outfile
+        
+            print 'Done {}'.format(outfile)
+            return outfile
+        except OSError:
+            print 'OSError{}'.format(outfile)
     else:
         return img
 
