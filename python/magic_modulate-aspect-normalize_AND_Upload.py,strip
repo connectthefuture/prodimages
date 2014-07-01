@@ -504,7 +504,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "-colorspace",
             "sRGB",
             '-unsharp',
-            '2x2.7+0.5+0',, 
+            '2x2.7+0.5+0',
             '-quality', 
             '95',
             os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
