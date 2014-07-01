@@ -145,17 +145,40 @@ def get_exif_metadata_value(img, exiftag=None):
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
-    ret = subprocess.check_output(['convert', img, '-median', '3', '+dither', '-colors', '2', '-trim', '+repage', '-gravity', 'center', '-crop', '50%', '-depth', '8', '-format', '%c','histogram:info:-'])    
+    ret = subprocess.check_output([
+    'convert',
+    img, 
+    '-median',
+    '3', 
+    '+dither', 
+    '-colors',
+    '2', 
+    '-trim', 
+    '+repage',  
+    '-gravity', 
+    'center', 
+    '-crop', 
+    '50%', 
+    '-depth', 
+    '8', 
+    '-format',
+    '%c', 
+    'histogram:info:-'])
+    
+    
     ## Prepare cleaned output as list or dict
     colorlow = str(ret).split('\n')[0].strip(' ')
     colorlow =  re.sub(re.compile(r',\W'),',',colorlow).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
     colorhigh = str(ret).split('\n')[1].strip(' ')
-    colorhigh =  re.sub(re.compile(r',\W'),',',colorhigh).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ') 
+    colorhigh =  re.sub(re.compile(r',\W'),',',colorhigh).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
+    
     fields_top =  ['low_rgb_avg', 'high_rgb_avg']
     fields_level2  =  ['total_pixels', 'rgb_vals', 'webcolor_id', 'color_profile_vals']
     # x = { zip(field.split(','),color.split(',')) for color in colormin }
     colorlow  = zip(fields_level2,colorlow)
-    colorhigh  = zip(fields_level2,colorhigh)    
+    colorhigh  = zip(fields_level2,colorhigh)
+    
+    
     if len(colorhigh) == len(colorlow):
         coloravgs = dict(colorlow),dict(colorhigh)
         colordata = zip(fields_top, coloravgs)
@@ -220,10 +243,11 @@ def evaluate_color_values(colordata):
 def sort_files_by_values(directory):
     import os,glob    
     filevalue_dict = {}
-    # if type(directory) == 'list':
+    #if type(directory) == 'list':
     fileslist = directory
-    # elif os.path.isdir(directory):
+    #elif os.path.isdir(directory):
     #    fileslist = glob.glob(os.path.join(os.path.abspath(directory), '*.??g'))
+ 
     count = len(fileslist)
     for f in fileslist: 
         values = {}
@@ -301,10 +325,10 @@ def subproc_magick_large_jpg(img, destdir=None):
             '-colorspace',
             'sRGB',
             img,
-            # '-crop',
-            # str(
-            # subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-            # ,
+            '-crop',
+            str(
+            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            ,
             # CENTERING & Trim
             '-background',
             'white',
@@ -388,10 +412,10 @@ def subproc_magick_medium_jpg(img, destdir=None):
             '-colorspace',
             'sRGB',
             img,
-            # '-crop',
-            # str(
-            # subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-            # ,
+            '-crop',
+            str(
+            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            ,
             # CENTERING & Trim
             '-background',
             'white',
@@ -528,20 +552,18 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     
     print dimensions,vert_horiz, width, height, aspect_ratio
     #imgformat = img.split('.')[-1]
-    if regex_valid_style.findall(img):
-        print os.path.abspath(img), outfile        
-        try:
-            subprocess.call([
+    if regex_valid_style.findall(img):        
+        subprocess.call([
             'convert',
             "-colorspace",
             "RGB",
             '-format',
             'png',
             img,
-            # '-crop',
-            # str(
-            # subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-            # ,
+            '-crop',
+            str(
+            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            ,
             '-define',
             'png:preserve-colormap',
             '-define',
@@ -562,13 +584,13 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             #"Mitchell",
             #"-define",
             #"filter:filter=QuadraticJinc",
-            #"-define", 
-            #"filter:win-support=12",
-            #"-define",
-            #"filter:support=8",
+            "-define", 
+            "filter:win-support=12",
             "-define",
-            #"filter:blur=0.625",
-            "filter:blur=0.88549061701764",
+            "filter:support=8",
+            "-define",
+            "filter:blur=0.625",
+            #"filter:blur=0.88549061701764",
             "-distort",
             "Resize",
             vert_horiz,
@@ -586,11 +608,9 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             '100',
             outfile
             ])
-        
-            print 'Done {}'.format(outfile)
-            return outfile
-        except OSError:
-            print 'OSError{}'.format(outfile)
+    
+        print 'Done {}'.format(outfile)
+        return outfile
     else:
         return img
 
@@ -615,6 +635,7 @@ def upload_imagedrop(root_dir):
         os.makedirs(tmp_failed, 16877)
     except:
         pass
+
 
     import time
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
@@ -664,6 +685,7 @@ def upload_imagedrop(root_dir):
         print 'Failed to Archive {}'.format(upload_tmp_loading)
         pass
 
+
 #############################
 #############################
 def main():
@@ -673,8 +695,8 @@ def main():
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
     #root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-    #root_img_dir = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/vendor_dropoff/marketplace/137550/' #/mnt/Post_Complete/Complete_Archive/MARKETPLACE/vendor_dropoff/marketplace/137550/'# os.path.abspath(sys.argv[1])
-    root_img_dir = sys.argv[1]
+    root_img_dir = os.path.abspath(sys.argv[1])
+
     try:
         destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
         if not os.path.isdir(destdir):
@@ -719,15 +741,12 @@ def main():
 
         for k,v in img_dict.items():
             try:
-                import pdb
-                pdb.set_trace()
                 img = k
                 rgbmean     = v.items()
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
             except AttributeError:
-                print 'AttributeError {}'.format(img)
                 pass
             
             #subproc_magick_large_jpg(img, destdir=destdir)
@@ -750,7 +769,7 @@ def main():
     ## UPLOAD FTP with PyCurl everything in tmp_loading
     # [ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
     
-    upload_imagedrop(destdir)
+    upload_imagedrop(root_img_dir)
 
 
 if __name__ == '__main__':

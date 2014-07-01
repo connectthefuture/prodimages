@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
 import cStringIO, tokenize
-def remove_comments_and_docstrings(source):
+def remove_comments_and_docstrings(source=None):
     """
     Returns 'source' minus comments and docstrings.
     """
+    if not source:
+        import sys
+        source = open(sys.argv[1]).read()
     io_obj = cStringIO.StringIO(source)
     out = ""
     prev_toktype = tokenize.INDENT
@@ -55,4 +58,5 @@ def remove_comments_and_docstrings(source):
         prev_toktype = token_type
         last_col = end_col
         last_lineno = end_line
+    print out
     return out
