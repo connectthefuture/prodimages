@@ -76,11 +76,12 @@ except:
 
     # imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 
+regex_swi = re.compile(r'^.*?SWI.*?\.jpg$')
 if os.path.isdir(imagedir):
     ## Remove previous days imports only from the PO dir prior to new import
     remove_prior_import = glob.glob(os.path.join(imagedir, '*/*/*.jpg'))
     try:
-        [ os.remove(f) for f in remove_prior_import ] 
+        [ os.remove(f) for f in remove_prior_import if not re.findall(regex_swi,f) ] 
     except:
         pass
 else:
