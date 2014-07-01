@@ -145,40 +145,17 @@ def get_exif_metadata_value(img, exiftag=None):
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
-    ret = subprocess.check_output([
-    'convert',
-    img, 
-    '-median',
-    '3', 
-    '+dither', 
-    '-colors',
-    '2', 
-    '-trim', 
-    '+repage',  
-    '-gravity', 
-    'center', 
-    '-crop', 
-    '50%', 
-    '-depth', 
-    '8', 
-    '-format',
-    '%c', 
-    'histogram:info:-'])
-    
-    
+    ret = subprocess.check_output(['convert', img, '-median', '3', '+dither', '-colors', '2', '-trim', '+repage', '-gravity', 'center', '-crop', '50%', '-depth', '8', '-format', '%c','histogram:info:-'])    
     ## Prepare cleaned output as list or dict
     colorlow = str(ret).split('\n')[0].strip(' ')
     colorlow =  re.sub(re.compile(r',\W'),',',colorlow).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
     colorhigh = str(ret).split('\n')[1].strip(' ')
-    colorhigh =  re.sub(re.compile(r',\W'),',',colorhigh).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
-    
+    colorhigh =  re.sub(re.compile(r',\W'),',',colorhigh).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ') 
     fields_top =  ['low_rgb_avg', 'high_rgb_avg']
     fields_level2  =  ['total_pixels', 'rgb_vals', 'webcolor_id', 'color_profile_vals']
     # x = { zip(field.split(','),color.split(',')) for color in colormin }
     colorlow  = zip(fields_level2,colorlow)
-    colorhigh  = zip(fields_level2,colorhigh)
-    
-    
+    colorhigh  = zip(fields_level2,colorhigh)    
     if len(colorhigh) == len(colorlow):
         coloravgs = dict(colorlow),dict(colorhigh)
         colordata = zip(fields_top, coloravgs)
@@ -243,11 +220,10 @@ def evaluate_color_values(colordata):
 def sort_files_by_values(directory):
     import os,glob    
     filevalue_dict = {}
-    #if type(directory) == 'list':
+    # if type(directory) == 'list':
     fileslist = directory
-    #elif os.path.isdir(directory):
+    # elif os.path.isdir(directory):
     #    fileslist = glob.glob(os.path.join(os.path.abspath(directory), '*.??g'))
- 
     count = len(fileslist)
     for f in fileslist: 
         values = {}
@@ -552,7 +528,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     
     print dimensions,vert_horiz, width, height, aspect_ratio
     #imgformat = img.split('.')[-1]
-    if regex_valid_style.findall(img):        
+    if regex_valid_style.findall(img):
+        print os.path.abspath(img), outfile        
         subprocess.call([
             'convert',
             "-colorspace",
@@ -636,7 +613,6 @@ def upload_imagedrop(root_dir):
     except:
         pass
 
-
     import time
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
     upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
@@ -694,7 +670,7 @@ def main():
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
     #root_img_dir = '/Users/johnb/Dropbox/DEVROOT/DROP/testfragrancecopy/newsettest/312467701.png'
-    root_img_dir = os.path.abspath(sys.argv[1])
+    root_img_dir = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/vendor_dropoff/marketplace/137550/' #/mnt/Post_Complete/Complete_Archive/MARKETPLACE/vendor_dropoff/marketplace/137550/'# os.path.abspath(sys.argv[1])
 
     try:
         destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
