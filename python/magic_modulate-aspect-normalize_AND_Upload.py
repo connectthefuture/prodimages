@@ -682,6 +682,7 @@ def upload_imagedrop(root_dir):
             for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
                 shutil.move(f, finaldir)
     except:
+        print 'Failed to Archive {}'.format(upload_tmp_loading)
         pass
 
 #############################
