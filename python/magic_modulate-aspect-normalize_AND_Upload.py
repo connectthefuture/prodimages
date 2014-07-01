@@ -725,6 +725,7 @@ def main():
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
             except AttributeError:
+                print 'AttributeError {}'.format(img)
                 pass
             
             #subproc_magick_large_jpg(img, destdir=destdir)
