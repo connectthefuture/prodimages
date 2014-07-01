@@ -65,10 +65,12 @@ def url_download_file(url,filepath):
             print "On 2nd Attempt, Retrieved: " + urlsplit + " ---> " + filepath
             
         elif backup_urlcode_value == 200: 
-            urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
+            # urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
+            urllib.urlretrieve(backupurl, filepath)
             print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
         elif backup_spliturlcode_value == 200: 
-            urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
+            # urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
+            urllib.urlretrieve(backup_spliturl, filepath)
             print "Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
         else:
             print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
