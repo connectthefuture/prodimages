@@ -325,10 +325,10 @@ def subproc_magick_large_jpg(img, destdir=None):
             '-colorspace',
             'sRGB',
             img,
-            '-crop',
-            str(
-            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-            ,
+            # '-crop',
+            # str(
+            # subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            # ,
             # CENTERING & Trim
             '-background',
             'white',
@@ -412,10 +412,10 @@ def subproc_magick_medium_jpg(img, destdir=None):
             '-colorspace',
             'sRGB',
             img,
-            '-crop',
-            str(
-            subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-            ,
+            # '-crop',
+            # str(
+            # subprocess.call(['convert', img, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '1%', '-trim', '-format', '%wx%h%O', 'info:-'], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+            # ,
             # CENTERING & Trim
             '-background',
             'white',
