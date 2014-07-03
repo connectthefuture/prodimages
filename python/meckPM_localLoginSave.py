@@ -133,6 +133,18 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.pmurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
         return self.pmurl_style
 
+
+
+    def get_set_image_on_off(self):
+        mainImageCheck          = self.form.controls[25]
+        zoomImageCheck          = self.form.controls[27]
+        alternateImage1Check    = self.form.controls[30]
+        alternateImage2Check    = self.form.controls[32]
+        alternateImage3Check    = self.form.controls[34]
+        alternateImage4Check    = self.form.controls[36]
+        alternateImage5Check    = self.form.controls[38]
+        mainImageSwatchText     = self.form.controls[41]
+
 #    def get_url_vpnprodmerge(self):
 #        self.vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+mergecolorstyle.html?id={0}".format(self.style)
 #        return self.pmurl_style
@@ -168,7 +180,7 @@ def main():
                       'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
 
     try:
-        styles_list = sys.argv[1:]
+        styles_list = sys.argv[0].split(' ')[1:]
     except:
         styles_list = ['336844201','336842001','336841901', '336841801','336841701', '336841601','336841501']
         pass
