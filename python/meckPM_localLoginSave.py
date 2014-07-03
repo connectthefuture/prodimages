@@ -180,7 +180,7 @@ def main():
                       'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
 
     try:
-        styles_list = sys.argv[0].split(' ')[1:]
+        styles_list = sys.argv[1:]
     except:
         styles_list = ['336844201','336842001','336841901', '336841801','336841701', '336841601','336841501']
         pass
