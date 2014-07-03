@@ -143,6 +143,31 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         mainImageSwatchText     = self.form.controls[41]
 
 
+    def get_api_endpoints(self):
+        import requests
+        self.hostname   =   ''
+        self.apiroot    =   ''
+        self.apiname    =   ''
+        self.endpoint   =   ''
+        self.objects    =   ''
+        self.fmt        =   ''
+
+        if not self.hostname:
+            self.hostname = 'http://pm.bluefly.corp/manager/product/{0}".format(apiname)
+        if not self.apiroot:
+            self.apiroot = 'api/mergecolorstyle.html'
+        if not self.apiname:
+            self.apiname = ''
+        if not self.objects:
+            self.objects = ''
+        if not self.fmt:
+            self.fmt = '?format=json'
+        
+        url = os.path.join(self.hostname,self.apiroot,self.apiname,endpoint,self.objects,self.fmt)
+        r = requests.get(url).json()
+        endpoints = r.keys()
+        return endpoints, r
+
 
     ##  MERGE SECTION
     def get_url_prodmerge(self):
