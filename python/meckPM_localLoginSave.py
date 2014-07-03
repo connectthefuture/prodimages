@@ -1,16 +1,5 @@
-import mechanize
-import cookielib
-import os,sys,re,glob
-
-
-def login_pm(url):
-    pm_login = br.open(url)
-    br.select_form('frmLogin')
-    
-
-
-import mechanize, cookielib
-import os,sys,re
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 class MyBrowser(mechanize.Browser, object):
 
@@ -20,7 +9,7 @@ class MyBrowser(mechanize.Browser, object):
         # Cookie Jar
         self.cj = cookielib.LWPCookieJar()
         self.set_cookiejar(self.cj)
-        # Opts
+        # Browser Opts
         self.set_debug_http(True)
         self.set_debug_redirects(True)
         self.set_debug_responses(True)
@@ -114,9 +103,7 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
   
 
     def submit_save_proddesc(self):
-        #pmurlpdp = self.get_url_vpnproddesc()
-        pmurlpdp = self.get_url_proddesc()
-        
+        pmurlpdp = self.get_url_proddesc()        
         ## Open Page
         self.open(pmurlpdp)
 
@@ -140,10 +127,10 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
 
 
 
-#    def get_url_prodmerge(self):
-#        self.pmurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
-#        return self.pmurl_style
-#
+    def get_url_prodmerge(self):
+        self.pmurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
+        return self.pmurl_style
+
 #    def get_url_vpnprodmerge(self):
 #        self.vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+mergecolorstyle.html?id={0}".format(self.style)
 #        return self.pmurl_style
@@ -152,67 +139,52 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
 ###########################
 ###########################
 ###########################
+def main():
+    import mechanize, cookielib
+    import os,sys,re,glob
 
-#url = sys.argv[1]
+    #url = sys.argv[1]
 
-# Browser
-#br = mechanize.Browser()
-br = PMbflyMyBrowser()
-br.login_pm()
-# Cookie Jar
-cj = cookielib.LWPCookieJar()
-br.set_cookiejar(cj)
+    # Browser
+    #br = mechanize.Browser()
+    br = PMbflyMyBrowser()
+    # Cookie Jar
+    cj = cookielib.LWPCookieJar()
+    br.set_cookiejar(cj)
 
-# Browser options
-br.set_handle_equiv(True)
-br.set_handle_gzip(True)
-br.set_handle_redirect(True)
-br.set_handle_referer(True)
-br.set_handle_robots(False)
 
-# Follows refresh 0 but not hangs on refresh > 0
-br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+    # Follows refresh 0 but not hangs on refresh > 0
+    br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
 
-# Want debugging messages?
-br.set_debug_http(True)
-br.set_debug_redirects(True)
-br.set_debug_responses(True)
+    # Want debugging messages?
+    br.set_debug_http(True)
+    br.set_debug_redirects(True)
+    br.set_debug_responses(True)
 
-# User-Agent (this is cheating, ok?)
-br.addheaders = [('User-agent',
-                  'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+    # User-Agent (this is cheating, ok?)
+    br.addheaders = [('User-agent',
+                      'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
 
-styles_list = ['336844201','336842001','336841901', '336841801','336841701', '336841601','336841501']
-
-br.login_pm()
-
-for style in styles_list:
-    br.style = style
-    res = br.submit_save_proddesc()
     try:
-        print res.read()
-    except AttributeError:
+        styles_list = sys.argv[1:]
+    except:
+        styles_list = ['336844201','336842001','336841901', '336841801','336841701', '336841601','336841501']
         pass
-        print 'None Type Passed {}'.format(style)
-    # pmurl_style = "http://pm.bluefly.corp/manager/product/productdetails.html?id={0}".format(style)
-    # pmstyle_urls.append(pmurl_style)
 
-## Login
-uname = 'johnb'
-pword = '$cutle1r2377'
-pmurl_login = 'http://pm.bluefly.corp/manager/login.html'
+    ## First Login with the already supplied creds
+    br.login_pm()
 
-## VPN FORM ELEMENT NAMES
-#br.form['username'] = uname
-#br.form['password'] = pword
+    # Read in style list which goes to each styles product detail page then clicks submit
+    for style in styles_list:
+        br.style = style
+        res = br.submit_save_proddesc()
+        try:
+            print res.read()
+        except AttributeError:
+            pass
+            print 'None Type Passed {}'.format(style)
 
+    br.close()
 
-## PM FORM ELEMENT NAMES FOR LOGIN
-br.form['j_username'] = uname
-br.form['j_password'] = pword
-        
-response = br.submit()
-response.read()
-
-br.close()
-
+if __name__ == "__main__":
+    main()
