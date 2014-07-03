@@ -153,7 +153,7 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.fmt        =   ''
 
         if not self.hostname:
-            self.hostname = 'http://pm.bluefly.corp/manager/product/{0}".format(apiname)
+            self.hostname = 'http://pm.bluefly.corp/manager/product/{0}'.format(self.apiname)
         if not self.apiroot:
             self.apiroot = 'api/mergecolorstyle.html'
         if not self.apiname:
@@ -177,6 +177,8 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
 
     def select_merge_colorstyle(self):
         ## Select the check box
+        self.select_form(nr=0)
+        self.controls
         return
 
     def submit_save_prodmerge(self):
