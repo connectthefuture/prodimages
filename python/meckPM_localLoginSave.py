@@ -175,17 +175,25 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         return self.mergeurl_style
 
 
-    def submit_save_proddesc(self):
+    def select_merge_colorstyle(self):
+        ## Select the check box
+        return
+
+    def submit_save_prodmerge(self):
         pmmergeurl = self.get_url_prodmerge()        
         ## Open Page
         self.open(pmmergeurl)
-        ## Select the main(and only) form nr=
-        self.select_form(nr=0)
 
         try:
             ## Select the main(and only) form nr=
             self.select_form(nr=0)
+            
+            ## Select the style to merge into current style
+            select_merge_checkbox = select_merge_colorstyle(self.style)
+
+            ## Merge em
             self.submit()
+        
         except mechanize._mechanize.FormNotFoundError:
             pass
             return
