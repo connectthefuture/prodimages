@@ -124,8 +124,13 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.addheaders = [('Referer', '{0}'.format(pmurlpdp))]
         # Content Type is form
         self.addheaders = [('Content-Type', 'application/x-www-form-urlencoded')]
-        self.select_form(nr=0)
-        self.submit()
+        try:
+            self.select_form(nr=0)
+            self.submit()
+        except mechanize._mechanize.FormNotFoundError:
+            pass
+            return
+
 
 
 
