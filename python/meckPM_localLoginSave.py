@@ -139,6 +139,7 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.submit()
 
 
+
 #    def get_url_prodmerge(self):
 #        self.pmurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
 #        return self.pmurl_style
@@ -183,13 +184,16 @@ br.addheaders = [('User-agent',
 
 styles_list = ['336844201','336842001','336841901', '336841801','336841701', '336841601','336841501']
 
-pmstyle_urls = []
-
 br.login_pm()
 
 for style in styles_list:
+    br.style = style
     res = br.submit_save_proddesc()
-    print res.read()
+    try:
+        print res.read()
+    except AttributeError:
+        pass
+        print 'None Type Passed {}'.format(style)
     # pmurl_style = "http://pm.bluefly.corp/manager/product/productdetails.html?id={0}".format(style)
     # pmstyle_urls.append(pmurl_style)
 
