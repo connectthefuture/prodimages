@@ -111,9 +111,6 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         ## Open Page
         self.open(pmurlpdp)
 
-        ## Select the main(and only) form nr=
-        self.select_form(nr=0)
-
         ## Preprocess Response to Account for Bad HTML         
         response = self.http_response(self.request,self.response())
         headers = response.info()  
@@ -127,6 +124,7 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         # Content Type is form
         self.addheaders = [('Content-Type', 'application/x-www-form-urlencoded')]
         try:
+            ## Select the main(and only) form nr=
             self.select_form(nr=0)
             self.submit()
         except mechanize._mechanize.FormNotFoundError:
@@ -160,6 +158,7 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.select_form(nr=0)
 
         try:
+            ## Select the main(and only) form nr=
             self.select_form(nr=0)
             self.submit()
         except mechanize._mechanize.FormNotFoundError:
