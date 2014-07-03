@@ -73,6 +73,7 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         #self.url_prodmerge    = self.get_url_prodmerge()    
     
     
+    ## LOGIN LOGOUT SECTION
     def login_pm(self):
         ## Login to pm when on local bfly network
         self.open(self.url_login_pm)
@@ -96,6 +97,8 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         self.open(self.url_logout_pm)
         return
 
+
+    ## PRODUCT DETAIL SECTION
         
     # Generate Pm Product Detail URL when Passed self.style ( for self.style in style_list: self.get_url_proddesc()    ) or style?not sure
     def get_url_proddesc(self):
@@ -103,7 +106,6 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         return self.pmurl_style
 
   
-
     def submit_save_proddesc(self):
         pmurlpdp = self.get_url_proddesc()        
         ## Open Page
@@ -132,14 +134,6 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
             return
 
 
-
-
-    def get_url_prodmerge(self):
-        self.pmurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
-        return self.pmurl_style
-
-
-
     def get_set_image_on_off(self):
         mainImageCheck          = self.form.controls[25]
         zoomImageCheck          = self.form.controls[27]
@@ -150,9 +144,27 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         alternateImage5Check    = self.form.controls[38]
         mainImageSwatchText     = self.form.controls[41]
 
-#    def get_url_vpnprodmerge(self):
-#        self.vpnpmurl_style = "https://vpn.bluefly.com/manager/product/,DanaInfo=pm.bluefly.corp+mergecolorstyle.html?id={0}".format(self.style)
-#        return self.pmurl_style
+
+
+    ##  MERGE SECTION
+    def get_url_prodmerge(self):
+        self.mergeurl_style    = "http://pm.bluefly.corp/manager/product/mergecolorstyle.html?id={0}".format(self.style)
+        return self.mergeurl_style
+
+
+    def submit_save_proddesc(self):
+        pmmergeurl = self.get_url_prodmerge()        
+        ## Open Page
+        self.open(pmmergeurl)
+        ## Select the main(and only) form nr=
+        self.select_form(nr=0)
+
+        try:
+            self.select_form(nr=0)
+            self.submit()
+        except mechanize._mechanize.FormNotFoundError:
+            pass
+            return
 
 
 ###########################
@@ -167,22 +179,18 @@ def main():
     # Browser
     #br = mechanize.Browser()
     br = PMbflyMyBrowser()
-    # Cookie Jar
-    cj = cookielib.LWPCookieJar()
-    br.set_cookiejar(cj)
-
-
+    
     # Follows refresh 0 but not hangs on refresh > 0
     br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
 
     # Want debugging messages?
-    br.set_debug_http(True)
-    br.set_debug_redirects(True)
-    br.set_debug_responses(True)
+    # br.set_debug_http(True)
+    # br.set_debug_redirects(True)
+    # br.set_debug_responses(True)
 
     # User-Agent (this is cheating, ok?)
-    br.addheaders = [('User-agent',
-                      'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+    #br.addheaders = [('User-agent',
+    #                  'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
 
     try:
         styles_list = sys.argv[1:]
@@ -204,6 +212,7 @@ def main():
             print 'None Type Passed {}'.format(style)
         except mechanize._mechanize.FormNotFoundError:
             pass
+            ## Logout Log back in on error
             br.logout_pm()
             br.login_pm()
     
