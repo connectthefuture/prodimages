@@ -197,7 +197,12 @@ def main():
         except AttributeError:
             pass
             print 'None Type Passed {}'.format(style)
-
+        except mechanize._mechanize.FormNotFoundError:
+            pass
+            br.logout_pm()
+            br.login_pm()
+    
+    br.logout_pm()
     br.close()
 
 if __name__ == "__main__":
