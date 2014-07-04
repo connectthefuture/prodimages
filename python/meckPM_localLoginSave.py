@@ -185,7 +185,15 @@ class PMbflyMyBrowser(MyBrowser, PrettifyHandler):
         pmmergeurl = self.get_url_prodmerge()        
         ## Open Page
         self.open(pmmergeurl)
-
+        self.Formid="mergeStylesModel" 
+        self.Formname="mergeform" 
+        self.Formmethod="post" 
+        self.Formaction=pmmergeurl.strip('http://pm.bluefly.corp/')
+        self.Inputid="mergingStyleIndex" 
+        self.Inputname="mergingStyleIndex" 
+        self.Inputtype="hidden" 
+        self.Inputvalue=""
+            
         try:
             ## Select the main(and only) form nr=
             self.select_form(nr=0)
