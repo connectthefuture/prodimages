@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-#import gflags
+import gflags
 import httplib2
 from apiclient.discovery import build
 from oauth2client.file import Storage
 from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.client import AccessTokenRefreshError
 from oauth2client.tools import run
-import os, sys
+import os
 
 ##########################Vars
 client_id='924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
@@ -26,7 +24,7 @@ os.chdir(batchRunScripts)
 storage_file = os.path.join(batchRunScripts, 'calendar.dat')
 
 ############################
-# FLAGS = gflags.FLAGS
+FLAGS = gflags.FLAGS
 
 # The client_id and client_secret are copied from the API Access tab on
 # the Google APIs Console
@@ -37,7 +35,7 @@ FLOW = OAuth2WebServerFlow(
     user_agent=user_agent)
 
 # To disable the local server feature, uncomment the following line:
-# FLAGS.auth_local_webserver = False
+FLAGS.auth_local_webserver = False
 
 # If the Credentials don't exist or are invalid, run through the native client
 # flow. The Storage object will ensure that if successful the good
@@ -52,11 +50,10 @@ if credentials is None or credentials.invalid == True:
 http = httplib2.Http()
 http = credentials.authorize(http)
 
-#prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
 prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
-# k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com
-# https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s%40group.calendar.google.com/
-#prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s%40group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
+#prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/'
+# prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
+
 # Build a service object for interacting with the API.
 service = build(serviceName='calendar', version='v3', http=http)
 
@@ -73,12 +70,6 @@ try:
         page_token = events.get('nextPageToken')
         if not page_token:
             break
-
-except AccessTokenRefreshError:
-    # The AccessTokenRefreshError exception is raised if the credentials
-    # have been revoked by the user or they have expired.
-    print ('The credentials have been revoked or expired, please re-run'
-           'the application to re-authorize')
 except:
     page_token = None
     while True:
