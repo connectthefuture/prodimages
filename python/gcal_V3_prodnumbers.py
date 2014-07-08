@@ -53,7 +53,7 @@ http = httplib2.Http()
 http = credentials.authorize(http)
 
 #prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
-prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/'
+prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
 # k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com
 # https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s%40group.calendar.google.com/
 #prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s%40group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
