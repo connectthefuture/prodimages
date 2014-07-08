@@ -157,5 +157,9 @@ dirlist = []
 [dirlist.append(os.path.abspath(g)) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
 import subprocess
 for d in dirlist:
-    subprocess.call(['/usr/local/batchRunScripts/python/magic_modulate-aspect-normalize_AND_Upload.py', d])
-
+    # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
+    try:
+        subprocess.call(['/usr/local/batchRunScripts/python/magic_modulate-aspect-normalize_AND_Upload.py', d])
+    except subprocess.CalledProcessError:
+        pass
+    
