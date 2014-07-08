@@ -62,7 +62,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None):
 
 ############################################################ RUN ##################################################
 ############################################################ RUN ##################################################
-import os,re,sys,urllib, glob, re
+import os,re,sys,urllib, glob, re, requests
 import requests
 
 ## Create image dir Root if not exist
@@ -135,7 +135,7 @@ for k,v in vaultstyles.iteritems():
                     f.close()
             except:
                 print 'Failed Downloading HTTPS file {}'.format(image_url)
-                
+
         elif urlcode_value == 404:
             badurldir = os.path.join(destdir,'error404')
             if os.path.isdir(badurldir):
