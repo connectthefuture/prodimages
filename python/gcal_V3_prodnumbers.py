@@ -73,8 +73,8 @@ try:
         page_token = events.get('nextPageToken')
         if not page_token:
             break
-            
- except AccessTokenRefreshError:
+
+except AccessTokenRefreshError:
     # The AccessTokenRefreshError exception is raised if the credentials
     # have been revoked by the user or they have expired.
     print ('The credentials have been revoked or expired, please re-run'
