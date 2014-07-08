@@ -26,7 +26,7 @@ os.chdir(batchRunScripts)
 storage_file = os.path.join(batchRunScripts, 'calendar.dat')
 
 ############################
-FLAGS = gflags.FLAGS
+# FLAGS = gflags.FLAGS
 
 # The client_id and client_secret are copied from the API Access tab on
 # the Google APIs Console
