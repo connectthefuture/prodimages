@@ -127,7 +127,15 @@ for k,v in vaultstyles.iteritems():
             if alt_number == 1:
                 countstyle += 1
             print "Total New Styles Downloaded: {}".format(countstyle)
-
+        elif urlcode_value == 403:
+            try:
+                res = requests.get(image_url, stream=True, timeout=1)
+                with open(destpath, 'ab+') as f:
+                    f.write(res.content)
+                    f.close()
+            except:
+                print 'Failed Downloading HTTPS file {}'.format(image_url)
+                
         elif urlcode_value == 404:
             badurldir = os.path.join(destdir,'error404')
             if os.path.isdir(badurldir):
