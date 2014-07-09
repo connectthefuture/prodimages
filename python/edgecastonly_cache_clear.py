@@ -140,9 +140,10 @@ def send_purge_request_edgecast(mediaPath):
             
             
 ############ RUN ###########
-def main():
+def main(colorstyle_list=None):
     import sys,re,os
-    colorstyle_list = sys.argv[1:]
+    if not colorstyle_list:
+        colorstyle_list = sys.argv[1:]
 
     alturl = 'altimage.ms'
 
@@ -177,7 +178,7 @@ def main():
         edgecast_listurls.append(pmeventimg)
         
     count = 0
-    if len(edgecast_listurls) <= 3550:
+    if len(edgecast_listurls) <= 99550:
         #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
     ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
     #
