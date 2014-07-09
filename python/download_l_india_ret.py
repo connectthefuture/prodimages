@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os, sys, re, csv
 
@@ -134,6 +135,7 @@ def main(styleslist=None):
 
     if not styleslist:
         styleslist = os.listdir('/Volumes/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/PNG')
+        print 'NOTSTYLES LIST!!!'
         #for k,v in styles.iteritems():
         os.chdir(os.path.abspath(os.path.join(os.path.expanduser('~'), 'Pictures')))
     for style in styleslist:
@@ -147,6 +149,8 @@ def main(styleslist=None):
         
         cdn_url     = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode=' + colorstyle + '&width=251&height=300'
         netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext_JPG)
+        netsrv101_url_png = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext_PNG)
+
         #colorstyle = str(v[val]) + ".jpg"
         #vendor_stripped = k
         #cdn_url_file       = os.path.join(cdn_url)
@@ -155,11 +159,14 @@ def main(styleslist=None):
         #print urlcode_value
         #try: #if urlcode_value == 200:
         colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle + ext_JPG)
+        colorstyle_png = os.path.join(os.path.abspath(os.curdir), colorstyle + ext_PNG)
+
         cdncached_file  = os.path.join(os.path.abspath(os.curdir), colorstyle + ext_CDN)
 
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
             url_download_file(cdn_url, cdncached_file)
+            url_download_file(netsrv101_url_png, colorstyle_png)
     #        alt = 0   
     #        for x in range(1,6):
     #            try:
