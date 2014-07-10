@@ -56,5 +56,5 @@ for f in gpng:
             except:
                 pass
     except:
-        pass
+         pass
 print ongreypng
