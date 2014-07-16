@@ -42,11 +42,11 @@ def main():
     ## Get Csv files dated today through 5 days ago
     csvfiles = formatted_delta_path(flag=flag,textpre=textpre,textext=textext)
     
-    ## Read each csv collecting styles from each row ending with a sorted reversed set of styles to clear
+    ## Read each csv collecting styles from each row ending with a sorted reversed unique list of styles to clear
     for f in csvfiles:
         for s in csv_read_file(f,delim):
             styles.append(s)
-    styles = set(styles)
+    styles = list(uniq(sorted(styles, reverse=True))
     
     ## Finally
     # clear the cache by style list or each style if list too long
