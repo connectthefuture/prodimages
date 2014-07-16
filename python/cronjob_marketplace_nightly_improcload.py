@@ -115,42 +115,45 @@ for k,v in vaultstyles.iteritems():
     if image_url:
         #with open(destpath,'wb') as f:
             #f.write(requests.get(image_url).content)
-        print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
-        error_check = urllib.urlopen(image_url)
-        urlcode_value = error_check.getcode()
-        print urlcode_value
+        try:
+            print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
+            error_check = urllib.urlopen(image_url)
+            urlcode_value = error_check.getcode()
+            print urlcode_value
 
-        if urlcode_value == 200:
-            urllib.urlretrieve(image_url, destpath)
-            countimage += 1
-            print "Image Download Count: {}".format(countimage)
-            if alt_number == 1:
-                countstyle += 1
-            print "Total New Styles Downloaded: {}".format(countstyle)
-        elif urlcode_value == 403:
-            try:
-                res = requests.get(image_url, stream=True, timeout=1)
-                with open(destpath, 'ab+') as f:
-                    f.write(res.content)
-                    f.close()
-            except:
-                print 'Failed Downloading HTTPS file {}'.format(image_url)
-
-        elif urlcode_value == 404:
-            badurldir = os.path.join(destdir,'error404')
-            if os.path.isdir(badurldir):
-                pass
-            else:
+            if urlcode_value == 200:
+                urllib.urlretrieve(image_url, destpath)
+                countimage += 1
+                print "Image Download Count: {}".format(countimage)
+                if alt_number == 1:
+                    countstyle += 1
+                print "Total New Styles Downloaded: {}".format(countstyle)
+            elif urlcode_value == 403:
                 try:
-                    os.makedirs(badurldir, 16877)
+                    res = requests.get(image_url, stream=True, timeout=1)
+                    with open(destpath, 'ab+') as f:
+                        f.write(res.content)
+                        f.close()
                 except:
+                    print 'Failed Downloading HTTPS file {}'.format(image_url)
+
+            elif urlcode_value == 404:
+                badurldir = os.path.join(destdir,'error404')
+                if os.path.isdir(badurldir):
                     pass
-            try:
-                with open(os.path.join(os.path.abspath(badurldir), colorstyle + '_error404.txt'), 'wb+') as f:
-                    f.write("{0}\n".format(colorstyle + urlcode_value))
-            except:
-                'Print Failed write 404 file'
-                pass
+                else:
+                    try:
+                        os.makedirs(badurldir, 16877)
+                    except:
+                        pass
+                try:
+                    with open(os.path.join(os.path.abspath(badurldir), colorstyle + '_error404.txt'), 'wb+') as f:
+                        f.write("{0}\n".format(colorstyle + urlcode_value))
+                except:
+                    'Print Failed write 404 file'
+                    pass
+        except IOError:
+            pass
 
 ######## Process Images and Load Downloaded files in VendorNAme-->POnumber subdir of main images dir #####
 dirlist = []
