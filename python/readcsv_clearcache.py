@@ -31,6 +31,14 @@ def csv_read_file(filename, delim):
         return sorted(rows)
 
 
+def uniq(input_list):
+    last = object()
+    for item in input_list:
+        if item == last:
+            continue
+        yield item
+        last = item
+
 ############ Run ###############
 def main():
     textpre = '/mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/4_Archive/CSV/'
