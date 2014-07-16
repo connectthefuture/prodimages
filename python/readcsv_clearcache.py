@@ -46,7 +46,7 @@ def main():
     for f in csvfiles:
         for s in csv_read_file(f,delim):
             styles.append(s)
-    styles = list(reversed([set(sorted(styles[0]))]))
+    styles = set(styles)
     
     ## Finally
     # clear the cache by style list or each style if list too long
