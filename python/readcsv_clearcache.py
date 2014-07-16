@@ -54,7 +54,7 @@ def main():
     for f in csvfiles:
         for s in csv_read_file(f,delim):
             styles.append(s)
-    styles = list(uniq(sorted(styles, reverse=True)))
+    #styles = #list(uniq(sorted(styles, reverse=True)))
     
     ## Finally
     # clear the cache by style list or each style if list too long
