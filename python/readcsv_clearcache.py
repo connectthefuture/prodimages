@@ -24,7 +24,7 @@ def csv_read_file(filename, delim):
     import csv
     with open(filename, 'rb') as f:
         # dialect = csv.Sniffer().sniff(f.read(1024))
-        reader = csv.reader(f, delimiter=delim, dialect='csv')
+        reader = csv.reader(f, delimiter=delim, dialect='excel')
         rows = []
         for row in reader: 
             rows.append(row)
