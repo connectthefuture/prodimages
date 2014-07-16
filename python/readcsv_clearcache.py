@@ -24,7 +24,7 @@ def csv_read_file(filename, delim):
     import csv
     with open(filename, 'rb') as f:
         # dialect = csv.Sniffer().sniff(f.read(1024))
-        reader = csv.reader(f, delimiter=delim, dialect='excel')
+        reader = csv.reader(f, delimiter=delim, dialect='csv')
         rows = []
         for row in reader: 
             rows.append(row)
@@ -46,7 +46,7 @@ def main():
     for f in csvfiles:
         for s in csv_read_file(f,delim):
             styles.append(s)
-    styles = reversed(set(sorted(styles)))
+    styles = reversed(set(sorted(styles[0])))
     
     ## Finally
     # clear the cache by style list or each style if list too long
