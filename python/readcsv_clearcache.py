@@ -60,7 +60,7 @@ def main():
     # clear the cache by style list or each style if list too long
     import newAll_Sites_CacheClear
     if len(styles) <= 950:
-        print type(styles)
+        styles
         newAll_Sites_CacheClear.main(colorstyle_list=styles)
     else:
         for style in styles:
