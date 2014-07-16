@@ -3,7 +3,6 @@
 
 def formatted_delta_path(flag='csv',textext=None,textpre=None):
     import datetime
-    
     fivedirs = []
     fivecsvs = []
     nowobj = datetime.datetime.now()
@@ -21,8 +20,8 @@ def formatted_delta_path(flag='csv',textext=None,textpre=None):
     else:
         return fivedirs
 
-
 def csv_read_file(filename, delim):
+    import csv
     with open(filename, 'rb') as f:
         dialect = csv.Sniffer().sniff(f.read(1024))
         reader = csv.reader(f, delimiter=delim, dialect=dialect)
