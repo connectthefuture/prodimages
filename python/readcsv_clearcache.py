@@ -64,7 +64,7 @@ def main():
     #        newAll_Sites_CacheClear.main(colorstyle_list=styles)
     #    else:
     count = len(styles)
-    while styles:
+    while count >= 1:
         style = styles.pop()
         yield "{} styles remaining to clear".format(count)
         newAll_Sites_CacheClear.main(colorstyle_list=style)
