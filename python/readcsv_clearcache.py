@@ -61,7 +61,7 @@ def main():
     import newAll_Sites_CacheClear
     if len(styles) <= 950:
         #styles
-        newAll_Sites_CacheClear.main(colorstyle_list=[styles])
+        newAll_Sites_CacheClear.main(colorstyle_list=[styles[:]])
     else:
         for style in styles:
             print style
