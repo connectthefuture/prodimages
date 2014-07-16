@@ -65,7 +65,10 @@ def main():
     #    else:
     count = len(styles)
     for style in styles:
-        yield "{} styles remaining to clear".format(count)
+        if yield "{} styles remaining to clear".format(count):
+           yield "{} styles remaining to clear".format(count)
+        else:
+            print "{} styles remaining to clear".format(count)
         newAll_Sites_CacheClear.main(colorstyle_list=style)
         count -= 1
 
