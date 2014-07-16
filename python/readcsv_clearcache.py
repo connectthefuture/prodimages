@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def formatted_delta_path(flag='csv',textext=None,textpre=None):
+def formatted_delta_path(flag='csv',textext=None,textpre=None,daysrange=1):
     import datetime
     fivedirs = []
     fivecsvs = []
     nowobj = datetime.datetime.now()
-    for day in xrange(5):
+    for day in xrange(daysrange):
         delta = datetime.timedelta(weeks=0, days=day, hours=12, minutes=50, seconds=600)
         nowdelta = nowobj - delta
         
@@ -46,9 +46,9 @@ def main():
     styles  = []
     delim   = '\n'
     flag    = 'csv'
-    
+    daysrange = 3
     ## Get Csv files dated today through 5 days ago
-    csvfiles = formatted_delta_path(flag=flag,textpre=textpre,textext=textext)
+    csvfiles = formatted_delta_path(flag=flag,textpre=textpre,textext=textext,daysrange=daysrange)
     
     ## Read each csv collecting styles from each row ending with a sorted reversed unique list of styles to clear
     for f in csvfiles:

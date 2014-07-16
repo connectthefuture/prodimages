@@ -353,7 +353,7 @@ def main(colorstyle_list=None):
             #send_purge_request_localis(colorstyle,version,POSTURL_BC)
             send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
-    elif len(versioned_links) <= 4550:
+    elif len(versioned_links) <= 8550:
 
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
@@ -399,7 +399,7 @@ def main(colorstyle_list=None):
 
     #print generated_links
     count = 0
-    if len(edgecast_listurls) <= 4550:
+    if len(edgecast_listurls) <= 8550:
 
         #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
@@ -421,7 +421,7 @@ def main(colorstyle_list=None):
             #csv_write_datedOutfile(url_purge)
 
     else:
-        print "Failed -- Over 4550 URLs Submitted"    
+        print "Failed -- Over 8550 URLs Submitted"    
 
 
 #print edgecast_listurls
