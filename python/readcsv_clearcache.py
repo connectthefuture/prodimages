@@ -54,7 +54,7 @@ def main():
     for f in csvfiles:
         for s in csv_read_file(f,delim):
             styles.append(s)
-    styles = list(uniq(sorted(styles, reverse=True)))
+    styles = list(uniq(sorted(styles)))
     
     ## Finally
     # clear the cache by style list or each style if list too long
@@ -64,8 +64,9 @@ def main():
     #        newAll_Sites_CacheClear.main(colorstyle_list=styles)
     #    else:
     count = len(styles)
-    for style in styles:
-        print "{} styles remaining to clear".format(count)
+    while styles:
+        style = styles.pop()
+        yield "{} styles remaining to clear".format(count)
         newAll_Sites_CacheClear.main(colorstyle_list=style)
         count -= 1
 
