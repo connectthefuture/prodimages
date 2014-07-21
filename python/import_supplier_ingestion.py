@@ -39,7 +39,6 @@ def sqlQuerySupplierIngest():
                             RIGHT JOIN POMGR.PO_LINE
                             ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR
                             WHERE POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%'
-                            and POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE > trunc(sysdate - 4)
                             ORDER BY 
                             POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE desc nulls last,
                             POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last,
@@ -110,7 +109,7 @@ for k,v in importdata.iteritems():
 
         # try:
         #     connection_data.execute("""
-        #             INSERT INTO excel_tool_data 
+        #             INSERT INTO supplier_ingest 
         #                 (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, image_type, copy_ready_dt, modified_dt, start_dt)
         #                 (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         #             ON DUPLICATE KEY UPDATE 
@@ -139,7 +138,7 @@ for k,v in importdata.iteritems():
         
 
         try:
-            connection_www.execute("""INSERT INTO excel_tool_data (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, image_type, modified_dt, start_dt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+            connection_www.execute("""INSERT INTO supplier_ingest (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, image_type, modified_dt, start_dt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
             ON DUPLICATE KEY UPDATE 
             version  = VALUES(version), 
             vendor_name  = VALUES(vendor_name), 
