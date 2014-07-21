@@ -27,7 +27,7 @@ def sqlQuerySupplierIngest():
                               POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT                      AS "production_complete_dt",
                               POMGR.PRODUCT_COLOR.ACTIVE                                      AS "active",
                               POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE                        AS "create_dt",
-                              POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE                       AS "modified_dt",
+                              POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE                        AS "modified_dt",
                               POMGR.PRODUCT_COLOR.START_DATE                                  AS "start_dt"
                             FROM POMGR.SUPPLIER_INGEST_STYLE
                             LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE
@@ -39,7 +39,7 @@ def sqlQuerySupplierIngest():
                             ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR
                             WHERE POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%' and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER = '1'
                             ORDER BY 
-                            POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE desc nulls last,
+                            POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE desc nulls last,
                             POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last,
                             POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last,
                             POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND Nulls Last,
