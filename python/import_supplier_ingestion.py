@@ -27,7 +27,6 @@ def sqlQuerySupplierIngest():
                               POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT                      AS "production_complete_dt",
                               POMGR.PRODUCT_COLOR.ACTIVE                                      AS "active",
                               POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE                        AS "create_dt",
-                              POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_TYPE                          AS "image_type",
                               POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE                       AS "modified_dt",
                               POMGR.PRODUCT_COLOR.START_DATE                                  AS "start_dt"
                             FROM POMGR.SUPPLIER_INGEST_STYLE
@@ -67,7 +66,6 @@ def sqlQuerySupplierIngest():
         importdata_tmp['production_complete_dt'] = row['production_complete_dt']
         importdata_tmp['active'] = row['active']
         importdata_tmp['create_dt'] = row['create_dt']
-        importdata_tmp['image_type'] = row['image_type']
         importdata_tmp['modified_dt'] = row['modified_dt']
         importdata_tmp['start_dt'] = row['start_dt']
         print row['colorstyle']
@@ -138,7 +136,7 @@ for k,v in importdata.iteritems():
         
 
         try:
-            connection_www.execute("""INSERT INTO supplier_ingest (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, image_type, modified_dt, start_dt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+            connection_www.execute("""INSERT INTO supplier_ingest (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, modified_dt, start_dt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
             ON DUPLICATE KEY UPDATE 
             version  = VALUES(version), 
             vendor_name  = VALUES(vendor_name), 
@@ -153,9 +151,8 @@ for k,v in importdata.iteritems():
             production_complete_dt = VALUES(production_complete_dt), 
             active = VALUES(active), 
             create_dt = VALUES(create_dt), 
-            image_type= VALUES(image_type), 
             modified_dt = VALUES(modified_dt), 
-            start_dt = VALUES(start_dt);""", v['colorstyle'], v['vendor_style'], v['po_number'], v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['image_type'], v['modified_dt'], v['start_dt'])
+            start_dt = VALUES(start_dt);""", v['colorstyle'], v['vendor_style'], v['po_number'], v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['modified_dt'], v['start_dt'])
 
             print "Inserted {0}".format(k)
 
