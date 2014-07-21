@@ -12,23 +12,24 @@ def sqlQuerySupplierIngest():
     connection = orcl_engine.connect()
 
     querymake_supplier_ingest="""SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS "colorstyle",
-                              POMGR.PRODUCT_COLOR.VERSION                                     AS "version",
-                              POMGR.PO_LINE.PO_HDR_ID                                         AS "po_number",
-                              POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE                        AS "vendor_style",
-                              POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID                           AS "vendor_name",
-                              POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND                        AS "vendor_brand",
-                              POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY                    AS "bfly_product_path",
-                              POMGR.SUPPLIER_INGEST_IMAGE.URL                                 AS "image_url",
-                              POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER                        AS "alt",
-                              POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED                          AS "image_download_valid",
-                              POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID                            AS "ingest_style_id",
-                              POMGR.PRODUCT_COLOR.COPY_READY_DT                               AS "copy_ready_dt",
-                              POMGR.PRODUCT_COLOR.IMAGE_READY_DT                              AS "image_ready_dt",
-                              POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT                      AS "production_complete_dt",
-                              POMGR.PRODUCT_COLOR.ACTIVE                                      AS "active",
-                              POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE                        AS "create_dt",
-                              POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE                        AS "modified_dt",
-                              POMGR.PRODUCT_COLOR.START_DATE                                  AS "start_dt"
+                            POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID                           AS "vendor_name",
+                            POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND                        AS "vendor_brand",
+                            POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE                        AS "vendor_style",
+                            POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY                    AS "bfly_product_path",
+                            POMGR.SUPPLIER_INGEST_IMAGE.URL                                 AS "image_url",
+                            POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED                          AS "image_download_valid",
+                            POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER                        AS "alt",
+                            POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID                            AS "ingest_style_id",
+                            POMGR.PRODUCT_COLOR.COPY_READY_DT                               AS "copy_ready_dt",
+                            POMGR.PRODUCT_COLOR.IMAGE_READY_DT                              AS "image_ready_dt",
+                            POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT                      AS "production_complete_dt",
+                            POMGR.PRODUCT_COLOR.ACTIVE                                      AS "active",
+                            POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID                     AS "third_supplier_id",
+                            POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE                        AS "create_dt",
+                            POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_TYPE                          AS "image_type",
+                            POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE                       AS "modified_dt",
+                            POMGR.PRODUCT_COLOR.START_DATE                                  AS "start_dt",
+                            POMGR.PRODUCT_COLOR.VERSION                                     AS "version"
                             FROM POMGR.SUPPLIER_INGEST_STYLE
                             LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE
                             ON POMGR.SUPPLIER_INGEST_STYLE.ID                     = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID
@@ -39,7 +40,7 @@ def sqlQuerySupplierIngest():
                             ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR
                             WHERE POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%' and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER = '1'
                             ORDER BY 
-                            POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE desc nulls last,
+                            POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE desc nulls last,
                             POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last,
                             POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last,
                             POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND Nulls Last,
