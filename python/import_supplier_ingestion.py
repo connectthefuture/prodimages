@@ -56,7 +56,7 @@ def sqlQuerySupplierIngest():
         importdata_tmp = {}
         importdata_tmp['colorstyle'] = row['colorstyle']
         importdata_tmp['vendor_style'] = row['vendor_style']
-        importdata_tmp['po_number'] = row['po_number']
+        importdata_tmp['po_number'] = 'x' #row['po_number']
         importdata_tmp['version'] = row['version']
         importdata_tmp['vendor_name'] = row['vendor_name']
         importdata_tmp['vendor_brand'] = row['vendor_brand']
