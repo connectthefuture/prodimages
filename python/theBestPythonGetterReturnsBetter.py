@@ -12,7 +12,7 @@ def get_using_python(destdir,sqlcolorstyles):
             try:
             
                 file_path = row[0]
-                if file_path[:3] == '/mnt':
+                if file_path.split('/')[1][2] == 'R':
                     pass
                 else:
                     file_path = os.path.join('/mnt/Post_Ready', file_path)
