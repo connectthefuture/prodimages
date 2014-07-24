@@ -172,8 +172,8 @@ for k,v in vaultstyles.iteritems():
         [badlist.append(style.split('/')[-1][:9]) for style in failed]
         for f in failed:
             try:
-                shutl.move(f,os.path.join(imagedir,'ERRORS'))
-            except AttributeError:
+                shutil.move(f,os.path.join(imagedir,'ERRORS'))
+            except:
                 pass
 
 ######## Process Images and Load Downloaded files in VendorNAme-->POnumber subdir of main images dir #####
