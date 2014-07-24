@@ -43,6 +43,7 @@ def get_using_python(destdir,sqlcolorstyles):
 ############ RUN ########################
 def main():
     import os,sqlalchemy,shutil,datetime,re,glob
+    import mtags_reshoots
     mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@localhost:3301/data_imagepaths')
     connection = mysql_engine.connect()   
     daily_incomplete_query = '''SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` FROM `data_imagepaths`.`push_photoselects` t1 join `data_imagepaths`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle` having (t2.`image_ready_dt` = '0000-00-00') ORDER BY t1.`file_path`  ASC '''
@@ -89,8 +90,12 @@ def main():
 
     reshoots = glob.glob(os.path.join(destdir_reshoot,'*.jpg'))
     if reshoots:
-        pass
         print reshoots
+        for f in reshoots:
+            try:
+                mtags_reshoots.main(filename=f)
+            except: 
+                pass
     else:
         os.rmdir(destdir_reshoot)
 
