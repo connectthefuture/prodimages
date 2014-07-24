@@ -50,7 +50,8 @@ def sqlQueryMetatags(style,f):
     return metatags
 
 
-def get_dbinfo_for_metatags_singlefile(f):   
+def get_dbinfo_for_metatags_singlefile(f):  
+    import os
     metafield_dict = {}
     listed = []
     stylefile = os.path.basename(f)
