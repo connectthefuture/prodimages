@@ -130,7 +130,7 @@ def get_image_color_minmax(img):
     try:
         ret = subprocess.check_output(['convert', img, '-median', '3', '+dither', '-colors', '2', '-trim', '+repage', '-gravity', 'center', '-crop', '50%', '-depth', '8', '-format', '%c','histogram:info:-'])    
     except:
-        return = ''
+        return ''
     colorlow = str(ret).split('\n')[0].strip(' ')
     colorlow =  re.sub(re.compile(r',\W'),',',colorlow).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
     colorhigh = str(ret).split('\n')[1].strip(' ')
