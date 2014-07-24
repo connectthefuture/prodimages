@@ -63,8 +63,8 @@ def main():
     today_folder_reshoot = os.path.join('/mnt/Post_Ready/Daily', today, 'reshoot')
 
     try:
-        os.mkdir(today_folder, 16877)
-        os.mkdir(today_folder_reshoot, 16877)
+        os.makedirs(today_folder, 16877)
+        os.makedirs(today_folder_reshoot, 16877)
     except:
         pass
 
