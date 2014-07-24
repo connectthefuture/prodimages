@@ -12,11 +12,11 @@ def get_using_python(destdir,sqlcolorstyles):
             try:
             
                 file_path = row[0]
-                if file_path.split('/')[1][2] == 'R':
-                    pass
-                else:
-                    file_path = os.path.join('/mnt/Post_Ready', file_path)
-                
+                # if file_path.split('/')[1][2] == 'R':
+                #     pass
+                # else:
+                #     file_path = os.path.join('/mnt/Post_Ready', file_path)
+                #     print file_path
                 file_name = file_path.split('/')[-1]
      
                 ## Destination File name if not in a PENDING dir
@@ -47,7 +47,7 @@ def main():
     connection = mysql_engine.connect()   
     daily_incomplete_query = '''SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` FROM `data_imagepaths`.`push_photoselects` t1 join `data_imagepaths`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle` having (t2.`image_ready_dt` = '0000-00-00') ORDER BY t1.`file_path`  ASC '''
 
-    daily_reshoot_query = '''select distinct t3.`file_path`, t3.`photo_date`, data.`colorstyle`, data.`file_path`,data.`photo_date` 
+    daily_reshoot_query = '''select distinct data.`file_path`,data.`photo_date`,data.`colorstyle`, t3.`file_path`, t3.`photo_date` 
                 FROM 
                     (SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` , t1.`photo_date`,t1.alt
                     FROM `data_imagepaths`.`push_photoselects` t1 
