@@ -68,7 +68,7 @@ def main():
     except:
         pass
     os.makedirs(today_folder_reshoot, 16877)
-    
+
     destdir = today_folder
     destdir_reshoot = today_folder_reshoot
     
@@ -76,8 +76,11 @@ def main():
     get_using_python(destdir,result)
     # Get Reshoots
     get_using_python(destdir_reshoot,result_reshoot)
-    if glob.glob(os.path.join(destdir_reshoot,'*.jpg')):
+
+    reshoots = glob.glob(os.path.join(destdir_reshoot,'*.jpg'))
+    if reshoots:
         pass
+        print reshoots
     else:
         os.rmdir(destdir_reshoot)
 
