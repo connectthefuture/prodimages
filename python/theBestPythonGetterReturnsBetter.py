@@ -67,7 +67,8 @@ def main():
         os.makedirs(today_folder_reshoot, 16877)
     except:
         pass
-
+    os.makedirs(today_folder_reshoot, 16877)
+    
     destdir = today_folder
     destdir_reshoot = today_folder_reshoot
     
