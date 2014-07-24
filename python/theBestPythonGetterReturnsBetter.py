@@ -94,7 +94,7 @@ def main():
         for f in reshoots:
             try:
                 mtags_reshoots.main(filename=f)
-            except: 
+            except AttributeError: 
                 pass
     else:
         os.rmdir(destdir_reshoot)
