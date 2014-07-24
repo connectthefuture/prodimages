@@ -158,8 +158,8 @@ for k,v in vaultstyles.iteritems():
                     except:
                         pass
                 try:
-                    with open(os.path.join(os.path.abspath(badurldir), colorstyle + '_error404.txt'), 'wb+') as f:
-                        f.write("{0}\n".format(colorstyle + urlcode_value))
+                    with open(os.path.join(os.path.abspath(badurldir), colorstyle + ext + '_error404.txt'), 'wb+') as f:
+                        f.write("{0}\t{1}\n".format(image_url,colorstyle + urlcode_value))
                 except:
                     'Print Failed write 404 file'
                     pass
