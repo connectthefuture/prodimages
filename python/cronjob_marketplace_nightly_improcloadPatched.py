@@ -173,7 +173,7 @@ for k,v in vaultstyles.iteritems():
         for f in failed:
             try:
                 shutl.move(f,os.path.join(imagedir,'ERRORS'))
-            except:
+            except AttributeError:
                 pass
 
 ######## Process Images and Load Downloaded files in VendorNAme-->POnumber subdir of main images dir #####
