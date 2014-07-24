@@ -62,7 +62,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None):
 
 ############################################################ RUN ##################################################
 ############################################################ RUN ##################################################
-import os,re,sys,urllib, glob, re, subprocess
+import os,re,sys,urllib, glob, re, subprocess, shutil
 import requests
 
 ## Create image dir Root if not exist
@@ -105,6 +105,7 @@ for k,v in vaultstyles.iteritems():
         ext = bfly_ext
     destdir  = os.path.join(imagedir, str(vendor_name), str(po_number))
     destpath = os.path.join(destdir, colorstyle + ext)
+    badurldir = ''
     if os.path.isdir(destdir):
         pass
     else:
@@ -165,6 +166,16 @@ for k,v in vaultstyles.iteritems():
         except IOError:
             pass
 
+    if badurldir:
+        badlist = []
+        failed = glob.glob(os.path.join(badurldir,'*.csv'))
+        [badlist.append(style.split('/')[-1][:9]) for style in failed]
+        for f in failed:
+            try:
+                shutl.move(f,os.path.join(imagedir,'ERRORS'))
+            except:
+                pass
+        
 ######## Process Images and Load Downloaded files in VendorNAme-->POnumber subdir of main images dir #####
 dirlist = []
 [dirlist.append(os.path.abspath(g)) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
