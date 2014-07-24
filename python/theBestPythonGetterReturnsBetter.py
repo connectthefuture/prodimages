@@ -53,7 +53,7 @@ def main():
                     (SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` , t1.`photo_date`,t1.alt
                     FROM `data_imagepaths`.`push_photoselects` t1 
                     join `data_imagepaths`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle` 
-                    where t1.photo_date BETWEEN SYSDATE( ) - INTERVAL 17 DAY AND SYSDATE( ) + INTERVAL 2 DAY
+                    where t1.photo_date BETWEEN SYSDATE( ) - INTERVAL 32 DAY AND SYSDATE( ) + INTERVAL 2 DAY
                     having (t2.`image_ready_dt` != '0000-00-00'))
                 AS data
                 join `data_imagepaths`.`post_ready_original` t3 on data.`colorstyle` = t3.`colorstyle`
