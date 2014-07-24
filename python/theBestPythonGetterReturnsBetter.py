@@ -32,7 +32,7 @@ def get_using_python(destdir,sqlcolorstyles):
                 print "Files Found: {0},\t File Name: {1}".format(ncount,file_name)
                 
             except:
-                print "Failed {0}".format(file_path)
+                print "Failed {0}".format(row)
  
 
 ############ RUN ########################
