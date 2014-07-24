@@ -133,7 +133,7 @@ for k,v in vaultstyles.iteritems():
             if urlcode_value == 200:
                 res = urllib.urlretrieve(image_url, destpath)
                 if res != '2':
-                    subprocess.call(['wget','-O',destpath + '/' + colorstyle + ext, image_url])
+                    subprocess.call(['wget','-O',''.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                 countimage += 1
                 print "Image Download Count: {}".format(countimage)
                 if alt_number == 1:
