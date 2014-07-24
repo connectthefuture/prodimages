@@ -34,6 +34,7 @@ def sqlQueryMetatags(style,f):
 #        metatag['IPTC:SpecialInstructions'] = '{:%d-%m-%Y}'.format(row['copy_dt'])
 #        metatag['IPTC:SpecialInstructions'] = row['copy_dt']
         metatag['IPTC:SimilarityIndex'] = row['sample_status']
+        metatag['IPTC:IntelectualGenre'] = 'RESHOOT' #row['sample_status']
 #        metatag['IPTC:SampleStatusDate'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
 #        metatag['IPTC:Source'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
 #        metatag['IPTC:SampleStatusDate'] = row['sample_dt']
