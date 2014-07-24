@@ -36,6 +36,7 @@ def sqlQueryMetatags(style,f):
         metatag['IPTC:SimilarityIndex'] = row['sample_status']
         metatag['XMP:Label'] = 'RESHOOT' #row['sample_status']
         metatag['XMP:Rating'] = '5'
+        metatag['EXIF:CameraModelName'] = 'RESERVED'
 #        metatag['IPTC:SampleStatusDate'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
 #        metatag['IPTC:Source'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
 #        metatag['IPTC:SampleStatusDate'] = row['sample_dt']
