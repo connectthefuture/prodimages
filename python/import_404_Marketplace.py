@@ -7,9 +7,7 @@ import os,sys,sqlalchemy,glob,io
 def import_404_data():
     mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
     mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-    connection_data = mysql_engine_data.connect()
-    connection_www = mysql_engine_www.connect()
-    
+
     badurldir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE/ERRORS/'
     errorfiles = ''
     try:
@@ -20,6 +18,8 @@ def import_404_data():
     if errorfiles:
         zipped = zip(errorstyles,errorfiles)
         print errorfiles
+
+    connection_www = mysql_engine_www.connect()
     
     for colorstyle in errorstyles:
         errorcode = '404'
@@ -29,6 +29,7 @@ def import_404_data():
                                     ON DUPLICATE KEY UPDATE 
                                     errorcode  = VALUES(errorcode);""", v['colorstyle'], v['errorcode'])
         except:
+            print colorstyle
             pass
 
 def main():
