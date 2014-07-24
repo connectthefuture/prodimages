@@ -62,7 +62,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None):
 
 ############################################################ RUN ##################################################
 ############################################################ RUN ##################################################
-import os,re,sys,urllib, glob, re, requests
+import os,re,sys,urllib, glob, re, subprocess
 import requests
 
 ## Create image dir Root if not exist
@@ -119,7 +119,7 @@ for k,v in vaultstyles.iteritems():
             image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
         except:
             pass
-        
+
         image_url = ''.join(image_url.split('%0A'))
         image_url = ''.join(image_url.split('%20'))
         
