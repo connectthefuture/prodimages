@@ -12,6 +12,11 @@ def get_using_python(destdir,sqlcolorstyles):
             try:
             
                 file_path = row[0]
+                if file_path[:3] == '/mnt':
+                    pass
+                else:
+                    file_path = os.path.join('/mnt/Post_Ready', file_path)
+                
                 file_name = file_path.split('/')[-1]
      
                 ## Destination File name if not in a PENDING dir
@@ -71,7 +76,7 @@ def main():
         os.makedirs(today_folder_reshoot, 16877)
     except:
         pass
-        
+
     destdir = today_folder
     destdir_reshoot = today_folder_reshoot
     
