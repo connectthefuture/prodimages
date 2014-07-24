@@ -60,7 +60,7 @@ def main():
     dt = str(datetime.datetime.now())
     today = dt.split(' ')[0]
     today_folder = os.path.join('/mnt/Post_Ready/Daily', today)
-    today_folder_reshoot = os.path.join('/mnt/Post_Ready/Daily', today, 'reshoot')
+    today_folder_reshoot = os.path.join(today_folder, 'reshoot')
 
     try:
         os.makedirs(today_folder, 16877)
