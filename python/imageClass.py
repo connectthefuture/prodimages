@@ -29,10 +29,10 @@ class ImageFile(Image):
         metadata = pyexiv2.ImageMetadata(self)
         metadata[xmpkey] = xmpvalue
         
-	def writeIptc(self,iptckey,iptcvalue):
-	    import pyexiv2
-    	    metadata = pyexiv2.ImageMetadata(self)
-    	    metadata[iptckey] = iptcvalue
+    def writeIptc(self,iptckey,iptcvalue):
+        import pyexiv2
+    	 metadata = pyexiv2.ImageMetadata(self)
+        metadata[iptckey] = iptcvalue
     
     def readIptc(self):
         import pyexiv2    
