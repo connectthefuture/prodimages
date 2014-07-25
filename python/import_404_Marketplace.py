@@ -27,8 +27,8 @@ def import_404_data():
 
             connection_www.execute("""INSERT INTO supplier_ingest_404 (colorstyle, errorcode) VALUES (%s,%s)
                                     ON DUPLICATE KEY UPDATE 
-                                    errorcode  = VALUES(errorcode);""", v['colorstyle'], v['errorcode'])
-        except:
+                                    errorcode  = VALUES(errorcode);""", colorstyle, errorcode)
+        except AttributeError:
             print colorstyle
             pass
 
