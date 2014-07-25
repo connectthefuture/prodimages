@@ -146,6 +146,7 @@ for k,v in vaultstyles.iteritems():
                         f.write(res.content)
                         f.close()
                 except:
+                    subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                     print 'Failed Downloading HTTPS file {}'.format(image_url)
 
             elif urlcode_value == 404:
