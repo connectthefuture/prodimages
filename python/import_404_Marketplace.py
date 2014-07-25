@@ -22,12 +22,12 @@ def import_404_data():
     connection_www = mysql_engine_www.connect()
     
     for colorstyle in errorstyles:
-        errorcode = '404'
+        error_code = '404'
         try:
 
-            connection_www.execute("""INSERT INTO supplier_ingest_404 (colorstyle, errorcode) VALUES (%s,%s)
+            connection_www.execute("""INSERT INTO supplier_ingest_404 (colorstyle, error_code) VALUES (%s,%s)
                                     ON DUPLICATE KEY UPDATE 
-                                    errorcode  = VALUES(errorcode);""", colorstyle, errorcode)
+                                    error_code  = VALUES(error_code);""", colorstyle, error_code)
         except AttributeError:
             print colorstyle
             pass
