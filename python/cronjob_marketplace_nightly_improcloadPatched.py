@@ -122,7 +122,7 @@ for k,v in vaultstyles.iteritems():
             pass
 
         image_url = ''.join(image_url.split('%0A'))
-        image_url = ''.join(image_url.split('%20'))
+        # image_url = ''.join(image_url.split('%20'))
         
         try:
             print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
@@ -145,6 +145,8 @@ for k,v in vaultstyles.iteritems():
                     with open(destpath, 'ab+') as f:
                         f.write(res.content)
                         f.close()
+                    if res != '2':
+                        subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                 except:
                     subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                     print 'Failed Downloading HTTPS file {}'.format(image_url)
