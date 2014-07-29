@@ -613,7 +613,9 @@ def main():
             except AttributeError:
                 print 'AttributeError {}'.format(img)
                 pass
-
+            except IOError:
+                print 'IOError {}'.format(img)
+                pass                
     else:
         img = root_img_dir
         if regex_coded.findall(img):
