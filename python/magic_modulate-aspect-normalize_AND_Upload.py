@@ -98,16 +98,22 @@ def rename_retouched_file(img):
 
 def get_aspect_ratio(img):
     from PIL import Image
-    im = Image.open(img)
-    w,h = im.size
-    aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+    try:
+        im = Image.open(img)
+        w,h = im.size
+        aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+    except:
+        aspect_ratio = str("1/1")
     return aspect_ratio
 
 def get_dimensions(img):
     from PIL import Image
-    im = Image.open(img)
-    w,h = im.size
-    dimensions = "{0}x{1}".format(int(w),int(h))
+    try:
+        im = Image.open(img)
+        w,h = im.size
+        dimensions = "{0}x{1}".format(int(w),int(h))
+    except:
+        dimensions = "2000x2400"
     return dimensions
 
 
