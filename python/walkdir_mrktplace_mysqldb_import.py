@@ -266,7 +266,7 @@ def main(rootdir=None):
             regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
             regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
-    ## ProdRaw Thumbs
+    ## MarketplaceDloads Thumbs
             if re.findall(regex_consigANY, sqlinsert_choose_test):
                 connection.execute("""INSERT INTO post_complete_marketplace (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s )""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
                 print "Successful Insert post_complete_marketplace --> {0}".format(k)
