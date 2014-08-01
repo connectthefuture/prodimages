@@ -31,6 +31,15 @@ def get_color_profile_mode(img):
     except IOError:
         pass
 
+def get_color_profile_name(img):
+    import exiftool
+    exif=exiftool.ExifTool()
+    exif.start()
+    mdata=exif.get_metadata(img)
+    exif.terminate()
+    color_profile_name = mdata['XMP:ICCProfileName']
+    return color_profile_name
+
 ################################## COLOR PROFILE CONVERSIONS #####################
 
 def convert_colorprofile(image_file,inprofile,outprofile):
