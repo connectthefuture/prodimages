@@ -634,8 +634,8 @@ def main():
         subproc_magick_medium_jpg(pngout, destdir=destdir)
 
     
-    upload_imagedrop(destdir)
-
+    #upload_imagedrop(destdir)
+    print 'NOT UPLOADING YET'
 
 if __name__ == '__main__':
     main()
