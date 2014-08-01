@@ -634,8 +634,14 @@ def main():
         subproc_magick_medium_jpg(pngout, destdir=destdir)
 
     
-    #upload_imagedrop(destdir)
-    print 'NOT UPLOADING YET'
+    upload_imagedrop(destdir)
+    failed_dir = os.path.join(destdir,'failed_upload','*.??[gG]')
+    while True:
+        if glob.glob(failed_dir):
+            destdir = failed_dir
+            failed_dir = os.path.join(destdir,'failed_upload','*.??[gG]')
+            upload_imagedrop(destdir)
+    #print 'NOT UPLOADING YET'
 
 if __name__ == '__main__':
     main()

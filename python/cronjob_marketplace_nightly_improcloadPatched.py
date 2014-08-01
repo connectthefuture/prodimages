@@ -121,9 +121,9 @@ for k,v in vaultstyles.iteritems():
         except:
             pass
 
+        ## Strip error causing Line Feed ascii char
         image_url = ''.join(image_url.split('%0A'))
-        # image_url = ''.join(image_url.split('%20'))
-        
+ 
         try:
             print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
             error_check = urllib.urlopen(image_url)
@@ -186,7 +186,7 @@ import subprocess
 for d in dirlist:
     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
     try:
-        subprocess.call(['/usr/local/batchRunScripts/python/magic_modulate-aspect-normalize_AND_Upload.py', d])
-    except subprocess.CalledProcessError:
+        subprocess.call(['/usr/local/batchRunScripts/python/magicColorspace_modulate-aspect-normalize_AND_Upload.py', d])
+    except: #subprocess.CalledProcessError:
         pass
     
