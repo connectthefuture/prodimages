@@ -616,7 +616,7 @@ def main():
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
-            except:
+            except AttributeError:
                 print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
                 pass
 
