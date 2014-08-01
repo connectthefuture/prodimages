@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 def get_dimensions(img):
     from PIL import Image
     im = Image.open(img)
@@ -27,7 +28,7 @@ def convert_colorprofile(image_file,inprofile,outprofile):
     import subprocess
     format = image_file.split('.')[-1]
     subprocess.call([
-                    'mogrify',
+                    'convert',
                     image_file,
                     '-format',
                     format,
@@ -36,9 +37,10 @@ def convert_colorprofile(image_file,inprofile,outprofile):
                     '+repage',
                     '-profile',
                     outprofile,
-                    '+repage',
+                    "+repage",
                     '-colorspace',
-                    'sRGB'
+                    'sRGB',
+                    image_file
                     ])
     return
 ################################ RUN #############################################
@@ -53,7 +55,6 @@ cmyk_FOGRA27coat='/usr/local/color_profiles/standard/CoatedFOGRA27.icc'
 adobe98='/usr/local/color_profiles/standard/AdobeRGB1998.icc'
 srgb_webrdy='/usr/local/color_profiles/standard/sRGB.icm'
 
-
 import sys,os
 
 def main(image_file=None,inprofile=None,outprofile=None):
@@ -66,16 +67,16 @@ def main(image_file=None,inprofile=None,outprofile=None):
 
     inmode = get_color_profile_mode(image_file).lower()
     if inmode == 'cmyk' and not inprofile:
-        inprofile  = cmyk_ussheetfedcoat
-    elif inmode == 'rgb' and not inprofile:
-        inprofile  = srgb_webrdy
-    elif not inprofile:
-        inprofile  = srgb_webrdy
+        outprofile = srgb_webrdy
+    #elif inmode == 'rgb' and not inprofile:
+    #    inprofile  = srgb_webrdy
+    #elif not inprofile:
+    #    inprofile  = srgb_webrdy
     
     
-    ret = convert_colorprofile(image_file,inprofile,outprofile)
-    return ret
-
+        ret = convert_colorprofile(image_file,inprofile,outprofile)
+    # print image_file, inmode, inprofile, outprofile
+    #return ret
 
 if __name__ == '__main__':
     main()
