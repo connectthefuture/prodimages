@@ -67,7 +67,7 @@ def main(image_file=None,inprofile=None,outprofile=None):
 
     inmode = get_color_profile_mode(image_file).lower()
     if inmode == 'cmyk' and not inprofile:
-        outprofile = srgb_webrdy
+        inprofile = cmyk_ussheetfedcoat
     #elif inmode == 'rgb' and not inprofile:
     #    inprofile  = srgb_webrdy
     #elif not inprofile:
