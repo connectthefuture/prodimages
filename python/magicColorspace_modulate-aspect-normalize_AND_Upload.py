@@ -99,18 +99,23 @@ def rename_retouched_file(img):
 
 def get_aspect_ratio(img):
     from PIL import Image
-    im = Image.open(img)
-    w,h = im.size
-    aspect_ratio = str(round(float(int(h))/float(int(w)),2))
-    return aspect_ratio
+    try:
+        im = Image.open(img)
+        w,h = im.size
+        aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+        return aspect_ratio
+    except IOError:
+        pass
 
 def get_dimensions(img):
     from PIL import Image
-    im = Image.open(img)
-    w,h = im.size
-    dimensions = "{0}x{1}".format(int(w),int(h))
-    return dimensions
-
+    try:
+        im = Image.open(img)
+        w,h = im.size
+        dimensions = "{0}x{1}".format(int(w),int(h))
+        return dimensions
+    except IOError:
+        pass
 
 def get_exif_metadata_value(img, exiftag=None):
     import pyexiv2

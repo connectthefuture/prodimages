@@ -4,23 +4,32 @@
 
 def get_dimensions(img):
     from PIL import Image
-    im = Image.open(img)
-    w,h = im.size
-    dimensions = "{0}x{1}".format(int(w),int(h))
-    return dimensions
+    try:
+        im = Image.open(img)
+        w,h = im.size
+        dimensions = "{0}x{1}".format(int(w),int(h))
+        return dimensions
+    except IOError:
+        pass
 
 def get_aspect_ratio(img):
     from PIL import Image
-    im = Image.open(img)
-    w,h = im.size
-    aspect_ratio = str(round(float(int(h))/float(int(w)),2))
-    return aspect_ratio
+    try:
+        im = Image.open(img)
+        w,h = im.size
+        aspect_ratio = str(round(float(int(h))/float(int(w)),2))
+        return aspect_ratio
+    except IOError:
+        pass
 
 def get_color_profile_mode(img):
     from PIL import Image
-    im = Image.open(img)
-    color_profile_mode = im.mode
-    return color_profile_mode
+    try:
+        im = Image.open(img)
+        color_profile_mode = im.mode
+        return color_profile_mode
+    except IOError:
+        pass
 
 ################################## COLOR PROFILE CONVERSIONS #####################
 
@@ -64,22 +73,19 @@ def main(image_file=None,inprofile=None,outprofile=None):
 
     if not outprofile:
         outprofile = srgb_webrdy
-    try:
 
-        inmode = get_color_profile_mode(image_file).lower()
-        if inmode == 'cmyk' and not inprofile:
-            inprofile = cmyk_ussheetfedcoat
-            #elif inmode == 'rgb' and not inprofile:
-            #    inprofile  = srgb_webrdy
-            #elif not inprofile:
-            #    inprofile  = srgb_webrdy
-            
-            ret = convert_colorprofile(image_file,inprofile,outprofile)
-            # print image_file, inmode, inprofile, outprofile
-        #return ret
+    inmode = get_color_profile_mode(image_file).lower()
 
-    except IOError:
-        pass
+    if inmode == 'cmyk' and not inprofile:
+        inprofile = cmyk_ussheetfedcoat
+        #elif inmode == 'rgb' and not inprofile:
+        #    inprofile  = srgb_webrdy
+        #elif not inprofile:
+        #    inprofile  = srgb_webrdy
+        
+        ret = convert_colorprofile(image_file,inprofile,outprofile)
+        # print image_file, inmode, inprofile, outprofile
+    #return ret
 
 
 if __name__ == '__main__':
