@@ -64,19 +64,23 @@ def main(image_file=None,inprofile=None,outprofile=None):
 
     if not outprofile:
         outprofile = srgb_webrdy
+    try:
 
-    inmode = get_color_profile_mode(image_file).lower()
-    if inmode == 'cmyk' and not inprofile:
-        inprofile = cmyk_ussheetfedcoat
-    #elif inmode == 'rgb' and not inprofile:
-    #    inprofile  = srgb_webrdy
-    #elif not inprofile:
-    #    inprofile  = srgb_webrdy
-    
-    
-        ret = convert_colorprofile(image_file,inprofile,outprofile)
-    # print image_file, inmode, inprofile, outprofile
-    #return ret
+        inmode = get_color_profile_mode(image_file).lower()
+        if inmode == 'cmyk' and not inprofile:
+            inprofile = cmyk_ussheetfedcoat
+            #elif inmode == 'rgb' and not inprofile:
+            #    inprofile  = srgb_webrdy
+            #elif not inprofile:
+            #    inprofile  = srgb_webrdy
+            
+            ret = convert_colorprofile(image_file,inprofile,outprofile)
+            # print image_file, inmode, inprofile, outprofile
+        #return ret
+
+    except IOError:
+        pass
+
 
 if __name__ == '__main__':
     main()
