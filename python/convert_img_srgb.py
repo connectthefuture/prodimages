@@ -54,15 +54,15 @@ def convert_colorprofile(image_file,inprofile,outprofile):
     return
 ################################ RUN #############################################
 ## CMYK Profile Files
-cmyk_uswebcoat='/usr/local/color_profiles/standard/USWebCoatedSWOP.icc'
-cmyk_ussheetfedcoat='/usr/local/color_profiles/standard/USSheetfedCoated.icc'
-cmyk_jpn01coat='/usr/local/color_profiles/standard/JapanColor2001Coated.icc'
-cmyk_FOGRA39coat='/usr/local/color_profiles/standard/CoatedFOGRA39.icc'
-cmyk_FOGRA27coat='/usr/local/color_profiles/standard/CoatedFOGRA27.icc'
+cmyk_uswebcoat='/usr/local/color_profiles/USWebCoatedSWOP.icc'
+cmyk_ussheetfedcoat='/usr/local/color_profiles/USSheetfedCoated.icc'
+cmyk_jpn01coat='/usr/local/color_profiles/JapanColor2001Coated.icc'
+cmyk_FOGRA39coat='/usr/local/color_profiles/CoatedFOGRA39.icc'
+cmyk_FOGRA27coat='/usr/local/color_profiles/CoatedFOGRA27.icc'
 
 ## RGB Profile Files
-adobe98='/usr/local/color_profiles/standard/AdobeRGB1998.icc'
-srgb_webrdy='/usr/local/color_profiles/standard/sRGB.icm'
+adobe98='/usr/local/color_profiles/AdobeRGB1998.icc'
+srgb_webrdy='/usr/local/color_profiles/sRGB.icm'
 
 import sys,os
 
