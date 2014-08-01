@@ -40,7 +40,7 @@ def convert_colorprofile(image_file,inprofile,outprofile):
                     "+repage",
                     '-colorspace',
                     'sRGB',
-                    image_file
+                    str(os.path.abspath(image_file))
                     ])
     return
 ################################ RUN #############################################
