@@ -140,6 +140,7 @@ except:
         pass
         
 print destdir
+originaldest = destdir
 
 for stylesDict in stylesDictsDict:
     if type(stylesDictsDict) == dict:
@@ -167,7 +168,7 @@ for stylesDict in stylesDictsDict:
         colorstyle_main = style      +   "_6.jpg"
         
         # Make the subdir by POnum
-        destdir = os.path.join(os.path.abspath(destdir),ponumber)
+        destdir = os.path.join(os.path.abspath(originaldest),ponumber)
         try:
             os.makedirs(destdir, 16877)
         except OSError:
