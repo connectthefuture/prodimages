@@ -6,17 +6,17 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
     if ponum:
-        querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT is null"
+        querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS ponumber FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT is null"
     else:
         ## Get all missing Styles vs above which takes a PO list
-        querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE PRODUCT_COLOR.IMAGE_READY_DT is null"
+        querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS ponumber FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE PRODUCT_COLOR.IMAGE_READY_DT is null"
 
     result = connection.execute(querymake_StylesByPO)
     styles = {}
     for row in result:
         style = {}        
         style['colorstyle'] = row['colorstyle']
-        style['ponumber'] = row['po_hdr_id']
+        style['ponumber'] = row['ponumber']
         styles[row['vendor_style']] = style
         
     connection.close()
@@ -157,7 +157,7 @@ for stylesDict in stylesDictsDict:
 
         
         style = str(v['colorstyle'])
-        ponumber = str(v['ponumber'])
+        ponumber = v['ponumber']
         colorstyle = ''
         colorstyle =  style          +   "_1.jpg"
         colorstyle_side = style      +   "_2.jpg"
