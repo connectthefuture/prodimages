@@ -16,7 +16,7 @@
 
 import subprocess
 import threading
-import magicColorspace_modulate-aspect-normalize_AND_Upload as magickProc
+import magicColorspaceModAspctLoad as magickProc
 
 class Loader(object):
     def __init__(self, directory_list, **kargs):
