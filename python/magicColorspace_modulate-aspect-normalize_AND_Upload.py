@@ -586,14 +586,18 @@ def upload_imagedrop(root_dir):
         pass
 
 
-def main():
+def main(root_img_dir=None):
     import sys,glob,shutil,os,re
     import convert_img_srgb
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-    root_img_dir = sys.argv[1]
+    if not root_img_dir:
+        root_img_dir = sys.argv[1]
+    else:
+        pass
+    
     try:
         destdir = os.path.abspath(sys.argv[2]) 
 
