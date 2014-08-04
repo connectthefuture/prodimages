@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import os, sys, re, csv
-
 def pycurl_upload_imagedrop(img):
     import pycurl, os
     localFilePath = os.path.abspath(img)
