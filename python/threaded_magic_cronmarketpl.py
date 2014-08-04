@@ -35,6 +35,7 @@ class Loader(object):
     def finishUp(self):
         print 'finishing up'
 
+
 import glob,os,threading
 def main(searchdir=None):
     load = Loader()
