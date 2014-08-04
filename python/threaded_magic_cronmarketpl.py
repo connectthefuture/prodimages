@@ -46,3 +46,7 @@ def main(searchdir=None):
         thread.join()
 
     load.finishUp()
+
+
+if __name__ == '__main__':
+    main()
