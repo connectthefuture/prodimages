@@ -19,7 +19,7 @@ import threading
 import magicColorspaceModAspctLoad as magickProc
 
 class Loader(object):
-    def __init__(self, directory_list, **kargs):
+    def __init__(self, **kargs):
         #self.__main__
         self.directory_list = directory_list
 
@@ -38,9 +38,10 @@ class Loader(object):
 
 import glob,os,threading
 def main(searchdir=None):
+    searchdirs = [directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g)]
     load = Loader()
     threads = [threading.Thread(target=load.threadLoad, args=(directory_list, ))
-               for directory_list in [directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g)]]
+               for directory_list in searchdirs]
     for thread in threads:
         thread.start()
     for thread in threads:
