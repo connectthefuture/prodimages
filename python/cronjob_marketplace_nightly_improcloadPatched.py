@@ -92,7 +92,7 @@ else:
 
 countimage = 0
 countstyle = 0
-vaultstyles=sqlQuery_GetIMarketplaceImgs(vendor='', vendor_brand='', po_number='AllCronRun')
+vaultstyles=sqlQuery_GetIMarketplaceImgs(vendor='INMOD', vendor_brand='', po_number='')
 for k,v in vaultstyles.iteritems():
     colorstyle  = v['colorstyle']
     image_url   = v['image_url']
@@ -162,7 +162,7 @@ for k,v in vaultstyles.iteritems():
                         pass
                 try:
                     with open(os.path.join(os.path.abspath(badurldir), colorstyle + ext + '_error404.txt'), 'wb+') as f:
-                        f.write("{0}\t{1}\n".format(image_url,colorstyle + urlcode_value))
+                        f.write("{0}\t{1}\n".format(image_url,colorstyle + '_imgnum_' + ext + '_errcode_' + urlcode_value))
                 except:
                     'Print Failed write 404 file'
                     pass
@@ -180,13 +180,16 @@ for k,v in vaultstyles.iteritems():
                 pass
 
 ######## Process Images and Load Downloaded files in VendorNAme-->POnumber subdir of main images dir #####
-dirlist = []
-[dirlist.append(os.path.abspath(g)) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
-import subprocess
-for d in dirlist:
-    # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
-    try:
-        subprocess.call(['/usr/local/batchRunScripts/python/magicColorspace_modulate-aspect-normalize_AND_Upload.py', d])
-    except: #subprocess.CalledProcessError:
-        pass
+#dirlist = []
+#[dirlist.append(os.path.abspath(g)) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
+import subprocess, threaded_magic_cronmarketpl
+
+threaded_magic_cronmarketpl.main(searchdir=imagedir)
+print 'Done With threaded_magic_cronmarketpl'
+# for d in dirlist:
+#     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
+#     try:
+#         subprocess.call(['/usr/local/batchRunScripts/python/magicColorspace_modulate-aspect-normalize_AND_Upload.py', d])
+#     except: #subprocess.CalledProcessError:
+#         pass
     
