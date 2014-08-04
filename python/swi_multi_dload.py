@@ -158,7 +158,7 @@ for stylesDict in stylesDictsDict:
 
         
         style = str(v['colorstyle'])
-        ponumber = v['ponumber']
+        ponumber = str(v['ponumber'])
         colorstyle = ''
         colorstyle =  style          +   "_1.jpg"
         colorstyle_side = style      +   "_2.jpg"
