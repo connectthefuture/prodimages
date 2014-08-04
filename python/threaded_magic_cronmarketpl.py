@@ -19,11 +19,9 @@ import threading
 import magicColorspaceModAspctLoad as magickProc
 
 class Loader(object):
-    def __init__(self, **kargs):
-        self.directory_list = ''
 
-    def threadLoad(self):
-        for directory in self.directory_list:
+    def threadLoad(self,directory_list):
+        for directory in directory_list:
             load_cmd =  magickProc.main(root_img_dir=directory) # load command
             run = subprocess.Popen(load_cmd, shell=True)
             # block until subprocess is done
@@ -40,7 +38,7 @@ def main(searchdir=None):
     directory_list = []
     searchdirs = sorted([directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g)])
     load = Loader()
-    threads = [threading.Thread(target=load.threadLoad, args=(tuple(directory_list,) ))
+    threads = [threading.Thread(target=load.threadLoad, args=(tuple(directory_list,), ))
                for directory_list in searchdirs]
     for thread in threads:
         thread.start()
