@@ -40,7 +40,7 @@ def main(searchdir=None):
     directory_list = []
     searchdirs = sorted([directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g)])
     load = Loader()
-    threads = [threading.Thread(target=load.threadLoad, args=(directory_list, ))
+    threads = [threading.Thread(target=load.threadLoad, args=(tuple(directory_list,) ))
                for directory_list in searchdirs]
     for thread in threads:
         thread.start()
