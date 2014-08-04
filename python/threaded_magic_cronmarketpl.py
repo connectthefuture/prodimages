@@ -20,8 +20,7 @@ import magicColorspaceModAspctLoad as magickProc
 
 class Loader(object):
     def __init__(self, **kargs):
-        self.__main__
-        self.directory_list
+        self.directory_list = ''
 
     def threadLoad(self):
         for directory in self.directory_list:
