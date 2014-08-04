@@ -18,8 +18,8 @@ import subprocess
 import threading
 import magicColorspaceModAspctLoad as magickProc
 
-class Loader(object):
-    def __init__(self,directory_list=None, **kargs):
+class Loader(object,directory_list=None):
+    def __init__(self, **kargs):
         #self.__main__
         self.directory_list = directory_list
 
