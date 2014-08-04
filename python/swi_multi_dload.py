@@ -16,6 +16,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     for row in result:
         style = {}        
         style['colorstyle'] = row['colorstyle']
+        style['ponumber'] = row['po_hdr_id']
         styles[row['vendor_style']] = style
         
     connection.close()
@@ -156,6 +157,7 @@ for stylesDict in stylesDictsDict:
 
         
         style = str(v['colorstyle'])
+        ponumber = str(v['ponumber'])
         colorstyle = ''
         colorstyle =  style          +   "_1.jpg"
         colorstyle_side = style      +   "_2.jpg"
@@ -164,9 +166,15 @@ for stylesDict in stylesDictsDict:
         colorstyle_straps = style    +   "_5.jpg"
         colorstyle_main = style      +   "_6.jpg"
         
-
+        # Make the subdir by POnum
+        destdir = os.path.join(os.path.abspath(destdir),ponumber)
+        try:
+            os.makedirs(destdir, 16877)
+        except OSError:
+            pass
+        
         colorstyle_file = os.path.join(os.path.abspath(destdir), colorstyle)
-        colorstyle_side_file = os.path.join(os.path.abspath(destdir), colorstyle_side)
+        colorstyle_side_file = os.path.join(os.path.abspath(destdir),colorstyle_side)
         colorstyle_back_file = os.path.join(os.path.abspath(destdir), colorstyle_back)
         colorstyle_boxset_file = os.path.join(os.path.abspath(destdir), colorstyle_boxset)
         colorstyle_straps_file = os.path.join(os.path.abspath(destdir), colorstyle_straps)
