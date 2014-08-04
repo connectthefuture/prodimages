@@ -38,6 +38,7 @@ class Loader(object):
 
 import glob,os,threading
 def main(searchdir=None):
+    directory_list = []
     searchdirs = [directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g)]
     load = Loader()
     threads = [threading.Thread(target=load.threadLoad, args=(directory_list, ))
