@@ -11,11 +11,13 @@ def run_multiproccesses_magick(searchdir=None):
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
     else:
         pass
+
     directory_list = []
     [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
 
     results = pool.map(magickProc.main,directory_list)
     print results
+    
     # close the pool and wait for the work to finish
     pool.close()
     print 'PoolClose'

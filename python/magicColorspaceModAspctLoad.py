@@ -591,7 +591,11 @@ def main(root_img_dir=None):
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
     if not root_img_dir:
-        root_img_dir = sys.argv[1]
+        try:
+            root_img_dir = sys.argv[1]
+        except IndexError:
+            root_img_dir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
+            pass
     else:
         pass
     

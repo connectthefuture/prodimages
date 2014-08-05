@@ -183,10 +183,10 @@ for k,v in vaultstyles.iteritems():
 ######## Process Images and Load Downloaded files in VendorNAme-->POnumber subdir of main images dir #####
 #dirlist = []
 #[dirlist.append(os.path.abspath(g)) for g in glob.glob(os.path.join(imagedir, '*/*')) if os.path.isdir(g)]
-import subprocess, threaded_magic_cronmarketpl
+import subprocess, multiprocmagick
 
-threaded_magic_cronmarketpl.main(searchdir=imagedir)
-print 'Done With threaded_magic_cronmarketpl'
+multiprocmagick.run_multiproccesses_magick(searchdir=imagedir)
+print 'Done With multiprocmagick'
 # for d in dirlist:
 #     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
 #     try:
