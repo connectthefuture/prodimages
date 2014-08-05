@@ -4,6 +4,7 @@
 def run_multiproccesses_magick(searchdir=None):
     import magicColorspaceModAspctLoad as magickProc
     import multiprocessing.dummy.Pool as ThreadPool
+    import glob,os
     
     pool = ThreadPool(4)
     if not searchdir:
