@@ -271,23 +271,6 @@ if __name__ == '__main__':
         except OSError:
             pass
 
-    try:
-        if not polist:
-            polist = set(list(sys.argv[1:]))
-        else:
-            pass
-    except IndexError:
-        polist = ''
-        pass
-    except:
-        import csv
-        file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
-        polist = []
-        with open(file, 'rbU') as f:
-            reader = csv.reader(f, dialect=csv)    
-            for ponumber in reader:
-                polist.append(ponumber[1])
-
     
     try:
         polist = set(list(sys.argv[1:]))
