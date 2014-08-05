@@ -86,7 +86,7 @@ def url_download_file(url,filepath):
 ########################################################################################################
 ############################ Run #######################################################################
 ########################################################################################################
-def main(polist=None):
+def get_postyles_dict(polist=None):
     import os,sys
 
     #try:
@@ -94,23 +94,6 @@ def main(polist=None):
     #    #ponum = '119071'
     #except:
     #    print "Enter a PO Number as 1st Arg or Nothing will Happen"
-
-    try:
-        if not polist:
-            polist = set(list(sys.argv[1:]))
-        else:
-            pass
-    except IndexError:
-        polist = ''
-        pass
-    except:
-        import csv
-        file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
-        polist = []
-        with open(file, 'rbU') as f:
-            reader = csv.reader(f, dialect=csv)    
-            for ponumber in reader:
-                polist.append(ponumber[1])
 
     print polist
     stylesDictsDict = []
@@ -123,27 +106,12 @@ def main(polist=None):
                 pass
     else:
         stylesDictsDict = sqlQuery_GetStyleVendor_ByPO(ponum=None)
-    maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
-    if maclinux_prefix == 'Users':
-        destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
-    elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
-        destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
-    else:
-        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+    return stylesDictsDict
 
-    try:
-        os.makedirs(destdir, 16877)
-    except OSError:
-        pass
-    except:
-        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
-        try:
-            os.makedirs(destdir, 16877)
-        except OSError:
-            pass
-            
+
+def download_urls_bypo(stylesDictsDict, destdir=None):
     print destdir
-    originaldest = destdir
+    #originaldest = destdir
 
     for stylesDict in stylesDictsDict:
         if type(stylesDictsDict) == dict:
@@ -256,8 +224,9 @@ def main(polist=None):
     #                except:
     #                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
 
+
 ## Run MAin as a multiprocessor by PO
-def run_multiproccesses_magick(polist=None):
+def run_multiproccesses_download(polist=None):
     import multiprocessing
     import glob,os
     
@@ -273,10 +242,65 @@ def run_multiproccesses_magick(polist=None):
     print 'PoolJoin'
 
 
+def main(polist=None):
+    if not polist:
+        polist = ''
+    stylesDictsDict = get_postyles_dict(polist)
+    download_urls_bypo(stylesDictsDict)
+
+
 if __name__ == '__main__':
     import sys
+    import os,sys
+    maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
+    if maclinux_prefix == 'Users':
+        destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
+        destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    else:
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+
+    try:
+        os.makedirs(destdir, 16877)
+    except OSError:
+        pass
+    except:
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+        try:
+            os.makedirs(destdir, 16877)
+        except OSError:
+            pass
+
+    try:
+        if not polist:
+            polist = set(list(sys.argv[1:]))
+        else:
+            pass
+    except IndexError:
+        polist = ''
+        pass
+    except:
+        import csv
+        file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
+        polist = []
+        with open(file, 'rbU') as f:
+            reader = csv.reader(f, dialect=csv)    
+            for ponumber in reader:
+                polist.append(ponumber[1])
+
+    
     try:
         polist = set(list(sys.argv[1:]))
-        run_multiproccesses_magick(polist=polist)
+        run_multiproccesses_download(polist=polist)
     except IndexError:
-        main()
+        try:
+            popre= get_postyles_dict()
+            polist = []
+            for k,v in propre.iteritems():
+                po = v['ponumber']
+                polist.append(po)
+            polist = set(sorted(polist))
+            run_multiproccesses_download(polist=polist)
+
+        except:
+            main()
