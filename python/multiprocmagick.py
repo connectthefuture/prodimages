@@ -3,8 +3,8 @@
 
 def run_multiproccesses_magick(searchdir=None):
 	from multiprocessing import Pool
-    from multiprocessing import dummy.Pool as ThreadPool
-    
+    import multiprocessing.dummy.Pool as ThreadPool
+
     import magicColorspaceModAspctLoad as magickProc
 
     pool = ThreadPool(4)
