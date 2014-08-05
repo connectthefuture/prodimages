@@ -36,11 +36,11 @@ class Loader(object):
 import glob,os,threading
 def main(searchdir=None):
     directory_list = []
-    searchdirs = sorted([directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g)])
+    sorted([directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g)])
     print searchdirs, 'rootdir',searchdir,  'dirlist',directory_list
     load = Loader()
-    threads = [threading.Thread(target=load.threadLoad, args=(tuple(directory_list,), ))
-               for directory_list in searchdirs]
+    threads = [threading.Thread(target=load.threadLoad, args=(tuple(directories,), ))
+               for directories in [directory_list]]
     for thread in threads:
         thread.start()
     for thread in threads:
