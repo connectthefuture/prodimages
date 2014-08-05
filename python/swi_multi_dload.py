@@ -282,7 +282,7 @@ if __name__ == '__main__':
             for k,v in propre.iteritems():
                 po = v['ponumber']
                 polist.append(po)
-            polist = set(polist)
+            
             run_multiproccesses_download(polist=polist)
 
         except:
