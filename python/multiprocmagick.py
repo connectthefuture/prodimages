@@ -3,10 +3,10 @@
 
 def run_multiproccesses_magick(searchdir=None):
     import magicColorspaceModAspctLoad as magickProc
-    import multiprocessing.Pool as ThreadPool
+    import multiprocessing
     import glob,os
     
-    pool = ThreadPool(4)
+    pool = multiprocessing.Pool(4)
     if not searchdir:
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
     else:
