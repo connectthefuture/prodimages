@@ -233,7 +233,7 @@ def run_multiproccesses_download(polist=None):
     pool = multiprocessing.Pool(4)
     
     results = pool.map(main,polist)
-    print results
+    print results,polist
     
     # close the pool and wait for the work to finish
     pool.close()
