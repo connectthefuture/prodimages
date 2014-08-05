@@ -86,170 +86,197 @@ def url_download_file(url,filepath):
 ########################################################################################################
 ############################ Run #######################################################################
 ########################################################################################################
+def main(polist=None):
+    import os,sys
 
-import os,sys
+    #try:
+    #    ponum = sys.argv[1]
+    #    #ponum = '119071'
+    #except:
+    #    print "Enter a PO Number as 1st Arg or Nothing will Happen"
 
-#try:
-#    ponum = sys.argv[1]
-#    #ponum = '119071'
-#except:
-#    print "Enter a PO Number as 1st Arg or Nothing will Happen"
-
-try:
-    polist = set(list(sys.argv[1:]))
-except IndexError:
-    polist = ''
-    pass
-except:
-    import csv
-    file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
-    polist = []
-    with open(file, 'rbU') as f:
-        reader = csv.reader(f, dialect=csv)    
-        for ponumber in reader:
-            polist.append(ponumber[1])
-
-print polist
-stylesDictsDict = []
-if polist:
-    for ponum in polist:
-        try:
-            stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum)
-            stylesDictsDict.append(stylesDict)
-        except:
+    try:
+        if not polist:
+            polist = set(list(sys.argv[1:]))
+        else:
             pass
-else:
-    stylesDictsDict = sqlQuery_GetStyleVendor_ByPO(ponum=None)
-maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
-if maclinux_prefix == 'Users':
-    destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
-elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
-    destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
-else:
-    destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+    except IndexError:
+        polist = ''
+        pass
+    except:
+        import csv
+        file = '/Volumes/Post_Ready/Retouchers/JohnBragato/SQLDeveloper_Exports/swisswatchstyles.csv'
+        polist = []
+        with open(file, 'rbU') as f:
+            reader = csv.reader(f, dialect=csv)    
+            for ponumber in reader:
+                polist.append(ponumber[1])
 
-try:
-    os.makedirs(destdir, 16877)
-except OSError:
-    pass
-except:
-    destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+    print polist
+    stylesDictsDict = []
+    if polist:
+        for ponum in polist:
+            try:
+                stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum)
+                stylesDictsDict.append(stylesDict)
+            except:
+                pass
+    else:
+        stylesDictsDict = sqlQuery_GetStyleVendor_ByPO(ponum=None)
+    maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
+    if maclinux_prefix == 'Users':
+        destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
+        destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    else:
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+
     try:
         os.makedirs(destdir, 16877)
     except OSError:
         pass
-        
-print destdir
-originaldest = destdir
-
-for stylesDict in stylesDictsDict:
-    if type(stylesDictsDict) == dict:
-        stylesDict = stylesDictsDict
-    else:
-        pass
-    for k,v in stylesDict.iteritems():
+    except:
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+        try:
+            os.makedirs(destdir, 16877)
+        except OSError:
+            pass
             
-        vendor_url = "http://admin.swisswatchintl.com/Z/{0}.jpg".format(k)
-        vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
-        vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
-        vendor_url_boxset = vendor_url.replace('.jpg', '-boxset.jpg')
-        vendor_url_straps = vendor_url.replace('.jpg', '-straps.jpg')
-        vendor_url_main = vendor_url.replace('.jpg', '-main.jpg')
+    print destdir
+    originaldest = destdir
 
-        
-        style = str(v['colorstyle'])
-        ponumber = str(v['ponumber'])
-        colorstyle = ''
-        colorstyle =  style          +   "_1.jpg"
-        colorstyle_side = style      +   "_2.jpg"
-        colorstyle_back = style      +   "_3.jpg"
-        colorstyle_boxset = style    +   "_4.jpg"
-        colorstyle_straps = style    +   "_5.jpg"
-        colorstyle_main = style      +   "_6.jpg"
-        
-        # Make the subdir by POnum
-        # destdir = os.path.join(os.path.abspath(originaldest),ponumber)
-        # try:
-        #     os.makedirs(destdir, 16877)
-        # except OSError:
-        #     pass
-        
-        colorstyle_file = os.path.join(os.path.abspath(destdir), colorstyle)
-        colorstyle_side_file = os.path.join(os.path.abspath(destdir),colorstyle_side)
-        colorstyle_back_file = os.path.join(os.path.abspath(destdir), colorstyle_back)
-        colorstyle_boxset_file = os.path.join(os.path.abspath(destdir), colorstyle_boxset)
-        colorstyle_straps_file = os.path.join(os.path.abspath(destdir), colorstyle_straps)
-        colorstyle_main_file = os.path.join(os.path.abspath(destdir), colorstyle_main)
+    for stylesDict in stylesDictsDict:
+        if type(stylesDictsDict) == dict:
+            stylesDict = stylesDictsDict
+        else:
+            pass
+        for k,v in stylesDict.iteritems():
+                
+            vendor_url = "http://admin.swisswatchintl.com/Z/{0}.jpg".format(k)
+            vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
+            vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
+            vendor_url_boxset = vendor_url.replace('.jpg', '-boxset.jpg')
+            vendor_url_straps = vendor_url.replace('.jpg', '-straps.jpg')
+            vendor_url_main = vendor_url.replace('.jpg', '-main.jpg')
+
+            
+            style = str(v['colorstyle'])
+            ponumber = str(v['ponumber'])
+            colorstyle = ''
+            colorstyle =  style          +   "_1.jpg"
+            colorstyle_side = style      +   "_2.jpg"
+            colorstyle_back = style      +   "_3.jpg"
+            colorstyle_boxset = style    +   "_4.jpg"
+            colorstyle_straps = style    +   "_5.jpg"
+            colorstyle_main = style      +   "_6.jpg"
+            
+            # Make the subdir by POnum
+            # destdir = os.path.join(os.path.abspath(originaldest),ponumber)
+            # try:
+            #     os.makedirs(destdir, 16877)
+            # except OSError:
+            #     pass
+            
+            colorstyle_file = os.path.join(os.path.abspath(destdir), colorstyle)
+            colorstyle_side_file = os.path.join(os.path.abspath(destdir),colorstyle_side)
+            colorstyle_back_file = os.path.join(os.path.abspath(destdir), colorstyle_back)
+            colorstyle_boxset_file = os.path.join(os.path.abspath(destdir), colorstyle_boxset)
+            colorstyle_straps_file = os.path.join(os.path.abspath(destdir), colorstyle_straps)
+            colorstyle_main_file = os.path.join(os.path.abspath(destdir), colorstyle_main)
 
 
-        #imagefalse = sqlQuery_GetStyleVendor_ByPO()
-        #if imagefalse:
-        
-        ##_1
-        try:            
-            url_download_file(vendor_url,colorstyle_file)
-        except:
-            print "Failed {}{}".format(vendor_url,colorstyle_file)
+            #imagefalse = sqlQuery_GetStyleVendor_ByPO()
+            #if imagefalse:
+            
+            ##_1
+            try:            
+                url_download_file(vendor_url,colorstyle_file)
+            except:
+                print "Failed {}{}".format(vendor_url,colorstyle_file)
 
-        ##_2
-        try:            
-            url_download_file(vendor_url_side,colorstyle_side_file)
-            print "Downloaded {}".format(colorstyle_side_file)
-        except:
-            print "Failed {}{}".format(vendor_url,colorstyle_side_file)
+            ##_2
+            try:            
+                url_download_file(vendor_url_side,colorstyle_side_file)
+                print "Downloaded {}".format(colorstyle_side_file)
+            except:
+                print "Failed {}{}".format(vendor_url,colorstyle_side_file)
 
-        ## _3
-        try:            
-            url_download_file(vendor_url_back,colorstyle_back_file)
-            print "Downloaded {}".format(colorstyle_back_file)
-        except:
-            try:
-                url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-clasp'))
-                print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
+            ## _3
+            try:            
+                url_download_file(vendor_url_back,colorstyle_back_file)
+                print "Downloaded {}".format(colorstyle_back_file)
             except:
                 try:
-                   url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
+                    url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-clasp'))
+                    print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
                 except:
-                    print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
+                    try:
+                       url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
+                    except:
+                        print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
 
-#        ##_4
-#        try:            
-#            url_download_file(vendor_url_boxset,colorstyle_boxset_file)
-#            print "Downloaded {}".format(colorstyle_boxset_file)
-#        except:
-#            try:
-#                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-box'))
-#                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-box'))
-#            except:
-#                try:
-#                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-BOX'))
-#                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-BOX'))
-#                except:
-#                    print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
-#
-#        ## _5
-#        try:            
-#            url_download_file(vendor_url_straps,colorstyle_straps_file)
-#            print "Downloaded {}".format(colorstyle_straps_file)
-#        except:
-#            try:
-#                url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
-#                print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
-#            except:
-#                 print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
-#        
-#        ## _6
-#        try:            
-#            url_download_file(vendor_url_main,colorstyle_main_file)
-#            print "Downloaded {}".format(colorstyle_main_file)
-#        except:
-#            try:
-#                url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
-#                print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
-#            except:
-#                try:
-#                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
-#                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
-#                except:
-#                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
+    #        ##_4
+    #        try:            
+    #            url_download_file(vendor_url_boxset,colorstyle_boxset_file)
+    #            print "Downloaded {}".format(colorstyle_boxset_file)
+    #        except:
+    #            try:
+    #                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-box'))
+    #                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-box'))
+    #            except:
+    #                try:
+    #                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-BOX'))
+    #                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-BOX'))
+    #                except:
+    #                    print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
+    #
+    #        ## _5
+    #        try:            
+    #            url_download_file(vendor_url_straps,colorstyle_straps_file)
+    #            print "Downloaded {}".format(colorstyle_straps_file)
+    #        except:
+    #            try:
+    #                url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
+    #                print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
+    #            except:
+    #                 print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
+    #        
+    #        ## _6
+    #        try:            
+    #            url_download_file(vendor_url_main,colorstyle_main_file)
+    #            print "Downloaded {}".format(colorstyle_main_file)
+    #        except:
+    #            try:
+    #                url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
+    #                print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
+    #            except:
+    #                try:
+    #                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
+    #                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
+    #                except:
+    #                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
 
+## Run MAin as a multiprocessor by PO
+def run_multiproccesses_magick(polist=None):
+    import multiprocessing
+    import glob,os
+    
+    pool = multiprocessing.Pool(4)
+    
+    results = pool.map(main,polist)
+    print results
+    
+    # close the pool and wait for the work to finish
+    pool.close()
+    print 'PoolClose'
+    pool.join()
+    print 'PoolJoin'
+
+
+if __name__ == '__main__':
+    import sys
+    try:
+        polist = set(list(sys.argv[1:]))
+        run_multiproccesses_magick(polist=polist)
+    except IndexError:
+        main()
