@@ -211,9 +211,9 @@ def run_multiproccesses_download(cmd_process=None,args=None):
     if not args:
         args = get_postyles_dict()
     #cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
-    func = getattr(sys.modules[__name__], 'download_urls_bypo')
-    print type(func)
-    results = pool.map(func,args)
+    #func = getattr(sys.modules[__name__], 'download_urls_bypo')
+    #print type(func)
+    results = pool.map(download_urls_bypo,args)
     print results,args
     
     # close the pool and wait for the work to finish
