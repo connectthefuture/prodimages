@@ -189,7 +189,7 @@ def download_urls_bypo(ponum):
         ##_1
         try:            
             url_download_file(vendor_url,colorstyle_file)
-        except:
+        except IndexError:
             print "Failed {}{}".format(vendor_url,colorstyle_file)
 
         ##_2
