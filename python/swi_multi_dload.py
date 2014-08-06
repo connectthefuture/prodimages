@@ -283,6 +283,6 @@ if __name__ == '__main__':
         
         func =  'download_urls_bypo'
         run_multiproccesses_download(cmd_process=func,args=None)
-    except:
+    except IndexError:
         print 'EXCEPT MAIN only'
         
