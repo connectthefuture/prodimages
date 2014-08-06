@@ -158,8 +158,9 @@ def get_postyles_dict(polist=None):
     import os,sys
 
     #print polist
+    #polist = [7:17]
+    
     stylesDictsDict = []
-    polist = [7:17]
     if polist:
         for ponum in polist:
             try:
