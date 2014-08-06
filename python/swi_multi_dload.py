@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
+
 def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     import sqlalchemy, sys, re
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
@@ -64,7 +64,7 @@ def define_variables_mkdirs():
 
 
 def url_download_file(url,filepath):
-    import urllib
+    import urllib, os
     
     ## Split Vendor # to try again on fail of full VENDOR_STYLE_NO
     url_split = url.split('/')[-1]
@@ -189,7 +189,7 @@ def download_urls_bypo(ponum):
         ##_1
         try:            
             url_download_file(vendor_url,colorstyle_file)
-        except IndexError:
+        except IOError:
             print "Failed {}{}".format(vendor_url,colorstyle_file)
 
         ##_2
@@ -221,7 +221,6 @@ def download_urls_bypo(ponum):
 ## Run MAin as a multiprocessor by PO
 def run_multiproccesses_download(cmd_process=None,args=None):
     import multiprocessing
-    import glob,os
     
     pool = multiprocessing.Pool(4)
     
