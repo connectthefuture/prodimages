@@ -115,28 +115,28 @@ def url_download_file(url,filepath,errdir=None):
         elif backup_spliturlcode_value == 200: 
             # urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
             urllib.urlretrieve(backup_spliturl, filepath)
-            print "Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
+            print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
         else:
             print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
             print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)    
-        try:
-            errdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/ERRORS')
             try:
-                os.makedirs(errdir, 16877)
-            except:
-                pass
-            colorstyle = filepath.split('/')[-1][:9]
-            alt        = filepath.split('/')[-1].split('_alt0')[-1][1]
-            if alt.isdigit():
-                alt = str(alt)
-            else:
-                alt = '1'
-            try:
+                errdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/ERRORS')
+                try:
+                    os.makedirs(errdir, 16877)
+                except:
+                    pass
+                colorstyle = filepath.split('/')[-1][:9]
+                alt        = filepath.split('/')[-1].split('_alt0')[-1][1]
+                if alt.isdigit():
+                    alt = str(alt)
+                else:
+                    alt = '1'
+                try:
 
-                with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'wb+') as f:
-                            f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
-            except:
-                pass
+                    with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'wb+') as f:
+                                f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
+                except:
+                    pass
 
         except OSError:
             pass
