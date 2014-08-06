@@ -210,7 +210,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
     
     if not args:
         args = get_postyles_dict()
-    cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
+    #cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
     results = pool.map(cmd_process,args)
     print results,args
     
@@ -237,7 +237,8 @@ if __name__ == '__main__':
                 polist.append(po)
             
             stylesDictsDict = get_postyles_dict(polist)
-            run_multiproccesses_download(cmd_process=download_urls_bypo,args=stylesDictsDict)
+            cmd_process = locals()['download_urls_bypo']()
+            run_multiproccesses_download(cmd_process=cmd_process,args=stylesDictsDict)
 
         except:
             print 'EXCEPT MAIN only'
