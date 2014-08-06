@@ -134,7 +134,7 @@ def url_download_file(url,filepath,errdir=None):
                             f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
             except:
                 pass
-            
+
         except OSError:
             pass
         
@@ -243,7 +243,7 @@ def download_urls_bypo(ponum):
 def run_multiproccesses_download(cmd_process=None,args=None):
     import multiprocessing
     
-    pool = multiprocessing.Pool(4)
+    pool = multiprocessing.Pool(8)
     
     if not args:
         # args = get_postyles_dict()
