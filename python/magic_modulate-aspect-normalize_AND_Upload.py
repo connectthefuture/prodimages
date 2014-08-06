@@ -588,7 +588,7 @@ def upload_imagedrop(root_dir):
 
 
 def main():
-    import sys,glob,shutil,os,re
+    import sys,glob,shutil,os,re, do_sharpen_only_img
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
@@ -609,12 +609,12 @@ def main():
     if os.path.isdir(root_img_dir):
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
         img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
-
         for k,v in img_dict.items():
             try:
                 img = k
                 rgbmean     = v.items()
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
+                do_sharpen_only_img.sharpen_image(pngout)
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
             except AttributeError:
