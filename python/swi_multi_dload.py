@@ -117,7 +117,7 @@ def url_download_file(url,filepath,errdir=None):
             urllib.urlretrieve(backup_spliturl, filepath)
             print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
         else:
-            print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
+            #print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
             print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)    
             try:
                 errdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/ERRORS')
@@ -154,7 +154,7 @@ def url_download_file(url,filepath,errdir=None):
 def get_postyles_dict(polist=None):
     import os,sys
 
-    ##print polist
+    #print polist
     stylesDictsDict = []
     if polist:
         for ponum in polist:
@@ -178,7 +178,7 @@ def download_urls_bypo(ponum):
 
     stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum=ponum)
     for k,v in stylesDict.iteritems():
-        #print k,v 
+        print k,v 
         vendor_url = "http://admin.swisswatchintl.com/Z/{0}.jpg".format(k)
         vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
         vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
@@ -219,28 +219,28 @@ def download_urls_bypo(ponum):
         try:            
             url_download_file(vendor_url,colorstyle_file)
         except IOError:
-            #print "Failed {}{}".format(vendor_url,colorstyle_file)
+            print "Failed {}{}".format(vendor_url,colorstyle_file)
 
         ##_2
         try:            
             url_download_file(vendor_url_side,colorstyle_side_file)
-            #print "Downloaded {}".format(colorstyle_side_file)
+            print "Downloaded {}".format(colorstyle_side_file)
         except:
-            #print "Failed {}{}".format(vendor_url,colorstyle_side_file)
+            print "Failed {}{}".format(vendor_url,colorstyle_side_file)
 
         ## _3
         try:            
             url_download_file(vendor_url_back,colorstyle_back_file)
-            #print "Downloaded {}".format(colorstyle_back_file)
+            print "Downloaded {}".format(colorstyle_back_file)
         except:
             try:
                 url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-clasp'))
-                #print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
+                print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
             except:
                 try:
                    url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
                 except:
-                    #print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
+                    print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
         # # Try to remove empty dirs
         # try:
         #     os.rmdir(destdir)
@@ -269,7 +269,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
     #cmd_process = getattr(.,"{}".format(cmd_process)) 
     #locals()["{}".format(cmd_process)]()
     #func = getattr(sys.modules[__name__], 'download_urls_bypo')
-    ##print type(args)
+    #print type(args)
     
     func = getattr(sys.modules[__name__], str(cmd_process))
     results = pool.map(func,args)
