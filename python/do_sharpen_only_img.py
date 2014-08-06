@@ -48,10 +48,10 @@ def sharpen_image(img, destdir=None):
 #            "Spline",
             
        
-            '-adaptive-sharpen',
-            '33',
             '-unsharp',
-            '1.5x0.85+.80+0.0096',
+            "1.5x0.85+.80+0.0096",
+            '-unsharp',
+            "1.5x0.85+.80+0.0096",
             "-colorspace",
             "sRGB",
             '-quality', 
@@ -66,3 +66,5 @@ if __name__ == '__main__':
     
     sharpen_image(img, destdir=None)
     
+
+
