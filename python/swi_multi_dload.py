@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import time
+start_time = time.strftime('%X')
 
 def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     import sqlalchemy, sys, re
@@ -315,13 +317,17 @@ if __name__ == '__main__':
         func =  'download_urls_bypo'
         run_multiproccesses_download(cmd_process=func,args=None)
         ## Now Process and Load Em
-        
+        dload_end = time.strftime('%X')
+        print "Time to Complete Download Stage {0}".format(dload_end - start_time)
         import multiprocmagick
         try:
             searchdir = globals()['destdir']
         except KeyError:
             searchdir = define_variables_mkdirs()
         multiprocmagick.run_multiproccesses_magick(searchdir=searchdir)
+        print "Time to Complete MagickProcessor Stage {0}".format(time.strftime('%X') - dload_end)
+        print "Total Time All Stages {0}".format(time.strftime('%X') - start_time)
+
 
     except IndexError:
         print 'EXCEPT MAIN only'
