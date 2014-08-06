@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os, sys, re, csv,subprocess
 
-def subproc_magick_png(img, destdir=None):
+def sharpen_image(img, destdir=None):
     import subprocess,re,os,sys
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
@@ -93,5 +93,6 @@ def subproc_magick_png(img, destdir=None):
     
 
 if __name__ == '__main__':
-    subproc_magick_png(img, destdir=None)
+    
+    sharpem_image(img, destdir=None)
     
