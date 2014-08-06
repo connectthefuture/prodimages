@@ -317,7 +317,11 @@ if __name__ == '__main__':
         ## Now Process and Load Em
         
         import multiprocmagick
-        multiprocmagick.run_multiproccesses_magick(searchdir=globals()['destdir'])
+        try:
+            searchdir = globals()['destdir']
+        except KeyError:
+            searchdir = define_variables_mkdirs()
+        multiprocmagick.run_multiproccesses_magick(searchdir=searchdir)
 
     except IndexError:
         print 'EXCEPT MAIN only'
