@@ -8,7 +8,7 @@ def sharpen_image(img, destdir=None):
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
     if not destdir:
-        destdir = '.'
+        destdir = os.path.dirname(img)
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
     
@@ -26,7 +26,7 @@ def sharpen_image(img, destdir=None):
     outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
     
     subprocess.call([
-            'mogrify',
+            'convert',
             '-format',
             format,
              "-colorspace",
@@ -48,14 +48,14 @@ def sharpen_image(img, destdir=None):
 #            "Spline",
             
        
+
             '-unsharp',
-            "1.5x0.85+.80+0.0096",
-            '-unsharp',
-            "1.5x0.85+.80+0.0096",
+            "2.5x1.2+0.50+0.0087",
             "-colorspace",
             "sRGB",
             '-quality', 
-            '95'
+            '95',
+            os.path.abspath(img)
             ])
     #os.rename(img,outfile)
     print 'Done {}'.format(img)
