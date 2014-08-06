@@ -212,6 +212,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
         args = get_postyles_dict()
     #cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
     func = getattr(sys.modules[__name__], 'download_urls_bypo')
+    print type(func)
     results = pool.map(func,args)
     print results,args
     
