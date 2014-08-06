@@ -158,7 +158,7 @@ def get_postyles_dict(polist=None):
     import os,sys
 
     #print polist
-    polist = [7:17]
+    
     
     stylesDictsDict = []
     if polist:
@@ -266,7 +266,8 @@ def run_multiproccesses_download(cmd_process=None,args=None):
         for v in popre.itervalues():
             po = v['ponumber']
             polist.append(po)
-        args = sorted(list(set(sorted(polist))),reverse=True)
+
+        args = sorted(list(set(sorted(polist))),reverse=True)[7:17]
     
     func = getattr(sys.modules[__name__], str(cmd_process))
     results = pool.map(func,args)
