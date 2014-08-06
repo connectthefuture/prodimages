@@ -240,5 +240,5 @@ if __name__ == '__main__':
             run_multiproccesses_download(cmd_process=download_urls_bypo,args=stylesDictsDict)
 
         except:
-
-            main()
+            print 'EXCEPT MAIN only'
+            
