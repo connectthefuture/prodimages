@@ -134,9 +134,9 @@ def url_download_file(url,filepath,errdir=None):
                 else:
                     alt = '1'
                 try:
-
-                    with io.open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
-                        info = cStringIO.StringIO()
+                    info = cStringIO.StringIO()
+                    with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
+                        
                         info.write("{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url))
                         f.write(info.getvalue())
                         info.close()
