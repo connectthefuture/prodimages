@@ -50,7 +50,7 @@ def sharpen_image(img, destdir=None):
        
 
             '-unsharp',
-            "2.5x1.2+0.50+0.0087",
+            "21.5x1.2+0.80+0.0087",
             "-colorspace",
             "sRGB",
             '-quality', 
