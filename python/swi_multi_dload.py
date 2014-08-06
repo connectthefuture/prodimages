@@ -46,18 +46,18 @@ def define_variables_mkdirs():
     import os,sys
     maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
     if maclinux_prefix == 'Users':
-        destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+        destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI')
     elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
-        destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+        destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI')
     else:
-        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI')
 
     try:
         os.makedirs(destdir, 16877)
     except OSError:
         pass
     except:
-        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI')
         try:
             os.makedirs(destdir, 16877)
         except OSError:
