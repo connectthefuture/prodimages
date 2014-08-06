@@ -213,7 +213,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
     #cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
     #func = getattr(sys.modules[__name__], 'download_urls_bypo')
     print type(args)
-    print type(cmd_process)
+    print type(dir(sys.modules[__name__]['download_urls_bypo']))
     results = pool.map(download_urls_bypo,args)
     print type(results)
     
