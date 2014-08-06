@@ -227,7 +227,8 @@ if __name__ == '__main__':
     try:
         polist = set(list(sys.argv[1:]))
         stylesDictsDict = get_postyles_dict(polist)
-        run_multiproccesses_download(cmd_process=download_urls_bypo,args=stylesDictsDict)
+        cmd_process = locals()['download_urls_bypo']()
+        run_multiproccesses_download(cmd_process=cmd_process,args=stylesDictsDict)
     except IndexError:
         try:
             popre= get_postyles_dict()
