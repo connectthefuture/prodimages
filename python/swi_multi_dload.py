@@ -5,7 +5,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     import sqlalchemy, sys, re
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-    print 'THIS IS PO',ponum
+    
     if ponum:
         querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS ponumber FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT is null"
     else:
@@ -33,7 +33,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
             style['colorstyle'] = str(row['colorstyle'])
             style['ponumber'] = str(row['ponumber'])
             styles[row['vendor_style']] = style
-            print style
+            #print style
         else:
             pass    
     connection.close()
@@ -154,7 +154,7 @@ def url_download_file(url,filepath,errdir=None):
 def get_postyles_dict(polist=None):
     import os,sys
 
-    print polist
+    ##print polist
     stylesDictsDict = []
     if polist:
         for ponum in polist:
@@ -178,7 +178,7 @@ def download_urls_bypo(ponum):
 
     stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum=ponum)
     for k,v in stylesDict.iteritems():
-        print k,v 
+        #print k,v 
         vendor_url = "http://admin.swisswatchintl.com/Z/{0}.jpg".format(k)
         vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
         vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
@@ -219,28 +219,28 @@ def download_urls_bypo(ponum):
         try:            
             url_download_file(vendor_url,colorstyle_file)
         except IOError:
-            print "Failed {}{}".format(vendor_url,colorstyle_file)
+            #print "Failed {}{}".format(vendor_url,colorstyle_file)
 
         ##_2
         try:            
             url_download_file(vendor_url_side,colorstyle_side_file)
-            print "Downloaded {}".format(colorstyle_side_file)
+            #print "Downloaded {}".format(colorstyle_side_file)
         except:
-            print "Failed {}{}".format(vendor_url,colorstyle_side_file)
+            #print "Failed {}{}".format(vendor_url,colorstyle_side_file)
 
         ## _3
         try:            
             url_download_file(vendor_url_back,colorstyle_back_file)
-            print "Downloaded {}".format(colorstyle_back_file)
+            #print "Downloaded {}".format(colorstyle_back_file)
         except:
             try:
                 url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-clasp'))
-                print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
+                #print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
             except:
                 try:
                    url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
                 except:
-                    print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
+                    #print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
         # # Try to remove empty dirs
         # try:
         #     os.rmdir(destdir)
@@ -269,11 +269,11 @@ def run_multiproccesses_download(cmd_process=None,args=None):
     #cmd_process = getattr(.,"{}".format(cmd_process)) 
     #locals()["{}".format(cmd_process)]()
     #func = getattr(sys.modules[__name__], 'download_urls_bypo')
-    #print type(args)
+    ##print type(args)
     
     func = getattr(sys.modules[__name__], str(cmd_process))
     results = pool.map(func,args)
-    print type(results)
+    #print type(results)
     
     # close the pool and wait for the work to finish
     pool.close()
