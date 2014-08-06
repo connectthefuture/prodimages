@@ -265,14 +265,6 @@ def run_multiproccesses_download(cmd_process=None,args=None):
             po = v['ponumber']
             polist.append(po)
         args = sorted(list(set(sorted(polist))),reverse=True)
-        # if type(args) == list:
-        #     polist =  str(args).strip('[]')
-        #args =  str(args).strip('[]')
-        #args = (args,)
-    #cmd_process = getattr(.,"{}".format(cmd_process)) 
-    #locals()["{}".format(cmd_process)]()
-    #func = getattr(sys.modules[__name__], 'download_urls_bypo')
-    #print type(args)
     
     func = getattr(sys.modules[__name__], str(cmd_process))
     results = pool.map(func,args)
@@ -287,21 +279,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
 
 if __name__ == '__main__':
     import sys
-    
-    # try:
-    #     polist = set(list(sys.argv[1:]))
-    #     stylesDictsDict = get_postyles_dict(polist)
-
-    #     #mod  = importlib.import_module(swi_multi_dload)
-    #     #mod =  dir(sys.modules[__name__])
-    #     #mod3 = dir(__name__)
-    #     #print mod,mod3
-        
-    #     func =  'download_urls_bypo'
-    #     run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
-    #
-    # except IndexError:
-
+ 
     try:
 
         #mod  = importlib.import_module(swi_multi_dload)
@@ -313,6 +291,7 @@ if __name__ == '__main__':
         ## Now Process and Load Em
         dload_end = time.strftime('%X')
         print "Time to Complete Download Stage {0}".format(int(dload_end.strip(':')) - int(start_time.strip(':')))
+        
         import multiprocmagick
         try:
             searchdir = globals()['destdir']
@@ -325,4 +304,7 @@ if __name__ == '__main__':
 
     except IndexError:
         print 'EXCEPT MAIN only'
+    
+
+    ## epilogue
         

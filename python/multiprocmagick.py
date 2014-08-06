@@ -8,7 +8,7 @@ def run_multiproccesses_magick(searchdir=None):
     
     pool = multiprocessing.Pool(4)
     if not searchdir:
-        searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
+        searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
     else:
         pass
 
