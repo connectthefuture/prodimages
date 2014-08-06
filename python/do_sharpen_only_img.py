@@ -64,5 +64,5 @@ def sharpen_image(img, destdir=None):
 
 if __name__ == '__main__':
     
-    sharpem_image(img, destdir=None)
+    sharpen_image(img, destdir=None)
     
