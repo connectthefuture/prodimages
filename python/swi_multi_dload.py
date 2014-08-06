@@ -60,6 +60,9 @@ def define_variables_mkdirs():
             os.makedirs(destdir, 16877)
         except OSError:
             pass
+    
+    #setattr(globals,'destdir',destdir)
+    globals()['destdir'] = destdir
     return destdir
 
 
@@ -305,6 +308,11 @@ if __name__ == '__main__':
         
         func =  'download_urls_bypo'
         run_multiproccesses_download(cmd_process=func,args=None)
+        ## Now Process and Load Em
+        
+        import multiprocmagick
+        multiprocmagick.run_multiproccesses_magick(searchdir=globals()['destdir'])
+
     except IndexError:
         print 'EXCEPT MAIN only'
         
