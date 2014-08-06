@@ -122,7 +122,7 @@ def get_postyles_dict(polist=None):
     return stylesDictsDict
 
 
-def download_urls_bypo(stylesDictsDict:
+def download_urls_bypo(stylesDictsDict):
     destdir = ''
     
     if not destdir:
