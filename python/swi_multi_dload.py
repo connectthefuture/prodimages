@@ -140,7 +140,7 @@ def url_download_file(url,filepath,errdir=None):
                         f.write("{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url))
                         #f.write(info.getvalue())
                         #info.close()
-                        f.close()
+                        #f.close()
                 except:
                     pass
 
