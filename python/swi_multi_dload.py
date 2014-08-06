@@ -232,7 +232,7 @@ if __name__ == '__main__':
         mod =  dir(sys.modules[__name__])
         mod3 = dir(__name__)
         print mod,mod3
-        func = getattr(mod, 'download_urls_bypo')
+        func = getattr(sys.modules[__name__], 'download_urls_bypo')
         run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
     
     except IndexError:
@@ -251,7 +251,7 @@ if __name__ == '__main__':
             mod3 = dir(__name__)
             print mod,mod3
             
-            func = getattr(mod, download_urls_bypo)
+            func = getattr(sys.modules[__name__], download_urls_bypo)
             run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
         except:
             print 'EXCEPT MAIN only'
