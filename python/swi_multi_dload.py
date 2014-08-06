@@ -67,7 +67,7 @@ def define_variables_mkdirs():
 
 
 def url_download_file(url,filepath,errdir=None):
-    import urllib, os, io
+    import urllib, os, io, cStringIO
     
     ## Split Vendor # to try again on fail of full VENDOR_STYLE_NO
     url_split = url.split('/')[-1]
@@ -126,15 +126,20 @@ def url_download_file(url,filepath,errdir=None):
                 except:
                     pass
                 colorstyle = filepath.split('/')[-1][:9]
-                alt        = filepath.split('/')[-1].split('_alt0')[-1][1]
+                alt        = filepath.split('/')[-1].split('_')[-1][1]
                 if alt.isdigit():
+                    alt = str(alt)
+                elif alt == 'a':
                     alt = str(alt)
                 else:
                     alt = '1'
                 try:
 
                     with io.open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
-                        f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
+                        info = cStringIO.StringIO()
+                        info.write("{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url))
+                        f.write(info.getvalue())
+                        info.close()
                         f.close()
                 except:
                     pass
