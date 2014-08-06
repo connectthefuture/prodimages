@@ -232,6 +232,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
             po = v['ponumber']
             polist.append(po)
         args = sorted(list(set(sorted(polist))))
+        args = args.reverse()
         # if type(args) == list:
         #     polist =  str(args).strip('[]')
         #args =  str(args).strip('[]')
