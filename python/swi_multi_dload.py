@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import time, datetime
-start_time = time.strftime('%X')
 
 def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     import sqlalchemy, sys, re
@@ -279,7 +278,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
 
 if __name__ == '__main__':
     import sys
- 
+    start_time = time.strftime('%X')
     try:
 
         #mod  = importlib.import_module(swi_multi_dload)
@@ -298,8 +297,8 @@ if __name__ == '__main__':
         except KeyError:
             searchdir = define_variables_mkdirs()
         multiprocmagick.run_multiproccesses_magick(searchdir=searchdir)
-        print "Time to Complete MagickProcessor Stage {0}".format(int(time.strftime('%X').strip(':')) - int(dload_end.strip(':')))
-        print "Total Time All Stages {0}".format(int(time.strftime('%X').strip(':')) - int(start_time.strip(':')))
+        #print "Time to Complete MagickProcessor Stage {0}".format(int(time.strftime('%X').strip(':')) - int(dload_end.strip(':')))
+        print "Times for All Stages {0}".format(str(start_time) + '_' + str(dload_end)+'_' + str(time.strftime('%X'))) #(int(time.strftime('%X').strip(':')) - int(start_time.strip(':')))
 
 
     except IndexError:
