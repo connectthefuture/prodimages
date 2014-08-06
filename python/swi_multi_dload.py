@@ -128,8 +128,13 @@ def url_download_file(url,filepath,errdir=None):
                 alt = str(alt)
             else:
                 alt = '1'
-            with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'wb+') as f:
-                        f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
+            try:
+
+                with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'wb+') as f:
+                            f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
+            except:
+                pass
+            
         except OSError:
             pass
         
