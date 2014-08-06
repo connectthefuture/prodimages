@@ -127,7 +127,7 @@ def url_download_file(url,filepath,errdir=None):
                 pass
             colorstyle = filepath.split('/')[-1][:9]
             alt        = filepath.split('/')[-1].split('_alt0')[-1][1]
-            if isdigit(alt):
+            if alt.isdigit():
                 alt = str(alt)
             else:
                 alt = '1'
