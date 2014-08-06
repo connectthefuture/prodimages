@@ -158,7 +158,7 @@ def get_postyles_dict(polist=None):
     import os,sys
 
     #print polist
-    polist = [:17]
+    polist = [:7]
     
     stylesDictsDict = []
     if polist:
