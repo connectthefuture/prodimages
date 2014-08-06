@@ -133,9 +133,9 @@ def url_download_file(url,filepath,errdir=None):
                     alt = '1'
                 try:
 
-                    with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'ab+') as f:
+                    with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'wb+') as f:
                                 f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
-                except TypeError:
+                except IOError:
                     pass
 
             except OSError:
