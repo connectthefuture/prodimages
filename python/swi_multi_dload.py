@@ -222,7 +222,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
 
 
 if __name__ == '__main__':
-    import sys
+    import sys, importlib
     
     try:
         polist = set(list(sys.argv[1:]))
