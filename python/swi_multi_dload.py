@@ -242,7 +242,7 @@ if __name__ == '__main__':
                 polist.append(po)
             
             stylesDictsDict = get_postyles_dict(polist)
-            
+
             mod  = importlib.import_module(swi_multi_dload)
             func = getattr(mod, download_urls_bypo)
             run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
