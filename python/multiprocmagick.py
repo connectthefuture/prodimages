@@ -25,4 +25,4 @@ def run_multiproccesses_magick(searchdir=None):
     print 'PoolJoin'
 
 if __name__ == '__main__':
-    run_multiproccesses()
+    run_multiproccesses_magick()
