@@ -302,18 +302,11 @@ if __name__ == '__main__':
     # except IndexError:
 
     try:
-        # popre= get_postyles_dict()
-        # polist = []
-        # for v in popre.itervalues():
-        #     po = v['ponumber']
-        #     polist.append(po)
-        # polist = sorted(list(set(sorted(polist))))
-        # stylesDictsDict = get_postyles_dict(polist.reverse())
 
         #mod  = importlib.import_module(swi_multi_dload)
         mod =  dir(sys.modules[__name__])
-        #print mod,mod3
         
+        ## Multiproc download incomlpete files by po
         func =  'download_urls_bypo'
         run_multiproccesses_download(cmd_process=func,args=None)
         ## Now Process and Load Em
