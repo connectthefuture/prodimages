@@ -122,8 +122,8 @@ def get_postyles_dict(polist=None):
     return stylesDictsDict
 
 
-def download_urls_bypo(stylesDictsDict, destdir=None):
-    print destdir
+def download_urls_bypo(stylesDictsDict:
+    destdir = ''
     
     if not destdir:
         destdir = define_variables_mkdirs()
@@ -211,7 +211,8 @@ def run_multiproccesses_download(cmd_process=None,args=None):
     if not args:
         args = get_postyles_dict()
     #cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
-    results = pool.map(cmd_process,args)
+    func = getattr(sys.modules[__name__], 'download_urls_bypo')
+    results = pool.map(func,args)
     print results,args
     
     # close the pool and wait for the work to finish
@@ -232,7 +233,7 @@ if __name__ == '__main__':
         mod =  dir(sys.modules[__name__])
         mod3 = dir(__name__)
         print mod,mod3
-        func = getattr(sys.modules[__name__], 'download_urls_bypo')
+        func =  'download_urls_bypo'
         run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
     
     except IndexError:
@@ -248,10 +249,9 @@ if __name__ == '__main__':
 
             #mod  = importlib.import_module(swi_multi_dload)
             mod =  dir(sys.modules[__name__])
-            mod3 = dir(__name__)
             print mod,mod3
             
-            func = getattr(sys.modules[__name__], download_urls_bypo)
+            func =  'download_urls_bypo'
             run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
         except:
             print 'EXCEPT MAIN only'
