@@ -229,7 +229,9 @@ if __name__ == '__main__':
         stylesDictsDict = get_postyles_dict(polist)
         cmd_process = locals()['download_urls_bypo']()
         run_multiproccesses_download(cmd_process=cmd_process,args=stylesDictsDict)
+    
     except IndexError:
+
         try:
             popre= get_postyles_dict()
             polist = []
@@ -240,7 +242,6 @@ if __name__ == '__main__':
             stylesDictsDict = get_postyles_dict(polist)
             cmd_process = locals()['download_urls_bypo']()
             run_multiproccesses_download(cmd_process=cmd_process,args=stylesDictsDict)
-
         except:
             print 'EXCEPT MAIN only'
             
