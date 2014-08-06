@@ -112,11 +112,11 @@ def url_download_file(url,filepath,errdir=None):
         elif backup_urlcode_value == 200: 
             # urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
             urllib.urlretrieve(backupurl, filepath)
-            print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
+            #print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
         elif backup_spliturlcode_value == 200: 
             # urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
             urllib.urlretrieve(backup_spliturl, filepath)
-            print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
+            #print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
         else:
             #print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
             print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)    
@@ -139,8 +139,9 @@ def url_download_file(url,filepath,errdir=None):
                     with io.open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
                         
                         info.write("{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url)))
+                        info.flush()
                         f.write(info.getvalue())
-                        f.write(info.flush())
+                        f.write()
                         info.close()
                         f.close()
                 except:
