@@ -210,7 +210,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
     
     if not args:
         args = get_postyles_dict()
-    cmd_process = locals()["{}".format(cmd_process)]()
+    cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
     results = pool.map(cmd_process,args)
     print results,args
     
