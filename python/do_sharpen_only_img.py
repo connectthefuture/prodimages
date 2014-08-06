@@ -29,6 +29,8 @@ def sharpen_image(img, destdir=None):
             'mogrify',
             '-format',
             format,
+             "-colorspace",
+             "LAB",
             img,
             '-define',
             'png:preserve-colormap',
@@ -42,14 +44,16 @@ def sharpen_image(img, destdir=None):
             'png:compression-filter\=N',
             '-format',
             'png',
-            "-filter",
-            "Spline",
-            '-filter',
-            "Cosine",
+#            "-filter",
+#            "Spline",
+            
+       
+            '-adaptive-sharpen',
+            '33',
+            '-unsharp',
+            '1.5x0.85+.80+0.0096',
             "-colorspace",
             "sRGB",
-            '-unsharp',
-            '3.9x5.7+0.85+0',
             '-quality', 
             '95'
             ])
