@@ -158,6 +158,8 @@ def get_postyles_dict(polist=None):
     import os,sys
 
     #print polist
+    #polist = [7:17]
+    
     stylesDictsDict = []
     if polist:
         for ponum in polist:
@@ -290,7 +292,7 @@ if __name__ == '__main__':
         run_multiproccesses_download(cmd_process=func,args=None)
         ## Now Process and Load Em
         dload_end = time.strftime('%X')
-        print "Time to Complete Download Stage {0}".format(int(dload_end.strip(':')) - int(start_time.strip(':')))
+        #print "Time to Complete Download Stage {0}".format(int(dload_end.strip(':')) - int(start_time.strip(':')))
         
         import multiprocmagick
         try:
