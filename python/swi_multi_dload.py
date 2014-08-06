@@ -21,8 +21,31 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
         
     connection.close()
     return styles
-                        
-                     
+
+
+def define_variables_mkdirs():
+    import os,sys
+    maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
+    if maclinux_prefix == 'Users':
+        destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
+        destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
+    else:
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+
+    try:
+        os.makedirs(destdir, 16877)
+    except OSError:
+        pass
+    except:
+        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
+        try:
+            os.makedirs(destdir, 16877)
+        except OSError:
+            pass
+    return destdir
+
+     
 def url_download_file(url,filepath):
     import urllib
     
@@ -80,20 +103,10 @@ def url_download_file(url,filepath):
 
     else:
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
-        
 
 
-########################################################################################################
-############################ Run #######################################################################
-########################################################################################################
 def get_postyles_dict(polist=None):
     import os,sys
-
-    #try:
-    #    ponum = sys.argv[1]
-    #    #ponum = '119071'
-    #except:
-    #    print "Enter a PO Number as 1st Arg or Nothing will Happen"
 
     print polist
     stylesDictsDict = []
@@ -111,7 +124,11 @@ def get_postyles_dict(polist=None):
 
 def download_urls_bypo(stylesDictsDict, destdir=None):
     print destdir
-    #originaldest = destdir
+    
+    if not destdir:
+        destdir = define_variables_mkdirs()
+    
+    originaldest = destdir
 
     for stylesDict in stylesDictsDict:
         if type(stylesDictsDict) == dict:
@@ -183,57 +200,19 @@ def download_urls_bypo(stylesDictsDict, destdir=None):
                     except:
                         print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
 
-    #        ##_4
-    #        try:            
-    #            url_download_file(vendor_url_boxset,colorstyle_boxset_file)
-    #            print "Downloaded {}".format(colorstyle_boxset_file)
-    #        except:
-    #            try:
-    #                url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-box'))
-    #                print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-box'))
-    #            except:
-    #                try:
-    #                    url_download_file(vendor_url_boxset,colorstyle_boxset_file.replace('-boxset','-BOX'))
-    #                    print "Downloaded {}".format(colorstyle_boxset_file.replace('-boxset','-BOX'))
-    #                except:
-    #                    print "Failed {}{}".format(vendor_url,colorstyle_boxset_file)
-    #
-    #        ## _5
-    #        try:            
-    #            url_download_file(vendor_url_straps,colorstyle_straps_file)
-    #            print "Downloaded {}".format(colorstyle_straps_file)
-    #        except:
-    #            try:
-    #                url_download_file(vendor_url_straps,colorstyle_straps_file.replace('-straps','-keychain'))
-    #                print "Downloaded {}".format(colorstyle_straps_file.replace('-straps','-keychain'))
-    #            except:
-    #                 print "Failed {}{}".format(vendor_url,colorstyle_straps_file)
-    #        
-    #        ## _6
-    #        try:            
-    #            url_download_file(vendor_url_main,colorstyle_main_file)
-    #            print "Downloaded {}".format(colorstyle_main_file)
-    #        except:
-    #            try:
-    #                url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-MAIN'))
-    #                print "Downloaded {}".format(colorstyle_main_file.replace('-main','-MAIN'))
-    #            except:
-    #                try:
-    #                    url_download_file(vendor_url_main,colorstyle_main_file.replace('-main','-extra1'))
-    #                    print "Downloaded {}".format(colorstyle_main_file.replace('-main','-extra1'))
-    #                except:
-    #                    print "Failed {}{}".format(vendor_url,colorstyle_main_file.replace('-main','-extra1'))
-
 
 ## Run MAin as a multiprocessor by PO
-def run_multiproccesses_download(polist=None):
+def run_multiproccesses_download(cmd_process=None,args=None):
     import multiprocessing
     import glob,os
     
     pool = multiprocessing.Pool(4)
     
-    results = pool.map(main,polist)
-    print results,polist
+    if not args:
+        args = get_postyles_dict()
+    
+    results = pool.map(cmd_process,args)
+    print results,args
     
     # close the pool and wait for the work to finish
     pool.close()
@@ -242,39 +221,13 @@ def run_multiproccesses_download(polist=None):
     print 'PoolJoin'
 
 
-def main(polist=None):
-    if not polist:
-        polist = ''
-    stylesDictsDict = get_postyles_dict(polist)
-    download_urls_bypo(stylesDictsDict)
-
-
 if __name__ == '__main__':
     import sys
-    import os,sys
-    maclinux_prefix=os.path.abspath(os.path.expanduser('~')).split('/')[1]
-    if maclinux_prefix == 'Users':
-        destdir=os.path.join('/Volumes','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
-    elif maclinux_prefix == 'home' or maclinux_prefix == 'root':
-        destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/images')
-    else:
-        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
-
-    try:
-        os.makedirs(destdir, 16877)
-    except OSError:
-        pass
-    except:
-        destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI/images')
-        try:
-            os.makedirs(destdir, 16877)
-        except OSError:
-            pass
-
     
     try:
         polist = set(list(sys.argv[1:]))
-        run_multiproccesses_download(polist=polist)
+        stylesDictsDict = get_postyles_dict(polist)
+        run_multiproccesses_download(cmd_process=download_urls_bypo,args=stylesDictsDict)
     except IndexError:
         try:
             popre= get_postyles_dict()
@@ -283,7 +236,8 @@ if __name__ == '__main__':
                 po = v['ponumber']
                 polist.append(po)
             
-            run_multiproccesses_download(polist=polist)
+            stylesDictsDict = get_postyles_dict(polist)
+            run_multiproccesses_download(cmd_process=download_urls_bypo,args=stylesDictsDict)
 
         except:
             main()
