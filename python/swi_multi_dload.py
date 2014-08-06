@@ -138,9 +138,9 @@ def url_download_file(url,filepath,errdir=None):
                 except:
                     pass
 
-        except OSError:
-            pass
-        
+            except OSError:
+                pass
+            
     else:
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
 
