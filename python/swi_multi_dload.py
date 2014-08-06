@@ -237,7 +237,8 @@ def run_multiproccesses_download(cmd_process=None,args=None):
         #     polist =  str(args).strip('[]')
         #args =  str(args).strip('[]')
         #args = (args,)
-    #cmd_process = getattr(.,"{}".format(cmd_process)) #locals()["{}".format(cmd_process)]()
+    #cmd_process = getattr(.,"{}".format(cmd_process)) 
+    #locals()["{}".format(cmd_process)]()
     #func = getattr(sys.modules[__name__], 'download_urls_bypo')
     #print type(args)
     
