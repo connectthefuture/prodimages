@@ -140,12 +140,13 @@ def get_postyles_dict(polist=None):
 
 
 def download_urls_bypo(ponum):
+    import os
     destdir = ''
     
     if not destdir:
         destdir = define_variables_mkdirs()
     originaldest = destdir
-    print ponum,'PREE'
+
     stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum=ponum)
     for k,v in stylesDict.iteritems():
         print k,v 
@@ -252,7 +253,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
 
 
 if __name__ == '__main__':
-    import sys, os, importlib
+    import sys
     
     # try:
     #     polist = set(list(sys.argv[1:]))
