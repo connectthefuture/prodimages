@@ -227,8 +227,10 @@ if __name__ == '__main__':
     try:
         polist = set(list(sys.argv[1:]))
         stylesDictsDict = get_postyles_dict(polist)
-        cmd_process = locals()['download_urls_bypo']()
-        run_multiproccesses_download(cmd_process=cmd_process,args=stylesDictsDict)
+
+        mod  = importlib.import_module(swi_multi_dload)
+        func = getattr(mod, download_urls_bypo)
+        run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
     
     except IndexError:
 
@@ -240,8 +242,10 @@ if __name__ == '__main__':
                 polist.append(po)
             
             stylesDictsDict = get_postyles_dict(polist)
-            cmd_process = locals()['download_urls_bypo']()
-            run_multiproccesses_download(cmd_process=cmd_process,args=stylesDictsDict)
+            
+            mod  = importlib.import_module(swi_multi_dload)
+            func = getattr(mod, download_urls_bypo)
+            run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
         except:
             print 'EXCEPT MAIN only'
             
