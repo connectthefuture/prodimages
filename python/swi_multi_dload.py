@@ -63,7 +63,7 @@ def define_variables_mkdirs():
     return destdir
 
 
-def url_download_file(url,filepath):
+def url_download_file(url,filepath,errdir=None):
     import urllib, os
     
     ## Split Vendor # to try again on fail of full VENDOR_STYLE_NO
@@ -116,8 +116,23 @@ def url_download_file(url,filepath):
         else:
             print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
             print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)    
+        try:
+            errdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/ERRORS')
+            try:
+                os.makedirs(errdir, 16877)
+            except:
+                pass
+            colorstyle = filepath.split('/')[-1][:9]
+            alt        = filepath.split('/')[-1].split('_alt0')[-1][1]
+            if isdigit(alt):
+                alt = str(alt)
+            else:
+                alt = '1'
+            with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'wb+') as f:
+                        f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
+        except OSError:
+            pass
         
-
     else:
         print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
 
