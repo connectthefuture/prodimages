@@ -126,7 +126,7 @@ def url_download_file(url,filepath,errdir=None):
                 except:
                     pass
                 colorstyle = filepath.split('/')[-1][:9]
-                alt        = filepath.split('/')[-1].split('_alt0')[-1][1]
+                alt        = filepath.split('/')[-1].split('_')[-1][1]
                 if alt.isdigit():
                     alt = str(alt)
                 else:
@@ -135,7 +135,7 @@ def url_download_file(url,filepath,errdir=None):
 
                     with open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), 'wb+') as f:
                                 f.write("{0}\n".format(colorstyle + '\n' + alt + '\n' + urlcode_value + '\n' + url))
-                except:
+                except TypeError:
                     pass
 
             except OSError:
