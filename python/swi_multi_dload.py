@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import time
+import time, datetime
 start_time = time.strftime('%X')
 
 def sqlQuery_GetStyleVendor_ByPO(ponum=None):
@@ -141,6 +141,7 @@ def url_download_file(url,filepath,errdir=None):
                         
                         info.write("{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url)))
                         f.write(info.getvalue())
+                        f.write(info.flush())
                         info.close()
                         f.close()
                 except:
@@ -311,15 +312,15 @@ if __name__ == '__main__':
         run_multiproccesses_download(cmd_process=func,args=None)
         ## Now Process and Load Em
         dload_end = time.strftime('%X')
-        print "Time to Complete Download Stage {0}".format(dload_end - start_time)
+        print "Time to Complete Download Stage {0}".format(int(dload_end.strip(':')) - int(start_time.strip(':')))
         import multiprocmagick
         try:
             searchdir = globals()['destdir']
         except KeyError:
             searchdir = define_variables_mkdirs()
         multiprocmagick.run_multiproccesses_magick(searchdir=searchdir)
-        print "Time to Complete MagickProcessor Stage {0}".format(time.strftime('%X') - dload_end)
-        print "Total Time All Stages {0}".format(time.strftime('%X') - start_time)
+        print "Time to Complete MagickProcessor Stage {0}".format(int(time.strftime('%X').strip(':')) - int(dload_end.strip(':')))
+        print "Total Time All Stages {0}".format(int(time.strftime('%X').strip(':')) - int(start_time.strip(':')))
 
 
     except IndexError:
