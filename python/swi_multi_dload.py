@@ -267,7 +267,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
             po = v['ponumber']
             polist.append(po)
 
-        args = sorted(list(set(sorted(polist))),reverse=True)[:2]
+        args = sorted(list(set(sorted(polist))),reverse=True)[2:]
     
     func = getattr(sys.modules[__name__], str(cmd_process))
     results = pool.map(func,args)
