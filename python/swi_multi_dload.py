@@ -230,7 +230,7 @@ if __name__ == '__main__':
 
         #mod  = importlib.import_module(swi_multi_dload)
         mod =  dir(sys.modules[__name__])
-        func = getattr(mod, download_urls_bypo)
+        func = getattr(mod, 'download_urls_bypo')
         run_multiproccesses_download(cmd_process=func,args=stylesDictsDict)
     
     except IndexError:
