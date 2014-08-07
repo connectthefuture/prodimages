@@ -271,7 +271,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
             po = v['ponumber']
             polist.append(po)
 
-        args = unicode(sorted(list(set(sorted(polist))),reverse=True), 'utf-8')
+        args = sorted(list(set(sorted(polist)),reverse=True), 'utf-8')
     try:
         func = getattr(sys.modules[__name__], unicode(cmd_process))
         results = pool.map(func,args)
