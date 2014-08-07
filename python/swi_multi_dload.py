@@ -283,7 +283,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
 
 
 if __name__ == '__main__':
-    import sys
+    import sys,time
     start_time = time.strftime('%X')
     try:
 
@@ -304,7 +304,8 @@ if __name__ == '__main__':
             searchdir = define_variables_mkdirs()
         multiprocmagick.run_multiproccesses_magick(searchdir=searchdir)
         #print "Time to Complete MagickProcessor Stage {0}".format(int(time.strftime('%X').strip(':')) - int(dload_end.strip(':')))
-        print "Times for All Stages {0}".format(str(start_time) + '_' + str(dload_end)+'_' + str(time.strftime('%X'))) #(int(time.strftime('%X').strip(':')) - int(start_time.strip(':')))
+        # (int(time.strftime('%X').strip(':')) - int(start_time.strip(':')))
+        print "Times for All Stages {0}".format(str(start_time) + '_' + str(dload_end)+'_' + str(time.strftime('%X')))
 
 
     except IndexError:
