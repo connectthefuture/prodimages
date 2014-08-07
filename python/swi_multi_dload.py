@@ -135,14 +135,16 @@ def url_download_file(url,filepath,errdir=None):
                 else:
                     alt = '1'
                 try:
-                    info = cStringIO.StringIO()
-                    with io.open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
+                    #info = cStringIO.StringIO()
+                    with os.popen(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
                         
-                        info.write("{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url)))
-                        info.flush()
-                        f.write(info.getvalue())
-                        f.write()
-                        info.close()
+                        outtext= "{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url)))
+                        print >>f, outtext
+                        #info.flush()
+                        #f.write(info.getvalue())
+                        #f.write()
+                        #info.close()
+                        f.flush()
                         f.close()
                 except:
                     pass
