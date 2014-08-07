@@ -273,7 +273,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
 
         args = sorted(list(set(sorted(polist))),reverse=True)
     try:
-        func = getattr(sys.modules[__name__], str(cmd_process))
+        func = getattr(sys.modules[__name__], unicode(cmd_process))
         results = pool.map(func,args)
         #print type(results)
 
