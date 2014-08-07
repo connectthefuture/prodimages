@@ -13,7 +13,7 @@ def run_multiproccesses_magick(searchdir=None):
         pass
 
     directory_list = []
-    if searchdir.split('/')[-1]) == 'SWI':
+    if searchdir.split('/')[-1] == 'SWI':
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
     else:
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
