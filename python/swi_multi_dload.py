@@ -271,7 +271,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
             po = v['ponumber']
             polist.append(po)
 
-        args = sorted(list(set(sorted(polist))),reverse=True)
+        args = unicode(sorted(list(set(sorted(polist))),reverse=True), 'utf-8')
     try:
         func = getattr(sys.modules[__name__], unicode(cmd_process))
         results = pool.map(func,args)
@@ -284,7 +284,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
         print 'PoolJoin'
     except TypeError:
         print 'Failed with args {}'.format(args)
-        raise AssertionError
+        raise TypeError
 
 if __name__ == '__main__':
     import sys,time
