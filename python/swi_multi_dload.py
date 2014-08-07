@@ -138,7 +138,7 @@ def url_download_file(url,filepath,errdir=None):
                     #info = cStringIO.StringIO()
                     with io.open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
                         
-                        info = "\n".join(str(colorstyle),str(alt),str(urlcode_value), str(url))
+                        info = "{0}\n{1}\n{2},{3}\n".format(str(colorstyle),str(alt),str(urlcode_value), str(url))
                         outtext = ''.join(unicode(info, 'utf-8').splitlines())
                         print outtext
                         print >>f, outtext
