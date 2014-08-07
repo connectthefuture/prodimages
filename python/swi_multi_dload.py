@@ -272,17 +272,19 @@ def run_multiproccesses_download(cmd_process=None,args=None):
             polist.append(po)
 
         args = sorted(list(set(sorted(polist))),reverse=True)
-    
-    func = getattr(sys.modules[__name__], str(cmd_process))
-    results = pool.map(func,args)
-    #print type(results)
-    
-    # close the pool and wait for the work to finish
-    pool.close()
-    print 'PoolClose'
-    pool.join()
-    print 'PoolJoin'
+    try:
+        func = getattr(sys.modules[__name__], str(cmd_process))
+        results = pool.map(func,args)
+        #print type(results)
 
+        # close the pool and wait for the work to finish
+        pool.close()
+        print 'PoolClose'
+        pool.join()
+        print 'PoolJoin'
+    except TypeError:
+        print 'Failed with args {}'.format(args)
+        raise AssertionError
 
 if __name__ == '__main__':
     import sys,time
