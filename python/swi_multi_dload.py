@@ -139,9 +139,9 @@ def url_download_file(url,filepath,errdir=None):
                     with io.open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
                         
                         info = "{0},{1},{2},{3}".format(str(colorstyle), str(alt), str(urlcode_value), str(url))
-                        #outtext = unicode(info, 'utf-8')
+                        outtext = unicode(info, 'utf-8')
                         print outtext
-                        print >>f, info
+                        print >>f, outtext
                         #info.flush()
                         #f.write(info.getvalue())
                         #f.write()
