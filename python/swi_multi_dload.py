@@ -138,7 +138,7 @@ def url_download_file(url,filepath,errdir=None):
                     #info = cStringIO.StringIO()
                     with os.popen(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
                         
-                        outtext= "{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url)))
+                        outtext= "{0}\n".format(str(colorstyle) + '\n' + str(alt) + '\n' + str(urlcode_value) + '\n' + str(url))
                         print >>f, outtext
                         #info.flush()
                         #f.write(info.getvalue())
@@ -309,7 +309,3 @@ if __name__ == '__main__':
 
     except IndexError:
         print 'EXCEPT MAIN only'
-    
-
-    ## epilogue
-        
