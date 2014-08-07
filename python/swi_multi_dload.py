@@ -284,7 +284,7 @@ def run_multiproccesses_download(cmd_process=None,args=None):
         print 'PoolJoin'
     except TypeError:
         print 'Failed with args {}'.format(args)
-        raise TypeError
+        pass # raise TypeError
 
 if __name__ == '__main__':
     import sys,time
