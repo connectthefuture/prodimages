@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os, sys, EasyDialogs, Image
+import os, sys, EasyDialogs
+from PIL import Image as Image
 
 # instead of relying on sys.argv, ask the user via a simple dialog:
 rotater = ('Rotate right', 'Rotate image by 90 degrees clockwise')
@@ -45,19 +46,19 @@ if not os.path.isdir(path) :
 tot_numfiles = sum([ len(os.listdir(d)) for d in dirs ])
 bar = EasyDialogs.ProgressBar("Processing", tot_numfiles)
 for d in dirs:
-for item in os.listdir(d): 
-    bar.inc( )
-    try:
-        objpict = Image.open(d + "/" + item)
-        if resize: 
-            objpict.thumbnail((100, 100, 1))
-        if rotationr: 
-            objpict = objpict.rotate(-90)
-        if rotationl: 
-            objpict = objpict.rotate(90)
-        objpict.save(path + "/" + item + "." + format, format)
-    except:
-        print item + " is not an image"
+    for item in os.listdir(d):
+        bar.inc( )
+        try:
+            objpict = Image.open(d + "/" + item)
+            if resize:
+                objpict.thumbnail((100, 100, 1))
+            if rotationr:
+                objpict = objpict.rotate(-90)
+            if rotationl:
+                objpict = objpict.rotate(90)
+            objpict.save(path + "/" + item + "." + format, format)
+        except:
+            print item + " is not an image"
  
 # and one last dialog...:
 score = EasyDialogs.AskYesNoCancel("Whatcha Want?")
