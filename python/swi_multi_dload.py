@@ -147,7 +147,7 @@ def url_download_file(url,filepath,errdir=None):
                         #info.close()
                         f.flush()
                         f.close()
-                except:
+                except AttributeError:
                     pass
 
             except OSError:
