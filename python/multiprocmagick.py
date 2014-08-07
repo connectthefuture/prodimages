@@ -13,7 +13,10 @@ def run_multiproccesses_magick(searchdir=None):
         pass
 
     directory_list = []
-    [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
+    if searchdir.split('/')[-1]) == 'SWI':
+        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
+    else:
+        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
 
     results = pool.map(magickProc.main,directory_list)
     print results
