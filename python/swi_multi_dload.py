@@ -186,7 +186,7 @@ def download_urls_bypo(ponum):
 
     stylesDict = sqlQuery_GetStyleVendor_ByPO(ponum=ponum)
     for k,v in stylesDict.iteritems():
-        print k,v 
+        # print k,v
         vendor_url = "http://admin.swisswatchintl.com/Z/{0}.jpg".format(k)
         vendor_url_side = vendor_url.replace('.jpg', '-side.jpg')
         vendor_url_back = vendor_url.replace('.jpg', '-back.jpg')
@@ -227,23 +227,23 @@ def download_urls_bypo(ponum):
         try:            
             url_download_file(vendor_url,colorstyle_file)
         except IOError:
-            print "Failed {}{}".format(vendor_url,colorstyle_file)
-
+            # print "Failed {}{}".format(vendor_url,colorstyle_file)
+            pass
         ##_2
         try:            
             url_download_file(vendor_url_side,colorstyle_side_file)
-            print "Downloaded {}".format(colorstyle_side_file)
+            # print "Downloaded {}".format(colorstyle_side_file)
         except:
-            print "Failed {}{}".format(vendor_url,colorstyle_side_file)
-
+            # print "Failed {}{}".format(vendor_url,colorstyle_side_file)
+            pass
         ## _3
         try:            
             url_download_file(vendor_url_back,colorstyle_back_file)
-            print "Downloaded {}".format(colorstyle_back_file)
+            # print "Downloaded {}".format(colorstyle_back_file)
         except:
             try:
                 url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-clasp'))
-                print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
+                # print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
             except:
                 try:
                    url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
