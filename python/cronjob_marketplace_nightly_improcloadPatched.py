@@ -77,7 +77,8 @@ except:
 
     # imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 
-regex_swi = re.compile(r'^.*?SWI.*?\.jpg$')
+regex_swi = re.compile(r'^.*?SWI.jpg$')
+#regex_swi = re.compile(r'^.*?SWI.*?\.jpg$')
 if os.path.isdir(imagedir):
     ## Remove previous days imports only from the PO dir prior to new import, SWI stays separate
     remove_prior_import = glob.glob(os.path.join(imagedir, '*/*/*.jpg'))
