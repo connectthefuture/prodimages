@@ -22,7 +22,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
                                 RIGHT JOIN POMGR.VENDOR
                                 ON POMGR.VENDOR.ID                        = POMGR.PO_HDR.VENDOR_ID
                                 WHERE POMGR.VENDOR.NAME like 'Swiss Watch%'
-                                and POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NULL
+                                and POMGR.PRODUCT_COLOR.COPY_READY_DT IS NULL
                                 ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC nulls Last"""
 
     result = connection.execute(querymake_StylesByPO)
