@@ -244,57 +244,57 @@ lotsofdicts = [marketpl_prodcomplete_dict, complete_by_source_dict]
 
 for iterdict in lotsofdicts:
     count = 0
-    for k,v in iterdict.iteritems():
+    for k,value in iterdict.iteritems():
         import datetime, time
-        for value in [v]:
+        #for value in [v]:
             
-            try:
-                total       = value['total']
-                total_asset = value['total_asset']
-                total_ff    = value['total_ff']
-                total_swids = value['total_swids']
-                total_mpl   = value['total_mpl']
-                colorId = '8'
-                calendarId = prodcompletebysourcecal
-                summary = "Total: {0}".format(total)
-                description = """
-                Total: {0}
-                \tAssets: {1}
-                \tFullfill: {2}
-                \tSWI: {3}
-                \tMarketplace: {4}
-                """.format(total,total_asset,total_ff,total_swids,total_mpl)
-                location = 'Home'
-            except KeyError:
-                value['vendor_name']
-                total       = value['total']
-                vendor_name = value['vendor_name']
-                colorId = '8'
-                calendarId = marketplvendorscmpcal
-                description = """Vendor: {0}\n\tTotalComplete: {1}""".format(vendor_name,total)
-                location = 'Home'
-                summary = description #"Vendor: {0}".format(vendor_name)
+        try:
+            total       = value['total']
+            total_asset = value['total_asset']
+            total_ff    = value['total_ff']
+            total_swids = value['total_swids']
+            total_mpl   = value['total_mpl']
+            colorId = '8'
+            calendarId = prodcompletebysourcecal
+            summary = "Total: {0}".format(total)
+            description = """
+            Total: {0}
+            \tAssets: {1}
+            \tFullfill: {2}
+            \tSWI: {3}
+            \tMarketplace: {4}
+            """.format(total,total_asset,total_ff,total_swids,total_mpl)
+            location = 'Home'
+        except KeyError:
+            value['vendor_name']
+            total       = value['total']
+            vendor_name = value['vendor_name']
+            colorId = '8'
+            calendarId = marketplvendorscmpcal
+            description = """Vendor: {0}\n\tTotalComplete: {1}""".format(vendor_name,total)
+            location = 'Home'
+            summary = description #"Vendor: {0}".format(vendor_name)
 
-            if type(k) == str:
-                k = datetime.datetime.strptime(k,'%Y-%d-%M')
-            try:
+        if type(k) == str:
+            k = datetime.datetime.strptime(k,'%Y-%d-%M')
+        try:
 
-                event = {
-                  'summary': summary,
-                  'description': description,
-                  'location': location,
-                  'colorId': colorId,
-                  'start': {
-                    'date': "{0:%Y-%m-%d}".format(k.date()),
-                    'timeZone': 'America/New_York'
-                  },
-                  'end': {
-                    'date': "{0:%Y-%m-%d}".format(k.date()),
-                    'timeZone': 'America/New_York'
-                  },
-                #  'recurrence': [
-                #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
-                #  ],
+            event = {
+              'summary': summary,
+              'description': description,
+              'location': location,
+              'colorId': colorId,
+              'start': {
+                'date': "{0:%Y-%m-%d}".format(k.date()),
+                'timeZone': 'America/New_York'
+              },
+              'end': {
+                'date': "{0:%Y-%m-%d}".format(k.date()),
+                'timeZone': 'America/New_York'
+              },
+            #  'recurrence': [
+            #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
+            #  ],
 #                  'attendees': [
 #                    {
 #                      'email': 'james.hoetker@bluefly.com',
@@ -302,11 +302,11 @@ for iterdict in lotsofdicts:
 #                    },
 #                    # ...
 #                  ],
-                }
-                print event
-                created_event = service.events().insert(calendarId=calendarId, body=event).execute()
-                print created_event['id']
-            except OSError:
-                print 'ERROR {}'.format(event)
-                pass
+            }
+            print event
+            created_event = service.events().insert(calendarId=calendarId, body=event).execute()
+            print created_event['id']
+        except OSError:
+            print 'ERROR {}'.format(event)
+            pass
                 
