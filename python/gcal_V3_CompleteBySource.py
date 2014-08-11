@@ -6,7 +6,7 @@ from apiclient.discovery import build
 from oauth2client.file import Storage
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import run
-import os
+import os, datetime
 
 ##########################Vars
 client_id='924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
@@ -50,9 +50,12 @@ if credentials is None or credentials.invalid == True:
 http = httplib2.Http()
 http = credentials.authorize(http)
 
-prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
-#prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/'
-# prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
+prodcompletebysourcecal = 'pbr49v778pi6n9cqark5rd1dns@group.calendar.google.com'
+marketplvendorscmpcal = 'qfr9hv1frv22ovnk5hoptsqj38@group.calendar.google.com'
+
+calendarId = prodcompletebysourcecal
+#calendarId = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/'
+# calendarId = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
 
 # Build a service object for interacting with the API.
 service = build(serviceName='calendar', version='v3', http=http)
@@ -62,7 +65,7 @@ page_token = None
 events_list = []
 try:    
     while True:
-        events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
+        events = service.events().list(calendarId=calendarId, pageToken=page_token).execute()
         for event in events['items']:
             event_id = event['id']
             events_list.append(event_id)
@@ -73,7 +76,7 @@ try:
 except:
     page_token = None
     while True:
-        events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
+        events = service.events().list(calendarId=calendarId, pageToken=page_token).execute()
         for event in events['items']:
             event_id = event['id']
             events_list.append(event_id)
@@ -96,264 +99,125 @@ def sql_query_production_numbers():
     connection = orcl_engine.connect()
 
     ### Get Production Complete Totals and Build Dict of key value pairs
-    querymake_prodnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
-    POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
-    FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 30)
-    GROUP BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
-    ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
-    prodcomplete = connection.execute(querymake_prodnumbers)
-    prodcomplete_dict = {}
+    complete_by_vendor = """SELECT POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as "vendor_name",
+                                    COUNT(DISTINCT POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID) AS "style_count",
+                                    TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') as "production_complete_dt"
+                                    FROM POMGR.SUPPLIER_INGEST_STYLE
+                                    RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU
+                                    ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID
+                                    LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE
+                                    ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID
+                                    RIGHT JOIN POMGR.PRODUCT_COLOR
+                                    ON POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR = POMGR.PRODUCT_COLOR.ID
+                                    WHERE POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%'
+                                    AND POMGR.SUPPLIER_INGEST_IMAGE.URL            IS NOT NULL
+                                    AND TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') IS NOT NULL
+                                    GROUP BY POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID,
+                                      TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD')
+                                    ORDER BY 3 DESC"""
+    prodcomplete = connection.execute(complete_by_vendor)
+    marketpl_prodcomplete_dict = {}
     for row in prodcomplete:
         tmp_dict = {}
-        tmp_dict['total'] = row['completion_total']
-        tmp_dict['role'] = 'Production'
-        prodcomplete_dict[row['prod_complete_dt']] = tmp_dict
+        tmp_dict['total'] = row['style_count']
+        tmp_dict['vendor_name'] = row['vendor_name']
+        marketpl_prodcomplete_dict[row['production_complete_dt']] = tmp_dict
 
-    ### Get Retouching Complete Totals and Build Dict of key value pairs
-    querymake_retouchnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
-    POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
-    FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
-    GROUP BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT
-    ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC"""
-    retouchcomplete = connection.execute(querymake_retouchnumbers)
-    retouchcomplete_dict = {}
-    for row in retouchcomplete:
+    
+    ### Get Complete by inventory Source Totals and Build Dict of key value pairs
+    querymake_complete_by_source ='''SELECT "DateComplete", "TotalCompletions", "Asset-Total", "Asset-Apparel", "Asset-Non-Appr", "FullFill-Bluefly", "FF-Vendor-Dropship", "Marketplace" FROM(
+    with data as (  
+        select   
+        max(distinct POMGR.SKU.PRODUCT_COLOR_ID) as "DATA_COLORSTYLE",   
+        max(distinct POMGR.SKU.sku_code) as "DATA_SKU_CODE"   
+      FROM POMGR.SKU  
+      LEFT JOIN POMGR.PRODUCT_COLOR  
+        ON POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID  
+      group by POMGR.SKU.PRODUCT_COLOR_ID  
+      order by POMGR.SKU.PRODUCT_COLOR_ID desc  
+    )  
+     
+    SELECT  
+      TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD') AS "DateComplete",  
+      COUNT(distinct POMGR.PRODUCT_COLOR.ID) AS "TotalCompletions",   
+       SUM(  
+        CASE  
+          WHEN ( data.DATA_SKU_CODE LIKE '8%' 
+          )  
+          THEN 1  
+          ELSE 0  
+        END) "Asset-Total",  
+        SUM(  
+        CASE  
+          WHEN ( data.DATA_SKU_CODE LIKE '8%' and POMGR.PRODUCT_FOLDER_DENORMALIZED.PATH LIKE '%/%men/apparel/%'  
+          )  
+          THEN 1  
+          ELSE 0  
+        END) "Asset-Apparel",  
+      SUM(  
+        CASE  
+          WHEN (SUBSTR(data.DATA_SKU_CODE, 1,1) = '8' and POMGR.PRODUCT_FOLDER_DENORMALIZED.PATH LIKE '%/non apparel/%'  
+          )  
+          THEN 1  
+          ELSE 0  
+        END) "Asset-Non-Appr",  
+      SUM(  
+        CASE  
+          WHEN data.DATA_SKU_CODE LIKE '101%'  
+          THEN 1  
+          ELSE 0  
+        END) "FullFill-Bluefly",  
+      SUM(  
+        CASE  
+          WHEN data.DATA_SKU_CODE LIKE '102%'  
+          THEN 1  
+          ELSE 0  
+        END) "FF-Vendor-Dropship",  
+      SUM(  
+        CASE  
+          WHEN data.DATA_SKU_CODE LIKE '103%'  
+          THEN 1  
+          ELSE 0  
+        END) "Marketplace"  
+    FROM  
+      POMGR.PRODUCT_COLOR  
+    LEFT JOIN POMGR.PRODUCT  
+    ON  
+      POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT.ID  
+    LEFT JOIN POMGR.PRODUCT_FOLDER  
+    ON  
+      POMGR.PRODUCT.PRODUCT_FOLDER_ID = POMGR.PRODUCT_FOLDER.ID  
+    LEFT JOIN POMGR.PRODUCT_FOLDER_DENORMALIZED  
+    ON  
+      POMGR.PRODUCT_FOLDER.ID = POMGR.PRODUCT_FOLDER_DENORMALIZED.ID  
+    LEFT JOIN data 
+    ON  
+      data.DATA_COLORSTYLE = POMGR.PRODUCT_COLOR.ID  
+    WHERE  
+    TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY') = '2014' 
+    GROUP BY  
+    TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY-MM-DD'), 
+    TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY') 
+    ORDER BY 
+    "DateComplete" DESC,  
+    TO_CHAR(POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, 'YYYY') DESC
+    )'''
+    complete_by_source = connection.execute(querymake_complete_by_source)
+    complete_by_source_dict = {}
+    for row in complete_by_source:
         tmp_dict = {}
-        tmp_dict['total'] = row['retouch_total']
-        tmp_dict['role'] = 'Retouching'
-        retouchcomplete_dict[row['retouch_complete_dt']] = tmp_dict
+        tmp_dict['total']       = row['TotalCompletions']
+        tmp_dict['total_asset'] = row['Asset-Total']
+        tmp_dict['total_ff']    = row['FullFill-Bluefly']
+        tmp_dict['total_swids'] = row['FF-Vendor-Dropship']
+        tmp_dict['total_mpl']   = row['Marketplace']
+        complete_by_source_dict[row['DateComplete']] = tmp_dict
 
-    ### Get Copy Complete Totals and Build Dict of key value pairs
-    querymake_copynumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
-    to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') as copy_complete_dt
-    FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 30)
-    GROUP BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD')
-    ORDER BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') DESC"""
-    copycomplete = connection.execute(querymake_copynumbers)
-    copycomplete_tmpdict = {}
-    for row in copycomplete:
-        tmp_dict = {}
-        tmp_dict['total'] = row['copy_total']
-        tmp_dict['role'] = 'Copy'
-        copycomplete_tmpdict[row['copy_complete_dt']] = tmp_dict
-## Super Coersion of nums and year due to time stamp occasionally on copy dates
-    copycomplete_dict = {}
-    for k,v in copycomplete_tmpdict.iteritems():
-        tmp_dict = {}
-        tmp_dict['total'] = v['total']
-        tmp_dict['role'] = v['role']
-        dt = str(datetime.datetime.strptime(str(k), "%Y-%m-%d %H:%M:%S"))
-        dtsplit = dt.replace('00','', 2)
-        dtsplit = "20{2:.2}-{1:.2}-{0:.2} 00:00:00".format(dtsplit[:2],dtsplit[3:5],dtsplit[6:8])
-        dtsplit = datetime.datetime.strptime(dtsplit, "%Y-%m-%d %H:%M:%S")
-        copycomplete_dict[dtsplit] = tmp_dict
+    
 
-    ### Get Sample Received Totals and Build Dict of key value pairs
-    querymake_sample_received = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as sample_total,
-    to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD') AS sample_dt
-    FROM POMGR.PRODUCT_COLOR
-    LEFT JOIN POMGR.SAMPLE ON POMGR.PRODUCT_COLOR.ID = POMGR.SAMPLE.PRODUCT_COLOR_ID
-    LEFT JOIN POMGR.SAMPLE_TRACKING ON POMGR.SAMPLE.ID = POMGR.SAMPLE_TRACKING.SAMPLE_ID
-    LEFT JOIN POMGR.LK_SAMPLE_STATUS ON POMGR.SAMPLE_TRACKING.STATUS_ID = POMGR.LK_SAMPLE_STATUS.ID
-    WHERE (POMGR.SAMPLE_TRACKING.CREATE_DT >= TRUNC(SysDate - 30)
-    AND POMGR.LK_SAMPLE_STATUS.NAME = 'Scanned In at Bluefly')
-    GROUP BY to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')
-    ORDER BY to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD') DESC"""
-    samples_received = connection.execute(querymake_sample_received)
-    samples_received_tmpdict = {}
-    for row in samples_received:
-        tmp_dict = {}
-        tmp_dict['total'] = row['sample_total']
-        tmp_dict['role'] = 'Samples_Received'
-        samples_received_tmpdict[row['sample_dt']] = tmp_dict
-## Super Coersion of nums and year due to time stamp occasionally on copy dates
-    samples_received_dict = {}
-    for k,v in samples_received_tmpdict.iteritems():
-        tmp_dict = {}
-        tmp_dict['total'] = v['total']
-        tmp_dict['role'] = v['role']
-        dt = str(datetime.datetime.strptime(str(k), "%Y-%m-%d %H:%M:%S"))
-        dtsplit = dt.replace('00','', 2)
-        dtsplit = "20{2:.2}-{1:.2}-{0:.2} 00:00:00".format(dtsplit[:2],dtsplit[3:5],dtsplit[6:8])
-        dtsplit = datetime.datetime.strptime(dtsplit, "%Y-%m-%d %H:%M:%S")
-        samples_received_dict[dtsplit] = tmp_dict
-
+    
     connection.close()
-    return prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict
-
-
-
-def fashioncomplete():
-    import datetime
-    from collections import defaultdict
-    ######  Recursively search Photo Folders and get counts of shots by date
-    ## rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
-    rootdir_fashion = '/mnt/Post_Ready/eFashionPush'
-    #####  Walk rootdir tree compile dict of Walked Directory
-    walkedout_fashion = recursive_dirlist(rootdir_fashion)
-    #### Parse Walked Directory Paths Output stylestringssdict
-    stylestringsdict_fashion = walkeddir_parse_stylestrings_out(walkedout_fashion)
-    ### Get and Collect Counts of fashion and still sets by date
-    fashiond = defaultdict(list)
-    for row in stylestringsdict_fashion.itervalues():
-        try:
-            file_path = row['file_path']
-            photo_date = row['photo_date']
-            dt = photo_date
-            dt = "{} 00:00:00".format(dt)
-            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-            #### 5 digit date
-            if type(dt) == datetime.datetime:
-                photo_date = dt
-                fashiond[photo_date].append(file_path)
-        except:
-            pass
-    ## Count the Grouped Files
-    # fashioncomplete_dict = defaultdict(int)
-    # for k in fashiond:
-    #     fashioncomplete_dict[k] +=1
-    fashioncomplete_dict = {}
-    for k,v in fashiond.iteritems():
-        tmp_dict = {}
-        tmp_dict['role'] = 'Fashion'
-        tmp_dict['total'] = len(v)
-        fashioncomplete_dict[k] = tmp_dict
-    #    fashioncomplete_dict['Role'] = 'Fashion_Photo'
-    #    fashioncomplete_dict['shot_count'] = len(v)
-    return fashioncomplete_dict
-
-
-
-def stillcomplete():
-    import datetime
-    from collections import defaultdict
-    ######  Recursively search Photo Folders and get counts of shots by date
-    ## rootdir_still = '/mnt/Post_Ready/Retouch_Still'
-    rootdir_still = '/mnt/Post_Ready/aPhotoPush'
-    #####  Walk rootdir tree compile dict of Walked Directory
-    walkedout_still = recursive_dirlist(rootdir_still)
-    #### Parse Walked Still Directory Paths Output stylestringssdict
-    stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
-    ### Now the still sets counts by date
-    stilld = defaultdict(list)
-    for row in stylestringsdict_still.itervalues():
-        try:
-            file_path = row['file_path']
-            photo_date = row['photo_date']
-            dt = photo_date
-            dt = "{} 00:00:00".format(dt)
-            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-            #### 5 digit date
-            if type(dt) == datetime.datetime:
-                photo_date = dt
-                stilld[photo_date].append(file_path)
-    #        else:
-    #            dt = ''
-    #            dt = "2000-01-01 00:00:00".format(dt)
-    #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-    #            photo_date = dt
-    #            stilld[photo_date].append(file_path)
-        except:
-            pass
-
-    ## Count the Grouped Files
-    stillcomplete_dict = {}
-    for k,v in stilld.iteritems():
-        tmp_dict = {}
-        tmp_dict['role'] = 'Still'
-        tmp_dict['total'] = len(v)
-        stillcomplete_dict[k] = tmp_dict
-    #    stillcomplete_dict['Role'] = 'Still_Photo'
-    #    fashioncomplete_dict['shot_count'] = len(v)
-    return stillcomplete_dict
-
-## Walk Root Directory and Return List or all Files in all Subdirs too
-def recursive_dirlist(rootdir):
-    import os
-    walkedlist = []
-    for dirname, subdirnames, filenames in os.walk(rootdir):
-        # append path of all filenames to walkedlist
-        for filename in filenames:
-            file_path = os.path.abspath(os.path.join(dirname, filename))
-            if os.path.isfile(file_path):
-                walkedlist.append(file_path)
-    # Advanced usage:
-    # editing the 'dirnames' list will stop os.walk() from recursing into there.
-    #if '.git' in dirnames:
-    # don't go into any .git directories.
-    #    dirnames.remove('.git')
-    return walkedlist
-
-
-###
-## Extract All Metadata from Image File as Dict using PIL
-def get_exif(file_path):
-    from PIL import Image
-    from PIL.ExifTags import TAGS
-    exifdata = {}
-    im = Image.open(file_path)
-    info = im._getexif()
-    for tag, value in info.items():
-        decoded = TAGS.get(tag, tag)
-        exifdata[decoded] = value
-    return exifdata
-
-
-###
-## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
-def walkeddir_parse_stylestrings_out(walkeddir_list):
-    import re,os
-########  Regex only finds _1.jpg files
-    regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
-    regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
-    stylestrings = []
-    stylestringsdict = {}
-    for line in walkeddir_list:
-        stylestringsdict_tmp = {}
-        if re.findall(regex,line):
-            try:
-                file_path = line
-                filename = file_path.split('/')[-1]
-                colorstyle = filename.split('_')[0]
-                alt_ext = file_path.split('_')[-1]
-                alt = alt_ext.split('.')[0]
-                ext = alt_ext.split('.')[-1]
-                try:
-                    path_date = file_path.split('/')[4][:6]
-                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
-                    if re.findall(regex_date, path_date):
-                        photo_date = path_date
-                    else:
-                        try:
-                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
-                        except KeyError:
-                            try:
-                                photo_date = get_exif(file_path)['DateTime'][:10]
-                            except KeyError:
-                                photo_date = '0000-00-00'
-                except AttributeError:
-                    photo_date = '0000-00-00'
-                photo_date = str(photo_date)
-                photo_date = photo_date.replace(':','-')
-                stylestringsdict_tmp['colorstyle'] = colorstyle
-                stylestringsdict_tmp['photo_date'] = photo_date
-                stylestringsdict_tmp['file_path'] = file_path
-                stylestringsdict_tmp['alt'] = alt
-                stylestringsdict[file_path] = stylestringsdict_tmp
-                file_path_reletive = file_path.replace('/mnt/Post_Ready/zImages_1/', '/zImages/')
-                file_path_reletive = file_path.replace('JPG', 'jpg')
-                ## Format CSV Rows
-                row = "{0},{1},{2},{3}".format(colorstyle,photo_date,file_path_reletive,alt)
-                #print row
-                stylestrings.append(row)
-            except IOError:
-                print "IOError on {0}".format(line)
-            #except AttributeError:
-            #    print "AttributeError on {0}".format(line)
-    return stylestringsdict
+    return marketpl_prodcomplete_dict, complete_by_source_dict
 
 #############################END Funcx Section##########################
 
@@ -362,7 +226,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
 
 ## Delete all Events by ID prior to reup
 for event in events_list:
-    service.events().delete(calendarId=prodnumberscal, eventId=event).execute()
+    service.events().delete(calendarId=calendarId, eventId=event).execute()
     
 print "Deleted all Events"    
 #calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
@@ -371,13 +235,11 @@ print "Deleted all Events"
 #############################Get Data Functions to Query DB###########################
 
 
-prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict = sql_query_production_numbers()
+marketpl_prodcomplete_dict, complete_by_source_dict = sql_query_production_numbers()
 
-###########################################
-stillcomplete_dict     = stillcomplete()
-fashioncomplete_dict   = fashioncomplete()
+##########################################     = stillcomplete   = fashioncomplete()
 
-lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
+lotsofdicts = [marketpl_prodcomplete_dict, complete_by_source_dict]
 ##############################################################################
 
 for iterdict in lotsofdicts:
@@ -385,59 +247,42 @@ for iterdict in lotsofdicts:
     for k,v in iterdict.iteritems():
         import datetime, time
         for value in [v]:
+            
             try:
-                titlekv = str(v['role'])
-            except:
-                titlekv = 'Studio_Shots'
-            try:
-                desckv = str(v['total'])
-                desckv = desckv.replace('&', 'And')
-                desckv = desckv.replace('%', ' Percent')
-#                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
-#                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
-#                sdatekvsplit = sdatekvraw.split(",")
-#                edatekvsplit = edatekvraw.split(",")
-#                sdatekv = map(int,sdatekvsplit)
-#                edatekv = map(int,edatekvsplit)
-                
-                titleid = '{0} - {1}'.format(desckv,titlekv)
-                #if v['total'] < 200:
-                #    congrats = '<>'
-                #elif v['total'] >= 200:
-                #    if v['total'] <= 300:
-                #        congrats = '<-->'
-                #    else:
-                #        congrats = '<-*->'
-                descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
-                descfull = str(descfull)
-                count += 1
-                
-                ##TODO: rework choose color process below with following 3 line of code 
-                # keycode =  v['role']
-                #functions = {9: 'Production', 8: 'Copy', 7: 'Retouching'}
-                #functions.get(keycode, unknown_key_pressed)()
+                total       = value['total']
+                total_asset = value['total_asset']
+                total_ff    = value['total_ff']
+                total_swids = value['total_swids']
+                total_mpl   = value['total_mpl']
+                colorId = '8'
+                calendarId = prodcompletebysourcecal
+                summary = "Total: {0}".format(total)
+                description = """
+                Total: {0}
+                \tAssets: {1}
+                \tFullfill: {2}
+                \tSWI: {3}
+                \tMarketplace: {4}
+                """.format(total,total_asset,total_ff,total_swids,total_mpl)
+                location = 'Home'
+            except KeyError:
+                value['vendor_name']
+                total       = value['total']
+                vendor_name = value['vendor_name']
+                colorId = '8'
+                calendarId = marketplvendorscmpcal
+                description = """Vendor: {0}\n\tTotalComplete: {1}""".format(vendor_name,total)
+                location = 'Home'
+                summary = description #"Vendor: {0}".format(vendor_name)
 
-                ## Choose Color of Event Based on Role
-                lockv = v['role']
-                if lockv == 'Production':
-                    colorId = '9'
-                elif lockv == 'Copy':
-                    colorId = '8'
-                elif lockv == 'Retouching':
-                    colorId = '7'
-                elif lockv == 'Fashion':
-                    colorId = '6'
-                    print descfull
-                    
-                elif lockv == 'Still':
-                    colorId = '5'
-                elif lockv == 'Samples_Received':
-                    colorId = '4'
+            if type(k) == str:
+                k = datetime.datetime.strptime(k,'%Y-%d-%M')
+            try:
 
                 event = {
-                  'summary': titleid,
-                  'description': descfull,
-                  'location': lockv,
+                  'summary': summary,
+                  'description': description,
+                  'location': location,
                   'colorId': colorId,
                   'start': {
                     'date': "{0:%Y-%m-%d}".format(k.date()),
@@ -458,8 +303,8 @@ for iterdict in lotsofdicts:
 #                    # ...
 #                  ],
                 }
-                
-                created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
+                print event
+                created_event = service.events().insert(calendarId=calendarId, body=event).execute()
                 print created_event['id']
             except OSError:
                 print 'ERROR {}'.format(event)
