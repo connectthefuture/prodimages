@@ -217,7 +217,7 @@ def sql_query_production_numbers():
 
     
     connection.close()
-    return marketpl_prodcomplete_dict, complete_by_source_dict
+    return complete_by_source_dict
 
 #############################END Funcx Section##########################
 
@@ -234,12 +234,11 @@ print "Deleted all Events"
 
 #############################Get Data Functions to Query DB###########################
 
-
-marketpl_prodcomplete_dict, complete_by_source_dict = sql_query_production_numbers()
+complete_by_source_dict = sql_query_production_numbers()
 
 ##########################################     = stillcomplete   = fashioncomplete()
 
-lotsofdicts = [marketpl_prodcomplete_dict, complete_by_source_dict]
+lotsofdicts = [complete_by_source_dict]
 ##############################################################################
 
 for iterdict in lotsofdicts:
