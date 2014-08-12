@@ -2,6 +2,21 @@
 # -*- coding: utf-8 -*-
 
 
+def replace_alpha_withbg(img):
+    ext = img.split('.')[-1]
+    imgout = img.replace('.' + ext,'_bg.' + ext)
+    subprocess.call([
+    'convert', 
+    img,
+    '-alpha', 
+    'transparent', 
+    '-alpha',
+    'opaque', 
+    '-strip', 
+    imgout
+    ])
+    return imgout
+
 def get_dimensions(img):
     from PIL import Image
     try:
