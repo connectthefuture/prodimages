@@ -3,6 +3,7 @@
 
 
 def replace_alpha_withbg(img):
+    import subprocess
     ext = img.split('.')[-1]
     imgout = img.replace('.' + ext,'_bg.' + ext)
     subprocess.call([
