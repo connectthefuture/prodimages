@@ -84,13 +84,13 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
     regex_Raw = re.compile(r'/.*?/ON_FIGURE/.+?/[0-9]{9}.+?\.CR2$')
     regex_consigANY = re.compile(r'^/.+?/MARKETPLACE/.+?/output/[0-9]{9}?_?[1-9]?_?[0-9]{,4}?.*?\.[jpengJPENGCR2]{3}$')
-    regex_consigConvertedPNG = re.compile(r'^/.+?/MARKETPLACE/.+?/output/[0-9]{9}_?.*?\.[png]{3}$')
+    regex_consigConvertedPNG = re.compile(r'^/.+?/MARKETPLACE/.+?/output/.+?/[0-9]{9}_?.*?\.[png]{3}$')
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
     stylestrings = []
     stylestringsdict = {}
     for line in walkeddir_list:
         stylestringsdict_tmp = {}
-        if re.findall(regex_consigANY,line):
+        if re.findall(regex_consigConvertedPNG,line):
             try:
                 file_path = line
                 filename = file_path.split('/')[-1]
@@ -204,7 +204,8 @@ def main(rootdir=None):
     #regex = re.compile(r'^/.+?/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE/.+?RAW_FILES.*?[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
     regex = re.compile(r'^/.+?/MARKETPLACE/.+?/output/[0-9]{9}_?.*?\.[png]{3}$')
     regex_consigANY = re.compile(r'^/.+?/MARKETPLACE/.+?/output/[0-9]{9}?_?[1-9]?_?[0-9]{,4}?.+?\.[pnjpgJPGCR2]{3}$')
-
+    regex_consigConvertedPNG = re.compile(r'^/.+?/MARKETPLACE/.+?/output/.+?/[0-9]{9}_?.*?\.[png]{3}$')
+            
     ## Parse Walked Directory Paths Output stylestringssdict
     stylestringsdict = walkeddir_parse_stylestrings_out(walkedout)
 
@@ -267,7 +268,7 @@ def main(rootdir=None):
             regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
     ## MarketplaceDloads Thumbs
-            if re.findall(regex_consigANY, sqlinsert_choose_test):
+            if re.findall(regex_consigConvertedPNG, sqlinsert_choose_test):
                 connection.execute("""INSERT INTO post_complete_marketplace (colorstyle, photo_date, file_path, alt) VALUES (%s, %s, %s, %s )""", v['colorstyle'], v['photo_date'], v['file_path'],  v['alt'])
                 print "Successful Insert post_complete_marketplace --> {0}".format(k)
     # ProdRaw RAW
