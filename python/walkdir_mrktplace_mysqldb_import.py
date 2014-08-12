@@ -261,7 +261,7 @@ def main(rootdir=None):
             #regex_productionraw = re.compile(r'^/.+?/ON_FIGURE/.+?RAW_FILES.*?/[0-9]{9}_[1-9]_[0-9]{1,4}\.[jpgJPGCR2]{3}$')
             #regex_mediarepo = re.compile(r'^.+?MEDIAREPO.+?\.[NnjpgJPG]$')
             regex_consigANY = re.compile(r'^/.+?/MARKETPLACE/.+?/output/[0-9]{9}?_?[1-9]?_?[0-9]{,4}?.*?\.[jpengJPENGCR2]{3}$')
-            regex_consigConvertedPNG = re.compile(r'^/.+?/MARKETPLACE/.+?/output/[0-9]{9}_?.*?\.[png]{3}$')
+            regex_consigConvertedPNG = re.compile(r'^/.+?/MARKETPLACE/.+?/output/.+?/[0-9]{9}_?.*?\.[png]{3}$')
             
             regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
             regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
