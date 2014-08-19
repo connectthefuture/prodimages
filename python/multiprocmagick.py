@@ -15,6 +15,9 @@ def run_multiproccesses_magick(searchdir=None):
     directory_list = []
     if searchdir.split('/')[-1] == 'SWI':
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
+    elif searchdir.split('/')[-1][:3] == '3_L':
+        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]        
+        print 'Image Clipping Import', searchdir
     else:
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
 
