@@ -285,9 +285,6 @@ for link in found_links:
             edgecast_listurls.append(pmeventimg)
             edgecast_listurls.append(email_img1)
             edgecast_listurls.append(email_img2)
-    except AttributeError:
-        pass
-
 
 colorstyles = list(set(sorted(colorstyles)))
 clrversions = query_version_number(colorstyles)
