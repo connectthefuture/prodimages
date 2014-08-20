@@ -26,10 +26,14 @@ def main(bfly_url=None):
     #print 'Scraping --> {}'.format(bfly_url)
     found_links = url_get_links(bfly_url)
     for f in found_links:
-        style=f.split('?productCode=')[-1][:9]
-        if style.isdigit():
-            print style
-            styles.append(style)
+        try:
+
+            style=f.split('?productCode=')[-1][:9]
+            if style.isdigit():
+                print style
+                styles.append(style)
+        except AttributeError:
+            pass
     return styles
 
 
