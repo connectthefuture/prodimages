@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import hashlib
-import os,sys
-
 def find_duplicate_imgs(dname):
+    import hashlib
+    import os
+    
     hash_table = {}
     dups = []
 
@@ -27,11 +27,14 @@ def find_duplicate_imgs(dname):
 ############ RUN ###########################
 ############################################
 
+import os,sys
+
 dname = sys.argv[1]
 def main():
-    duplicates = find_duplicate_imgs(dname)
-    return duplicates
+    unique_files, duplicates = find_duplicate_imgs(dname)
+    unique_files = unique_files.values()
+    return unique_files, duplicates 
 
 if __name__ == '__main__':
-    unique_files, dups = main()
-    unique_files.values()
+    result = main()
+    print result
