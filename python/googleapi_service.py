@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def create_googleapi_service(serviceName=None, version=None, client_id=None, scope=None):
+def create_googleapi_service(serviceName=None, 
+                            version=None, 
+                            client_id=None,
+                            client_secret=None,
+                            redirect_uri=None, 
+                            scope=None):
     serviceName = ''
     version = ''
     import httplib2
@@ -19,7 +24,7 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None, sco
     #     client_id = '924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
     
     client_id = client_id
-    client_secret='rqZxYuy0Cht37rJ0GSZ05YoY'
+    client_secret= client_secret  #'rqZxYuy0Cht37rJ0GSZ05YoY'
     scope =  scope
     user_agent='Python2.7'
     BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
@@ -38,7 +43,9 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None, sco
         client_id=client_id,
         client_secret=client_secret,
         scope=scope,
+        redirect_uri=redirect_uri,
         user_agent=user_agent)
+
     # If the Credentials don't exist or are invalid, run through the native client
     # flow. The Storage object will ensure that if successful the good
     # Credentials will get written back to a file.
@@ -58,7 +65,12 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None, sco
     #
     credentials = STORAGE.get()
     if credentials is None or credentials.invalid == True:
-        credentials = tools.run_flow(FLOW, STORAGE, FLAGS)
+        authorize_url = FLOW.step1_get_authorize_url()
+        print 'Go to the following link in your browser: ' + authorize_url
+        code = raw_input('Enter verification code: ').strip()
+        credentials = FLOW.step2_exchange(code)
+
+        #credentials = tools.run_flow(FLOW, STORAGE, FLAGS)
     ##
     # Create an httplib2.Http object to handle our HTTP requests and authorize it
     # with our good Credentials.
@@ -73,4 +85,9 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None, sco
     return service
 
 if __name__ == '__main__':
-    create_googleapi_service(serviceName=serviceName,version=version,client_id=client_id,scope=scope)
+    create_googleapi_service(serviceName=serviceName,
+                            version=version,
+                            client_id=client_id,
+                            client_secret=client_secret,
+                            redirect_uri=redirect_uri,
+                            scope=scope)

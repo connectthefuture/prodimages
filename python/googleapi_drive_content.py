@@ -27,15 +27,21 @@ def download_file_content(service=None, drive_file=None):
     
 if __name__ == '__main__':
     import apiclient, sys
-    from googleapi_functions import create_googleapi_service
+    from googleapi_service import create_googleapi_service
+    
     serviceName = 'drive'
     version = 'v2'
-    client_id = '390426411557-fsk0n5k1g5fnj1gs1te2f19kq5vfftgk.apps.googleusercontent.com'
+    client_secret = 'eZfKgvYDfrQ74TMJQFNj1zOr'
+    client_id = '355881409068-4u3uc09afj83fii3pvg64mroomnbq500.apps.googleusercontent.com'
     scope = 'https://www.googleapis.com/auth/drive'
-    
+    #redirect_uri = 'http://localhost:8080/'
+    redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
+
     service = create_googleapi_service(serviceName=serviceName, 
-                                        version=version, 
+                                        version=version,
+                                        client_secret=client_secret, 
                                         client_id=client_id,
+                                        redirect_uri=redirect_uri,
                                         scope=scope)
     
     # drive_file = drive_file_instance
