@@ -28,10 +28,19 @@ def download_file_content(service=None, drive_file=None):
 if __name__ == '__main__':
     import apiclient, sys
     from googleapi_functions import create_googleapi_service
-    service = create_googleapi_service(serviceName='drive', version='v2')
+    serviceName = 'drive'
+    version = 'v2'
+    client_id = '390426411557-fsk0n5k1g5fnj1gs1te2f19kq5vfftgk.apps.googleusercontent.com'
+    scope = 'https://www.googleapis.com/auth/drive'
     
+    service = create_googleapi_service(serviceName=serviceName, 
+                                        version=version, 
+                                        client_id=client_id,
+                                        scope=scope)
+    
+    # drive_file = drive_file_instance
     #url = 'https://lh6.googleusercontent.com/OIewDxLKKSkrPbeyzzvnokg5QaQGryNrMwQFV9IoxYZKtop6ow_OQ45bX0lvq1e9SUveGICEK-I=w1154-h561'
     url = 'https://drive.google.com/file/d/0B4p-sxy24gtqb3dLQjZzZUJqSmc/edit?usp=sharing'
     
-    download_file_content(service=None, drive_file=drive_file)
+    download_file_content(service=service, drive_file=drive_file)
   

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def create_googleapi_service(serviceName=None, version=None):
+def create_googleapi_service(serviceName=None, version=None, client_id=None, scope=None):
     serviceName = ''
     version = ''
     import httplib2
@@ -10,10 +10,17 @@ def create_googleapi_service(serviceName=None, version=None):
     from oauth2client import tools
     import os, datetime, argparse, apiclient
 
-
-    ##########################Vars
-    client_id='924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
+    # if serviceName == 'drive':
+    #     print serviceName
+    #     client_id = '390426411557-fsk0n5k1g5fnj1gs1te2f19kq5vfftgk.apps.googleusercontent.com'
+    # ##########################Vars
+    # elif serviceName == 'calendar':
+    #     print serviceName
+    #     client_id = '924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
+    
+    client_id = client_id
     client_secret='rqZxYuy0Cht37rJ0GSZ05YoY'
+    scope =  scope
     user_agent='Python2.7'
     BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
     SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
@@ -30,7 +37,7 @@ def create_googleapi_service(serviceName=None, version=None):
     FLOW = OAuth2WebServerFlow(
         client_id=client_id,
         client_secret=client_secret,
-        scope='https://www.googleapis.com/auth/' + serviceName,
+        scope=scope,
         user_agent=user_agent)
     # If the Credentials don't exist or are invalid, run through the native client
     # flow. The Storage object will ensure that if successful the good
@@ -66,5 +73,4 @@ def create_googleapi_service(serviceName=None, version=None):
     return service
 
 if __name__ == '__main__':
-    print 
-    create_googleapi_service(serviceName=serviceName,version=version)
+    create_googleapi_service(serviceName=serviceName,version=version,client_id=client_id,scope=scope)
