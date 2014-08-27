@@ -123,9 +123,13 @@ for k,v in vaultstyles.iteritems():
         except:
             pass
 
-        ## Strip error causing Line Feed ascii char
+        ## Strip error causing Line Feed ascii char and other spec char % escapes
+        import urllib2
         image_url = ''.join(image_url.split('%0A'))
- 
+        #image_url = ' '.join(image_url.split('%2520'))
+        #image_url = ' '.join(image_url.split('%20'))
+        image_url = urllib2.unquote(urllib2.unquote(image_url))
+
         try:
             print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
             error_check = urllib.urlopen(image_url)

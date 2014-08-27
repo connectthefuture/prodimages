@@ -31,8 +31,8 @@ if __name__ == '__main__':
     
     serviceName = 'drive'
     version = 'v2'
-    client_secret = 'eZfKgvYDfrQ74TMJQFNj1zOr'
-    client_id = '355881409068-4u3uc09afj83fii3pvg64mroomnbq500.apps.googleusercontent.com'
+    client_secret = 'Pvisql1TrWtRaOuud6ah6bDa'
+    client_id = '355881409068-167vm2c1oqjkmdmb2kulaugu63ehgcim.apps.googleusercontent.com'
     scope = 'https://www.googleapis.com/auth/drive'
     #redirect_uri = 'http://localhost:8080/'
     redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'

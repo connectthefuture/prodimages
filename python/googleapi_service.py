@@ -7,8 +7,7 @@ def create_googleapi_service(serviceName=None,
                             client_secret=None,
                             redirect_uri=None, 
                             scope=None):
-    serviceName = ''
-    version = ''
+
     import httplib2
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
