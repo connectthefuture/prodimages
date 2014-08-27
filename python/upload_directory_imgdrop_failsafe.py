@@ -64,9 +64,9 @@ def upload_to_imagedrop(img):
 
 #[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
 
-def main(root_dir=None):
+def run_upload(root_dir=None,destdir=None):
     ## UPLOAD FTP with PyCurl everything in tmp_loading
-    import os, sys, re, csv, shutil, glob
+    import os, sys, re, csv, shutil, glob, time
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
@@ -78,7 +78,7 @@ def main(root_dir=None):
             root_dir = os.path.abspath('.')
     else:
         root_dir = root_dir
-    
+
     archive_uploaded = os.path.join(root_dir, 'uploaded')
     tmp_failed = os.path.join(root_dir, 'failed_upload')
     try:
@@ -91,7 +91,6 @@ def main(root_dir=None):
     except:
         pass
 
-    import time
     upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
     for upload_file in upload_tmp_loading:
         #### UPLOAD upload_file via ftp to imagedrop using Pycurl
@@ -106,7 +105,7 @@ def main(root_dir=None):
                     print code, upload_file
                     time.sleep(float(.3))
                     try:
-                        ftpload_to_imagedrop(upload_file)
+                        upload_to_imagedrop(upload_file)
                         print "Uploaded {}".format(upload_file)
                         time.sleep(float(.3))
                         shutil.move(upload_file, archive_uploaded)
@@ -129,11 +128,30 @@ def main(root_dir=None):
         else:
             shutil.move(upload_file, tmp_failed)
 
-    try:
-        if sys.argv[2]:
+    if not destdir:
+        try:
             destdir = os.path.abspath(sys.argv[2])
             for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
                 shutil.move(f, destdir)
-    except:
-        pass
-            
+        except:
+            pass
+    else:
+        for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
+            shutil.move(f, destdir)
+
+    count_tmp_loading = len(glob.glob(os.path.join(tmp_failed, '*.*g')))
+
+    return count_tmp_loading, os.path.abspath(tmp_failed)
+
+def main(root_dir=None):
+    failed_count, failed_dir = run_upload()
+    while failed_count > 0:
+        failed_count, failed_dir = run_upload(root_dir=failed_dir)
+    return failed_count
+
+
+if __name__ == '__main__':
+    main()
+
+
+

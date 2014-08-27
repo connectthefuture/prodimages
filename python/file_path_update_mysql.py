@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ###
-## Walk Root Directory and Return List or all Files in all Subdirs too
+## Walk Root Directory and Return List of all Files in all Subdirs too
 def recursive_dirlist(rootdir):
     import os
     walkedlist = []
