@@ -68,7 +68,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
                 destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures')
         except:
             destdir = os.path.abspath('.')
-
+    print destdir
     if len(currentalt_newalt_pairs) == 2:
         old_alt = currentalt_newalt_pairs[0]
         new_alt = currentalt_newalt_pairs[1]
