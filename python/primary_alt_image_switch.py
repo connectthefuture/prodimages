@@ -63,7 +63,9 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         try:
             destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing'
             if os.path.isdir(destdir):
+                print 'Isdir'
                 pass
+            
             else:
                 destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures')
         except:
