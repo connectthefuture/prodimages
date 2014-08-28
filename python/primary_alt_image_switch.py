@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Path to file below is from the mountpoint on FTP, ie /mnt/images..
+## Download via FTP
+def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=None, ext='.png', destdir=None):
+    # fetch a binary file from primary bfly site repo
+    import ftplib,sys, os
+    ftp_host        = "netsrv101.l3.bluefly.com" 
+    ftp_user        = "imagedrop"
+    ftp_pass        = "imagedrop0"
+    remote_img_dir  = "/mnt/images/images"
+    fname_parent    = colorstyle[:4]
+
+    if int(old_alt) == 1:
+        fname1    = colorstyle + ext
+    elif int(old_alt) > 1:
+        altext1   = int(old_alt) - 1
+        fname1    = colorstyle + '_alt0' + str(altext1) + ext
+        
+    if int(new_alt) > 1:
+        altext2   = int(new_alt) - 1
+        fname2    = colorstyle + '_alt0' + str(altext2) + ext
+    elif int(new_alt) == 1:
+        fname2     = colorstyle + ext
+
+    remote_pathtofile1 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname)
+    remote_pathtofile2 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname2)
+
+    outfile1 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(new_alt) + ext)
+    outfile2 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(old_alt) + ext)
+
+    destfile1 = open(outfile1, "wb")
+    destfile2 = open(outfile2, "wb")
+
+    session = ftplib.FTP(ftp_host, ftp_user, ftp_pass)    
+    session.retrbinary("RETR " + remote_pathtofile1, destfile1.write, 8*1024)
+    session.retrbinary("RETR " + remote_pathtofile2, destfile2.write, 8*1024)
+    destfile1.close()
+    destfile2.close()
+    session.quit()
+
+    return [os.path.abspath(outfile1), os.path.abspath(outfile2)]
+
+
+# curnew_pairs=tuple((1,4,))
+def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
+    import os, sys
+    import magicColorspaceModAspctLoad as magickProcLoad
+    if not destdir:
+        try:
+            destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing'
+            if os.path.isdir(destdir):
+                pass
+            else:
+                destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures')
+        except:
+            destdir = os.path.abspath('.')
+
+    ## iterate through pairs and append nonmatching alt number pairs
+    if len(currentalt_newalt_pairs) == 2:
+        for pair in currentalt_newalt_pairs:
+            old_alt = pair[0]
+            new_alt = pair[1]
+            if old_alt != new_alt:
+                # Download Zoom of both files renaming on dest dir save
+                getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
+                # Process newely named files and upload
+                magickProcLoad.main(root_img_dir=destdir)
+
+    ###-## Process/convert Renamed pngs for upload
+    #      Upload renamed/switched files to image drop
+    #  import upload_directory_imgdrop_failsafe 
+    #  upload_directory_imgdrop_failsafe(root_dir=destdir)
+    #  magickProcLoad.main(root_img_dir=destdir)
+
+
+if __name__ == '__main__':
+    import sys
+    try:
+        colorstyle = sys.argv[1]
+        a1 = int(sys.argv[2])
+        a2 = int(sys.argv[3])
+        pairs = tuple((a1,a2,))
+    except:
+        pass
+
+    main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
