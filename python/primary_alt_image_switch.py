@@ -87,7 +87,8 @@ if __name__ == '__main__':
         a1 = int(sys.argv[2])
         a2 = int(sys.argv[3])
         pairs = tuple((a1,a2,))
+        main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
     except:
         pass
-
-    main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
+        
+    
