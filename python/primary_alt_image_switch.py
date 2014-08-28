@@ -79,12 +79,15 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             # Process newely named files and upload
             magickProcLoad.main(root_img_dir=destdir)
             print res
-            print 'Done'
+            print 'Done Switching Style {2} Image #{0} With Image #{1}'.format(old_alt, new_alt, colorstyle)
             return res
     elif len(currentalt_newalt_pairs) == 1:
         old_alt = currentalt_newalt_pairs[0]
         res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
+        # Reprocess Downloaded Style's Image and re-upload
+        magickProcLoad.main(root_img_dir=destdir)
         print res
+        print 'Done Reloading Image {0} For Style {1}'.format(old_alt, colorstyle)
         return res
     else:
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
