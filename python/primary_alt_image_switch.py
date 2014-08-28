@@ -57,7 +57,6 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         except:
             destdir = os.path.abspath('.')
 
-    ## iterate through pairs and append nonmatching alt number pairs
     if len(currentalt_newalt_pairs) == 2:
         for pair in currentalt_newalt_pairs:
             old_alt = pair[0]
