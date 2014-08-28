@@ -57,7 +57,7 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
 
 #ex currentalt_newalt_pairs=tuple((1,4,))
 def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
-    import os, sys
+    import os, sys, glob
     import magicColorspaceModAspctLoad_ArgSafe as magickProcLoad
     if not destdir:
         try:
@@ -93,9 +93,21 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
          pass
 
+    ## Clear downloaded pngs from destdir, leaving uploaded files in 1/uploaded dir 
+    todelete = glob.glob(os.path.join(destdir, '*.??g')
+    if todelete:
+        for f in todelete:
+            os.remove(os.path.abspath(f))
+            print 'Deleted {}'.format(os.path.abspath(f))
+    else:
+        pass
+
+
+##########################
+##########################
 
 if __name__ == '__main__':
-    import sys
+    import sys, os
     pairs = ''
     try:
         colorstyle = sys.argv[1]
