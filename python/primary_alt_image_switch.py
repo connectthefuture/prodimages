@@ -63,13 +63,11 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         try:
             destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing'
             if os.path.isdir(destdir):
-                print 'Isdir'
-                pass
-            
+                pass            
             else:
                 destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures')
         except:
-            destdir = os.path.abspath('.')
+            destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing'#os.path.abspath('.')
     
     if len(currentalt_newalt_pairs) == 2:
         old_alt = currentalt_newalt_pairs[0]

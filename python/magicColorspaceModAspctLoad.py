@@ -603,11 +603,11 @@ def main(root_img_dir=None):
         destdir = os.path.abspath(sys.argv[2]) 
 
         if not os.path.isdir(destdir):
-            os.makedirs(destdir)
+            os.makedirs(destdir, 16877)
     except IndexError:
         destdir = os.path.join(root_img_dir, 'output')
         try:
-            os.makedirs(destdir)
+            os.makedirs(destdir, 16877)
         except OSError:
             pass
 
