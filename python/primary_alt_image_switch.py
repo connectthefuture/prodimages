@@ -118,7 +118,10 @@ if __name__ == '__main__':
     if colorstyle:
         print colorstyle, pairs
         main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
-        print 'Success ', colorstyle, #currentalt_newalt_pairs
+        print 'Success ', colorstyle
     else:
-        print 'Utterfailure in ', os.path.abspath(__file__)
-
+        try:
+            print 'Utterfailure in ', os.path.abspath(__file__)
+        except:
+            pass
+            print 'Total Utterfailure ', colorstyle
