@@ -601,8 +601,9 @@ def main(root_img_dir=None, destdir=None):
     
     if not destdir:
         try:
-            destdir = os.path.abspath(sys.argv[2]) 
-            
+            destdir = os.path.abspath(sys.argv[2])
+            if destdir.isdigit():
+                destdir = os.path.join(root_img_dir, 'output')
         except IndexError:
             destdir = os.path.join(root_img_dir, 'output')
             try:
@@ -612,7 +613,7 @@ def main(root_img_dir=None, destdir=None):
     
     if not os.path.isdir(destdir):
         os.makedirs(destdir, 16877)
-    
+
     if os.path.isdir(root_img_dir):
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
         img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
