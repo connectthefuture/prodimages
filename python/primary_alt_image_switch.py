@@ -43,7 +43,7 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
     return [os.path.abspath(outfile1), os.path.abspath(outfile2)]
 
 
-# curnew_pairs=tuple((1,4,))
+#ex currentalt_newalt_pairs=tuple((1,4,))
 def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
     import os, sys
     import magicColorspaceModAspctLoad as magickProcLoad
@@ -63,9 +63,15 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             new_alt = pair[1]
             if old_alt != new_alt:
                 # Download Zoom of both files renaming on dest dir save
-                getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
+                res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
                 # Process newely named files and upload
                 magickProcLoad.main(root_img_dir=destdir)
+                print res
+                print 'Done'
+                return res
+    else:
+         print 'Pair Tuple aint len 2'
+         pass
 
     ###-## Process/convert Renamed pngs for upload
     #      Upload renamed/switched files to image drop
