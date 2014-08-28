@@ -70,7 +70,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
                 destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures')
         except:
             destdir = os.path.abspath('.')
-    print destdir
+    
     if len(currentalt_newalt_pairs) == 2:
         old_alt = currentalt_newalt_pairs[0]
         new_alt = currentalt_newalt_pairs[1]
@@ -85,6 +85,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             return res
     elif len(currentalt_newalt_pairs) == 1:
         old_alt = currentalt_newalt_pairs[0]
+        print destdir, old_alt, 'LLL'
         res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
         # Reprocess Downloaded Style's Image and re-upload
         magickProcLoad.main(root_img_dir=destdir)
