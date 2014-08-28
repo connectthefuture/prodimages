@@ -116,6 +116,7 @@ if __name__ == '__main__':
 
     # Run it
     if colorstyle:
+        print colorstyle, pairs
         main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
         print 'Success ', colorstyle, #currentalt_newalt_pairs
     else:
