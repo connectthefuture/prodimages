@@ -17,30 +17,42 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
     elif int(old_alt) > 1:
         altext1   = int(old_alt) - 1
         fname1    = colorstyle + '_alt0' + str(altext1) + ext
-        
-    if int(new_alt) > 1:
-        altext2   = int(new_alt) - 1
-        fname2    = colorstyle + '_alt0' + str(altext2) + ext
-    elif int(new_alt) == 1:
-        fname2     = colorstyle + ext
+    
+    # Reprocess and upload old_alt img# for style in case jpgs failed to generate and load
+    if not new_alt:
+        remote_pathtofile = os.path.join(ftp_host, remote_img_dir, fname_parent, fname1)
+        outfile = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(old_alt) + ext)
+        destfile = open(outfile, "wb")
+        session = ftplib.FTP(ftp_host, ftp_user, ftp_pass)    
+        session.retrbinary("RETR " + remote_pathtofile, destfile.write, 8*1024)
+        destfile.close()
+        session.quit()
+        return [os.path.abspath(outfile)]
+    # Switch position of new and old images
+    else:
+        if int(new_alt) > 1:
+            altext2   = int(new_alt) - 1
+            fname2    = colorstyle + '_alt0' + str(altext2) + ext
+        elif int(new_alt) == 1:
+            fname2     = colorstyle + ext
 
-    remote_pathtofile1 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname)
-    remote_pathtofile2 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname2)
+        remote_pathtofile1 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname1)
+        remote_pathtofile2 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname2)
 
-    outfile1 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(new_alt) + ext)
-    outfile2 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(old_alt) + ext)
+        outfile1 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(new_alt) + ext)
+        outfile2 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(old_alt) + ext)
 
-    destfile1 = open(outfile1, "wb")
-    destfile2 = open(outfile2, "wb")
+        destfile1 = open(outfile1, "wb")
+        destfile2 = open(outfile2, "wb")
 
-    session = ftplib.FTP(ftp_host, ftp_user, ftp_pass)    
-    session.retrbinary("RETR " + remote_pathtofile1, destfile1.write, 8*1024)
-    session.retrbinary("RETR " + remote_pathtofile2, destfile2.write, 8*1024)
-    destfile1.close()
-    destfile2.close()
-    session.quit()
+        session = ftplib.FTP(ftp_host, ftp_user, ftp_pass)    
+        session.retrbinary("RETR " + remote_pathtofile1, destfile1.write, 8*1024)
+        session.retrbinary("RETR " + remote_pathtofile2, destfile2.write, 8*1024)
+        destfile1.close()
+        destfile2.close()
+        session.quit()
 
-    return [os.path.abspath(outfile1), os.path.abspath(outfile2)]
+        return [os.path.abspath(outfile1), os.path.abspath(outfile2)]
 
 
 #ex currentalt_newalt_pairs=tuple((1,4,))
@@ -69,8 +81,11 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
                 print res
                 print 'Done'
                 return res
+    elif len(currentalt_newalt_pairs) == 1:
+        old_alt = currentalt_newalt_pairs[0]
+        getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
     else:
-         print 'Pair Tuple aint len 2'
+         print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
          pass
 
     ###-## Process/convert Renamed pngs for upload
@@ -85,10 +100,14 @@ if __name__ == '__main__':
     try:
         colorstyle = sys.argv[1]
         a1 = int(sys.argv[2])
-        a2 = int(sys.argv[3])
-        pairs = tuple((a1,a2,))
+        try:
+            a2 = int(sys.argv[3])
+            pairs = tuple((a1,a2,))
+        except:
+            pairs = tuple((a1,))
         main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
     except:
+        print 'You need at least 2 args, first is colorstyle then img # to Download. primary img is 1, etc. A 3rd arg can be the img# to swap with arg 2 or empty reloads the image only'
         pass
         
     
