@@ -93,26 +93,31 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
          pass
 
-    ###-## Process/convert Renamed pngs for upload
-    #      Upload renamed/switched files to image drop
-    #  import upload_directory_imgdrop_failsafe 
-    #  upload_directory_imgdrop_failsafe(root_dir=destdir)
-    #  magickProcLoad.main(root_img_dir=destdir)
-
 
 if __name__ == '__main__':
     import sys
+    pairs = ''
     try:
         colorstyle = sys.argv[1]
-        a1 = int(sys.argv[2])
         try:
-            a2 = int(sys.argv[3])
-            pairs = tuple((a1,a2,))
-        except:
-            pairs = tuple((a1,))
-        main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
+            a1 = sys.argv[2]
+        except IndexError:
+            # if only colorstylee provide assume to just reload the primary
+            a1 = 1
     except:
         print 'You need at least 2 args, first is colorstyle then img # to Download. primary img is 1, etc. A 3rd arg can be the img# to swap with arg 2 or empty reloads the image only'
         pass
-        
-    
+
+    try:
+        a2 = sys.argv[3]
+        pairs = tuple((a1,a2,))
+    except IndexError:
+        pairs = tuple((a1,))
+
+    # Run it
+    if colorstyle:
+        main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
+        print 'Success ', colorstyle, currentalt_newalt_pairs
+    else:
+        print 'Utterfailure in ', os.path.abspath(__file__)
+
