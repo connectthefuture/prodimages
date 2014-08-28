@@ -58,7 +58,7 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
 #ex currentalt_newalt_pairs=tuple((1,4,))
 def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
     import os, sys
-    import magicColorspaceModAspctLoad as magickProcLoad
+    import magicColorspaceModAspctLoad_ArgSafe as magickProcLoad
     if not destdir:
         try:
             destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing'
