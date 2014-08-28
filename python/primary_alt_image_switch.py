@@ -70,20 +70,22 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             destdir = os.path.abspath('.')
 
     if len(currentalt_newalt_pairs) == 2:
-        for pair in currentalt_newalt_pairs:
-            old_alt = pair[0]
-            new_alt = pair[1]
-            if old_alt != new_alt:
-                # Download Zoom of both files renaming on dest dir save
-                res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
-                # Process newely named files and upload
-                magickProcLoad.main(root_img_dir=destdir)
-                print res
-                print 'Done'
-                return res
+        old_alt = currentalt_newalt_pairs[0]
+        new_alt = currentalt_newalt_pairs[1]
+        if old_alt != new_alt:
+            # Download Zoom of both files renaming on dest dir save
+            res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
+            
+            # Process newely named files and upload
+            magickProcLoad.main(root_img_dir=destdir)
+            print res
+            print 'Done'
+            return res
     elif len(currentalt_newalt_pairs) == 1:
         old_alt = currentalt_newalt_pairs[0]
-        getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
+        res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
+        print res
+        return res
     else:
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
          pass
