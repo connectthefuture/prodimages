@@ -94,7 +94,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
          pass
 
     ## Clear downloaded pngs from destdir, leaving uploaded files in 1/uploaded dir 
-    todelete = glob.glob(os.path.join(destdir, '*.??g')
+    todelete = glob.glob(os.path.join(destdir, '*.??g'))
     if todelete:
         for f in todelete:
             os.remove(os.path.abspath(f))
