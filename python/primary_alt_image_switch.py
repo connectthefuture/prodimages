@@ -67,7 +67,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             else:
                 destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures')
         except:
-            destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing'#os.path.abspath('.')
+            destdir = os.path.abspath('.')
     
     if len(currentalt_newalt_pairs) == 2:
         old_alt = currentalt_newalt_pairs[0]
@@ -75,19 +75,17 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         if old_alt != new_alt:
             # Download Zoom of both files renaming on dest dir save
             res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
-            
+            os.chdir(destdir)
             # Process newely named files and upload
             magickProcLoad.main(root_img_dir=destdir)
-            print res
             print 'Done Switching Style {2} Image #{0} With Image #{1}'.format(old_alt, new_alt, colorstyle)
             return res
     
     elif len(currentalt_newalt_pairs) == 1:
         old_alt = currentalt_newalt_pairs[0]
-        print destdir, old_alt, 'LLL'
         res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
         # Reprocess Downloaded Style's Image and re-upload
-        print res
+        os.chdir(destdir)
         magickProcLoad.main(root_img_dir=destdir)
         print 'Done Reloading Image {0} For Style {1}'.format(old_alt, colorstyle)
         return res
