@@ -77,8 +77,8 @@ except:
 
     # imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 
-regex_swi = re.compile(r'^.*?SWI.jpg$')
-#regex_swi = re.compile(r'^.*?SWI.*?\.jpg$')
+regex_swi   = re.compile(r'^.*?SWI.jpg$')
+
 if os.path.isdir(imagedir):
     ## Remove previous days imports only from the PO dir prior to new import, SWI stays separate
     remove_prior_import = glob.glob(os.path.join(imagedir, '*/*/*.jpg'))
@@ -123,12 +123,30 @@ for k,v in vaultstyles.iteritems():
         except:
             pass
 
-        ## Strip error causing Line Feed ascii char and other spec char % escapes
+
+        ########################################################
+        ########################################################
+        ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
+        ########################################################
+        ########################################################
+        ####### Google Drive Fix ###############################
+        regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
+        ## Strip query string and edit RETURNNG URL TO IMG ON GOOGLE DRIVE
+        if regex_drive.findall(image_url):
+            image_url = image_url.split('/edit?')[0]
+        ########################################################
+        ########################################################
+        ####### URL ENCODED % ESCAPES Fix ######################
+        ## Strip error causing Line Feed ascii char
         import urllib2
         image_url = ''.join(image_url.split('%0A'))
-        #image_url = ' '.join(image_url.split('%2520'))
-        #image_url = ' '.join(image_url.split('%20'))
+        ########################################################
+        ############       Finally     #########################
+        #####     Replace ALL url encoding % escapes    ########
+        ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
         image_url = urllib2.unquote(urllib2.unquote(image_url))
+        ########################################################
+        ########################################################
 
         try:
             print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
