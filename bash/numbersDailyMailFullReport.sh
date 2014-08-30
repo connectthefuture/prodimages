@@ -6,11 +6,8 @@ fileInput=$LIMBO/newTmp.txt
 #$1
 
 DAYR=`date "+%Y-%m-%d-RetouchToDo"`
-<<<<<<< HEAD
-DAYR_DIR=$POSTREADY/Daily/"$DAYR"
-=======
+
 DAYR_DIR=/mnt/Post_Ready/Daily/"$DAYR"
->>>>>>> 5a6c3db907983a96a6cdc0bf6194a7a13e8401de
 sourceDir="$DAYR_DIR"
 TODAY=$(date +"%m-%d-%Y")
 formatFile=$LIBSRV/exifFormatFilePrdStatsCsv_ex.txt
