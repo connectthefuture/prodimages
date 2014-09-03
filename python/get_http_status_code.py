@@ -10,38 +10,41 @@ regex = re.compile(
         r'(?::\d+)?' # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 #
-#import requests
-#try:
-#    r = requests.head("http://stackoverflow.com")
-#    print r.status_code
-#    #prints the int of the status code. Find more at httpstatusrappers.com :)
-#except requests.ConnectionError:
-#    print "failed to connect"
-#    
-#    
-
-import httplib
-def get_status_code(host=None, path="/"):
+def request_status_code(url):
+    import requests
     try:
-        conn = httplib.HTTPConnection(host)
-        conn.request("HEAD", path)
-        return conn.getresponse().status
-    except StandardError:
-        return None
-        
+        r = requests.head(url)
+        return r.status_code
+        #prints the int of the status code. Find more at httpstatusrappers.com :)
+    except requests.ConnectionError:
+        print "failed to connect"
 
-def main(url_path=None):
-    host = url_path.split('.com/')[0] + '.com'
-    path = url_path.split('.com/')[-1] + '/'
-    status_code = get_status_code(host=host, path=path)
-    return status_code
+    
+
+#import httplib
+#def get_status_code(host=None, path="/"):
+#    try:
+#        conn = httplib.HTTPConnection(host)
+#        conn.request("HEAD", path)
+#        return conn.getresponse().status
+#    except StandardError:
+#        return None
+#        
+#
+#def main(url_path=None):
+#    host = url_path.split('.com/')[0] + '.com'
+#    path = url_path.split('.com/')[-1] + '/'
+#    status_code = get_status_code(host=host, path=path)
+#    return status_code
 
 
 if __name__ == '__main__':
     import sys
     try:
-        host = sys.argv[1].split('.com/')[0] + '.com'
-        path = sys.argv[1].split('.com/')[-1] + '/'
-        status_code = get_status_code(host=host, path=path)
-    except:
-        print 'Error occurred. Unable to get Http Code'
+        url = sys.argv[1]
+        status_code = request_status_code(url)
+        print status_code
+    except IndexError:
+        print 'You need to provide a URL as your first and only argument'
+    #except:
+    #    print 'Error occurred. Unable to get Http Code'
