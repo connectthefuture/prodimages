@@ -47,16 +47,17 @@ def download_file(url, colorstyle=None, alt=None, ext='.jpg', destdir=None):
             f.close()
         return destpath            
 
-def main(url):
+
+def main():
     result = parse_html_for_urls(url)
     return result
 
-#    urlok='https://drive.google.com/file/d/0B4p-sxy24gtqOGlERmRkQmpoRkU/edit?usp=sharing'
-#    urlbad='https://drive.google.com/file/d/0B4p-sxy24gtqb3dLQjZzZUJqSmc/edit?usp=sharing'
-#    urlbad2='https://drive.google.com/file/d/0B4p-sxy24gtqWng3LTd4RXlxSXM/edit?usp=sharing'
-#    print parse_html_for_urls(urlok)
-#    print parse_html_for_urls(urlbad)
-#    print parse_html_for_urls(urlbad2)
+    urlok='https://drive.google.com/file/d/0B4p-sxy24gtqOGlERmRkQmpoRkU/edit?usp=sharing'
+    urlbad='https://drive.google.com/file/d/0B4p-sxy24gtqb3dLQjZzZUJqSmc/edit?usp=sharing'
+    urlbad2='https://drive.google.com/file/d/0B4p-sxy24gtqWng3LTd4RXlxSXM/edit?usp=sharing'
+    print parse_html_for_urls(urlok)
+    print parse_html_for_urls(urlbad)
+    print parse_html_for_urls(urlbad2)
 
 
 
