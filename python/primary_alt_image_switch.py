@@ -129,8 +129,8 @@ if __name__ == '__main__':
     # Run it
     if colorstyle:
         print colorstyle, pairs
-        main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
-        print 'Success ', colorstyle
+        results = main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
+        print 'Success ', colorstyle, results,'results'
     else:
         try:
             print 'Utterfailure in ', os.path.abspath(__file__)
