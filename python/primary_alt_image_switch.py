@@ -133,7 +133,7 @@ if __name__ == '__main__':
         print 'Success ', colorstyle, results,'results'
     else:
         try:
-            print 'Utterfailure in ', os.path.abspath(__file__)
+            print 'Utter failure in ', os.path.abspath(__file__)
         except:
             pass
             print 'Total Utterfailure ', colorstyle
