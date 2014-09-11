@@ -61,7 +61,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
     import magicColorspaceModAspctLoad_ArgSafe as magickProcLoad
     if not destdir:
         try:
-            destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing/reprocess'
+            destdir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
             if os.path.isdir(destdir):
                 pass            
             else:
