@@ -61,7 +61,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
     import magicColorspaceModAspctLoad_ArgSafe as magickProcLoad
     if not destdir:
         try:
-            destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing/output'
+            destdir = '/mnt/Post_Complete/Complete_to_Load/.tmp_processing/reprocess'
             if os.path.isdir(destdir):
                 pass            
             else:
@@ -87,7 +87,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         # Reprocess Downloaded Style's Image and re-upload
         os.chdir(destdir)
         magickProcLoad.main(root_img_dir=destdir)
-        print 'Done Reloading Image {0} For Style {1}'.format(old_alt, colorstyle)
+        print 'Done Reloading Image {0} For Only the Main for Style {1}'.format(old_alt, colorstyle)
         return res
     else:
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
