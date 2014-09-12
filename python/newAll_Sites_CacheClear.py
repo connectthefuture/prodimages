@@ -190,18 +190,21 @@ def main(colorstyle_list=None):
         found_links = url_get_links(bflypdp_url)
         version =  query_version_number(colorstyle)[colorstyle]['version']
         ## static standard urls
-        oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
-        newlistpg = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
-        pdpg = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
-        pmlistpg  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
-        pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
-        pdpZOOMthumb ='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-        pdpZOOM   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version) 
-        pdpaltthumb ='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-        pdpalt01z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-        pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)       
-        email_img1     = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
-        email_img2     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
+        oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
+        newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
+        pdpg         = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
+        pmlistpg     = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+        pmeventimg   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
+        pdpZOOMthumb = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+        pdpZOOM      = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+        pdpaltthumb  = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+        pdpalt01z    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+        pdpalt01l    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+        email_img1   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
+        email_img2   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
+
+        mobile_list  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=226&height=271'.format(colorstyle)
+        mobile_zoom  = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
 
         if not found_links:
             # remote cdn to clear
@@ -212,6 +215,8 @@ def main(colorstyle_list=None):
             edgecast_listurls.append(pmeventimg)
             edgecast_listurls.append(email_img1)
             edgecast_listurls.append(email_img2)
+            edgecast_listurls.append(mobile_list)
+            edgecast_listurls.append(mobile_zoom)
             ## version urls using db query not scraped
             edgecast_listurls.append(pdpZOOMthumb)
             edgecast_listurls.append(pdpZOOM)
@@ -245,21 +250,33 @@ def main(colorstyle_list=None):
                     version =  query_version_number(colorstyle)[colorstyle]['version']
                 ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
-                    oldlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
-                    newlistpg   =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
-                    pdpg  =         'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
-                    pmlistpg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
-                    pmeventimg    =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
-                    email_img1     = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
-                    email_img2     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
+                    ## static standard urls
+                    oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
+                    newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
+                    pdpg         = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
+                    pmlistpg     = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
+                    pmeventimg   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
+                    pdpZOOMthumb = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+                    pdpZOOM      = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+                    pdpaltthumb  = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
+                    pdpalt01z    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
+                    pdpalt01l    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
+                    email_img1   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
+                    email_img2   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
+
+                    mobile_list  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=226&height=271'.format(colorstyle)
+                    mobile_zoom  = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
 
                     edgecast_listurls.append(oldlistpg)
                     edgecast_listurls.append(newlistpg)
                     edgecast_listurls.append(pdpg)
                     edgecast_listurls.append(pmlistpg)
                     edgecast_listurls.append(pmeventimg)
+                    edgecast_listurls.append(pmeventimg)
                     edgecast_listurls.append(email_img1)
                     edgecast_listurls.append(email_img2)
+                    edgecast_listurls.append(mobile_list)
+                    edgecast_listurls.append(mobile_zoom)
                     
                 if version:
                     ### ZOOM HI REZ
@@ -273,14 +290,17 @@ def main(colorstyle_list=None):
                         pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt01l)
                         print "SUCCESS1"
+                        mobile_alt1 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
                         #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
-                    
+                        edgecast_listurls.append(mobile_alt1)
                     ### ALT 2
                     if testurl.replace('_alt01','_alt02') in pdp_urllist:
                         pdpalt02z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt02z)
                         pdpalt02l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt02l)
+                        mobile_alt2 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
+                        edgecast_listurls.append(mobile_alt2)
                         print "SUCCESS2"
                     ### ALT 3
                     if testurl.replace('_alt01','_alt03') in pdp_urllist:
@@ -288,6 +308,8 @@ def main(colorstyle_list=None):
                         edgecast_listurls.append(pdpalt03z)
                         pdpalt03l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt03l)
+                        mobile_alt3 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
+                        edgecast_listurls.append(mobile_alt3)
                         print "SUCCESS3"
                     ### ALT 4
                     if testurl.replace('_alt01','_alt04') in pdp_urllist:
@@ -296,15 +318,20 @@ def main(colorstyle_list=None):
                         pdpalt04l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt04l)
                         print "SUCCESS4"
+                        mobile_alt4 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
+                        edgecast_listurls.append(mobile_alt4)
                     ### ALT 5
                     if testurl.replace('_alt01','_alt05') in pdp_urllist:
                         pdpalt05z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt05z)
                         pdpalt05l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt05l)
+                        mobile_alt5 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
+                        edgecast_listurls.append(mobile_alt5)
                         print "SUCCESS5"
                     ## Unique Set
                     edgecast_listurls = list(set(edgecast_listurls))
+                    
                     print pdp_urllist
 
     #                newlistpg = '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt01.pct&outputx=1800&outputy=2160&level=1&ver=1'
