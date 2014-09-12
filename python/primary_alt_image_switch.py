@@ -65,7 +65,9 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             if os.path.isdir(destdir):
                 pass            
             else:
-                destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures')
+                destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', 'reprocess')
+                if not os.path.isdir(destdir):
+                    os.makedirs(destdir)
         except:
             destdir = os.path.abspath('.')
     
