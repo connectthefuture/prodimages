@@ -70,7 +70,19 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
                     os.makedirs(destdir)
         except:
             destdir = os.path.abspath('.')
-    
+
+            # # Clean out desination dir prior to running new files
+    cleardest = glob.glob(os.path.join(destdir, '*.??g'))
+    # filter(os.path.isfile, os.listdir(destdir))
+    if cleardest:
+        for image in cleardest:
+            import shutil, os
+
+            try:
+                os.remove(os.path.abspath(image))
+            except:
+                pass
+
     if len(currentalt_newalt_pairs) == 2:
         old_alt = currentalt_newalt_pairs[0]
         new_alt = currentalt_newalt_pairs[1]
@@ -96,16 +108,16 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
          pass
 
     ## Clear downloaded pngs from destdir, leaving uploaded files in 1/uploaded dir 
-    todelete1 = glob.glob(os.path.join(destdir, '*.*g'))
-    todelete2 = glob.glob(os.path.join(destdir, '*/*.??g'))
-    todelete = todelete1 + todelete2
-    #filter(os.path.isfile, os.listdir(destdir))
-    for image in todelete:
-        import shutil,os
-        try:
-            os.remove(os.path.abspath(image))
-        except:
-            pass
+    # todelete1 = glob.glob(os.path.join(destdir, '*.*g'))
+    # todelete2 = glob.glob(os.path.join(destdir, '*/*.??g'))
+    # todelete = todelete1 + todelete2
+    # #filter(os.path.isfile, os.listdir(destdir))
+    # for image in todelete:
+    #     import shutil,os
+    #     try:
+    #         os.remove(os.path.abspath(image))
+    #     except:
+    #         pass
         #shutil.rmtree()
         #shutil.rmtree()
 
