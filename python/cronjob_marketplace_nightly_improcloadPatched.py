@@ -136,6 +136,9 @@ for k,v in vaultstyles.iteritems():
             image_url = image_url.split('/edit?')[0]
         ########################################################
         ########################################################
+        ####### Dropbox Fix for View vs DL value ###############
+        image_url = image_url.replace('?dl=0', '?dl=1')
+        ########################################################
         ####### URL ENCODED % ESCAPES Fix ######################
         ## Strip error causing Line Feed ascii char
         import urllib2
