@@ -137,7 +137,7 @@ for k,v in vaultstyles.iteritems():
         ########################################################
         ########################################################
         ####### Dropbox Fix for View vs DL value ###############
-        image_url = image_url.replace('?dl=0', '?dl=1')
+        # image_url = image_url.replace('?dl=0', '?dl=1')
         ########################################################
         ####### URL ENCODED % ESCAPES Fix ######################
         ## Strip error causing Line Feed ascii char
