@@ -118,7 +118,7 @@ for k,v in importdata.iteritems():
         try:
             connection_www.execute("""INSERT INTO supplier_ingest_images (file_name, colorstyle, vendor_style, po_number, version, vendor_name, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, modified_dt, bfly_local_src, bfly_zoom_src, bfly_zoom_site, bfly_list_site, bfly_pdp_site) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
             ON DUPLICATE KEY UPDATE 
-            file_name     = VALUES(file_name)
+            file_name     = VALUES(file_name),
             version  = VALUES(version), 
             vendor_name  = VALUES(vendor_name), 
             bfly_product_path  = VALUES(bfly_product_path), 
