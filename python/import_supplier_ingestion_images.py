@@ -112,7 +112,7 @@ import sqlalchemy
 importdata = sqlQuerySupplierIngestImages()
 
 for k,v in importdata.iteritems():
-    print k "BEGIN"
+    print "BEGIN-->\t", k
     try:
 
         mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
