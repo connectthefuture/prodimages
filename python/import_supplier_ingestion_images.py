@@ -138,8 +138,8 @@ for k,v in importdata.iteritems():
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         
-        except sqlalchemy.exc.OperationalError:
-            print "Invalid Path or Entry {0}".format(k)
+        #except sqlalchemy.exc.OperationalError:
+        #    print "Invalid Path or Entry {0}".format(k)
 
         
         #print "Successful Insaert Push_Photoselecs --> {0}".format(k)
