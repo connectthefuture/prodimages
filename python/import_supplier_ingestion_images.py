@@ -72,7 +72,7 @@ def sqlQuerySupplierIngestImages():
         importdata_tmp['modified_dt'] = row['modified_dt']
         ## Set primary key and image location urls
         if row['alt'] != 1:
-            primarykey  = '{0}_alt0{1}'.format(str(row['colorstyle']), str(int(row['alt']) + 1))
+            primarykey  = '{0}_alt0{1}'.format(str(row['colorstyle']), str(int(row['alt']) - 1))
             srcLOCAL    = 'NotAvailable'
             srcZOOM     = 'http://images1.qa.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(primarykey, row['version'])
             siteZOOM    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(primarykey, row['version'])
