@@ -124,11 +124,11 @@ for k,v in importdata.iteritems():
             connection_www.execute("""INSERT INTO supplier_ingest_images (file_name, colorstyle, vendor_style, po_number, version, vendor_name, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, modified_dt, bfly_local_src, bfly_zoom_src, bfly_zoom_site, bfly_list_site, bfly_pdp_site) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
             ON DUPLICATE KEY UPDATE 
             file_name     = VALUES(file_name),
-            version  = VALUES(version), 
-            vendor_name  = VALUES(vendor_name), 
+            version       = VALUES(version), 
+            vendor_name   = VALUES(vendor_name), 
             bfly_product_path  = VALUES(bfly_product_path), 
-            image_url  = VALUES(image_url), 
-            alt  = VALUES(alt), 
+            image_url     = VALUES(image_url), 
+            alt           = VALUES(alt), 
             image_download_valid  = VALUES(image_download_valid),
             ingest_style_id  = VALUES(ingest_style_id), 
             modified_dt = VALUES(modified_dt);""", k, v['colorstyle'], v['vendor_style'], v['po_number'], v['version'], v['vendor_name'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['modified_dt'], v['bfly_local_src'], v['bfly_zoom_src'], v['bfly_zoom_site'], v['bfly_list_site'], v['bfly_pdp_site'])
