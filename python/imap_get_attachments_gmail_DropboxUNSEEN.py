@@ -40,14 +40,61 @@ def parse_email_list_by_tag(parsed_email_aslist,tag_name=None):
     return divs ## list(set(sorted(divs)))
 
 
+def download_file_url(url, localpath=None):
+    if localpath and os.path.isdir(localpath):
+        localpath = os.path.join(localpath, url.split('/')[-1])
+    res = requests.get(url, stream=True, timeout=1)
+    with open(localpath, 'ab+') as f:
+        f.write(res.content)
+        f.close()
+    return localpath
+
+
+def unzip_dir_savefiles(zipin, extractdir):
+    import zipfile,sys,datetime,os,re
+    regex_png = re.compile(r'^[^\.].+?[png]{3}$')
+    os.chdir(extractdir)
+    # Open zip file
+    zipf   = zipfile.ZipFile(zipin, 'r')
+    
+    # ZipFile.read returns the bytes contained in named file
+    filenames = zipf.namelist()
+    #print "777e3e3",os.path.abspath(os.curdir)
+    for filename in filenames:
+        if re.findall(regex_png, filename):    
+            f = zipf.open(filename)
+            contents = f.read()
+            f.close()
+            writefile = os.path.join(extractdir, filename.split('/')[-1])
+            try:
+                with open(writefile, 'w') as wfile:
+                    wfile.write(contents)
+                    print 'Extracting to --> {0}/{1}'.format(extractdir, filename.split('/')[-1])
+            except IOError:
+                print "IO Error -->{0}".format(filename)
+                #os.rename(filename, filename.replace('2_Returned', 'X_Errors'))
+                pass
+    return zipin
+
+
+
+
 def main():
-    import email, imaplib, os, re
+    import email, imaplib, os, re, requests
     regex_url = re.compile(r'/^(((http|https|ftp):\/\/)?([[a-zA-Z0-9]\-\.])+(\.)([[a-zA-Z0-9]]){2,4}([[a-zA-Z0-9]\/+=%&_\.~?\-]*))*$/')
     regex_dbx = re.compile(r'(https://.+?[?]dl=0)')
     parsed = parse_gmail_mailbox_to_html_list()
     res = [ regex_dbx.findall(p) for p in parsed if p ]
     ret = sorted(list(set(sorted([l[0] for l in sorted(res)]))))
     
+    ## Links to zips need to be downloaded\
+    extractdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
+    
+    zip_downloads = [ download_file_url(url, localpath=extractdir) for url in ret if url ]
+
+    ## Unzip Files
+    zips_extracted = [ unzip_dir_savefiles(z,extractdir) for z in zip_downloads]
+
     return ret
 
 
