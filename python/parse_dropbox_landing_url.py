@@ -52,7 +52,10 @@ def download_file(url, destdir=None):
 def parse_dropbox_landing_page(url):
     import re, requests
     regex_dbx = re.compile(r'"(https://.+?[?]dl=1)"')
-    r = requests.get(url).text.splitlines()
+    if regex_dbx.findall(url): 
+        r = requests.get(url).text.splitlines()
+    else:
+        r = url
     filesmash = [x for x in r if regex_dbx.findall(x)][1]
     all = [ line for line in filesmash.splitlines() if regex_dbx.findall(line) ][0].split(',')
     files = [ a for a in all if regex_dbx.findall(a) ]
