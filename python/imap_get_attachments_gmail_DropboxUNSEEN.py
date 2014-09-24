@@ -41,17 +41,18 @@ def parse_email_list_by_tag(parsed_email_aslist,tag_name=None):
 
 
 def download_file_url(url, localpath=None):
+    import requests, os, io
     if localpath and os.path.isdir(localpath):
         localpath = os.path.join(localpath, url.split('/')[-1])
     res = requests.get(url, stream=True, timeout=1)
-    with open(localpath, 'ab+') as f:
+    with io.open(localpath, 'ab+') as f:
         f.write(res.content)
         f.close()
     return localpath
 
 
 def unzip_dir_savefiles(zipin, extractdir):
-    import zipfile,sys,datetime,os,re
+    import zipfile,sys,datetime,os,re,io
     regex_png = re.compile(r'^[^\.].+?[png]{3}$')
     os.chdir(extractdir)
     # Open zip file
@@ -67,7 +68,7 @@ def unzip_dir_savefiles(zipin, extractdir):
             f.close()
             writefile = os.path.join(extractdir, filename.split('/')[-1])
             try:
-                with open(writefile, 'w') as wfile:
+                with io.open(writefile, 'w') as wfile:
                     wfile.write(contents)
                     print 'Extracting to --> {0}/{1}'.format(extractdir, filename.split('/')[-1])
             except IOError:
@@ -77,19 +78,23 @@ def unzip_dir_savefiles(zipin, extractdir):
     return zipin
 
 
-
-
-def main():
+def main(mailbox_name=None,searchTerms=None):
     import email, imaplib, os, re, requests
     regex_url = re.compile(r'/^(((http|https|ftp):\/\/)?([[a-zA-Z0-9]\-\.])+(\.)([[a-zA-Z0-9]]){2,4}([[a-zA-Z0-9]\/+=%&_\.~?\-]*))*$/')
     regex_dbx = re.compile(r'(https://.+?[?]dl=0)')
-    parsed = parse_gmail_mailbox_to_html_list()
+    parsed = parse_gmail_mailbox_to_html_list(mailbox_name=mailbox_name,searchTerms=searchTerms)
     res = [ regex_dbx.findall(p) for p in parsed if p ]
     ret = sorted(list(set(sorted([l[0] for l in sorted(res)]))))
     
     ## Links to zips need to be downloaded\
     extractdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
-    
+    if os.path.isdir(extractdir):
+        pass
+    else:
+        extractdir = os.path.join(os.path.abspath('~'), 'Pictures', 'emailParserDownloads')
+        if not os.path.isdir(extractdir):
+            os.makedirs(extractdir, 16877)
+        else: pass
     zip_downloads = [ download_file_url(url, localpath=extractdir) for url in ret if url ]
 
     ## Unzip Files
