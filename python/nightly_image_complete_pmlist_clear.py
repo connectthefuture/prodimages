@@ -93,6 +93,17 @@ def daily_img_complete_list():
     reslist = [ r[0] for r in results ]
     return reslist
     
+    
+
+def modify_dt_img_list():
+    import sqlalchemy
+    mysql_engine  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+    cnx = mysql_engine.connect()
+    sqlQuery_vendor_img_modify_dt = """select `colorstyle` from image_update where `modify_dt` BETWEEN SYSDATE( ) - INTERVAL 5 DAY AND SYSDATE( ) + INTERVAL 2 DAY and DATE_FORMAT(`create_dt`,'%Y-%M-%d') < DATE_FORMAT(`modify_dt`,'%Y-%M-%d') ORDER BY `colorstyle` DESC"""
+    results=cnx.execute(sqlQuery_vendor_img_modify_dt)
+    reslist = [ r[0] for r in results ]
+    return reslist
+    
 
 ####################
 import os, sys, re, csv
