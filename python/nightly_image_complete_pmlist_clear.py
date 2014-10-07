@@ -109,9 +109,19 @@ def modify_dt_img_list():
 import os, sys, re, csv
 
 #versioned_links_null = [ pmlistpg[0] for colorstyle in daily_img_complete_list() ]
-india_imagelist = daily_img_complete_list()
-api_imagelist   = modify_dt_img_list()
-imagelist = api_imagelist + india_imagelist
+try:
+    flag = sys.argv[1]
+    if flag == '1':
+        imagelist = modify_dt_img_list()
+    else:
+        india_imagelist = daily_img_complete_list()
+        api_imagelist   = modify_dt_img_list()
+        imagelist = api_imagelist + india_imagelist
+except:
+    india_imagelist = daily_img_complete_list()
+    api_imagelist   = modify_dt_img_list()
+    imagelist = api_imagelist + india_imagelist
+
 count = len(imagelist)
 if len(imagelist) <= 6550:
     for f in imagelist:
