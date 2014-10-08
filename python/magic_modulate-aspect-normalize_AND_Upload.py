@@ -453,11 +453,11 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
     dimensions = ''
     ## Get variable values for processing
-    aspect_ratio = get_aspect_ratio(img)
-    dimensions = get_dimensions(img)
-    width  = dimensions.split('x')[0]
-    height = dimensions.split('x')[1]
-    try:
+    try:    
+        aspect_ratio = get_aspect_ratio(img)
+        dimensions = get_dimensions(img)
+        width  = dimensions.split('x')[0]
+        height = dimensions.split('x')[1]
 
         if aspect_ratio == '1.2':
             vert_horiz = '{0}x{1}'.format(width,height)  
