@@ -42,6 +42,7 @@ def sqlQuerySupplierIngest():
                             ON
                               POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR = POMGR.PRODUCT_COLOR.ID
                             WHERE POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%' and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER = '1'
+                            and POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE < sysdate - 7,
                             ORDER BY 
                             POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE desc nulls last,
                             POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last,
