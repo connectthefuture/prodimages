@@ -100,8 +100,15 @@ def sql_query_production_numbers():
     querymake_prodnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
     POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(SysDate - 30)
-    GROUP BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
+    INNER JOIN POMGR.SKU
+    ON
+      POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
+    WHERE
+      POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(sysdate - 30)
+      --and substr(pomgr.sku.sku_code,1,1) = '8'
+    GROUP BY
+      POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT,
+      POMGR.SKU.SKU_CODE
     ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
@@ -115,7 +122,12 @@ def sql_query_production_numbers():
     querymake_retouchnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
     POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
+    INNER JOIN POMGR.SKU
+    ON
+      POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
+    WHERE 
+      POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
+      and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT
     ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC"""
     retouchcomplete = connection.execute(querymake_retouchnumbers)
@@ -130,7 +142,11 @@ def sql_query_production_numbers():
     querymake_copynumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
     to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
-    WHERE POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 30)
+    INNER JOIN POMGR.SKU
+    ON
+      POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
+    WHERE  POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 30)
+    and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD')
     ORDER BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') DESC"""
     copycomplete = connection.execute(querymake_copynumbers)
