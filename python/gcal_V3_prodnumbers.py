@@ -105,10 +105,11 @@ def sql_query_production_numbers():
       POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
     WHERE
       POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(sysdate - 30)
-      --and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY
       POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT,
       POMGR.SKU.SKU_CODE
+    having substr(pomgr.sku.sku_code,1,1) = '8'
+
     ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
@@ -127,8 +128,10 @@ def sql_query_production_numbers():
       POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
     WHERE 
       POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
-      and substr(pomgr.sku.sku_code,1,1) = '8'
-    GROUP BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT
+    GROUP BY
+      POMGR.PRODUCT_COLOR.IMAGE_READY_DT,
+        POMGR.SKU.SKU_CODE
+    having substr(pomgr.sku.sku_code,1,1) = '8'
     ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC"""
     retouchcomplete = connection.execute(querymake_retouchnumbers)
     retouchcomplete_dict = {}
@@ -146,8 +149,9 @@ def sql_query_production_numbers():
     ON
       POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
     WHERE  POMGR.PRODUCT_COLOR.COPY_READY_DT >= TRUNC(SysDate - 30)
-    and substr(pomgr.sku.sku_code,1,1) = '8'
-    GROUP BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD')
+    GROUP BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD'),
+    POMGR.SKU.SKU_CODE
+    having substr(pomgr.sku.sku_code,1,1) = '8'
     ORDER BY to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') DESC"""
     copycomplete = connection.execute(querymake_copynumbers)
     copycomplete_tmpdict = {}
