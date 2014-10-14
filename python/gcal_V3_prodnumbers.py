@@ -127,7 +127,7 @@ def sql_query_production_numbers():
     WHERE 
       POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
     and substr(pomgr.sku.sku_code,1,1) = '8'
-    GROUP BY POMGR.SKU.SKU_CODE,
+    GROUP BY 
       POMGR.PRODUCT_COLOR.IMAGE_READY_DT
     ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC"""
     retouchcomplete = connection.execute(querymake_retouchnumbers)
