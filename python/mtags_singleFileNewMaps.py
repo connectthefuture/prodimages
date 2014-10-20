@@ -99,33 +99,35 @@ def sqlQueryMetatags(style,f):
 
     metatags = {}
     for row in result:
-        metatag = {}
-#        metatag['colorstyle'] = row['colorstyle']
-#        metatag['IPTC:PONumber'] = row['po_num']
-        metatag['IPTC:VendorStyle'] = row['vendor_style']
-        metatag['IPTC:Brand'] = row['brand']
-        metatag['XMP:Genre'] = row['color_group']
-        metatag['IPTC:ProductType'] = row['category_sub']
-        metatag['EventID'] = row['event_id']
-        try:
-            metatag['XMP:Album'] = "EventID " + str(row['event_id'])
-        except:
-            pass
-        metatag['IPTC:Credit'] = row['product_path']
-        metatag['IPTC:CopyrightNotice'] = row['brand']
-        metatag['IPTC:SpecialInstructions'] = row['production_status']
-        metatag['Keywords'] = row['category_parent']
-        metatag['IPTC:Source'] = row['shot_list_dt']
-#        metatag['IPTC:SpecialInstructions'] = '{:%Y-%m-%d}'.format(metatag['brand_editorial'])
-#        metatag['IPTC:SampleStatusDate'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
-#        metatag['IPTC:Source'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
-#        metatag['IPTC:Source'] = row['sample_dt']
-#        metatag['SourceFile'] = f
-        ## file path as dict KEY
-        metatags[f] = metatag
-        ## colorstyle as dict KEY
-        #metatags[row['colorstyle']] = metatag
-
+        if row:
+            metatag = {}
+    #        metatag['colorstyle'] = row['colorstyle']
+    #        metatag['IPTC:PONumber'] = row['po_num']
+            metatag['IPTC:VendorStyle'] = row['vendor_style']
+            metatag['IPTC:Brand'] = row['brand']
+            metatag['XMP:Genre'] = row['color_group']
+            metatag['IPTC:ProductType'] = row['category_sub']
+            metatag['EventID'] = row['event_id']
+            try:
+                metatag['XMP:Album'] = "EventID " + str(row['event_id'])
+            except:
+                pass
+            metatag['IPTC:Credit'] = row['product_path']
+            metatag['IPTC:CopyrightNotice'] = row['brand']
+            metatag['IPTC:SpecialInstructions'] = row['production_status']
+            metatag['Keywords'] = row['category_parent']
+            metatag['IPTC:Source'] = row['shot_list_dt']
+    #        metatag['IPTC:SpecialInstructions'] = '{:%Y-%m-%d}'.format(metatag['brand_editorial'])
+    #        metatag['IPTC:SampleStatusDate'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
+    #        metatag['IPTC:Source'] = '{:%Y-%m-%d}'.format(row['sample_dt'])
+    #        metatag['IPTC:Source'] = row['sample_dt']
+    #        metatag['SourceFile'] = f
+            ## file path as dict KEY
+            metatags[f] = metatag
+            ## colorstyle as dict KEY
+            #metatags[row['colorstyle']] = metatag
+        else:
+          pass
     connection.close()
     return metatags
 
