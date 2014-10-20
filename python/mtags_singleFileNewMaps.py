@@ -131,107 +131,62 @@ def sqlQueryMetatags(style,f):
 
     
 
-def get_dbinfo_for_metatags_filelist(filelist):   
+def get_dbinfo_for_metatags_singlefile(f):   
     metafield_dict = {}
     listed = []
-    for f in filelist:
-        stylefile = os.path.basename(f)
-        style = stylefile.split('_')[0].strip('.png').strip('.jpg')
-        #print style, f
-        ### string = key/val as k=filepath, val=all metadata as k/v pairs
-        exiftoolstring = sqlQueryMetatags(style,f)
-        #pairs = zip(exiftoolstring.values(), exiftoolstring.keys())
-    
-        for k,v in exiftoolstring.iteritems():
-            #full = tuple(value.values())
-            #full = value
-            tmpd = {}
-            for val in v:
-                #valpair = val,v[val]
-                #listed.append
-                tmpd[val] = v[val]
-                listed.append(tmpd)
-            metafield_dict[k] = tmpd
+    stylefile = os.path.basename(f)
+    style = stylefile.split('_')[0]
+    #print style, f
+    ### string = key/val as k=filepath, val=all metadata as k/v pairs
+    exiftoolstring = sqlQueryMetatags(style,f)
+    #pairs = zip(exiftoolstring.values(), exiftoolstring.keys())
+
+    for k,v in exiftoolstring.iteritems():
+        tmpd = {}
+        for val in v:
+            tmpd[val] = v[val]
+            listed.append(tmpd)
+        metafield_dict[k] = tmpd
 
     return metafield_dict
     #return listed
+    
 
 
-
-def main(directory=None):
-    #sqlQueryConsigRename(vnum, ponum)[vnum]    
+##################### Begin CMDS ##############
+def main(filename=None):
     import sys, os, glob, sqlalchemy
-    
-    if not directory:
-        glbdir = sys.argv[1]
-    else:
-        glbdir = directory
-    
-    #glbdir='/mnt/Post_Ready/aPhotoPush'
-    #glbdir = '/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117257'
-    #globtoconvert = os.path.join('/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment/images_for_conversion/117147', '*.jpg')
-    globtoconvert = glob.glob(os.path.join(os.path.realpath(glbdir), '*.??g'))
-    #print globtoconvert
-
-
-            #pairs = zip(exiftoolstring.values(), exiftoolstring.keys())
-        
-    #for f in globtoconvert:
-    #    metafield_dict = {}
-    #    style = stylefile.split('_')[0]
-    #    exiftoolstring = sqlQueryMetatags(style,f)
-    #    for k,v in exiftoolstring.items():
-    #        metatags = []
-    #        for val in v:
-    #            metapairs = val,v[val]
-    #            metapairs = tuple(metapairs)
-    #            metatags.append(metapairs)
-    #            #print metatags
-    #    metafield_dict[k] = metatags
-
-    metadict = get_dbinfo_for_metatags_filelist(globtoconvert)
+    if not filename:
+        filename=os.path.abspath(sys.argv[1])
+    metadict = get_dbinfo_for_metatags_singlefile(filename)
     exiftags = []
     exifdict = {}
     for k,v in metadict.items():
         metatags = []
-
         for val in v:
-            #m = []
             filename = str(k)
             exiftag = val
             exifvalue = v[val]
-            #exifpart = str(' -' + "'" + str(exiftag) + "=" + str(exifvalue) + "'" + ''),
             exifpart = "-'{exiftag}'='{exifvalue}'".format(exiftag=exiftag,exifvalue=exifvalue)
-            #print exifpart
-            #exifcmd = str('exiftool -' + "'" + str(exiftag) + "=" + str(exifvalue) + "'" + '')
-            #lines = str(exifcmd + " " + filename)
             metatags.append(exifpart)
-            #print metatags
-            #m.append(exifpart)
-            #print val,v[val]
-        #exifdict[filename] = [x for x in metatags]
-        #metatags = (str(tag) for tag in metatags)
         exifdict[filename] = " ".join(metatags)
-    #    for line in metatags:
-    #        print line[0]
-    #        exifcmd = str('exiftool -m -fast2 -q ' + line[0] + ' ' + filename)
-    #        exiftags.append(exifcmd)
+
     execlist = []
     for key,value in exifdict.iteritems():
         execstring = "exiftool -m -overwrite_original_in_place -fast2 -q {0} {1}".format(value,key)
         execlist.append(execstring)
 
-    def bashexec_subproc(cmdstring):
-        import subprocess
-        p = subprocess.Popen(cmdstring, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        for line in p.stdout.readlines():
-            print line,
-        retval = p.wait()
-        return retval
-
     for line in execlist:
-        os.system(line)
-        print line
+        try:
+            os.system(line)
+            print line
+        except:
+            pass
+
+
+if __name__ == '__main__':
+    main()
+
 
 #print execlist
 #print exifdict
