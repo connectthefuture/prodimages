@@ -16,5 +16,6 @@ def dloader(url,stylenum,imgnum):
 	else: 
 		pass
 	return
+
 if __name__ == '__main__':
 	dloader()
