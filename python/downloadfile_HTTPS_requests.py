@@ -8,10 +8,13 @@ def dloader(url,stylenum,imgnum):
 	subprocess.call(['wget', url, '-o',localpath])
 	if regex.findall(urlget):
 		regexfnd=regex.findall(urlget)
-		print regexfnd 
-		res = requests.get(urlget, stream=True, timeout=5).content
-		with __builtin__.open(localpath, 'wb') as f:
+		print regexfnd,'<--REGEX-FOUND--'
+		res = requests.get(urlget, stream=True, timeout=5)
+		with __builtin__.open(localpath, 'wb+') as f:
 		    f.write(res.content)
 		    f.close()
-	else: pass
-
+	else: 
+		pass
+	return
+if __name__ == '__main__':
+	dloader()
