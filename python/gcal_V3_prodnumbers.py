@@ -120,10 +120,14 @@ def sql_query_production_numbers():
     querymake_prodnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
     POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
-    WHERE
+    INNER JOIN POMGR.SKU
+    ON
+      POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
+    WHERE 
       POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(sysdate - 30)
+        and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY
-            POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
+        POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ID
     ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
@@ -144,7 +148,7 @@ def sql_query_production_numbers():
       POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
     and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY 
-      POMGR.PRODUCT_COLOR.IMAGE_READY_DT
+      POMGR.PRODUCT_COLOR.IMAGE_READY_DT,POMGR
     ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC"""
     retouchcomplete = connection.execute(querymake_retouchnumbers)
     retouchcomplete_dict = {}
@@ -444,6 +448,8 @@ def main():
                         print 'ERROR {}'.format(event)
                         pass
         except AttributeError:
+            pass
+        except:
             pass
 
 
