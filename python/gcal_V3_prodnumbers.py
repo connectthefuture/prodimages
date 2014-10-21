@@ -275,16 +275,16 @@ def stillcomplete():
         except:
             pass
 
-    ## Count the Grouped Files
-    stillcomplete_dict = {}
-    for k,v in stilld.iteritems():
-        tmp_dict = {}
-        tmp_dict['role'] = 'Still'
-        tmp_dict['total'] = len(v)
-        stillcomplete_dict[k] = tmp_dict
-        #    stillcomplete_dict['Role'] = 'Still_Photo'
-        #    fashioncomplete_dict['shot_count'] = len(v)
-    return stillcomplete_dict
+## Count the Grouped Files
+stillcomplete_dict = {}
+for k,v in stilld.iteritems():
+    tmp_dict = {}
+    tmp_dict['role'] = 'Still'
+    tmp_dict['total'] = len(v)
+    stillcomplete_dict[k] = tmp_dict
+    #    stillcomplete_dict['Role'] = 'Still_Photo'
+    #    fashioncomplete_dict['shot_count'] = len(v)
+return stillcomplete_dict
 
 ## Walk Root Directory and Return List or all Files in all Subdirs too
 def recursive_dirlist(rootdir):
@@ -395,88 +395,91 @@ def main():
 
     for iterdict in lotsofdicts:
         count = 0
-        for k,v in iterdict.iteritems():
-            import datetime, time
-            for value in [v]:
-                try:
-                    titlekv = str(v['role'])
-                except:
-                    titlekv = 'Studio_Shots'
-                try:
-                    desckv = str(v['total'])
-                    desckv = desckv.replace('&', 'And')
-                    desckv = desckv.replace('%', ' Percent')
-                    #                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
-                    #                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
-                    #                sdatekvsplit = sdatekvraw.split(",")
-                    #                edatekvsplit = edatekvraw.split(",")
-                    #                sdatekv = map(int,sdatekvsplit)
-                    #                edatekv = map(int,edatekvsplit)
-                                    
-                    titleid = '{0} - {1}'.format(desckv,titlekv)
-                    #if v['total'] < 200:
-                    #    congrats = '<>'
-                    #elif v['total'] >= 200:
-                    #    if v['total'] <= 300:
-                    #        congrats = '<-->'
-                    #    else:
-                    #        congrats = '<-*->'
-                    descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
-                    descfull = str(descfull)
-                    count += 1
-                    
-                    ##TODO: rework choose color process below with following 3 line of code 
-                    # keycode =  v['role']
-                    #functions = {9: 'Production', 8: 'Copy', 7: 'Retouching'}
-                    #functions.get(keycode, unknown_key_pressed)()
-
-                    ## Choose Color of Event Based on Role
-                    lockv = v['role']
-                    if lockv == 'Production':
-                        colorId = '9'
-                    elif lockv == 'Copy':
-                        colorId = '8'
-                    elif lockv == 'Retouching':
-                        colorId = '7'
-                    elif lockv == 'Fashion':
-                        colorId = '6'
-                        print descfull
+        try:
+            for k,v in iterdict.iteritems():
+                import datetime, time
+                for value in [v]:
+                    try:
+                        titlekv = str(v['role'])
+                    except:
+                        titlekv = 'Studio_Shots'
+                    try:
+                        desckv = str(v['total'])
+                        desckv = desckv.replace('&', 'And')
+                        desckv = desckv.replace('%', ' Percent')
+                        #                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
+                        #                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
+                        #                sdatekvsplit = sdatekvraw.split(",")
+                        #                edatekvsplit = edatekvraw.split(",")
+                        #                sdatekv = map(int,sdatekvsplit)
+                        #                edatekv = map(int,edatekvsplit)
+                                        
+                        titleid = '{0} - {1}'.format(desckv,titlekv)
+                        #if v['total'] < 200:
+                        #    congrats = '<>'
+                        #elif v['total'] >= 200:
+                        #    if v['total'] <= 300:
+                        #        congrats = '<-->'
+                        #    else:
+                        #        congrats = '<-*->'
+                        descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
+                        descfull = str(descfull)
+                        count += 1
                         
-                    elif lockv == 'Still':
-                        colorId = '5'
-                    elif lockv == 'Samples_Received':
-                        colorId = '4'
+                        ##TODO: rework choose color process below with following 3 line of code 
+                        # keycode =  v['role']
+                        #functions = {9: 'Production', 8: 'Copy', 7: 'Retouching'}
+                        #functions.get(keycode, unknown_key_pressed)()
 
-                    event = {
-                      'summary': titleid,
-                      'description': descfull,
-                      'location': lockv,
-                      'colorId': colorId,
-                      'start': {
-                        'date': "{0:%Y-%m-%d}".format(k.date()),
-                        'timeZone': 'America/New_York'
-                      },
-                      'end': {
-                        'date': "{0:%Y-%m-%d}".format(k.date()),
-                        'timeZone': 'America/New_York'
-                      },
-                        #  'recurrence': [
-                        #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
-                        #  ],
-                        #                  'attendees': [
-                        #                    {
-                        #                      'email': 'james.hoetker@bluefly.com',
-                        #                      # Other attendee's data...
-                        #                    },
-                        #                    # ...
-                        #                  ],
-                        }
-                        
-                    created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
-                    print created_event['id']
-                except OSError:
-                    print 'ERROR {}'.format(event)
-                    pass
+                        ## Choose Color of Event Based on Role
+                        lockv = v['role']
+                        if lockv == 'Production':
+                            colorId = '9'
+                        elif lockv == 'Copy':
+                            colorId = '8'
+                        elif lockv == 'Retouching':
+                            colorId = '7'
+                        elif lockv == 'Fashion':
+                            colorId = '6'
+                            print descfull
+                            
+                        elif lockv == 'Still':
+                            colorId = '5'
+                        elif lockv == 'Samples_Received':
+                            colorId = '4'
+
+                        event = {
+                          'summary': titleid,
+                          'description': descfull,
+                          'location': lockv,
+                          'colorId': colorId,
+                          'start': {
+                            'date': "{0:%Y-%m-%d}".format(k.date()),
+                            'timeZone': 'America/New_York'
+                          },
+                          'end': {
+                            'date': "{0:%Y-%m-%d}".format(k.date()),
+                            'timeZone': 'America/New_York'
+                          },
+                            #  'recurrence': [
+                            #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
+                            #  ],
+                            #                  'attendees': [
+                            #                    {
+                            #                      'email': 'james.hoetker@bluefly.com',
+                            #                      # Other attendee's data...
+                            #                    },
+                            #                    # ...
+                            #                  ],
+                            }
+                            
+                        created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
+                        print created_event['id']
+                    except OSError:
+                        print 'ERROR {}'.format(event)
+                        pass
+        except AttributeError:
+            pass
 
 
 if __name__ == '__main__':
