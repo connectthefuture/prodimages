@@ -89,6 +89,24 @@ except:
 #############################Get Data to send to API###########################
 #from python.gcal_functions import stillcomplete, fashioncomplete, sql_query_production_numbers
 
+## Walk Root Directory and Return List or all Files in all Subdirs too
+def recursive_dirlist(rootdir):
+    import os
+    walkedlist = []
+    for dirname, subdirnames, filenames in os.walk(rootdir):
+        # append path of all filenames to walkedlist
+        for filename in filenames:
+            file_path = os.path.abspath(os.path.join(dirname, filename))
+            if os.path.isfile(file_path):
+                walkedlist.append(file_path)
+                # Advanced usage:
+                # editing the 'dirnames' list will stop os.walk() from recursing into there.
+                #if '.git' in dirnames:
+                # don't go into any .git directories.
+                #    dirnames.remove('.git')
+    return walkedlist
+
+
 def sql_query_production_numbers():
     import sqlalchemy
     import datetime
@@ -275,33 +293,16 @@ def stillcomplete():
         except:
             pass
 
-## Count the Grouped Files
-stillcomplete_dict = {}
-for k,v in stilld.iteritems():
-    tmp_dict = {}
-    tmp_dict['role'] = 'Still'
-    tmp_dict['total'] = len(v)
-    stillcomplete_dict[k] = tmp_dict
-    #    stillcomplete_dict['Role'] = 'Still_Photo'
-    #    fashioncomplete_dict['shot_count'] = len(v)
-return stillcomplete_dict
-
-## Walk Root Directory and Return List or all Files in all Subdirs too
-def recursive_dirlist(rootdir):
-    import os
-    walkedlist = []
-    for dirname, subdirnames, filenames in os.walk(rootdir):
-        # append path of all filenames to walkedlist
-        for filename in filenames:
-            file_path = os.path.abspath(os.path.join(dirname, filename))
-            if os.path.isfile(file_path):
-                walkedlist.append(file_path)
-                # Advanced usage:
-                # editing the 'dirnames' list will stop os.walk() from recursing into there.
-                #if '.git' in dirnames:
-                # don't go into any .git directories.
-                #    dirnames.remove('.git')
-    return walkedlist
+    ## Count the Grouped Files
+    stillcomplete_dict = {}
+    for k,v in stilld.iteritems():
+        tmp_dict = {}
+        tmp_dict['role'] = 'Still'
+        tmp_dict['total'] = len(v)
+        stillcomplete_dict[k] = tmp_dict
+        #    stillcomplete_dict['Role'] = 'Still_Photo'
+        #    fashioncomplete_dict['shot_count'] = len(v)
+    return stillcomplete_dict
 
 
 ## Extract All Metadata from Image File as Dict using PIL
