@@ -611,7 +611,11 @@ def main(root_img_dir=None):
         except OSError:
             pass
 
+
     if os.path.isdir(root_img_dir):
+        #import md5_unique_dup_files
+        #duplicates = md5_unique_dup_files.find_duplicate_imgs(root_img_dir)[1]
+        #[ os.remove(f) for f in duplicates if f ]
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
         img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
 

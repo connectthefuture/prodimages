@@ -6,12 +6,12 @@ Created on mo jun 9 20:48:56 2014
 
 @author: jb
 """
-def sqlQuerySupplierIngest():
+def sqlQuerySupplierIngestImages():
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
 
-    querymake_supplier_ingest="""SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS "colorstyle",
+    querymake_supplier_ingest_images="""SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS "colorstyle",
                               POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID                           AS "vendor_name",
                               POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND                        AS "vendor_brand",
                               POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE                        AS "vendor_style",
@@ -41,7 +41,8 @@ def sqlQuerySupplierIngest():
                             RIGHT JOIN POMGR.PRODUCT_COLOR
                             ON
                               POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR = POMGR.PRODUCT_COLOR.ID
-                            WHERE POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%' and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER = '1'
+                            WHERE 
+                              POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%' 
                             and(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE  > trunc(sysdate-30) or POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE > trunc(sysdate-30))
                             ORDER BY 
                             POMGR.SUPPLIER_INGEST_IMAGE.MODIFIED_DATE desc nulls last,
@@ -51,7 +52,10 @@ def sqlQuerySupplierIngest():
                             POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last,
                             POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last"""
 
-    result = connection.execute(querymake_supplier_ingest)
+    ## use as where to rm primary img --->  WHERE POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%%' AND POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER != '1'
+
+
+    result = connection.execute(querymake_supplier_ingest_images)
     importdata = {}
     for row in result:
         importdata_tmp = {}
@@ -60,23 +64,41 @@ def sqlQuerySupplierIngest():
         importdata_tmp['po_number'] = 'x' #row['po_number']
         importdata_tmp['version'] = row['version']
         importdata_tmp['vendor_name'] = row['vendor_name']
-        importdata_tmp['vendor_brand'] = row['vendor_brand']
         importdata_tmp['bfly_product_path'] = row['bfly_product_path']
         importdata_tmp['image_url'] = row['image_url']
         importdata_tmp['alt'] = row['alt']
         importdata_tmp['image_download_valid'] = row['image_download_valid']
         importdata_tmp['ingest_style_id'] = row['ingest_style_id']
-        importdata_tmp['copy_ready_dt'] = row['copy_ready_dt']
-        importdata_tmp['image_ready_dt'] = row['image_ready_dt']
-        importdata_tmp['production_complete_dt'] = row['production_complete_dt']
-        importdata_tmp['active'] = row['active']
-        importdata_tmp['create_dt'] = row['create_dt']
         importdata_tmp['modified_dt'] = row['modified_dt']
-        importdata_tmp['start_dt'] = row['start_dt']
-        print row['colorstyle']
+        ## Set primary key and image location urls
+        if row['alt'] != 1:
+            primarykey  = '{0}_alt0{1}'.format(str(row['colorstyle']), str(int(row['alt']) - 1))
+            srcLOCAL    = 'NotAvailable'
+            srcZOOM     = 'http://images1.qa.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(primarykey, row['version'])
+            siteZOOM    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(primarykey, row['version'])
+            siteLIST    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(primarykey.split('_')[0])
+            sitePDP     = 'http://is5.l3.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}'.format(primarykey, row['version'])
+        elif row['alt'] == 1:
+            primarykey  =  str(row['colorstyle'])
+            srcLOCAL    = ''
+            srcZOOM     = 'http://images1.qa.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(primarykey, row['version'])
+            siteZOOM    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(primarykey, row['version'])
+            siteLIST    = 'http://is5.l3.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=738&outputy=700&level=1&ver={1}'.format(primarykey, row['version'])
+            sitePDP     = 'http://is5.l3.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}'.format(primarykey, row['version'])
+
+        print primarykey
+        importdata_tmp['bfly_local_src']  = srcLOCAL
+        importdata_tmp['bfly_zoom_src']   = srcZOOM
+        importdata_tmp['bfly_zoom_site']  = siteZOOM
+        importdata_tmp['bfly_list_site']  = siteLIST
+        importdata_tmp['bfly_pdp_site']  = sitePDP
+
+
+        ## colorstyle and alt as dict KEY
+        importdata[primarykey] = importdata_tmp
 
         ## colorstyle as dict KEY
-        importdata[row['colorstyle']] = importdata_tmp
+        ## importdata[row['colorstyle']] = importdata_tmp
 
     connection.close()
     return importdata
@@ -87,22 +109,10 @@ import os
 import sqlalchemy
 
 
-importdata = sqlQuerySupplierIngest()
-
-## Truncate Prior to Inserting new data
-#mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-#connection1 = mysql_engine.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-#connection1.close()
-
-## Trunc www_django vers wont TRUNC du to Foreign Keys
-#mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-#connectiondj = mysql_engine_dj.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-#connectiondj.close()
+importdata = sqlQuerySupplierIngestImages()
 
 for k,v in importdata.iteritems():
-    print k,v, "BEGIN"
+    print "BEGIN-->\t", k
     try:
 
         mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
@@ -110,62 +120,27 @@ for k,v in importdata.iteritems():
         connection_data = mysql_engine_data.connect()
         connection_www = mysql_engine_www.connect()
 
-        # try:
-        #     connection_data.execute("""
-        #             INSERT INTO supplier_ingest 
-        #                 (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, image_type, copy_ready_dt, modified_dt, start_dt)
-        #                 (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        #             ON DUPLICATE KEY UPDATE 
-        #                 version  = VALUES(version), 
-        #                 vendor_name  = VALUES(vendor_name), 
-        #                 vendor_brand  = VALUES(vendor_brand), 
-        #                 bfly_product_path  = VALUES(bfly_product_path), 
-        #                 image_url  = VALUES(image_url), 
-        #                 alt  = VALUES(alt), 
-        #                 image_download_valid  = VALUES(image_download_valid), 
-        #                 ingest_style_id  = VALUES(ingest_style_id), 
-        #                 copy_ready_dt  = VALUES(copy_ready_dt), 
-        #                 image_ready_dt  = VALUES(image_ready_dt), 
-        #                 production_complete_dt           = VALUES(production_complete_dt), 
-        #                 active     = VALUES(active), 
-        #                 create_dt       = VALUES(create_dt), 
-        #                 image_type     = VALUES(image_type), 
-        #                 copy_ready_dt        = VALUES(copy_ready_dt), 
-        #                 modified_dt = VALUES(modified_dt), 
-        #                 start_dt        = VALUES(start_dt);
-        #                        """, v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['image_type'], v['copy_ready_dt'], v['modified_dt'], v['start_dt'])
-        # except sqlalchemy.exc.IntegrityError:
-        #     print "Duplicate Entry {0}".format(k)
-        
-        
-        
-
         try:
-            connection_www.execute("""INSERT INTO supplier_ingest (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, modified_dt, start_dt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+            connection_www.execute("""INSERT INTO supplier_ingest_images (file_name, colorstyle, vendor_style, po_number, version, vendor_name, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, modified_dt, bfly_local_src, bfly_zoom_src, bfly_zoom_site, bfly_list_site, bfly_pdp_site) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
             ON DUPLICATE KEY UPDATE 
-            version  = VALUES(version), 
-            vendor_name  = VALUES(vendor_name), 
-            vendor_brand  = VALUES(vendor_brand), 
+            file_name      = VALUES(file_name),
+            bfly_local_src = VALUES(bfly_local_src),
+            version        = VALUES(version), 
+            vendor_name    = VALUES(vendor_name), 
             bfly_product_path  = VALUES(bfly_product_path), 
-            image_url  = VALUES(image_url), 
-            alt  = VALUES(alt), 
+            image_url      = VALUES(image_url), 
+            alt            = VALUES(alt), 
             image_download_valid  = VALUES(image_download_valid),
             ingest_style_id  = VALUES(ingest_style_id), 
-            copy_ready_dt  = VALUES(copy_ready_dt), 
-            image_ready_dt  = VALUES(image_ready_dt), 
-            production_complete_dt = VALUES(production_complete_dt), 
-            active = VALUES(active), 
-            create_dt = VALUES(create_dt), 
-            modified_dt = VALUES(modified_dt), 
-            start_dt = VALUES(start_dt);""", v['colorstyle'], v['vendor_style'], v['po_number'], v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['modified_dt'], v['start_dt'])
+            modified_dt = VALUES(modified_dt);""", k, v['colorstyle'], v['vendor_style'], v['po_number'], v['version'], v['vendor_name'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['modified_dt'], v['bfly_local_src'], v['bfly_zoom_src'], v['bfly_zoom_site'], v['bfly_list_site'], v['bfly_pdp_site'])
 
             print "Inserted {0}".format(k)
 
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         
-        except sqlalchemy.exc.OperationalError:
-            print "Invalid Path or Entry {0}".format(k)
+        #except sqlalchemy.exc.OperationalError:
+        #    print "Invalid Path or Entry {0}".format(k)
 
         
         #print "Successful Insaert Push_Photoselecs --> {0}".format(k)
