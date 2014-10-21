@@ -1,87 +1,89 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gflags
-import httplib2
-from apiclient.discovery import build
-from oauth2client.file import Storage
-from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.tools import run
-import os
+def getServiceEvents():
+    import gflags
+    import httplib2
+    from apiclient.discovery import build
+    from oauth2client.file import Storage
+    from oauth2client.client import OAuth2WebServerFlow
+    from oauth2client.tools import run
+    import os
 
-##########################Vars
-client_id='924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
-client_secret='rqZxYuy0Cht37rJ0GSZ05YoY'
-user_agent='Python2.7'
-BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
-SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
+    ##########################Vars
+    client_id='924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
+    client_secret='rqZxYuy0Cht37rJ0GSZ05YoY'
+    user_agent='Python2.7'
+    BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
+    SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
 
+    batchRunScripts = os.path.join('/usr/local', 'batchRunScripts')
+    os.chdir(batchRunScripts)
 
+    #here = os.path.dirname(os.path.realpath(os.path.curdir))
+    storage_file = os.path.join(batchRunScripts, 'calendar.dat')
 
-batchRunScripts = os.path.join('/usr/local', 'batchRunScripts')
-os.chdir(batchRunScripts)
+    ############################
+    FLAGS = gflags.FLAGS
 
-#here = os.path.dirname(os.path.realpath(os.path.curdir))
-storage_file = os.path.join(batchRunScripts, 'calendar.dat')
+    # The client_id and client_secret are copied from the API Access tab on
+    # the Google APIs Console
+    FLOW = OAuth2WebServerFlow(
+        client_id=client_id,
+        client_secret=client_secret,
+        scope='https://www.googleapis.com/auth/calendar',
+        user_agent=user_agent)
 
-############################
-FLAGS = gflags.FLAGS
+    # To disable the local server feature, uncomment the following line:
+    FLAGS.auth_local_webserver = False
 
-# The client_id and client_secret are copied from the API Access tab on
-# the Google APIs Console
-FLOW = OAuth2WebServerFlow(
-    client_id=client_id,
-    client_secret=client_secret,
-    scope='https://www.googleapis.com/auth/calendar',
-    user_agent=user_agent)
+    # If the Credentials don't exist or are invalid, run through the native client
+    # flow. The Storage object will ensure that if successful the good
+    # Credentials will get written back to a file.
+    storage = Storage(storage_file)
+    credentials = storage.get()
+    if credentials is None or credentials.invalid == True:
+        credentials = run(FLOW, storage)
 
-# To disable the local server feature, uncomment the following line:
-FLAGS.auth_local_webserver = False
+    # Create an httplib2.Http object to handle our HTTP requests and authorize it
+    # with our good Credentials.
+    http = httplib2.Http()
+    http = credentials.authorize(http)
 
-# If the Credentials don't exist or are invalid, run through the native client
-# flow. The Storage object will ensure that if successful the good
-# Credentials will get written back to a file.
-storage = Storage(storage_file)
-credentials = storage.get()
-if credentials is None or credentials.invalid == True:
-    credentials = run(FLOW, storage)
+    prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
+    #prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/'
+    # prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
 
-# Create an httplib2.Http object to handle our HTTP requests and authorize it
-# with our good Credentials.
-http = httplib2.Http()
-http = credentials.authorize(http)
+    # Build a service object for interacting with the API.
+    service = build(serviceName='calendar', version='v3', http=http)
 
-prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
-#prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/'
-# prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
-
-# Build a service object for interacting with the API.
-service = build(serviceName='calendar', version='v3', http=http)
-
-# Getting All Event Ids
-page_token = None
-events_list = []
-try:    
-    while True:
-        events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
-        for event in events['items']:
-            event_id = event['id']
-            events_list.append(event_id)
-            #print event_id
-        page_token = events.get('nextPageToken')
-        if not page_token:
-            break
-except:
+    # Getting All Event Ids
     page_token = None
-    while True:
-        events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
-        for event in events['items']:
-            event_id = event['id']
-            events_list.append(event_id)
-            #print event_id
-        page_token = events.get('nextPageToken')
-        if not page_token:
-            break
+    events_list = []
+    try:    
+        while True:
+            events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
+            for event in events['items']:
+                event_id = event['id']
+                events_list.append(event_id)
+                #print event_id
+            page_token = events.get('nextPageToken')
+            if not page_token:
+                break
+    except:
+        page_token = None
+        while True:
+            events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
+            for event in events['items']:
+                event_id = event['id']
+                events_list.append(event_id)
+                #print event_id
+            page_token = events.get('nextPageToken')
+            if not page_token:
+                break
+
+    return service, events_list
+
 
 ###########################
 ####  END AUTH SECTION
@@ -375,25 +377,21 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
 
 ######RUN######
 
-
 ## Delete all Events by ID prior to reup
 def main():
+    prodnumberscal = 'k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com'
+    service, events_list = getServiceEvents()
     for event in events_list:
         service.events().delete(calendarId=prodnumberscal, eventId=event).execute()
-        
     print "Deleted all Events"    
     #calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
     #cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
-
     #############################Get Data Functions to Query DB###########################
-
-
     prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict = sql_query_production_numbers()
     stillcomplete_dict     = stillcomplete()
     fashioncomplete_dict   = fashioncomplete()
     lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
     ##############################################################################
-
     for iterdict in lotsofdicts:
         count = 0
         try:
@@ -407,32 +405,11 @@ def main():
                     try:
                         desckv = str(v['total'])
                         desckv = desckv.replace('&', 'And')
-                        desckv = desckv.replace('%', ' Percent')
-                        #                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
-                        #                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
-                        #                sdatekvsplit = sdatekvraw.split(",")
-                        #                edatekvsplit = edatekvraw.split(",")
-                        #                sdatekv = map(int,sdatekvsplit)
-                        #                edatekv = map(int,edatekvsplit)
-                                        
+                        desckv = desckv.replace('%', ' Percent')             
                         titleid = '{0} - {1}'.format(desckv,titlekv)
-                        #if v['total'] < 200:
-                        #    congrats = '<>'
-                        #elif v['total'] >= 200:
-                        #    if v['total'] <= 300:
-                        #        congrats = '<-->'
-                        #    else:
-                        #        congrats = '<-*->'
                         descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
                         descfull = str(descfull)
                         count += 1
-                        
-                        ##TODO: rework choose color process below with following 3 line of code 
-                        # keycode =  v['role']
-                        #functions = {9: 'Production', 8: 'Copy', 7: 'Retouching'}
-                        #functions.get(keycode, unknown_key_pressed)()
-
-                        ## Choose Color of Event Based on Role
                         lockv = v['role']
                         if lockv == 'Production':
                             colorId = '9'
@@ -443,12 +420,10 @@ def main():
                         elif lockv == 'Fashion':
                             colorId = '6'
                             print descfull
-                            
                         elif lockv == 'Still':
                             colorId = '5'
                         elif lockv == 'Samples_Received':
                             colorId = '4'
-
                         event = {
                           'summary': titleid,
                           'description': descfull,
@@ -462,18 +437,7 @@ def main():
                             'date': "{0:%Y-%m-%d}".format(k.date()),
                             'timeZone': 'America/New_York'
                           },
-                            #  'recurrence': [
-                            #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
-                            #  ],
-                            #                  'attendees': [
-                            #                    {
-                            #                      'email': 'james.hoetker@bluefly.com',
-                            #                      # Other attendee's data...
-                            #                    },
-                            #                    # ...
-                            #                  ],
-                            }
-                            
+                        }
                         created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
                         print created_event['id']
                     except OSError:
