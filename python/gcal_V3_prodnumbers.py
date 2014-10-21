@@ -117,7 +117,7 @@ def sql_query_production_numbers():
     connection = orcl_engine.connect()
 
     ### Get Production Complete Totals and Build Dict of key value pairs
-    querymake_prodnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
+    querymake_prodnumbers = """SELECT distinct COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as completion_total,
     POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as prod_complete_dt
     FROM POMGR.PRODUCT_COLOR
     INNER JOIN POMGR.SKU
@@ -127,7 +127,7 @@ def sql_query_production_numbers():
       POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(sysdate - 30)
         and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY
-        POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
+        POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT 
     ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
