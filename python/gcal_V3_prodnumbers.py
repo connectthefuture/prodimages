@@ -140,7 +140,8 @@ def sql_query_production_numbers():
         tmp_dict['total'] = row['copy_total']
         tmp_dict['role'] = 'Copy'
         copycomplete_tmpdict[row['copy_complete_dt']] = tmp_dict
-## Super Coersion of nums and year due to time stamp occasionally on copy dates
+
+    ## Super Coersion of nums and year due to time stamp occasionally on copy dates
     copycomplete_dict = {}
     for k,v in copycomplete_tmpdict.iteritems():
         tmp_dict = {}
@@ -170,16 +171,17 @@ def sql_query_production_numbers():
         tmp_dict['total'] = row['sample_total']
         tmp_dict['role'] = 'Samples_Received'
         samples_received_tmpdict[row['sample_dt']] = tmp_dict
-## Super Coersion of nums and year due to time stamp occasionally on copy dates
+
+    ## Super Coersion of nums and year due to time stamp occasionally on copy dates
     samples_received_dict = {}
     for k,v in samples_received_tmpdict.iteritems():
         tmp_dict = {}
         tmp_dict['total'] = v['total']
         tmp_dict['role'] = v['role']
-        dt = str(datetime.datetime.strptime(str(k), "%Y-%m-%d %H:%M:%S"))
-        dtsplit = dt.replace('00','', 2)
+        dtpresplit = str(datetime.datetime.strptime(str(k), '%Y-%m-%d %H:%M:%S'))
+        dtsplit = dtpresplit.replace('00','', 2)
         dtsplit = "20{2:.2}-{1:.2}-{0:.2} 00:00:00".format(dtsplit[:2],dtsplit[3:5],dtsplit[6:8])
-        dtsplit = datetime.datetime.strptime(dtsplit, "%Y-%m-%d %H:%M:%S")
+        dtsplit = datetime.datetime.strptime(dtsplit, '%Y-%m-%d %H:%M:%S')
         samples_received_dict[dtsplit] = tmp_dict
 
     connection.close()
@@ -212,6 +214,7 @@ def fashioncomplete():
                 fashiond[photo_date].append(file_path)
         except:
             pass
+
     ## Count the Grouped Files
     # fashioncomplete_dict = defaultdict(int)
     # for k in fashiond:
@@ -222,8 +225,8 @@ def fashioncomplete():
         tmp_dict['role'] = 'Fashion'
         tmp_dict['total'] = len(v)
         fashioncomplete_dict[k] = tmp_dict
-    #    fashioncomplete_dict['Role'] = 'Fashion_Photo'
-    #    fashioncomplete_dict['shot_count'] = len(v)
+        #    fashioncomplete_dict['Role'] = 'Fashion_Photo'
+        #    fashioncomplete_dict['shot_count'] = len(v)
     return fashioncomplete_dict
 
 
@@ -251,12 +254,12 @@ def stillcomplete():
             if type(dt) == datetime.datetime:
                 photo_date = dt
                 stilld[photo_date].append(file_path)
-    #        else:
-    #            dt = ''
-    #            dt = "2000-01-01 00:00:00".format(dt)
-    #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-    #            photo_date = dt
-    #            stilld[photo_date].append(file_path)
+                #        else:
+                #            dt = ''
+                #            dt = "2000-01-01 00:00:00".format(dt)
+                #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+                #            photo_date = dt
+                #            stilld[photo_date].append(file_path)
         except:
             pass
 
@@ -267,8 +270,8 @@ def stillcomplete():
         tmp_dict['role'] = 'Still'
         tmp_dict['total'] = len(v)
         stillcomplete_dict[k] = tmp_dict
-    #    stillcomplete_dict['Role'] = 'Still_Photo'
-    #    fashioncomplete_dict['shot_count'] = len(v)
+        #    stillcomplete_dict['Role'] = 'Still_Photo'
+        #    fashioncomplete_dict['shot_count'] = len(v)
     return stillcomplete_dict
 
 ## Walk Root Directory and Return List or all Files in all Subdirs too
@@ -281,15 +284,14 @@ def recursive_dirlist(rootdir):
             file_path = os.path.abspath(os.path.join(dirname, filename))
             if os.path.isfile(file_path):
                 walkedlist.append(file_path)
-    # Advanced usage:
-    # editing the 'dirnames' list will stop os.walk() from recursing into there.
-    #if '.git' in dirnames:
-    # don't go into any .git directories.
-    #    dirnames.remove('.git')
+                # Advanced usage:
+                # editing the 'dirnames' list will stop os.walk() from recursing into there.
+                #if '.git' in dirnames:
+                # don't go into any .git directories.
+                #    dirnames.remove('.git')
     return walkedlist
 
 
-###
 ## Extract All Metadata from Image File as Dict using PIL
 def get_exif(file_path):
     from PIL import Image
@@ -307,7 +309,7 @@ def get_exif(file_path):
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif" function
 def walkeddir_parse_stylestrings_out(walkeddir_list):
     import re,os
-########  Regex only finds _1.jpg files
+    ########  Regex only finds _1.jpg files
     regex = re.compile(r'.*?[0-9]{9}_1\.[jpgJPG]{3}$')
     regex_date = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
     stylestrings = []
@@ -352,8 +354,8 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 stylestrings.append(row)
             except IOError:
                 print "IOError on {0}".format(line)
-            #except AttributeError:
-            #    print "AttributeError on {0}".format(line)
+                #except AttributeError:
+                #    print "AttributeError on {0}".format(line)
     return stylestringsdict
 
 #############################END Funcx Section##########################
@@ -362,107 +364,108 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
 
 
 ## Delete all Events by ID prior to reup
-for event in events_list:
-    service.events().delete(calendarId=prodnumberscal, eventId=event).execute()
-    
-print "Deleted all Events"    
-#calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
-#cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
+def main():
+    for event in events_list:
+        service.events().delete(calendarId=prodnumberscal, eventId=event).execute()
+        
+    print "Deleted all Events"    
+    #calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
+    #cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
 
-#############################Get Data Functions to Query DB###########################
+    #############################Get Data Functions to Query DB###########################
 
 
-prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict = sql_query_production_numbers()
+    prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict = sql_query_production_numbers()
+    stillcomplete_dict     = stillcomplete()
+    fashioncomplete_dict   = fashioncomplete()
+    lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
+    ##############################################################################
 
-###########################################
-stillcomplete_dict     = stillcomplete()
-fashioncomplete_dict   = fashioncomplete()
-
-lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
-##############################################################################
-
-for iterdict in lotsofdicts:
-    count = 0
-    for k,v in iterdict.iteritems():
-        import datetime, time
-        for value in [v]:
-            try:
-                titlekv = str(v['role'])
-            except:
-                titlekv = 'Studio_Shots'
-            try:
-                desckv = str(v['total'])
-                desckv = desckv.replace('&', 'And')
-                desckv = desckv.replace('%', ' Percent')
-#                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
-#                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
-#                sdatekvsplit = sdatekvraw.split(",")
-#                edatekvsplit = edatekvraw.split(",")
-#                sdatekv = map(int,sdatekvsplit)
-#                edatekv = map(int,edatekvsplit)
-                
-                titleid = '{0} - {1}'.format(desckv,titlekv)
-                #if v['total'] < 200:
-                #    congrats = '<>'
-                #elif v['total'] >= 200:
-                #    if v['total'] <= 300:
-                #        congrats = '<-->'
-                #    else:
-                #        congrats = '<-*->'
-                descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
-                descfull = str(descfull)
-                count += 1
-                
-                ##TODO: rework choose color process below with following 3 line of code 
-                # keycode =  v['role']
-                #functions = {9: 'Production', 8: 'Copy', 7: 'Retouching'}
-                #functions.get(keycode, unknown_key_pressed)()
-
-                ## Choose Color of Event Based on Role
-                lockv = v['role']
-                if lockv == 'Production':
-                    colorId = '9'
-                elif lockv == 'Copy':
-                    colorId = '8'
-                elif lockv == 'Retouching':
-                    colorId = '7'
-                elif lockv == 'Fashion':
-                    colorId = '6'
-                    print descfull
+    for iterdict in lotsofdicts:
+        count = 0
+        for k,v in iterdict.iteritems():
+            import datetime, time
+            for value in [v]:
+                try:
+                    titlekv = str(v['role'])
+                except:
+                    titlekv = 'Studio_Shots'
+                try:
+                    desckv = str(v['total'])
+                    desckv = desckv.replace('&', 'And')
+                    desckv = desckv.replace('%', ' Percent')
+                    #                sdatekvraw = '{:%Y,%m,%d,12,30,00,00,00,00}'.format(k)
+                    #                edatekvraw = '{:%Y,%m,%d,21,50,00,00,00,00}'.format(k)
+                    #                sdatekvsplit = sdatekvraw.split(",")
+                    #                edatekvsplit = edatekvraw.split(",")
+                    #                sdatekv = map(int,sdatekvsplit)
+                    #                edatekv = map(int,edatekvsplit)
+                                    
+                    titleid = '{0} - {1}'.format(desckv,titlekv)
+                    #if v['total'] < 200:
+                    #    congrats = '<>'
+                    #elif v['total'] >= 200:
+                    #    if v['total'] <= 300:
+                    #        congrats = '<-->'
+                    #    else:
+                    #        congrats = '<-*->'
+                    descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
+                    descfull = str(descfull)
+                    count += 1
                     
-                elif lockv == 'Still':
-                    colorId = '5'
-                elif lockv == 'Samples_Received':
-                    colorId = '4'
+                    ##TODO: rework choose color process below with following 3 line of code 
+                    # keycode =  v['role']
+                    #functions = {9: 'Production', 8: 'Copy', 7: 'Retouching'}
+                    #functions.get(keycode, unknown_key_pressed)()
 
-                event = {
-                  'summary': titleid,
-                  'description': descfull,
-                  'location': lockv,
-                  'colorId': colorId,
-                  'start': {
-                    'date': "{0:%Y-%m-%d}".format(k.date()),
-                    'timeZone': 'America/New_York'
-                  },
-                  'end': {
-                    'date': "{0:%Y-%m-%d}".format(k.date()),
-                    'timeZone': 'America/New_York'
-                  },
-                #  'recurrence': [
-                #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
-                #  ],
-#                  'attendees': [
-#                    {
-#                      'email': 'james.hoetker@bluefly.com',
-#                      # Other attendee's data...
-#                    },
-#                    # ...
-#                  ],
-                }
-                
-                created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
-                print created_event['id']
-            except OSError:
-                print 'ERROR {}'.format(event)
-                pass
-                
+                    ## Choose Color of Event Based on Role
+                    lockv = v['role']
+                    if lockv == 'Production':
+                        colorId = '9'
+                    elif lockv == 'Copy':
+                        colorId = '8'
+                    elif lockv == 'Retouching':
+                        colorId = '7'
+                    elif lockv == 'Fashion':
+                        colorId = '6'
+                        print descfull
+                        
+                    elif lockv == 'Still':
+                        colorId = '5'
+                    elif lockv == 'Samples_Received':
+                        colorId = '4'
+
+                    event = {
+                      'summary': titleid,
+                      'description': descfull,
+                      'location': lockv,
+                      'colorId': colorId,
+                      'start': {
+                        'date': "{0:%Y-%m-%d}".format(k.date()),
+                        'timeZone': 'America/New_York'
+                      },
+                      'end': {
+                        'date': "{0:%Y-%m-%d}".format(k.date()),
+                        'timeZone': 'America/New_York'
+                      },
+                        #  'recurrence': [
+                        #    'RRULE:FREQ=WEEKLY;UNTIL=20110701T100000-07:00',
+                        #  ],
+                        #                  'attendees': [
+                        #                    {
+                        #                      'email': 'james.hoetker@bluefly.com',
+                        #                      # Other attendee's data...
+                        #                    },
+                        #                    # ...
+                        #                  ],
+                        }
+                        
+                    created_event = service.events().insert(calendarId=prodnumberscal, body=event).execute()
+                    print created_event['id']
+                except OSError:
+                    print 'ERROR {}'.format(event)
+                    pass
+
+
+if __name__ == '__main__':
+    main()
