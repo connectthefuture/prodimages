@@ -123,11 +123,11 @@ def sql_query_production_numbers():
     INNER JOIN POMGR.SKU
     ON
       POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
-    WHERE 
+    WHERE
       POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(sysdate - 30)
         and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY
-        POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT, POMGR.PRODUCT_COLOR.ID
+        POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
     ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
@@ -138,8 +138,7 @@ def sql_query_production_numbers():
         prodcomplete_dict[row['prod_complete_dt']] = tmp_dict
 
     ### Get Retouching Complete Totals and Build Dict of key value pairs
-    querymake_retouchnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total,
-    POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
+    querymake_retouchnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
     INNER JOIN POMGR.SKU
     ON
@@ -148,7 +147,7 @@ def sql_query_production_numbers():
       POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
     and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY 
-      POMGR.PRODUCT_COLOR.IMAGE_READY_DT,POMGR
+      POMGR.PRODUCT_COLOR.IMAGE_READY_DT
     ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC"""
     retouchcomplete = connection.execute(querymake_retouchnumbers)
     retouchcomplete_dict = {}
@@ -159,8 +158,7 @@ def sql_query_production_numbers():
         retouchcomplete_dict[row['retouch_complete_dt']] = tmp_dict
 
     ### Get Copy Complete Totals and Build Dict of key value pairs
-    querymake_copynumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total,
-    to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') as copy_complete_dt
+    querymake_copynumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as copy_total, to_date(POMGR.PRODUCT_COLOR.COPY_READY_DT, 'YYYY-MM-DD') as copy_complete_dt
     FROM POMGR.PRODUCT_COLOR
     INNER JOIN POMGR.SKU
     ON
