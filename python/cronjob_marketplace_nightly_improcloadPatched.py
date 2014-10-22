@@ -102,7 +102,7 @@ for k,v in vaultstyles.iteritems():
     vendor_name = v['vendor_name']
     alt_number  = v['alt']
     if len(image_url.split('.')[-1]) == 3:
-        ext = image_url.split('.')[-1]
+        ext = '.' + str(image_url.split('.')[-1])
     else: 
         ext = '.jpg'
     if alt_number:
