@@ -101,7 +101,10 @@ for k,v in vaultstyles.iteritems():
     po_number   = v['po_number']
     vendor_name = v['vendor_name']
     alt_number  = v['alt']
-    ext = '.jpg'
+    if len(image_url.split('.')[-1]) == 3:
+        ext = image_url.split('.')[-1]
+    else: 
+        ext = '.jpg'
     if alt_number:
         bfly_ext = "_{0}{1}".format(alt_number,ext)
         ext = bfly_ext
