@@ -111,6 +111,7 @@ def recursive_dirlist(rootdir):
 
 ###############
 def insert_mysql_numbers(roletotalsdict):
+    import sqlalchemy
     marketplace = ''
     for k,v in roletotalsdict.iteritems():
         try:
