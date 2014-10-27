@@ -131,7 +131,6 @@ def insert_mysql_numbers(roletotalsdict):
                                     INSERT INTO production_numbers (complete_dt, role, total, marketplace) 
                                     VALUES (%s, %s, %s, %s)
                                     ON DUPLICATE KEY UPDATE 
-                                    total  = VALUES(total), 
                                     marketplace  = VALUES(marketplace);
                                     """, k, v['role'], v['total'], v['marketplace'])
                 print "Successful Insert production_numbers --> {0}".format(k)
