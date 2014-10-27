@@ -109,6 +109,41 @@ def recursive_dirlist(rootdir):
     return walkedlist
 
 
+###############
+def insert_mysql_numbers(roletotalsdict):
+    marketplace = ''
+    for k,v in roletotalsdict.iteritems():
+        try:
+            marketplace = v['marketplace']
+        except:
+            v['marketplace'] = ''
+            pass
+        try:
+            ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+            mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_reporting')
+            connection = mysql_engine.connect()
+            ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
+            sqlinsert_choose_test = v['role']
+
+            ## ProdRaw Metadata Extracted and added to DB
+            if sqlinsert_choose_test:
+                connection.execute("""
+                                    INSERT INTO production_numbers (complete_dt, role, total, marketplace) 
+                                    VALUES (%s, %s, %s, %s)
+                                    ON DUPLICATE KEY UPDATE 
+                                    total  = VALUES(total), 
+                                    marketplace  = VALUES(marketplace);
+                                    """, k, v['role'], v['total'], v['marketplace'])
+                print "Successful Insert production_numbers --> {0}".format(k)
+            
+            else:
+                print "Database Entry NOT VALID for Inserting {0}".format(k)
+        #except OSError:
+        except sqlalchemy.exc.IntegrityError:
+            print "Duplicate Entry {0}".format(k)
+            pass
+###############
+
 def sql_query_production_numbers():
     import sqlalchemy
     import datetime
@@ -395,6 +430,9 @@ def main():
     lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
     ##############################################################################
     for iterdict in lotsofdicts:
+        ## first insert data to db then post to gcal
+        insert_mysql_numbers(iterdict)
+        #
         count = 0
         try:
             for k,v in iterdict.iteritems():

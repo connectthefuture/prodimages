@@ -90,15 +90,15 @@ def retouching_numbers():
     import datetime
     from collections import defaultdict
     ######  Recursively search Photo Folders and get counts of shots by date
-    ## rootdir_still = '/mnt/Post_Ready/Retouch_Still'
-    rootdir_still = '/mnt/Post_Complete/Complete_Archive/Uploaded/'
+    ## rootdir_retouching = '/mnt/Post_Ready/Retouch_Still'
+    rootdir_retouching = '/mnt/Post_Complete/Complete_Archive/Uploaded/'
     #####  Walk rootdir tree compile dict of Walked Directory
-    walkedout_still = recursive_dirlist(rootdir_still)
+    walkedout_retouching = recursive_dirlist(rootdir_retouching)
     #### Parse Walked Still Directory Paths Output stylestringssdict
-    stylestringsdict_still = walkeddir_parse_stylestrings_out(walkedout_still)
-    ### Now the still sets counts by date
-    stilld = defaultdict(list)
-    for row in stylestringsdict_still.itervalues():
+    stylestringsdict_retouching = walkeddir_parse_stylestrings_out(walkedout_retouching)
+    ### Now the retouching sets counts by date
+    retouchingd = defaultdict(list)
+    for row in stylestringsdict_retouching.itervalues():
         try:
             file_path = row['file_path']
             photo_date = row['photo_date']
@@ -108,26 +108,26 @@ def retouching_numbers():
             #### 5 digit date
             if type(dt) == datetime.datetime:
                 photo_date = dt
-                stilld[photo_date].append(file_path)
+                retouchingd[photo_date].append(file_path)
                 #        else:
                 #            dt = ''
                 #            dt = "2000-01-01 00:00:00".format(dt)
                 #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
                 #            photo_date = dt
-                #            stilld[photo_date].append(file_path)
+                #            retouchingd[photo_date].append(file_path)
         except:
             pass
 
     ## Count the Grouped Files
-    stillcomplete_dict = {}
-    for k,v in stilld.iteritems():
+    retouchingcomplete_dict = {}
+    for k,v in retouchingd.iteritems():
         tmp_dict = {}
         tmp_dict['role'] = 'Retouching'
         tmp_dict['total'] = len(v)
-        stillcomplete_dict[k] = tmp_dict
-        #    stillcomplete_dict['Role'] = 'Still_Photo'
+        retouchingcomplete_dict[k] = tmp_dict
+        #    retouchingcomplete_dict['Role'] = 'Retouching'
         #    fashioncomplete_dict['shot_count'] = len(v)
-    return stillcomplete_dict
+    return retouchingcomplete_dict
 
 
 ## Extract All Metadata from Image File as Dict using PIL
@@ -142,3 +142,45 @@ def get_exif(file_path):
         exifdata[decoded] = value
     return exifdata
 
+
+def insert_mysql_numbers(roletotalsdict):
+    marketplace = ''
+    for k,v in roletotalsdict.iteritems():
+        try:
+            marketplace = v['marketplace']
+        except:
+            v['marketplace'] = ''
+            pass
+        try:
+            ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+            mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_reporting')
+            connection = mysql_engine.connect()
+            ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
+            sqlinsert_choose_test = v['role']
+
+            ## ProdRaw Metadata Extracted and added to DB
+            if sqlinsert_choose_test:
+                connection.execute("""
+                                    INSERT INTO production_numbers (complete_dt, role, total, marketplace) 
+                                    VALUES (%s, %s, %s, %s)
+                                    ON DUPLICATE KEY UPDATE 
+                                    total  = VALUES(total), 
+                                    marketplace  = VALUES(marketplace);
+                                    """, k, v['role'], v['total'], v['marketplace'])
+                print "Successful Insert production_numbers --> {0}".format(k)
+            
+            else:
+                print "Database Entry NOT VALID for Inserting {0}".format(k)
+        #except OSError:
+        except sqlalchemy.exc.IntegrityError:
+            print "Duplicate Entry {0}".format(k)
+            pass
+
+
+def main():
+    retouching_totals = retouching_numbers()
+    insert_mysql_numbers(retouching_totals)
+
+
+if __name__ == '__main__':
+    main()
