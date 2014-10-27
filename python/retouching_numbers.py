@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 def recursive_dirlist(rootdir):
     import os
     walkedlist = []
