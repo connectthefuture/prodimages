@@ -109,8 +109,11 @@ def retouching_numbers():
     stylestringsdict_retouching = walkeddir_parse_stylestrings_out(walkedout_retouching)
     ### Now the retouching sets counts by date
     retouchingd = defaultdict(list)
+    marketplace = 0
     for row in stylestringsdict_retouching.itervalues():
         try:
+            test = is_marketplace(row['colorstyle'])
+            marketplace += test
             file_path = row['file_path']
             photo_date = row['photo_date']
             dt = photo_date
@@ -135,6 +138,7 @@ def retouching_numbers():
         tmp_dict = {}
         tmp_dict['role'] = 'Retouching'
         tmp_dict['total'] = len(v)
+        tmp_dict['marketplace'] = marketplace
         retouchingcomplete_dict[k] = tmp_dict
         #    retouchingcomplete_dict['Role'] = 'Retouching'
         #    fashioncomplete_dict['shot_count'] = len(v)
