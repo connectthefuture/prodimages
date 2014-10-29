@@ -172,7 +172,7 @@ def sql_query_production_numbers():
         tmp_dict['role'] = 'Production'
         prodcomplete_dict[row['prod_complete_dt']] = tmp_dict
 
-    ### Get Retouching Complete Totals and Build Dict of key value pairs
+    ### Get Image_Completion Complete Totals and Build Dict of key value pairs
     querymake_retouchnumbers = """SELECT COUNT(DISTINCT POMGR.PRODUCT_COLOR.ID) as retouch_total, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as retouch_complete_dt
     FROM POMGR.PRODUCT_COLOR
     INNER JOIN POMGR.SKU
@@ -189,7 +189,7 @@ def sql_query_production_numbers():
     for row in retouchcomplete:
         tmp_dict = {}
         tmp_dict['total'] = row['retouch_total']
-        tmp_dict['role'] = 'Retouching'
+        tmp_dict['role'] = 'Image_Completion'
         retouchcomplete_dict[row['retouch_complete_dt']] = tmp_dict
 
     ### Get Copy Complete Totals and Build Dict of key value pairs
@@ -455,7 +455,7 @@ def main():
                             colorId = '9'
                         elif lockv == 'Copy':
                             colorId = '8'
-                        elif lockv == 'Retouching':
+                        elif lockv == 'Image_Completion':
                             colorId = '7'
                         elif lockv == 'Fashion':
                             colorId = '6'
