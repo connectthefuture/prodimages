@@ -81,101 +81,107 @@ def sqlQuerySupplierIngest():
     connection.close()
     return importdata
 
-#### Run Import To Mysql
-import sys
-import os
-import sqlalchemy
+
+def main():
+    #### Run Import To Mysql
+    import sys
+    import os
+    import sqlalchemy
 
 
-importdata = sqlQuerySupplierIngest()
+    importdata = sqlQuerySupplierIngest()
 
-## Truncate Prior to Inserting new data
-#mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-#connection1 = mysql_engine.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-#connection1.close()
+    ## Truncate Prior to Inserting new data
+    #mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+    #connection1 = mysql_engine.connect()
+    #trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+    #connection1.close()
 
-## Trunc www_django vers wont TRUNC du to Foreign Keys
-#mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-#connectiondj = mysql_engine_dj.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
-#connectiondj.close()
+    ## Trunc www_django vers wont TRUNC du to Foreign Keys
+    #mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+    #connectiondj = mysql_engine_dj.connect()
+    #trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+    #connectiondj.close()
 
-for k,v in importdata.iteritems():
-    print k,v, "BEGIN"
-    try:
-
-        mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-        mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-        connection_data = mysql_engine_data.connect()
-        connection_www = mysql_engine_www.connect()
-
-        # try:
-        #     connection_data.execute("""
-        #             INSERT INTO supplier_ingest 
-        #                 (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, image_type, copy_ready_dt, modified_dt, start_dt)
-        #                 (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        #             ON DUPLICATE KEY UPDATE 
-        #                 version  = VALUES(version), 
-        #                 vendor_name  = VALUES(vendor_name), 
-        #                 vendor_brand  = VALUES(vendor_brand), 
-        #                 bfly_product_path  = VALUES(bfly_product_path), 
-        #                 image_url  = VALUES(image_url), 
-        #                 alt  = VALUES(alt), 
-        #                 image_download_valid  = VALUES(image_download_valid), 
-        #                 ingest_style_id  = VALUES(ingest_style_id), 
-        #                 copy_ready_dt  = VALUES(copy_ready_dt), 
-        #                 image_ready_dt  = VALUES(image_ready_dt), 
-        #                 production_complete_dt           = VALUES(production_complete_dt), 
-        #                 active     = VALUES(active), 
-        #                 create_dt       = VALUES(create_dt), 
-        #                 image_type     = VALUES(image_type), 
-        #                 copy_ready_dt        = VALUES(copy_ready_dt), 
-        #                 modified_dt = VALUES(modified_dt), 
-        #                 start_dt        = VALUES(start_dt);
-        #                        """, v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['image_type'], v['copy_ready_dt'], v['modified_dt'], v['start_dt'])
-        # except sqlalchemy.exc.IntegrityError:
-        #     print "Duplicate Entry {0}".format(k)
-        
-        
-        
-
+    for k,v in importdata.iteritems():
+        print k,v, "BEGIN"
         try:
-            connection_www.execute("""INSERT INTO supplier_ingest (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, modified_dt, start_dt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
-            ON DUPLICATE KEY UPDATE 
-            version  = VALUES(version), 
-            vendor_name  = VALUES(vendor_name), 
-            vendor_brand  = VALUES(vendor_brand), 
-            bfly_product_path  = VALUES(bfly_product_path), 
-            image_url  = VALUES(image_url), 
-            alt  = VALUES(alt), 
-            image_download_valid  = VALUES(image_download_valid),
-            ingest_style_id  = VALUES(ingest_style_id), 
-            copy_ready_dt  = VALUES(copy_ready_dt), 
-            image_ready_dt  = VALUES(image_ready_dt), 
-            production_complete_dt = VALUES(production_complete_dt), 
-            active = VALUES(active), 
-            create_dt = VALUES(create_dt), 
-            modified_dt = VALUES(modified_dt), 
-            start_dt = VALUES(start_dt);""", v['colorstyle'], v['vendor_style'], v['po_number'], v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['modified_dt'], v['start_dt'])
 
-            print "Inserted {0}".format(k)
+            mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+            mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+            connection_data = mysql_engine_data.connect()
+            connection_www = mysql_engine_www.connect()
+
+            # try:
+            #     connection_data.execute("""
+            #             INSERT INTO supplier_ingest 
+            #                 (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, image_type, copy_ready_dt, modified_dt, start_dt)
+            #                 (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            #             ON DUPLICATE KEY UPDATE 
+            #                 version  = VALUES(version), 
+            #                 vendor_name  = VALUES(vendor_name), 
+            #                 vendor_brand  = VALUES(vendor_brand), 
+            #                 bfly_product_path  = VALUES(bfly_product_path), 
+            #                 image_url  = VALUES(image_url), 
+            #                 alt  = VALUES(alt), 
+            #                 image_download_valid  = VALUES(image_download_valid), 
+            #                 ingest_style_id  = VALUES(ingest_style_id), 
+            #                 copy_ready_dt  = VALUES(copy_ready_dt), 
+            #                 image_ready_dt  = VALUES(image_ready_dt), 
+            #                 production_complete_dt           = VALUES(production_complete_dt), 
+            #                 active     = VALUES(active), 
+            #                 create_dt       = VALUES(create_dt), 
+            #                 image_type     = VALUES(image_type), 
+            #                 copy_ready_dt        = VALUES(copy_ready_dt), 
+            #                 modified_dt = VALUES(modified_dt), 
+            #                 start_dt        = VALUES(start_dt);
+            #                        """, v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['image_type'], v['copy_ready_dt'], v['modified_dt'], v['start_dt'])
+            # except sqlalchemy.exc.IntegrityError:
+            #     print "Duplicate Entry {0}".format(k)
+            
+            
+            
+
+            try:
+                connection_www.execute("""INSERT INTO supplier_ingest (colorstyle, vendor_style, po_number, version, vendor_name, vendor_brand, bfly_product_path, image_url, alt, image_download_valid, ingest_style_id, copy_ready_dt, image_ready_dt, production_complete_dt, active, create_dt, modified_dt, start_dt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+                ON DUPLICATE KEY UPDATE 
+                version  = VALUES(version), 
+                vendor_name  = VALUES(vendor_name), 
+                vendor_brand  = VALUES(vendor_brand), 
+                bfly_product_path  = VALUES(bfly_product_path), 
+                image_url  = VALUES(image_url), 
+                alt  = VALUES(alt), 
+                image_download_valid  = VALUES(image_download_valid),
+                ingest_style_id  = VALUES(ingest_style_id), 
+                copy_ready_dt  = VALUES(copy_ready_dt), 
+                image_ready_dt  = VALUES(image_ready_dt), 
+                production_complete_dt = VALUES(production_complete_dt), 
+                active = VALUES(active), 
+                create_dt = VALUES(create_dt), 
+                modified_dt = VALUES(modified_dt), 
+                start_dt = VALUES(start_dt);""", v['colorstyle'], v['vendor_style'], v['po_number'], v['version'], v['vendor_name'], v['vendor_brand'], v['bfly_product_path'], v['image_url'], v['alt'], v['image_download_valid'], v['ingest_style_id'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['active'], v['create_dt'], v['modified_dt'], v['start_dt'])
+
+                print "Inserted {0}".format(k)
+
+            except sqlalchemy.exc.IntegrityError:
+                print "Duplicate Entry {0}".format(k)
+            
+            except sqlalchemy.exc.OperationalError:
+                print "Invalid Path or Entry {0}".format(k)
+
+            
+            #print "Successful Insaert Push_Photoselecs --> {0}".format(k)
+
 
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
-        
-        except sqlalchemy.exc.OperationalError:
-            print "Invalid Path or Entry {0}".format(k)
+        # except sqlalchemy.exc.DatabaseError:
+        #     continue
+        #     print "DBERR" + k
 
-        
-        #print "Successful Insaert Push_Photoselecs --> {0}".format(k)
+        # except KeyError:
+        #     continue
 
+if __name__ == '__main__':
+    main()
 
-    except sqlalchemy.exc.IntegrityError:
-        print "Duplicate Entry {0}".format(k)
-    # except sqlalchemy.exc.DatabaseError:
-    #     continue
-    #     print "DBERR" + k
-
-#     except KeyError:
-#         continue
