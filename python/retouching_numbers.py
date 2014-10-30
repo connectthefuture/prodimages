@@ -63,7 +63,7 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 ext = alt_ext.split('.')[-1]
                 try:
                     path_date = file_path.split('/dateloaded_')[1][2:8]
-                    path_date = "20{2:.2}-{0:.2}-{1:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
+                    path_date = "20{0:.2}-{1:.2}-{2:.2}".format(path_date[:2], path_date[2:4], path_date[4:6])
                     if re.findall(regex_date, path_date):
                         photo_date = path_date
                     else:
@@ -117,6 +117,7 @@ def retouching_numbers():
                 pass
             else:
                 marketplace += 1
+                print row['photo_date'], ' Is marketplace Count ' + marketplace
             file_path = row['file_path']
             photo_date = row['photo_date']
             dt = photo_date
