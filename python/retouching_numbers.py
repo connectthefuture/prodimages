@@ -19,13 +19,13 @@ def recursive_dirlist(rootdir):
 
 
 
-def is_marketplace(stylenum):
+def colorstyle_in_marketplace(stylenum):
     import requests
     url='http://prodimages.ny.bluefly.com/api/v1/supplier-ingest/'
     data={'colorstyle': stylenum}
-    marketplace = requests.get(url,)
+    marketplace = requests.get(url, params=data)
     if marketplace:
-        return 1
+        return marketplace.json()['meta']['total_count']
     else:
         return ''
 
@@ -112,8 +112,11 @@ def retouching_numbers():
     marketplace = 0
     for row in stylestringsdict_retouching.itervalues():
         try:
-            test = is_marketplace(row['colorstyle'])
-            marketplace += test
+            test = colorstyle_in_marketplace(row['colorstyle'])
+            if test == 0:
+                pass
+            else:
+                marketplace += 1
             file_path = row['file_path']
             photo_date = row['photo_date']
             dt = photo_date
