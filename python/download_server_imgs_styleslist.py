@@ -17,7 +17,7 @@ def url_download_file(url,filepath):
 
 
 #### Run ###
-main(styleslist=None, root_dir=None):
+def main(styleslist=None, root_dir=None):
     import os,sys, urllib, datetime
     todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
     if not root_dir:
