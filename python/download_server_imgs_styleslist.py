@@ -19,9 +19,10 @@ def url_download_file(url,filepath):
 #### Run ###
 def main(styleslist=None, root_dir=None):
     import os,sys, urllib, datetime
-    todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
+    todaysdate = '{:%Y%m%d}'.format(datetime.datetime.now())
+    username = os.path.expanduser('~').split('/')[-1].split('.')[0].lower()
     if not root_dir:
-        root_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', todaysdate + '_downloads')
+        root_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', todaysdate + '_files_for_' + username )
         if not os.path.isdir(root_dir):
             os.makedirs(root_dir)
     if not styleslist:
