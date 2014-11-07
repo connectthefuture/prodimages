@@ -25,21 +25,21 @@ def main(styleslist=None, root_dir=None):
         if not os.path.isdir(root_dir):
             os.makedirs(root_dir)
     if not styleslist:
-        args = sys.argv[1:]
+        styleslist = sys.argv[1:]
     else:
-        args = styleslist
+        pass
 
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
     regex_Space = re.compile(r'.*?\s.*?')
-    print args
+    print styleslist
 
-    # args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
+    # styleslist1 = styleslist[0].split('\n')   #(','.join(str(arg) for arg in styleslist)).split('\n')
     # try:
-    #     args1 = args[0].split(' ')   #(','.join(str(arg) for arg in args)).split('\n')
+    #     styleslist1 = styleslist[0].split(' ')   #(','.join(str(arg) for arg in styleslist)).split('\n')
     # except KeyError:
     #     pass
-    # print args1
+    # print styleslist1
 
     for style in styleslist:
 
