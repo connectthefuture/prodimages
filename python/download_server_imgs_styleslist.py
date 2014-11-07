@@ -21,7 +21,7 @@ main(styleslist=None, root_dir=None)
     import os,sys, urllib, datetime
     todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
     if not root_dir:
-        root_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'script_downloads', todaysdate + '_files')
+        root_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', todaysdate + '_downloads')
         if not os.path.isdir(root_dir):
             os.makedirs(root_dir)
     if not styleslist:
