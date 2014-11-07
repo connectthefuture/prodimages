@@ -31,8 +31,8 @@ def main(styleslist=None, root_dir=None):
 
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
-    regex_Space = re.compile(r'.*?\n.*?')
-
+    regex_Space = re.compile(r'.*?\s.*?')
+    print args
 
     # args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
     # try:
