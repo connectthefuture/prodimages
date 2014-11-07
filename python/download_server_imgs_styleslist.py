@@ -34,27 +34,12 @@ def main(styleslist=None, root_dir=None):
     regex_Space = re.compile(r'.*?\n.*?')
 
 
-    #args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
-    try:
-        args1 = args[0].split(' ')   #(','.join(str(arg) for arg in args)).split('\n')
-    except KeyError:
-        pass
-    try:
-        if len(args1) >= 2:
-            styleslist = args1
-            print "HELLO Greater 2"
-            print len(styleslist)
-            
-        elif len(args1) == 1:
-            ponum = args[0] #sys.argv[1]#ys.argv[1]#args_split #sys.argv[1]
-            print ponum
-            styleslist = sqlQuery_GetStyleVendor_ByPO(ponum)
-            #print stylesDict
-    #        #ponum = '119071'
-    except OSError:
-        print "Enter at least PO Number as 1st Arg or Nothing will Happen"
-#
-
+    # args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
+    # try:
+    #     args1 = args[0].split(' ')   #(','.join(str(arg) for arg in args)).split('\n')
+    # except KeyError:
+    #     pass
+    # print args1
 
     for style in styleslist:
 
