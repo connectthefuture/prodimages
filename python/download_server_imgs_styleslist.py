@@ -3,7 +3,7 @@ import os, sys, re, csv
 
 
 def url_download_file(url,filepath):
-    import urllib
+    import urllib, subprocess
     #error_check = urllib.urlopen(url)
     #urlcode_value = error_check.getcode()
     #print urlcode_value
@@ -13,7 +13,7 @@ def url_download_file(url,filepath):
         urllib.urlretrieve(url, filepath)
         print "Retrieved: " + url + " ---> " + filepath
     except:
-        print "Failed: " + url + " ---> " + filepath
+        print  url, filepath
         pass
     #    return urlcode_value
     #elif urlcode_value == 404:
