@@ -29,7 +29,7 @@ def main(styleslist=None, root_dir=None):
         styleslist = sys.argv[1:]
     else:
         pass
-
+    print 'Args ', sys.argv[0]
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
     regex_Space = re.compile(r'.*?\s.*?')
