@@ -13,7 +13,7 @@ def url_download_file(url,filepath):
         urllib.urlretrieve(url, filepath)
         print "Retrieved: " + url + " ---> " + filepath
     except:
-        print  url, filepath
+        print  'FAILED ', url, filepath
         pass
     #    return urlcode_value
     #elif urlcode_value == 404:
@@ -33,7 +33,7 @@ def main(styleslist=None, root_dir=None):
         styleslist = sys.argv[1:]
     else:
         pass
-    print 'Args ', sys.argv[0]
+    # print 'Args ', sys.argv[0]
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
     regex_Space = re.compile(r'.*?\s.*?')
@@ -60,7 +60,7 @@ def main(styleslist=None, root_dir=None):
         #urlcode_value = error_check.getcode()
         #print urlcode_value
         #try: #if urlcode_value == 200:
-        colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle + ext_PNG)
+        colorstyle_file = root_dir, colorstyle + ext_PNG)
         print netsrv101_url_file, colorstyle_file
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
