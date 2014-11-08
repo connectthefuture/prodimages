@@ -45,7 +45,8 @@ def main(styleslist=None, root_dir=None):
     # except KeyError:
     #     pass
     # print styleslist1
-    count = 0
+    countOne = 0
+    countAll = 0
     for style in styleslist:
 
         netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
@@ -79,12 +80,15 @@ def main(styleslist=None, root_dir=None):
                     #if urlcode_value == 200:
                     if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                         url_download_file(netsrv101_url_filealt, colorstyle_filealt)
-                        count += 1
+                        countAll += 1
                 except IOError:
                     pass        
+        countAll += 1
         except IOError:
             pass   
-    return str(count) + ' Files Downloaded'
+
+    perStyle = float(round(float(countOne)/float(countAll),2))
+    print '{0} Styles\n\t{1}Files Downloaded\n{2} Avg Files Per Style'.format(str(countOne), str(countAll), str(perStyle))
 
 if __name__ == '__main__':
     main()
