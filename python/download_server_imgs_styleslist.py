@@ -61,6 +61,7 @@ def main(styleslist=None, root_dir=None):
         #print urlcode_value
         #try: #if urlcode_value == 200:
         colorstyle_file = os.path.join(os.path.abspath(os.curdir), colorstyle + ext_PNG)
+        print netsrv101_url_file, colorstyle_file
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
         
