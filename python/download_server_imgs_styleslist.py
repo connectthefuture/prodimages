@@ -37,7 +37,7 @@ def main(styleslist=None, root_dir=None):
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
     regex_Space = re.compile(r'.*?\s.*?')
-    print styleslist
+    #print styleslist
 
     # styleslist1 = styleslist[0].split('\n')   #(','.join(str(arg) for arg in styleslist)).split('\n')
     # try:
@@ -45,7 +45,7 @@ def main(styleslist=None, root_dir=None):
     # except KeyError:
     #     pass
     # print styleslist1
-
+    count = 0
     for style in styleslist:
 
         netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
@@ -79,11 +79,12 @@ def main(styleslist=None, root_dir=None):
                     #if urlcode_value == 200:
                     if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                         url_download_file(netsrv101_url_filealt, colorstyle_filealt)
+                        count += 1
                 except IOError:
                     pass        
         except IOError:
             pass   
-
+    return str(count) + ' Files Downloaded'
 
 if __name__ == '__main__':
     main()
