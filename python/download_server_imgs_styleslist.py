@@ -9,8 +9,12 @@ def url_download_file(url,filepath):
     #print urlcode_value
     
     #if urlcode_value == 200:
-    urllib.urlretrieve(url, filepath)
-    print "Retrieved: " + url + " ---> " + filepath
+    try:
+        urllib.urlretrieve(url, filepath)
+        print "Retrieved: " + url + " ---> " + filepath
+    except:
+        print "Failed: " + url + " ---> " + filepath
+        pass
     #    return urlcode_value
     #elif urlcode_value == 404:
     #    return urlcode_value
