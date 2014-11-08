@@ -53,7 +53,6 @@ def main(styleslist=None, root_dir=None):
         ext_PNG     = '.png'
         ext_JPG     = '.jpg'
 
-      
         netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext_PNG)
     #try:
         #error_check = urllib.urlopen(netsrv101_url_file)
