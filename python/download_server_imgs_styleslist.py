@@ -91,7 +91,7 @@ def main(styleslist=None, root_dir=None):
     countAll = countAlt + countOne
     try:
         perStyle = round((float(countAll)/float(countOne)),2)
-        print '{0} Styles Found\n\t{1} Files Downloaded\n{2} Avg Files Per Style'.format(str(countOne), str(countAll), str(perStyle))
+        print '{0} Styles Found\n\t{1} Files Downloaded\n{2} Files Per Style Avg'.format(str(countOne), str(countAll), str(perStyle))
 
     except ZeroDivisionError:
         print 'Sorry, Nothing was Found\n\n\...This time. Try Again'
