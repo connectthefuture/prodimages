@@ -83,7 +83,7 @@ def main(styleslist=None, root_dir=None):
                         countAll =+ 1
                 except IOError:
                     pass        
-        countAll += 1
+        countOne =+ 1
         except IOError:
             pass   
 
