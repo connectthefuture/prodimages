@@ -87,7 +87,7 @@ def main(styleslist=None, root_dir=None):
         except IOError:
             pass   
 
-    perStyle = round((countAll)/(countOne),2)
+    perStyle = '' #round((countAll)/(countOne),2)
     print '{0} Styles Found\n\t{1}Files Downloaded\n{2} Avg Files Per Style'.format(str(countOne), str(countAll), str(perStyle))
 
 if __name__ == '__main__':
