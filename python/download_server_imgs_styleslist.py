@@ -64,7 +64,7 @@ def main(styleslist=None, root_dir=None):
         print netsrv101_url_file, colorstyle_file
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
-            countOne =+ 1
+            
             alt = 0   
             for x in range(1,6):
                 try:
@@ -87,7 +87,7 @@ def main(styleslist=None, root_dir=None):
         except IOError:
             pass   
 
-    perStyle = round(float(countOne)/float(countAll),2)
+    perStyle = float(round(float(countOne)/float(countAll),2))
     print '{0} Styles Found\n\t{1}Files Downloaded\n{2} Avg Files Per Style'.format(str(countOne), str(countAll), str(perStyle))
 
 if __name__ == '__main__':
