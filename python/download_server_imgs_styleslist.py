@@ -64,7 +64,7 @@ def main(styleslist=None, root_dir=None):
         print netsrv101_url_file, colorstyle_file
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
-            countOne =+ 1
+            
             alt = 0   
             for x in range(1,6):
                 try:
