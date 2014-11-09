@@ -46,7 +46,7 @@ def main(styleslist=None, root_dir=None):
     #     pass
     # print styleslist1
     countOne = 0
-    countAll = 0
+    countAlt = 0
     for style in styleslist:
 
         netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
@@ -80,7 +80,7 @@ def main(styleslist=None, root_dir=None):
                     #if urlcode_value == 200:
                     if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                         url_download_file(netsrv101_url_filealt, colorstyle_filealt)
-                        countAll += 1
+                        countAlt += 1
                 except IOError:
                     pass        
         
@@ -88,8 +88,13 @@ def main(styleslist=None, root_dir=None):
             pass   
 
     perStyle = 'NA' 
-    # round((countAll)/(countOne),2)
-    print '{0} Styles Found\n\t{1} Files Downloaded\n{2} Avg Files Per Style'.format(str(countOne), str(countAll), str(perStyle))
+    countAll = countAlt + countOne
+    try:
+        perStyle = round((float(countAll)/float(countOne)),2)
+        print '{0} Styles Found\n\t{1} Files Downloaded\n{2} Avg Files Per Style'.format(str(countOne), str(countAll), str(perStyle))
+
+    except ZeroDivisionError:
+        print 'Sorry, Nothing was Found'
 
 if __name__ == '__main__':
     main()
