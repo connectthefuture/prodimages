@@ -94,7 +94,7 @@ def main(styleslist=None, root_dir=None):
         print '{0} Styles Found\n\t{1} Files Downloaded\n{2} Avg Files Per Style'.format(str(countOne), str(countAll), str(perStyle))
 
     except ZeroDivisionError:
-        print 'Sorry, Nothing was Found'
+        print 'Sorry, Nothing was Found\n\n\...This time. Try Again'
 
 if __name__ == '__main__':
     main()
