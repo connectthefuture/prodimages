@@ -80,7 +80,7 @@ def main(styleslist=None, root_dir=None):
                     #if urlcode_value == 200:
                     if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                         url_download_file(netsrv101_url_filealt, colorstyle_filealt)
-                        countAll += 1
+                        countAll =+ 1
                 except IOError:
                     pass        
         countAll += 1
