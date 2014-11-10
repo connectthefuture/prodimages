@@ -299,11 +299,64 @@ def fashioncomplete():
     return fashioncomplete_dict
 
 
+def lookletcomplete():
+    import datetime
+    from collections import defaultdict
+    ######  Recursively search Photo Folders and get counts of shots by date
+    regex_photolooklet = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[L]{2}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+    regex_postreadylooklet = re.compile(r'^/Retouch_.+?/.*?[L]{2}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+    ## rootdir_looklet = '/mnt/Post_Ready/Retouch_Still'
+    rootdir_looklet = '/mnt/Post_Ready/aPhotoPush'
+    #####  Walk rootdir tree compile dict of Walked Directory
+    walkedout_looklet = recursive_dirlist(rootdir_looklet)
+    #### Parse Walked Directory Paths Output stylestringssdict
+    stylestringsdict_looklet = walkeddir_parse_stylestrings_out(walkedout_looklet)
+    ### Get and Collect Counts of looklet and still sets by date
+    lookletd = defaultdict(list)
+    for row in stylestringsdict_still.itervalues():
+        file_path = row['file_path']
+        if regex_photolooklet.findall(file_path):
+            try:
+                file_path = row['file_path']
+                photo_date = row['photo_date']
+                dt = photo_date
+                dt = "{} 00:00:00".format(dt)
+                dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+                #### 5 digit date
+                if type(dt) == datetime.datetime:
+                    photo_date = dt
+                    stilld[photo_date].append(file_path)
+                    #        else:
+                    #            dt = ''
+                    #            dt = "2000-01-01 00:00:00".format(dt)
+                    #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+                    #            photo_date = dt
+                    #            stilld[photo_date].append(file_path)
+            except:
+                pass
+        else:
+            pass
+
+    ## Count the Grouped Files
+    # lookletcomplete_dict = defaultdict(int)
+    # for k in lookletd:
+    #     lookletcomplete_dict[k] +=1
+    lookletcomplete_dict = {}
+    for k,v in lookletd.iteritems():
+        tmp_dict = {}
+        tmp_dict['role'] = 'Looklet'
+        tmp_dict['total'] = len(v)
+        lookletcomplete_dict[k] = tmp_dict
+        #    lookletcomplete_dict['Role'] = 'Fashion_Photo'
+        #    lookletcomplete_dict['shot_count'] = len(v)
+    return lookletcomplete_dict
 
 def stillcomplete():
     import datetime
     from collections import defaultdict
     ######  Recursively search Photo Folders and get counts of shots by date
+    regex_photostill = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[^L]{2}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+    regex_postreadystill = re.compile(r'^/Retouch_.+?/.*?[^L]{2}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
     ## rootdir_still = '/mnt/Post_Ready/Retouch_Still'
     rootdir_still = '/mnt/Post_Ready/aPhotoPush'
     #####  Walk rootdir tree compile dict of Walked Directory
@@ -313,25 +366,28 @@ def stillcomplete():
     ### Now the still sets counts by date
     stilld = defaultdict(list)
     for row in stylestringsdict_still.itervalues():
-        try:
-            file_path = row['file_path']
-            photo_date = row['photo_date']
-            dt = photo_date
-            dt = "{} 00:00:00".format(dt)
-            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-            #### 5 digit date
-            if type(dt) == datetime.datetime:
-                photo_date = dt
-                stilld[photo_date].append(file_path)
-                #        else:
-                #            dt = ''
-                #            dt = "2000-01-01 00:00:00".format(dt)
-                #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-                #            photo_date = dt
-                #            stilld[photo_date].append(file_path)
-        except:
+        file_path = row['file_path']
+        if regex_photostill.findall(file_path):
+            try:
+                file_path = row['file_path']
+                photo_date = row['photo_date']
+                dt = photo_date
+                dt = "{} 00:00:00".format(dt)
+                dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+                #### 5 digit date
+                if type(dt) == datetime.datetime:
+                    photo_date = dt
+                    stilld[photo_date].append(file_path)
+                    #        else:
+                    #            dt = ''
+                    #            dt = "2000-01-01 00:00:00".format(dt)
+                    #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+                    #            photo_date = dt
+                    #            stilld[photo_date].append(file_path)
+            except:
+                pass
+        else:
             pass
-
     ## Count the Grouped Files
     stillcomplete_dict = {}
     for k,v in stilld.iteritems():
@@ -426,8 +482,8 @@ def main():
     #############################Get Data Functions to Query DB###########################
     prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict = sql_query_production_numbers()
     stillcomplete_dict     = stillcomplete()
-    fashioncomplete_dict   = fashioncomplete()
-    lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, fashioncomplete_dict]
+    lookletcomplete_dict   = lookletcomplete()
+    lotsofdicts = [prodcomplete_dict, retouchcomplete_dict, copycomplete_dict, samples_received_dict, stillcomplete_dict, lookletcomplete_dict]
     ##############################################################################
     for iterdict in lotsofdicts:
         ## first insert data to db then post to gcal
@@ -457,7 +513,7 @@ def main():
                             colorId = '8'
                         elif lockv == 'Image_Completion':
                             colorId = '7'
-                        elif lockv == 'Fashion':
+                        elif lockv == 'Looklet':
                             colorId = '6'
                             print descfull
                         elif lockv == 'Still':
