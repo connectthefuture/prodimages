@@ -22,7 +22,7 @@ def url_download_file(url,filepath):
 
 
 #### Run ###
-def main(styleslist=None, root_dir=None):
+def main(styleslist=None, root_dir=None, primary_only=None):
     import os,sys, urllib, datetime
     todaysdate = '{:%Y%m%d}'.format(datetime.datetime.now())
     username = os.path.expanduser('~').split('/')[-1].split('.')[0].lower()
@@ -71,30 +71,32 @@ def main(styleslist=None, root_dir=None):
             url_download_file(netsrv101_url_file, colorstyle_file)
             countOne += 1
             alt = 0   
-            for x in range(1,6):
-                try:
-                    alt = x   
-                    ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
-                    colorstylealt = colorstyle + ext_ALT
-                    colorstyle_filealt = os.path.join(root_dir, 'ALT', colorstylealt)
-                    
-                    netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
-                    
-                    #error_check = urllib.urlopen(netsrv101_url_filealt)
-                    #urlcode_value = error_check.getcode()
-                    #if urlcode_value == 200:
-                    colorstyle_filealt_root = os.path.join(root_dir, 'ALT')
-                    if os.path.isdir(colorstyle_filealt_root):
-                        pass
-                    else:
-                        os.makedirs(colorstyle_filealt_root)
+            if not primary_only:    
+                for x in range(1,6):
+                    try:
+                        alt = x   
+                        ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
+                        colorstylealt = colorstyle + ext_ALT
+                        colorstyle_filealt = os.path.join(root_dir, 'ALT', colorstylealt)
+                        
+                        netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
+                        
+                        #error_check = urllib.urlopen(netsrv101_url_filealt)
+                        #urlcode_value = error_check.getcode()
+                        #if urlcode_value == 200:
+                        colorstyle_filealt_root = os.path.join(root_dir, 'ALT')
+                        if os.path.isdir(colorstyle_filealt_root):
+                            pass
+                        else:
+                            os.makedirs(colorstyle_filealt_root)
 
-                    if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
-                        url_download_file(netsrv101_url_filealt, colorstyle_filealt)
-                        countAlt += 1
-                except IOError:
-                    pass        
-        
+                        if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
+                            url_download_file(netsrv101_url_filealt, colorstyle_filealt)
+                            countAlt += 1
+                    except IOError:
+                        pass        
+            else:
+                pass
         except IOError:
             pass   
 
