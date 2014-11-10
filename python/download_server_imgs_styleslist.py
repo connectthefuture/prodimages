@@ -10,7 +10,7 @@ def url_download_file(url,filepath):
     
     #if urlcode_value == 200:
     try:
-        urllib.urlretrieve(url, os.path.join(filepath[0], filepath[1]))
+        urllib.urlretrieve(url, os.path.join(filepath)
         print "Retrieved: " + url + " ---> " + filepath
     except:
         print  'FAILED ', url, filepath
@@ -87,7 +87,7 @@ def main(styleslist=None, root_dir=None):
                         pass
                     else:
                         os.path.makedirs(colorstyle_filealt_root, 10755)
-                    
+
                     if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                         url_download_file(netsrv101_url_filealt, colorstyle_filealt)
                         countAlt += 1
