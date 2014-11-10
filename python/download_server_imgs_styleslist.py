@@ -86,7 +86,7 @@ def main(styleslist=None, root_dir=None):
                     if os.path.isdir(colorstyle_filealt_root):
                         pass
                     else:
-                        os.path.makedirs(colorstyle_filealt_root, 10755)
+                        os.makedirs(colorstyle_filealt_root, 10755)
 
                     if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                         url_download_file(netsrv101_url_filealt, colorstyle_filealt)
