@@ -313,7 +313,7 @@ def lookletcomplete():
     stylestringsdict_looklet = walkeddir_parse_stylestrings_out(walkedout_looklet)
     ### Get and Collect Counts of looklet and still sets by date
     lookletd = defaultdict(list)
-    for row in stylestringsdict_still.itervalues():
+    for row in stylestringsdict_looklet.itervalues():
         file_path = row['file_path']
         if regex_photolooklet.findall(file_path):
             try:
@@ -325,13 +325,13 @@ def lookletcomplete():
                 #### 5 digit date
                 if type(dt) == datetime.datetime:
                     photo_date = dt
-                    stilld[photo_date].append(file_path)
+                    lookletd[photo_date].append(file_path)
                     #        else:
                     #            dt = ''
                     #            dt = "2000-01-01 00:00:00".format(dt)
                     #            dt = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
                     #            photo_date = dt
-                    #            stilld[photo_date].append(file_path)
+                    #            lookletd[photo_date].append(file_path)
             except:
                 pass
         else:
