@@ -10,7 +10,7 @@ def url_download_file(url,filepath):
     
     #if urlcode_value == 200:
     try:
-        urllib.urlretrieve(url, os.path.join(filepath)
+        urllib.urlretrieve(url, os.path.join(filepath))
         print "Retrieved: " + url + " ---> " + filepath
     except:
         print  'FAILED ', url, filepath
