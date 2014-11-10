@@ -10,7 +10,7 @@ def url_download_file(url,filepath):
     
     #if urlcode_value == 200:
     try:
-        urllib.urlretrieve(url, os.path.join(filepath[0], filepath[1]))
+        urllib.urlretrieve(url, os.path.join(filepath)
         print "Retrieved: " + url + " ---> " + filepath
     except:
         print  'FAILED ', url, filepath
@@ -75,13 +75,19 @@ def main(styleslist=None, root_dir=None):
                     alt = x   
                     ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
                     colorstylealt = colorstyle + ext_ALT
-                    colorstyle_filealt = (root_dir, colorstylealt)
+                    colorstyle_filealt = os.path.join(root_dir, 'ALT', colorstylealt)
                     
                     netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
                     
                     #error_check = urllib.urlopen(netsrv101_url_filealt)
                     #urlcode_value = error_check.getcode()
                     #if urlcode_value == 200:
+                    colorstyle_filealt_root = os.path.join(root_dir, 'ALT')
+                    if os.path.isdir(colorstyle_filealt_root):
+                        pass
+                    else:
+                        os.path.makedirs(colorstyle_filealt_root, 10755)
+
                     if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                         url_download_file(netsrv101_url_filealt, colorstyle_filealt)
                         countAlt += 1
