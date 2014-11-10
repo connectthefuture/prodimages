@@ -12,6 +12,7 @@ def url_download_file(url,filepath):
     try:
         urllib.urlretrieve(url, os.path.join(filepath))
         print "Retrieved: " + url + " ---> " + filepath
+        return filepath
     except:
         print  'FAILED ', url, filepath
         pass
@@ -105,6 +106,7 @@ def main(styleslist=None, root_dir=None):
 
     except ZeroDivisionError:
         print 'Sorry, Nothing was Found\n\n\...This time. Try Again'
+    return root_dir
 
 if __name__ == '__main__':
     main()
