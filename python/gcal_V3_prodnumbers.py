@@ -259,7 +259,7 @@ def sql_query_production_numbers():
 
 
 def fashioncomplete():
-    import datetime
+    import datetime, re
     from collections import defaultdict
     ######  Recursively search Photo Folders and get counts of shots by date
     ## rootdir_fashion = '/mnt/Post_Ready/Retouch_Fashion'
@@ -300,7 +300,7 @@ def fashioncomplete():
 
 
 def lookletcomplete():
-    import datetime
+    import datetime, re
     from collections import defaultdict
     ######  Recursively search Photo Folders and get counts of shots by date
     regex_photolooklet = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[L]{2}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
@@ -352,7 +352,7 @@ def lookletcomplete():
     return lookletcomplete_dict
 
 def stillcomplete():
-    import datetime
+    import datetime, re
     from collections import defaultdict
     ######  Recursively search Photo Folders and get counts of shots by date
     regex_photostill = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[^L]{2}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
