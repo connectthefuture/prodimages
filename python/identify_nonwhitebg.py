@@ -25,7 +25,7 @@ def main(filesdir=None):
     for f in gjpg:
         try:
             # newf = f.replace('_l','_n')
-            cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '2x2', '-trim','-format', '%@', 'info:-']
+            cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '10x10', '-trim','-format', '%@', 'info:-']
             ret = subprocess.check_output(cmd, stdin=None, stderr=subprocess.STDOUT, shell=False)
             not_white = "2000x2400+0+0"
             oldimg = '{}'.format(ret.split('__')[-1])
@@ -45,11 +45,10 @@ def main(filesdir=None):
     for f in gpng:
         try:
             # newf = f.replace('_l','_n')
-            cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '2x2', '-trim','-format', '%@', 'info:-']
+            cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '10x10', '-trim','-format', '%@', 'info:-']
             ret = subprocess.check_output(cmd, stdin=None, stderr=subprocess.STDOUT, shell=False)
             not_white = "2000x2400+0+0"
             oldimg = '{}'.format(ret.split('__')[-1])
-
             if str(oldimg) == str(not_white):
                 ongreypng.append(f)
                 try:
