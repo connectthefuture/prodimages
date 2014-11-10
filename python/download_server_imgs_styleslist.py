@@ -28,7 +28,11 @@ def main(styleslist=None, root_dir=None):
     if not root_dir:
         root_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', todaysdate + '_files_for_' + username )
         if not os.path.isdir(root_dir):
-            os.makedirs(root_dir)
+            try:
+                os.makedirs(root_dir)
+            except:
+                print 'Error creating ', root_dir
+                pass
     if not styleslist:
         styleslist = sys.argv[1:]
     else:
