@@ -27,7 +27,7 @@ def main(filesdir=None):
             # newf = f.replace('_l','_n')
             cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '2x2', '-trim','-format', '%@', 'info:-']
             ret = subprocess.check_output(cmd, stdin=None, stderr=subprocess.STDOUT, shell=False)
-            not_white = "400x480+0+0"
+            not_white = "2000x2400+0+0"
             oldimg = '{}'.format(ret.split('__')[-1])
 
             if str(oldimg) == str(not_white):
@@ -47,7 +47,7 @@ def main(filesdir=None):
             # newf = f.replace('_l','_n')
             cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '2x2', '-trim','-format', '%@', 'info:-']
             ret = subprocess.check_output(cmd, stdin=None, stderr=subprocess.STDOUT, shell=False)
-            not_white = "400x480+0+0"
+            not_white = "2000x2400+0+0"
             oldimg = '{}'.format(ret.split('__')[-1])
 
             if str(oldimg) == str(not_white):
