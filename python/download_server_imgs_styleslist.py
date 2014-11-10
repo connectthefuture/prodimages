@@ -103,10 +103,10 @@ def main(styleslist=None, root_dir=None):
     try:
         perStyle = round((float(countAll)/float(countOne)),2)
         print '{0} Styles Found\n\t{1} Files Downloaded\n{2} Files Per Style Avg'.format(str(countOne), str(countAll), str(perStyle))
-
+        return root_dir
     except ZeroDivisionError:
         print 'Sorry, Nothing was Found\n\n\...This time. Try Again'
-    return root_dir
+    
 
 if __name__ == '__main__':
     main()
