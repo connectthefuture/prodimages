@@ -65,9 +65,11 @@ def identify_grey(images_list, outdir):
 def main(filesdir=None):
     import os, sys, re, glob
     import multiprocmagick
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+    BASE_PATH = os.path.abspath(__file__)
     if not filesdir:
         filesdir = sys.argv[1]
-
+    multiprocmagick.run_multiproccesses_magick(searchdir=filesdir, BASE_PATH.identify_grey=None)
     gjpg, jpgout, gpng, pngout = get_images_mkdirs(filesdir)
     
     if gjpg:
