@@ -29,7 +29,10 @@ def run_multiproccesses_magick(searchdir=None, magickProc=None):
 
     results = ''
     if multiproc_items:
-        results = pool.map(magickProc,multiproc_items)
+        try:
+            results = pool.map(magickProc.main,multiproc_items)
+        except:
+            results = pool.map(magickProc,multiproc_items)
         # close the pool and wait for the work to finish
         pool.close()
         print 'PoolClose'
