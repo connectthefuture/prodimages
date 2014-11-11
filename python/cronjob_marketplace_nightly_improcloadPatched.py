@@ -253,8 +253,11 @@ if update_styles:
         #response = conn.getresponse()
         try:
             response = requests.post(api_cache_clear, params=params, headers=headers)
-        print(resp.status, response.reason)
-
+            print response.status, response.method, data
+            #print(resp.status, response.reason)
+        except:
+            response = requests.put(api_cache_clear, params=params, headers=headers)
+            print response.status, response.method, data
 # for d in dirlist:
 #     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
 #     try:
