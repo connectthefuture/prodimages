@@ -268,6 +268,9 @@ if update_styles:
         except:
             response = requests.put(api_cache_clear, params=params)
             print response.status, response.method, data
+else:
+    print 'NO UPDATES TO CLEAR'
+
 # for d in dirlist:
 #     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
 #     try:
