@@ -245,11 +245,14 @@ if update_styles:
     update_styles = list(set(sorted(update_styles)))
     for colorstyle in update_styles:
         data = {'colorstyle': colorstyle}
-        params = urllib.parse.urlencode(data)
-        headers = {'content-type': 'application/json'}
-        conn = http.client.HTTPConnection(api_cache_clear, 80)
-        conn.request("PUT", "/", BODY)
-        response = conn.getresponse()
+        #params = urllib.parse.urlencode(data)
+        params = json.dumps(data)
+        headers = json.dumps({'content-type': 'application/json', 'user': 'james:hoetker'})
+        # conn = http.client.HTTPConnection(api_cache_clear, 80)
+        # conn.request("PUT", "/", BODY)
+        #response = conn.getresponse()
+        try:
+            response = requests.post(api_cache_clear, params=params, headers=headers)
         print(resp.status, response.reason)
 
 # for d in dirlist:
