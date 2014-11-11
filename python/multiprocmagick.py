@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-def run_multiproccesses_magick(searchdir=None, magickProc=None):
+def run_multiproccesses_magick(searchdir=None):
     import multiprocessing
     import glob,os
-    if not magickProc:
-        import magicColorspaceModAspctLoad as magickProc
-    else:
-        import magickProc as magickProc
+    import magicColorspaceModAspctLoad as magickProc
 
     if not searchdir:
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
