@@ -241,13 +241,17 @@ print 'Done With multiprocmagick'
 if update_styles:
     import requests, json
     import http.client, urllib.parse
+    AuthToken = ''
     api_cache_clear = 'http://prodimages.ny.bluefly.com/image-update/'
     update_styles = list(set(sorted(update_styles)))
     for colorstyle in update_styles:
-        data = {'colorstyle': colorstyle, 'user': 'james:hoetker'}
+        
+        data = {'colorstyle': colorstyle}
         #params = urllib.parse.urlencode(data)
         params = json.dumps(data)
-        #headers = json.dumps({'content-type': 'application/json'})
+        auth = 'Authorization': 'Token ' + AuthToken
+        content_type = 'content-type': 'application/json'
+        headers = json.dumps(auth,content_type) 
         # conn = http.client.HTTPConnection(api_cache_clear, 80)
         # conn.request("PUT", "/", BODY)
         #response = conn.getresponse()
