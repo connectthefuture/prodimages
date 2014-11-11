@@ -40,10 +40,25 @@ def get_images_mkdirs(filesdir):
     return gjpg, jpgout, gpng, pngout
 
 
-def identify_grey(images_list, outdir):
-    import subprocess, shutil
+def identify_grey(images_list, outdir=None):
+    import subprocess, shutil, os
     ongrey = []
     for f in images_list:
+        try:
+            if not outdir:
+                outdir = os.path.join(os.path.dirname(f), 'output')
+                if os.path.isdir():
+                    pass
+                else:
+                    try:
+                        os.makedir(outdir)
+                    except OSError:
+                        print 'OSError'
+                        pass
+        except AttributeError:
+            print 'AttributeError'
+            pass
+
         try:
             # newf = f.replace('_l','_n')
             cmd=['convert', f, '-resize', 'x480', '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '10x10', '-trim','-format', '%@', 'info:-']
@@ -55,21 +70,25 @@ def identify_grey(images_list, outdir):
                 ongrey.append(f)
                 try:
                     shutil.move(f,outdir)
-                except:
+                except KeyError:
+                    print 'KeyError'
                     pass
         except KeyError:
+            print 'KeyError'
             pass
     return ongrey
 
 
 def main(filesdir=None):
     import os, sys, re, glob
-    import multiprocmagick
+    import MultiprocessingModule
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
     BASE_PATH = os.path.abspath(__file__)
+    identify_grey_func =  identify_grey 
     if not filesdir:
         filesdir = sys.argv[1]
-    multiprocmagick.run_multiproccesses_magick(searchdir=filesdir, BASE_PATH.identify_grey=None)
+    
+    MultiprocessingModule.run_multiproccesses_magick(searchdir=filesdir, magickProc=identify_grey_func)
     gjpg, jpgout, gpng, pngout = get_images_mkdirs(filesdir)
     
     if gjpg:
@@ -79,6 +98,7 @@ def main(filesdir=None):
     if gpng:
         ongreypng = identify_grey(gpng, pngout)
     
+
     return
 
 if __name__ == '__main__':

@@ -10,29 +10,38 @@ def run_multiproccesses_magick(searchdir=None, magickProc=None):
         import magickProc as magickProc
 
     if not searchdir:
-        searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
+        #searchdir = os.path.abspath('.')
+        print 'NO Directory to Search'
     else:
         pass
 
     pool = multiprocessing.Pool(4)
-    directory_list = []
-    if searchdir.split('/')[-1] == 'SWI':
-        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
-    elif searchdir.split('/')[-1][:3] == '3_L':
-        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]        
+    multiproc_items = []
+    if searchdir.split('/')[-1][:3] == 'jpg':
+        [ multiproc_items.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*.jpg')) if os.path.isfile(g) ]
+    elif searchdir.split('/')[-1][:3] == 'png':
+        [ multiproc_items.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*.png')) if os.path.isfile(g) ]        
         print 'Image Clipping Import', searchdir
+    elif searchdir.split('/')[-1][:3] == 'out':
+        [ multiproc_items.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*.*')) if os.path.isfile(g) ] 
     else:
-        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
+        [ multiproc_items.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
 
-    if os.path.isdir(directory_list[0] 
-    results = pool.map(magickProc,directory_list)
-    print results
+    results = ''
+    if multiproc_items:
+        results = pool.map(magickProc,multiproc_items)
+        # close the pool and wait for the work to finish
+        pool.close()
+        print 'PoolClose'
+        pool.join()
+        print 'PoolJoin'
+    else:
+        print 'Processor Failed'
     
-    # close the pool and wait for the work to finish
-    pool.close()
-    print 'PoolClose'
-    pool.join()
-    print 'PoolJoin'
+    if results:
+        print results
+        return results
+
 
 if __name__ == '__main__':
     run_multiproccesses_magick()
