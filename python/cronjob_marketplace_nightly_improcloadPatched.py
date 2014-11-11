@@ -247,7 +247,9 @@ if update_styles:
         data = {'colorstyle': colorstyle, 'user': 'james:hoetker'}
         #params = urllib.parse.urlencode(data)
         params = json.dumps(data)
-        #headers = json.dumps({'content-type': 'application/json'})
+        auth = 'Authorization': 'Token ' + AuthToken
+        content_type = 'content-type': 'application/json'
+        headers = json.dumps(auth,content_type) 
         # conn = http.client.HTTPConnection(api_cache_clear, 80)
         # conn.request("PUT", "/", BODY)
         #response = conn.getresponse()
