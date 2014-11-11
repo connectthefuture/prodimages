@@ -64,6 +64,38 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, 
     connection.close()
     return styles
 
+
+def post_or_put_style_to_api(update_styles, api_url=None, AuthToken=None):
+    import requests, json
+    import http.client, urllib.parse
+    if not api_url:
+        api_url = 'http://prodimages.ny.bluefly.com/image-update/'
+    update_styles = list(set(sorted(update_styles)))
+    for colorstyle in update_styles:
+        data = {'colorstyle': colorstyle, 'user': 'james:hoetker'}
+        #params = urllib.parse.urlencode(data)
+        params = json.dumps(data)
+        auth = {'Authorization': 'Token ' + AuthToken}
+        content_type = {'content-type': 'application/json'}
+        headers = json.dumps(auth,content_type) 
+        # conn = http.client.HTTPConnection(api_cache_clear, 80)
+        # conn.request("PUT", "/", BODY)
+        #response = conn.getresponse()
+        try:
+            response = requests.post(api_cache_clear, params=params)
+            print response.status, response.method, data
+            #print(resp.status, response.reason)
+        except:
+            try:
+                response = requests.put(api_cache_clear, params=params)
+                print response.status, response.method, data
+            except:
+                try:
+                    subprocess.call([ 'curl', '-u', 'james:hoetker' '-d', params, '-H', headers, api_cache_clear])
+                    subprocess.call([ 'curl', '-u', 'james:hoetker', '-d', params, '-H', headers, '-X', 'PUT', api_cache_clear])
+                except:
+                     subprocess.call([ 'curl', '-u', 'james:hoetker', '-d', params, '-H', headers, '-X', 'PUT', api_cache_clear])
+
 ############################################################ RUN ##################################################
 ############################################################ RUN ##################################################
 import os,re,sys,urllib, glob, re, subprocess, shutil
@@ -244,30 +276,9 @@ import subprocess, multiprocmagick
 multiprocmagick.run_multiproccesses_magick(searchdir=imagedir)
 print 'Done With multiprocmagick'
 
+## Send updated styles to api to clear
 if update_styles:
-    import requests, json
-    import http.client, urllib.parse
-    AuthToken = ''
-    api_cache_clear = 'http://prodimages.ny.bluefly.com/image-update/'
-    update_styles = list(set(sorted(update_styles)))
-    for colorstyle in update_styles:
-        
-        data = {'colorstyle': colorstyle}
-        #params = urllib.parse.urlencode(data)
-        params = json.dumps(data)
-        auth = {'Authorization': 'Token ' + AuthToken}
-        content_type = {'content-type': 'application/json'}
-        headers = json.dumps(auth,content_type) 
-        # conn = http.client.HTTPConnection(api_cache_clear, 80)
-        # conn.request("PUT", "/", BODY)
-        #response = conn.getresponse()
-        try:
-            response = requests.post(api_cache_clear, params=params)
-            print response.status, response.method, data
-            #print(resp.status, response.reason)
-        except:
-            response = requests.put(api_cache_clear, params=params)
-            print response.status, response.method, data
+    post_or_put_style_to_api(update_styles, api_url=None, AuthToken=None)
 else:
     print 'NO UPDATES TO CLEAR'
 
