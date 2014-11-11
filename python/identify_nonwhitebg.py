@@ -97,7 +97,6 @@ def main(filesdir=None):
 
     if gpng:
         ongreypng = identify_grey(gpng, pngout)
-    
 
     return
 
