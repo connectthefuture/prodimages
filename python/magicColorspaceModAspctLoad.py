@@ -566,20 +566,20 @@ def upload_imagedrop(root_dir):
                 except:
                     try:
                         shutil.move(upload_file, tmp_failed)
-                    except:
+                    except shutil.Error:
                         pass
             else:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.3))
                 try:
                     shutil.move(upload_file, archive_uploaded)
-                except:
+                except shutil.Error:
                     pass
         except OSError:
             print "Error moving Finals to Arch {}".format(file)
             try:
                 shutil.move(upload_file, tmp_failed)
-            except:
+            except shutil.Error:
                 pass
 
     try:
@@ -588,7 +588,7 @@ def upload_imagedrop(root_dir):
             for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
                 try:
                     shutil.move(f, finaldir)
-                except:
+                except shutil.Error:
                     pass
     except:
         print 'Failed to Archive {}'.format(upload_tmp_loading)
