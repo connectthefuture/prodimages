@@ -5,7 +5,7 @@ def run_multiproccesses_magick(searchdir=None, magickProc=None):
     import multiprocessing
     import glob,os
     if not magickProc:
-        import magicColorspaceModAspctLoad.main as magickProc
+        import magicColorspaceModAspctLoad as magickProc
     else:
         import magickProc as magickProc
 
