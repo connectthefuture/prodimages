@@ -244,19 +244,19 @@ if update_styles:
     api_cache_clear = 'http://prodimages.ny.bluefly.com/image-update/'
     update_styles = list(set(sorted(update_styles)))
     for colorstyle in update_styles:
-        data = {'colorstyle': colorstyle}
+        data = {'colorstyle': colorstyle, 'user': 'james:hoetker'}
         #params = urllib.parse.urlencode(data)
         params = json.dumps(data)
-        headers = json.dumps({'content-type': 'application/json', 'user': 'james:hoetker'})
+        #headers = json.dumps({'content-type': 'application/json'})
         # conn = http.client.HTTPConnection(api_cache_clear, 80)
         # conn.request("PUT", "/", BODY)
         #response = conn.getresponse()
         try:
-            response = requests.post(api_cache_clear, params=params, headers=headers)
+            response = requests.post(api_cache_clear, params=params)
             print response.status, response.method, data
             #print(resp.status, response.reason)
         except:
-            response = requests.put(api_cache_clear, params=params, headers=headers)
+            response = requests.put(api_cache_clear, params=params)
             print response.status, response.method, data
 # for d in dirlist:
 #     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
