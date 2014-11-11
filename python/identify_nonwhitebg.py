@@ -1,64 +1,83 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def main(filesdir=None):
-    import os, sys, re, csv, glob, subprocess, shutil
-    if not filesdir:
-        filesdir = sys.argv[1]
-    gjpg = glob.glob(os.path.join(filesdir,'*.jpg'))
-    gpng = glob.glob(os.path.join(filesdir,'*.png'))
+def get_images_mkdirs(filesdir):
+    import os, glob
+    gjpg = ''
+    gpng = ''
+    if os.path.isfile(filesdir):
+        gjpg = [filesdir] 
+        gpng = [filesdir] 
+        pngout=os.path.join(os.path.dirname(filesdir),'pngnonwhitebg')
+        if filesdir.split('.')[-1] == 'png':
+            try:
+                os.makedirs(pngout, 16877)
+            except:
+                pass
+        jpgout=os.path.join(os.path.dirname(filesdir),'jpgnonwhitebg')
+        if filesdir.split('.')[-1] == 'jpg':
+            try:
+                os.makedirs(jpgout, 16877)
+            except:
+                pass
 
-    pngout=os.path.join(filesdir,'pngout')
-    jpgout=os.path.join(filesdir,'jpgout')
+    elif os.path.isdir(filesdir):
+        gjpg = glob.glob(os.path.join(filesdir,'*.jpg'))
+        gpng = glob.glob(os.path.join(filesdir,'*.png'))
+        if gpng:
+            pngout=os.path.join(os.path.dirname(filesdir),'pngnonwhitebg')
+            try:
+                os.makedirs(pngout, 16877)
+            except:
+                pass
 
-    try:
-        os.makedirs(pngout, 16877)
-    except:
-        pass
+        if gjpg:
+            jpgout=os.path.join(os.path.dirname(filesdir),'jpgnonwhitebg')
+            try:
+                os.makedirs(jpgout, 16877)
+            except:
+                pass
+    return gjpg, jpgout, gpng, pngout
 
-    try:
-        os.makedirs(jpgout, 16877)
-    except:
-        pass
 
+def identify_grey(images_list, outdir):
+    import subprocess, shutil
     ongrey = []
-    for f in gjpg:
+    for f in images_list:
         try:
             # newf = f.replace('_l','_n')
-            cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '10x10', '-trim','-format', '%@', 'info:-']
+            cmd=['convert', f, '-resize', 'x480', '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '10x10', '-trim','-format', '%@', 'info:-']
             ret = subprocess.check_output(cmd, stdin=None, stderr=subprocess.STDOUT, shell=False)
-            not_white = "2000x2400+0+0"
+            not_white = "400x480+0+0"
             oldimg = '{}'.format(ret.split('__')[-1])
 
             if str(oldimg) == str(not_white):
                 ongrey.append(f)
                 try:
-                    shutil.move(f,jpgout)
+                    shutil.move(f,outdir)
                 except:
                     pass
-        except:
+        except KeyError:
             pass
-            
-    print ongrey
+    return ongrey
 
-    ongreypng = []
-    for f in gpng:
-        try:
-            # newf = f.replace('_l','_n')
-            cmd=['convert', f, '-virtual-pixel', 'edge', '-blur', '0x15', '-fuzz', '2%', '-bordercolor', 'white', '-border', '10x10', '-trim','-format', '%@', 'info:-']
-            ret = subprocess.check_output(cmd, stdin=None, stderr=subprocess.STDOUT, shell=False)
-            not_white = "2000x2400+0+0"
-            oldimg = '{}'.format(ret.split('__')[-1])
-            if str(oldimg) == str(not_white):
-                ongreypng.append(f)
-                try:
-                    shutil.move(f,pngout)
-                except:
-                    pass
-        except:
-             pass
-    print ongreypng
 
+def main(filesdir=None):
+    import os, sys, re, glob
+    import multiprocmagick
+    if not filesdir:
+        filesdir = sys.argv[1]
+
+    gjpg, jpgout, gpng, pngout = get_images_mkdirs(filesdir)
+    
+    if gjpg:
+        magickProc = identify_grey(images_list, outdir)
+        ongreyjpg  = identify_grey(gjpg, jpgout)
+
+    if gpng:
+        ongreypng = identify_grey(gpng, pngout)
+    
+    return
 
 if __name__ == '__main__':
     main()

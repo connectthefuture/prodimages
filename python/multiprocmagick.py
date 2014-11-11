@@ -1,17 +1,20 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-def run_multiproccesses_magick(searchdir=None):
-    import magicColorspaceModAspctLoad as magickProc
+def run_multiproccesses_magick(searchdir=None, magickProc=None):
     import multiprocessing
     import glob,os
-    
-    pool = multiprocessing.Pool(4)
+    if not magickProc:
+        import magicColorspaceModAspctLoad as magickProc
+    else:
+        import magickProc as magickProc
+
     if not searchdir:
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
     else:
         pass
 
+    pool = multiprocessing.Pool(4)
     directory_list = []
     if searchdir.split('/')[-1] == 'SWI':
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
