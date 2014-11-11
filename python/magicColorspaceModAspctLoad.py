@@ -549,10 +549,12 @@ def upload_imagedrop(root_dir):
                     print "1stTryOK"
                 except:
                     dst_file = upload_file.replace(root_dir, archive_uploaded)
-                    if os.path.exists(dst_file):
-                        os.remove(dst_file)
-                    shutil.move(upload_file, archive_uploaded)
-                    pass
+                    try:
+                        if os.path.exists(dst_file):
+                            os.remove(dst_file)
+                        shutil.move(upload_file, archive_uploaded)
+                    except:
+                        pass
             elif code:
                 print code, upload_file
                 time.sleep(float(.3))
@@ -562,16 +564,23 @@ def upload_imagedrop(root_dir):
                     time.sleep(float(.3))
                     shutil.move(upload_file, archive_uploaded)
                 except:
-                    shutil.move(upload_file, tmp_failed)
-                    pass
+                    try:
+                        shutil.move(upload_file, tmp_failed)
+                    except:
+                        pass
             else:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.3))
-                shutil.move(upload_file, archive_uploaded)
+                try:
+                    shutil.move(upload_file, archive_uploaded)
+                except:
+                    pass
         except OSError:
             print "Error moving Finals to Arch {}".format(file)
-            shutil.move(upload_file, tmp_failed)
-            pass
+            try:
+                shutil.move(upload_file, tmp_failed)
+            except:
+                pass
 
     try:
         if os.path.isdir(sys.argv[2]):
