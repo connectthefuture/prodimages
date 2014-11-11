@@ -100,7 +100,7 @@ try:
         update_time = sys.argv[2]
     except:
         update_time = 20
-except KeyError:
+except IndexError:
     updateonly_flag = ''
     pass
 
