@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, all_flag=None, updateonly_flag='', update_time=):
+def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, all_flag=None, updateonly_flag='', update_time=20):
     import sqlalchemy,sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     # orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
