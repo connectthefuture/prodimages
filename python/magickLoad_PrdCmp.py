@@ -256,12 +256,14 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
             if os.path.isfile(imagedropFilePath):
                 try:
                     os.remove(imagedropFilePath)
-                    os.rename(src_filepath, imagedropFilePath)
+                    #os.rename(src_filepath, imagedropFilePath)
+                    shutil.copy(src_filepath, imagedrop)
                 except:
                     print 'Error ', imagedropFilePath
                     pass
             else:
-                os.rename(src_filepath, imagedropFilePath)
+                #os.rename(src_filepath, imagedropFilePath)
+                shutil.copyfile(src_filepath, imagedropFilePath)
             return True
         except:
             try:
