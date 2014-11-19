@@ -3,13 +3,18 @@
 
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
     import pycurl, os, shutil, re
-    regex_colorstyle = re.compile(r'^.*?[0-9]{9}[_alt0-6]{6}?\.[jpngJPNG]{3}$')
-    if regex_colorstyle.findall(src_filepath):
+
+    if not regex_colorstyle.findall(src_filepath):
+        print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
+        return
+    else:
         if not destdir:
             '/mnt/Post_Complete/ImageDrop'
-        localFileName = src_filepath.split('/')[-1]
+        else:
+            pass
 
         imagedrop         = os.path.abspath(destdir)
+        localFileName     = src_filepath.split('/')[-1]
         imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
             try:
                 if os.path.isfile(imagedropFilePath):
@@ -30,8 +35,6 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
                 except:
                     pass
                     return False
-    else:
-        pass
 
 
 if __name__ == '__main__':
