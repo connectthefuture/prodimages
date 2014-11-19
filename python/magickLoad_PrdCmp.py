@@ -183,7 +183,7 @@ def pycurl_upload_imagedrop(localFilePath, ftpURL=None):
 
     mediaType = "8"
     
-    if ftpURL == '/mnt/Post_Complete/ImageDrop:
+    if ftpURL == '/mnt/Post_Complete/ImageDrop':
         imagedrop         = os.path.abspath(ftpURL)
         imagedropFilePath = os.path.join(imagedrop, localFileName)
         try:
@@ -427,11 +427,9 @@ for upload_file in upload_tmp_loading:
     try:
         result = pycurl_upload_imagedrop(upload_file, ftpURL='/mnt/Post_Complete/ImageDrop')
         if result:
-          
             print "Uploaded {}".format(upload_file)
             time.sleep(float(.3))
             shutil.move(upload_file, archive_uploaded)
-
         else:    
             print result, upload_file
             pass
