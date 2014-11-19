@@ -257,15 +257,18 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
                 try:
                     os.remove(imagedropFilePath)
                     #os.rename(src_filepath, imagedropFilePath)
+                    shutil.copyfile(src_filepath, imagedropFilePath)
+                    return True
                 except:
                     print 'Error ', imagedropFilePath
+                    return False
                     pass
 
-                shutil.copyfile(src_filepath, imagedropFilePath
-            else:
-                #os.rename(src_filepath, imagedropFilePath)
-                shutil.copyfile(src_filepath, imagedropFilePath)
-            return True
+                #shutil.copyfile(src_filepath, imagedropFilePath
+            # else:
+            #     #os.rename(src_filepath, imagedropFilePath)
+            #     shutil.copyfile(src_filepath, imagedropFilePath)
+            
         except:
             # try:
             #     shutil.copy(src_filepath, imagedrop)
