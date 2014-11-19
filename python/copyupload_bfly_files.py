@@ -37,6 +37,36 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
                     return False
 
 
+def copy_to_imagedrop_uploadV2(src_filepath, destdir=None):
+    import pycurl, os, shutil, re
+    if not regex_colorstyle.findall(src_filepath):
+        print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
+        return
+    else:
+        if not destdir:
+            '/mnt/Post_Complete/ImageDrop'
+        else:
+            pass
+
+        imagedrop         = os.path.abspath(destdir)
+        localFileName     = src_filepath.split('/')[-1]
+        imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
+        try:
+            if os.path.isfile(imagedropFilePath):
+                try:
+                    os.remove(imagedropFilePath)
+                    shutil.copyfile(src_filepath, imagedropFilePath)
+                    return True
+                except:
+                    print 'Error ', imagedropFilePath
+                    return False
+            else:
+                shutil.copyfile(src_filepath, imagedropFilePath)
+            
+        except:
+            return False
+
+
 if __name__ == '__main__':
     import sys
     src_filepath = ''
