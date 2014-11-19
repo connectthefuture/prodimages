@@ -177,65 +177,78 @@ def subproc_magick_png(imgdir):
     return
 
 ##### Upload tmp_loading dir to imagedrop via FTP using Pycurl  #####
-def pycurl_upload_imagedrop(localFilePath):
-    import pycurl, os
-    #import FileReader
+def pycurl_upload_imagedrop(localFilePath, ftpURL=None):
+    import pycurl, os, shutil
     localFileName = localFilePath.split('/')[-1]
 
     mediaType = "8"
-    ftpURL = "ftp://file3.bluefly.corp/ImageDrop/"
-    ftpFilePath = os.path.join(ftpURL, localFileName)
-    ftpUSERPWD = "imagedrop:imagedrop0"
-
-    if localFilePath != "" and ftpFilePath != "":
-        ## Create send data
-
-        ### Send the request to Edgecast
-        c = pycurl.Curl()
-        c.setopt(pycurl.URL, ftpFilePath)
-#        c.setopt(pycurl.PORT , 21)
-        c.setopt(pycurl.USERPWD, ftpUSERPWD)
-        #c.setopt(pycurl.VERBOSE, 1)
-        c.setopt(c.CONNECTTIMEOUT, 5)
-        c.setopt(c.TIMEOUT, 8)
-        c.setopt(c.FAILONERROR, True)
-#        c.setopt(pycurl.FORBID_REUSE, 1)
-#        c.setopt(pycurl.FRESH_CONNECT, 1)
-        f = open(localFilePath, 'rb')
-        c.setopt(pycurl.INFILE, f)
-        c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
-        c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(localFilePath))
-#        c.setopt(pycurl.READFUNCTION, f.read());        
-#        c.setopt(pycurl.READDATA, f.read()); 
-        c.setopt(pycurl.UPLOAD, 1L)
-
+    
+    if ftpURL == '/mnt/Post_Complete/ImageDrop:
+        imagedrop         = os.path.abspath(ftpURL)
+        imagedropFilePath = os.path.join(imagedrop, localFileName)
         try:
-            c.perform()
-            c.close()
-            print "Successfully Uploaded --> {0}".format(localFileName)
-            ## return 200
-        except pycurl.error, error:
-            errno, errstr = error
-            print 'An error occurred: ', errstr
+            shutil.copy(localFilePath, imagedrop)
+        except:
             try:
-                c.close()
+                shutil.copyfile(localFilePath, imagedropFilePath)
             except:
-                print "Couldnt Close Cnx"
                 pass
-            return errno
+                return False    
+
+    elif not ftpURL:
+        ftpURL = "ftp://file3.bluefly.corp/ImageDrop"
+        ftpFilePath = os.path.join(ftpURL, localFileName)
+        ftpUSERPWD = "imagedrop:imagedrop0"
+
+        if localFilePath != "" and ftpFilePath != "":
+            ## Create send data
+
+            ### Send the request to Edgecast
+            c = pycurl.Curl()
+            c.setopt(pycurl.URL, ftpFilePath)
+            #c.setopt(pycurl.PORT , 21)
+            c.setopt(pycurl.USERPWD, ftpUSERPWD)
+            #c.setopt(pycurl.VERBOSE, 1)
+            c.setopt(c.CONNECTTIMEOUT, 5)
+            c.setopt(c.TIMEOUT, 8)
+            c.setopt(c.FAILONERROR, True)
+            #c.setopt(pycurl.FORBID_REUSE, 1)
+            #c.setopt(pycurl.FRESH_CONNECT, 1)
+            f = open(localFilePath, 'rb')
+            c.setopt(pycurl.INFILE, f)
+            c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
+            c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(localFilePath))
+            #c.setopt(pycurl.READFUNCTION, f.read());
+            #c.setopt(pycurl.READDATA, f.read()); 
+            c.setopt(pycurl.UPLOAD, 1L)
+
+            try:
+                c.perform()
+                c.close()
+                print "Successfully Uploaded --> {0}".format(localFileName)
+                ## return 200
+            except pycurl.error, error:
+                errno, errstr = error
+                print 'An error occurred: ', errstr
+                try:
+                    c.close()
+                except:
+                    print "Couldnt Close Cnx"
+                    pass
+                return errno
 
 #####
 ###
 ## backup for 56 then 7 curl err            
-def upload_to_imagedrop(file):
-    import ftplib
-    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file, 'rb')
-    filename = str(file.split('/')[-1])
-    session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + filename, fileread, 8*1024)
-    fileread.close()
-    session.quit()
+# def upload_to_imagedrop(file):
+#     import ftplib
+#     session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+#     fileread = open(file, 'rb')
+#     filename = str(file.split('/')[-1])
+#     session.cwd("ImageDrop/")
+#     session.storbinary('STOR ' + filename, fileread, 8*1024)
+#     fileread.close()
+#     session.quit()
 
 ########### RUN #################
 # def convert_jpg_png(imgsrc_jpg,imgdest_png):
@@ -404,7 +417,7 @@ jpgs_to_archive = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
 [ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
 
-## UPLOAD FTP with PyCurl everything in tmp_loading
+## UPLOAD NFS with PyCurl everything in tmp_loading
 ###
 import time
 upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
@@ -412,21 +425,25 @@ for upload_file in upload_tmp_loading:
     #### UPLOAD upload_file via ftp to imagedrop using Pycurl
     ## Then rm loading tmp dir
     try:
-        code = pycurl_upload_imagedrop(upload_file)
-        if code:
-            print code, upload_file
-            time.sleep(float(3))
-            try:
-                ftpload_to_imagedrop(upload_file)
-                print "Uploaded {}".format(upload_file)
-                time.sleep(float(.3))
-                shutil.move(upload_file, archive_uploaded)
-            except:
-                pass
-        else:
+        result = pycurl_upload_imagedrop(upload_file, ftpURL='/mnt/Post_Complete/ImageDrop')
+        if result:
+          
             print "Uploaded {}".format(upload_file)
             time.sleep(float(.3))
             shutil.move(upload_file, archive_uploaded)
+
+        else:    
+            print result, upload_file
+            pass
+            ##time.sleep(float(3))
+            # try:
+            #     ftpload_to_imagedrop(upload_file)
+            #     print "Uploaded {}".format(upload_file)
+            #     time.sleep(float(.3))
+            #     shutil.move(upload_file, archive_uploaded)
+            # except:
+            #     pass
+        
     except:
         print "Error moving Finals to Arch {}".format(file)
         
