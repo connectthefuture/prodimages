@@ -262,7 +262,6 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
                 except:
                     print 'Error ', imagedropFilePath
                     return False
-                    pass
 
                 #shutil.copyfile(src_filepath, imagedropFilePath
             else:
