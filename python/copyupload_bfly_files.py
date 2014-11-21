@@ -10,30 +10,30 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
         return
     else:
         if not destdir:
-            '/mnt/Post_Complete/ImageDrop'
+            destdir = '/mnt/Post_Complete/ImageDrop'
         imagedrop         = os.path.abspath(destdir)
         localFileName     = src_filepath.split('/')[-1]
         imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
-            try:
-                if os.path.isfile(imagedropFilePath):
-                    try:
-                        os.remove(imagedropFilePath)
-                        os.rename(src_filepath, imagedropFilePath)
-                        return True
-                    except:
-                        print 'Error ', imagedropFilePath
-                        return False
-                else:
-                    os.rename(src_filepath, imagedropFilePath)
-                    return True
-            except:
+        try:
+            if os.path.isfile(imagedropFilePath):
                 try:
-                    shutil.copy(src_filepath, imagedrop)
-                    #os.remove(src_filepath)
+                    os.remove(imagedropFilePath)
+                    os.rename(src_filepath, imagedropFilePath)
                     return True
                 except:
                     print 'Error ', imagedropFilePath
                     return False
+            else:
+                os.rename(src_filepath, imagedropFilePath)
+                return True
+        except:
+            try:
+                shutil.copy(src_filepath, imagedrop)
+                #os.remove(src_filepath)
+                return True
+            except:
+                print 'Error ', imagedropFilePath
+                return False
 
 
 def copy_to_imagedrop_uploadV2KeepOrig(src_filepath, destdir=None):
@@ -44,8 +44,7 @@ def copy_to_imagedrop_uploadV2KeepOrig(src_filepath, destdir=None):
         return
     else:
         if not destdir:
-            '/mnt/Post_Complete/ImageDrop'
-
+            destdir = '/mnt/Post_Complete/ImageDrop'
         imagedrop         = os.path.abspath(destdir)
         localFileName     = src_filepath.split('/')[-1]
         imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
