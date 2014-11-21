@@ -23,6 +23,7 @@ def main(csvdata=None):
         if not csvdata:
             csvdata = sys.argv[1]
         else: pass
+
     except:
         pass
 
