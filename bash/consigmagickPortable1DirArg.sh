@@ -112,20 +112,20 @@ do
 done;
 
 ##########			##########	 Upload Files via FTP through cUrl
-ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
+# ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
 ## weddavLogin="https://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
-
+uploadPathFile7='/Volumes/Post_Complete/ImageDrop/'
 ### for Find only jp'g' and pn'g' files
-for f in `find $uploadInProg -type f -iname \*.*g`
+for f in `find "$uploadInProg" -type f -iname \*.*g`
 do
   ##uploadResult=`curl -k -T $f $ftpLoginFull`
   ## copyUploadResult to file 7
-
+  "mv -f "$f" ""$uploadPathFile7"
   exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'='$Today' $f
   mv -f $f $uploadComplete;
   echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt
 done;
 
-loadedCount=`cat $magickBase/uploadLog.txt | grep _l | wc -l`
-echo $loadedCount " Styles Loaded"
+loadedCount=`cat "$magickBase"/uploadLog.txt | grep _l | wc -l`
+loadedCount=`echo "$loadedCount-Styles-Loaded"`
 mv "$magickBase"/uploadLog.txt "$magickBase"/uploadLog_"$loadedCount".txt
