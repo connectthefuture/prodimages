@@ -1,4 +1,6 @@
 /**
+ * As well as all the good stuff below this js doc
+ * also composes and sends a .json attachment via gmail
  * Adds a custom menu to the active spreadsheet, containing a single menu item
  * for invoking the readRows() function specified above.
  * The onOpen() function, when defined, is automatically invoked whenever the
@@ -20,12 +22,12 @@
 // Tweak the makePrettyJSON_ function to customize what kind of JSON to export.
 /////////////////
 
-var FORMAT_ONELINE   = 'One-line';
+var FORMAT_ONELINE = 'One-line';
 var FORMAT_MULTILINE = 'Multi-line';
-var FORMAT_PRETTY    = 'Pretty';
+var FORMAT_PRETTY = 'Pretty';
 
-var LANGUAGE_JS      = 'JavaScript';
-var LANGUAGE_PYTHON  = 'Python';
+var LANGUAGE_JS = 'JavaScript';
+var LANGUAGE_PYTHON = 'Python';
 
 var STRUCTURE_LIST = 'List';
 var STRUCTURE_HASH = 'Hash (keyed by "colorstyle" column)';
@@ -37,133 +39,146 @@ var DEFAULT_STRUCTURE = STRUCTURE_LIST;
 
 
 function onOpen() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var menuEntries = [
-    {name: "Export JSON for this sheet", functionName: "exportSheet"},
-    {name: "Export JSON for all sheets", functionName: "exportAllSheets"},
-    {name: "Configure export", functionName: "exportOptions"},
-  ];
-  ss.addMenu("Export JSON", menuEntries);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var menuEntries = [{
+        name: "Export JSON for this sheet",
+        functionName: "exportSheet"
+    }, {
+        name: "Export JSON for all sheets",
+        functionName: "exportAllSheets"
+    }, {
+        name: "Configure export",
+        functionName: "exportOptions"
+    }, ];
+    ss.addMenu("Export JSON", menuEntries);
 }
 
-
 function exportOptions() {
-  var doc = SpreadsheetApp.getActiveSpreadsheet();
-  var app = UiApp.createApplication().setTitle('Export JSON');
+    var doc = SpreadsheetApp.getActiveSpreadsheet();
+    var app = UiApp.createApplication().setTitle('Export JSON');
 
-  var grid = app.createGrid(4, 2);
-  grid.setWidget(0, 0, makeLabel(app, 'Language:'));
-  grid.setWidget(0, 1, makeListBox(app, 'language', [LANGUAGE_JS, LANGUAGE_PYTHON]));
-  grid.setWidget(1, 0, makeLabel(app, 'Format:'));
-  grid.setWidget(1, 1, makeListBox(app, 'format', [FORMAT_PRETTY, FORMAT_MULTILINE, FORMAT_ONELINE]));
-  grid.setWidget(2, 0, makeLabel(app, 'Structure:'));
-  grid.setWidget(2, 1, makeListBox(app, 'structure', [STRUCTURE_LIST, STRUCTURE_HASH]));
-  grid.setWidget(3, 0, makeButton(app, grid, 'Export Active Sheet', 'exportSheet'));
-  grid.setWidget(3, 1, makeButton(app, grid, 'Export All Sheets', 'exportAllSheets'));
-  app.add(grid);
-
-  doc.show(app);
+    var grid = app.createGrid(4, 2);
+    grid.setWidget(0, 0, makeLabel(app, 'Language:'));
+    grid.setWidget(0, 1, makeListBox(app, 'language', [LANGUAGE_JS,
+        LANGUAGE_PYTHON
+    ]));
+    grid.setWidget(1, 0, makeLabel(app, 'Format:'));
+    grid.setWidget(1, 1, makeListBox(app, 'format', [FORMAT_PRETTY,
+        FORMAT_MULTILINE, FORMAT_ONELINE
+    ]));
+    grid.setWidget(2, 0, makeLabel(app, 'Structure:'));
+    grid.setWidget(2, 1, makeListBox(app, 'structure', [STRUCTURE_LIST,
+        STRUCTURE_HASH
+    ]));
+    grid.setWidget(3, 0, makeButton(app, grid, 'Export Active Sheet',
+        'exportSheet'));
+    grid.setWidget(3, 1, makeButton(app, grid, 'Export All Sheets',
+        'exportAllSheets'));
+    app.add(grid);
+    doc.show(app);
 }
 
 function makeLabel(app, text, id) {
-  var lb = app.createLabel(text);
-  if (id) lb.setId(id);
-  return lb;
+    var lb = app.createLabel(text);
+    if (id) lb.setId(id);
+    return lb;
 }
 
 function makeListBox(app, name, items) {
-  var listBox = app.createListBox().setId(name).setName(name);
-  listBox.setVisibleItemCount(1);
+    var listBox = app.createListBox().setId(name).setName(name);
+    listBox.setVisibleItemCount(1);
 
-  var cache = CacheService.getPublicCache();
-  var selectedValue = cache.get(name);
-  Logger.log(selectedValue);
-  for (var i = 0; i < items.length; i++) {
-    listBox.addItem(items[i]);
-    if (items[1] == selectedValue) {
-      listBox.setSelectedIndex(i);
+    var cache = CacheService.getPublicCache();
+    var selectedValue = cache.get(name);
+    Logger.log(selectedValue);
+    for (var i = 0; i < items.length; i++) {
+        listBox.addItem(items[i]);
+        if (items[1] == selectedValue) {
+            listBox.setSelectedIndex(i);
+        }
     }
-  }
-  return listBox;
+    return listBox;
 }
 
 function makeButton(app, parent, name, callback) {
-  var button = app.createButton(name);
-  app.add(button);
-  var handler = app.createServerClickHandler(callback).addCallbackElement(parent);;
-  button.addClickHandler(handler);
-  return button;
+    var button = app.createButton(name);
+    app.add(button);
+    var handler = app.createServerClickHandler(callback).addCallbackElement(
+        parent);;
+    button.addClickHandler(handler);
+    return button;
 }
 
 function makeTextBox(app, name) {
-  var textArea    = app.createTextArea().setWidth('100%').setHeight('200px').setId(name).setName(name);
-  return textArea;
+    var textArea = app.createTextArea().setWidth('100%').setHeight('200px')
+        .setId(name).setName(name);
+    return textArea;
 }
 
 function exportAllSheets(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheets = ss.getSheets();
-  var sheetsData = {};
-  for (var i = 0; i < sheets.length; i++) {
-    var sheet = sheets[i];
-    var rowsData = getRowsData_(sheet, getExportOptions(e));
-    var sheetName = sheet.getName();
-    sheetsData[sheetName] = rowsData;
-  }
-  var json = makeJSON_(sheetsData, getExportOptions(e));
-  return displayText_(json);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheets = ss.getSheets();
+    var sheetsData = {};
+    for (var i = 0; i < sheets.length; i++) {
+        var sheet = sheets[i];
+        var rowsData = getRowsData_(sheet, getExportOptions(e));
+        var sheetName = sheet.getName();
+        sheetsData[sheetName] = rowsData;
+    }
+    var json = makeJSON_(sheetsData, getExportOptions(e));
+    return displayText_(json);
 }
 
 
 function exportSheet(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getActiveSheet();
-  var rowsData = getRowsData_(sheet, getExportOptions(e));
-  var json = makeJSON_(rowsData, getExportOptions(e));
-  return displayText_(json);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getActiveSheet();
+    var rowsData = getRowsData_(sheet, getExportOptions(e));
+    var json = makeJSON_(rowsData, getExportOptions(e));
+    return displayText_(json);
 }
 
 
 function getExportOptions(e) {
-  var options = {};
-  options.language = e && e.parameter.language || DEFAULT_LANGUAGE;
-  options.format   = e && e.parameter.format || DEFAULT_FORMAT;
-  options.structure = e && e.parameter.structure || DEFAULT_STRUCTURE;
+    var options = {};
+    options.language = e && e.parameter.language || DEFAULT_LANGUAGE;
+    options.format = e && e.parameter.format || DEFAULT_FORMAT;
+    options.structure = e && e.parameter.structure || DEFAULT_STRUCTURE;
 
-  var cache = CacheService.getPublicCache();
-  cache.put('language', options.language);
-  cache.put('format',   options.format);
-  cache.put('structure',   options.structure);
+    var cache = CacheService.getPublicCache();
+    cache.put('language', options.language);
+    cache.put('format', options.format);
+    cache.put('structure', options.structure);
 
-  Logger.log(options);
-  return options;
+    Logger.log(options);
+    return options;
 }
 
 function makeJSON_(object, options) {
-  if (options.format == FORMAT_PRETTY) {
-    var jsonString = JSON.stringify(object, null, 4);
-  } else if (options.format == FORMAT_MULTILINE) {
-    var jsonString = Utilities.jsonStringify(object);
-    jsonString = jsonString.replace(/},/gi, '},\n');
-    jsonString = prettyJSON.replace(/":\[{"/gi, '":\n[{"');
-    jsonString = prettyJSON.replace(/}\],/gi, '}],\n');
-  } else {
-    var jsonString = Utilities.jsonStringify(object);
-  }
-  if (options.language == LANGUAGE_PYTHON) {
-    // add unicode markers
-    jsonString = jsonString.replace(/"([a-zA-Z]*)":\s+"/gi, '"$1": u"');
-  }
-  return jsonString;
+    if (options.format == FORMAT_PRETTY) {
+        var jsonString = JSON.stringify(object, null, 4);
+    } else if (options.format == FORMAT_MULTILINE) {
+        var jsonString = Utilities.jsonStringify(object);
+        jsonString = jsonString.replace(/},/gi, '},\n');
+        jsonString = prettyJSON.replace(/":\[{"/gi, '":\n[{"');
+        jsonString = prettyJSON.replace(/}\],/gi, '}],\n');
+    } else {
+        var jsonString = Utilities.jsonStringify(object);
+    }
+    if (options.language == LANGUAGE_PYTHON) {
+        // add unicode markers
+        jsonString = jsonString.replace(/"([a-zA-Z]*)":\s+"/gi, '"$1": u"');
+    }
+    return jsonString;
 }
 
 function displayText_(text) {
-  var app = UiApp.createApplication().setTitle('Exported JSON');
-  app.add(makeTextBox(app, 'json'));
-  app.getElementById('json').setText(text);
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  ss.show(app);
-  return app;
+    var app = UiApp.createApplication().setTitle('Exported JSON');
+    app.add(makeTextBox(app, 'json'));
+    app.getElementById('json').setText(text);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    ss.show(app);
+    return app;
 }
 
 // getRowsData iterates row by row in the input range and returns an array of objects.
@@ -175,19 +190,21 @@ function displayText_(text) {
 //       This argument is optional and it defaults to the row immediately above range;
 // Returns an Array of objects.
 function getRowsData_(sheet, options) {
-  var headersRange = sheet.getRange(1, 1, sheet.getFrozenRows(), sheet.getMaxColumns());
-  var headers = headersRange.getValues()[0];
-  var dataRange = sheet.getRange(sheet.getFrozenRows()+1, 1, sheet.getMaxRows(), sheet.getMaxColumns());
-  var objects = getObjects_(dataRange.getValues(), normalizeHeaders_(headers));
-  if (options.structure == STRUCTURE_HASH) {
-    var objectsById = {};
-    objects.forEach(function(object) {
-      objectsById[object.id] = object;
-    });
-    return objectsById;
-  } else {
-    return objects;
-  }
+    var headersRange = sheet.getRange(1, 1, sheet.getFrozenRows(), sheet.getMaxColumns());
+    var headers = headersRange.getValues()[0];
+    var dataRange = sheet.getRange(sheet.getFrozenRows() + 1, 1, sheet.getMaxRows(),
+        sheet.getMaxColumns());
+    var objects = getObjects_(dataRange.getValues(), normalizeHeaders_(
+        headers));
+    if (options.structure == STRUCTURE_HASH) {
+        var objectsById = {};
+        objects.forEach(function(object) {
+            objectsById[object.id] = object;
+        });
+        return objectsById;
+    } else {
+        return objects;
+    }
 }
 
 // getColumnsData iterates column by column in the input range and returns an array of objects.
@@ -199,10 +216,12 @@ function getRowsData_(sheet, options) {
 //       This argument is optional and it defaults to the column immediately left of the range;
 // Returns an Array of objects.
 function getColumnsData_(sheet, range, rowHeadersColumnIndex) {
-  rowHeadersColumnIndex = rowHeadersColumnIndex || range.getColumnIndex() - 1;
-  var headersTmp = sheet.getRange(range.getRow(), rowHeadersColumnIndex, range.getNumRows(), 1).getValues();
-  var headers = normalizeHeaders_(arrayTranspose_(headersTmp)[0]);
-  return getObjects(arrayTranspose_(range.getValues()), headers);
+    rowHeadersColumnIndex = rowHeadersColumnIndex || range.getColumnIndex() -
+        1;
+    var headersTmp = sheet.getRange(range.getRow(), rowHeadersColumnIndex,
+        range.getNumRows(), 1).getValues();
+    var headers = normalizeHeaders_(arrayTranspose_(headersTmp)[0]);
+    return getObjects(arrayTranspose_(range.getValues()), headers);
 }
 
 
@@ -212,37 +231,37 @@ function getColumnsData_(sheet, range, rowHeadersColumnIndex) {
 //   - data: JavaScript 2d array
 //   - keys: Array of Strings that define the property names for the objects to create
 function getObjects_(data, keys) {
-  var objects = [];
-  for (var i = 0; i < data.length; ++i) {
-    var object = {};
-    var hasData = false;
-    for (var j = 0; j < data[i].length; ++j) {
-      var cellData = data[i][j];
-      if (isCellEmpty_(cellData)) {
-        continue;
-      }
-      object[keys[j]] = cellData;
-      hasData = true;
+    var objects = [];
+    for (var i = 0; i < data.length; ++i) {
+        var object = {};
+        var hasData = false;
+        for (var j = 0; j < data[i].length; ++j) {
+            var cellData = data[i][j];
+            if (isCellEmpty_(cellData)) {
+                continue;
+            }
+            object[keys[j]] = cellData;
+            hasData = true;
+        }
+        if (hasData) {
+            objects.push(object);
+        }
     }
-    if (hasData) {
-      objects.push(object);
-    }
-  }
-  return objects;
+    return objects;
 }
 
 // Returns an Array of normalized Strings.
 // Arguments:
 //   - headers: Array of Strings to normalize
 function normalizeHeaders_(headers) {
-  var keys = [];
-  for (var i = 0; i < headers.length; ++i) {
-    var key = normalizeHeader_(headers[i]);
-    if (key.length > 0) {
-      keys.push(key);
+    var keys = [];
+    for (var i = 0; i < headers.length; ++i) {
+        var key = normalizeHeader_(headers[i]);
+        if (key.length > 0) {
+            keys.push(key);
+        }
     }
-  }
-  return keys;
+    return keys;
 }
 
 // Normalizes a string, by removing all alphanumeric characters and using mixed case
@@ -255,47 +274,47 @@ function normalizeHeaders_(headers) {
 //   "Market Cap (millions) -> "marketCapMillions
 //   "1 number at the beginning is ignored" -> "numberAtTheBeginningIsIgnored"
 function normalizeHeader_(header) {
-  var key = "";
-  var upperCase = false;
-  for (var i = 0; i < header.length; ++i) {
-    var letter = header[i];
-    if (letter == " " && key.length > 0) {
-      upperCase = true;
-      continue;
+    var key = "";
+    var upperCase = false;
+    for (var i = 0; i < header.length; ++i) {
+        var letter = header[i];
+        if (letter == " " && key.length > 0) {
+            upperCase = true;
+            continue;
+        }
+        if (!isAlnum_(letter)) {
+            continue;
+        }
+        if (key.length == 0 && isDigit_(letter)) {
+            continue; // first character must be a letter
+        }
+        if (upperCase) {
+            upperCase = false;
+            key += letter.toUpperCase();
+        } else {
+            key += letter.toLowerCase();
+        }
     }
-    if (!isAlnum_(letter)) {
-      continue;
-    }
-    if (key.length == 0 && isDigit_(letter)) {
-      continue; // first character must be a letter
-    }
-    if (upperCase) {
-      upperCase = false;
-      key += letter.toUpperCase();
-    } else {
-      key += letter.toLowerCase();
-    }
-  }
-  return key;
+    return key;
 }
 
 // Returns true if the cell where cellData was read from is empty.
 // Arguments:
 //   - cellData: string
 function isCellEmpty_(cellData) {
-  return typeof(cellData) == "string" && cellData == "";
+    return typeof(cellData) == "string" && cellData == "";
 }
 
 // Returns true if the character char is alphabetical, false otherwise.
 function isAlnum_(char) {
-  return char >= 'A' && char <= 'Z' ||
-    char >= 'a' && char <= 'z' ||
-    isDigit_(char);
+    return char >= 'A' && char <= 'Z' ||
+        char >= 'a' && char <= 'z' ||
+        isDigit_(char);
 }
 
 // Returns true if the character char is a digit, false otherwise.
 function isDigit_(char) {
-  return char >= '0' && char <= '9';
+    return char >= '0' && char <= '9';
 }
 
 // Given a JavaScript 2d Array, this function returns the transposed table.
@@ -304,65 +323,69 @@ function isDigit_(char) {
 // Returns a JavaScript 2d Array
 // Example: arrayTranspose([[1,2,3],[4,5,6]]) returns [[1,4],[2,5],[3,6]].
 function arrayTranspose_(data) {
-  if (data.length == 0 || data[0].length == 0) {
-    return null;
-  }
-
-  var ret = [];
-  for (var i = 0; i < data[0].length; ++i) {
-    ret.push([]);
-  }
-
-  for (var i = 0; i < data.length; ++i) {
-    for (var j = 0; j < data[i].length; ++j) {
-      ret[j][i] = data[i][j];
+    if (data.length == 0 || data[0].length == 0) {
+        return null;
     }
-  }
+    var ret = [];
+    for (var i = 0; i < data[0].length; ++i) {
+        ret.push([]);
+    }
 
-  return ret;
+    for (var i = 0; i < data.length; ++i) {
+        for (var j = 0; j < data[i].length; ++j) {
+            ret[j][i] = data[i][j];
+        }
+    }
+    return ret;
 }
 
 
-function httpPostData(data){
-  var url = "http://prodimages.ny.bluefly.com/api/v1/looklet-shot-list/";
-  var user = 'looklet'
-  var token = 'fb49f24a29060a350628fd9e9fb08b3b9762abbd'
-  Logger.log(data[0][0]['colorstyle']);
-  var options = {
-  "method": "post",
-  "headers": {
-  "authorization": "ApiKey " + Utilities.base64Encode(user + ":" + token),
-  "accept":"application/json",
-  "contentType" : "application/json",
-  },
-  "payload": data
-  };
-  Logger.log(options, data);
-  var response = UrlFetchApp.fetch(url, options);
-  //Logger.log(JSON.parse(response.getContentText()));
-  return response;
+function httpPostLookletShotListApi(data) {
+    var url = "http://prodimages.ny.bluefly.com/api/v1/looklet-shot-list/";
+    var user = 'looklet'
+    var token = 'fb49f24a29060a350628fd9e9fb08b3b9762abbd'
+        //Logger.log(data[0][0]['colorstyle']);
+    var options = {
+        "method": "post",
+        "headers": {
+            "authorization": "ApiKey " + Utilities.base64Encode(user +
+                ":" + token),
+            "accept": "application/json",
+            "contentType": "application/json",
+        },
+        "payload": data
+    };
+    Logger.log(options, data);
+    var response = UrlFetchApp.fetch(url, options);
+    Logger.log(JSON.parse(response.getContentText()));
+    return response;
 };
 
 
 var SCRIPT_PROP = PropertiesService.getScriptProperties(); // new property service
-var SHEET_NAME  = 'data';
-// If you don't want to expose either GET or POST methods you can comment out the appropriate function
+var SHEET_NAME = 'data';
 
-function mailJsonOutput(json){
-  today = new Date();
-  //var file = DriveApp.getFileById('1234567890abcdefghijklmnopqrstuvwxyz');
-  //var decoded = Utilities.base64Decode(htmljson, Utilities.Charset.UTF_8);
-  //var encoded = Utilities.base64Encode(blob.getBytes());
-  var blob = Utilities.newBlob(json, 'application/json', today + '_looklet-shot-list.json');
-  blob.setName('LookletShotListAutoEmailerJSON_' + today + '.json');
-  MailApp.sendEmail('john.bragato@bluefly.com', 'looklet_shotlist_json_import', '', {attachments: blob});
-  Logger.log(today);
+function mailJsonOutput(json) {
+    today = new Date();
+    //var file = DriveApp.getFileById('1234567890abcdefghijklmnopqrstuvwxyz');
+    //var decoded = Utilities.base64Decode(htmljson, Utilities.Charset.UTF_8);
+    //var encoded = Utilities.base64Encode(blob.getBytes());
+    var blob = Utilities.newBlob(json, 'application/json', today +
+        '_looklet-shot-list.json');
+    blob.setName('LookletShotListAutoEmailerJSON_' + today + '.json');
+    MailApp.sendEmail('john.bragato@bluefly.com',
+        'looklet_shotlist_json_import', '', {
+            attachments: blob
+        }
+    );
+    Logger.log(today);
 }
 
-function getScriptUrl(){
-  execMailUrl = 'https://script.google.com/a/macros/bluefly.com/s/AKfycbxGrdiKVLOs4hgCpo6J1DICeUsJpxgc9n7AYTt_-NvKCSAiI-oi/exec'
-  req = UrlFetchApp.getRequest(execMailUrl)
-  Logger.log(req)
+function getScriptUrl() {
+    execMailUrl =
+        'https://script.google.com/a/macros/bluefly.com/s/AKfycbxGrdiKVLOs4hgCpo6J1DICeUsJpxgc9n7AYTt_-NvKCSAiI-oi/exec'
+    req = UrlFetchApp.getRequest(execMailUrl)
+    Logger.log(req)
 }
 
 //////////////////////////////////
@@ -370,56 +393,60 @@ function getScriptUrl(){
 //////////////////////////////////
 
 function handleResponse(e) {
-  // shortly after my original solution Google announced the LockService[1]
-  // this prevents concurrent access overwritting data
-  // [1] http://googleappsdeveloper.blogspot.co.uk/2011/10/concurrency-and-google-apps-script.html
-  // we want a public lock, one that locks for all invocations
-  var lock = LockService.getPublicLock();
-  lock.waitLock(30000);  // wait 30 seconds before conceding defeat.
+    // shortly after my original solution Google announced the LockService[1]
+    // this prevents concurrent access overwritting data
+    // [1] http://googleappsdeveloper.blogspot.co.uk/2011/10/concurrency-and-google-apps-script.html
+    // we want a public lock, one that locks for all invocations
+    var lock = LockService.getPublicLock();
+    lock.waitLock(30000); // wait 30 seconds before conceding defeat.
     // next set where we read data from - ie spreadsheet named data
-    var doc = SpreadsheetApp.openById('1SKTU3VZSCbwLv5Fq1U-Hh3SinATkJSrVQY4TiBXl2us')  ///SCRIPT_PROP.getProperty("key")); SpreadsheetApp.getActiveSpreadsheet(); //
-    //var sheet = doc.getSheetByName('data');
+    var doc = SpreadsheetApp.openById(
+            '1SKTU3VZSCbwLv5Fq1U-Hh3SinATkJSrVQY4TiBXl2us') ///SCRIPT_PROP.getProperty("key")); SpreadsheetApp.getActiveSpreadsheet(); //
+        //var sheet = doc.getSheetByName(SHEET_NAME);
     var sheet = doc.getSheetByName(doc.getSheets()[1].getSheetName());
-        //Logger.log(doc.getSheets()[0].getSheetName());
-        //Logger.log(sheet.getName());
+    var sheetName = doc.getSheets()[0].getSheetName();
 
     var rowsData = getRowsData_(sheet, getExportOptions(e));
     var json = makeJSON_(rowsData, getExportOptions(e));
     var apiurl = ''
-    //Logger.log(json)
-    try { //Try posting json data to api
-        //res = httpPostData(json);
+    try { //Try composing and sending json file via gmail
         content = ContentService
-              .createTextOutput(json) //JSON.stringify({"response": JSON.parse(json)}))
-              .setMimeType(ContentService.MimeType.JSON);
+            .createTextOutput(json) //JSON.stringify({"response": JSON.parse(json)}))
+            .setMimeType(ContentService.MimeType.JSON);
 
-        // return json success results
-        mailJsonOutput(content.getContent());
+        // return json success results if accessing via published script url
         return ContentService
-              .createTextOutput(JSON.stringify({"result":"success", "response": JSON.parse(json)}))
-              .setMimeType(ContentService.MimeType.JSON);
+            .createTextOutput(JSON.stringify({
+                "result": "success",
+                "response": JSON.parse(json)
+            }))
+            .setMimeType(ContentService.MimeType.JSON);
 
-    } catch(e){
-    // if error return this
-    return ContentService
-          .createTextOutput(JSON.stringify({"result":"error", "error": e}))
-          .setMimeType(ContentService.MimeType.JSON);
-  } finally { //release lock
-    lock.releaseLock();
-  }
+    } catch (e) {
+        // if error return this
+        return ContentService
+            .createTextOutput(JSON.stringify({
+                "result": "error",
+                "error": e
+            }))
+            .setMimeType(ContentService.MimeType.JSON);
+    } finally { //release lock
+        lock.releaseLock();
+    }
 };
 
 
-function doGet(e){
-  //  var url = "http://prodimages.ny.bluefly.com";
-  //  var response = UrlFetchApp.fetch(url);
-  //  Logger.log(response.getAllHeaders());
-  //
-  //return HtmlService.createHtmlOutputFromFile('index.html');
-  return handleResponse(e);
+function doGet(e) {
+    //var url = "http://prodimages.ny.bluefly.com";
+    //var response = UrlFetchApp.fetch(url);
+    //Logger.log(response.getAllHeaders());
+    //
+    // Uncomment below to serve index.html upon fetching url
+    //return HtmlService.createHtmlOutputFromFile('index.html');
+    return handleResponse(e);
 }
 
 
-function doPost(e){
-  return handleResponse(e);
+function doPost(e) {
+    return handleResponse(e);
 }
