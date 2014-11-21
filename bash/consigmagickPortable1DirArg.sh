@@ -52,8 +52,8 @@ trimExcessBGCMYKconv1DirArg.sh $preBatchDtop
 ### Rename files based on Photo output names (_1,_2)etc.
 for f in `find $preBatchDtop -iname \*.jpg`
 do
-baseName=`basename $f | sed 's/\ /\\\ /g'`
-echo $f | sed 's/\ /\\\ /g' | awk -v fname=$baseName -v batchdir=$batchDtop '{ print("mv -f "$1" "batchdir"/"fname) }' | sed 's/_1//2' | sed 's/_2/_alt01/2' | sed 's/_3/_alt02/2' | sed 's/_4/_alt03/2' | sed 's/_5/_alt04/2' | sed 's/_6/_alt05/2' | /bin/bash;
+  baseName=`basename $f | sed 's/\ /\\\ /g'`
+  echo $f | sed 's/\ /\\\ /g' | awk -v fname=$baseName -v batchdir=$batchDtop '{ print("mv -f "$1" "batchdir"/"fname) }' | sed 's/_1//2' | sed 's/_2/_alt01/2' | sed 's/_3/_alt02/2' | sed 's/_4/_alt03/2' | sed 's/_5/_alt04/2' | sed 's/_6/_alt05/2' | /bin/bash;
 done;
 
 ### Move/Copy files to folder based on Format ImageMagick will convert to
@@ -67,16 +67,16 @@ find $batchDtop -type f -iname [2-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].jpg
 ## Large Jpegs
 for f in `find $convertedFolder_l -iname \*.jpg`
 do
-baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
-echo $f | awk -v folder_l=$convertedFolder_l -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_lfname" "fname"_l.jpg") }' | /bin/bash;
-#>> /Volumes/johnb/AWkdebug.txt 
+  baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
+  echo $f | awk -v folder_l=$convertedFolder_l -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_lfname" "fname"_l.jpg") }' | /bin/bash;
+  #>> /Volumes/johnb/AWkdebug.txt
 done;
 
 ## Medium Jpegs
 for f in `find $convertedFolder_m -iname \*.jpg`
 do
-baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
-echo $f | awk -v folder_m=$convertedFolder_m -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_mfname" "fname"_m.jpg") }' | /bin/bash;
+  baseNamePlus=`echo $f | sed s/\ /\\\\\ /g | sed s/.jpg//g`
+  echo $f | awk -v folder_m=$convertedFolder_m -v fname=$baseNamePlus '{ print("mv -fv "$1 folder_mfname" "fname"_m.jpg") }' | /bin/bash;
 done;
 
 
@@ -88,7 +88,7 @@ find $convertedFolder_l -type f -iname \*.jpg -exec mv {} $uploadInProg \;
 ##Mogrify - Format as _m jpg and Alt Thumb
 cp -pR $convertedFolder_alt $convertedFolder_m
 cd $convertedFolder_m
-mogrify '*.jpg[200x240]' -compress none -format jpeg -adaptive-sharpen 100 -unsharp 40 -quality 100
+mogrify '*.jpg[300x360]' -compress none -format jpeg -adaptive-sharpen 100 -unsharp 40 -quality 100
 find $convertedFolder_m -type f -iname \*.jpg -exec mv {} $uploadInProg \;
 
 ##Mogrify - Format as Primary PNG, store originalRetouched
@@ -107,8 +107,8 @@ batchDoneFolder="$postBatchDone/$batchDoneDate"
 mkdir $batchDoneFolder
 for f in `find $batchDtop -iname \*.jpg`
 do
-exiftool -m -P -fast2 -overwrite_original -'IPTC:DateOriginalRetouchProcessed'='$Today' $f
-mv -f $f $batchDoneFolder
+  exiftool -m -P -fast2 -overwrite_original -'IPTC:DateOriginalRetouchProcessed'='$Today' $f
+  mv -f $f $batchDoneFolder
 done;
 
 ##########			##########	 Upload Files via FTP through cUrl
@@ -118,10 +118,12 @@ ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
 ### for Find only jp'g' and pn'g' files
 for f in `find $uploadInProg -type f -iname \*.*g`
 do
-uploadResult=`curl -k -T $f $ftpLoginFull`
-exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'='$Today' $f
-mv -f $f $uploadComplete;
-echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt
+  ##uploadResult=`curl -k -T $f $ftpLoginFull`
+  ## copyUploadResult to file 7
+
+  exiftool -m -P -fast2 -overwrite_original -'IPTC:DateLoaded'='$Today' $f
+  mv -f $f $uploadComplete;
+  echo "$Today, $f, $uploadResult" >> $magickBase/uploadLog.txt
 done;
 
 loadedCount=`cat $magickBase/uploadLog.txt | grep _l | wc -l`
