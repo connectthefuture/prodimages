@@ -4,7 +4,7 @@
 ## This one move the file while the other copies it and leave an original, moving is better usually
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
     import pycurl, os, shutil, re
-    regex_colorstyle = re.compile(r'^.*?/[0-9]{9}[_alt0-6]{,6}?\.[jpngJPNG]{3}$')
+    regex_colorstyle = re.compile(r'^.*?/[0-9]{9}[_altm0-6]{,6}?\.[jpngJPNG]{3}$')
     if not regex_colorstyle.findall(src_filepath):
         print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
         return
@@ -38,7 +38,7 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
 
 def copy_to_imagedrop_uploadV2KeepOrig(src_filepath, destdir=None):
     import pycurl, os, shutil, re
-    regex_colorstyle = re.compile(r'^.*?/[0-9]{9}[_alt0-6]{,6}?\.[jpngJPNG]{3}$')
+    regex_colorstyle = re.compile(r'^.*?/[0-9]{9}[_altm0-6]{,6}?\.[jpngJPNG]{3}$')
     if not regex_colorstyle.findall(src_filepath):
         print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
         return
