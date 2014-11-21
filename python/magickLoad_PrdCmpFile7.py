@@ -467,7 +467,7 @@ for upload_file in upload_tmp_loading:
         result = copy_to_imagedrop_upload(upload_file, destdir='/mnt/Post_Complete/ImageDrop')
         if result:
             print "Uploaded {}".format(upload_file)
-            time.sleep(float(.3))
+            time.sleep(float(.1))
             shutil.move(upload_file, archive_uploaded)
         else:
             print result, upload_file
