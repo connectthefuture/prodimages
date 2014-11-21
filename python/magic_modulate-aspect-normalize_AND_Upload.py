@@ -31,8 +31,8 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
                 ##os.rename(src_filepath, imagedropFilePath)
                 shutil.copyfile(src_filepath, imagedropFilePath)
                 return True
-            except:
-                return False
+        except:
+            return False
 
 
 def rename_retouched_file(img):

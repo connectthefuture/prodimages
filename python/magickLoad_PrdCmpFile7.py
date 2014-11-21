@@ -246,7 +246,7 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
         return
     else:
         if not destdir:
-            '/mnt/Post_Complete/ImageDrop'
+            destdir = '/mnt/Post_Complete/ImageDrop'
         imagedrop         = os.path.abspath(destdir)
         localFileName     = src_filepath.split('/')[-1]
         imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
