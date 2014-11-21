@@ -91,7 +91,7 @@ def subproc_magick_large_jpg(imgdir):
 
     ### Change to Large jpg dir to Mogrify using Glob
     os.chdir(imgdir)
-    
+
     subprocess.call([
     "mogrify",
     '*.jpg[400x480]',
@@ -115,7 +115,7 @@ def subproc_magick_medium_jpg(imgdir):
 
     ### Change to Medium jpg dir to Mogrify using Glob
     os.chdir(imgdir)
-    
+
     subprocess.call([
     "mogrify",
     '*.jpg[200x240]',
@@ -139,7 +139,7 @@ def subproc_magick_png(imgdir):
     import subprocess,re,os
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
     os.chdir(imgdir)
-    
+
     subprocess.call([
     "mogrify",
     "-format",
@@ -165,14 +165,14 @@ def subproc_magick_png(imgdir):
     "-define",
     "filter:blur=0.88549061701764",
     '-unsharp',
-    '2x2.4+0.5+0', 
+    '2x2.4+0.5+0',
     "-colorspace",
     "sRGB",
-    '-quality', 
+    '-quality',
     '100',
 ## new
     ])
-    
+
     print "Done {}".format(imgdir)
     return
 
@@ -182,7 +182,7 @@ def subproc_magick_png(imgdir):
 #     localFileName = localFilePath.split('/')[-1]
 
 #     mediaType = "8"
-    
+
 #     if ftpURL == '/mnt/Post_Complete/ImageDrop':
 #         imagedrop         = os.path.abspath(ftpURL)
 #         imagedropFilePath = os.path.join(imagedrop, localFileName)
@@ -193,7 +193,7 @@ def subproc_magick_png(imgdir):
 #                 shutil.copyfile(localFilePath, imagedropFilePath)
 #             except:
 #                 pass
-#                 return False    
+#                 return False
 
 #     elif not ftpURL:
 #         ftpURL = "ftp://file3.bluefly.corp/ImageDrop"
@@ -219,7 +219,7 @@ def subproc_magick_png(imgdir):
 #             c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
 #             c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(localFilePath))
 #             #c.setopt(pycurl.READFUNCTION, f.read());
-#             #c.setopt(pycurl.READDATA, f.read()); 
+#             #c.setopt(pycurl.READDATA, f.read());
 #             c.setopt(pycurl.UPLOAD, 1L)
 
 #             try:
@@ -240,15 +240,13 @@ def subproc_magick_png(imgdir):
 
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
     import pycurl, os, shutil, re
+    regex_colorstyle = re.compile(r'^.*?/[0-9]{9}[_alt0-6]{,6}?\.[jpngJPNG]{3}$')
     if not regex_colorstyle.findall(src_filepath):
         print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
         return
     else:
         if not destdir:
             '/mnt/Post_Complete/ImageDrop'
-        else:
-            pass
-
         imagedrop         = os.path.abspath(destdir)
         localFileName     = src_filepath.split('/')[-1]
         imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
@@ -256,30 +254,31 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
             if os.path.isfile(imagedropFilePath):
                 try:
                     os.remove(imagedropFilePath)
-                    #os.rename(src_filepath, imagedropFilePath)
-                    shutil.copyfile(src_filepath, imagedropFilePath)
+                    os.rename(src_filepath, imagedropFilePath)
+                    #shutil.copyfile(src_filepath, imagedropFilePath)
                     return True
                 except:
                     print 'Error ', imagedropFilePath
                     return False
-
                 #shutil.copyfile(src_filepath, imagedropFilePath
             else:
-            #     #os.rename(src_filepath, imagedropFilePath)
-                shutil.copyfile(src_filepath, imagedropFilePath)
-            
+                os.rename(src_filepath, imagedropFilePath)
+                #shutil.copyfile(src_filepath, imagedropFilePath)
+                return True
         except:
+            'Error ', imagedropFilePath
+            return False
             # try:
             #     shutil.copy(src_filepath, imagedrop)
             #     #os.remove(src_filepath)
             #     return True
             # except:
             #     pass
-            return False
+            # return False
 
 #####
 ###
-## backup for 56 then 7 curl err            
+## backup for 56 then 7 curl err
 # def upload_to_imagedrop(file):
 #     import ftplib
 #     session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
@@ -438,7 +437,7 @@ subproc_magick_medium_jpg(tmp_processing_m)
 ##  make png frpm hirez jpg then move copy to losding and orig to archive
 subproc_magick_png(tmp_processing)
 
-### Glob created PNGs and copy to Load Dir then Store in Arch dir 
+### Glob created PNGs and copy to Load Dir then Store in Arch dir
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
 [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
@@ -470,7 +469,7 @@ for upload_file in upload_tmp_loading:
             print "Uploaded {}".format(upload_file)
             time.sleep(float(.3))
             shutil.move(upload_file, archive_uploaded)
-        else:    
+        else:
             print result, upload_file
             pass
             ##time.sleep(float(3))
@@ -481,10 +480,10 @@ for upload_file in upload_tmp_loading:
             #     shutil.move(upload_file, archive_uploaded)
             # except:
             #     pass
-        
+
     except:
         print "Error moving Finals to Arch {}".format(file)
-        
+
 
 ## After completed Process and Load to imagedrop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
@@ -497,7 +496,7 @@ upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/
 if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
     shutil.rmtree(tmp_processing)
 
-    
+
 ###################
 ## Remove Lock file
 ###################

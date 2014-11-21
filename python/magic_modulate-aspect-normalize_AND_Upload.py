@@ -4,56 +4,35 @@
 import os, sys, re, csv
 
 
-def pycurl_upload_imagedrop(img):
-    import pycurl, os
-    localFilePath = os.path.abspath(img)
-    localFileName = localFilePath.split('/')[-1]
-
-    mediaType = "8"
-    ftpURL = "ftp://file3.bluefly.corp/ImageDrop/"
-    ftpFilePath = os.path.join(ftpURL, localFileName)
-    ftpUSERPWD = "imagedrop:imagedrop0"
-
-    if localFilePath != "" and ftpFilePath != "":
-
-        c = pycurl.Curl()
-        c.setopt(pycurl.URL, ftpFilePath)
-        c.setopt(pycurl.USERPWD, ftpUSERPWD)
-        c.setopt(c.CONNECTTIMEOUT, 5)
-        c.setopt(c.TIMEOUT, 8)
-        c.setopt(c.FAILONERROR, True)
-
-        f = open(localFilePath, 'rb')
-        c.setopt(pycurl.INFILE, f)
-        c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
-        c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(localFilePath))
-        c.setopt(pycurl.UPLOAD, 1L)
-
+def copy_to_imagedrop_upload(src_filepath, destdir=None):
+    import pycurl, os, shutil, re
+    regex_colorstyle = re.compile(r'^.*?/[0-9]{9}[_alt0-6]{,6}?\.[jpngJPNG]{3}$')
+    if not regex_colorstyle.findall(src_filepath):
+        print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
+        return
+    else:
+        if not destdir:
+            '/mnt/Post_Complete/ImageDrop'
+        imagedrop         = os.path.abspath(destdir)
+        localFileName     = src_filepath.split('/')[-1]
+        imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
         try:
-            c.perform()
-            c.close()
-            print "Successfully Uploaded --> {0}".format(localFileName)
-
-        except pycurl.error, error:
-            errno, errstr = error
-            print 'An error occurred: ', errstr
-            try:
-                c.close()
+            if os.path.isfile(imagedropFilePath):
+                try:
+                    os.remove(imagedropFilePath)
+                    #os.rename(src_filepath, imagedropFilePath)
+                    shutil.copyfile(src_filepath, imagedropFilePath)
+                    return True
+                except:
+                    print 'Error ', imagedropFilePath
+                    return False
+                    #shutil.copyfile(src_filepath, imagedropFilePath
+            else:
+                ##os.rename(src_filepath, imagedropFilePath)
+                shutil.copyfile(src_filepath, imagedropFilePath)
+                return True
             except:
-                print "Couldnt Close Cnx"
-                pass
-            return errno
-
-
-def upload_to_imagedrop(img):
-    import ftplib
-    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file, 'rb')
-    filename = str(file.split('/')[-1])
-    session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + filename, fileread, 8*1024)
-    fileread.close()
-    session.quit()
+                return False
 
 
 def rename_retouched_file(img):
@@ -134,25 +113,25 @@ def get_exif_metadata_value(img, exiftag=None):
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
     try:
-        ret = subprocess.check_output(['convert', img, '-median', '3', '+dither', '-colors', '2', '-trim', '+repage', '-gravity', 'center', '-crop', '50%', '-depth', '8', '-format', '%c','histogram:info:-'])    
+        ret = subprocess.check_output(['convert', img, '-median', '3', '+dither', '-colors', '2', '-trim', '+repage', '-gravity', 'center', '-crop', '50%', '-depth', '8', '-format', '%c','histogram:info:-'])
     except:
         return ''
     colorlow = str(ret).split('\n')[0].strip(' ')
     colorlow =  re.sub(re.compile(r',\W'),',',colorlow).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
     colorhigh = str(ret).split('\n')[1].strip(' ')
-    colorhigh =  re.sub(re.compile(r',\W'),',',colorhigh).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ') 
+    colorhigh =  re.sub(re.compile(r',\W'),',',colorhigh).replace(':','',1).replace('(','').replace(')','').replace('  ',' ').split(' ')
     fields_top =  ['low_rgb_avg', 'high_rgb_avg']
     fields_level2  =  ['total_pixels', 'rgb_vals', 'webcolor_id', 'color_profile_vals']
 
     colorlow  = zip(fields_level2,colorlow)
-    colorhigh  = zip(fields_level2,colorhigh)    
+    colorhigh  = zip(fields_level2,colorhigh)
     if len(colorhigh) == len(colorlow):
         coloravgs = dict(colorlow),dict(colorhigh)
         colordata = zip(fields_top, coloravgs)
         colordata = dict(colordata)
         colordata['comp_level'] = 'InRange'
         return colordata
-            
+
     elif len(colorhigh) < len(colorlow):
         coloravgs = dict(colorlow)
         colordata = {}
@@ -176,7 +155,7 @@ def evaluate_color_values(colordata):
     high_range_pixels = float((colordata['high_rgb_avg']['total_pixels']))
     low_range_pixels   = float((colordata['low_rgb_avg']['total_pixels']))
     try:
-        
+
         if low_range_pixels >= high_range_pixels and high_range_pixels != 0:
             r,g,b = colordata['high_rgb_avg']['rgb_vals'].split(',')
             r,g,b = float(r),float(g),float(b)
@@ -187,8 +166,8 @@ def evaluate_color_values(colordata):
 
             ratio   =  round(float(float(low_range_pixels)/float(high_range_pixels)),2)
             print high_avg/(low_avg*ratio)
-            return high_avg,low_avg,ratio, 'LOW' 
-            
+            return high_avg,low_avg,ratio, 'LOW'
+
         elif low_range_pixels < high_range_pixels and low_range_pixels != 0:
             r,g,b = colordata['high_rgb_avg']['rgb_vals'].split(',')
             r,g,b = float(r),float(g),float(b)
@@ -199,7 +178,7 @@ def evaluate_color_values(colordata):
 
             ratio   =  round(float(float(low_range_pixels)/float(high_range_pixels)),2)
             print low_avg/(high_avg*ratio)
-            return high_avg,low_avg,ratio, 'HIGH' 
+            return high_avg,low_avg,ratio, 'HIGH'
     except TypeError:
         print "Type Error"
         pass
@@ -208,27 +187,27 @@ def evaluate_color_values(colordata):
             pass
 
 def sort_files_by_values(directory):
-    import os,glob    
+    import os,glob
     filevalue_dict = {}
     fileslist = directory
 
     count = len(fileslist)
-    for f in fileslist: 
+    for f in fileslist:
         values = {}
         colordata = get_image_color_minmax(f)
-        try: 
+        try:
             high,low,ratio, ratio_range = evaluate_color_values(colordata)
             values['ratio'] = ratio
             values['ratio_range'] = ratio_range
             if ratio_range == 'LOW':
                 values['low'] = low ##
 
-                values['high'] = high 
+                values['high'] = high
             if ratio_range  == 'HIGH':
                 values['high'] = high ##
 
                 values['low'] = low
-                
+
             filevalue_dict[f] = values
             count -= 1
             print "{0} Files Remaining".format(count)
@@ -251,7 +230,7 @@ def subproc_magick_large_jpg(img, destdir=None):
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
-    
+
     os.chdir(os.path.dirname(img))
 
     if not destdir:
@@ -268,14 +247,14 @@ def subproc_magick_large_jpg(img, destdir=None):
         dimensions = get_dimensions(img)
         width  = dimensions.split('x')[0]
         height = dimensions.split('x')[1]
-        
+
         if aspect_ratio == '1.2':
             vert_horiz = '400x480'
         elif float(aspect_ratio) > float(1.2):
             vert_horiz = 'x480'
         elif float(aspect_ratio) < float(1.2):
             vert_horiz = '400x'
-        
+
         dimensions = "400x480"
         print dimensions,vert_horiz
         if regex_valid_style.findall(img):
@@ -295,15 +274,15 @@ def subproc_magick_large_jpg(img, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-extent', 
+            '-extent',
             dimensions,
             "-colorspace",
             "sRGB",
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.24+0.5+0', 
-            '-quality', 
+            '2x1.24+0.5+0',
+            '-quality',
             '95',
             outfile
             ])
@@ -319,7 +298,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
-       
+
     os.chdir(os.path.dirname(img))
     if not destdir:
         destdir = os.path.abspath('.')
@@ -337,14 +316,14 @@ def subproc_magick_medium_jpg(img, destdir=None):
     dimensions = get_dimensions(img)
     width  = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
-    
+
     if aspect_ratio == '1.2':
         vert_horiz = '300x360'
     elif float(aspect_ratio) > float(1.2):
         vert_horiz = 'x360'
     elif float(aspect_ratio) < float(1.2):
         vert_horiz = '300x'
-    
+
     dimensions = '300x360'
     print dimensions,vert_horiz
     if regex_valid_style.findall(img):
@@ -365,15 +344,15 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-extent', 
+            '-extent',
             dimensions,
             "-colorspace",
             "sRGB",
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.1+0.5+0', 
-            '-quality', 
+            '2x1.1+0.5+0',
+            '-quality',
             '95',
             outfile
             ])
@@ -411,36 +390,36 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if ratio_range == 'LOW':
         if float(round(high,2)) > float(240):
             modulator = '-modulate'
-            modulate = '104,100'  
-        elif float(round(high,2)) > float(200):    
+            modulate = '104,100'
+        elif float(round(high,2)) > float(200):
             modulator = '-modulate'
             modulate = '107,110'
-        elif float(round(high,2)) > float(150):    
+        elif float(round(high,2)) > float(150):
             modulator = '-modulate'
-            modulate =  '110,110'    
-        else:    
+            modulate =  '110,110'
+        else:
             modulator = '-modulate'
-            modulate =  '112,110' 
+            modulate =  '112,110'
 
     elif ratio_range == 'HIGH':
         if float(round(high,2)) > float(230):
             modulator = '-modulate'
-            modulate = '100,100'  
-        elif float(round(high,2)) > float(200):    
+            modulate = '100,100'
+        elif float(round(high,2)) > float(200):
             modulator = '-modulate'
             modulate = '103,100'
-        elif float(round(high,2)) > float(150):    
+        elif float(round(high,2)) > float(150):
             modulator = '-modulate'
-            modulate = '105,105'     
-        else:    
+            modulate = '105,105'
+        else:
             modulator = '-modulate'
-            modulate =  '108,107'  
+            modulate =  '108,107'
     elif ratio_range == 'OutOfRange':
         modulator = '-modulate'
         modulate = '100,100'
-    
+
     format = img.split('.')[-1]
-    
+
     os.chdir(os.path.dirname(img))
 
     ## Destination name
@@ -453,14 +432,14 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
     dimensions = ''
     ## Get variable values for processing
-    try:    
+    try:
         aspect_ratio = get_aspect_ratio(img)
         dimensions = get_dimensions(img)
         width  = dimensions.split('x')[0]
         height = dimensions.split('x')[1]
 
         if aspect_ratio == '1.2':
-            vert_horiz = '{0}x{1}'.format(width,height)  
+            vert_horiz = '{0}x{1}'.format(width,height)
             dimensions = '{0}x{1}'.format(int(width),int(height))
         elif float(aspect_ratio) > float(int(1.2)):
             vert_horiz = 'x{0}'.format(height)
@@ -476,7 +455,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             print "H",h, aspect_ratio
     except ValueError:
         pass
-    
+
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
@@ -510,17 +489,17 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             'white',
             '-gravity',
             'center',
-            '-extent', 
+            '-extent',
             dimensions,
             "-colorspace",
             "sRGB",
             '-unsharp',
             '2x2.7+0.5+0',
-            '-quality', 
+            '-quality',
             '95',
             os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
             ])
-        
+
     print 'Done {}'.format(img)
     return os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
@@ -547,7 +526,7 @@ def upload_imagedrop(root_dir):
     upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
     for upload_file in upload_tmp_loading:
         try:
-            code = pycurl_upload_imagedrop(upload_file)
+            code = copy_to_imagedrop_upload(upload_file)
             if code == '200':
                 try:
                     shutil.move(upload_file, archive_uploaded)
@@ -597,7 +576,7 @@ def main():
 
     root_img_dir = sys.argv[1]
     try:
-        destdir = os.path.abspath(sys.argv[2]) 
+        destdir = os.path.abspath(sys.argv[2])
 
         if not os.path.isdir(destdir):
             os.makedirs(destdir)
@@ -624,7 +603,7 @@ def main():
                 pass
             except IOError:
                 print 'IOError {}'.format(img)
-                pass                
+                pass
     else:
         img = root_img_dir
         if regex_coded.findall(img):
@@ -633,7 +612,7 @@ def main():
         subproc_magick_large_jpg(pngout, destdir=destdir)
         subproc_magick_medium_jpg(pngout, destdir=destdir)
 
-    
+
     upload_imagedrop(destdir)
 
 
