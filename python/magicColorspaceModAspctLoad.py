@@ -34,17 +34,6 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
             return False
 
 
-def upload_to_imagedrop(img):
-    import ftplib
-    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file, 'rb')
-    filename = str(file.split('/')[-1])
-    session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + filename, fileread, 8*1024)
-    fileread.close()
-    session.quit()
-
-
 def rename_retouched_file(img):
     import os,re
     regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.[jJpPnNgG]{3}')
