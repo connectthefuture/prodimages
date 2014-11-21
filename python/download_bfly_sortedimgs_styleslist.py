@@ -52,11 +52,11 @@ def main(styleslist=None, dest_dir=None, primary_only=None, out_dir_structure=No
             dest_dir = os.path.join(dest_dir, todaysdate + '_BflyImgExport')
 
     ## Now make the destination root dir if not exists
-    dest_dir = os.path.abspath(dest_dir)
-    if os.path.isdir(dest_dir):
+    dest_dir_root = os.path.abspath(dest_dir)
+    if os.path.isdir(dest_dir_root):
         pass
     else:
-        os.makedirs(dest_dir)
+        os.makedirs(dest_dir_root)
 
     # Define the directory structure of the downloaded files
     if not out_dir_structure:
@@ -71,6 +71,7 @@ def main(styleslist=None, dest_dir=None, primary_only=None, out_dir_structure=No
     for style in styleslist:
         netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
         colorstyle = str(style)
+        dest_dir = dest_dir_root
         if not file_format:
             ext = '.png'
         else:
