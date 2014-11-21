@@ -58,7 +58,7 @@ def main(styleslist=None, dest_dir=None, primary_only=None, out_dir_structure=No
     else:
         os.makedirs(dest_dir_root)
 
-    # Define the directory structure of the downloaded files
+    # Define the output directory structure of the downloaded files
     if not out_dir_structure:
         out_dir_structure = 'allSeparateAlt'
     elif out_dir_structure == 'groupByStyle':
@@ -131,7 +131,7 @@ def main(styleslist=None, dest_dir=None, primary_only=None, out_dir_structure=No
     try:
         perStyle = round((float(countAll) / float(countOne)), 2)
         print '{0} Styles Found\n\t{1} Files Downloaded\n{2} Files Per Style Avg'.format(str(countOne), str(countAll), str(perStyle))
-        return dest_dir
+        return dest_dir_root
     except ZeroDivisionError:
         print 'Sorry, Nothing was Found\n\n\...This time. Try Again'
 
