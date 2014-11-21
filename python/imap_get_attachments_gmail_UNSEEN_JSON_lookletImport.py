@@ -1,78 +1,101 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import email, getpass, imaplib, os, datetime
-dt = str(datetime.datetime.now())
-today = dt.split(' ')[0]
 
-jsonFeedDir = '/home/johnb/virtualenvs/DJDAM/src/var/media/feeds'
-### directory where to save attachments (default: current)
-feeds_dir = jsonFeedDir ##'/mnt/Post_Complete/.FEEDS/feeds'
-m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
-m.login('john.bragato@bluefly.com','0zeroseven')
-keywordsSearch = 'Feeds'
-searchString = "(ALL SUBJECT '%s')" % keywordsSearch
+def download_email_attachments_by_label(email_address=None, email_password=None, gmail_label=None, keywordsSearch=None, mail_status=None, download_dir=None):
+    import email, getpass, imaplib, os, datetime, json
+    dt = str(datetime.datetime.now())
+    today = dt.split(' ')[0]
+    ## Creds
+    if not email_address:
+        email_address  = 'john.bragato@bluefly.com'
+        email_password = '0zeroseven'
+    ### directory where to save attachments (default is current dir)
+    if not download_dir:
+        download_dir = '/home/johnb/virtualenvs/DJDAM/src/var/media/feeds'
+    ### Select the Keywords to search in mail and select the scope using gmail_label
+    if not keywordsSearch:
+        keywordsSearch = 'Feeds'
+    if not gmail_label:
+        gmail_label = '1-Consignment_Vendor-Imgs/FEEDS'
+    ## Choose UNSEEN messages or All including opened and seen messages
+    if not mail_status:
+        mail_status = 'UNSEEN'
 
-### m.search(None, "(ALL SUBJECT 'bananas oranges')")
-m.select('1-Consignment_Vendor-Imgs/FEEDS')
-resp, items = m.search(None, 'UNSEEN', searchString)
-items = items[0].split()
-for emailid in items:
-    resp, data = m.fetch(emailid, "(RFC822)")
-    email_body = data[0][1]
-    mail = email.message_from_string(email_body)
-    if mail.get_content_maintype() != 'multipart':
-        continue
-    print "["+mail["From"]+"] :" + mail["Subject"]
-    for part in mail.walk():
-        if part.get_content_maintype() == 'multipart':
+    ## Login and Get mail box as m object, select by label etc
+    m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
+    m.login(email_address, email_password)
+    m.select(gmail_label)
+
+    searchString = "(ALL SUBJECT '{0}')".format(keywordsSearch)
+    resp, items = m.search(None, mail_status, searchString)
+    items = items[0].split()
+    for emailid in items:
+        resp, data = m.fetch(emailid, "(RFC822)")
+        email_body = data[0][1]
+        mail = email.message_from_string(email_body)
+        if mail.get_content_maintype() != 'multipart':
             continue
-        if part.get('Content-Disposition') is None:
-            continue
-        filename = part.get_filename()
-        counter = 1
-        if not filename:
-            filename = 'part-%03d%s' % (counter, 'bin')
-            counter += 1
-        att_path = os.path.join(feeds_dir, today + "_" + filename)
-        print att_path
-        if not os.path.isfile(att_path):
-            fp = open(att_path, 'wb')
-            fp.write(part.get_payload(decode=True))
-            fp.close()
+        print "["+mail["From"]+"] :" + mail["Subject"]
+        for part in mail.walk():
+            if part.get_content_maintype() == 'multipart':
+                continue
+            if part.get('Content-Disposition') is None:
+                continue
+            filename = part.get_filename()
+            counter = 1
+            if not filename:
+                filename = 'part-%03d%s' % (counter, 'bin')
+                counter += 1
+            att_path = os.path.join(download_dir, today + "_" + filename)
+            print att_path
+            if not os.path.isfile(att_path):
+                fp = open(att_path, 'wb')
+                fp.write(part.get_payload(decode=True))
+                fp.close()
 
 
 ## Now that latest files have bee Downloaded - Get Delta of 2 most recent
-import difflib
-import os,re
+def get_delta_from_json_file(OLD_PATH=None, NEW_PATH=None, OUTPUT_DELTA_FILE=None, jsonFeedDir=None):
+    import difflib
+    import os,re
 
-regex = re.compile(r'.+?/[0-9]{4}-[0-9]{2}-[0-9]{2}_.+?.json$')
-feeds_files = os.listdir(feeds_dir)
+    regex_json = re.compile(r'^.+?.json$')
+    feeds_files = os.listdir(jsonFeedDir)
 
-for f in feeds_files:
-    if re.findall(regex, f):
-        print f
+    for f in feeds_files:
+        if re.findall(regex_json, f):
+            print f
+    if not OLD_PATH:
+        filename = 'LookletShotListImportJSON.json'
+        OLD_PATH = os.path.join(jsonFeedDir, filename)
+        NEW_PATH = os.path.join(jsonFeedDir, today + "_" + filename)
 
-OLD_PATH = os.path.join(feeds_dir,'looklet_shot_list.json')
-NEW_PATH = os.path.join(feeds_dir, today + "_" + "looklet_shot_list.json")
+    OUTPUT_DELTA_FILE =  os.path.join(jsonFeedDir, today + "_" + "delta_file.txt")
+    out = open(OUTPUT_DELTA_FILE, 'w')
+    #
+    old = open(OLD_PATH, 'r')
+    old_lines = list(old)
+    print len(old_lines)
+    old.close()
+    #
+    new = open(NEW_PATH, 'r')
+    new_lines = list(new)
+    print len(new_lines)
+    new.close()
+    #
+    for line in difflib.unified_diff(old_lines, new_lines, fromfile=OLD_PATH, tofile=NEW_PATH):
+        out.write(line)
+
+    ## Rename the new file to the old file, eliminating the old file
+    ## ie. updating the copy in the the directory
+    os.rename(NEW_PATH, OLD_PATH)
 
 
-outfile =  os.path.join(feeds_dir, today + "_" + "delta_file.txt")
-out = open(outfile, 'w')
-#
-old = open(OLD_PATH, 'r')
-old_lines = list(old)
-print len(old_lines)
-old.close()
-#
-new = open(NEW_PATH, 'r')
-new_lines = list(new)
-print len(new_lines)
-new.close()
-#
-for line in difflib.unified_diff(old_lines, new_lines, fromfile=OLD_PATH, tofile=NEW_PATH):
-    out.write(line)
-    #print("Writter")
+def main():
+    import sys, json
+    json_data = json.load(__builtin__.open('/Users/johnb/Dropbox/LookletShotListImportJSON.json'))
+    return
 
-
-os.rename(NEW_PATH, OLD_PATH)
+if __name__ == '__main__':
+    main()
