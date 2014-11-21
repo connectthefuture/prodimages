@@ -41,8 +41,8 @@ def main(styleslist=None, dest_dir=None, primary_only=None, out_dir_structure=No
         styleslist = sys.argv[1:]
 
     ## Define the root dest_dir or redefine using current dest_dir as the root
+    todaysdate = '{:%Y%m%d}'.format(datetime.datetime.now())
     if not dest_dir:
-        todaysdate = '{:%Y%m%d}'.format(datetime.datetime.now())
         username = os.path.expanduser('~').split('/')[-1].split('.')[0].lower()
         dest_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', todaysdate + '_BflyImgExport_' + username)
     else:
