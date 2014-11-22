@@ -124,14 +124,14 @@ def main(filepath=None):
             try:
                 delta = get_delta_from_json_file(filepath)
                 if delta:
-                    print 'DELTA'
+                    print 'DELTA', filepath
                 else:
-                    print 'NO_DELTA'
+                    print 'NO_DELTA', filepath
                     pass
             except:
-                print 'Not A JSON File AND Delta could not be generated'
+                print 'Not A JSON File AND Delta could not be generated', filepath
     except:
-        print filepath
+        print 'FinalFail ', filepath
 
 if __name__ == '__main__':
     main()
