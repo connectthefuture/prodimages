@@ -16,7 +16,7 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
         os.makedirs(download_dir)
     ### Select the Keywords to search in mail and select the scope using gmail_label
     if not keywordsSearch:
-        keywordsSearch = 'looklet_shotlist_json_import'
+        keywordsSearch = 'looklet'
     if not gmail_label:
         gmail_label = '1-PrimaryOps/Feeds'
     ## Choose UNSEEN messages or All including opened and seen messages
@@ -107,7 +107,6 @@ def main():
         filepath = download_email_attachments_by_label()
     if not os.path.isfile(filepath):
         filepath = download_email_attachments_by_label()
-
     if filepath.split('.')[-1] == 'json':
         try:
             json_data = json.load(__builtin__.open(filepath))
