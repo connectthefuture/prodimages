@@ -60,24 +60,28 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
 
 
 ## Now that latest files have bee Downloaded - Get Delta of 2 most recent
-def get_delta_from_json_file(OLD_PATH=None, NEW_PATH=None, OUTPUT_DELTA_FILE=None, jsonFeedDir=None):
+def get_delta_from_json_file(filename=None, OLD_PATH=None, NEW_PATH=None, OUTPUT_DELTA_FILE=None, diffFilesDir=None):
     import difflib
     import os,re
+    #regex_json = re.compile(r'^.+?.json$')
+    #json_files = re.findall(regex_json, f)
 
-    regex_json = re.compile(r'^.+?.json$')
-    feeds_files = os.listdir(jsonFeedDir)
-
-    for f in feeds_files:
-        if re.findall(regex_json, f):
-            print f
-    if not OLD_PATH:
+    ## Define what we are diffing and were it is etc.
+    if not filename:
         filename = 'LookletShotListImportJSON.json'
-        OLD_PATH = os.path.join(jsonFeedDir, filename)
-        NEW_PATH = os.path.join(jsonFeedDir, today + "_" + filename)
+        diffFilesDir = '/home/johnb/virtualenvs/DJDAM/src/var/media/feeds'
+    else:
+        diffFilesDir = os.path.dirname(filename)
 
-    OUTPUT_DELTA_FILE =  os.path.join(jsonFeedDir, today + "_" + "delta_file.txt")
+    if not OLD_PATH:
+        OLD_PATH = os.path.join(diffFilesDir, filename)
+        NEW_PATH = os.path.join(diffFilesDir, today + "_" + filename)
+    if not NEW_PATH:
+        NEW_PATH = os.path.join(diffFilesDir, today + "_" + filename)
+    if not OUTPUT_DELTA_FILE:
+        OUTPUT_DELTA_FILE =  os.path.join(diffFilesDir, today + "_" + "delta_file.txt")
+
     out = open(OUTPUT_DELTA_FILE, 'w')
-    #
     old = open(OLD_PATH, 'r')
     old_lines = list(old)
     print len(old_lines)
@@ -99,7 +103,7 @@ def get_delta_from_json_file(OLD_PATH=None, NEW_PATH=None, OUTPUT_DELTA_FILE=Non
 def main():
     import sys, json, import __builtin__
     downloaded_filepath = download_email_attachments_by_label
-    if downloaded_filepath.split('.')[-1] == 'json'
+    if downloaded_filepath.split('.')[-1] == 'json':
         json_data = json.load(__builtin__.open(downloaded_filepath))
     return json_data
 
