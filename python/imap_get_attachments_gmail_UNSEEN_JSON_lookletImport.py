@@ -99,26 +99,37 @@ def get_delta_from_json_file(filename=None, OLD_PATH=None, NEW_PATH=None, OUTPUT
     os.rename(NEW_PATH, OLD_PATH)
 
 
-def main():
+def main(filepath=None):
     import sys, os, json, __builtin__
-    try:
-        filepath = sys.argv[1]
-    except:
-        filepath = download_email_attachments_by_label()
-    if filepath == None or not os.path.isfile(filepath):
-        filepath = download_email_attachments_by_label()
-    if filepath.split('.')[-1] == 'json':
+    if not filepath:
         try:
-            json_data = json.load(__builtin__.open(filepath))
-            return json_data
+            filepath = sys.argv[1]
         except:
-            print 'JSON couldnt be read Properly'
+            filepath = download_email_attachments_by_label()
+        if not filepath or not os.path.isfile(filepath):
+            filepath = download_email_attachments_by_label()
     else:
-        try:
-            get_delta_from_json_file(filepath)
-        except:
-            print 'Not A JSON File AND Delta could not be generated'
-
+        pass
+    
+    try:
+        if filepath.split('.')[-1] == 'json':
+            try:
+                json_data = json.load(__builtin__.open(filepath))
+                return json_data
+            except:
+                print 'JSON couldnt be read Properly'
+        else:
+            try:
+                delta = get_delta_from_json_file(filepath)
+                if delta:
+                    print 'DELTA'
+                else:
+                    print 'NO_DELTA'
+                    pass
+            except:
+                print 'Not A JSON File AND Delta could not be generated'
+    except:
+        print filepath
 
 if __name__ == '__main__':
     main()
