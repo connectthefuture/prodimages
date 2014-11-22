@@ -110,7 +110,7 @@ def main(filepath=None):
             filepath = download_email_attachments_by_label()
     else:
         pass
-    
+
     try:
         if filepath.split('.')[-1] == 'json':
             try:
