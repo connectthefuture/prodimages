@@ -54,8 +54,8 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
                 os.remove(attachment_dest)
             fp = open(attachment_dest, 'wb')
             fp.write(part.get_payload(decode=True))
-            fp.close()
-            return os.path.abspath(attachment_dest)
+            fp.close()    
+    return os.path.abspath(attachment_dest)
 
 
 ## Now that latest files have bee Downloaded - Get Delta of 2 most recent
