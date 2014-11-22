@@ -101,10 +101,21 @@ def get_delta_from_json_file(filename=None, OLD_PATH=None, NEW_PATH=None, OUTPUT
 
 def main():
     import sys, json, __builtin__
-    downloaded_filepath = download_email_attachments_by_label
-    if downloaded_filepath.split('.')[-1] == 'json':
-        json_data = json.load(__builtin__.open(downloaded_filepath))
-    return json_data
+    try:
+        filepath = sys.argv[1]
+    else:
+        filepath = download_email_attachments_by_label()
+    if filepath.split('.')[-1] == 'json':
+        try:
+            json_data = json.load(__builtin__.open(filepath))
+            return json_data
+        except:
+            print 'JSON couldnt be read Properly'
+    else:
+        try:
+            get_delta_from_json_file(filepath)
+        except:
+            print 'Not A JSON File AND Delta could not be generated'
 
 
 if __name__ == '__main__':
