@@ -23,14 +23,16 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
     if not mail_status:
         mail_status = 'UNSEEN'
 
+    searchString = "(ALL SUBJECT '{0}')".format(keywordsSearch)
+    attachment_dest = ''
     ## Login and Get mail box as m object, select by label etc
     m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
     m.login(email_address, email_password)
     m.select(gmail_label)
 
-    searchString = "(ALL SUBJECT '{0}')".format(keywordsSearch)
     resp, items = m.search(None, mail_status, searchString)
     items = items[0].split()
+
     for emailid in items:
         resp, data = m.fetch(emailid, "(RFC822)")
         email_body = data[0][1]
@@ -54,7 +56,7 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
                 os.remove(attachment_dest)
             fp = open(attachment_dest, 'wb')
             fp.write(part.get_payload(decode=True))
-            fp.close()    
+            fp.close()
     return os.path.abspath(attachment_dest)
 
 
