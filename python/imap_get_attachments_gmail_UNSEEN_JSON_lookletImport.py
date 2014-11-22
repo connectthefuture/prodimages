@@ -105,7 +105,7 @@ def main():
         filepath = sys.argv[1]
     except:
         filepath = download_email_attachments_by_label()
-    if not os.path.isfile(filepath):
+    if not filepath == None or not os.path.isfile(filepath):
         filepath = download_email_attachments_by_label()
     if filepath.split('.')[-1] == 'json':
         try:
