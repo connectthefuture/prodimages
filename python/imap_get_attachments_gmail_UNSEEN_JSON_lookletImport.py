@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 def download_email_attachments_by_label(email_address=None, email_password=None, gmail_label=None, keywordsSearch=None, mail_status=None, download_dir=None):
     import email, getpass, imaplib, os, datetime, json
     dt = str(datetime.datetime.now())
