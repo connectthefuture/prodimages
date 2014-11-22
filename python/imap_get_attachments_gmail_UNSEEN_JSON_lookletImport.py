@@ -13,6 +13,8 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
     ### directory where to save attachments (default is current dir)
     if not download_dir:
         download_dir = '/home/johnb/virtualenvs/DJDAM/src/var/media/feeds'
+    if not os.path.isdir(download_dir):
+        os.makedirs(download_dir)
     ### Select the Keywords to search in mail and select the scope using gmail_label
     if not keywordsSearch:
         keywordsSearch = 'Feeds'
@@ -47,12 +49,14 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
             if not filename:
                 filename = 'part-%03d%s' % (counter, 'bin')
                 counter += 1
-            att_path = os.path.join(download_dir, today + "_" + filename)
-            print att_path
-            if not os.path.isfile(att_path):
-                fp = open(att_path, 'wb')
-                fp.write(part.get_payload(decode=True))
-                fp.close()
+            attachment_dest = os.path.join(download_dir, today + "_" + filename)
+            print attachment_dest
+            if os.path.isfile(attachment_dest):
+                os.remove(attachment_dest)
+            fp = open(attachment_dest, 'wb')
+            fp.write(part.get_payload(decode=True))
+            fp.close()
+            return os.path.abspath(attachment_dest)
 
 
 ## Now that latest files have bee Downloaded - Get Delta of 2 most recent
@@ -93,9 +97,12 @@ def get_delta_from_json_file(OLD_PATH=None, NEW_PATH=None, OUTPUT_DELTA_FILE=Non
 
 
 def main():
-    import sys, json
-    json_data = json.load(__builtin__.open('/Users/johnb/Dropbox/LookletShotListImportJSON.json'))
-    return
+    import sys, json, import __builtin__
+    downloaded_filepath = download_email_attachments_by_label
+    if downloaded_filepath.split('.')[-1] == 'json'
+        json_data = json.load(__builtin__.open(downloaded_filepath))
+    return json_data
+
 
 if __name__ == '__main__':
     main()
