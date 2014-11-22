@@ -100,11 +100,14 @@ def get_delta_from_json_file(filename=None, OLD_PATH=None, NEW_PATH=None, OUTPUT
 
 
 def main():
-    import sys, json, __builtin__
+    import sys, os, json, __builtin__
     try:
         filepath = sys.argv[1]
-    except IndexError:
+    except:
         filepath = download_email_attachments_by_label()
+    if not os.path.isfile(filepath):
+        filepath = download_email_attachments_by_label()
+
     if filepath.split('.')[-1] == 'json':
         try:
             json_data = json.load(__builtin__.open(filepath))
