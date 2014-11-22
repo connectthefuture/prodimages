@@ -103,7 +103,7 @@ def main():
     import sys, json, __builtin__
     try:
         filepath = sys.argv[1]
-    else:
+    except IndexError:
         filepath = download_email_attachments_by_label()
     if filepath.split('.')[-1] == 'json':
         try:
