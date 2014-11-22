@@ -23,6 +23,7 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
     if not mail_status:
         mail_status = 'UNSEEN'
 
+    os.chdir(download_dir)
     searchString = "(ALL SUBJECT '{0}')".format(keywordsSearch)
     attachment_dest = ''
     ## Login and Get mail box as m object, select by label etc
