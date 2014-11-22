@@ -16,9 +16,9 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
         os.makedirs(download_dir)
     ### Select the Keywords to search in mail and select the scope using gmail_label
     if not keywordsSearch:
-        keywordsSearch = 'Feeds'
+        keywordsSearch = 'looklet'
     if not gmail_label:
-        gmail_label = '1-Consignment_Vendor-Imgs/FEEDS'
+        gmail_label = '1-Consignment_Vendor-Imgs/Feeds'
     ## Choose UNSEEN messages or All including opened and seen messages
     if not mail_status:
         mail_status = 'UNSEEN'
