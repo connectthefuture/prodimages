@@ -114,7 +114,7 @@ done;
 ##########			##########	 Upload Files via FTP through cUrl
 # ftpLoginFull="ftp://file3.bluefly.corp/ImageDrop/ --user imagedrop:imagedrop0"
 ## weddavLogin="https://imagedrop:imagedrop0@file3.bluefly.corp/ImageDrop/"
-uploadPathFile7='/Volumes/Post_Complete/ImageDrop/'
+uploadPathFile7='/Volumes/Post_Complete/ImageDrop'
 ### for Find only jp'g' and pn'g' files
 for f in `find "$uploadInProg" -type f -iname \*.*g`
 do
