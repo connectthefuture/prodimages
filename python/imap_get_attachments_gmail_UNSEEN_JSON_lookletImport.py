@@ -11,7 +11,7 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
         email_password = '0zeroseven'
     ### directory where to save attachments (default is current dir)
     if not download_dir:
-        download_dir = '/home/johnb/virtualenvs/DJDAM/src/var/media/feeds'
+        download_dir = '/var/www/srv/media/feeds'
     if not os.path.isdir(download_dir):
         os.makedirs(download_dir)
     ### Select the Keywords to search in mail and select the scope using gmail_label
