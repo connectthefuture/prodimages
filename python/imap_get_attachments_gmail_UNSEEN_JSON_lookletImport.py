@@ -13,7 +13,12 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
     if not download_dir:
         download_dir = '/var/www/srv/media/feeds'
     if not os.path.isdir(download_dir):
-        os.makedirs(download_dir)
+        try:
+            os.makedirs(download_dir)
+        except:
+            download_dir = os.path.join('/Users/johnb/Dropbox/DEVROOT/', download_dir)
+            os.makedirs(download_dir)
+
     ### Select the Keywords to search in mail and select the scope using gmail_label
     if not keywordsSearch:
         keywordsSearch = 'looklet'
