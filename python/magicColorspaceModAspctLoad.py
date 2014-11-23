@@ -526,7 +526,7 @@ def upload_imagedrop(root_dir):
                 try:
                     shutil.move(upload_file, archive_uploaded)
                     time.sleep(float(.1))
-                    print "1stTryOK"
+                    print "1stTryOK", upload_file
                 except:
                     dst_file = upload_file.replace(root_dir, archive_uploaded)
                     try:
