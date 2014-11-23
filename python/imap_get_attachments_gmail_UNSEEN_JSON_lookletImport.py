@@ -10,18 +10,21 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
         email_address  = 'john.bragato@bluefly.com'
         email_password = '0zeroseven'
     ### directory where to save attachments (default is current dir)
+#    testdev='/Users/johnb/Dropbox/DEVROOT/var/www/srv/media/feeds'
+#    if os.path.isdir(testdev):
+#        download_dir = testdev
+#    elif
     if not download_dir:
         download_dir = '/var/www/srv/media/feeds'
-    if not os.path.isdir(download_dir):
-        try:
-            os.makedirs(download_dir)
-        except:
-            download_dir = os.path.join('/Users/johnb/Dropbox/DEVROOT/', download_dir)
+    else:
+        if os.path.isdir(download_dir):
+            pass
+        else:
             os.makedirs(download_dir)
 
     ### Select the Keywords to search in mail and select the scope using gmail_label
     if not keywordsSearch:
-        keywordsSearch = 'looklet'
+        keywordsSearch = 'looklet_shotlist_json_import'
     if not gmail_label:
         gmail_label = '1-PrimaryOps/Feeds'
     ## Choose UNSEEN messages or All including opened and seen messages
@@ -38,13 +41,16 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
 
     resp, items = m.search(None, mail_status, searchString)
     items = items[0].split()
-
+    print items
     for emailid in items:
         resp, data = m.fetch(emailid, "(RFC822)")
         email_body = data[0][1]
         mail = email.message_from_string(email_body)
-        if mail.get_content_maintype() != 'multipart':
+        print mail.get_content_maintype()
+        #print 'Content-Disposition ', mail.get('Content-Disposition'), '\n\t ', ##dir(mail.walk()[0])
+        if mail.get_content_maintype() == 'multipart':
             continue
+        print 'ALLLLLLL'
         print "["+mail["From"]+"] :" + mail["Subject"]
         for part in mail.walk():
             if part.get_content_maintype() == 'multipart':
@@ -53,6 +59,7 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
                 continue
             filename = part.get_filename()
             counter = 1
+            print 'Counter {0} \t Filename {1}'.format(counter, filename)
             if not filename:
                 filename = 'part-%03d%s' % (counter, 'bin')
                 counter += 1
@@ -70,6 +77,9 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
 def get_delta_from_json_file(filename=None, OLD_PATH=None, NEW_PATH=None, OUTPUT_DELTA_FILE=None, diffFilesDir=None):
     import difflib
     import os,re
+    import datetime
+    dt = str(datetime.datetime.now())
+    today = dt.split(' ')[0]
     #regex_json = re.compile(r'^.+?.json$')
     #json_files = re.findall(regex_json, f)
 
@@ -118,26 +128,27 @@ def main(filepath=None):
             filepath = download_email_attachments_by_label()
     else:
         pass
-
-    try:
-        if filepath.split('.')[-1] == 'json':
-            try:
-                json_data = json.load(__builtin__.open(filepath))
-                return json_data
-            except:
-                print 'JSON couldnt be read Properly'
-        else:
-            try:
-                delta = get_delta_from_json_file(filepath)
-                if delta:
-                    print 'DELTA', filepath
-                else:
-                    print 'NO_DELTA', filepath
-                    pass
-            except:
-                print 'Not A JSON File AND Delta could not be generated', filepath
-    except:
-        print 'FinalFail ', filepath
+    return filepath
+#
+#    try:
+#        if filepath.split('.')[-1] == 'json':
+#            try:
+#                json_data = json.load(__builtin__.open(filepath))
+#                return json_data
+#            except:
+#                print 'JSON couldnt be read Properly'
+#        else:
+#            try:
+#                delta = get_delta_from_json_file(filepath)
+#                if delta:
+#                    print 'DELTA', filepath
+#                else:
+#                    print 'NO_DELTA', filepath
+#                    pass
+#            except AttributeError:
+#                print 'Not A JSON File AND Delta could not be generated', filepath
+#    except AttributeError:
+#        print 'FinalFail ', filepath
 
 if __name__ == '__main__':
     main()
