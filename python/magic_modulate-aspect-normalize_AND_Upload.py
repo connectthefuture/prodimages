@@ -11,8 +11,10 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
         print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
         return
     else:
-        if not destdir:
-            '/mnt/Post_Complete/ImageDrop'
+        if not destdir and os.path.isdir('/Users/johnb'):
+            destdir = '/Volumes/Post_Complete/ImageDrop'
+        elif not destdir:
+            destdir = '/mnt/Post_Complete/ImageDrop'
         imagedrop         = os.path.abspath(destdir)
         localFileName     = src_filepath.split('/')[-1]
         imagedropFilePath = os.path.join(imagedrop, localFileName.lower())
