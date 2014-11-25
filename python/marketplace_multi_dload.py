@@ -77,16 +77,16 @@ import os,re,sys,urllib,urllib3, subprocess
 import requests
 
 ## Create image dir Root if not exist
-imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
-
+#imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'PicturesFile7Bklog'))
+imagedir = '/Volumes/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL'
 if os.path.isdir(imagedir):
     pass
-else:
+elif os.path.isdir(imagedir.split('/')[:3]):
     try:
+        imagedir = '/mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL'
         os.makedirs(imagedir, 16877)
     except:
         pass
-
 
     ca_certs = '/usr//local/lib/python2.7/site-packages/tornado/ca-certificates.crt' #"/etc/ssl/certs/ca-certificates.crt"  # Or wherever it lives.
 
@@ -96,19 +96,23 @@ else:
     )
     urllib3.disable_warnings()
    
+# 145490
+#138772
+# 147711
+# 148071
 
 
 countimage = 0
 countstyle = 0
 ALL = '' #'True'
-vaultstyles=sqlQuery_GetIMarketplaceImgs(vendor='pbjLabs', vendor_brand='', po_number='', ALL=ALL)
+vaultstyles=sqlQuery_GetIMarketplaceImgs(vendor='%%', vendor_brand='', po_number='', ALL=ALL)
 for k,v in vaultstyles.iteritems():
     colorstyle  = v['colorstyle']
     image_url   = v['image_url']
     po_number   = v['po_number']
     vendor_name = v['vendor_name']
     alt_number  = v['alt']
-    ext = '.jpg'
+    ext = image_url.split('.')[-1]
     if alt_number:
         bfly_ext = "_{0}{1}".format(alt_number,ext)
         ext = bfly_ext
@@ -124,59 +128,114 @@ for k,v in vaultstyles.iteritems():
     if image_url:
         #with open(destpath,'wb') as f:
             #f.write(requests.get(image_url).content)
-        image_url = ''.join(image_url.split('%0A'))
+        #image_url = ''.join(image_url.split('%0A'))
         print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
         
-        error_check = urllib.urlopen(image_url)
-        urlcode_value = error_check.getcode()
-        print urlcode_value
+        try:
+            image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
+        except:
+            pass
 
-        if urlcode_value == 403 or urlcode_value == 200:
-            #try:
+        
+        ########################################################
+        ########################################################
+        ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
+        ########################################################
+        ########################################################
+        ####### Google Drive Fix ###############################
+        regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
+        ## Strip query string and edit RETURNNG URL TO IMG ON GOOGLE DRIVE
+        if regex_drive.findall(image_url):
+            image_url = image_url.split('/edit?')[0]
+        ########################################################
+        ########################################################
+        ####### Dropbox Fix for View vs DL value ###############
+        regex_dbx = re.compile(r'^https://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
+        image_url = image_url.replace('?dl=0', '?dl=1')
+        if regex_dbx.findall(image_url):
+            image_url.replace('.jpg', '.jpg?dl=1')
+            image_url.replace('.png', '.png?dl=1')
+        ########################################################
+        ####### URL ENCODED % ESCAPES Fix ######################
+        ## Strip error causing Line Feed ascii char
+        import urllib2
+        image_url = ''.join(image_url.split('%0A'))
+        ########################################################
+        ############       Finally     #########################
+        #####     Replace ALL url encoding % escapes    ########
+        ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
+        
+        #image_url  = image_url.replace('/Flat%2520Images/', '/Flat%20Images/')
+        print image_url, ' URL'
+        #image_url  = image_url.replace('/Flat%2520Images/', '/Flat%20Images/')
+        # image_url = urllib2.unquote(image_url)
+        regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
+        if regex_validurl.findall(image_url):
+            import httplib2
+            image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
+        #image_url = urllib2.unquote(image_url)   #urllib2.unquote(image_url))
+        ########################################################
+        ########################################################
+        
+            print 'RRR'
+            headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
             try:
-                res = requests.get(image_url, stream=True, timeout=7)
-                        
-                with open(destpath, 'ab+') as f:
-                    f.write(res.content)
-                    f.close()
-#                    r = http.request('GET', image_url)
-#                    with open(destpath, 'ab+') as f:
-#                        f.write(res.content)
-#                        f.close()
-#                
-            except:
-                # Handle incorrect certificate error.
-                print 'e'
-            if not res:
+                print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
+                #error_check = urllib.urlopen(image_url)
+                #print error_check
+                #urlcode_value = error_check.getcode()
                 
-            #try:
-                exe = ['wget', '-O', os.path.join(destdir, colorstyle + ext), image_url]
-                subprocess.check_output(exe)
-                #except:
-                print exe
-            #    pass
-            else: print len(res.content)
-            countimage += 1
-            print "Image Download Count: {}".format(countimage)
-            if alt_number == 1:
-                countstyle += 1
-            print "Total New Styles Downloaded: {}".format(countstyle)
+                res = requests.get(image_url, stream=True, timeout=1, headers=headers)
+                print 'ALMOST'
+                urlcode_value = res.status_code
+                print urlcode_value
+                #res = requests.get(image_url, stream=True, timeout=1, headers=headers)
+                if urlcode_value == 209:
+                    res = urllib.urlretrieve(image_url, destpath)
+                    if res != '2':
+                        subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
+                    countimage += 1
+                    print "Image Download Count: {}".format(countimage)
+                    if alt_number == 1:
+                        countstyle += 1
+                    print "Total New Styles Downloaded: {}".format(countstyle)
+    #                if updateonly_flag:
+    #                    update_styles.append(colorstyle)
+                elif urlcode_value < 400:
+                    try:
+                        print 'TRY'
+                        res = requests.get(image_url, stream=True, timeout=1,headers=headers)
+                        with open(destpath, 'ab+') as f:
+                            f.write(res.content)
+                            f.close()
+                        print res
+                        if res != '2':
+                            subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
+    #                        if updateonly_flag:
+    #                            update_styles.append(colorstyle)
+                    except:
+                        subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
+                        print 'Failed Downloading HTTPS file {}'.format(image_url)
+    #                    if updateonly_flag:
+    #                        update_styles.append(colorstyle)
 
-        #except:
-        #    print 'Failed Downloading HTTPS Forbidden file {}'.format(image_url)
-
-        elif urlcode_value == 404:
-            badurldir = os.path.join(destdir,'error404')
-            if os.path.isdir(badurldir):
+                elif urlcode_value == 404:
+                    badurldir = os.path.join(destdir,'error404')
+                    if os.path.isdir(badurldir):
+                        pass
+                    else:
+                        try:
+                            os.makedirs(badurldir, 16877)
+                        except:
+                            pass
+                    try:
+                        with open(os.path.join(os.path.abspath(badurldir), colorstyle + ext + '_error404.txt'), 'wb+') as f:
+                            f.write("{0}\t{1}\n".format(image_url,colorstyle + '_imgnum_' + ext + '_errcode_' + urlcode_value))
+                    except:
+                        'Print Failed write 404 file'
+                        pass
+            except requests.exceptions.ConnectionError:
+                print 'ConnectionError'
                 pass
-            else:
-                try:
-                    os.makedirs(badurldir, 16877)
-                except:
-                    pass
-            try:
-                with open(os.path.join(os.path.abspath(badurldir), colorstyle + '_error404.txt'), 'wb+') as f:
-                    f.write("{0}\n".format(colorstyle + urlcode_value))
-            except:
-                'Print Failed write 404 file'
+            except IOError:
                 pass
