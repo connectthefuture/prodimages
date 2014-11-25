@@ -105,14 +105,22 @@ elif os.path.isdir(imagedir.split('/')[:3]):
 countimage = 0
 countstyle = 0
 ALL = '' #'True'
-vaultstyles=sqlQuery_GetIMarketplaceImgs(vendor='%%', vendor_brand='', po_number='', ALL=ALL)
+vaultstyles=sqlQuery_GetIMarketplaceImgs(vendor='%%', vendor_brand='', po_number='148090', ALL=ALL)
 for k,v in vaultstyles.iteritems():
     colorstyle  = v['colorstyle']
     image_url   = v['image_url']
     po_number   = v['po_number']
     vendor_name = v['vendor_name']
     alt_number  = v['alt']
-    ext = image_url.split('.')[-1]
+    
+    ext = '.'' + image_url.split('.')[-1]
+    if len(image_url.split('.')[-1]) == 3:
+        ext = '.' + str(image_url.split('.')[-1][:3])
+        ext = ext.lower().strip('?dl=0')
+        ext = ext.lower().strip('?dl=1')
+    else:
+        ext = '.jpg'
+    
     if alt_number:
         bfly_ext = "_{0}{1}".format(alt_number,ext)
         ext = bfly_ext
