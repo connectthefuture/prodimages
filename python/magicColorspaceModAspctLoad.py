@@ -572,6 +572,8 @@ def main(root_img_dir=None):
     if not root_img_dir:
         try:
             root_img_dir = sys.argv[1]
+            if root_img_dir == 'jblocal':
+                root_img_dir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL')
         except IndexError:
             root_img_dir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
             pass
