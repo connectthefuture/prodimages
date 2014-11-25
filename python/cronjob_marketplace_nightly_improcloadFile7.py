@@ -106,7 +106,7 @@ import requests
 ## Create image dir Root if not exist
 try:
     #imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'MARKETPLACE'))
-    if sys.argv[1] == 'jblocal'
+    if sys.argv[1] == 'jblocal':
         imagedir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL')
 except IndexError:
     imagedir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
