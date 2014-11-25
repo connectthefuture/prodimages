@@ -210,12 +210,14 @@ for k,v in vaultstyles.iteritems():
         ############       Finally     #########################
         #####     Replace ALL url encoding % escapes    ########
         ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
-        import httplib2
-        image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
+        
         ########################################################
         ########################################################
         regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
+        
         if regex_validurl.findall(image_url):
+            import httplib2
+            image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
             print 'RRR'
             headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
             try:
