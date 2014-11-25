@@ -159,7 +159,7 @@ for k,v in vaultstyles.iteritems():
     alt_number  = v['alt']
 
     if len(image_url.split('.')[-1]) == 3:
-        ext = '.' + str(image_url.split('.')[-1])
+        ext = '.' + str(image_url.split('.')[-1][:3])
         ext = ext.lower()
     else:
         ext = '.jpg'
