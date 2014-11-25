@@ -11,19 +11,19 @@ def run_multiproccesses_magick(searchdir=None):
     else:
         pass
 
-    pool = multiprocessing.Pool(4)
+    pool = multiprocessing.Pool(8)
     directory_list = []
     if searchdir.split('/')[-1] == 'SWI':
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
     elif searchdir.split('/')[-1][:3] == '3_L':
-        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]        
+        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
         print 'Image Clipping Import', searchdir
     else:
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
 
     results = pool.map(magickProc.main,directory_list)
     print results
-    
+
     # close the pool and wait for the work to finish
     pool.close()
     print 'PoolClose'
