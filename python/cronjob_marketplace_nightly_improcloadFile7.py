@@ -108,6 +108,8 @@ try:
     #imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'MARKETPLACE'))
     if sys.argv[1] == 'jblocal':
         imagedir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL')
+    else:
+        imagedir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
 except IndexError:
     imagedir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
 except:
@@ -115,7 +117,7 @@ except:
 
     # imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 
-regex_swi   = re.compile(r'^.*?SWI.jpg$')
+regex_swi   = re.compile(r'^.*?SWI.+?\.jpg$')
 
 if os.path.isdir(imagedir):
     ## Remove previous days imports only from the PO dir prior to new import, SWI stays separate
@@ -176,17 +178,24 @@ for k,v in vaultstyles.iteritems():
             pass
     if image_url:
         #with open(destpath,'wb') as f:
-            #f.write(requests.get(image_url).content)
-        try:
-            image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
-        except:
-            pass
-
+        #f.write(requests.get(image_url).content)
 
         ########################################################
         ########################################################
         ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
         ########################################################
+        ########################################################
+        ####### Dropbox Fix for View vs DL value ###############
+        ########################################################
+        try:
+            image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
+        except:
+            pass
+        regex_dbx = re.compile(r'^https://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
+        image_url = image_url.replace('?dl=0', '?dl=1')
+        if regex_dbx.findall(image_url):
+            image_url.replace('.jpg', '.jpg?dl=1')
+            image_url.replace('.png', '.png?dl=1')
         ########################################################
         ####### Google Drive Fix ###############################
         regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
@@ -194,28 +203,19 @@ for k,v in vaultstyles.iteritems():
         if regex_drive.findall(image_url):
             image_url = image_url.split('/edit?')[0]
         ########################################################
-        ########################################################
-        ####### Dropbox Fix for View vs DL value ###############
-        regex_dbx = re.compile(r'^https://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
-        image_url = image_url.replace('?dl=0', '?dl=1')
-        if regex_dbx.findall(image_url):
-            image_url.replace('.jpg', '.jpg?dl=1')
-            image_url.replace('.png', '.png?dl=1')
-        ########################################################
         ####### URL ENCODED % ESCAPES Fix ######################
         ## Strip error causing Line Feed ascii char
-        import urllib2
         image_url = ''.join(image_url.split('%0A'))
         ########################################################
-        ############       Finally     #########################
-        #####     Replace ALL url encoding % escapes    ########
-        ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
-        
-        ########################################################
+
         ########################################################
         regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
-        
+
         if regex_validurl.findall(image_url):
+            ############       Finally     #########################
+            #####     Replace ALL url encoding % escapes    ########
+            ###  TO ACCOUNT FOR EX. %2520 --> %20 --> ' '   ########
+            ########################################################
             import httplib2
             image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
             print 'RRR'
