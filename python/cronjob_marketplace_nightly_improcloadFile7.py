@@ -123,7 +123,7 @@ if os.path.isdir(imagedir):
     ## Remove previous days imports only from the PO dir prior to new import, SWI stays separate
     remove_prior_import = glob.glob(os.path.join(imagedir, '*/*/*.jpg'))
     try:
-        [ os.remove(f) for f in remove_prior_import if not re.findall(regex_swi,f) ]
+        [ os.remove(f) for f in remove_prior_import ]
     except:
         pass
 else:
