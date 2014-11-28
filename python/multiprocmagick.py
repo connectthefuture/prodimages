@@ -11,7 +11,7 @@ def run_multiproccesses_magick(searchdir=None):
     else:
         pass
 
-    pool = multiprocessing.Pool(8)
+    pool = multiprocessing.Pool(4)
     directory_list = []
     if searchdir.split('/')[-1] == 'SWI':
         [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
@@ -28,6 +28,31 @@ def run_multiproccesses_magick(searchdir=None):
     pool.close()
     print 'PoolClose'
     pool.join()
+    print 'PoolJoin'
+
+def run_multiproc_urldownload(po_list=None):
+    import multiprocessing
+    import glob,os
+    from cronjob_marketplace_nightly_improcloadMultiFile7 import download_marketplace_urls urlDownloadProc
+    from cronjob_marketplace_nightly_improcloadMultiFile7 import sqlQuery_GetIMarketplaceImgs
+
+    poolResults = multiprocessing.Pool(4)
+
+    # if searchdir.split('/')[-1] == 'SWI':
+    #     [ urls_list.append(os.path.abspath(g)) for url in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
+    # elif searchdir.split('/')[-1][:3] == '3_L':
+    #     [ directory_list.append(os.path.abspath(g)) for g in sqlQuery_GetIMarketplaceImgs() if os.path.isdir(g) ]
+    #     print 'Image Clipping Import', searchdir
+    # else:
+    #     [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
+
+    poolResultsDict = pool.map(sqlQuery_GetIMarketplaceImgs,po_list)
+
+
+    # close the pool and wait for the work to finish
+    poolResults.close()
+    print 'PoolClose'
+    poolResults.join()
     print 'PoolJoin'
 
 if __name__ == '__main__':
