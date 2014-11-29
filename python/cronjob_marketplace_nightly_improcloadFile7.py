@@ -135,17 +135,17 @@ else:
 updateonly_flag = ''
 update_time     = ''
 
-try:
-    updateonly_flag = sys.argv[1]
-    if updateonly_flag:
-        updateonly_flag = 'not'
-    try:
-        update_time = sys.argv[2]
-    except:
-        update_time = 20
-except IndexError:
-    updateonly_flag = ''
-    pass
+#try:
+    #updateonly_flag = sys.argv[1]
+#    if updateonly_flag:
+updateonly_flag = 'not'
+    #try:
+    #    update_time = sys.argv[2]
+    #except:
+update_time = 20
+#except IndexError:
+#    updateonly_flag = ''
+#    pass
 
 countimage = 0
 countstyle = 0
