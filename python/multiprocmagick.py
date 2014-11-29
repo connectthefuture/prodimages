@@ -4,7 +4,7 @@
 def run_multiproccesses_magick(searchdir=None):
     import multiprocessing
     import glob,os
-    import magicColorspaceModAspctLoad as magickProc
+    import magicColorspaceModAspctLoadFaster as magickProc
 
     if not searchdir:
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
