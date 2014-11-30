@@ -94,7 +94,7 @@ def url_download_file(image_url,filepath,errdir=None):
         print 'ALMOST'
         urlcode_value = res.status_code
         print urlcode_value
-    except:
+    except IOError:
         pass
     if urlcode_value == 200:
         try:
@@ -102,7 +102,7 @@ def url_download_file(image_url,filepath,errdir=None):
             with open(filepath, 'ab+') as f:
                 f.write(res.content)
                 f.close()
-        except:
+        except IOError:
             pass
     elif urlcode_value == 404:
 
@@ -127,7 +127,7 @@ def url_download_file(image_url,filepath,errdir=None):
                 with open(filepath, 'ab+') as f:
                     f.write(res.content)
                     f.close()
-            except:
+            except IOError:
                 pass
             # print "On 2nd Attempt, Retrieved: " + urlsplit + " ---> " + filepath
 
@@ -138,7 +138,7 @@ def url_download_file(image_url,filepath,errdir=None):
                 with open(filepath, 'ab+') as f:
                     f.write(res.content)
                     f.close()
-            except:
+            except IOError:
                 pass
             #print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
         elif backup_spliturlcode_value == 200:
@@ -148,7 +148,7 @@ def url_download_file(image_url,filepath,errdir=None):
                 with open(filepath, 'ab+') as f:
                     f.write(res.content)
                     f.close()
-            except:
+            except IOError:
                 pass
             #print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)
         else:
@@ -158,7 +158,7 @@ def url_download_file(image_url,filepath,errdir=None):
                 errdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/ERRORS')
                 try:
                     os.makedirs(errdir, 16877)
-                except:
+                except IOError:
                     pass
                 colorstyle = filepath.split('/')[-1][:9]
                 alt        = filepath.split('/')[-1].split('_')[-1][0]
