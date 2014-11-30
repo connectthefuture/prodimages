@@ -50,7 +50,6 @@ def define_variables_mkdirs():
         destdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI')
     else:
         destdir=os.path.join(os.path.abspath(os.path.expanduser('~')),'MARKETPLACE/SWI')
-
     try:
         os.makedirs(destdir, 16877)
     except OSError:
@@ -88,22 +87,16 @@ def url_download_file(image_url,filepath,errdir=None):
     import httplib2
     image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
     print 'RRR'
-    try:
-        print image_url, filepath #.split('/' )[-1].replace('.jpg','_1200.jpg')
-        res = requests.get(image_url, stream=True, timeout=1, headers=headers)
-        print 'ALMOST'
-        urlcode_value = res.status_code
-        print urlcode_value
-    except OSError:
-        pass
+    print image_url, filepath #.split('/' )[-1].replace('.jpg','_1200.jpg')
+    res = requests.get(image_url, stream=True, timeout=1, headers=headers)
+    print 'ALMOST'
+    urlcode_value = res.status_code
+    print urlcode_value
     if urlcode_value == 200:
-        try:
-            res = requests.get(url_split, stream=True, timeout=1, headers=headers)
-            with open(filepath, 'ab+') as f:
-                f.write(res.content)
-                f.close()
-        except OSError:
-            pass
+        res = requests.get(url_split, stream=True, timeout=1, headers=headers)
+        with open(filepath, 'ab+') as f:
+            f.write(res.content)
+            f.close()
     elif urlcode_value == 404:
 
         ### Split URL, /Z/
@@ -122,34 +115,25 @@ def url_download_file(image_url,filepath,errdir=None):
 
 
         if split_urlcode_value == 200:
-            try:
-                res = requests.get(url_split, stream=True, timeout=1, headers=headers)
-                with open(filepath, 'ab+') as f:
-                    f.write(res.content)
-                    f.close()
-            except OSError:
-                pass
+            res = requests.get(url_split, stream=True, timeout=1, headers=headers)
+            with open(filepath, 'ab+') as f:
+                f.write(res.content)
+                f.close()
             # print "On 2nd Attempt, Retrieved: " + urlsplit + " ---> " + filepath
 
         elif backup_urlcode_value == 200:
             # urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
-            try:
-                res = requests.get(backupurl, stream=True, timeout=1, headers=headers)
-                with open(filepath, 'ab+') as f:
-                    f.write(res.content)
-                    f.close()
-            except OSError:
-                pass
+            res = requests.get(backupurl, stream=True, timeout=1, headers=headers)
+            with open(filepath, 'ab+') as f:
+                f.write(res.content)
+                f.close()
             #print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
         elif backup_spliturlcode_value == 200:
             # urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
-            try:
-                res = requests.get(backup_spliturl, stream=True, timeout=1, headers=headers)
-                with open(filepath, 'ab+') as f:
-                    f.write(res.content)
-                    f.close()
-            except OSError:
-                pass
+            res = requests.get(backup_spliturl, stream=True, timeout=1, headers=headers)
+            with open(filepath, 'ab+') as f:
+                f.write(res.content)
+                f.close()
             #print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)
         else:
             #print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(image_url, urlcode_value)
@@ -262,27 +246,27 @@ def download_urls_bypo(ponum):
         try:
             url_download_file(vendor_url,colorstyle_file)
         except IOError:
-            # print "Failed {}{}".format(vendor_url,colorstyle_file)
+            print "Failed {}{}".format(vendor_url,colorstyle_file)
             pass
         ##_2
         try:
             url_download_file(vendor_url_side,colorstyle_side_file)
-            # print "Downloaded {}".format(colorstyle_side_file)
-        except:
-            # print "Failed {}{}".format(vendor_url,colorstyle_side_file)
+            print "Downloaded {}".format(colorstyle_side_file)
+        except IOError:
+            print "Failed {}{}".format(vendor_url,colorstyle_side_file)
             pass
         ## _3
         try:
             url_download_file(vendor_url_back,colorstyle_back_file)
-            # print "Downloaded {}".format(colorstyle_back_file)
-        except:
+            print "Downloaded {}".format(colorstyle_back_file)
+        except IOError:
             try:
                 url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-clasp'))
-                # print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
-            except:
+                print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
+            except IOError:
                 try:
                    url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
-                except:
+               except IOError:
                     print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
         # # Try to remove empty dirs
         # try:
