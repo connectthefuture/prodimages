@@ -90,14 +90,21 @@ def url_download_file(image_url,filepath,errdir=None):
     print 'RRR'
     headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
     try:
-        print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
+        print image_url, filepath #.split('/' )[-1].replace('.jpg','_1200.jpg')
         res = requests.get(image_url, stream=True, timeout=1, headers=headers)
         print 'ALMOST'
         urlcode_value = res.status_code
         print urlcode_value
     except:
         pass
-
+    if urlcode_value == 200:
+        try:
+            res = requests.get(url_split, stream=True, timeout=1, headers=headers)
+            with open(filepath, 'ab+') as f:
+                f.write(res.content)
+                f.close()
+        except:
+            pass
     elif urlcode_value == 404:
 
         ### Split URL, /Z/
@@ -117,7 +124,7 @@ def url_download_file(image_url,filepath,errdir=None):
         if split_urlcode_value == 200:
             try:
                 res = requests.get(url_split, stream=True, timeout=1, headers=headers)
-                with open(destpath, 'ab+') as f:
+                with open(filepath, 'ab+') as f:
                     f.write(res.content)
                     f.close()
             except:
@@ -128,7 +135,7 @@ def url_download_file(image_url,filepath,errdir=None):
             # urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
             try:
                 res = requests.get(backupurl, stream=True, timeout=1, headers=headers)
-                with open(destpath, 'ab+') as f:
+                with open(filepath, 'ab+') as f:
                     f.write(res.content)
                     f.close()
             except:
@@ -138,7 +145,7 @@ def url_download_file(image_url,filepath,errdir=None):
             # urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
             try:
                 res = requests.get(backup_spliturl, stream=True, timeout=1, headers=headers)
-                with open(destpath, 'ab+') as f:
+                with open(filepath, 'ab+') as f:
                     f.write(res.content)
                     f.close()
             except:
