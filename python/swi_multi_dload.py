@@ -6,7 +6,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     import sqlalchemy, sys, re
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-    
+
     if ponum:
         querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS ponumber FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "' AND PRODUCT_COLOR.IMAGE_READY_DT is null"
     else:
@@ -22,7 +22,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
                                 RIGHT JOIN POMGR.VENDOR
                                 ON POMGR.VENDOR.ID                        = POMGR.PO_HDR.VENDOR_ID
                                 WHERE POMGR.VENDOR.NAME like 'Swiss Watch%'
-                                and POMGR.PRODUCT_COLOR.COPY_READY_DT IS NULL
+                                and POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NULL
                                 ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC nulls Last"""
 
     result = connection.execute(querymake_StylesByPO)
@@ -30,13 +30,13 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
     regex = re.compile(r'^\d{8}[^0]{1}$')
     for row in result:
         if regex.findall(str(row['colorstyle'])):
-            style = {}        
+            style = {}
             style['colorstyle'] = str(row['colorstyle'])
             style['ponumber'] = str(row['ponumber'])
             styles[row['vendor_style']] = style
             #print style
         else:
-            pass    
+            pass
     connection.close()
     return styles
 
@@ -61,41 +61,50 @@ def define_variables_mkdirs():
             os.makedirs(destdir, 16877)
         except OSError:
             pass
-    
+
     #setattr(globals,'destdir',destdir)
     globals()['destdir'] = destdir
     return destdir
 
 
-def url_download_file(url,filepath,errdir=None):
+def url_download_file(image_url,filepath,errdir=None):
     import urllib, os, io, cStringIO
-    
+
     ## Split Vendor # to try again on fail of full VENDOR_STYLE_NO
-    url_split = url.split('/')[-1]
+    url_split = image_url.split('/')[-1]
     url_split = url_split.split('-')[1:]
-    url_split = '-'.join(url_split)       
-    url_parent = url.split('/')[:-1]
+    url_split = '-'.join(url_split)
+    url_parent = image_url.split('/')[:-1]
     url_parent = '/'.join(url_parent)
-    backupurl = url.replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
+    backupurl = image_url.replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
     backup_spliturl = os.path.join(url_parent, url_split).replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
-    
-    
-    error_check = urllib.urlopen(url)
+
+
+    error_check = urllib.urlopen(image_url)
     urlcode_value = error_check.getcode()
     print urlcode_value
-    
+
     ### PRIMARY URL, AKA /Z/
-    if urlcode_value == 200:
-        urllib.urlretrieve(url, filepath)
-        print "Retrieved: " + url + " ---> " + filepath
-    
+    import httplib2
+    image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
+    print 'RRR'
+    headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
+    try:
+        print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
+        res = requests.get(image_url, stream=True, timeout=1, headers=headers)
+        print 'ALMOST'
+        urlcode_value = res.status_code
+        print urlcode_value
+    except:
+        pass
+
     elif urlcode_value == 404:
-        
+
         ### Split URL, /Z/
         urlsplit = os.path.join(url_parent, url_split)
         error_check = urllib.urlopen(urlsplit)
-        split_urlcode_value = error_check.getcode()        
-        
+        split_urlcode_value = error_check.getcode()
+
         ### Backup URL, AKA /H/
         error_check = urllib.urlopen(backupurl)
         backup_urlcode_value = error_check.getcode()
@@ -103,22 +112,40 @@ def url_download_file(url,filepath,errdir=None):
         ### BackupSplit
         error_check = urllib.urlopen(backup_spliturl)
         backup_spliturlcode_value = error_check.getcode()
-        
-            
+
+
         if split_urlcode_value == 200:
-            urllib.urlretrieve(urlsplit, filepath)
+            try:
+                res = requests.get(url_split, stream=True, timeout=1, headers=headers)
+                with open(destpath, 'ab+') as f:
+                    f.write(res.content)
+                    f.close()
+            except:
+                pass
             # print "On 2nd Attempt, Retrieved: " + urlsplit + " ---> " + filepath
-            
-        elif backup_urlcode_value == 200: 
+
+        elif backup_urlcode_value == 200:
             # urllib.urlretrieve(backupurl, filepath.replace('.jpg', '_H.jpg'))
-            urllib.urlretrieve(backupurl, filepath)
+            try:
+                res = requests.get(backupurl, stream=True, timeout=1, headers=headers)
+                with open(destpath, 'ab+') as f:
+                    f.write(res.content)
+                    f.close()
+            except:
+                pass
             #print "Downloaded URL {0} Finally on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
-        elif backup_spliturlcode_value == 200: 
+        elif backup_spliturlcode_value == 200:
             # urllib.urlretrieve(backup_spliturl, filepath.replace('.jpg', '_HH.jpg'))
-            urllib.urlretrieve(backup_spliturl, filepath)
-            #print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)      
+            try:
+                res = requests.get(backup_spliturl, stream=True, timeout=1, headers=headers)
+                with open(destpath, 'ab+') as f:
+                    f.write(res.content)
+                    f.close()
+            except:
+                pass
+            #print "Didnt Fail Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backup_spliturl, backup_spliturlcode_value)
         else:
-            #print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(url, urlcode_value)
+            #print "AWFUL Totally Failed Downloading URL {0} on 2nd Attempt with Error Code {1}".format(image_url, urlcode_value)
             # print "TERRIBLE Failed Downloading URL {0} even on 3rd and Final Attempt with Error Code {1}".format(backupurl, backup_urlcode_value)
             try:
                 errdir=os.path.join('/mnt','Post_Complete/Complete_Archive/MARKETPLACE/SWI/ERRORS')
@@ -137,8 +164,8 @@ def url_download_file(url,filepath,errdir=None):
                 try:
                     #info = cStringIO.StringIO()
                     with io.open(os.path.join(os.path.abspath(errdir), colorstyle + '_' + alt + '_error404.txt'), mode='wt+') as f:
-                        
-                        info = "{0},{1},{2},{3}".format(str(colorstyle), str(alt), str(urlcode_value), str(url))
+
+                        info = "{0},{1},{2},{3}".format(str(colorstyle), str(alt), str(urlcode_value), str(image_url))
                         outtext = unicode(info, 'utf-8')
                         print outtext
                         print >>f, outtext
@@ -153,17 +180,17 @@ def url_download_file(url,filepath,errdir=None):
 
             except OSError:
                 pass
-            
+
     else:
-        print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,url)
+        print "{0} Error:\v {1} is not a valid URL".format(urlcode_value,image_url)
 
 
 def get_postyles_dict(polist=None):
     import os,sys
 
     #print polist
-    
-    
+
+
     stylesDictsDict = []
     if polist:
         for ponum in polist:
@@ -180,7 +207,7 @@ def get_postyles_dict(polist=None):
 def download_urls_bypo(ponum):
     import os
     destdir = ''
-    
+
     if not destdir:
         destdir = define_variables_mkdirs()
     originaldest = destdir
@@ -195,7 +222,7 @@ def download_urls_bypo(ponum):
         vendor_url_straps = vendor_url.replace('.jpg', '-straps.jpg')
         vendor_url_main = vendor_url.replace('.jpg', '-main.jpg')
 
-        
+
         style = str(v['colorstyle'])
         ponumber = str(v['ponumber'])
         colorstyle = ''
@@ -205,14 +232,14 @@ def download_urls_bypo(ponum):
         colorstyle_boxset = style    +   "_4.jpg"
         colorstyle_straps = style    +   "_5.jpg"
         colorstyle_main = style      +   "_6.jpg"
-        
+
         # Make the subdir by POnum
         destdir = os.path.join(os.path.abspath(originaldest),ponumber)
         try:
             os.makedirs(destdir, 16877)
         except OSError:
             pass
-        
+
         colorstyle_file = os.path.join(os.path.abspath(destdir), colorstyle)
         colorstyle_side_file = os.path.join(os.path.abspath(destdir),colorstyle_side)
         colorstyle_back_file = os.path.join(os.path.abspath(destdir), colorstyle_back)
@@ -223,22 +250,22 @@ def download_urls_bypo(ponum):
 
         #imagefalse = sqlQuery_GetStyleVendor_ByPO()
         #if imagefalse:
-        
+
         ##_1
-        try:            
+        try:
             url_download_file(vendor_url,colorstyle_file)
         except IOError:
             # print "Failed {}{}".format(vendor_url,colorstyle_file)
             pass
         ##_2
-        try:            
+        try:
             url_download_file(vendor_url_side,colorstyle_side_file)
             # print "Downloaded {}".format(colorstyle_side_file)
         except:
             # print "Failed {}{}".format(vendor_url,colorstyle_side_file)
             pass
         ## _3
-        try:            
+        try:
             url_download_file(vendor_url_back,colorstyle_back_file)
             # print "Downloaded {}".format(colorstyle_back_file)
         except:
@@ -260,9 +287,9 @@ def download_urls_bypo(ponum):
 ## Run MAin as a multiprocessor by PO
 def run_multiproccesses_download(cmd_process=None,args=None):
     import multiprocessing
-    
+
     pool = multiprocessing.Pool(8)
-    
+
     if not args:
         # args = get_postyles_dict()
         popre= get_postyles_dict()
@@ -293,14 +320,14 @@ if __name__ == '__main__':
 
         #mod  = importlib.import_module(swi_multi_dload)
         mod =  dir(sys.modules[__name__])
-        
+
         ## Multiproc download incomlpete files by po
         func =  'download_urls_bypo'
         run_multiproccesses_download(cmd_process=func,args=None)
         ## Now Process and Load Em
         dload_end = time.strftime('%X')
         #print "Time to Complete Download Stage {0}".format(int(dload_end.strip(':')) - int(start_time.strip(':')))
-        
+
         import multiprocmagick
         try:
             searchdir = globals()['destdir']
