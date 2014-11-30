@@ -78,7 +78,7 @@ def url_download_file(image_url,filepath,errdir=None):
     url_parent = '/'.join(url_parent)
     backupurl = image_url.replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
     backup_spliturl = os.path.join(url_parent, url_split).replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
-
+    headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
 
     error_check = requests.get(image_url, stream=True, timeout=1, headers=headers)
     urlcode_value = error_check.status_code()
@@ -88,7 +88,6 @@ def url_download_file(image_url,filepath,errdir=None):
     import httplib2
     image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
     print 'RRR'
-    headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
     try:
         print image_url, filepath #.split('/' )[-1].replace('.jpg','_1200.jpg')
         res = requests.get(image_url, stream=True, timeout=1, headers=headers)
