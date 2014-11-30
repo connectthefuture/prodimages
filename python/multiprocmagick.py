@@ -33,7 +33,7 @@ def run_multiproccesses_magick(searchdir=None):
 def run_multiproc_urldownload(po_list=None):
     import multiprocessing
     import glob,os
-    from cronjob_marketplace_nightly_improcloadMultiFile7 import download_marketplace_urls urlDownloadProc
+    #from cronjob_marketplace_nightly_improcloadMultiFile7 import download_marketplace_urls
     from cronjob_marketplace_nightly_improcloadMultiFile7 import sqlQuery_GetIMarketplaceImgs
 
     poolResults = multiprocessing.Pool(4)
