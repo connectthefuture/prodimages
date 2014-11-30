@@ -21,7 +21,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum=None):
                                 ON POMGR.PO_LINE.PO_HDR_ID = POMGR.PO_HDR.ID
                                 RIGHT JOIN POMGR.VENDOR
                                 ON POMGR.VENDOR.ID                        = POMGR.PO_HDR.VENDOR_ID
-                                WHERE POMGR.VENDOR.NAME like 'Swiss Watch%'
+                                WHERE POMGR.VENDOR.NAME like '%SWI%'
                                 and POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NULL
                                 ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC nulls Last"""
 
@@ -68,7 +68,7 @@ def define_variables_mkdirs():
 
 
 def url_download_file(image_url,filepath,errdir=None):
-    import urllib, os, io, cStringIO
+    import urllib, os, io, cStringIO, requests
 
     ## Split Vendor # to try again on fail of full VENDOR_STYLE_NO
     url_split = image_url.split('/')[-1]
@@ -80,8 +80,8 @@ def url_download_file(image_url,filepath,errdir=None):
     backup_spliturl = os.path.join(url_parent, url_split).replace('admin.swisswatchintl.com/Z/', 'admin.swisswatchintl.com/H/')
 
 
-    error_check = urllib.urlopen(image_url)
-    urlcode_value = error_check.getcode()
+    error_check = requests.get(image_url, stream=True, timeout=1, headers=headers)
+    urlcode_value = error_check.status_code()
     print urlcode_value
 
     ### PRIMARY URL, AKA /Z/
@@ -109,16 +109,17 @@ def url_download_file(image_url,filepath,errdir=None):
 
         ### Split URL, /Z/
         urlsplit = os.path.join(url_parent, url_split)
-        error_check = urllib.urlopen(urlsplit)
-        split_urlcode_value = error_check.getcode()
+        error_check = requests.get(url_split, stream=True, timeout=1, headers=headers)
+        split_urlcode_value = error_check.status_code()
 
         ### Backup URL, AKA /H/
-        error_check = urllib.urlopen(backupurl)
-        backup_urlcode_value = error_check.getcode()
+        error_check = requests.get(backupurl, stream=True, timeout=1, headers=headers)
+        backup_urlcode_value = error_check.status_code()
 
         ### BackupSplit
         error_check = urllib.urlopen(backup_spliturl)
-        backup_spliturlcode_value = error_check.getcode()
+        error_check = requests.get(backup_spliturl, stream=True, timeout=1, headers=headers)
+        backup_spliturlcode_value = error_check.status_code()
 
 
         if split_urlcode_value == 200:
