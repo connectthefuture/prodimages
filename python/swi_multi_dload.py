@@ -265,8 +265,8 @@ def download_urls_bypo(ponum):
                 print "Downloaded {}".format(colorstyle_back_file.replace('-back','-clasp'))
             except IOError:
                 try:
-                   url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
-               except IOError:
+                    url_download_file(vendor_url_back,colorstyle_back_file.replace('-back','-Clasp'))
+                except IOError:
                     print "Failed {}{}".format(vendor_url,colorstyle_back_file.replace('-back','-Clasp'))
         # # Try to remove empty dirs
         # try:
