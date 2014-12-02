@@ -5,7 +5,7 @@ def normalize_json_tounicode(filename):
     from kitchen.text.converters import getwriter, to_unicode, to_unicode
     import json
     json_data = json.load(open(filename))
-    data = {}
+    data = []
     for row in json_data:
         datarow = {}
         for k,v in row.items():
@@ -21,14 +21,15 @@ def normalize_json_tounicode(filename):
                 k = to_unicode(k)
             #print type(v), type(k)
             datarow[k] = v 
-        data[to_unicode(row[k])] = datarow
+        #data[to_unicode(row[k])] = datarow
+        data.append(datarow)
     return data
 
 def normalize_json_tobytes(filename):
     from kitchen.text.converters import getwriter, to_bytes, to_unicode
     import json
     json_data = json.load(open(filename))
-    data = {}
+    data = []
     for row in json_data:
         datarow = {}
         for k,v in row.items():
@@ -44,7 +45,8 @@ def normalize_json_tobytes(filename):
                 k = to_bytes(k)
             #print type(v), type(k)
             datarow[k] = v 
-        data[to_bytes(row[k])] = datarow
+        #data[to_bytes(row[k])] = datarow
+        data.append(datarow)
     return data
 
 def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/'):
@@ -90,19 +92,34 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
 
 def iterate_post_data_kv(data):
     import json
-    for key,val in data.iteritems():
-        for k,v in val.iteritems():
-            try:
-                #jsondata = json.dumps({key: {k: v} })
-                jsondata = json.dumps({k: v})
-                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
-                if response.status_code == 200:
-                    pass
-                else:
-                    print response.status_code, ' ERROR', response.text, '\n\t', jsondata
-                #print jsondata
-            except KeyError:
-                print 'KeyError', k, v, key,
+    if type(data) == dict:
+        for key,val in data.iteritems():
+            for k,v in val.iteritems():
+                try:
+                    #jsondata = json.dumps({key: {k: v} })
+                    jsondata = json.dumps({k: v})
+                    response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
+                    if response.status_code == 200:
+                        pass
+                    else:
+                        print response.status_code, ' ERROR', response.text, '\n\t', jsondata
+                    #print jsondata
+                except KeyError:
+                    print 'KeyError', k, v, key,
+    elif type(data) == list:
+        for val in data:
+            for k,v in val.iteritems():
+                try:
+                    #jsondata = json.dumps({key: {k: v} })
+                    jsondata = json.dumps({k: v})
+                    response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
+                    if response.status_code == 200:
+                        pass
+                    else:
+                        print response.status_code, ' ERROR', response.text, '\n\t', jsondata
+                    #print jsondata
+                except KeyError:
+                    print 'KeyError', k, v,
     return
 
 

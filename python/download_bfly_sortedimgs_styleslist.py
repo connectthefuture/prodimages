@@ -60,9 +60,9 @@ def main(styleslist=None, dest_dir=None, primary_only=None, out_dir_structure=No
 
     # Define the output directory structure of the downloaded files
     if not out_dir_structure:
-        out_dir_structure = 'allSeparateAlt'
-    elif out_dir_structure == 'groupByStyle':
         out_dir_structure = 'groupByStyle'
+    elif out_dir_structure == 'allSeparateAlt':
+        out_dir_structure = 'allSeparateAlt'
     else:
         pass
 
