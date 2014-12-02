@@ -99,7 +99,7 @@ def iterate_post_data_kv(data):
                 if response.status_code == 200:
                     pass
                 else:
-                    print response.status_code, ' ERROR', response.request
+                    print response.status_code, ' ERROR', response.text, '\n\t', jsondata
                 #print jsondata
             except KeyError:
                 print 'KeyError', k, v, key,
