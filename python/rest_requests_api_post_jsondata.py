@@ -29,7 +29,7 @@ def post_to_api(data=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/'
     import json, requests
     url = 'http://' + host + api_path + api_endpoint
     headers = {'Content-Type': 'application/json'}
-    res = requests.request(method, url, headers=headers, data=data)
+    res = requests.post(url, headers=headers, data=data)
     return res
 
 
@@ -53,7 +53,8 @@ def main(filename=None):
     for key,val in data.iteritems():
         for k,v in val.iteritems():
             try:
-                jsondata = json.dumps({key: {k: v} })
+                #jsondata = json.dumps({key: {k: v} })
+                jsondata = json.dumps({k: v})
                 response = post_to_api(data=jsondata, api_endpoint='looklet-shot-list/', method='POST')
                 if response.status_code == 200:
                     pass
