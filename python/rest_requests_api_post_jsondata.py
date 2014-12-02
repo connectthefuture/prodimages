@@ -29,24 +29,37 @@ def post_to_api(data=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/'
     import json, requests
     url = 'http://' + host + api_path + api_endpoint
     headers = {'Content-Type': 'application/json'}
-    res = requests.get(url, method=method, headers=headers, data=payload)
-    return res.status_code
+    res = requests.request(url, method=method, headers=headers, data=data)
+    return res
 
 
 ########     RUN      ##########
-def main():
-    import __builtin__, json, yaml, re, datetime
+def main(filename=None):
+    import __builtin__, json, yaml, re, datetime, sys
+    from os import path
     today = datetime.date.strftime(datetime.date.today(), '%Y-%m-%d')
-    filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
+    if not filename:
+        try:
+            filename = sys.argv[1]
+            if path.isfile(filename):
+                pass
+            else:
+                filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
+        except:
+            filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
+        
     print filename
     data=normalize_unicode_json_tobytes(filename)
     #print json.dumps(data.items())
     for key,val in data.iteritems():
         for k,v in val.iteritems():
             try:
-                jsondata = json.dumps({key:
-                    {k: v}
-                    }) 
+                jsondata = json.dumps({key: {k: v} })
+                response = post_to_api(data=jsondata, api_endpoint='looklet-shot-list/', method='POST')
+                if response.status_code == 200:
+                    pass
+                else:
+                    print response.status_code, ' ERROR', response.text
                 #print jsondata
             except KeyError:
                 print 'KeyError', k, v, key,
