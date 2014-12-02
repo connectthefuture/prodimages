@@ -107,19 +107,22 @@ def iterate_post_data_kv(data):
                 except KeyError:
                     print 'KeyError', k, v, key,
     elif type(data) == list:
+        from collections import defaultdict
+        
         for val in data:
-            for k,v in val.iteritems():
-                try:
-                    #jsondata = json.dumps({key: {k: v} })
-                    jsondata = json.dumps({k: v})
-                    response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
-                    if response.status_code == 200:
-                        pass
-                    else:
-                        print response.status_code, ' ERROR', response.text, '\n\t', jsondata
-                    #print jsondata
-                except KeyError:
-                    print 'KeyError', k, v,
+            dd = defaultdict(list)
+            [ dd[k].append(v) for k,v in val.iteritems() if val[k] ] 
+            try:
+                #jsondata = json.dumps({key: {k: v} })
+                jsondata = json.dumps(dd)
+                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
+                if response.status_code == 200:
+                    pass
+                else:
+                    print response.status_code, ' ERROR', response.text, '\n\t', jsondata
+                #print jsondata
+            except KeyError:
+                print 'KeyError', k, v,
     return
 
 
