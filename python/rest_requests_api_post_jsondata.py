@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def normalize_unicode_json_tobytes(filename):
+def normalize_json_tounicode(filename):
     from kitchen.text.converters import getwriter, to_unicode, to_unicode
     import json
     json_data = json.load(open(filename))
@@ -9,9 +9,9 @@ def normalize_unicode_json_tobytes(filename):
     for row in json_data:
         datarow = {}
         for k,v in row.items():
-            if type(v) == unicode:
+            if type(v) == str:
                 v = to_unicode(v)
-            if type(k) == unicode:
+            if type(k) == str:
                 k = to_unicode(k)
             if type(v) == int:
                 v = str(v)
@@ -24,6 +24,28 @@ def normalize_unicode_json_tobytes(filename):
         data[to_unicode(row[k])] = datarow
     return data
 
+def normalize_json_tobytes(filename):
+    from kitchen.text.converters import getwriter, to_bytes, to_unicode
+    import json
+    json_data = json.load(open(filename))
+    data = {}
+    for row in json_data:
+        datarow = {}
+        for k,v in row.items():
+            if type(v) == unicode:
+                v = to_bytes(v)
+            if type(k) == unicode:
+                k = to_bytes(k)
+            if type(v) == int:
+                v = str(v)
+                v = to_bytes(v)
+            if type(k) == int:
+                k = str(k)
+                k = to_bytes(k)
+            #print type(v), type(k)
+            datarow[k] = v 
+        data[to_bytes(row[k])] = datarow
+    return data
 
 def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/'):
     import json, requests
@@ -65,6 +87,25 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
         if res.status_code < 400:
             return res
 
+
+def iterate_post_data_kv(data):
+    import json
+    for key,val in data.iteritems():
+        for k,v in val.iteritems():
+            try:
+                #jsondata = json.dumps({key: {k: v} })
+                jsondata = json.dumps({k: v})
+                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
+                if response.status_code == 200:
+                    pass
+                else:
+                    print response.status_code, ' ERROR', response.text, '\n\t', jsondata
+                #print jsondata
+            except KeyError:
+                print 'KeyError', k, v, key,
+    return
+
+
 ########     RUN      ##########
 def main(filename=None):
     import __builtin__, json, yaml, re, datetime, sys
@@ -80,21 +121,10 @@ def main(filename=None):
         except:
             filename='/var/www/srv/media/feeds/{0}_LookletShotListImportJSON.json'.format(today)
     #print filename
-    data=normalize_unicode_json_tobytes(filename)
+    data=normalize_json_tobytes(filename)
     #print json.dumps(data.items())
-    for key,val in data.iteritems():
-        for k,v in val.iteritems():
-            try:
-                #jsondata = json.dumps({key: {k: v} })
-                jsondata = json.dumps({k: v})
-                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
-                if response.status_code == 200:
-                    pass
-                else:
-                    print response.status_code, ' ERROR', response.text
-                #print jsondata
-            except KeyError:
-                print 'KeyError', k, v, key,
+    result = iterate_post_data_kv(data)
+    print result
 
 
 if __name__ == '__main__':
