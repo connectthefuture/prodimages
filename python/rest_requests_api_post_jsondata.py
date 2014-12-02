@@ -56,7 +56,7 @@ def main(filename=None):
             try:
                 #jsondata = json.dumps({key: {k: v} })
                 jsondata = json.dumps({k: v})
-                response = post_to_api(data=jsondata, api_endpoint='looklet-shot-list/', method='POST')
+                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/', method='POST')
                 if response.status_code == 200:
                     pass
                 else:
