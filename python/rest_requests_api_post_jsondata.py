@@ -89,6 +89,10 @@ def main(filename=None):
 
 
 if __name__ == '__main__':
+    import __builtin__, json, yaml, re, datetime, sys
+    from os import path
+    today = datetime.date.strftime(datetime.date.today(), '%Y-%m-%d')
+    #filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
     main()
     
     

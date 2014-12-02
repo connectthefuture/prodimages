@@ -233,7 +233,7 @@ for k,v in marketplace_styles.iteritems():
             headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
             try:
                 print image_url, destpath #.split('/' )[-1].replace('.jpg','_1200.jpg')
-                res = requests.get(image_url, stream=True, timeout=1, headers=headers)
+                res = requests.get(image_url, stream=False, timeout=5, headers=headers)
                 print 'ALMOST'
                 urlcode_value = res.status_code
                 print urlcode_value
