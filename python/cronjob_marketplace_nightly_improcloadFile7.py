@@ -21,9 +21,9 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, 
     # or None('not') from vendid and All From other vendors
     # or comment out for All from All incomplete
     # Usually comment out for everything but allows to exclude slow and redundant vendors info
-    vendid = 'SWI'
+    #vendid = 'SWI'
     #if vendid:
-    notvendor='not'
+    #notvendor='not'
     #############################
 
     connection = orcl_engine.connect()
