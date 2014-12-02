@@ -25,14 +25,14 @@ def normalize_unicode_json_tobytes(filename):
     return data
 
 
-def post_to_api(data=None, params=None, method=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/', api_endpoint='looklet-shot-list/'):
+def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/'):
     import json, requests
     url = 'http://' + host + api_path + api_endpoint
     headers = {'Content-Type': 'application/json; charset=utf-8', 
                     'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0'
                     }
                     ## 'User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'
-    if data and not method:
+    if data and not method and not params:
         try:
             res = requests.post(url, headers=headers, data=data)
             print 'POST request succeeded to -->', url 
@@ -78,7 +78,7 @@ def main(filename=None):
             try:
                 #jsondata = json.dumps({key: {k: v} })
                 jsondata = json.dumps({k: v})
-                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/', method='POST')
+                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
                 if response.status_code == 200:
                     pass
                 else:
