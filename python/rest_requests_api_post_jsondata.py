@@ -35,25 +35,35 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
     if data and not method and not params:
         try:
             res = requests.post(url, headers=headers, data=data)
-            print 'POST request succeeded to -->', url 
+            if res.status_code < 400:
+                print 'POST request succeeded to -->', url 
+            else:
+                print 'POST request Failed to -->', url , ' with Code ', res.status_code                
             return res
         except:
             print 'POST failed, Trying to PUT to -->', url 
             try:
                 res = requests.put(url, headers=headers, data=data)
-                print 'Try 2 PUT request succeeded to -->', url
+                if res.status_code < 400:
+                    print 'Try 2 PUT request succeeded to -->', url
+                else:
+                    print 'PUT request Failed to -->', url , ' with Code ', res.status_code     
                 return res
             except:
                 print '2nd Transmit Attempt using PUT failed to -->', url 
                 return False
     elif method and data:
         res = requests.request(method, url, headers=headers, data=data)
-        print 'Sent Custom ', method, ' Request to --> ', url
+        if res.status_code < 400:
+            print 'Sent Custom ', method, ' Request to --> ', url
+        else:
+            print 'Failed Custom ', method, ' Request to --> ', url
         return res
     elif not data:
         print 'No data payload included in request issuing GET for --> ' , url
         res = requests.get(url, headers=headers, params=params)
-        return res
+        if res.status_code < 400:
+            return res
 
 ########     RUN      ##########
 def main(filename=None):
