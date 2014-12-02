@@ -21,7 +21,7 @@ def normalize_unicode_json_tobytes(filename):
                 k = to_bytes(k)
             #print type(v), type(k)
             datarow[k] = v 
-        data[row[k]] = datarow
+        data[to_bytes(row[k])] = datarow
     return data
 
 
@@ -44,9 +44,9 @@ def main(filename=None):
             if path.isfile(filename):
                 pass
             else:
-                filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
+                filename='/var/www/srv/media/feeds/{0}_LookletShotListImportJSON.json'.format(today)
         except:
-            filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
+            filename='/var/www/srv/media/feeds/{0}_LookletShotListImportJSON.json'.format(today)
     print filename
     data=normalize_unicode_json_tobytes(filename)
     #print json.dumps(data.items())
