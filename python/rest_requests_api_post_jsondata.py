@@ -25,13 +25,35 @@ def normalize_unicode_json_tobytes(filename):
     return data
 
 
-def post_to_api(data=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/', api_endpoint='looklet-shot-list/', method=None):
+def post_to_api(data=None, params=None, method=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/', api_endpoint='looklet-shot-list/'):
     import json, requests
     url = 'http://' + host + api_path + api_endpoint
-    headers = {'Content-Type': 'application/json'}
-    res = requests.post(url, headers=headers, data=data)
-    return res
-
+    headers = {'Content-Type': 'application/json; charset=utf-8', 
+                    'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0'
+                    }
+                    ## 'User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'
+    if data and not method:
+        try:
+            res = requests.post(url, headers=headers, data=data)
+            print 'POST request succeeded to -->', url 
+            return res
+        except:
+            print 'POST failed, Trying to PUT to -->', url 
+            try:
+                res = requests.put(url, headers=headers, data=data)
+                print 'Try 2 PUT request succeeded to -->', url
+                return res
+            except:
+                print '2nd Transmit Attempt using PUT failed to -->', url 
+                return False
+    elif method and data:
+        res = requests.request(method, url, headers=headers, data=data)
+        print 'Sent Custom ', method, ' Request to --> ', url
+        return res
+    elif not data:
+        print 'No data payload included in request issuing GET for --> ' , url
+        res = requests.get(url, headers=headers, params=params)
+        return res
 
 ########     RUN      ##########
 def main(filename=None):
