@@ -80,7 +80,7 @@ def main(styleslist=None, dest_dir=None, primary_only=None, out_dir_structure=No
         ## 1 Change the dest dir then create it if necessary for this file based on out_dir_structure parameter
         if out_dir_structure == 'groupByStyle':
             dest_dir = os.path.join(dest_dir, colorstyle)
-            dest_dir_style = destdir
+            dest_dir_style = dest_dir
         ## Create the dest dir if not exists
         if os.path.isdir(dest_dir):
             pass
