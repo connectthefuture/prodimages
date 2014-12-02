@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def normalize_unicode_json_tobytes(filename):
-    from kitchen.text.converters import getwriter, to_bytes, to_unicode
+    from kitchen.text.converters import getwriter, to_unicode, to_unicode
     import json
     json_data = json.load(open(filename))
     data = {}
@@ -10,18 +10,18 @@ def normalize_unicode_json_tobytes(filename):
         datarow = {}
         for k,v in row.items():
             if type(v) == unicode:
-                v = to_bytes(v)
+                v = to_unicode(v)
             if type(k) == unicode:
-                k = to_bytes(k)
+                k = to_unicode(k)
             if type(v) == int:
                 v = str(v)
-                v = to_bytes(v)
+                v = to_unicode(v)
             if type(k) == int:
                 k = str(k)
-                k = to_bytes(k)
+                k = to_unicode(k)
             #print type(v), type(k)
             datarow[k] = v 
-        data[to_bytes(row[k])] = datarow
+        data[to_unicode(row[k])] = datarow
     return data
 
 
