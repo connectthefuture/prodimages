@@ -25,11 +25,11 @@ def normalize_unicode_json_tobytes(filename):
     return data
 
 
-def post_to_api(data=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/', api_endpoint='looklet-shot-list/', method='POST'):
+def post_to_api(data=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/', api_endpoint='looklet-shot-list/', method=None):
     import json, requests
     url = 'http://' + host + api_path + api_endpoint
     headers = {'Content-Type': 'application/json'}
-    res = requests.request(url, method=method, headers=headers, data=data)
+    res = requests.request(method, url, headers=headers, data=data)
     return res
 
 
