@@ -9,11 +9,11 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
     if not email_address:
         email_address  = 'john.bragato@bluefly.com'
         email_password = '0zeroseven'
-    ### directory where to save attachments (default is current dir)
-#    testdev='/Users/johnb/Dropbox/DEVROOT/var/www/srv/media/feeds'
-#    if os.path.isdir(testdev):
-#        download_dir = testdev
-#    elif
+        ### directory where to save attachments (default is current dir)
+    #    testdev='/Users/johnb/Dropbox/DEVROOT/var/www/srv/media/feeds'
+    #    if os.path.isdir(testdev):
+    #        download_dir = testdev
+    #    elif
     if not download_dir:
         download_dir = '/var/www/srv/media/feeds'
     else:

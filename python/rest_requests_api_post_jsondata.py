@@ -47,7 +47,6 @@ def main(filename=None):
                 filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
         except:
             filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
-        
     print filename
     data=normalize_unicode_json_tobytes(filename)
     #print json.dumps(data.items())
