@@ -19,17 +19,17 @@ access_type = 'app_folder'
 import dropbox
 import webbrowser
 from dropbox import client, rest, session
-import keychain
+#import keychain
 import pickle
-import console
+i#mport # console
 
 def get_request_token():
-    console.clear()
+    # console.clear()
     print 'Getting request token...'    
     sess = session.DropboxSession(app_key, app_secret, access_type)
     request_token = sess.obtain_request_token()
     url = sess.build_authorize_url(request_token)
-    console.clear()
+    # console.clear()
     webbrowser.open(url, modal=True)
     return request_token
 
@@ -37,7 +37,7 @@ def get_access_token(token_str=None):
     if token_str:
         pass
     else:
-        token_str = keychain.get_password('dropbox', app_key)
+        token_str = globals()['token_str']  ## keychain.get_password('dropbox', app_key)
     if token_str:
         key, secret = pickle.loads(token_str)
         return session.OAuthToken(key, secret)
