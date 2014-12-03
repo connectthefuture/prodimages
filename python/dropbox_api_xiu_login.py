@@ -1,14 +1,17 @@
 # YOU NEED TO INSERT YOUR APP KEY AND SECRET BELOW!
 # Go to dropbox.com/developers/apps to create an app.
 
-app_key = 'flefsjl4w8ts320'
-app_secret = 'o84bmkm9o777ow2'
+app_key = 'uvdjq3jebc0i77w'
+app_secret = 'hwm2he4b4kff3ow'
 #app_key = 'cmdxy6bmoqd95h9'
 #app_secret = 'rmm7ecwe8xwrqsy'
 
+username = 'julia.liao@xiu.com'  
+password = '880703'
+token_str = 'q6WP3pOY0k8AAAAAAAAABdQ4y9ejnypzqCoGxujZfznGySNzvN_7s8lgdgEdIhHt'
 # access_type can be 'app_folder' or 'dropbox', depending on
 # how you registered your app.
-access_type = 'app_folder'
+access_type = 'dropbox'
 
 import webbrowser
 from dropbox import client, rest, session
@@ -16,10 +19,9 @@ import keychain
 import pickle
 import console
 
-
 def get_request_token():
     console.clear()
-    print 'Getting request token...'	
+    print 'Getting request token...'    
     sess = session.DropboxSession(app_key, app_secret, access_type)
     request_token = sess.obtain_request_token()
     url = sess.build_authorize_url(request_token)
@@ -30,8 +32,8 @@ def get_request_token():
 def get_access_token():
     token_str = keychain.get_password('dropbox', app_key)
     if token_str:
-    	key, secret = pickle.loads(token_str)
-    	return session.OAuthToken(key, secret)
+        key, secret = pickle.loads(token_str)
+        return session.OAuthToken(key, secret)
     request_token = get_request_token()
     sess = session.DropboxSession(app_key, app_secret, access_type)
     access_token = sess.obtain_access_token(request_token)
@@ -54,6 +56,6 @@ def main():
     account_info = dropbox_client.account_info()
     print 'linked account:', account_info
 
-
 if __name__ == '__main__':
     main()
+

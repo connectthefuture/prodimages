@@ -1,25 +1,31 @@
-# YOU NEED TO INSERT YOUR APP KEY AND SECRET BELOW!
-# Go to dropbox.com/developers/apps to create an app.
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-app_key = 'flefsjl4w8ts320'
-app_secret = 'o84bmkm9o777ow2'
-#app_key = 'cmdxy6bmoqd95h9'
-#app_secret = 'rmm7ecwe8xwrqsy'
+#### SET AUTH VARS ####
+app_key = 'ikcr68gddbxed1t'
+app_secret = 'i4wjfxe0umdvx7c'
+token_str = 'aFNqVSoDKPEAAAAAAAAMcj7D7el49caS8gBocryRW99VpF-5K6_GRJi6pQZ5Ii2K'
 
+### Optional ###
+username = 'john.bragato@bluefly.com'  
+password = 'secret'
 # access_type can be 'app_folder' or 'dropbox', depending on
 # how you registered your app.
-access_type = 'app_folder'
+## folder name image_sync_api
+## app-name image-sync-api
+access_type = 'app_folder'  
 
+#### END VARS ####
+import dropbox
 import webbrowser
 from dropbox import client, rest, session
 import keychain
 import pickle
 import console
 
-
 def get_request_token():
     console.clear()
-    print 'Getting request token...'	
+    print 'Getting request token...'    
     sess = session.DropboxSession(app_key, app_secret, access_type)
     request_token = sess.obtain_request_token()
     url = sess.build_authorize_url(request_token)
@@ -27,11 +33,14 @@ def get_request_token():
     webbrowser.open(url, modal=True)
     return request_token
 
-def get_access_token():
-    token_str = keychain.get_password('dropbox', app_key)
+def get_access_token(token_str=None):
     if token_str:
-    	key, secret = pickle.loads(token_str)
-    	return session.OAuthToken(key, secret)
+        pass
+    else:
+        token_str = keychain.get_password('dropbox', app_key)
+    if token_str:
+        key, secret = pickle.loads(token_str)
+        return session.OAuthToken(key, secret)
     request_token = get_request_token()
     sess = session.DropboxSession(app_key, app_secret, access_type)
     access_token = sess.obtain_access_token(request_token)
@@ -53,7 +62,6 @@ def main():
     dropbox_client = get_client()
     account_info = dropbox_client.account_info()
     print 'linked account:', account_info
-
 
 if __name__ == '__main__':
     main()
