@@ -2,16 +2,42 @@
 # -*- coding: utf-8 -*-
 
 def normalize_json_tounicode(filename):
-    from kitchen.text.converters import getwriter, to_unicode, to_unicode
+    from kitchen.text.converters import getwriter, to_unicode
     import json
-    json_data = json.load(open(filename))
+    from collections import defaultdict
+    from os import path
     data = []
-    for row in json_data:
-        datarow = {}
-        for k,v in row.items():
-            if type(v) == str:
+    if type(filename) == 'str':
+        if path.isfile(filename):
+            jsondata = json.load(open(filename))
+            print 'FILE'
+            for row in jsondata:
+                datarow = {}
+                for k,v in row.items():
+                    if type(v) == unicode:
+                        v = to_unicode(v)
+                    if type(k) == unicode:
+                        k = to_unicode(k)
+                    if type(v) == int:
+                        v = str(v)
+                        v = to_unicode(v)
+                    if type(k) == int:
+                        k = str(k)
+                        k = to_unicode(k)
+                    #print type(v), type(k)
+                    datarow[k] = v 
+                #data[to_unicode(row[k])] = datarow
+                data.append(datarow)
+        else:
+            jsondata = json.dumps(filename)
+            print 'STR'
+    else:
+        jsondata = filename
+        datarow =  defaultdict(list) ##{}
+        for k,v in jsondata.iteritems():
+            if type(v) == unicode:
                 v = to_unicode(v)
-            if type(k) == str:
+            if type(k) == unicode:
                 k = to_unicode(k)
             if type(v) == int:
                 v = str(v)
@@ -20,19 +46,49 @@ def normalize_json_tounicode(filename):
                 k = str(k)
                 k = to_unicode(k)
             #print type(v), type(k)
-            datarow[k] = v 
+            datarow[k].append(v) 
+            #datarow[k] = v 
         #data[to_unicode(row[k])] = datarow
         data.append(datarow)
+        print 'ELSE', type(filename)
+    
     return data
 
+
 def normalize_json_tobytes(filename):
-    from kitchen.text.converters import getwriter, to_bytes, to_unicode
+    from kitchen.text.converters import getwriter, to_bytes
     import json
-    json_data = json.load(open(filename))
+    from collections import defaultdict
+    from os import path
     data = []
-    for row in json_data:
-        datarow = {}
-        for k,v in row.items():
+    if type(filename) == 'str':
+        if path.isfile(filename):
+            jsondata = json.load(open(filename))
+            print 'FILE'
+            for row in jsondata:
+                datarow = {}
+                for k,v in row.items():
+                    if type(v) == unicode:
+                        v = to_bytes(v)
+                    if type(k) == unicode:
+                        k = to_bytes(k)
+                    if type(v) == int:
+                        v = str(v)
+                        v = to_bytes(v)
+                    if type(k) == int:
+                        k = str(k)
+                        k = to_bytes(k)
+                    #print type(v), type(k)
+                    datarow[k] = v 
+                #data[to_bytes(row[k])] = datarow
+                data.append(datarow)
+        else:
+            jsondata = json.dumps(filename)
+            print 'STR'
+    else:
+        jsondata = filename
+        datarow =  defaultdict(list) ##{}
+        for k,v in jsondata.iteritems():
             if type(v) == unicode:
                 v = to_bytes(v)
             if type(k) == unicode:
@@ -44,9 +100,12 @@ def normalize_json_tobytes(filename):
                 k = str(k)
                 k = to_bytes(k)
             #print type(v), type(k)
-            datarow[k] = v 
+            datarow[k].append(v) 
+            #datarow[k] = v 
         #data[to_bytes(row[k])] = datarow
         data.append(datarow)
+        print 'ELSE', type(filename)
+    
     return data
 
 def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/'):
@@ -91,6 +150,7 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
 
 
 def iterate_post_data_kv(data):
+    from collections import defaultdict
     import json
     if type(data) == dict:
         for key,val in data.iteritems():
@@ -106,9 +166,7 @@ def iterate_post_data_kv(data):
                     #print jsondata
                 except KeyError:
                     print 'KeyError', k, v, key,
-    elif type(data) == list:
-        from collections import defaultdict
-        
+    elif type(data) == list:        
         for val in data:
             dd = defaultdict(list)
             [ dd[k].append(v) for k,v in val.iteritems() if val[k] ] 
@@ -154,7 +212,7 @@ if __name__ == '__main__':
     #filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
     main()
     
-    
+
 #import __builtin__, json,yaml,re
 #def json_file_parse(filename):
 #    data = []
