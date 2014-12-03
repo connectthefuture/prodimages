@@ -33,7 +33,7 @@ def normalize_json_tounicode(filename):
             print 'STR'
     else:
         jsondata = filename
-        datarow =  defaultdict(list) ##{}
+        datarow =  {} ##defaultdict(list) 
         for k,v in jsondata.iteritems():
             if type(v) == unicode:
                 v = to_unicode(v)
@@ -46,8 +46,8 @@ def normalize_json_tounicode(filename):
                 k = str(k)
                 k = to_unicode(k)
             #print type(v), type(k)
-            datarow[k].append(v) 
-            #datarow[k] = v 
+            #datarow[k].append(v) 
+            datarow[k] = v 
         #data[to_unicode(row[k])] = datarow
         data.append(datarow)
         print 'ELSE', type(filename)
@@ -87,7 +87,7 @@ def normalize_json_tobytes(filename):
             print 'STR'
     else:
         jsondata = filename
-        datarow =  defaultdict(list) ##{}
+        datarow =  {} ##defaultdict(list) ##{}
         for k,v in jsondata.iteritems():
             if type(v) == unicode:
                 v = to_bytes(v)
@@ -100,8 +100,8 @@ def normalize_json_tobytes(filename):
                 k = str(k)
                 k = to_bytes(k)
             #print type(v), type(k)
-            datarow[k].append(v) 
-            #datarow[k] = v 
+            #datarow[k].append(v) 
+            datarow[k] = v 
         #data[to_bytes(row[k])] = datarow
         data.append(datarow)
         print 'ELSE', type(filename)
