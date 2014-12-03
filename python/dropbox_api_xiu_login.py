@@ -1,61 +1,74 @@
 # YOU NEED TO INSERT YOUR APP KEY AND SECRET BELOW!
 # Go to dropbox.com/developers/apps to create an app.
 
-app_key = 'uvdjq3jebc0i77w'
-app_secret = 'hwm2he4b4kff3ow'
-#app_key = 'cmdxy6bmoqd95h9'
-#app_secret = 'rmm7ecwe8xwrqsy'
+def get_login_client():
+    import dropbox
+    # Get your app key and secret from the Dropbox developer website
+    #### SET AUTH VARS ####  
+    app_key = 'uvdjq3jebc0i77w'
+    app_secret = 'hwm2he4b4kff3ow'
+    #app_key = 'cmdxy6bmoqd95h9'
+    #app_secret = 'rmm7ecwe8xwrqsy'
 
-username = 'julia.liao@xiu.com'  
-password = '880703'
-token_str = 'q6WP3pOY0k8AAAAAAAAABdQ4y9ejnypzqCoGxujZfznGySNzvN_7s8lgdgEdIhHt'
-# access_type can be 'app_folder' or 'dropbox', depending on
-# how you registered your app.
-access_type = 'dropbox'
+    username = 'julia.liao@xiu.com'  
+    password = '880703'
+    token_str = 'q6WP3pOY0k8AAAAAAAAABdQ4y9ejnypzqCoGxujZfznGySNzvN_7s8lgdgEdIhHt'
+    # access_type can be 'app_folder' or 'dropbox', depending on
+    # how you registered your app.
+    access_type = 'dropbox'
 
-import webbrowser
-from dropbox import client, rest, session
-#import keychain
-import pickle
-# import console
+    #### END VARS ####
+    flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
+    authorize_url = flow.start()
+    # print '1. Go to: ' + authorize_url
+    # print '2. Click "Allow" (you might have to log in first)'
+    # print '3. Copy the authorization code.'
+    # code = raw_input("Enter the authorization code here: ").strip()
+    # This will fail if the user enters an invalid authorization code
+    if private_access_token:
+        access_token = private_access_token
+    else:
+        access_token, user_id = flow.finish(raw_input("Enter the authorization code here: ").strip())
 
-def get_request_token():
-    # console.clear()
-    print 'Getting request token...'    
-    sess = session.DropboxSession(app_key, app_secret, access_type)
-    request_token = sess.obtain_request_token()
-    url = sess.build_authorize_url(request_token)
-    # console.clear()
-    webbrowser.open(url, modal=True)
-    return request_token
+    client = dropbox.client.DropboxClient(access_token)
+    print 'linked account: ', client.account_info()
+    return client
 
-def get_access_token():
-    token_str = globals()['token_str']  ## keychain.get_password('dropbox', app_key)
-    if token_str:
-        key, secret = pickle.loads(token_str)
-        return session.OAuthToken(key, secret)
-    request_token = get_request_token()
-    sess = session.DropboxSession(app_key, app_secret, access_type)
-    access_token = sess.obtain_access_token(request_token)
-    token_str = pickle.dumps((access_token.key, access_token.secret))
-    keychain.set_password('dropbox', app_key, token_str)
-    return access_token
 
-def get_client():
-    access_token = get_access_token()
-    sess = session.DropboxSession(app_key, app_secret, access_type)
-    sess.set_token(access_token.key, access_token.secret)
-    dropbox_client = client.DropboxClient(sess)
-    return dropbox_client
+## Downloadfile from Dropbox to pwd
+def get_file_dropbox(client, filename, destdir=None):
+    folder_metadata = client.metadata('/')
+    if not destdir:
+        destdir = '.'
+    print 'metadata: ', folder_metadata
+    f, metadata = client.get_file_and_metadata('/' + filename.split('/')[-1])
+    out = open(os.path.join(destdir, filename.split('/')[-1]), 'wb')
+    out.write(f.read())
+    out.close()
+    print metadata
 
-def main():
-    # Demo if started run as a script...
-    # Just print the account info to verify that the authentication worked:
-    print 'Getting account info...'
-    dropbox_client = get_client()
-    account_info = dropbox_client.account_info()
-    print 'linked account:', account_info
+
+## Upload File from pwd to Dropbox
+def put_file_dropbox(client, filename, destdir=None):
+    if not destdir:
+        destdir = '/'
+    f = open(filename, 'rb')
+    response = client.put_file(destdir + filename.split('/')[-1], f)
+    print 'uploaded: ', response
+
+
+def main(filename=None):
+    import sys
+    if not filename:
+        try:
+            filename = sys.argv[1]            
+            client = get_login_client()
+            get_file_dropbox(client, filename, destdir=None)
+        except:
+            pass
+    else:
+        print 'No Valid File selected to sync'
+        pass
 
 if __name__ == '__main__':
     main()
-
