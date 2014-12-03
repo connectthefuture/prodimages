@@ -57,6 +57,18 @@ def put_file_dropbox(client, filename, destdir=None):
     print 'uploaded: ', response
 
 
-def main():
-    client = get_login_client()
-    get_file_dropbox(client, filename, destdir=None)
+def main(filename=None):
+    import sys
+    if not filename:
+        try:
+            filename = sys.argv[1]            
+            client = get_login_client()
+            get_file_dropbox(client, filename, destdir=None)
+        except:
+            pass
+    else:
+        print 'No Valid File selected to sync'
+        pass
+
+if __name__ == '__main__':
+    main()
