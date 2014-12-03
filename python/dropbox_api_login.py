@@ -20,9 +20,9 @@ authorize_url = flow.start()
 
 # This will fail if the user enters an invalid authorization code
 if private_access_token:
-	access_token = private_access_token
+    access_token = private_access_token
 else:
-	access_token, user_id = flow.finish(raw_input("Enter the authorization code here: ").strip())
+    access_token, user_id = flow.finish(raw_input("Enter the authorization code here: ").strip())
 
 client = dropbox.client.DropboxClient(access_token)
 print 'linked account: ', client.account_info()
