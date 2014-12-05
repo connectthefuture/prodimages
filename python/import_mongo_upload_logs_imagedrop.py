@@ -65,7 +65,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo_collection = mongo_db[collection_name]
 
     # Returns the '_id' key associated with the newly created document
-    new_insertobj_id = mongo_collection.update({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
+    new_insertobj_id = mongo_collection.({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
 
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
@@ -212,7 +212,7 @@ def main(dirname=None):
         except:
             dirname = '/mnt/Post_Complete/ImageDrop/bkup'
     ## Take the compiled k/v pairs and Format + Insert into Mongo DB
-    transfer_batches = parse_upload_log_files_indir()
+    transfer_batches = parse_upload_log_files_indir(dirname=dirname)
     for batch in transfer_batches:
         database_name = 'images'
         collection_name = 'uploads_imagedrop'
