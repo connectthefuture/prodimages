@@ -95,9 +95,10 @@ def normalize_json_tounicode(input_data):
         print 'ELSE', type(input_data)
     return data
 
-
 def main(dirname=None):
     import sys,os,re, sqlalchemy, json
+    regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
+    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     if not dirname:
         try:
             dirname = sys.argv[1]
@@ -107,6 +108,8 @@ def main(dirname=None):
     transfer_batches = parse_upload_log_files_indir()
     #[ r for r in transfer_batches.items() if r  ] 
     for batch in transfer_batches:
+        database_name = 'data_images'
+        collection_name = 'uploads_imagedrop'
         for row in batch:
             print row
             for k,v in row.items():
@@ -119,17 +122,15 @@ def main(dirname=None):
                 print query_insert
                 try:
                     ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-                    mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-                    connection = mysql_engine.connect()
-                    regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
-                    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
-                    if regex_valid_colorstyle_file.findall(row['timestamp']):
-                        connection.execute(query_insert)
-                        print "Successful Insert uploads_imagedrop --> {0}".format(k)
+                    #mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+                    #connection = mysql_engine.connect()
+                    if regex_valid_colorstyle_file.findall(row['filename']):
+                        #connection.execute(query_insert)
+                        print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
                     else:
-                        print "Database Table not Found for Inserting {0}".format(k)
+                        print "Database Table not Found for Inserting {0} --> {1}".format(k,v)
                 except sqlalchemy.exc.IntegrityError:
-                    print "Duplicate Entry {0}".format(k)
+                    print "Duplicate Entry {0} --> {1}".format(k,v)
                     pass
 
 
