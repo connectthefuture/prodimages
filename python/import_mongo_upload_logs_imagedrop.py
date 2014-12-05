@@ -228,10 +228,10 @@ def main(dirname=None):
                 print locals()
                 ## Perform the Insert to mongodb
                 #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
-                expr = { "$or": [ {"uploads_imagedrop": { "$exists": False }}, {"colorstyle": colorstyle}]}
+                #expr = { "$or": [ {"uploads_imagedrop": { "$exists": False }}, {"colorstyle": colorstyle}]}
 
-                for c in collection_name.find(expr):
-                    print [ k.upper() for k in sorted(c.keys()) ]
+                #for c in collection_name.find(expr):
+                #    print [ k.upper() for k in sorted(c.keys()) ]
                 if regex_valid_colorstyle_file.findall(row['filename']):
                     ## inserts only, not updates, will create multiple records if exists already
                     insert_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
