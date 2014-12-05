@@ -3,7 +3,7 @@
 
 def parse_upload_log_files_indir(dirname=None):
     import re, datetime, glob, os
-    dirname =  '/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup' ##'/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup'
+    #dirname =  '/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup' ##'/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup'
     regex_textfile = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(.txt)$')
     regex_datarow  = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(.txt)$')
     textfile_list  = glob.glob(os.path.join(dirname, 'LST*.txt'))
@@ -43,7 +43,7 @@ def parse_upload_log_files_indir(dirname=None):
             page += 1
 
 
-def insert_filerecord_pymongo_uploads_datatrack(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
+def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     # Insert a New Document
     import pymongo
     mongo = pymongo.Connection('127.0.0.1')
@@ -52,6 +52,20 @@ def insert_filerecord_pymongo_uploads_datatrack(database_name=None, collection_n
 
     # Returns the '_id' key associated with the newly created document
     new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
+
+    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
+    return new_insertobj_id
+
+
+def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
+    # Insert a New Document
+    import pymongo
+    mongo = pymongo.Connection('127.0.0.1')
+    mongo_db = mongo[database_name]
+    mongo_collection = mongo_db[collection_name]
+
+    # Returns the '_id' key associated with the newly created document
+    new_insertobj_id = mongo_collection.update({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
 
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
@@ -200,7 +214,7 @@ def main(dirname=None):
     ## Take the compiled k/v pairs and Format + Insert into Mongo DB
     transfer_batches = parse_upload_log_files_indir()
     for batch in transfer_batches:
-        database_name = 'data_images'
+        database_name = 'images'
         collection_name = 'uploads_imagedrop'
         for row in batch:
             print row
@@ -220,7 +234,7 @@ def main(dirname=None):
                     print [ k.upper() for k in sorted(c.keys()) ]
                 if regex_valid_colorstyle_file.findall(row['filename']):
                     ## inserts only, not updates, will create multiple records if exists already
-                    insert_filerecord_pymongo_uploads_datatrack(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
+                    insert_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
                     print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
                 else:
                     pass
