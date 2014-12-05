@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 def parse_upload_log_files_indir(dirname=None):
     import re, datetime, glob, os
     dirname =  '/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup' ##'/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup'
@@ -42,8 +43,61 @@ def parse_upload_log_files_indir(dirname=None):
             page += 1
 
 
+def normalize_json_tounicode(input_data):
+    from kitchen.text.converters import getwriter, to_unicode
+    import json
+    from collections import defaultdict
+    from os import path
+    data = []
+    if type(input_data) == 'str':
+        if path.isfile(input_data):
+            jsondata = json.load(open(input_data))
+            print 'FILE'
+            for row in jsondata:
+                datarow = {}
+                for k,v in row.items():
+                    if type(v) == unicode:
+                        v = to_unicode(v)
+                    if type(k) == unicode:
+                        k = to_unicode(k)
+                    if type(v) == int:
+                        v = str(v)
+                        v = to_unicode(v)
+                    if type(k) == int:
+                        k = str(k)
+                        k = to_unicode(k)
+                    #print type(v), type(k)
+                    datarow[k] = v 
+                #data[to_unicode(row[k])] = datarow
+                data.append(datarow)
+        else:
+            jsondata = json.dumps(input_data)
+            print 'STR'
+    else:
+        jsondata = input_data
+        datarow =  {} ##defaultdict(list) 
+        for k,v in jsondata.iteritems():
+            if type(v) == unicode:
+                v = to_unicode(v)
+            if type(k) == unicode:
+                k = to_unicode(k)
+            if type(v) == int:
+                v = str(v)
+                v = to_unicode(v)
+            if type(k) == int:
+                k = str(k)
+                k = to_unicode(k)
+            #print type(v), type(k)
+            #datarow[k].append(v) 
+            datarow[k] = v 
+        #data[to_unicode(row[k])] = datarow
+        data.append(datarow)
+        print 'ELSE', type(input_data)
+    return data
+
+
 def main(dirname=None):
-    import sys,os,re, sqlalchemy
+    import sys,os,re, sqlalchemy, json
     if not dirname:
         try:
             dirname = sys.argv[1]
@@ -61,23 +115,19 @@ def main(dirname=None):
                 alt = row['alt']
                 format = row['format']
                 timestamp = row['timestamp']
-                x =   """INSERT INTO uploads_imagedrop (batch_id, colorstyle, alt, format, timestamp) VALUES (%s, %s, %i, %s, %d)""", batch_id, colorstyle, alt, format, timestamp
-                print x
-
+                query_insert =   """INSERT INTO uploads_imagedrop (batch_id, colorstyle, alt, format, timestamp) VALUES (%s, %s, %i, %s, %d)""", batch_id, colorstyle, alt, format, timestamp
+                print query_insert
                 try:
                     ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
                     mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
                     connection = mysql_engine.connect()
                     regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
-                    regex_valid_colorstyle_file = re.compile(r'^(.*?)/.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
-
-                    if re.findall(regex_consigConvertedPNG, sqlinsert_choose_test):
-                        connection.execute("""INSERT INTO uploads_imagedrop (batch_id, colorstyle, alt, format, timestamp) VALUES (%s, %s, %i, %s, %d)""", batch_id, colorstyle, alt, format, timestamp)
+                    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
+                    if regex_valid_colorstyle_file.findall(row['timestamp']):
+                        connection.execute(query_insert)
                         print "Successful Insert uploads_imagedrop --> {0}".format(k)
-
                     else:
                         print "Database Table not Found for Inserting {0}".format(k)
-                #except OSError:
                 except sqlalchemy.exc.IntegrityError:
                     print "Duplicate Entry {0}".format(k)
                     pass
