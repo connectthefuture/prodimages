@@ -21,7 +21,7 @@ def parse_upload_log_files_indir(dirname=None):
                     ts = matches.groups()[2]
                     tsstr = "{0}-{1}-{2} {3}-{4}".format(ts[:4],ts[4:6],ts[6:8],ts[8:10],ts[10:12],ts[12:15])
                     timestamp = datetime.datetime.strptime(tsstr, '%Y-%m-%d %H-%M')
-                    insertrow['batch_id'] = ts
+                    insertrow['batchid'] = ts
                     insertrow['colorstyle'] = datarow.split()[-1][:9]
                     insertrow['filename'] = datarow.split()[-1]
                     insertrow['format'] = datarow.split('.')[-1]
@@ -43,16 +43,16 @@ def parse_upload_log_files_indir(dirname=None):
             page += 1
 
 
-def insert_filerecord_pymongo_uploads_datatrack(database_name=None, collection_name=None, batch_id=None, colorstyle=None, alt=None, format=None, timestamp=None):
+def insert_filerecord_pymongo_uploads_datatrack(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     # Insert a New Document
     import pymongo
     mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
-    
+
     # Returns the '_id' key associated with the newly created document
-    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batch_id': batch_id,'alt': alt,'timestamp': timestamp})
-    
+    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
+
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
 
@@ -81,7 +81,7 @@ def normalize_json_tounicode(input_data):
                         k = str(k)
                         k = to_unicode(k)
                     #print type(v), type(k)
-                    datarow[k] = v 
+                    datarow[k] = v
                 #data[to_unicode(row[k])] = datarow
                 data.append(datarow)
         else:
@@ -89,7 +89,7 @@ def normalize_json_tounicode(input_data):
             print 'STR'
     else:
         jsondata = input_data
-        datarow =  {} ##defaultdict(list) 
+        datarow =  {} ##defaultdict(list)
         for k,v in jsondata.iteritems():
             if type(v) == unicode:
                 v = to_unicode(v)
@@ -102,8 +102,8 @@ def normalize_json_tounicode(input_data):
                 k = str(k)
                 k = to_unicode(k)
             #print type(v), type(k)
-            #datarow[k].append(v) 
-            datarow[k] = v 
+            #datarow[k].append(v)
+            datarow[k] = v
         #data[to_unicode(row[k])] = datarow
         data.append(datarow)
         print 'ELSE', type(input_data)
@@ -128,7 +128,7 @@ def get_api_endpoints(self):
             self.objects = ''
         if not self.fmt:
             self.fmt = '?format=json'
-        
+
         url = os.path.join(self.hostname,self.apiroot,self.apiname,endpoint,self.objects,self.fmt)
         r = requests.get(url).json()
         endpoints = r.keys()
@@ -179,9 +179,9 @@ class MongodbClient:
 class ImageDropMongodbClient(MongodbClient):
     import pymongo
     #conn = pymongo.Connection('mongodb://tutorial-test:u3ZYh136@ds029187.mongolab.com:29187/tutorial-test')
-    def __init__(self, **kargs): ##  data, 
+    def __init__(self, **kargs): ##  data,
         #super(ImageDropMongodbClient, self).__init__()
-        self.batch_id   = self.item['batch_id']
+        self.batchid   = self.item['batchid']
         self.colorstyle = self.item['colorstyle']
         self.alt        = self.item['alt']
         self.format     = self.item['format']
@@ -206,7 +206,7 @@ def main(dirname=None):
             print row
             for k,v in row.items():
                 ## Build object of key/values for insert
-                batch_id = row['batch_id']
+                batchid = row['batchid']
                 colorstyle = row['colorstyle']
                 alt = row['alt']
                 format = row['format']
@@ -220,7 +220,7 @@ def main(dirname=None):
                     print [ k.upper() for k in sorted(c.keys()) ]
                 if regex_valid_colorstyle_file.findall(row['filename']):
                     ## inserts only, not updates, will create multiple records if exists already
-                    insert_filerecord_pymongo_uploads_datatrack(database_name=database_name, collection_name=collection_name, batch_id=batch_id, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
+                    insert_filerecord_pymongo_uploads_datatrack(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
                     print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
                 else:
                     pass
