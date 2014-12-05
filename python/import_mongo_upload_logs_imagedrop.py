@@ -180,7 +180,7 @@ class ImageDropMongodbClient(MongodbClient):
     import pymongo
     #conn = pymongo.Connection('mongodb://tutorial-test:u3ZYh136@ds029187.mongolab.com:29187/tutorial-test')
     def __init__(self, **kargs): ##  data, 
-        super(ImageDropMongodbClient, self).__init__()
+        #super(ImageDropMongodbClient, self).__init__()
         self.batch_id   = self.item['batch_id']
         self.colorstyle = self.item['colorstyle']
         self.alt        = self.item['alt']
