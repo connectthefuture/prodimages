@@ -202,6 +202,44 @@ class ImageDropMongodbClient(MongodbClient):
         self.timestamp  = self.item['timestamp']
 
 
+def main_update(dirname=None):
+    import sys,os,re, sqlalchemy, json
+    regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
+    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
+    if not dirname:
+        try:
+            dirname = sys.argv[1]
+        except:
+            dirname = '/mnt/Post_Complete/ImageDrop/bkup'
+    ## Take the compiled k/v pairs and Format + Insert into Mongo DB
+    transfer_batches = parse_upload_log_files_indir(dirname=dirname)
+    for batch in transfer_batches:
+        database_name = 'images'
+        collection_name = 'uploads_imagedrop'
+        for row in batch:
+            print row
+            for k,v in row.items():
+                ## Build object of key/values for insert
+                batchid = row['batchid']
+                colorstyle = row['colorstyle']
+                alt = row['alt']
+                format = row['format']
+                timestamp = row['timestamp']
+                print locals()
+                ## Perform the Insert to mongodb
+                #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
+                #expr = { "$or": [ {"uploads_imagedrop": { "$exists": False }}, {"colorstyle": colorstyle}]}
+
+                #for c in collection_name.find(expr):
+                #    print [ k.upper() for k in sorted(c.keys()) ]
+                if regex_valid_colorstyle_file.findall(row['filename']):
+                    ## inserts only, not updates, will create multiple records if exists already
+                    update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
+                    print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
+                else:
+                    pass
+
+
 def main(dirname=None):
     import sys,os,re, sqlalchemy, json
     regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
