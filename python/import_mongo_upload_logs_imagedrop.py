@@ -65,7 +65,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo_collection = mongo_db[collection_name]
 
     # Returns the '_id' key associated with the newly created document
-    new_insertobj_id = mongo_collection.update({'colorstyle': colorstyle, 'batchid': batchid}, {'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, upsert=True, multi=True)
+    new_insertobj_id = mongo_collection.update({'colorstyle': colorstyle}, {'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, upsert=True, multi=True)
 
 
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
@@ -218,7 +218,7 @@ def main_update(dirname=None):
         database_name = 'images'
         collection_name = 'uploads_imagedrop'
         for row in batch:
-            print row
+            #print row
             for k,v in row.items():
                 ## Build object of key/values for insert
                 batchid = row['batchid']
@@ -226,7 +226,7 @@ def main_update(dirname=None):
                 alt = row['alt']
                 format = row['format']
                 timestamp = row['timestamp']
-                print locals()
+                #print locals()
                 ## Perform the Insert to mongodb
                 #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
                 #expr = { "$or": [ {"uploads_imagedrop": { "$exists": False }}, {"colorstyle": colorstyle}]}
