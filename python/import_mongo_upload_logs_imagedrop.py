@@ -67,6 +67,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     # Returns the '_id' key associated with the newly created document
     new_insertobj_id = mongo_collection.update({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, upsert=True, multi=True)
 
+
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
 
