@@ -61,6 +61,8 @@ def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=
 def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     # Insert a New Document
     import pymongo, bson
+    from bson import Binary, Code
+    from bson import bson.json_util
     mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
