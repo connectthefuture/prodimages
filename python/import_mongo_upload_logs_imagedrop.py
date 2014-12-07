@@ -67,7 +67,9 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
 
     key = {'colorstyle': colorstyle}  #, 'alt': alt}
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
-    #data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
+    datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
+    if main_check(datarow=datarow) == True:
+        print 'Checked ', main_check
     data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}}
     mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], background=True)
     #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
