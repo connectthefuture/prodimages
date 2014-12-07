@@ -70,9 +70,9 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     key = {'colorstyle': colorstyle}  #, 'alt': alt}
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
-     
-    check = main_check(datarow=dumps(datarow))
-    if check == True:
+    key_str = key.keys()[0]
+    check = mongo_collection.find({key_str: colorstyle}).count()
+    if check:
         print 'REFRESH IT ', check
     else:
         print 'NEW IT ', check
