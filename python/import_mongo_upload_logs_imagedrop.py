@@ -63,9 +63,9 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
-
+    key = {'colorstyle': colorstyle}
     # Returns the '_id' key associated with the newly created document
-    new_insertobj_id = mongo_collection.update({'colorstyle': colorstyle , {'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}}, upsert=True)
+    new_insertobj_id = mongo_collection.update(key, {'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, {upsert=True})
     #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
     #new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, continue_on_error=True, upsert=True)
 
