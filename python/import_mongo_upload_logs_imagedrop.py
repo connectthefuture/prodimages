@@ -67,12 +67,12 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     key = {'colorstyle': colorstyle}
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     data = {'colorstyle': colorstyle'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
-    create_index([("colorstyle", pymongo.DESCENDING)], background=True)
+    mongo_collection.create_index([("colorstyle", pymongo.DESCENDING)], background=True)
     try:
         test= mongo_collection.findone(key, data)
     except TypeError:
         test = 'NEW'
-    if not test:
+    if test:
     # Returns the '_id' key associated with the newly created document
         new_insertobj_id = mongo_collection.update(key, data, upsert=True)
         #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
