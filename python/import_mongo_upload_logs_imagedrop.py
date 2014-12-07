@@ -60,7 +60,7 @@ def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=
 
 def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     # Insert a New Document
-    import pymongo
+    import pymongo, bson
     mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
@@ -69,7 +69,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
      
-    check = main_check(datarow=dict(datarow)):
+    check = main_check(datarow=bson.dumps(datarow))
     if check == True:
         print 'REFRESH IT ', check
     else:
