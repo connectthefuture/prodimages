@@ -69,7 +69,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
      
-    check = main_check(datarow=bson.dumps(datarow))
+    check = main_check(datarow=bson.json_util.dumps(datarow))
     if check == True:
         print 'REFRESH IT ', check
     else:
