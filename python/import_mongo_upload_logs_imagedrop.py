@@ -211,11 +211,12 @@ def main_check(datarow=None):
     database_name = 'images'
     collection_name = 'uploads_imagedrop'
     ## Build object of key/values for insert
-    batchid = datarow[0]['batchid']
-    colorstyle = datarow[0]['colorstyle']
-    alt = datarow[0]['alt']
-    format = datarow[0]['format']
-    timestamp = datarow[0]['timestamp']
+    print datarow
+    batchid = datarow['batchid']
+    colorstyle = datarow['colorstyle']
+    alt = datarow['alt']
+    format = datarow['format']
+    timestamp = datarow['timestamp']
     #print locals()
     ## Perform the Insert to mongodb
     #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
@@ -223,11 +224,11 @@ def main_check(datarow=None):
 
     #for c in collection_name.find(expr):
     #    print [ k.upper() for k in sorted(c.keys()) ]
-    if regex_valid_colorstyle_file.findall(datarow[0]['filename']):
+    if regex_valid_colorstyle_file.findall(datarow['filename']):
         ## inserts only, not updates, will create multiple records if exists already
         check = get_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
         if check >= 1:
-            print "Successful Insert to uploads_imagedrop {0} --> {1}".format(datarow[0])
+            print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
             return True, check
         else:
             return False, check
