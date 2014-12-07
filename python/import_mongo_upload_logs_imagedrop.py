@@ -90,14 +90,14 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
     key = 'colorstyle'
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
-    results = new_insertobj_id = mongo_collection.find({
-                                                        key: {
-                                                              '$elemMatch': {
-                                                                   key: key,
-                                                                   alt: { '$lt': 6 }
-                                                                   }
-                                                            }
-                                                        })
+    results = mongo_collection.find({
+                                    key: {
+                                          '$elemMatch': {
+                                               key: data.key,
+                                               alt: { '$lt': 6 }
+                                               }
+                                        }
+                                    })
     return results
 
 
