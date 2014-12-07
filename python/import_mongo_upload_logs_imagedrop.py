@@ -93,9 +93,9 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
 
     results = new_insertobj_id = mongo_collection.find({
                                                         key: {
-                                                              $elemMatch: {
+                                                              '$elemMatch': {
                                                                    key: data.key,
-                                                                   alt: { $lt: 6 }
+                                                                   alt: { '$lt': 6 }
                                                                    }
                                                             }
                                                         })
