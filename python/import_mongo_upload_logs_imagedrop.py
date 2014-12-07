@@ -65,7 +65,8 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo_collection = mongo_db[collection_name]
 
     key = {'colorstyle': colorstyle}
-    data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
+    #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
+    data = {'colorstyle': colorstyle'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp},
     try:
         test= mongo_collection.findone(key)
     except TypeError:
