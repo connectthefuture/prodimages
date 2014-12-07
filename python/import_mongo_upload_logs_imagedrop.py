@@ -84,16 +84,9 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
     key = 'colorstyle'
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
-    results = mongo_collection.find({
-                                    key: {
-                                          '$elemMatch': {
-                                               key: key,
-                                               alt: { '$lt': 6 }
-                                               }
-                                        }
-                                    })
+    results = mongo_collection.find({key: colorstyle}).count()
+    #return count of styles with the number found
     return results
-
 
 
 def normalize_json_tounicode(input_data):
@@ -148,31 +141,6 @@ def normalize_json_tounicode(input_data):
         print 'ELSE', type(input_data)
     return data
 
-def get_api_endpoints(self):
-        import requests
-        self.hostname   =   ''
-        self.apiroot    =   ''
-        self.apiname    =   ''
-        self.endpoint   =   ''
-        self.objects    =   ''
-        self.fmt        =   ''
-
-        if not self.hostname:
-            self.hostname = 'http://pm.bluefly.corp/manager/product/{0}'.format(self.apiname)
-        if not self.apiroot:
-            self.apiroot = 'api/mergecolorstyle.html'
-        if not self.apiname:
-            self.apiname = ''
-        if not self.objects:
-            self.objects = ''
-        if not self.fmt:
-            self.fmt = '?format=json'
-
-        url = os.path.join(self.hostname,self.apiroot,self.apiname,endpoint,self.objects,self.fmt)
-        r = requests.get(url).json()
-        endpoints = r.keys()
-        return endpoints, r
-
 
 class MongodbClient:
     import pymongo
@@ -225,6 +193,38 @@ class ImageDropMongodbClient(MongodbClient):
         self.alt        = self.item['alt']
         self.format     = self.item['format']
         self.timestamp  = self.item['timestamp']
+
+
+def main_check(datarows=None):
+    import sys,os,re, sqlalchemy, json
+    regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
+    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
+    database_name = 'images'
+    collection_name = 'uploads_imagedrop'
+    for row in datarow:
+        #print row
+        for k,v in row.items():
+            ## Build object of key/values for insert
+            batchid = row['batchid']
+            colorstyle = row['colorstyle']
+            alt = row['alt']
+            format = row['format']
+            timestamp = row['timestamp']
+            #print locals()
+            ## Perform the Insert to mongodb
+            #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
+            #expr = { "$or": [ {"uploads_imagedrop": { "$exists": False }}, {"colorstyle": colorstyle}]}
+
+            #for c in collection_name.find(expr):
+            #    print [ k.upper() for k in sorted(c.keys()) ]
+            if regex_valid_colorstyle_file.findall(row['filename']):
+                ## inserts only, not updates, will create multiple records if exists already
+                check = get_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
+                if check >= 1:
+                    print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
+                    return True, check
+                else:
+                    return False, check
 
 
 def main_update(dirname=None):
