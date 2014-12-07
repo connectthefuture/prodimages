@@ -52,7 +52,8 @@ def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=
 
     # Returns the '_id' key associated with the newly created document
     new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
-
+    #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
+    #new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, continue_on_error=True, upsert=True)
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
 
@@ -76,11 +77,22 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
         test = 'NEW'
     # Returns the '_id' key associated with the newly created document
     new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
-    #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
-    #new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, continue_on_error=True, upsert=True)
-
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
+
+
+def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
+    import pymongo
+    mongo = pymongo.Connection('127.0.0.1')
+    mongo_db = mongo[database_name]
+    mongo_collection = mongo_db[collection_name]
+    key = 'colorstyle'
+    #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
+    data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
+
+    results = new_insertobj_id = mongo_collection.find({key: { $in: [colorstyle, alt]}})
+    return results
+
 
 
 def normalize_json_tounicode(input_data):
