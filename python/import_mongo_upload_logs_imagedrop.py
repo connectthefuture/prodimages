@@ -201,7 +201,7 @@ def main_check(datarows=None):
     regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     database_name = 'images'
     collection_name = 'uploads_imagedrop'
-    for row in datarow:
+    for row in datarows:
         #print row
         for k,v in row.items():
             ## Build object of key/values for insert
