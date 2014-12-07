@@ -81,6 +81,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     return new_insertobj_id
 
 
+
 def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     import pymongo
     mongo = pymongo.Connection('127.0.0.1')
@@ -90,7 +91,14 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
 
-    results = new_insertobj_id = mongo_collection.find({key: { $in: [colorstyle, alt]}})
+    results = new_insertobj_id = mongo_collection.find({
+                                                        key: {
+                                                              $elemMatch: {
+                                                                   key: data.key,
+                                                                   alt: { $lt: 6 }
+                                                                   }
+                                                            }
+                                                        })
     return results
 
 
