@@ -69,7 +69,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     data = {'colorstyle': colorstyle'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
     create_index([("colorstyle", pymongo.DESCENDING)], background=True)
     try:
-        test= mongo_collection.findone(key)
+        test= mongo_collection.findone(key, data)
     except TypeError:
         test = 'NEW'
     if not test:
