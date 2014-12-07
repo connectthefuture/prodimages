@@ -211,7 +211,7 @@ def main_check(datarow=None):
     database_name = 'images'
     collection_name = 'uploads_imagedrop'
     ## Build object of key/values for insert
-    print datarow
+    #print datarow
     # batchid = datarow['batchid']
     # colorstyle = datarow['colorstyle']
     # alt = datarow['alt']
