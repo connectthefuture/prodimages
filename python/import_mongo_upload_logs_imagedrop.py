@@ -83,6 +83,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
         return new_insertobj_id
     else:
         print key, test
+        new_insertobj_id = mongo_collection.update(key, data, upsert=True)
         return key
 
 def normalize_json_tounicode(input_data):
