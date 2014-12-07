@@ -66,7 +66,8 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
 
     key = {'colorstyle': colorstyle}
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
-    data = {'colorstyle': colorstyle'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp},
+    data = {'colorstyle': colorstyle'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
+    create_index([("colorstyle", pymongo.DESCENDING)], background=True)
     try:
         test= mongo_collection.findone(key)
     except TypeError:
@@ -81,7 +82,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
         print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
         return new_insertobj_id
     else:
-        print key
+        print key, test
         return key
 
 def normalize_json_tounicode(input_data):
