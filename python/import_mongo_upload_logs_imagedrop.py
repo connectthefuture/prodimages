@@ -65,7 +65,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
 
-    key = 'colorstyle'
+    key = {'colorstyle': colorstyle}
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
     mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], background=True)
