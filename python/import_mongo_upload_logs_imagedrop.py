@@ -64,27 +64,24 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
 
-    key = {'colorstyle': colorstyle}
+    key = 'colorstyle'
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
-    mongo_collection.create_index([("colorstyle", pymongo.DESCENDING)], background=True)
+    mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], background=True)
     try:
-        test= mongo_collection.findone(key)
-        print 'Print TEST'
+        test= mongo_collection.distinct(key)
+        if test['colorstyle'] == colorstyle:
+            print 'Print TEST', test
     except TypeError:
         test = 'NEW'
     # Returns the '_id' key associated with the newly created document
-    new_insertobj_id = mongo_collection.update(key, data, upsert=True)
+    new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
     #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
     #new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, continue_on_error=True, upsert=True)
 
-
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
-    # else:
-    #     print key, test
-    #     new_insertobj_id = mongo_collection.update(key, data, upsert=True)
-    #     return key
+
 
 def normalize_json_tounicode(input_data):
     from kitchen.text.converters import getwriter, to_unicode
