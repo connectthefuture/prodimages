@@ -69,8 +69,8 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
      
-    check = main_check(datarow=dict(datarow)) == True:
-    if check:
+    check = main_check(datarow=dict(datarow)):
+    if check == True:
         print 'REFRESH IT ', check
     else:
         print 'NEW IT ', check
