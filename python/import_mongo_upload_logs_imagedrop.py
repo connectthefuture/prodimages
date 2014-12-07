@@ -5,28 +5,28 @@ def parse_upload_log_files_indir(dirname=None):
     import re, datetime, glob, os
     #dirname =  '/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup' ##'/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup'
     regex_textfile = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(.txt)$')
-    regex_datarow  = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(.txt)$')
+    regex_datarow = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(.txt)$')
     textfile_list  = glob.glob(os.path.join(dirname, 'LST*.txt'))
     data = {}
     page = 1
     for textfile in textfile_list:
         if regex_textfile.findall(textfile):
             matches = regex_textfile.match(textfile)
-            datarows = open(textfile).readlines()
+            datarow = open(textfile).readlines()
             insertbatch = []
-            for datarow in datarows[1:]:
-                datarow = datarow.strip('\n').strip('\r')
+            for datarowin datarow[1:]:
+                datarow= datarowstrip('\n').strip('\r')
                 insertrow = {}
                 try:
                     ts = matches.groups()[2]
                     tsstr = "{0}-{1}-{2} {3}-{4}".format(ts[:4],ts[4:6],ts[6:8],ts[8:10],ts[10:12],ts[12:15])
                     timestamp = datetime.datetime.strptime(tsstr, '%Y-%m-%d %H-%M')
                     insertrow['batchid'] = ts
-                    insertrow['colorstyle'] = datarow.split()[-1][:9]
-                    insertrow['filename'] = datarow.split()[-1]
-                    insertrow['format'] = datarow.split('.')[-1]
+                    insertrow['colorstyle'] = datarowsplit()[-1][:9]
+                    insertrow['filename'] = datarowsplit()[-1]
+                    insertrow['format'] = datarowsplit('.')[-1]
                     insertrow['timestamp'] = timestamp
-                    alttest = datarow.split('.')[-2].split('_')[1][-1]
+                    alttest = datarowsplit('.')[-2].split('_')[1][-1]
                     if alttest.isdigit():
                         insertrow['alt'] = int(alttest) + 1
                     elif alttest.islower():
@@ -100,7 +100,7 @@ def normalize_json_tounicode(input_data):
             jsondata = json.load(open(input_data))
             print 'FILE'
             for row in jsondata:
-                datarow = {}
+                datarow= {}
                 for k,v in row.items():
                     if type(v) == unicode:
                         v = to_unicode(v)
@@ -113,15 +113,14 @@ def normalize_json_tounicode(input_data):
                         k = str(k)
                         k = to_unicode(k)
                     #print type(v), type(k)
-                    datarow[k] = v
-                #data[to_unicode(row[k])] = datarow
-                data.append(datarow)
+                    datarowk] = v
+                #data[to_unicode(row[k])] = datarow                data.append(datarow
         else:
             jsondata = json.dumps(input_data)
             print 'STR'
     else:
         jsondata = input_data
-        datarow =  {} ##defaultdict(list)
+        datarow=  {} ##defaultdict(list)
         for k,v in jsondata.iteritems():
             if type(v) == unicode:
                 v = to_unicode(v)
@@ -134,10 +133,9 @@ def normalize_json_tounicode(input_data):
                 k = str(k)
                 k = to_unicode(k)
             #print type(v), type(k)
-            #datarow[k].append(v)
-            datarow[k] = v
-        #data[to_unicode(row[k])] = datarow
-        data.append(datarow)
+            #datarowk].append(v)
+            datarowk] = v
+        #data[to_unicode(row[k])] = datarow        data.append(datarow
         print 'ELSE', type(input_data)
     return data
 
@@ -195,13 +193,13 @@ class ImageDropMongodbClient(MongodbClient):
         self.timestamp  = self.item['timestamp']
 
 
-def main_check(datarows=None):
+def main_check(datarow=None):
     import sys,os,re, sqlalchemy, json
     regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
     regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     database_name = 'images'
     collection_name = 'uploads_imagedrop'
-    for row in datarows:
+    for row in datarow:
         #print row
         for k,v in row.items():
             ## Build object of key/values for insert
