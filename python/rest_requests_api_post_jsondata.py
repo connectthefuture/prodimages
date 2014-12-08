@@ -206,8 +206,13 @@ def main(filename=None):
     #print filename
     data=normalize_json_tounicode(filename)
     #print json.dumps(data.items())
-    result = iterate_post_data_kv(data)
-    print result
+    #result = iterate_post_data_kv(data)
+    response = []
+    for row in data:
+        res = post_to_api(data=json.dumps(row), api_endpoint='looklet-shot-list/')
+        print res
+        response.append(res)
+    return response
 
 
 if __name__ == '__main__':
