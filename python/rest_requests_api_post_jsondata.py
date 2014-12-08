@@ -7,7 +7,7 @@ def normalize_json_tounicode(filename):
     from collections import defaultdict
     from os import path
     data = []
-    if type(filename) == 'str':
+    if type(filename) == str:
         if path.isfile(filename):
             jsondata = json.load(open(filename))
             print 'FILE'
@@ -31,7 +31,7 @@ def normalize_json_tounicode(filename):
         else:
             jsondata = json.dumps(filename)
             print 'STR'
-    else:
+    elif type(filename) == dict:
         jsondata = filename
         datarow =  {} ##defaultdict(list) 
         for k,v in jsondata.iteritems():
@@ -61,7 +61,7 @@ def normalize_json_tobytes(filename):
     from collections import defaultdict
     from os import path
     data = []
-    if type(filename) == 'str':
+    if type(filename) == str:
         if path.isfile(filename):
             jsondata = json.load(open(filename))
             print 'FILE'
@@ -85,7 +85,7 @@ def normalize_json_tobytes(filename):
         else:
             jsondata = json.dumps(filename)
             print 'STR'
-    else:
+    elif type(filename) == dict:
         jsondata = filename
         datarow =  {} ##defaultdict(list) ##{}
         for k,v in jsondata.iteritems():
