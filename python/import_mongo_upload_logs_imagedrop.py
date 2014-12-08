@@ -77,10 +77,8 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
         data = { "$set":{
                         'format': format,
                         'batchid': batchid, 
-                        '$inc': {'upload_ct': 1}, 
-                        'timestamp': {
-                            '$cond': [ { '$lte': [ "$$timestamp", timestamp ] }, timestamp, "$$timestamp" ]
-                            }
+                        'upload_ct': {'$inc': {'upload_ct': 1}}, 
+                        'timestamp': { '$max': { 'timestamp': timestamp}}
                         }
                     }
         return check
