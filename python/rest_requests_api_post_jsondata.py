@@ -175,7 +175,8 @@ def iterate_post_data_kv(data):
                 #jsondata = json.dumps({key: {k: v} })
                 jsondata = json.dumps(r)
                 response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
-                if response != False and response.status_code == 200:
+                if response != False: #and response.status_code == 200:
+                    print response
                     pass
                 else:
                     print response.status_code, ' ERROR LIST', response.text, '\n\t', jsondata
