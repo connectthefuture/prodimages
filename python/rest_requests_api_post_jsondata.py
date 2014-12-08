@@ -116,6 +116,7 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
                     }
                     ## 'User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'
     if data and not method and not params:
+        print data
         try:
             res = requests.post(url, headers=headers, data=data)
             if res.status_code < 400:
