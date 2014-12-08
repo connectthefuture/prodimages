@@ -124,7 +124,7 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
             else:
                 print 'POST request Failed to -->', url , ' with Code ', res.status_code, res.text                
             return res
-        except:
+        except IndexError:
             print 'POST failed, Trying to PUT to -->', url, data
             try:
                 res = requests.put(url, headers=headers, data=data)
@@ -133,7 +133,7 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
                 else:
                     print 'PUT request Failed to -->', url , ' with Code ', res.status_code, res.text     
                 return res
-            except:
+            except IndexError:
                 print '2nd Transmit Attempt using PUT failed to -->', url, data
                 return False
     elif method and data:
@@ -160,7 +160,7 @@ def iterate_post_data_kv(data):
                 try:
                     #jsondata = json.dumps({key: {k: v} })
                     jsondata = json.dumps({k: v})
-                    print jsondata
+                    print jsondata, 'JSON DICT'
                     response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
                     if response.status_code == 200:
                         pass
@@ -170,16 +170,16 @@ def iterate_post_data_kv(data):
                 except KeyError:
                     print 'KeyError', k, v, key,
     elif type(data) == list:        
-        for val in data:
-            dd = defaultdict(list)
-            r = [ dd[k].append(v) for k,v in val.iteritems() if val[k] ] 
+        for row in data:
+            #dd = defaultdict(list)
+            #r = [ dd[k].append(v) for k,v in val.iteritems() if val[k] ] 
             print r
             try:
                 #jsondata = json.dumps({key: {k: v} })
-                jsondata = json.dumps(r)
-                response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
+                
+                response = post_to_api(data=json.dumps(row), api_endpoint='looklet-shot-list/')
                 if response != False: #and response.status_code == 200:
-                    print response
+                    print response, 'LIST'
                     pass
                 else:
                     pass #print response.status_code, ' ERROR LIST', response.text, '\n\t', jsondata
@@ -201,10 +201,10 @@ def main(filename=None):
                 pass
             else:
                 filename='/var/www/srv/media/feeds/{0}_LookletShotListImportJSON.json'.format(today)
-        except:
+        except IndexError:
             filename='/var/www/srv/media/feeds/{0}_LookletShotListImportJSON.json'.format(today)
     #print filename
-    data=normalize_json_tobytes(filename)
+    data=normalize_json_tounicode(filename)
     #print json.dumps(data.items())
     result = iterate_post_data_kv(data)
     print result
