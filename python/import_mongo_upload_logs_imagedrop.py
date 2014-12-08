@@ -88,11 +88,11 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
         print 'NEW IT ', check
         data = { "$set":{'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
-        mongo_collection.create_index("colorstyle", unique=True, sparse=False, background=True)
-        #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
-        new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
-        print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
-        return new_insertobj_id
+    mongo_collection.create_index("colorstyle", unique=True, sparse=False, background=True)
+    #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
+    new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
+    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
+    return new_insertobj_id
 
 
 def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
