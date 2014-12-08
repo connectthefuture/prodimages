@@ -121,19 +121,19 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
             if res.status_code < 400:
                 print 'POST request succeeded to -->', url 
             else:
-                print 'POST request Failed to -->', url , ' with Code ', res.status_code                
+                print 'POST request Failed to -->', url , ' with Code ', res.status_code, res.text                
             return res
         except:
-            print 'POST failed, Trying to PUT to -->', url 
+            print 'POST failed, Trying to PUT to -->', url, data
             try:
                 res = requests.put(url, headers=headers, data=data)
                 if res.status_code < 400:
                     print 'Try 2 PUT request succeeded to -->', url
                 else:
-                    print 'PUT request Failed to -->', url , ' with Code ', res.status_code     
+                    print 'PUT request Failed to -->', url , ' with Code ', res.status_code, res.text     
                 return res
             except:
-                print '2nd Transmit Attempt using PUT failed to -->', url 
+                print '2nd Transmit Attempt using PUT failed to -->', url, data
                 return False
     elif method and data:
         res = requests.request(method, url, headers=headers, data=data)
