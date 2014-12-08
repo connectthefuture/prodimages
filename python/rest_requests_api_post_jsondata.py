@@ -155,15 +155,17 @@ def iterate_post_data_kv(data):
     import json
     if type(data) == dict:
         for key,val in data.iteritems():
+            print key,val
             for k,v in val.iteritems():
                 try:
                     #jsondata = json.dumps({key: {k: v} })
                     jsondata = json.dumps({k: v})
+                    print jsondata
                     response = post_to_api(data=json.loads(jsondata), api_endpoint='looklet-shot-list/')
                     if response.status_code == 200:
                         pass
                     else:
-                        print response.status_code, ' ERROR DICT', response.text, '\n\t', jsondata
+                        pass #print response.status_code, ' ERROR DICT', response.text, '\n\t', jsondata
                     #print jsondata
                 except KeyError:
                     print 'KeyError', k, v, key,
@@ -180,7 +182,7 @@ def iterate_post_data_kv(data):
                     print response
                     pass
                 else:
-                    print response.status_code, ' ERROR LIST', response.text, '\n\t', jsondata
+                    pass #print response.status_code, ' ERROR LIST', response.text, '\n\t', jsondata
                 #print jsondata
             except KeyError:
                 print 'KeyError', k, v,
