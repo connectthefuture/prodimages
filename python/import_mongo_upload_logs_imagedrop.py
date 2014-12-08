@@ -74,11 +74,12 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     check = mongo_collection.find({key_str: colorstyle}).count()
     if check:
         print 'REFRESH IT ', check
+        data = { "$set":{'format': format,'batchid': batchid,'last_uploaded': timestamp}}
         return check
     else:
         print 'NEW IT ', check
         data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}}
-        mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], background=True)
+        mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
         new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
         print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
