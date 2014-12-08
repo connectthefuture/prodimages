@@ -75,6 +75,8 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     if check == 1:
         print 'REFRESH IT ', check  
         data = { "$set":{
+                        'colorstyle': colorstyle,
+                        'alt': alt,
                         'format': format,
                         'batchid': batchid, 
                         'upload_ct': {'$inc': {'upload_ct': 1}}, 
