@@ -51,9 +51,9 @@ def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo_collection = mongo_db[collection_name]
 
     # Returns the '_id' key associated with the newly created document
-    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
-    #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp})
-    #new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}, continue_on_error=True, upsert=True)
+    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp})
+    #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp})
+    #new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp}, continue_on_error=True, upsert=True)
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
 
@@ -67,18 +67,18 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
 
-    key = {'colorstyle': colorstyle}  #, 'alt': alt}
-    #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
-    datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
+    key = {'colorstyle': colorstyle}  #, 'alt': alt, upload_ct: 1}
+    #data = { "$set":{'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
+    datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp}
     key_str = key.keys()[0]
     check = mongo_collection.find({key_str: colorstyle}).count()
     if check:
-        print 'REFRESH IT ', check
-        data = { "$set":{'format': format,'batchid': batchid,'last_uploaded': timestamp}}
+        print 'REFRESH IT ', check  
+        data = { "$set":{'format': format,'batchid': batchid, '$inc': {'upload_ct': 1}}
         return check
     else:
         print 'NEW IT ', check
-        data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}}
+        data = { "$set":{'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp}}
         mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
         new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
@@ -92,8 +92,8 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
     key = 'colorstyle'
-    #data = { "$set":{'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}},
-    data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt,'timestamp': timestamp}
+    #data = { "$set":{'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
+    data = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp}
     results = mongo_collection.find({key: colorstyle}).count()
     #return count of styles with the number found
     return results
