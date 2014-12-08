@@ -4,8 +4,8 @@
 def parse_upload_log_files_indir(dirname=None):
     import re, datetime, glob, os
     #dirname =  '/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup' ##'/Users/johnb/Dropbox/DEVROOT/mnt/Post_Complete/ImageDrop/bkup'
-    regex_textfile = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(.txt)$')
-    regex_datarow  = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(.txt)$')
+    regex_textfile = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(\.txt)$')
+    regex_datarow  = re.compile(r'^(/.+?/)(LSTransfer)(\d{12})(\.txt)$')
     textfile_list  = glob.glob(os.path.join(dirname, 'LST*.txt'))
     data = {}
     page = 1
@@ -88,7 +88,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
         print 'NEW IT ', check
         data = { "$set":{'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
-        mongo_collection.create_index("colorstyle", unique=True, sparse=True, background=True)
+        mongo_collection.create_index("colorstyle", unique=True, sparse=False, background=True)
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
         new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
         print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
