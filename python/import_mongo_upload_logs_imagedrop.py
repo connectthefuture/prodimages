@@ -79,7 +79,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
                         'batchid': batchid, 
                         '$inc': {'upload_ct': 1}, 
                         'timestamp': {
-                            '$cond': [ { lte: [ "$$timestamp", timestamp ] }, timestamp, "$$timestamp" ]
+                            '$cond': [ { '$lte': [ "$$timestamp", timestamp ] }, timestamp, "$$timestamp" ]
                             }
                         }
                     }
