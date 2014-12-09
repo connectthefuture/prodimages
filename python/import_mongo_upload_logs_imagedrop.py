@@ -174,6 +174,7 @@ def main_update(dirname=None):
     ## Take the compiled k/v pairs and Format + Insert into Mongo DB
     transfer_batches = parse_upload_log_files_indir(dirname=dirname)
     #try:
+    print type(transfer_batches)
     if type(transfer_batches) == dict:
         xfer = transfer_batches.values():
     else:
