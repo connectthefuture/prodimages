@@ -22,7 +22,7 @@ def recursive_dirlist(rootdir):
 
 ###
 ## Extract All Metadata from Image File as Dict using PIL
-def get_exif_all_data(file_path):
+def get_exif(file_path):
     from PIL import Image
     from PIL.ExifTags import TAGS
     exifdata = {}
