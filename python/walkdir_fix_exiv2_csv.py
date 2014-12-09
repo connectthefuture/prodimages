@@ -65,13 +65,13 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                 alt = alt_ext.split('.')[0]
                 ext = alt_ext.split('.')[-1]
                 try:
-                    photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
+                    photo_date = get_exif_all_data(file_path)[u'File:FileModifyDate'][:10]
                 except KeyError:
                     try:
                         photo_date = get_exif(file_path)['DateTime'][:10]
                     except KeyError:
                         try:
-                            photo_date = get_exif_all_data(file_path)['File:FileModifyDate'][:10]
+                            photo_date = get_exif(file_path)['DateTimeOriginal'][:10]
                         except KeyError:
                             photo_date = '0000-00-00'
                 except AttributeError:
