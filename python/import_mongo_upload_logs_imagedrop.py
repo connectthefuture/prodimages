@@ -172,8 +172,15 @@ def main_update(dirname=None):
                 #    print [ k.upper() for k in sorted(c.keys()) ]
                 if regex_valid_colorstyle_file.findall(row['filename']):
                     ## inserts only, not updates, will create multiple records if exists already
-                    update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
-                    print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
+                    try:
+                        update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
+                        print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
+                    except pymongo.errors.ConnectionFailure:
+                        import time
+                        time.sleep(5)
+                        pass
+
+
                 else:
                     pass
     #except StopIteration:
