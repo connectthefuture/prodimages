@@ -176,7 +176,7 @@ def main_update(dirname=None):
     #try:
     print type(transfer_batches)
     if type(transfer_batches) == dict:
-        xfer = transfer_batches.values():
+        xfer = transfer_batches.values()
     else:
         xfer  = transfer_batches
     for batch in xfer:
