@@ -144,7 +144,7 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
     if check_proc_regex:
         pass
     else:
-        check_proc_regex = r'^mongodb$'
+        check_proc_regex = r'^mongod$'
     regex_proc_check = re.compile(check_proc_regex)
     procs = psutil.get_process_list()
     found_conflicts_bypid = []
