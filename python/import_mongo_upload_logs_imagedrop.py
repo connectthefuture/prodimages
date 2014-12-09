@@ -154,7 +154,7 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
             procname   = pdict['name']
             procuser   = pdict['username']
             procstatus = pdict['status']
-            if regex_proc_check.findall(procname) and procuser == 'root:
+            if regex_proc_check.findall(procname) and procuser == 'root':
                 print procname,  procuser, procstatus
                 found_conflicts_bypid.append(pdict['pid'])
             else:
