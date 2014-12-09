@@ -139,7 +139,7 @@ def main_check(datarow=None):
             return False, check
 
 
-def check_running_process(check_proc_regex=None):
+def check_running_process(check_proc_regex=None, kill_found_procs=False):
     import psutil, re
     if check_proc_regex:
         pass
@@ -153,14 +153,17 @@ def check_running_process(check_proc_regex=None):
             pdict = p.as_dict()
             procname = pdict['name']
             if regex_proc_check.findall(procname):
-                print procname
+                print procname, pdict['username'], pdict['nice'], pdict['io_counters'], pdict['status'], pdict['threads']
                 found_conflicts_bypid.append(pdict['pid'])
             else:
                 pass
         except:
             pass
-    return found_conflicts_bypid
-
+    if not kill_found_procs:
+        return found_conflicts_bypid
+    else:
+        ## kill them
+        return found_conflicts_bypid
 
 def main_update(dirname=None):
     import sys,os,re, sqlalchemy, json, pymongo
