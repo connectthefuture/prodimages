@@ -140,7 +140,7 @@ def main_check(datarow=None):
 
 
 def main_update(dirname=None):
-    import sys,os,re, sqlalchemy, json
+    import sys,os,re, sqlalchemy, json, pymongo
     regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
     regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     if not dirname:
