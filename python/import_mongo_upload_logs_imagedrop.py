@@ -138,6 +138,29 @@ def main_check(datarow=None):
             return False, check
 
 
+def check_running_process(check_proc_regex=None):
+    import psutil, re
+    if check_proc_regex:
+        pass
+    else:
+        check_proc_regex = r'^mongodb$'
+    regex_proc_check = re.compile(check_proc_regex)
+    procs = psutil.get_process_list()
+    found_conflicts_bypid = []
+    for p in procs:
+        try:
+            pdict = p.as_dict()
+            procname = pdict['name']
+            if regex_proc_check.findall(procname):
+                print procname
+                found_conflicts_bypid.append(pdict['pid'])
+            else:
+                pass
+        except:
+            pass
+    return found_conflicts_bypid
+
+
 def main_update(dirname=None):
     import sys,os,re, sqlalchemy, json
     regex_uploadlogs = re.compile(r'^.*?/Post_Complete/ImageDrop/bkup/LSTransfer.+?\.[txtTXT]{3}$')
