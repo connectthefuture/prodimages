@@ -75,7 +75,10 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
                         except KeyError:
                             photo_date = '0000-00-00'
                 except AttributeError:
-                        photo_date = '0000-00-00'
+                        try:
+                            photo_date = get_exif_all_data(file_path)[u'FileModifyDate'][:10]
+                        except:
+                            photo_date = '0000-00-00'
                 photo_date = str(photo_date)
                 photo_date = photo_date.replace(':','-')
                 stylestringsdict_tmp['colorstyle'] = colorstyle
