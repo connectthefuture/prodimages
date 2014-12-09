@@ -39,8 +39,8 @@ def parse_upload_log_files_indir(dirname=None):
                     if insertrow['colorstyle']:
                         insertbatch.append(insertrow)
             data[page] = insertbatch
-            yield data[page]
             page += 1
+    return data
 
 
 def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
@@ -73,13 +73,14 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     key_str = key.keys()[0]
     check = mongo_collection.find({key_str: colorstyle}).count()
     if check == 1:
-        print 'REFRESH IT ', check  
+        print 'REFRESH IT ', check
         data = { "$set":{
                         'colorstyle': colorstyle,
                         'alt': {'$min': {'alt': alt}},
                         'format': format,
-                        'batchid': batchid, 
-                        'upload_ct': {'$inc': {'upload_ct': 1}}, 
+                        'batchid': batchid,
+                        #'upload_ct': 
+                        {'$inc': {'upload_ct': 1}},
                         'timestamp': { '$max': {'timestamp': timestamp}}
                         }
                     }
@@ -149,34 +150,34 @@ def main_update(dirname=None):
             dirname = '/mnt/Post_Complete/ImageDrop/bkup'
     ## Take the compiled k/v pairs and Format + Insert into Mongo DB
     transfer_batches = parse_upload_log_files_indir(dirname=dirname)
-    try:
-        while transfer_batches.next():
-            database_name = 'images'
-            collection_name = 'uploads_imagedrop'
-            for row in batch:
-                #print row
-                for k,v in row.items():
-                    ## Build object of key/values for insert
-                    batchid = row['batchid']
-                    colorstyle = row['colorstyle']
-                    alt = row['alt']
-                    format = row['format']
-                    timestamp = row['timestamp']
-                    #print locals()
-                    ## Perform the Insert to mongodb
-                    #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
-                    #expr = { "$or": [ {"uploads_imagedrop": { "$exists": False }}, {"colorstyle": colorstyle}]}
+    #try:
+    for batch in transfer_batches:
+        database_name = 'images'
+        collection_name = 'uploads_imagedrop'
+        for row in batch:
+            #print row
+            for k,v in row.items():
+                ## Build object of key/values for insert
+                batchid = row['batchid']
+                colorstyle = row['colorstyle']
+                alt = row['alt']
+                format = row['format']
+                timestamp = row['timestamp']
+                #print locals()
+                ## Perform the Insert to mongodb
+                #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
+                #expr = { "$or": [ {"uploads_imagedrop": { "$exists": False }}, {"colorstyle": colorstyle}]}
 
-                    #for c in collection_name.find(expr):
-                    #    print [ k.upper() for k in sorted(c.keys()) ]
-                    if regex_valid_colorstyle_file.findall(row['filename']):
-                        ## inserts only, not updates, will create multiple records if exists already
-                        update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
-                        print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
-                    else:
-                        pass
-    except StopIteration:
-        print "Successful Batch Update Completed uploads_imagedrop..."
+                #for c in collection_name.find(expr):
+                #    print [ k.upper() for k in sorted(c.keys()) ]
+                if regex_valid_colorstyle_file.findall(row['filename']):
+                    ## inserts only, not updates, will create multiple records if exists already
+                    update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, batchid=batchid, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
+                    print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
+                else:
+                    pass
+    #except StopIteration:
+        #print "Successful Batch Update Completed uploads_imagedrop..."
 
 def main(dirname=None):
     import sys,os,re, sqlalchemy, json
