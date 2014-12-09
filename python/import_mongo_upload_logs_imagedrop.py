@@ -79,8 +79,8 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
                         'alt': {'$min': {'alt': alt}},
                         'format': format,
                         'batchid': batchid,
-                        #'upload_ct': 
-                        {'$inc': {'upload_ct': 1}},
+                        #'upload_ct':
+                        '$inc': {'upload_ct': 1},
                         'timestamp': { '$max': {'timestamp': timestamp}}
                         }
                     }
