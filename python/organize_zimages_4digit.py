@@ -38,20 +38,25 @@ def organize_files_by_4digit(pathname,destdir):
             os.mkdir(zimages_dir, 16877)
         except OSError:
             pass
-        
-        shutil.move(pathname,zimages_filepath)
-        
-        
+
+        if os.path.isfile(zimages_filepath):
+            os.remove(zimages_filepath)
+            shutil.move(pathname,zimages_filepath)
+        else:
+            shutil.move(pathname,zimages_filepath)
+            #pass
+
+
 import os, sys, re, shutil,glob
 if __name__ == "__main__":
     destdir = '/mnt/Production_Raw/.zImages_1'
     try:
         if len(sys.argv[1:]) <= 2:
-        
+
             destdir = sys.argv[2]
     except:
         destdir = '/mnt/Production_Raw/.zImages_1'
-    
+
     if sys.argv[1] != 'GLOBOUT':
         try:
             if os.path.isdir(sys.argv[1]):
@@ -70,7 +75,7 @@ if __name__ == "__main__":
             globbed_output_jpgs = glob.glob(g)
             print globbed_output_jpgs
             ##if len(globbed_output_jpgs) > 0:
-            for f in globbed_output_jpgs: 
+            for f in globbed_output_jpgs:
                 try:
                     organize_files_by_4digit(os.path.abspath(f),destdir=destdir)
                 except:
@@ -78,15 +83,15 @@ if __name__ == "__main__":
         except:
             pass
 
-                    
-    
-    
+
+
+
     #if len(sys.argv[1:]) >= 3:
 #        if os.path.isdir(sys.argv[:][0]):
 #            destdir=sys.argv[1]
 #        else:
 #            destdir = '/mnt/Production_Raw/.zImages_1'
-#        
+#
 #        arglist = sys.argv[1:]
 #        for f in arglist:
 #            organize_files_by_4digit(os.path.abspath(f), destdir=destdir)
