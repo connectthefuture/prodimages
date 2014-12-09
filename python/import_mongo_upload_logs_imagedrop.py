@@ -120,7 +120,7 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
     found_conflicts_bypid = []
     for p in procs:
         try:
-            pdict = p.as_dict()
+            pdict      = p.as_dict()
             procname   = pdict['name']
             procuser   = pdict['username']
             procstatus = pdict['status']
@@ -129,13 +129,13 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
                 found_conflicts_bypid.append(pdict['pid'])
             else:
                 pass
-        except psutil.NoSuchProcess:
+        except:
             pass
-    if not kill_found_procs:
-        return found_conflicts_bypid
-    else:
-        ## kill them
-        return found_conflicts_bypid
+    # if not kill_found_procs:
+    #     return found_conflicts_bypid
+    # else:
+    #     ## kill them
+    return found_conflicts_bypid
 
 
 ## Perform the Insert to mongodb
