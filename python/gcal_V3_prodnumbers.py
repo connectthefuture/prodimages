@@ -60,7 +60,7 @@ def getServiceEvents():
     # Getting All Event Ids
     page_token = None
     events_list = []
-    try:    
+    try:
         while True:
             events = service.events().list(calendarId=prodnumberscal, pageToken=page_token).execute()
             for event in events['items']:
@@ -129,13 +129,13 @@ def insert_mysql_numbers(roletotalsdict):
             ## ProdRaw Metadata Extracted and added to DB
             if sqlinsert_choose_test:
                 connection.execute("""
-                                    INSERT INTO production_numbers (complete_dt, role, total, marketplace) 
+                                    INSERT INTO production_numbers (complete_dt, role, total, marketplace)
                                     VALUES (%s, %s, %s, %s)
-                                    ON DUPLICATE KEY UPDATE 
+                                    ON DUPLICATE KEY UPDATE
                                     marketplace  = VALUES(marketplace);
                                     """, k, v['role'], v['total'], v['marketplace'])
                 print "Successful Insert production_numbers --> {0}".format(k)
-            
+
             else:
                 print "Database Entry NOT VALID for Inserting {0}".format(k)
         #except OSError:
@@ -162,7 +162,7 @@ def sql_query_production_numbers():
       POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT >= TRUNC(sysdate - 30)
         and substr(pomgr.sku.sku_code,1,1) = '8'
     GROUP BY
-        POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT 
+        POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT
     ORDER BY POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT DESC"""
     prodcomplete = connection.execute(querymake_prodnumbers)
     prodcomplete_dict = {}
@@ -178,10 +178,10 @@ def sql_query_production_numbers():
     INNER JOIN POMGR.SKU
     ON
       POMGR.SKU.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID
-    WHERE 
+    WHERE
       POMGR.PRODUCT_COLOR.IMAGE_READY_DT >= TRUNC(SysDate - 30)
     and substr(pomgr.sku.sku_code,1,1) = '8'
-    GROUP BY 
+    GROUP BY
       POMGR.PRODUCT_COLOR.IMAGE_READY_DT
     ORDER BY POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC"""
     retouchcomplete = connection.execute(querymake_retouchnumbers)
@@ -230,7 +230,7 @@ def sql_query_production_numbers():
     LEFT JOIN POMGR.SAMPLE_TRACKING ON POMGR.SAMPLE.ID = POMGR.SAMPLE_TRACKING.SAMPLE_ID
     LEFT JOIN POMGR.LK_SAMPLE_STATUS ON POMGR.SAMPLE_TRACKING.STATUS_ID = POMGR.LK_SAMPLE_STATUS.ID
     WHERE (POMGR.SAMPLE_TRACKING.CREATE_DT >= TRUNC(SysDate - 30)
-    AND POMGR.LK_SAMPLE_STATUS.NAME = 'Scanned In at Bluefly')
+    AND POMGR.LK_SAMPLE_STATUS.NAME = 'Scanned In at BF-QL')
     GROUP BY to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD')
     ORDER BY to_date(POMGR.SAMPLE_TRACKING.CREATE_DT, 'YYYY-MM-DD') DESC"""
     samples_received = connection.execute(querymake_sample_received)
@@ -476,7 +476,7 @@ def main():
     service, events_list = getServiceEvents()
     for event in events_list:
         service.events().delete(calendarId=prodnumberscal, eventId=event).execute()
-    print "Deleted all Events"    
+    print "Deleted all Events"
     #calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
     #cals = service.calendarList().get(calendarId='john.bragato@gmail.com').execute()
     #############################Get Data Functions to Query DB###########################
@@ -501,7 +501,7 @@ def main():
                     try:
                         desckv = str(v['total'])
                         desckv = desckv.replace('&', 'And')
-                        desckv = desckv.replace('%', ' Percent')             
+                        desckv = desckv.replace('%', ' Percent')
                         titleid = '{0} - {1}'.format(desckv,titlekv)
                         descfull = '{0} Total for {1} is {2}\n'.format(titlekv, str(k)[:10], desckv)
                         descfull = str(descfull)
