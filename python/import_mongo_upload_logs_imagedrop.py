@@ -40,7 +40,7 @@ def parse_upload_log_files_indir(dirname=None):
                         insertbatch.append(insertrow)
             data[page] = insertbatch
             page += 1
-    return data
+    return sorted(data, reverse=True)
 
 
 def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
