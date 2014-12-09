@@ -32,3 +32,11 @@ def post_or_put_style_to_api(colorstyle, api_url=None, AuthToken=None):
                     subprocess.call([ 'curl', '-u', 'james:hoetker', '-d', curldata, '-H', curlauth, '-X', 'PUT', api_url])
                 except:
                      subprocess.call([ 'curl', '-u', 'james:hoetker' '-d', curldata, '-H', curlauth, api_url])
+
+
+if __name__ == '__main__':
+    import os,sys
+    try:
+        colorstyle = sys.argv[1]
+    except IndexError:
+        print 'Enter a style numbert to add to clear queue'
