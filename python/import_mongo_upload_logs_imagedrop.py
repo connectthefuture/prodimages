@@ -40,7 +40,7 @@ def parse_upload_log_files_indir(dirname=None):
                         insertbatch.append(insertrow)
             data[page] = insertbatch
             page += 1
-    return sorted(data, reverse=True)
+    return data
 
 
 def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
@@ -173,15 +173,12 @@ def main_update(dirname=None):
             dirname = '/mnt/Post_Complete/ImageDrop/bkup'
     ## Take the compiled k/v pairs and Format + Insert into Mongo DB
     transfer_batches = parse_upload_log_files_indir(dirname=dirname)
-    #try:
-    print type(transfer_batches)
-    if type(transfer_batches) == dict:
-        xfer = transfer_batches.values()
-    else:
-        xfer  = transfer_batches
-    for batch in xfer:
+    #try:sorted(data, reverse=True)
+    
+    for batch in sorted(transfer_batches.values(), reverse=True):
         database_name = 'images'
         collection_name = 'uploads_imagedrop'
+
         for row in batch:
             #print row
             for k,v in row.items():
