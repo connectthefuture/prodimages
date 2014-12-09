@@ -151,9 +151,11 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
     for p in procs:
         try:
             pdict = p.as_dict()
-            procname = pdict['name']
-            if regex_proc_check.findall(procname):
-                print procname, pdict['username'], pdict['nice'], pdict['io_counters'], pdict['status'], pdict['threads']
+            procname   = pdict['name']
+            procuser   = pdict['username']
+            procstatus = pdict['status']
+            if regex_proc_check.findall(procname) and procuser == 'root:
+                #print procname,  pdict['nice'], pdict['io_counters'],  pdict['threads']
                 found_conflicts_bypid.append(pdict['pid'])
             else:
                 pass
