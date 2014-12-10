@@ -109,13 +109,12 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
     return results
 
 
-def check_running_process(check_proc_regex=None, kill_found_procs=False):
+def check_running_process(check_process_name=None, kill_found_procs=False):
     import psutil, re
-    if check_proc_regex:
+    if check_process_name:
         pass
     else:
-        check_proc_regex = r'^mongod$'
-    regex_proc_check = re.compile(check_proc_regex)
+        check_process_name = os.path
     procnames=[]
     for p in list(psutil.process_iter()):
         try:
@@ -129,12 +128,22 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
     procnames = sorted(procnames)
     found_conflicts_bypid = []
     for proc in procnames:
-        if regex_proc_check.findall(proc.name()) and proc.user() == 'root':
-            found_conflicts_bypid.append(proc['pid'])
+        if len(proc) > 1:
+            script_name = proc[1] #.split('/')[-1]
+            if os.path.abspath(script_name) ==  os.path.abspath(__file__):
+                found_conflicts_bypid.append(proc['pid'])
         else:
             pass
+
+    # if not kill_found_procs:
+    #     return found_conflicts_bypid
+    # else:
+    #     ## kill them
+    #return found_conflicts_bypid
     return found_conflicts_bypid
 
+
+        # regex_proc_check = re.compile(check_process_name)
         # try:
         #     pdict      = p.as_dict()
         #     procname   = pdict['name']
@@ -147,11 +156,7 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
         #         pass
         # except:
         #     pass
-    # if not kill_found_procs:
-    #     return found_conflicts_bypid
-    # else:
-    #     ## kill them
-    #return found_conflicts_bypid
+    
 
 
 ## Perform the Insert to mongodb
