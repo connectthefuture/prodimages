@@ -116,26 +116,42 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
     else:
         check_proc_regex = r'^mongod$'
     regex_proc_check = re.compile(check_proc_regex)
-    procs = psutil.get_process_list()
-    found_conflicts_bypid = []
-    for p in procs:
+    procsnames=[]
+    for p in list(psutil.process_iter()):
         try:
-            pdict      = p.as_dict()
-            procname   = pdict['name']
-            procuser   = pdict['username']
-            procstatus = pdict['status']
-            if regex_proc_check.findall(procname) and procuser == 'root':
-                print procname,  procuser, procstatus
-                found_conflicts_bypid.append(pdict['pid'])
+            if p.exe():
+                procsnames.append(p.cmdline())
             else:
                 pass
         except:
             pass
+
+    procsnames = sorted(procsnames)
+    found_conflicts_bypid = []
+    for proc in procnames:
+        if regex_proc_check.findall(proc['name']) and procuser['user'] == 'root':
+            found_conflicts_bypid.append(proc['pid'])
+        else:
+            pass
+    return found_conflicts_bypid
+
+        # try:
+        #     pdict      = p.as_dict()
+        #     procname   = pdict['name']
+        #     procuser   = pdict['username']
+        #     procstatus = pdict['status']
+        #     if regex_proc_check.findall(procname) and procuser == 'root':
+        #         print procname,  procuser, procstatus
+        #         found_conflicts_bypid.append(pdict['pid'])
+        #     else:
+        #         pass
+        # except:
+        #     pass
     # if not kill_found_procs:
     #     return found_conflicts_bypid
     # else:
     #     ## kill them
-    return found_conflicts_bypid
+    #return found_conflicts_bypid
 
 
 ## Perform the Insert to mongodb
