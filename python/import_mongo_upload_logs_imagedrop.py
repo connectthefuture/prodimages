@@ -125,7 +125,7 @@ def check_running_process(check_process_name=None, kill_found_procs=False):
         except:
             pass
 
-    procnames = sorted(procnames)
+    #procnames = sorted(procnames)
     found_conflicts_bypid = []
     for proc in procnames:
         if len(proc) > 1:
