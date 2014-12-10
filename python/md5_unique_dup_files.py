@@ -35,7 +35,7 @@ def find_duplicate_imgs(dname):
 
 import os,sys
 
-dname = '/Users/johnb/Desktop/clinton_103114' #sys.argv[1]
+dname = sys.argv[1]
 def main():
     md5checksum_pairs, duplicates = find_duplicate_imgs(dname)
     unique_files = md5checksum_pairs.values()
