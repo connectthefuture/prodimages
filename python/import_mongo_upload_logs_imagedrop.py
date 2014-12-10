@@ -116,17 +116,17 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
     else:
         check_proc_regex = r'^mongod$'
     regex_proc_check = re.compile(check_proc_regex)
-    procsnames=[]
+    procnames=[]
     for p in list(psutil.process_iter()):
         try:
             if p.exe():
-                procsnames.append(p.cmdline())
+                procnames.append(p.cmdline())
             else:
                 pass
         except:
             pass
 
-    procsnames = sorted(procsnames)
+    procnames = sorted(procnames)
     found_conflicts_bypid = []
     for proc in procnames:
         if regex_proc_check.findall(proc['name']) and procuser['user'] == 'root':
