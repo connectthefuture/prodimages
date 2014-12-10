@@ -130,12 +130,16 @@ def check_running_process(check_process_name=None, kill_found_procs=False):
     found_conflicts_bypid = []
     for proc in procnames:
         if len(proc) > 1:
-            script_name = [ p for p in proc if regex_pyfile.findall(p) ] #.split('/')[-1]
-            print script_name
-            if script_name:
-                if os.path.abspath(script_name[0]) ==  os.path.abspath(__file__):
-                    found_conflicts_bypid.append(script_name[0])
-            else:
+            
+            try:
+                script_name = [ p for p in proc if regex_pyfile.findall(p) ] #.split('/')[-1]
+                print script_name
+                if script_name:
+                    if os.path.abspath(script_name[0]) ==  os.path.abspath(__file__):
+                        found_conflicts_bypid.append(script_name[0])
+                else:
+                    pass
+            except:
                 pass
         else:
             pass
