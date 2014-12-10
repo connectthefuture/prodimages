@@ -99,12 +99,15 @@ pythonpath = ['',
              '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk',
              '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old',
              '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload',
-             '/Users/JCut/Library/Python/2.7/lib/python/site-packages',
+             '/Users/johnb/Library/Python/2.7/lib/python/site-packages',
              '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/Orange/orng',
              '/Library/Python/2.7/site-packages',
              '/usr/local/lib/python2.7/site-packages',
              '/usr/local/lib/python2.7/site-packages/Orange/orng',
              '/usr/local/lib/python2.7/site-packages/IPython/extensions',
+             '/home/johnb/virtualenvs/DJDAM/lib/python2.7/site-packages',
+             '/home/johnb/virtualenvs/DJDAM/src/djdam',
+             '/home/johnb/virtualenvs/DJDAM/src',
              '~/.ipython']
 #### REGEX PATTERN DEFINITIONS
 ###
