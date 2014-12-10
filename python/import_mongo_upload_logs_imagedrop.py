@@ -111,10 +111,11 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
 
 def check_running_process(check_process_name=None, kill_found_procs=False):
     import psutil, re
+    regex_pyfile = re.compile(r'^.+?\.py[c]?.*?$')
     if check_process_name:
         pass
     else:
-        check_process_name = os.path
+        check_process_name = os.path.abspath(__file__).split('/')[-1]
     procnames=[]
     for p in list(psutil.process_iter()):
         try:
@@ -129,9 +130,10 @@ def check_running_process(check_process_name=None, kill_found_procs=False):
     found_conflicts_bypid = []
     for proc in procnames:
         if len(proc) > 1:
-            script_name = proc[1] #.split('/')[-1]
+            script_name = [ p for p in proc if regex_pyfile.findall(p) ] #.split('/')[-1]
+            print script_name
             if os.path.abspath(script_name) ==  os.path.abspath(__file__):
-                found_conflicts_bypid.append(proc['pid'])
+                found_conflicts_bypid.append(proc)
         else:
             pass
 
