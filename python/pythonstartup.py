@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 import requests
 # import scrapy
 #import MySQLdb
-
+os.chdir(os.path.dirname(__file__))
 """
 Initial Directory Variables to Set at Start
 """
