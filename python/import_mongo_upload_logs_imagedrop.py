@@ -129,7 +129,7 @@ def check_running_process(check_proc_regex=None, kill_found_procs=False):
     procnames = sorted(procnames)
     found_conflicts_bypid = []
     for proc in procnames:
-        if regex_proc_check.findall(proc['name']) and procuser['user'] == 'root':
+        if regex_proc_check.findall(proc.name()) and proc.user() == 'root':
             found_conflicts_bypid.append(proc['pid'])
         else:
             pass
