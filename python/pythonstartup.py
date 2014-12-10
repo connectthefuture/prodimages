@@ -36,7 +36,8 @@ dir_uploadedarch 	    = os.path.abspath("/mnt/Post_Complete/Complete_Archive/Upl
 dir_zimages 	        = os.path.abspath("/mnt/Post_Ready/zImages_1")
 dir_pushfashion 	    = os.path.abspath("/mnt/Post_Ready/eFashionPush")
 dir_pushstill 	        = os.path.abspath("/mnt/Post_Ready/aPhotoPush")
-dir_sites 	            = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/sites")
+dir_imagedropfile7      = os.path.abspath("/mnt/Post_Complete/ImageDrop")
+dir_marketplace 	    = os.path.abspath("/mnt/Post_Complete/Complete_Archive/MARKETPLACE")
 #dir_apps 	            = os.path.abspath("/mnt/Dropbox/Apps")
 dir_consig 	            = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/var/consignment")
 dir_datacsv             = os.path.abspath("/mnt/Post_Ready/zProd_Server/imageServer7/data/csv")
@@ -132,49 +133,49 @@ def recursive_dirlist(rootdir):
 ###########          ############################          ###########################          ################
 ################################################################################################################
 ## Upload to imagedrop via FTP Unreliable
-def upload_to_imagedrop(file):
-    import ftplib
-    session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
-    fileread = open(file, 'rb')
-    filename = str(file.split('/')[-1])
-    session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + filename, fileread, 8*1024)
-    fileread.close()
-    session.quit()
+# def upload_to_imagedrop(file):
+#     import ftplib
+#     session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
+#     fileread = open(file, 'rb')
+#     filename = str(file.split('/')[-1])
+#     session.cwd("ImageDrop/")
+#     session.storbinary('STOR ' + filename, fileread, 8*1024)
+#     fileread.close()
+#     session.quit()
 
 
-#### Very Reliable FTP upload to Imagedrop using PyCurl
-def pycurl_upload_imagedrop(localFilePath):
-    import pycurl, os
-    #import FileReader
-    localFileName = localFilePath.split('/')[-1]
+# #### Very Reliable FTP upload to Imagedrop using PyCurl
+# def pycurl_upload_imagedrop(localFilePath):
+#     import pycurl, os
+#     #import FileReader
+#     localFileName = localFilePath.split('/')[-1]
 
-    mediaType = "8"
-    ftpURL = "ftp://file3.bluefly.corp/ImageDrop/"
-    ftpFilePath = os.path.join(ftpURL, localFileName)
-    ftpUSERPWD = "imagedrop:imagedrop0"
+#     mediaType = "8"
+#     ftpURL = "ftp://file3.bluefly.corp/ImageDrop/"
+#     ftpFilePath = os.path.join(ftpURL, localFileName)
+#     ftpUSERPWD = "imagedrop:imagedrop0"
 
-    if localFilePath != "" and ftpFilePath != "":
-        ## Create send data
+#     if localFilePath != "" and ftpFilePath != "":
+#         ## Create send data
 
-        ### Send the request to Edgecast
-        c = pycurl.Curl()
-        c.setopt(pycurl.URL, ftpFilePath)
-        c.setopt(pycurl.PORT , 21)
-        c.setopt(pycurl.USERPWD, ftpUSERPWD)
-        c.setopt(pycurl.VERBOSE, 1)
-        f = open(localFilePath, 'rb')
-        c.setopt(pycurl.INFILE, f)
-        c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
-        c.setopt(pycurl.UPLOAD, 1)
+#         ### Send the request to Edgecast
+#         c = pycurl.Curl()
+#         c.setopt(pycurl.URL, ftpFilePath)
+#         c.setopt(pycurl.PORT , 21)
+#         c.setopt(pycurl.USERPWD, ftpUSERPWD)
+#         c.setopt(pycurl.VERBOSE, 1)
+#         f = open(localFilePath, 'rb')
+#         c.setopt(pycurl.INFILE, f)
+#         c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
+#         c.setopt(pycurl.UPLOAD, 1)
 
-        try:
-            c.perform()
-            c.close()
-            print "Successfully Sent Purge Request for --> {0}".format(localFileName)
-        except pycurl.error, error:
-            errno, errstr = error
-            print 'An error occurred: ', errstr
+#         try:
+#             c.perform()
+#             c.close()
+#             print "Successfully Sent Purge Request for --> {0}".format(localFileName)
+#         except pycurl.error, error:
+#             errno, errstr = error
+#             print 'An error occurred: ', errstr
             
 
 #END###### FTP FUNX
@@ -197,7 +198,7 @@ def dateMysql(date):
 """
 Return Exif info to KeyValue Array
 """
-def get_exif(fn):
+def get_exif_pip(fn):
 
     ret = {}
     from PIL import Image
@@ -274,7 +275,7 @@ Glob or Reg Search Dir for CSV output as:
 
 """
 
-def outputExifCsv(listDirGlob):
+def outputExifCsvPipo(listDirGlob):
     ret = {}
     from PIL import Image
     from PIL.ExifTags import TAGS
@@ -308,17 +309,17 @@ def union(a, b):
 ###########   URL LIB 2  ###
 ###  DOES NOT SAVE FILE  -- use below func#3 url_download_rw_httpsave ###
 ###
-def url2_download_read_http(targeturl):
-    from time import time
-    import urllib2, subprocess
-    url_start = time()
-    targetreq = urllib2.Request(targeturl)
-    targetreq.add_unredirected_header('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0')
-    targetreq.add_unredirected_header('Content-Type', 'text/html;charset=utf-8')
-    downloadfile = urllib2.urlopen(targetreq).read()
-    url_end = time()
-    print "Download Time -> %s"  % (url_end - url_start)
-    return downloadfile
+# def url2_download_read_http(targeturl):
+#     from time import time
+#     import urllib2, subprocess
+#     url_start = time()
+#     targetreq = urllib2.Request(targeturl)
+#     targetreq.add_unredirected_header('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0')
+#     targetreq.add_unredirected_header('Content-Type', 'text/html;charset=utf-8')
+#     downloadfile = urllib2.urlopen(targetreq).read()
+#     url_end = time()
+#     print "Download Time -> %s"  % (url_end - url_start)
+#     return downloadfile
 
 
 def recurse_dir_list(directory):
@@ -385,49 +386,49 @@ def soup_get_links_jpgs(soup):
 #####
 #1E
 ###  COMBINED: Get All href Links "Specific JPEG href select, NOT IN THIS ONEfrom Beautiful Soup and Requests -- downloads URL as html and returns Unique Links to files in text formatted by BSoup
-def url_get_links(targeturl):
-    import os,re,sys,requests
-    from bs4 import BeautifulSoup
-    r = requests.get(targeturl)
-    soup = BeautifulSoup(r.text)
-    ###  soup is now Full HTML of target -- Below creates/returns list of unique links
-    linklist = []
-    for link in soup.find_all('a'):
-        linklist.append(link.get('href'))
-        sorted(linklist)
-    ## Return list of unique links
-    return list(set(linklist))
+# def url_get_links(targeturl):
+#     import os,re,sys,requests
+#     from bs4 import BeautifulSoup
+#     r = requests.get(targeturl)
+#     soup = BeautifulSoup(r.text)
+#     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
+#     linklist = []
+#     for link in soup.find_all('a'):
+#         linklist.append(link.get('href'))
+#         sorted(linklist)
+#     ## Return list of unique links
+#     return list(set(linklist))
 
 
-####################################
-###########
-#### 2 ####
-###########   Download URL as file Uses urllib ###
-###########   URL LIB 1  ###
-###  Will SAVE FILE  to var - downloaddir--
-###
-def url_download_file_http(url):
-    from time import time
-    import urllib, subprocess
-    try:
-        downloaddir = os.path.join(os.path.expanduser('~'), 'script_dowloads')
-        if not downloaddir:
-            os.mkdir(downloaddir)
-        filename = url.split('/')[-1]
-        filepath =  os.path.join(downloaddir, filename)
-        filepath =  os.path.join(filepath, '.file')
-        url_start = time()
-        downloadfile = urllib.urlretrieve(url, filepath)
-        url_end = time()
-        print "Download Time -> %s"  % (url_end - url_start)
-    except OSError:
-        print "OS Error"
-    except AttributeError:
-        print "Attribute Error - Type doesnt have a property requested"
-    return downloadfile
+# ####################################
+# ###########
+# #### 2 ####
+# ###########   Download URL as file Uses urllib ###
+# ###########   URL LIB 1  ###
+# ###  Will SAVE FILE  to var - downloaddir--
+# ###
+# def url_download_file_http(url):
+#     from time import time
+#     import urllib, subprocess
+#     try:
+#         downloaddir = os.path.join(os.path.expanduser('~'), 'script_dowloads')
+#         if not downloaddir:
+#             os.mkdir(downloaddir)
+#         filename = url.split('/')[-1]
+#         filepath =  os.path.join(downloaddir, filename)
+#         filepath =  os.path.join(filepath, '.file')
+#         url_start = time()
+#         downloadfile = urllib.urlretrieve(url, filepath)
+#         url_end = time()
+#         print "Download Time -> %s"  % (url_end - url_start)
+#     except OSError:
+#         print "OS Error"
+#     except AttributeError:
+#         print "Attribute Error - Type doesnt have a property requested"
+#     return downloadfile
 
-### Below accepts single URL Above doesnt iterate and takes only 1 URL
-#imglinkslist = soup_get_links((soup_from_url(targeturl)))
+# ### Below accepts single URL Above doesnt iterate and takes only 1 URL
+# #imglinkslist = soup_get_links((soup_from_url(targeturl)))
 def url_download_fileslist_dbx(imglinkslist):
     import urllib,os,time,subprocess
     downloaddir = os.path.join(os.path.expanduser('~'), 'script_dowloads')
@@ -553,44 +554,44 @@ def html_get_parsed_images_fr_urls(htmlfile):
 ###########
 #### 4 d ####
 ###########
-def url2_download_file(url):
-    try:
-        from time import time
-        import urllib2, subprocess, os, urllib
-        downloaddir = os.path.join(os.path.expanduser('~'), 'Downloads')
-        #    if downloaddir:
-        #        continue
-        #    else:
-        #        os.mkdir(downloaddir)
-        #os.mkdir(downloaddir)
-        downloaddir = os.path.abspath(downloaddir)
-        url_start = time()
-        targetreq = urllib2.Request(url)
-        downloadfile = urllib2.urlopen(targetreq)
-        downloadtmp = downloadfile[0]
-        regex = re.compile(r'.+?/([A-Za-z0-9-_%]+?.+?g)')
-        imagename = str(re.findall(regex, url))
-        imagename = imagename.split('/')[-1]
-        downloadfinal = os.path.join(downloaddir, imagename)
-        downloadfinal = downloadfinal.split("']")
-        print downloadfinal
-        os.path.rename(downloadfile, downloadfinal)
-        url_end = time()
-        print "Download Time -> %s"  % (url_end - url_start)
-    except AttributeError:
-        print "Attrib Error"
-    except urllib2.HTTPError:
-        print "HTTP Error - Bad File URL"
+# def url2_download_file(url):
+#     try:
+#         from time import time
+#         import urllib2, subprocess, os, urllib
+#         downloaddir = os.path.join(os.path.expanduser('~'), 'Downloads')
+#         #    if downloaddir:
+#         #        continue
+#         #    else:
+#         #        os.mkdir(downloaddir)
+#         #os.mkdir(downloaddir)
+#         downloaddir = os.path.abspath(downloaddir)
+#         url_start = time()
+#         targetreq = urllib2.Request(url)
+#         downloadfile = urllib2.urlopen(targetreq)
+#         downloadtmp = downloadfile[0]
+#         regex = re.compile(r'.+?/([A-Za-z0-9-_%]+?.+?g)')
+#         imagename = str(re.findall(regex, url))
+#         imagename = imagename.split('/')[-1]
+#         downloadfinal = os.path.join(downloaddir, imagename)
+#         downloadfinal = downloadfinal.split("']")
+#         print downloadfinal
+#         os.path.rename(downloadfile, downloadfinal)
+#         url_end = time()
+#         print "Download Time -> %s"  % (url_end - url_start)
+#     except AttributeError:
+#         print "Attrib Error"
+#     except urllib2.HTTPError:
+#         print "HTTP Error - Bad File URL"
 
-    #except HTTPError:
-    #    print "404 Error"
-        #return 	downloadfinal
-#for link in links:
-#    import urllib2
-#    try:
-#        url2_download_file(link)
-#    except urllib2.HTTPError:
-#        print "HTTPError"
+#     #except HTTPError:
+#     #    print "404 Error"
+#         #return 	downloadfinal
+# #for link in links:
+# #    import urllib2
+# #    try:
+# #        url2_download_file(link)
+# #    except urllib2.HTTPError:
+# #        print "HTTPError"
 
 ####################
 #############
@@ -819,19 +820,19 @@ class HttpRequestHandler(asynchat.async_chat):
 
 
 
-#### Walks a Dir and returns a Dict
-def recursive_dirlist(rootdir):
-    import os
-    walkedlist = []
-    for dirname, subdirnames, filenames in os.walk(rootdir):
-        # append path of all filenames to walkedlist
-        for filename in filenames:
-            file_path = os.path.abspath(os.path.join(dirname, filename))
-            if os.path.isfile(file_path):
-                walkedlist.append(file_path)
-    # Advanced usage:
-    # editing the 'dirnames' list will stop os.walk() from recursing into there.
-    #if '.git' in dirnames:
-    # don't go into any .git directories.
-    #    dirnames.remove('.git')
-    return walkedlist
+# #### Walks a Dir and returns a Dict
+# def recursive_dirlist(rootdir):
+#     import os
+#     walkedlist = []
+#     for dirname, subdirnames, filenames in os.walk(rootdir):
+#         # append path of all filenames to walkedlist
+#         for filename in filenames:
+#             file_path = os.path.abspath(os.path.join(dirname, filename))
+#             if os.path.isfile(file_path):
+#                 walkedlist.append(file_path)
+#     # Advanced usage:
+#     # editing the 'dirnames' list will stop os.walk() from recursing into there.
+#     #if '.git' in dirnames:
+#     # don't go into any .git directories.
+#     #    dirnames.remove('.git')
+#     return walkedlist
