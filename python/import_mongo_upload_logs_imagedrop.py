@@ -110,7 +110,7 @@ def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=Non
 
 
 def check_running_process(check_process_name=None, kill_found_procs=False):
-    import psutil, re
+    import psutil, re, os
     regex_pyfile = re.compile(r'^.+?\.py[c]?.*?$')
     if check_process_name:
         pass
