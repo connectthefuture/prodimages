@@ -71,7 +71,7 @@ def walkeddir_parse_to_kvdict(filepaths_list):
                             create_dt = get_exif_pil(filepath)['DateTimeOriginal'][:10]
                         except KeyError:
                             create_dt = '0000-00-00'
-                except AttributeError:
+                except ValueError:
                         try:
                             create_dt = get_exif_all_data(filepath)['File:FileModifyDate'][:10]
                         except:
@@ -246,7 +246,7 @@ def main(files_list=None, database_name='images', collection_name=None):
             if not collection_name:
                 collection_name = 'md5checksums'
             # # Build object of key/values for insert
-            md5checksum = k.keys()[0] #v['md5checksum']
+            md5checksum = k #.keys()[0] #v['md5checksum']
             colorstyle  = v['colorstyle']
             alt         = v['alt']
             ext         = v['ext']
