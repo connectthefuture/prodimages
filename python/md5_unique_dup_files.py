@@ -46,13 +46,13 @@ def get_exif_all_data(image_filepath):
 
 ###
 ## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif_all_data" function
-def walkeddir_parse_to_kvdict(filepaths_list):
+def walkeddir_parse_to_kvdict(filepaths_listdict):
     import re,os
     #regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpngJPNG]{3}$')
     regex = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     datarows = []
     datarowsdict = {}
-    for filepathpair in filepaths_list:
+    for filepathpair in filepaths_listdict:
         datarowsdict_tmp = {}
         filepath = filepathpair[1]
         md5checksum = filepathpair[0]
@@ -245,10 +245,11 @@ def main(files_list=None, database_name='images', collection_name=None):
     elif len(res) == 3:
         hash_table_jpg, hash_table_png, dups = res
         if hash_table_jpg:
-            files_list = hash_table_jpg.items()[:]
-            insertkvdict = walkeddir_parse_to_kvdict(files_list)
-        if hash_table_png:
+            #files_list = [ f for f in hash_table_jpg.items() if regex_valid_colorstyle_file.findall(f) ]
             insertkvdict = walkeddir_parse_to_kvdict(hash_table_jpg)
+        if hash_table_png:
+            #files_list = [ f for f in hash_table_png.items() if regex_valid_colorstyle_file.findall(f) ]
+            insertkvdict = walkeddir_parse_to_kvdict(hash_table_png)
 
         for k,v in insertkvdict.iteritems():
             if not collection_name:
