@@ -132,17 +132,17 @@ def find_md5_and_dups(files_list, ext=None):
                     if _hash in hash_table_jpg.keys():
                         dups.append(os.path.abspath(filepath))
                     else:
-                        hash_table_jpg[_hash] = f
+                        hash_table_jpg[_hash] = filepath
                 elif regex_png.findall(filepath):
                     if _hash in hash_table_png.keys():
                         dups.append(os.path.abspath(filepath))
                     else:
-                        hash_table_png[_hash] = f
+                        hash_table_png[_hash] = filepath
                 else:
                     if _hash in hash_table_general.keys():
                         dups.append(os.path.abspath(filepath))
                     else:
-                        hash_table_general[_hash] = f               
+                        hash_table_general[_hash] = filepath
             except:
                 pass
     if not hash_table_png and hash_table_png:
@@ -200,50 +200,18 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
     return new_insertobj_id
 
 
-def main_update(files_list=None, database_name='images', collection_name=None):
-    import sys,os,re, sqlalchemy, json, pymongo
-    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
-    if not files_list:
-        try:
-            files_list = sys.argv[1]
-        except:
-            files_list = '/mnt/Post_Complete/ImageDrop'
-    ## Take the compiled k/v pairs and Format + Insert into Mongo DB
-    hash_table_jpg, hash_table_png, dups = find_md5_and_dups(files_list)
-    #try:sorted(data, reverse=True)
-    if hash_table_png:
-        hash_table = hash_table_png
-    elif hash_table_jpg:
-        hash_table = hash_table_jpg
-    
-    for batch in hash_table.iteritems():
-        if not collection_name:
-            collection_name = 'md5checksums'
-        for k,v in hash_table.items():
-            ## Build object of key/values for insert
-            md5checksum = row['md5checksum']
-            colorstyle = row['colorstyle']
-            alt = row['alt']
-            ext = row['ext']
-            create_dt = row['create_dt']
-            #print locals()
-            ## Perform the Insert to mongodb
-            #md5checksums.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
-            #expr = { "$or": [ {"md5checksums": { "$exists": False }}, {"colorstyle": colorstyle}]}
-            #for c in collection_name.find(expr):
-            #    print [ k.upper() for k in sorted(c.keys()) ]
-            if regex_valid_colorstyle_file.findall(row['filename']):
-                ## inserts only, not updates, will create multiple records if exists already
-                try:
-                    update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, md5checksum=md5checksum, colorstyle=colorstyle, alt=alt, ext=ext, create_dt=create_dt)
-                    print "Successful Insert to md5checksums {0} --> {1}".ext(k,v)
-                except pymongo.errors.ConnectionFailure:
-                    import time
-                    time.sleep(5)
-                    pass
-                else:
-                    pass
-        return dups
+
+
+
+
+
+        #print locals()
+        ## Perform the Insert to mongodb
+        #md5checksums.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
+        #expr = { "$or": [ {"md5checksums": { "$exists": False }}, {"colorstyle": colorstyle}]}
+        #for c in collection_name.find(expr):
+        #    print [ k.upper() for k in sorted(c.keys()) ]
+
         #except StopIteration:
             #print "Successful Batch Update Completed md5checksums..."
 
@@ -254,7 +222,9 @@ def main_update(files_list=None, database_name='images', collection_name=None):
 import os,sys
 
 
-def main(files_list=None):
+def main(files_list=None, database_name='images', collection_name=None):
+    import sys, os, re, sqlalchemy, json, pymongo
+    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     if not files_list:
         try:
             files_list = sys.argv[1]
@@ -262,14 +232,53 @@ def main(files_list=None):
             print 'You need to define files_list= or as sys.argv[1]'
             raise
     res = find_md5_and_dups(files_list)
+    insertkvdict = {}
     if len(res) <= 2:
         md5checksum_pairs, duplicates = res
         unique_files = md5checksum_pairs.values()
+        insertkvdict = walkeddir_parse_to_kvdict(unique_files)
         return unique_files, duplicates, md5checksum_pairs
     elif len(res) == 3:
         hash_table_jpg, hash_table_png, dups = res
-        return hash_table_jpg, hash_table_png, dups
+        if hash_table_jpg:
+            insertkvdict = walkeddir_parse_to_kvdict(hash_table_jpg)
+        if hash_table_png:
+            insertkvdict = walkeddir_parse_to_kvdict(hash_table_jpg)
 
+        for k,v in insertkvdict.iteritems():
+            if not collection_name:
+                collection_name = 'md5checksums'
+            # # Build object of key/values for insert
+            md5checksum = k.keys()[0] #v['md5checksum']
+            colorstyle  = v['colorstyle']
+            alt         = v['alt']
+            ext         = v['ext']
+            filepath    = k.values()[1:]
+            create_dt   = v['create_dt']
+
+            #print locals()
+            ## Perform the Insert to mongodb
+            #md5checksums.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
+            #expr = { "$or": [ {"md5checksums": { "$exists": False }}, {"colorstyle": colorstyle}]}
+            #for c in collection_name.find(expr):
+            #    print [ k.upper() for k in sorted(c.keys()) ]
+            if regex_valid_colorstyle_file.findall(v['filename']):
+                ## inserts only, not updates, will create multiple records if exists already
+                try:
+                    update_filerecord_pymongo(database_name=database_name, collection_name=collection_name,
+                                              md5checksum=md5checksum,
+                                              colorstyle=colorstyle, alt=alt, ext=ext,
+                                              create_dt=create_dt)
+                    print "Successful Insert to md5checksums {0} --> {1}".ext(k, v)
+                except pymongo.errors.ConnectionFailure:
+                    import time
+                    time.sleep(5)
+                    pass
+                else:
+                    pass
+        return
+        #insertkvdict
+        #return hash_table_jpg, hash_table_png, dups
 
 
 if __name__ == '__main__':
