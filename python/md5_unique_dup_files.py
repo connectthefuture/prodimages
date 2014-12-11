@@ -173,6 +173,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
                         'colorstyle': colorstyle,
                         'alt': {'$min': {'alt': alt}},
                         'ext': ext,
+                        'filepath': filepath,
                         #'upload_ct':
                         '$inc': {'upload_ct': 1},
                         'create_dt': { '$min': {'create_dt': create_dt}},
@@ -186,6 +187,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
                          'colorstyle': colorstyle,
                          'alt': alt,
                          'ext': ext,
+                         'filepath': filepath,
                          'upload_ct': 1,
                          'create_dt': {'$min': {'create_dt': create_dt}},
                          'modify_dt': {'$max': {'modify_dt': create_dt}}
@@ -196,7 +198,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
     mongo_collection.create_index([(key_str, pymongo.ASCENDING)], unique=True, sparse=False, background=True)
     mongo_collection.create_index([("colorstyle", pymongo.DESCENDING),("alt", pymongo.ASCENDING)], sparse=False, background=True)
     new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
-    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle, alt, ext, new_insertobj_id)
+    print "Upserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle, alt, ext, new_insertobj_id)
     return new_insertobj_id
 
 
