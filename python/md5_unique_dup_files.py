@@ -52,7 +52,7 @@ def walkeddir_parse_to_kvdict(filepaths_listdict):
     regex = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     datarows = []
     datarowsdict = {}
-    for filepathpair in filepaths_listdict:
+    for filepathpair in filepaths_listdict.items():
         datarowsdict_tmp = {}
         filepath = filepathpair[1]
         md5checksum = filepathpair[0]
