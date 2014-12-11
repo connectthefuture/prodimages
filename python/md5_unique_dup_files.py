@@ -13,7 +13,7 @@ def find_duplicate_imgs(dname):
     for img in os.listdir(dname):
         print img
         img_path = os.path.join(dname, img)
-        try:
+        try:  
             _file = __builtin__.open(img_path, "rb")
             content = _file.read()
             _file.close()
