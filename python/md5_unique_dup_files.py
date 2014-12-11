@@ -54,46 +54,48 @@ def walkeddir_parse_to_kvdict(filepaths_listdict):
     datarowsdict = {}
     for filepathpair in filepaths_listdict.items():
         datarowsdict_tmp = {}
-        filepath = filepathpair[1]
+        #filepath = filepathpair[1]
+        print filepath
         md5checksum = filepathpair[0]
-        if regex.findall(filepath):
+        #print md5checksum
+        #if regex.findall(filepath):
+        try:
+            filename = filepath.split('/')[-1]
+            colorstyle = filename.split('_')[0]
+            alt_ext = filepath.split('_')[-1]
+            alt = alt_ext.split('.')[0]
+            ext = alt_ext.split('.')[-1]
             try:
-                filename = filepath.split('/')[-1]
-                colorstyle = filename.split('_')[0]
-                alt_ext = filepath.split('_')[-1]
-                alt = alt_ext.split('.')[0]
-                ext = alt_ext.split('.')[-1]
+                create_dt = get_exif_all_data(filepath)['File:FileModifyDate'][:10]
+            except KeyError:
                 try:
-                    create_dt = get_exif_all_data(filepath)['File:FileModifyDate'][:10]
+                    create_dt = get_exif_pil(filepath)['DateTime'][:10]
                 except KeyError:
                     try:
-                        create_dt = get_exif_pil(filepath)['DateTime'][:10]
+                        create_dt = get_exif_pil(filepath)['DateTimeOriginal'][:10]
                     except KeyError:
-                        try:
-                            create_dt = get_exif_pil(filepath)['DateTimeOriginal'][:10]
-                        except KeyError:
-                            create_dt = '0000-00-00'
-                except ValueError:
-                        try:
-                            create_dt = get_exif_all_data(filepath)['File:FileModifyDate'][:10]
-                        except:
-                            create_dt = '0000-00-00'
-                create_dt = str(create_dt)
-                create_dt = create_dt.replace(':','-')
-                datarowsdict_tmp['colorstyle'] = colorstyle
-                datarowsdict_tmp['alt'] = alt
-                datarowsdict_tmp['ext'] = ext
-                datarowsdict_tmp['filepath'] = filepath
-                datarowsdict_tmp['filename'] = filename
-                datarowsdict_tmp['md5checksum'] = md5checksum
-                datarowsdict_tmp['create_dt'] = create_dt
-                datarowsdict[md5checksum] = datarowsdict_tmp
-                ## Format CSV Rows
-                row = "{0},{1},{2},{3},{4}".format(md5checksum,colorstyle,create_dt,filepath,alt)
-                print row
-                datarows.append(row)
-            except IOError:
-                print "IOError on {0}".format(filepath)
+                        create_dt = '0000-00-00'
+            except ValueError:
+                    try:
+                        create_dt = get_exif_all_data(filepath)['File:FileModifyDate'][:10]
+                    except:
+                        create_dt = '0000-00-00'
+            create_dt = str(create_dt)
+            create_dt = create_dt.replace(':','-')
+            datarowsdict_tmp['colorstyle'] = colorstyle
+            datarowsdict_tmp['alt'] = alt
+            datarowsdict_tmp['ext'] = ext
+            datarowsdict_tmp['filepath'] = filepath
+            datarowsdict_tmp['filename'] = filename
+            datarowsdict_tmp['md5checksum'] = md5checksum
+            datarowsdict_tmp['create_dt'] = create_dt
+            datarowsdict[md5checksum] = datarowsdict_tmp
+            ## Format CSV Rows
+            row = "{0},{1},{2},{3},{4}".format(md5checksum,colorstyle,create_dt,filepath,alt)
+            print row
+            datarows.append(row)
+        except IOError:
+            print "IOError on {0}".format(filepath)
             #except AttributeError:
             #    print "AttributeError on {0}".format(filepath)
     return datarowsdict
