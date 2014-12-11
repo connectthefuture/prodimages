@@ -56,8 +56,8 @@ def walkeddir_parse_to_kvdict(filepaths_listdict):
         datarowsdict_tmp = {}
         md5checksum = filepathpair[0]
         filepath    = filepathpair[1]
-        print filepath, ' \t',
-        print md5checksum, ' \n'
+        #print filepath, ' \t',
+        #print md5checksum, ' \n'
         #if regex.findall(filepath):
         try:
             filename = filepath.split('/')[-1].split('.')[0]
