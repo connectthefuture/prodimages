@@ -52,8 +52,10 @@ def walkeddir_parse_to_kvdict(filepaths_list):
     regex = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     datarows = []
     datarowsdict = {}
-    for filepath in filepaths_list:
+    for filepathpair in filepaths_list:
         datarowsdict_tmp = {}
+        filepath = filepathpair[1]
+        md5checksum = filepathpair[0]
         if regex.findall(filepath):
             try:
                 filename = filepath.split('/')[-1]
@@ -82,6 +84,8 @@ def walkeddir_parse_to_kvdict(filepaths_list):
                 datarowsdict_tmp['alt'] = alt
                 datarowsdict_tmp['ext'] = ext
                 datarowsdict_tmp['filepath'] = filepath
+                datarowsdict_tmp['filename'] = filename
+                datarowsdict_tmp['md5checksum'] = md5checksum
                 datarowsdict_tmp['create_dt'] = create_dt
                 datarowsdict[filepath] = datarowsdict_tmp
                 ## Format CSV Rows
@@ -111,12 +115,12 @@ def find_md5_and_dups(files_list, ext=None):
     else:
         checklist = files_list
 
-    if not ext:
-        ## Use basic regex excluding . (dot) files
-        regex = re.compile(r'^.+?\..+?$')
-        regex_jpg = re.compile(r'^.+?\.[jpg]{3}$', re.I)
-        regex_png = re.compile(r'^.+?\.[png]{3}$', re.I)
-        #regex_images = re.compile(r'^.+?\.[jpngsdtif]{3}$', re.I)
+    #if not ext:
+    ## Use basic regex excluding . (dot) files
+    regex = re.compile(r'^.+?\..+?$')
+    regex_jpg = re.compile(r'^.+?\.[jpg]{3}$', re.I)
+    regex_png = re.compile(r'^.+?\.[png]{3}$', re.I)
+    #regex_images = re.compile(r'^.+?\.[jpngsdtif]{3}$', re.I)
     for f in checklist:
         print f
         if regex.findall(f):
@@ -145,14 +149,14 @@ def find_md5_and_dups(files_list, ext=None):
                         hash_table_general[_hash] = filepath
             except:
                 pass
-    if not hash_table_png and hash_table_png:
+    if not hash_table_jpg and not hash_table_png:
         return hash_table_general, dups
     else:
         return hash_table_jpg, hash_table_png, dups
 
 
 
-def update_filerecord_pymongo(database_name=None, collection_name=None, md5checksum=None, colorstyle=None, alt=None, ext=None, create_dt=None):
+def update_filerecord_pymongo(database_name=None, collection_name=None, md5checksum=None, filename=None, filepath=None, colorstyle=None, alt=None, ext=None, create_dt=None):
     # Insert a New Document
     import pymongo, bson
     from bson import Binary, Code
@@ -163,7 +167,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
 
     key = {'md5checksum': md5checksum}  #, 'alt': alt, 'upload_ct': 1}
     #data = { "$set":{'ext': ext,'md5checksum': md5checksum,'alt': alt, upload_ct: 1,'create_dt': create_dt}},
-    datarow = {'md5checksum': md5checksum, 'colorstyle': colorstyle, 'ext': ext, 'alt': alt, 'upload_ct': 1,'create_dt': create_dt}
+    datarow = {'md5checksum': md5checksum, 'colorstyle': colorstyle, 'ext': ext, 'alt': alt, 'filepath': filepath,'filename': filename,'upload_ct': 1,'create_dt': create_dt}
     key_str = key.keys()[0]
     check = mongo_collection.find({key_str: colorstyle}).count()
     if check == 1:
@@ -174,6 +178,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
                         'alt': {'$min': {'alt': alt}},
                         'ext': ext,
                         'filepath': filepath,
+                        'filename': filename,
                         #'upload_ct':
                         '$inc': {'upload_ct': 1},
                         'create_dt': { '$min': {'create_dt': create_dt}},
@@ -188,6 +193,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
                          'alt': alt,
                          'ext': ext,
                          'filepath': filepath,
+                         'filename': filename,
                          'upload_ct': 1,
                          'create_dt': {'$min': {'create_dt': create_dt}},
                          'modify_dt': {'$max': {'modify_dt': create_dt}}
@@ -238,7 +244,8 @@ def main(files_list=None, database_name='images', collection_name=None):
     elif len(res) == 3:
         hash_table_jpg, hash_table_png, dups = res
         if hash_table_jpg:
-            insertkvdict = walkeddir_parse_to_kvdict(hash_table_jpg)
+            files_list = hash_table_jpg.items()[:]
+            insertkvdict = walkeddir_parse_to_kvdict(files_list)
         if hash_table_png:
             insertkvdict = walkeddir_parse_to_kvdict(hash_table_jpg)
 
@@ -279,5 +286,4 @@ def main(files_list=None, database_name='images', collection_name=None):
 
 
 if __name__ == '__main__':
-    unique_files, duplicates, md5checksum_pairs = main()
-    print unique_files, duplicates, md5checksum_pairs
+    main()
