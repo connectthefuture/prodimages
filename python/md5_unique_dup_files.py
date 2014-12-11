@@ -162,12 +162,15 @@ def find_md5_and_dups(files_list, ext=None):
 
 def update_filerecord_pymongo(database_name=None, collection_name=None, md5checksum=None, filename=None, filepath=None, colorstyle=None, alt=None, ext=None, create_dt=None):
     # Insert a New Document
-    import pymongo, bson
+    import pymongo, bson, datetime
     from bson import Binary, Code
     from bson.json_util import dumps
     mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
+
+    # Convert date string to date obj
+    create_dt = datetime.datetime.strptime(create_dt, '%Y-%m-%d')
 
     key = {'md5checksum': md5checksum}  #, 'alt': alt, 'upload_ct': 1}
     #data = { "$set":{'ext': ext,'md5checksum': md5checksum,'alt': alt, upload_ct: 1,'create_dt': create_dt}},
@@ -182,29 +185,29 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
                         "colorstyle": colorstyle,
                         "alt": {"$min": {"alt": alt}},
                         "ext": ext,
-                        "filepath": filepath,
                         "filename": filename,
+                        "filepath": filepath,
                         #"upload_ct":
                         "$inc": {"upload_ct": 1},
                         "create_dt": { "$min": {"create_dt": create_dt}},
                         "modify_dt": { "$max": {"modify_dt": create_dt}}
                         }
                     }
-        return check
+        #return data, check
     else:
         print 'NEW IT ', check
-        data = { "$set":{"md5checksum": md5checksum,
+        data = { "$set":{
                          "colorstyle": colorstyle,
                          "alt": alt,
                          "ext": ext,
-                         "filepath": filepath,
                          "filename": filename,
+                         "filepath": filepath,
                          "upload_ct": 1,
                          "create_dt": {"$min": {"create_dt": create_dt}},
                          "modify_dt": {"$max": {"modify_dt": create_dt}}
                         }
         }
-        #data = { "$set":{'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
+        #data = { "$set":{'colorstyle': colorstyle,'ext': ext,'alt': alt, 'upload_ct': 1,'create_dt': create_dt}}
     #mongo_collection.create_index([("colorstyle", pymongo.DECENDING)], unique=True, sparse=False, background=True)
     print data, key, key_str, key_val
     mongo_collection.create_index([(key_str, pymongo.ASCENDING)], unique=True, sparse=False, background=True)
