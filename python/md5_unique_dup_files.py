@@ -121,13 +121,13 @@ def find_md5_and_dups(files_list, ext=None):
 
     #if not ext:
     ## Use basic regex excluding . (dot) files
-    regex = re.compile(r'^.+?\..+?$')
-    regex_jpg = re.compile(r'^.+?\.[jpg]{3}$', re.I)
-    regex_png = re.compile(r'^.+?\.[png]{3}$', re.I)
+    regex_notdot = re.compile(r'^.+?\..+?$')
+    regex_jpg    = re.compile(r'^.+?\.[jpg]{3}$', re.I)
+    regex_png    = re.compile(r'^.+?\.[png]{3}$', re.I)
     #regex_images = re.compile(r'^.+?\.[jpngsdtif]{3}$', re.I)
     for f in checklist:
         print f
-        if regex.findall(f):
+        if regex_notdot.findall(f):
             if os.path.isfile(f):
                 filepath = os.path.abspath(f)
             try:
@@ -183,7 +183,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
     ## Check if key exists in db
     check = mongo_collection.find({key_str: key_val}).count()
     if check == 1:
-        print 'REFRESH IT ', check
+        print 'UPDATING IT ', check
         data = { "$set":{
                         "md5checksum": md5checksum,
                         "colorstyle": colorstyle,
@@ -211,7 +211,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
                          "modify_dt": {"$max": {"modify_dt": create_dt}}
                         }
         }
-        #data = { "$set":{'colorstyle': colorstyle,'ext': ext,'alt': alt, 'upload_ct': 1,'create_dt': create_dt}}
+    #data = { "$set":{'colorstyle': colorstyle,'ext': ext,'alt': alt, 'upload_ct': 1,'create_dt': create_dt}}
     #mongo_collection.create_index([("colorstyle", pymongo.DECENDING)], unique=True, sparse=False, background=True)
     #print data, key, key_str, key_val
     mongo_collection.create_index([(key_str, pymongo.ASCENDING)], unique=True, sparse=False, background=True)
