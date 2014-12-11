@@ -87,9 +87,9 @@ def walkeddir_parse_to_kvdict(filepaths_list):
                 datarowsdict_tmp['filename'] = filename
                 datarowsdict_tmp['md5checksum'] = md5checksum
                 datarowsdict_tmp['create_dt'] = create_dt
-                datarowsdict[filepath] = datarowsdict_tmp
+                datarowsdict[md5checksum] = datarowsdict_tmp
                 ## Format CSV Rows
-                row = "{0},{1},{2},{3}".format(colorstyle,create_dt,filepath,alt)
+                row = "{0},{1},{2},{3},{4}".format(md5checksum,colorstyle,create_dt,filepath,alt)
                 print row
                 datarows.append(row)
             except IOError:
@@ -230,7 +230,8 @@ def main(files_list=None, database_name='images', collection_name=None):
     regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     if not files_list:
         try:
-            files_list = sys.argv[1]
+            rootdir = sys.argv[1]
+            files_list = recursive_dirlist(rootdir)
         except IndexError:
             print 'You need to define files_list= or as sys.argv[1]'
             raise
@@ -258,6 +259,7 @@ def main(files_list=None, database_name='images', collection_name=None):
             alt         = v['alt']
             ext         = v['ext']
             filepath    = v['filepath'] #k.values()[1:]
+            filepath    = v['filename'] #k.values()[1:]
             create_dt   = v['create_dt']
 
             #print locals()
@@ -270,7 +272,7 @@ def main(files_list=None, database_name='images', collection_name=None):
                 ## inserts only, not updates, will create multiple records if exists already
                 try:
                     update_filerecord_pymongo(database_name=database_name, collection_name=collection_name,
-                                              md5checksum=md5checksum,
+                                              md5checksum=md5checksum, filepath=filepath, filename=filename,
                                               colorstyle=colorstyle, alt=alt, ext=ext,
                                               create_dt=create_dt)
                     print "Successful Insert to md5checksums {0} --> {1}".ext(k, v)
