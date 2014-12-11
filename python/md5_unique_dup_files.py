@@ -19,7 +19,6 @@ def find_duplicate_imgs(dname):
             _file.close()
             md5 = hashlib.md5(content)
             _hash = md5.hexdigest()
-
             if _hash in hash_table.keys():
                 dups.append(img)
             else:
@@ -34,12 +33,20 @@ def find_duplicate_imgs(dname):
 
 import os,sys
 
-dname = sys.argv[1]
-def main():
+
+def main(dname=None):
+    if not dname:
+        try:
+            dname = sys.argv[1]
+        except IndexError:
+            print 'You need to define dname= or as sys.argv[1]'
+            pass
     md5checksum_pairs, duplicates = find_duplicate_imgs(dname)
     unique_files = md5checksum_pairs.values()
     return unique_files, duplicates, md5checksum_pairs
 
+
 if __name__ == '__main__':
     unique_files, duplicates, md5checksum_pairs = main()
     print unique_files, duplicates, md5checksum_pairs
+
