@@ -122,7 +122,7 @@ def find_md5_and_dups(files_list, ext=None):
         if regex.findall(f):
             if os.path.isfile(f):
                 filepath = os.path.abspath(f)
-            try:  
+            try:
                 _file = __builtin__.open(filepath, "rb")
                 content = _file.read()
                 _file.close()
@@ -200,20 +200,15 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
     return new_insertobj_id
 
 
+    #print locals()
+    ## Perform the Insert to mongodb
+    #md5checksums.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
+    #expr = { "$or": [ {"md5checksums": { "$exists": False }}, {"colorstyle": colorstyle}]}
+    #for c in collection_name.find(expr):
+    #    print [ k.upper() for k in sorted(c.keys()) ]
 
-
-
-
-
-        #print locals()
-        ## Perform the Insert to mongodb
-        #md5checksums.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
-        #expr = { "$or": [ {"md5checksums": { "$exists": False }}, {"colorstyle": colorstyle}]}
-        #for c in collection_name.find(expr):
-        #    print [ k.upper() for k in sorted(c.keys()) ]
-
-        #except StopIteration:
-            #print "Successful Batch Update Completed md5checksums..."
+    #except StopIteration:
+        #print "Successful Batch Update Completed md5checksums..."
 
 ############################################
 ############ RUN ###########################
@@ -253,7 +248,7 @@ def main(files_list=None, database_name='images', collection_name=None):
             colorstyle  = v['colorstyle']
             alt         = v['alt']
             ext         = v['ext']
-            filepath    = k.values()[1:]
+            filepath    = v['filepath'] #k.values()[1:]
             create_dt   = v['create_dt']
 
             #print locals()
@@ -262,7 +257,7 @@ def main(files_list=None, database_name='images', collection_name=None):
             #expr = { "$or": [ {"md5checksums": { "$exists": False }}, {"colorstyle": colorstyle}]}
             #for c in collection_name.find(expr):
             #    print [ k.upper() for k in sorted(c.keys()) ]
-            if regex_valid_colorstyle_file.findall(v['filename']):
+            if regex_valid_colorstyle_file.findall(v['filepath']):
                 ## inserts only, not updates, will create multiple records if exists already
                 try:
                     update_filerecord_pymongo(database_name=database_name, collection_name=collection_name,
@@ -284,4 +279,3 @@ def main(files_list=None, database_name='images', collection_name=None):
 if __name__ == '__main__':
     unique_files, duplicates, md5checksum_pairs = main()
     print unique_files, duplicates, md5checksum_pairs
-
