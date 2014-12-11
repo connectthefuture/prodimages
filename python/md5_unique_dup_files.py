@@ -40,7 +40,7 @@ def main(dname=None):
             dname = sys.argv[1]
         except IndexError:
             print 'You need to define dname= or as sys.argv[1]'
-            pass
+            raise
     md5checksum_pairs, duplicates = find_duplicate_imgs(dname)
     unique_files = md5checksum_pairs.values()
     return unique_files, duplicates, md5checksum_pairs
