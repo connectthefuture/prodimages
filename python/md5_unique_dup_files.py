@@ -89,8 +89,11 @@ def walkeddir_parse_to_kvdict(filepaths_listdict):
             elif len(alt) == 1:
                 pass
             elif len(alt) > 1 and len(alt) < 7:
-                alt = int(alt[-1])
-                alt = alt + 1
+                if alt[-1].isdigit():
+                    alt = int(alt[-1])
+                    alt = alt + 1
+                else:
+                    alt = 0
             else:
                 alt = 0
             datarowsdict_tmp['alt'] = alt
