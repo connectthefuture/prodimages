@@ -1,6 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+def recursive_dirlist(rootdir):
+    import os
+    walkedlist = []
+    for dirname, subdirnames, filenames in os.walk(rootdir):
+        # append path of all filenames to walkedlist
+        for filename in filenames:
+            file_path = os.path.abspath(os.path.join(dirname, filename))
+            if os.path.isfile(file_path):
+                walkedlist.append(file_path)
+    # Advanced usage:
+    # editing the 'dirnames' list will stop os.walk() from recursing into there.
+    #if '.git' in dirnames:
+    # don't go into any .git directories.
+    #    dirnames.remove('.git')
+    return walkedlist
+
+
 def find_duplicate_files(dirname, file_type=None):
     import hashlib, re
     import os, __builtin__
@@ -10,19 +27,25 @@ def find_duplicate_files(dirname, file_type=None):
     hash_table_general = {}
     dups               = []
 
-    dirname = os.path.abspath(dirname)
-    os.chdir(os.path.abspath(dirname))
-    #print os.listdir(dirname)
+    if type(dirname) == str:
+        dirname = os.path.abspath(dirname)
+        os.chdir(os.path.abspath(dirname))
+        checklist = os.listdir(dirname)
+    else:
+        checklist = dirname
+
     if not file_type:
         ## Use basic regex excluding . (dot) files
         regex = re.compile(r'^.+?\..+?$')
         regex_jpg = re.compile(r'^.+?\.[jpg]{3}$', re.I)
         regex_png = re.compile(r'^.+?\.[png]{3}$', re.I)
         #regex_images = re.compile(r'^.+?\.[jpngJPNG]{3}$')
-    for f in os.listdir(dirname):
+    for f in checklist:
         print f
         if regex.findall(f):
-            filepath = os.path.join(dirname, f)
+            if os.path.isfile(f):
+                filepath = os.path.join(dirname, f)
+            
             try:  
                 _file = __builtin__.open(filepath, "rb")
                 content = _file.read()
