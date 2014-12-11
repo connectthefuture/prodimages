@@ -138,17 +138,17 @@ def find_md5_and_dups(files_list, ext=None):
                 _hash = md5.hexdigest()
                 if regex_jpg.findall(filepath):
                     if _hash in hash_table_jpg.keys():
-                        dups.append(os.path.abspath(filepath))
+                        dups.append(_hash, os.path.abspath(filepath))
                     else:
                         hash_table_jpg[_hash] = filepath
                 elif regex_png.findall(filepath):
                     if _hash in hash_table_png.keys():
-                        dups.append(os.path.abspath(filepath))
+                        dups.append(_hash, os.path.abspath(filepath))
                     else:
                         hash_table_png[_hash] = filepath
                 else:
                     if _hash in hash_table_general.keys():
-                        dups.append(os.path.abspath(filepath))
+                        dups.append(_hash, os.path.abspath(filepath))
                     else:
                         hash_table_general[_hash] = filepath
             except:
@@ -297,7 +297,10 @@ def main(files_list=None, database_name='images', collection_name='md5checksums'
             else:
                 print 'Failed Regex Validation --->\t ', v['filepath']
                 pass
-        return
+        if dups:
+            return dups
+        else:
+            return
         #insertkvdict
         #return hash_table_jpg, hash_table_png, dups
 
