@@ -4,10 +4,12 @@
 def find_duplicate_files(dirname, file_type=None):
     import hashlib, re
     import os, __builtin__
-    
-    hash_table_jpg = {}
-    hash_table_png = {}
-    dups = []
+
+    hash_table_jpg     = {}
+    hash_table_png     = {}
+    hash_table_general = {}
+    dups               = []
+
     dirname = os.path.abspath(dirname)
     os.chdir(os.path.abspath(dirname))
     #print os.listdir(dirname)
