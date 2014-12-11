@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def find_duplicate_imgs(dirname, file_type=None):
+def find_duplicate_files(dirname, file_type=None):
     import hashlib, re
     import os, __builtin__
     
@@ -10,7 +10,7 @@ def find_duplicate_imgs(dirname, file_type=None):
     dups = []
     dirname = os.path.abspath(dirname)
     os.chdir(os.path.abspath(dirname))
-    #print os.listdir(dname)
+    #print os.listdir(dirname)
     if not file_type:
         ## Use basic regex excluding . (dot) files
         regex = re.compile(r'^.+?\..+?$')
@@ -89,7 +89,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
     return new_insertobj_id
 
 
-def main_update(dirname=None, database_name=images, collection_name=None):
+def main_update(dirname=None, database_name='images', collection_name=None):
     import sys,os,re, sqlalchemy, json, pymongo
     regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     if not dirname:
@@ -98,7 +98,7 @@ def main_update(dirname=None, database_name=images, collection_name=None):
         except:
             dirname = '/mnt/Post_Complete/ImageDrop'
     ## Take the compiled k/v pairs and Format + Insert into Mongo DB
-    hash_table_jpg, hash_table_png, dups = find_duplicate_imgs(dirname)
+    hash_table_jpg, hash_table_png, dups = find_duplicate_files(dirname)
     #try:sorted(data, reverse=True)
     if hash_table_png:
         hash_table = hash_table_png
@@ -143,14 +143,14 @@ def main_update(dirname=None, database_name=images, collection_name=None):
 import os,sys
 
 
-def main(dname=None):
-    if not dname:
+def main(dirname=None):
+    if not dirname:
         try:
-            dname = sys.argv[1]
+            dirname = sys.argv[1]
         except IndexError:
-            print 'You need to define dname= or as sys.argv[1]'
+            print 'You need to define dirname= or as sys.argv[1]'
             raise
-    res = find_duplicate_imgs(dname)
+    res = find_duplicate_files(dirname)
     if len(res) <= 2:
         md5checksum_pairs, duplicates = res
         unique_files = md5checksum_pairs.values()
