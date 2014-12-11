@@ -18,7 +18,84 @@ def recursive_dirlist(rootdir):
     return walkedlist
 
 
-def find_duplicate_files(dirname, file_type=None):
+## Extract All Metadata from Image File as Dict using PIL
+def get_exif_pil(file_path):
+    from PIL import Image
+    from PIL.ExifTags import TAGS
+    exifdata = {}
+    im = Image.open(file_path)
+    info = im._getexif()
+    for tag, value in info.items():
+        decoded = TAGS.get(tag, tag)
+        exifdata[decoded] = value
+    return exifdata
+
+def get_PNG_datecreate(image_filepath):
+    import exiftool
+    with exiftool.ExifTool() as et:
+        datecreated = et.get_metadata(image_filepath)['PNG:datecreate'][:10]
+    return datecreated
+
+
+def get_exif_all_data(image_filepath):
+    import exiftool
+    with exiftool.ExifTool() as et:
+        metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
+    return metadata
+
+
+###
+## Convert Walked Dir List To Lines with path,photo_date,stylenum,alt. Depends on above "get_exif_all_data" function
+def walkeddir_parse_to_kvdict(filepaths_list):
+    import re,os
+    #regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpngJPNG]{3}$')
+    regex = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
+    datarows = []
+    datarowsdict = {}
+    for filepath in filepaths_list:
+        datarowsdict_tmp = {}
+        if regex.findall(filepath):
+            try:
+                filename = filepath.split('/')[-1]
+                colorstyle = filename.split('_')[0]
+                alt_ext = filepath.split('_')[-1]
+                alt = alt_ext.split('.')[0]
+                ext = alt_ext.split('.')[-1]
+                try:
+                    create_dt = get_exif_all_data(filepath)['File:FileModifyDate'][:10]
+                except KeyError:
+                    try:
+                        create_dt = get_exif_pil(filepath)['DateTime'][:10]
+                    except KeyError:
+                        try:
+                            create_dt = get_exif_pil(filepath)['DateTimeOriginal'][:10]
+                        except KeyError:
+                            create_dt = '0000-00-00'
+                except AttributeError:
+                        try:
+                            create_dt = get_exif_all_data(filepath)['File:FileModifyDate'][:10]
+                        except:
+                            create_dt = '0000-00-00'
+                create_dt = str(create_dt)
+                create_dt = create_dt.replace(':','-')
+                datarowsdict_tmp['colorstyle'] = colorstyle
+                datarowsdict_tmp['alt'] = alt
+                datarowsdict_tmp['ext'] = ext
+                datarowsdict_tmp['filepath'] = filepath
+                datarowsdict_tmp['create_dt'] = create_dt
+                datarowsdict[filepath] = datarowsdict_tmp
+                ## Format CSV Rows
+                row = "{0},{1},{2},{3}".format(colorstyle,create_dt,filepath,alt)
+                print row
+                datarows.append(row)
+            except IOError:
+                print "IOError on {0}".format(filepath)
+            #except AttributeError:
+            #    print "AttributeError on {0}".format(filepath)
+    return datarowsdict
+
+
+def find_md5_and_dups(files_list, ext=None):
     import hashlib, re
     import os, __builtin__
 
@@ -27,25 +104,24 @@ def find_duplicate_files(dirname, file_type=None):
     hash_table_general = {}
     dups               = []
 
-    if type(dirname) == str:
-        dirname = os.path.abspath(dirname)
-        os.chdir(os.path.abspath(dirname))
-        checklist = os.listdir(dirname)
+    if type(files_list) == str and os.path.isdir(files_list):
+        files_list = os.path.abspath(files_list)
+        os.chdir(os.path.abspath(files_list))
+        checklist = os.listdir(files_list)
     else:
-        checklist = dirname
+        checklist = files_list
 
-    if not file_type:
+    if not ext:
         ## Use basic regex excluding . (dot) files
         regex = re.compile(r'^.+?\..+?$')
         regex_jpg = re.compile(r'^.+?\.[jpg]{3}$', re.I)
         regex_png = re.compile(r'^.+?\.[png]{3}$', re.I)
-        #regex_images = re.compile(r'^.+?\.[jpngJPNG]{3}$')
+        #regex_images = re.compile(r'^.+?\.[jpngsdtif]{3}$', re.I)
     for f in checklist:
-        #print f
+        print f
         if regex.findall(f):
             if os.path.isfile(f):
-                filepath = os.path.join(dirname, f)
-            
+                filepath = os.path.abspath(f)
             try:  
                 _file = __builtin__.open(filepath, "rb")
                 content = _file.read()
@@ -76,7 +152,7 @@ def find_duplicate_files(dirname, file_type=None):
 
 
 
-def update_filerecord_pymongo(database_name=None, collection_name=None, md5checksum=None, colorstyle=None, alt=None, format=None, timestamp=None):
+def update_filerecord_pymongo(database_name=None, collection_name=None, md5checksum=None, colorstyle=None, alt=None, ext=None, create_dt=None):
     # Insert a New Document
     import pymongo, bson
     from bson import Binary, Code
@@ -85,45 +161,55 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
 
-    key = {'colorstyle': colorstyle}  #, 'alt': alt, 'upload_ct': 1}
-    #data = { "$set":{'format': format,'md5checksum': md5checksum,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
-    datarow = {'colorstyle': colorstyle, 'format': format, 'md5checksum': md5checksum, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
+    key = {'md5checksum': md5checksum}  #, 'alt': alt, 'upload_ct': 1}
+    #data = { "$set":{'ext': ext,'md5checksum': md5checksum,'alt': alt, upload_ct: 1,'create_dt': create_dt}},
+    datarow = {'md5checksum': md5checksum, 'colorstyle': colorstyle, 'ext': ext, 'alt': alt, 'upload_ct': 1,'create_dt': create_dt}
     key_str = key.keys()[0]
     check = mongo_collection.find({key_str: colorstyle}).count()
     if check == 1:
         print 'REFRESH IT ', check
         data = { "$set":{
+                        'md5checksum': md5checksum,
                         'colorstyle': colorstyle,
                         'alt': {'$min': {'alt': alt}},
-                        'format': format,
-                        'md5checksum': md5checksum,
+                        'ext': ext,
                         #'upload_ct':
                         '$inc': {'upload_ct': 1},
-                        'timestamp': { '$max': {'timestamp': timestamp}}
+                        'create_dt': { '$min': {'create_dt': create_dt}},
+                        'modify_dt': { '$max': {'modify_dt': create_dt}}
                         }
                     }
         return check
     else:
         print 'NEW IT ', check
-        data = { "$set":{'format': format,'md5checksum': md5checksum,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
-        #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
-    mongo_collection.create_index("colorstyle", unique=True, sparse=False, background=True)
-    #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
+        data = { "$set":{'md5checksum': md5checksum,
+                         'colorstyle': colorstyle,
+                         'alt': alt,
+                         'ext': ext,
+                         'upload_ct': 1,
+                         'create_dt': {'$min': {'create_dt': create_dt}},
+                         'modify_dt': {'$max': {'modify_dt': create_dt}}
+                        }
+        }
+
+    #mongo_collection.create_index([("colorstyle", pymongo.DECENDING)], unique=True, sparse=False, background=True)
+    mongo_collection.create_index([(key_str, pymongo.ASCENDING)], unique=True, sparse=False, background=True)
+    mongo_collection.create_index([("colorstyle", pymongo.DESCENDING),("alt", pymongo.ASCENDING)], sparse=False, background=True)
     new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
-    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
+    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle, alt, ext, new_insertobj_id)
     return new_insertobj_id
 
 
-def main_update(dirname=None, database_name='images', collection_name=None):
+def main_update(files_list=None, database_name='images', collection_name=None):
     import sys,os,re, sqlalchemy, json, pymongo
     regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
-    if not dirname:
+    if not files_list:
         try:
-            dirname = sys.argv[1]
+            files_list = sys.argv[1]
         except:
-            dirname = '/mnt/Post_Complete/ImageDrop'
+            files_list = '/mnt/Post_Complete/ImageDrop'
     ## Take the compiled k/v pairs and Format + Insert into Mongo DB
-    hash_table_jpg, hash_table_png, dups = find_duplicate_files(dirname)
+    hash_table_jpg, hash_table_png, dups = find_md5_and_dups(files_list)
     #try:sorted(data, reverse=True)
     if hash_table_png:
         hash_table = hash_table_png
@@ -138,8 +224,8 @@ def main_update(dirname=None, database_name='images', collection_name=None):
             md5checksum = row['md5checksum']
             colorstyle = row['colorstyle']
             alt = row['alt']
-            format = row['format']
-            timestamp = row['timestamp']
+            ext = row['ext']
+            create_dt = row['create_dt']
             #print locals()
             ## Perform the Insert to mongodb
             #md5checksums.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
@@ -149,8 +235,8 @@ def main_update(dirname=None, database_name='images', collection_name=None):
             if regex_valid_colorstyle_file.findall(row['filename']):
                 ## inserts only, not updates, will create multiple records if exists already
                 try:
-                    update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, md5checksum=md5checksum, colorstyle=colorstyle, alt=alt, format=format, timestamp=timestamp)
-                    print "Successful Insert to md5checksums {0} --> {1}".format(k,v)
+                    update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, md5checksum=md5checksum, colorstyle=colorstyle, alt=alt, ext=ext, create_dt=create_dt)
+                    print "Successful Insert to md5checksums {0} --> {1}".ext(k,v)
                 except pymongo.errors.ConnectionFailure:
                     import time
                     time.sleep(5)
@@ -168,14 +254,14 @@ def main_update(dirname=None, database_name='images', collection_name=None):
 import os,sys
 
 
-def main(dirname=None):
-    if not dirname:
+def main(files_list=None):
+    if not files_list:
         try:
-            dirname = sys.argv[1]
+            files_list = sys.argv[1]
         except IndexError:
-            print 'You need to define dirname= or as sys.argv[1]'
+            print 'You need to define files_list= or as sys.argv[1]'
             raise
-    res = find_duplicate_files(dirname)
+    res = find_md5_and_dups(files_list)
     if len(res) <= 2:
         md5checksum_pairs, duplicates = res
         unique_files = md5checksum_pairs.values()
@@ -183,8 +269,7 @@ def main(dirname=None):
     elif len(res) == 3:
         hash_table_jpg, hash_table_png, dups = res
         return hash_table_jpg, hash_table_png, dups
-    
-    
+
 
 
 if __name__ == '__main__':
