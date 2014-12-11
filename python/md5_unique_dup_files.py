@@ -54,13 +54,13 @@ def walkeddir_parse_to_kvdict(filepaths_listdict):
     datarowsdict = {}
     for filepathpair in filepaths_listdict.items():
         datarowsdict_tmp = {}
-        #filepath = filepathpair[1]
-        print filepath
         md5checksum = filepathpair[0]
-        #print md5checksum
+        filepath    = filepathpair[1]
+        print filepath, ' \t',
+        print md5checksum, ' \n'
         #if regex.findall(filepath):
         try:
-            filename = filepath.split('/')[-1]
+            filename = filepath.split('/')[-1].split('.')[0]
             colorstyle = filename.split('_')[0]
             alt_ext = filepath.split('_')[-1]
             alt = alt_ext.split('.')[0]
@@ -92,7 +92,9 @@ def walkeddir_parse_to_kvdict(filepaths_listdict):
             datarowsdict[md5checksum] = datarowsdict_tmp
             ## Format CSV Rows
             row = "{0},{1},{2},{3},{4}".format(md5checksum,colorstyle,create_dt,filepath,alt)
-            print row
+            #print row
+            #print datarowsdict,
+            #print datarowsdict_tmp, ' \n'
             datarows.append(row)
         except IOError:
             print "IOError on {0}".format(filepath)
@@ -262,7 +264,7 @@ def main(files_list=None, database_name='images', collection_name=None):
             alt         = v['alt']
             ext         = v['ext']
             filepath    = v['filepath'] #k.values()[1:]
-            filepath    = v['filename'] #k.values()[1:]
+            filename    = v['filename'] #k.values()[1:]
             create_dt   = v['create_dt']
 
             #print locals()
