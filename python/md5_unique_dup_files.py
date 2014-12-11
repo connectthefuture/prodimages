@@ -169,14 +169,18 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
 
-    # Convert date string to date obj
-    create_dt = datetime.datetime.strptime(create_dt, '%Y-%m-%d')
-
-    key = {'md5checksum': md5checksum}  #, 'alt': alt, 'upload_ct': 1}
-    #data = { "$set":{'ext': ext,'md5checksum': md5checksum,'alt': alt, upload_ct: 1,'create_dt': create_dt}},
-    datarow = {'md5checksum': md5checksum, 'colorstyle': colorstyle, 'ext': ext, 'alt': alt, 'filepath': filepath,'filename': filename,'upload_ct': 1,'create_dt': create_dt}
+    key = {'md5checksum': md5checksum}
     key_str = key.keys()[0]
     key_val = key.values()[0]
+    
+
+    #, 'alt': alt, 'upload_ct': 1}
+    #data = { "$set":{'ext': ext,'md5checksum': md5checksum,'alt': alt, upload_ct: 1,'create_dt': create_dt}},
+    # Convert date string to date obj
+    create_dt = datetime.datetime.strptime(create_dt, '%Y-%m-%d')
+    datarow = {'md5checksum': md5checksum, 'colorstyle': colorstyle, 'ext': ext, 'alt': alt, 'filepath': filepath,'filename': filename,'upload_ct': 1,'create_dt': create_dt}
+    
+    ## Check if key exists in db
     check = mongo_collection.find({key_str: key_val}).count()
     if check == 1:
         print 'REFRESH IT ', check
@@ -209,12 +213,11 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
         }
         #data = { "$set":{'colorstyle': colorstyle,'ext': ext,'alt': alt, 'upload_ct': 1,'create_dt': create_dt}}
     #mongo_collection.create_index([("colorstyle", pymongo.DECENDING)], unique=True, sparse=False, background=True)
-    print data, key, key_str, key_val
+    #print data, key, key_str, key_val
     mongo_collection.create_index([(key_str, pymongo.ASCENDING)], unique=True, sparse=False, background=True)
     mongo_collection.create_index([("colorstyle", pymongo.DESCENDING),("ext", pymongo.ASCENDING),("alt", pymongo.ASCENDING)], sparse=False, background=True)
     new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
     print "Upserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle, alt, ext, new_insertobj_id)
-    print dir(new_insertobj_id)
     return new_insertobj_id
 
 
@@ -286,13 +289,13 @@ def main(files_list=None, database_name='images', collection_name='md5checksums'
                                               md5checksum=md5checksum, filepath=filepath, filename=filename,
                                               colorstyle=colorstyle, alt=alt, ext=ext,
                                               create_dt=create_dt)
-                    print "Successful Insert to md5checksums {0} --> {1}".ext(k, v)
+                    print "Successful Insert to --->\n\t {0} {1} --> {2}".format(collection_name, k, v)
                 except pymongo.errors.ConnectionFailure:
                     import time
                     time.sleep(5)
                     pass
             else:
-                print 'Failed Regex Validation ', 
+                print 'Failed Regex Validation --->\t ', v['filepath']
                 pass
         return
         #insertkvdict
