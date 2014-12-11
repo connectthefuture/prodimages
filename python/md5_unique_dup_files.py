@@ -126,7 +126,7 @@ def find_md5_and_dups(files_list, ext=None):
     regex_png    = re.compile(r'^.+?\.[png]{3}$', re.I)
     #regex_images = re.compile(r'^.+?\.[jpngsdtif]{3}$', re.I)
     for f in checklist:
-        print f
+        #print f
         if regex_notdot.findall(f):
             if os.path.isfile(f):
                 filepath = os.path.abspath(f)
