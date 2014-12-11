@@ -83,6 +83,16 @@ def walkeddir_parse_to_kvdict(filepaths_listdict):
             create_dt = str(create_dt)
             create_dt = create_dt.replace(':','-')
             datarowsdict_tmp['colorstyle'] = colorstyle
+            # Increment alt# on files with _alt0# naming to match _1,_2 etc.
+            if not alt:
+                alt = 1
+            elif len(alt) == 1:
+                pass
+            elif len(alt) > 1 and len(alt) < 7:
+                alt = int(alt[-1])
+                alt = alt + 1
+            else:
+                alt = 0
             datarowsdict_tmp['alt'] = alt
             datarowsdict_tmp['ext'] = ext
             datarowsdict_tmp['filepath'] = filepath
@@ -240,7 +250,7 @@ import os,sys
 
 def main(files_list=None, database_name='images', collection_name='md5checksums'):
     import sys, os, re, sqlalchemy, json, pymongo
-    regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
+    regex_valid_colorstyle_file = re.compile(r'^(?:.*?/?)?.+?/([1-9][0-9]{8})(?:_)?([1-6x]|alt0[1-6])?\.([jpng]{3})?$', re.I)
     if not files_list:
         try:
             rootdir = sys.argv[1]
