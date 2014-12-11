@@ -229,7 +229,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
 import os,sys
 
 
-def main(files_list=None, database_name='images', collection_name=None):
+def main(files_list=None, database_name='images', collection_name='md5checksums'):
     import sys, os, re, sqlalchemy, json, pymongo
     regex_valid_colorstyle_file = re.compile(r'^(.*?/?)?.*?([0-9]{9})(_alt0[1-6])?(\.[jpngJPNG]{3})?$')
     if not files_list:
