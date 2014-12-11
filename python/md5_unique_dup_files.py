@@ -41,7 +41,7 @@ def find_duplicate_files(dirname, file_type=None):
         regex_png = re.compile(r'^.+?\.[png]{3}$', re.I)
         #regex_images = re.compile(r'^.+?\.[jpngJPNG]{3}$')
     for f in checklist:
-        print f
+        #print f
         if regex.findall(f):
             if os.path.isfile(f):
                 filepath = os.path.join(dirname, f)
@@ -87,7 +87,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
 
     key = {'colorstyle': colorstyle}  #, 'alt': alt, 'upload_ct': 1}
     #data = { "$set":{'format': format,'md5checksum': md5checksum,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
-    datarow = {'colorstyle': colorstyle, 'format': format,'md5checksum': md5checksum,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
+    datarow = {'colorstyle': colorstyle, 'format': format, 'md5checksum': md5checksum, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
     key_str = key.keys()[0]
     check = mongo_collection.find({key_str: colorstyle}).count()
     if check == 1:
