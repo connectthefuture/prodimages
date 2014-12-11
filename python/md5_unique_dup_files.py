@@ -285,8 +285,8 @@ def main(files_list=None, database_name='images', collection_name=None):
                     import time
                     time.sleep(5)
                     pass
-                else:
-                    pass
+            else:
+                pass
         return
         #insertkvdict
         #return hash_table_jpg, hash_table_png, dups
