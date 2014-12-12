@@ -117,24 +117,16 @@ def send_purge_request_edgecast(mediaPath):
 
 
 ############ RUN ###########
-def main(colorstyle_list=None):
+def compile_edgecast_urls_list(colorstyle_list=None):
     import sys,re,os
-    if not colorstyle_list:
-        colorstyle_list = sys.argv[1:]
+    
     edgecast_listurls = []
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
     print colorstyle_list
     for colorstyle in colorstyle_list:
         res = query_version_number(colorstyle)
         version = res[colorstyle]['version']
-        swatch  = res[colorstyle]['swatch']
-        alts = []
-        alts[1]    = res[colorstyle]['alt1']
-        alts[2]    = res[colorstyle]['alt2']
-        alts[3]    = res[colorstyle]['alt3']
-        alts[4]    = res[colorstyle]['alt4']
-        alts[5]    = res[colorstyle]['alt5']
-
+        
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
@@ -168,6 +160,15 @@ def main(colorstyle_list=None):
         
         ## Check for alt images and add thumb and zoom and list for each found
         #alts = [alt1,alt2,alt3,alt4,alt5]
+        swatch     = res[colorstyle]['swatch']
+        #
+        alts       = []
+        alts[1]    = res[colorstyle]['alt1']
+        alts[2]    = res[colorstyle]['alt2']
+        alts[3]    = res[colorstyle]['alt3']
+        alts[4]    = res[colorstyle]['alt4']
+        alts[5]    = res[colorstyle]['alt5']
+
         altnum = 0
         for alt in alts:
             altnum =+1
@@ -180,8 +181,17 @@ def main(colorstyle_list=None):
                 mobile_alt = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt0{1}.pct&outputx=720&outputy=864&level=1'.format(colorstyle, alt)
                 #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                 edgecast_listurls.append(mobile_alt)
+    return edgecast_listurls
+    
+def main(colorstyle_list=None):
+    ##########################################
+    ## Send the urls to clear local and cdn ##
+    ##########################################
+    import os,re,sys
+    if not colorstyle_list:
+        colorstyle_list = sys.argv[1:]
 
-    ## Send the urls to clear local and cdn
+    edgecast_listurls = compile_edgecast_urls_list(colorstyle_list=colorstyle_list)
     regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&)?(?P<version>ver=\d+?)?$', re.U, re.I)
 
     ## Clear Local image servers first
@@ -206,6 +216,7 @@ if __name__ == '__main__':
     import sys,re,os
     try:
         colorstyle_list = sys.argv[1:]
-    ex IndexError:
+    except IndexError:
         colorstyle_list = ''
     main(colorstyle_list=colorstyle_list)
+
