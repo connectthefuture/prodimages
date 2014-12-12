@@ -121,7 +121,6 @@ def main(colorstyle_list=None):
     import sys,re,os
     if not colorstyle_list:
         colorstyle_list = sys.argv[1:]
-    pdp_urllist = []
     edgecast_listurls = []
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
     print colorstyle_list
@@ -185,11 +184,12 @@ def main(colorstyle_list=None):
     ## Send the urls to clear local and cdn
     regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&)?(?P<version>ver=\d+?)?$', re.U, re.I)
 
+    ## Clear Local image servers first
     for url_purge in edgecast_listurls:
         try:
             matched = regex_url.match(url_purge)
-            colorstyle = matched['colorstyle']
-            version    = matched['version']
+            colorstyle = matched.group('colorstyle')
+            version    = matched.group('version')
 
             POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
             send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
@@ -198,7 +198,7 @@ def main(colorstyle_list=None):
         except IndexError:
             print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
             pass
-    
+    ## Now Clear Edgecast
     for url_purge in edgecast_listurls:
         send_purge_request_edgecast(url_purge)
 
@@ -206,6 +206,6 @@ if __name__ == '__main__':
     import sys,re,os
     try:
         colorstyle_list = sys.argv[1:]
-    else:
+    ex IndexError:
         colorstyle_list = ''
     main(colorstyle_list=colorstyle_list)
