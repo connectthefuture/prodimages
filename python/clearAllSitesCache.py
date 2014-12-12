@@ -67,7 +67,8 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         c.setopt(c.VERBOSE, True)
         c.perform()
         c.close()
-        print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
+        #print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
+        
         #head_authtoken = "Authorization: tok:{0}".format(token)
         #head_content_len= "Content-length: {0}".format(str(len(POSTDATA)))
         #head_accept = 'Accept: application/json'
@@ -110,7 +111,7 @@ def send_purge_request_edgecast(mediaPath):
         try:
             c.perform()
             c.close()
-            print "Successfully Sent Purge Request for --> {0}".format(mediaPath)
+            print " was Successfull" ##Sent Purge Request for --> {0}".format(mediaPath)
         except pycurl.error, error:
             errno, errstr = error
             print 'An error occurred: ', errstr 
