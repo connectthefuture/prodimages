@@ -318,7 +318,7 @@ def main(colorstyle_list=None):
                     ## Unique Set
                     edgecast_listurls = list(set(edgecast_listurls))
                     
-                    print pdp_urllist,edgecast_listurls,
+                    #print pdp_urllist,edgecast_listurls,
 
 
     ## Parse urllist returning only versioned List page images
@@ -369,7 +369,7 @@ def main(colorstyle_list=None):
             #csv_write_datedOutfile(url_purge)
 
     else:
-        print "Failed -- Over 550 URLs Submitted"    
+        print "Failed -- Over 8550 URLs Submitted"    
 
 
     count = 0
