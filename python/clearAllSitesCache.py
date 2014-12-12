@@ -6,18 +6,18 @@ def query_version_number(colorstyle):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')    
     connection = orcl_engine.connect()
     
-    querymake_version_number = "SELECT DISTINCT POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS colorstyle, POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as version, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as main, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as alt1, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as alt2, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as alt3, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as alt4, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as alt5, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as swatch FROM POMGR.PRODUCT_COLOR_DETAIL WHERE POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID LIKE '%{0}%'".format(colorstyle)
+    querymake_version_number = "SELECT DISTINCT POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS colorstyle, POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as version, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as main, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as alt1, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as alt02, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as alt03, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as alt04, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as alt05, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as swatch FROM POMGR.PRODUCT_COLOR_DETAIL WHERE POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID LIKE '%{0}%'".format(colorstyle)
 
     result = connection.execute(querymake_version_number)
     style_attribs = {}
     for row in result:
         style_info = {}
         style_info['version'] = row['version']
-        style_info['alt1']    = row['alt1']
-        style_info['alt2']    = row['alt2']
-        style_info['alt3']    = row['alt3']
-        style_info['alt4']    = row['alt4']
-        style_info['alt5']    = row['alt5']
+        style_info['alt01']    = row['alt01']
+        style_info['alt02']    = row['alt02']
+        style_info['alt03']    = row['alt03']
+        style_info['alt04']    = row['alt04']
+        style_info['alt05']    = row['alt05']
         style_info['swatch']  = row['swatch']
         # Convert Colorstyle to string then set as KEY
         style_attribs[str(row['colorstyle'])] = style_info
@@ -163,22 +163,20 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         swatch     = res[colorstyle]['swatch']
         #
         alts       = []
-        alts[1]    = res[colorstyle]['alt1']
-        alts[2]    = res[colorstyle]['alt2']
-        alts[3]    = res[colorstyle]['alt3']
-        alts[4]    = res[colorstyle]['alt4']
-        alts[5]    = res[colorstyle]['alt5']
+        alts.append(res[colorstyle]['alt01'])
+        alts.append(res[colorstyle]['alt02'])
+        alts.append(res[colorstyle]['alt03'])
+        alts.append(res[colorstyle]['alt04'])
+        alts.append(res[colorstyle]['alt05'])
 
-        altnum = 0
         for alt in alts:
-            altnum =+1
             if alt:
-                pdpaltz = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt0{1}.pct&outputx=1800&outputy=2160&level=1&ver={2}'.format(colorstyle, alt, version)
+                pdpaltz = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=1800&outputy=2160&level=1&ver={2}'.format(colorstyle, alt, version)
                 edgecast_listurls.append(pdpaltz)
-                pdpaltl = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt0{1}.pct&outputx=583&outputy=700&level=1&ver={2}'.format(colorstyle, alt, version)
+                pdpaltl = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=583&outputy=700&level=1&ver={2}'.format(colorstyle, alt, version)
                 edgecast_listurls.append(pdpaltl)
                 print "SUCCESS Adding Alt01 --> ", colorstyle
-                mobile_alt = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt0{1}.pct&outputx=720&outputy=864&level=1'.format(colorstyle, alt)
+                mobile_alt = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=720&outputy=864&level=1'.format(colorstyle, alt)
                 #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                 edgecast_listurls.append(mobile_alt)
     return edgecast_listurls
