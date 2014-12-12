@@ -169,7 +169,7 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         alts.append(res[colorstyle]['alt03'])
         alts.append(res[colorstyle]['alt04'])
         alts.append(res[colorstyle]['alt05'])
-
+        print 'Alts ', alts
         for alt in alts:
             if alt:
                 pdpaltz = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=1800&outputy=2160&level=1&ver={2}'.format(colorstyle, alt, version)
@@ -191,7 +191,7 @@ def main(colorstyle_list=None):
         colorstyle_list = sys.argv[1:]
 
     edgecast_listurls = compile_edgecast_urls_list(colorstyle_list=colorstyle_list)
-    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&)?(?P<version>ver=\d+?)?$', re.U, re.I)
+    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&)?(?P<version>ver=\d+?)?$', re.U)
 
     ## Clear Local image servers first
     for url_purge in edgecast_listurls:
