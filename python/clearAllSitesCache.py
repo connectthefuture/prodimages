@@ -6,7 +6,7 @@ def query_version_number(colorstyle):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')    
     connection = orcl_engine.connect()
     
-    querymake_version_number = "SELECT DISTINCT POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS colorstyle, POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as version, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as main, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as alt1, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as alt02, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as alt03, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as alt04, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as alt05, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as swatch FROM POMGR.PRODUCT_COLOR_DETAIL WHERE POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID LIKE '%{0}%'".format(colorstyle)
+    querymake_version_number = "SELECT DISTINCT POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS colorstyle, POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as version, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as main, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as alt01, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as alt02, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as alt03, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as alt04, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as alt05, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as swatch FROM POMGR.PRODUCT_COLOR_DETAIL WHERE POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID LIKE '%{0}%'".format(colorstyle)
 
     result = connection.execute(querymake_version_number)
     style_attribs = {}
@@ -161,6 +161,7 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         ## Check for alt images and add thumb and zoom and list for each found
         #alts = [alt1,alt2,alt3,alt4,alt5]
         swatch     = res[colorstyle]['swatch']
+        print 'SWATCH ', swatch
         #
         alts       = []
         alts.append(res[colorstyle]['alt01'])
