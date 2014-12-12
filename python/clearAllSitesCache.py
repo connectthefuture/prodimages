@@ -212,11 +212,7 @@ def main(colorstyle_list=None):
     for url_purge in edgecast_listurls:
         send_purge_request_edgecast(url_purge)
 
+
 if __name__ == '__main__':
-    import sys,re,os
-    try:
-        colorstyle_list = sys.argv[1:]
-    except IndexError:
-        colorstyle_list = ''
-    main(colorstyle_list=colorstyle_list)
+    main()
 
