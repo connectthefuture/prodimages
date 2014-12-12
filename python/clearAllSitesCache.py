@@ -171,12 +171,14 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         alts.append(res[colorstyle]['alt05'])
         print 'Alts ', alts
         for alt in alts:
-            if alt:
+            altcount = 0
+            if alt == 'Y':
+                altcount += 1
                 pdpaltz = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=1800&outputy=2160&level=1&ver={2}'.format(colorstyle, alt, version)
                 edgecast_listurls.append(pdpaltz)
                 pdpaltl = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=583&outputy=700&level=1&ver={2}'.format(colorstyle, alt, version)
                 edgecast_listurls.append(pdpaltl)
-                print "SUCCESS Adding Alt01 --> ", colorstyle
+                print "SUCCESS Adding Alt ", altcount, " --> ", colorstyle
                 mobile_alt = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=720&outputy=864&level=1'.format(colorstyle, alt)
                 #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                 edgecast_listurls.append(mobile_alt)
