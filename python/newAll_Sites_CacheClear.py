@@ -113,7 +113,6 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         #head_contenttype = 'Content-Type: application/json'
 
 
-
 def send_purge_request_edgecast(mediaPath):
     import pycurl,json,sys,os
     ## Setup variables
@@ -153,11 +152,8 @@ def send_purge_request_edgecast(mediaPath):
             print "Successfully Sent Purge Request for --> {0}".format(mediaPath)
         except pycurl.error, error:
             errno, errstr = error
-            print 'An error occurred: ', errstr
-            
-            
-            
-            
+            print 'An error occurred: ', errstr 
+
 ############ RUN ###########
 def main(colorstyle_list=None):
     import sys,re,os
@@ -171,13 +167,6 @@ def main(colorstyle_list=None):
     #catid = get_catid_from_eventid(eventid)
     ## Join Catid to BC Url
     #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
-    #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
-
-
-
-    #www.bluefly.com/Harrison-pink-check-classic-fit-dress-shirt/p/323108302/detail.fly
-
-    #url_colorstyle_pdp = 'http://www.belleandclive.com/browse/product.jsp?id=' + colorstyle
 
     ## Get all Img links on PDP and append only the primary image urls and versions
     ## Then tack the generated urls for edgecast to list
@@ -222,9 +211,7 @@ def main(colorstyle_list=None):
             edgecast_listurls.append(pdpZOOM)
             edgecast_listurls.append(pdpalt01z)
             edgecast_listurls.append(pdpalt01l)
-            edgecast_listurls.append(pdpaltthumb)         
-            
-
+            edgecast_listurls.append(pdpaltthumb) 
             
             ## Standard urls to clear
             #pdp_urllist.append(oldlistpg)
@@ -238,14 +225,13 @@ def main(colorstyle_list=None):
             #pdp_urllist.append(pdpalt01l)
             #pdp_urllist.append(pdpaltthumb)
 
-
         for link in found_links:
             if colorstyle in link:
                 pdp_urllist.append(link)
                 vertest=link.split('&')[-1]
                 version = ''
                 if vertest[:4] == 'ver=':
-                    version = vertest[-1]
+                    version = vertest.split('=')[-1]
                 else:
                     version =  query_version_number(colorstyle)[colorstyle]['version']
                 ## Create and append to edgecast list page urls for Edgecast
@@ -332,34 +318,7 @@ def main(colorstyle_list=None):
                     ## Unique Set
                     edgecast_listurls = list(set(edgecast_listurls))
                     
-                    print pdp_urllist
-
-    #                newlistpg = '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt01.pct&outputx=1800&outputy=2160&level=1&ver=1'
-    #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt02.pct&outputx=1800&outputy=2160&level=1&ver=1'
-    #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt03.pct&outputx=1800&outputy=2160&level=1&ver=1'
-    #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt04.pct&outputx=1800&outputy=2160&level=1&ver=1'.format(colorstyle, version)
-    #                '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt05.pct&outputx=1800&outputy=2160&level=1&ver=1'.format(colorstyle, version)
-    #                           ## 75x89 not needed as it is added to url list during the scraping of PDP
-                    #pdpalt01t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                    #pdpalt02t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt02.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                    #pdpalt03t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt03.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                    #pdpalt04t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt04.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                    #pdpalt05t = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt05.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-                    ##edgecast_listurls.append(pdpalt01t)
-      
-    #                for alturls in [pdpalt01z,pdpalt01l,pdpalt01t,pdpalt02z,pdpalt02l,pdpalt02t,pdpalt03z,pdpalt03l,pdpalt03t,pdpalt04z,pdpalt04l,pdpalt04t,pdpalt05z,pdpalt05l,pdpalt05t]:
-    #                    edgecast_listurls.append(alturls)  
-    #                pmlistpage='http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode=331460101&width=50&height=60'
-    #                
-    #                '/mgen/Bluefly/altimage.ms?img=325084201_alt05.jpg&w=75&h=89&ver=1'.format(colorstyle, version)
-    #                
-    #                
-    #                '/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-    #                
-    #                
-    #                
-                    
-
+                    print pdp_urllist,edgecast_listurls,
 
 
     ## Parse urllist returning only versioned List page images
@@ -387,10 +346,8 @@ def main(colorstyle_list=None):
             try:
                 colorstyle = re.findall(regex, url_purge_local[0])
                 colorstyle = colorstyle.pop()[1]
-                version  = re.findall(regex, url_purge_local[0])
-                version = version.pop()[-1].split('=')[-1]
-                #print "{0} and version num {1}".format(colorstyle,version)
-                #try:
+                version =  query_version_number(colorstyle)[colorstyle]['version']
+
                 POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
@@ -405,12 +362,7 @@ def main(colorstyle_list=None):
                 #    print sys.stderr().read()
             except IndexError:
                 print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
-    #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-    #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-    #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-    #            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-    #            send_purge_request_localis(colorstyle,version,POSTURL_BC)
-    #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+ 
                 pass
         for url_purge in versioned_links:
             send_purge_request_edgecast(url_purge[0])
@@ -420,29 +372,9 @@ def main(colorstyle_list=None):
         print "Failed -- Over 550 URLs Submitted"    
 
 
-
-    ## Now clear links from the generated urls
-    #generated_links = return_cleaned_bfly_urls(edgecast_listurls)
-
-    #print generated_links
     count = 0
     if len(edgecast_listurls) <= 8550:
 
-        #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
-
-    ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
-    #
-    #    for url_purge_local in edgecast_listurls:
-    #        colorstyle = re.findall(regex, url_purge_local[0])
-    #        colorstyle = colorstyle.pop()[1]
-    #        version  = re.findall(regex, url_purge_local[0])
-    #        version = version.pop()[-1].split('=')[-1]
-    #        #print "{0} and version num {1}".format(colorstyle,version)
-    #        #try:
-    #        send_purge_request_localis(colorstyle,version)
-            #except:
-            #    print sys.stderr().read()
-    ####
         for url_purge in set(sorted(edgecast_listurls)):
             send_purge_request_edgecast(url_purge)
             #csv_write_datedOutfile(url_purge)
