@@ -337,7 +337,7 @@ def main(colorstyle_list=None):
             send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
             #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
             #send_purge_request_localis(colorstyle,version,POSTURL_BC)
-            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+            #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
     elif len(versioned_links) <= 8550:
 
