@@ -232,8 +232,10 @@ def main(colorstyle_list=None):
                 version = ''
                 if vertest[:4] == 'ver=':
                     version = vertest.split('=')[-1]
-                else:
-                    version =  query_version_number(colorstyle)[colorstyle]['version']
+                if version:
+                    versiondb =  query_version_number(colorstyle)[colorstyle]['version']
+                    if int(version) < int(versiondb):
+                        version = versiondb
                 ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
                     ## static standard urls
