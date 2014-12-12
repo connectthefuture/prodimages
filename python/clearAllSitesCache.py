@@ -13,12 +13,27 @@ def query_version_number(colorstyle):
     for row in result:
         style_info = {}
         style_info['version'] = row['version']
-        style_info['alt01']    = row['alt01']
-        style_info['alt02']    = row['alt02']
-        style_info['alt03']    = row['alt03']
-        style_info['alt04']    = row['alt04']
-        style_info['alt05']    = row['alt05']
         style_info['swatch']  = row['swatch']
+        if row['alt01'] == 'Y':
+            style_info['alt01'] = 'alt01'
+        else:
+            style_info['alt01'] = ''
+        if row['alt02'] == 'Y':
+            style_info['alt02'] = 'alt02'
+        else:
+            style_info['alt02'] = ''
+        if row['alt03'] == 'Y':
+            style_info['alt03'] = 'alt03'
+        else:
+            style_info['alt03'] = ''
+        if row['alt04'] == 'Y':
+            style_info['alt04'] = 'alt04'
+        else:
+            style_info['alt04'] = ''
+        if row['alt05'] == 'Y':
+            style_info['alt05'] = 'alt05'
+        else:
+            style_info['alt05'] = 'alt05'
         # Convert Colorstyle to string then set as KEY
         style_attribs[str(row['colorstyle'])] = style_info
 
@@ -135,7 +150,6 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         pmeventimg   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
         pdpZOOMthumb = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
         pdpZOOM      = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-        pdpaltthumb  = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
         email_img1   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
         email_img2   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
 
@@ -156,7 +170,6 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         ## version urls using db query not scraped
         edgecast_listurls.append(pdpZOOMthumb)
         edgecast_listurls.append(pdpZOOM)
-        edgecast_listurls.append(pdpaltthumb) 
         
         ## Check for alt images and add thumb and zoom and list for each found
         #alts = [alt1,alt2,alt3,alt4,alt5]
@@ -174,6 +187,8 @@ def compile_edgecast_urls_list(colorstyle_list=None):
             altcount = 0
             if alt == 'Y':
                 altcount += 1
+                pdpaltthumb  = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_{1}.jpg&w=75&h=89&ver={2}'.format(colorstyle, alversion)
+                edgecast_listurls.append(pdpaltthumb) 
                 pdpaltz = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=1800&outputy=2160&level=1&ver={2}'.format(colorstyle, alt, version)
                 edgecast_listurls.append(pdpaltz)
                 pdpaltl = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_{1}.pct&outputx=583&outputy=700&level=1&ver={2}'.format(colorstyle, alt, version)
