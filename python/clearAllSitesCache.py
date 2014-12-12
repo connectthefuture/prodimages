@@ -169,9 +169,11 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         alts.append(res[colorstyle]['alt04'])
         alts.append(res[colorstyle]['alt05'])
         print 'Alts ', alts
+        print edgecast_listurls
         for alt in alts:
             altcount = 0
             if alt:
+                print alt
                 altcount += 1
                 pdpaltthumb  = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_{1}.jpg&w=75&h=89&ver={2}'.format(colorstyle, alt, version)
                 edgecast_listurls.append(pdpaltthumb) 
