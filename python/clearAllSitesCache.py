@@ -14,11 +14,11 @@ def query_version_number(colorstyle):
         style_info = {}
         style_info['version'] = row['version']
         style_info['swatch']  = row['swatch']
-        row['alt01'] = 'alt01' if row['alt01'] == 'Y' else ''
-        row['alt02'] = 'alt02' if row['alt02'] == 'Y' else ''
-        row['alt03'] = 'alt03' if row['alt03'] == 'Y' else ''
-        row['alt04'] = 'alt04' if row['alt04'] == 'Y' else ''
-        row['alt05'] = 'alt05' if row['alt05'] == 'Y' else ''
+        style_info['alt01']   = 'alt01' if row['alt01'] == 'Y' else ''
+        style_info['alt02']   = 'alt02' if row['alt02'] == 'Y' else ''
+        style_info['alt03']   = 'alt03' if row['alt03'] == 'Y' else ''
+        style_info['alt04']   = 'alt04' if row['alt04'] == 'Y' else ''
+        style_info['alt05']   = 'alt05' if row['alt05'] == 'Y' else ''
         # Convert Colorstyle to string then set as KEY
         style_attribs[str(row['colorstyle'])] = style_info
 
