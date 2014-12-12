@@ -270,6 +270,7 @@ def main(colorstyle_list=None):
                     ### ZOOM HI REZ
                     pdpZOOM   = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                     edgecast_listurls.append(pdpZOOM)
+                    print "SUCCESS Adding Zoom --> ", colorstyle
                     testurl='http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
                     ### ALT 1
                     if testurl in pdp_urllist:
@@ -277,7 +278,7 @@ def main(colorstyle_list=None):
                         edgecast_listurls.append(pdpalt01z)
                         pdpalt01l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt01l)
-                        print "SUCCESS1"
+                        print "SUCCESS Adding Alt01 --> ", colorstyle
                         mobile_alt1 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
                         #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                         edgecast_listurls.append(mobile_alt1)
@@ -289,7 +290,7 @@ def main(colorstyle_list=None):
                         edgecast_listurls.append(pdpalt02l)
                         mobile_alt2 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt02.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
                         edgecast_listurls.append(mobile_alt2)
-                        print "SUCCESS2"
+                        print "SUCCESS Adding Alt02 --> ", colorstyle
                     ### ALT 3
                     if testurl.replace('_alt01','_alt03') in pdp_urllist:
                         pdpalt03z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
@@ -298,14 +299,14 @@ def main(colorstyle_list=None):
                         edgecast_listurls.append(pdpalt03l)
                         mobile_alt3 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt03.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
                         edgecast_listurls.append(mobile_alt3)
-                        print "SUCCESS3"
+                        print "SUCCESS Adding Alt03 --> ", colorstyle
                     ### ALT 4
                     if testurl.replace('_alt01','_alt04') in pdp_urllist:
                         pdpalt04z = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt04z)
                         pdpalt04l = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                         edgecast_listurls.append(pdpalt04l)
-                        print "SUCCESS4"
+                        print "SUCCESS Adding Alt04 --> ", colorstyle
                         mobile_alt4 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt04.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
                         edgecast_listurls.append(mobile_alt4)
                     ### ALT 5
@@ -316,7 +317,7 @@ def main(colorstyle_list=None):
                         edgecast_listurls.append(pdpalt05l)
                         mobile_alt5 = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt05.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
                         edgecast_listurls.append(mobile_alt5)
-                        print "SUCCESS5"
+                        print "SUCCESS Adding Alt05 --> ", colorstyle
                     ## Unique Set
                     edgecast_listurls = list(set(edgecast_listurls))
                     
