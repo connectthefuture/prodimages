@@ -199,19 +199,23 @@ def main(colorstyle_list=None):
     regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&)?(?P<version>ver=\d+?)?$', re.U)
 
     ## Clear Local image servers first
-    for url_purge in edgecast_listurls:
+    kvpairs = []
+    for url_purge in colorstyle_list:
         try:
             matched = regex_url.match(url_purge)
             colorstyle = matched.group('colorstyle')
             version    = matched.group('version')
-
-            POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
-            send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
+            kvpairs.append((colorstyle, version),)
+            
             #except:
             #    print sys.stderr().read()
         except IndexError:
             print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
             pass
+    POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
+    
+    ret = [ send_purge_request_localis(k,v,POSTURL_ALLSITES) for k,v in kvpairs if v['version'] ]
+    print ret
     ## Now Clear Edgecast
     for url_purge in edgecast_listurls:
         send_purge_request_edgecast(url_purge)
