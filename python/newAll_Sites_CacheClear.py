@@ -52,17 +52,17 @@ def return_versioned_urls(text):
     
     
 
-def return_cleaned_bfly_urls(text):
-    import os,sys,re
-    regex = re.compile(r'http:.+?mgen/Bluefly/.+?')
-    listurls = []
-    for line in text:
-        testfind =  regex.findall(line)
-        if testfind:
-            listurls.append(testfind)
-            #print testfind
+# def return_cleaned_bfly_urls(text):
+#     import os,sys,re
+#     regex = re.compile(r'http:.+?mgen/Bluefly/.+?')
+#     listurls = []
+#     for line in text:
+#         testfind =  regex.findall(line)
+#         if testfind:
+#             listurls.append(testfind)
+#             #print testfind
 
-    return listurls
+#     return listurls
 
     
     
@@ -177,7 +177,6 @@ def main(colorstyle_list=None):
     for colorstyle in colorstyle_list:
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
-        print found_links
         version =  query_version_number(colorstyle)[colorstyle]['version']
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
@@ -228,6 +227,7 @@ def main(colorstyle_list=None):
         else:
             for link in found_links:
                 if colorstyle in link:
+                    print link, colorstyle, pdp_urllist
                     pdp_urllist.append(link)
                     vertest=link.split('&')[-1]
                     version = ''
@@ -324,7 +324,7 @@ def main(colorstyle_list=None):
                         ## Unique Set
                         edgecast_listurls = list(set(edgecast_listurls))
                         
-                        print pdp_urllist,edgecast_listurls,
+                        #print pdp_urllist,edgecast_listurls,
 
 
     ## Parse urllist returning only versioned List page images
