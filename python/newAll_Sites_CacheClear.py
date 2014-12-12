@@ -324,7 +324,7 @@ def main(colorstyle_list=None):
                         ## Unique Set
                         edgecast_listurls = list(set(edgecast_listurls))
                         
-                        #print pdp_urllist,edgecast_listurls,
+                        print pdp_urllist,edgecast_listurls,
 
 
     ## Parse urllist returning only versioned List page images
