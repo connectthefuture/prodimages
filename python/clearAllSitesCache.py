@@ -209,6 +209,9 @@ def main(colorstyle_list=None):
             
             #except:
             #    print sys.stderr().read()
+        except AttributeError:
+            print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
+            pass
         except IndexError:
             print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
             pass
