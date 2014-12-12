@@ -9,15 +9,21 @@ def query_version_number(colorstyle):
     querymake_version_number = "SELECT DISTINCT POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS colorstyle, POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as version, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as main, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as alt1, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as alt2, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as alt3, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as alt4, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as alt5, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as swatch FROM POMGR.PRODUCT_COLOR_DETAIL WHERE POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID LIKE '%{0}%'".format(colorstyle)
 
     result = connection.execute(querymake_version_number)
-    styles = {}
+    style_attribs = {}
     for row in result:
         style_info = {}
         style_info['version'] = row['version']
+        style_info['alt1']    = row['alt1']
+        style_info['alt2']    = row['alt2']
+        style_info['alt3']    = row['alt3']
+        style_info['alt4']    = row['alt4']
+        style_info['alt5']    = row['alt5']
+        style_info['swatch']  = row['swatch']
         # Convert Colorstyle to string then set as KEY
-        styles[str(row['colorstyle'])] = style_info
+        style_attribs[str(row['colorstyle'])] = style_info
 
     connection.close()
-    return styles
+    return style_attribs
 
     
     
@@ -43,7 +49,7 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
             
         
         head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
-        head_content_len= "Content-length: {0}".format(str(len(data)))
+        head_content_len = 'Content-length: {0}'.format(str(len(data)))
         #head_accept = 'Accept: text/html'
         head_accept = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
         head_useragent = 'User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0'
@@ -120,7 +126,16 @@ def main(colorstyle_list=None):
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
     print colorstyle_list
     for colorstyle in colorstyle_list:
-        version =  query_version_number(colorstyle)[colorstyle]['version']
+        res = query_version_number(colorstyle)
+        version = res[colorstyle]['version']
+        swatch  = res[colorstyle]['swatch']
+        alts = []
+        alts[1]    = res[colorstyle]['alt1']
+        alts[2]    = res[colorstyle]['alt2']
+        alts[3]    = res[colorstyle]['alt3']
+        alts[4]    = res[colorstyle]['alt4']
+        alts[5]    = res[colorstyle]['alt5']
+
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
@@ -130,14 +145,13 @@ def main(colorstyle_list=None):
         pdpZOOMthumb = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
         pdpZOOM      = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
         pdpaltthumb  = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_alt01.jpg&w=75&h=89&ver={1}'.format(colorstyle, version)
-        pdpalt01z    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=1800&outputy=2160&level=1&ver={1}'.format(colorstyle, version)
-        pdpalt01l    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
         email_img1   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
         email_img2   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
 
         mobile_list  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=226&height=271'.format(colorstyle)
         mobile_zoom  = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
 
+        
         # remote cdn to clear
         edgecast_listurls.append(oldlistpg)
         edgecast_listurls.append(newlistpg)
@@ -151,25 +165,47 @@ def main(colorstyle_list=None):
         ## version urls using db query not scraped
         edgecast_listurls.append(pdpZOOMthumb)
         edgecast_listurls.append(pdpZOOM)
-        edgecast_listurls.append(pdpalt01z)
-        edgecast_listurls.append(pdpalt01l)
         edgecast_listurls.append(pdpaltthumb) 
         
-        ## Standard urls to clear
-        pdp_urllist.append(oldlistpg)
-        pdp_urllist.append(newlistpg)
-        pdp_urllist.append(pdpg)
-        pdp_urllist.append(pmlistpg)
-        # version urls using db query not scraped
-        pdp_urllist.append(pdpZOOMthumb)
-        pdp_urllist.append(pdpZOOM)
-        pdp_urllist.append(pdpalt01z)
-        pdp_urllist.append(pdpalt01l)
-        pdp_urllist.append(pdpaltthumb)
+        ## Check for alt images and add thumb and zoom and list for each found
+        #alts = [alt1,alt2,alt3,alt4,alt5]
+        altnum = 0
+        for alt in alts:
+            altnum =+1
+            if alt:
+                pdpaltz = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt0{1}.pct&outputx=1800&outputy=2160&level=1&ver={2}'.format(colorstyle, alt, version)
+                edgecast_listurls.append(pdpaltz)
+                pdpaltl = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt0{1}.pct&outputx=583&outputy=700&level=1&ver={2}'.format(colorstyle, alt, version)
+                edgecast_listurls.append(pdpaltl)
+                print "SUCCESS Adding Alt01 --> ", colorstyle
+                mobile_alt = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt0{1}.pct&outputx=720&outputy=864&level=1'.format(colorstyle, alt)
+                #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
+                edgecast_listurls.append(mobile_alt)
 
+    ## Send the urls to clear local and cdn
+    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&)?(?P<version>ver=\d+?)?$', re.U, re.I)
+
+    for url_purge in edgecast_listurls:
+        try:
+            matched = regex_url.match(url_purge)
+            colorstyle = matched['colorstyle']
+            version    = matched['version']
+
+            POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
+            send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
+            #except:
+            #    print sys.stderr().read()
+        except IndexError:
+            print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
+            pass
+    
+    for url_purge in edgecast_listurls:
+        send_purge_request_edgecast(url_purge)
 
 if __name__ == '__main__':
     import sys,re,os
-    if not colorstyle_list:
+    try:
         colorstyle_list = sys.argv[1:]
+    else:
+        colorstyle_list = ''
     main(colorstyle_list=colorstyle_list)
