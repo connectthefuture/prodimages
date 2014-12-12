@@ -206,7 +206,6 @@ def main(colorstyle_list=None):
             colorstyle = matched.group('colorstyle')
             version    = matched.group('version')
             kvpairs.append((colorstyle, version),)
-            
             #except:
             #    print sys.stderr().read()
         except AttributeError:
