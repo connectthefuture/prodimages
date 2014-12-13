@@ -207,8 +207,8 @@ def main(colorstyle_list=None):
         colorstyle_list = sys.argv[1:]
 
     edgecast_listurls = compile_edgecast_urls_list(colorstyle_list=colorstyle_list)
-    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?((?:&w=)|(?:&width=)|(?:&outputx=))(?P<width>\d+)?((?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?(?:&ver=)?(?P<version>\d+?)?$', re.U)
-
+    #regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?((?:&w=)|(?:&width=)|(?:&outputx=))(?P<width>\d+)?((?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?(?:&ver=)?(?P<version>\d+?)?$', re.U)
+    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?((?:&ver=)(?P<version>\d+?))?(?:&level=\d+?)?$', re.U)
     ## Clear Local image servers first
     kvpairs = []
     for url_purge in edgecast_listurls:
@@ -218,7 +218,7 @@ def main(colorstyle_list=None):
             version    = matched.group('version')
             width      = matched.group('width')
             height     = matched.group('height')
-            pair = [colorstyle, version]
+            pair = (colorstyle, version)
             kvpairs.append(pair)
             print pair, ' Pair'
             #except:
@@ -232,14 +232,9 @@ def main(colorstyle_list=None):
     POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
     print 'KVPAIRS ', kvpairs
 
-
-    matched    = regex_url.match(mediaPath)
-    colorstyle = matched.group('colorstyle')
-    version    = matched.group('version')
-    width      = matched.group('width')
-    height     = matched.group('height')
     ## Send unique pairs to local clear
-    count = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
+    uniquepairs = list(set(sorted([ kvpair for kvpair in kvpairs if kvpair[1] ])))
+    count = [ send_purge_request_localis(pair[0],pair[1],POSTURL_ALLSITES) for pair in uniquepairs if pair[1] ]
     #print ret
     ## Now Clear Edgecast
     from collections import defaultdict
