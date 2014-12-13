@@ -242,11 +242,11 @@ def main(colorstyle_list=None):
     count = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
     #print ret
     ## Now Clear Edgecast
-
-    sent_items = {}
+    from collections import defaultdict
+    sent_items = defaultdict(list)
     for url_purge in edgecast_listurls:
         sent = send_purge_request_edgecast(url_purge)
-        sent_items[sent[0]] = sent[1:]
+        sent_items[sent[0]].append(sent[1])
     ## return colorstyle, version, width, height as list of lists
     print "Total Styles Local: {0}\nTotal Urls Purged: {1}".format(str(count),str(len(sent_items)))
     return sent_items
