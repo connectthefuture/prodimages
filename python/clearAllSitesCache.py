@@ -235,10 +235,10 @@ def main(colorstyle_list=None):
     #print ret
     ## Now Clear Edgecast
 
-    sent_items = []
+    sent_items = {}
     for url_purge in edgecast_listurls:
         sent = send_purge_request_edgecast(url_purge)
-        sent_items.append(sent)
+        sent_items[sent[0]] = sent[1:]
     ## return colorstyle, version, width, height as list of lists
     print "Total Styles Local: {0}\nTotal Urls Purged: {1}".format(str(count),str(len(sent_items)))
     return sent_items
