@@ -228,7 +228,7 @@ def main(colorstyle_list=None):
             print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
             pass
     POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
-    #print 'KVPAIRS ', kvpairs
+    print 'KVPAIRS ', kvpairs
 
     ## Send unique pairs to local clear
     count = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
