@@ -196,7 +196,7 @@ def main(colorstyle_list=None):
         colorstyle_list = sys.argv[1:]
 
     edgecast_listurls = compile_edgecast_urls_list(colorstyle_list=colorstyle_list)
-    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&)?(?P<version>ver=\d+?)?$', re.U)
+    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&ver=)?(?P<version>\d+?)?$', re.U)
 
     ## Clear Local image servers first
     kvpairs = []
