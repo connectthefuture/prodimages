@@ -79,7 +79,7 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
 def send_purge_request_edgecast(mediaPath):
     import pycurl,json,sys,os,re
     ## Regex output
-    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&width=)(?P<width>\d+?)?(?:&height=)?(?P<height>\d+?)?(?:.+?)?(?:&ver=)?(?P<version>\d+?)?$', re.U)
+    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?((?:&width=)|(?:outputx=))?(?P<width>\d+?)?((?:&height=)|(?:outputy=))?(?P<height>\d+?)?(?:.+?)?(?:&ver=)?(?P<version>\d+?)?$', re.U) 
     matched = regex_url.match(mediaPath)
     colorstyle = matched.group('colorstyle')
     version    = matched.group('version')
