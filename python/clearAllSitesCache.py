@@ -200,7 +200,7 @@ def main(colorstyle_list=None):
 
     ## Clear Local image servers first
     kvpairs = []
-    for url_purge in colorstyle_list:
+    for url_purge in edgecast_listurls:
         try:
             matched = regex_url.match(url_purge)
             colorstyle = matched.group('colorstyle')
