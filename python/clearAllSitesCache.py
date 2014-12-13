@@ -79,7 +79,7 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
 def send_purge_request_edgecast(mediaPath):
     import pycurl,json,sys,os,re
     ## Regex output
-    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?((?:&ver=)(?P<version>\d+?))?(?:&level=\d+?)?$', re.U)
+    re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?((?:&ver=)(?P<version>\d+?))?(?:&level=\d+?)?$', re.U)
     matched    = regex_url.match(mediaPath)
     colorstyle = matched.group('colorstyle')
     version    = matched.group('version')
@@ -121,7 +121,7 @@ def send_purge_request_edgecast(mediaPath):
             c.perform()
             c.close()
 
-            print " \nPurge Sent Successfully --> \vColorstyle: {0}\vVersion: {1}\vImageSize: {2}x{3}\n".format(colorstyle, version, width, height) ##Sent Purge Request for --> {0}".format(mediaPath)
+            print " \nPurge Sent Successfully --> \nColorstyle: {0}\nVersion: {1}\nImageSize: {2}x{3}\n".format(colorstyle, version, width, height) ##Sent Purge Request for --> {0}".format(mediaPath)
             return [colorstyle, version, width, height]
         except pycurl.error, error:
             errno, errstr = error
@@ -207,7 +207,7 @@ def main(colorstyle_list=None):
 
     edgecast_listurls = compile_edgecast_urls_list(colorstyle_list=colorstyle_list)
     #regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?((?:&w=)|(?:&width=)|(?:&outputx=))(?P<width>\d+)?((?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?(?:&ver=)?(?P<version>\d+?)?$', re.U)
-    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?((?:&ver=)(?P<version>\d+?))?(?:&level=\d+?)?$', re.U)
+    re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?((?:&ver=)(?P<version>\d+?))?(?:&level=\d+?)?$', re.U)
     ## Clear Local image servers first
     kvpairs = []
     for url_purge in edgecast_listurls:
@@ -242,7 +242,7 @@ def main(colorstyle_list=None):
         sent = send_purge_request_edgecast(url_purge)
         sent_items[sent[0]].append(sent[1])
     ## return colorstyle, version, width, height as list of lists
-    print "Total Styles Local: {0}\nTotal Urls Purged: {1}".format(str(count),str(len(sent_items)))
+    print "Total Styles with Version Local: {0}\nTotal Styles Remote: {1}".format(str(count),str(len(sent_items)))
     return sent_items
 
 
