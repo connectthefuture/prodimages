@@ -56,19 +56,19 @@ def query_version_number(colorstyle):
     else:
         querymake_version_number = "select distinct POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID as colorstyle, POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as version FROM POMGR.PRODUCT_COLOR_DETAIL where POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID like {0}".format(colorstyle)
 
-    try:
-        result = connection.execute(querymake_version_number)
+    result = connection.execute(querymake_version_number)
     
     
-        styles = {}
-        for row in result:
+    styles = {}
+    for row in result:
+        try:
             #style_info = {}
             #style_info['version'] = row['version']
             # Convert Colorstyle to string then set as KEY
             styles[str(row['colorstyle'])] = row['version']
-    except sqlalchemy.exc.DatabaseError:
-        print 'This Search needs to have more than 1 style, \nyou returned zero or 1 style'
-    
+        except sqlalchemy.exc.DatabaseError:
+            print 'This Search needs to have more than 1 style, \nyou returned zero or 1 style'
+        
     connection.close()
     return styles
 
