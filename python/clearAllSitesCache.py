@@ -219,7 +219,7 @@ def main(colorstyle_list=None):
     POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
     print 'KVPAIRS ', kvpairs
 
-    ret = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if v['version'] ]
+    ret = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
     print ret
     ## Now Clear Edgecast
     for url_purge in edgecast_listurls:
