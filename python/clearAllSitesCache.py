@@ -76,7 +76,15 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
 
 
 def send_purge_request_edgecast(mediaPath):
-    import pycurl,json,sys,os
+    import pycurl,json,sys,os,re
+    ## Regex output
+    regex_url = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)(?:&width=)(?P<width>\d+?)(?:&height=)(?P<height>\d+?))(?:.+?)(?:&ver=)?(?P<version>\d+?)?$', re.U)
+    matched = regex_url.match(mediaPath)
+    colorstyle = matched.group('colorstyle')
+    version    = matched.group('version')
+    width      = matched.group('width')
+    height     = matched.group('height')   
+
     ## Setup variables
     token = "9af6d09a-1250-4766-85bd-29cebf1c984f"
     account = "4936"
@@ -111,7 +119,9 @@ def send_purge_request_edgecast(mediaPath):
         try:
             c.perform()
             c.close()
-            print " was Successful for ", mediaPath.split("?")[-1] ##Sent Purge Request for --> {0}".format(mediaPath)
+
+            print " --> was Successful for Colorstyle: {0}\vVersion: {1}\vImageSize: {2}x{3}\n".format(colorstyle, version, width, height) ##Sent Purge Request for --> {0}".format(mediaPath)
+            return [colorstyle, version, width, height]
         except pycurl.error, error:
             errno, errstr = error
             print 'An error occurred: ', errstr 
@@ -185,7 +195,8 @@ def compile_edgecast_urls_list(colorstyle_list=None):
                 #'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
                 edgecast_listurls.append(mobile_alt)
     return edgecast_listurls
-    
+
+
 def main(colorstyle_list=None):
     ##########################################
     ## Send the urls to clear local and cdn ##
@@ -218,11 +229,16 @@ def main(colorstyle_list=None):
     POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
     #print 'KVPAIRS ', kvpairs
 
-    ret = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
+    ## Send unique pairs to local clear
+    [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
     #print ret
     ## Now Clear Edgecast
+    sent_items = []
     for url_purge in edgecast_listurls:
-        send_purge_request_edgecast(url_purge)
+        sent = send_purge_request_edgecast(url_purge)
+        sent_items.append(sent)
+    ## return colorstyle, version, width, height as list of lists
+    return sent_items
 
 
 if __name__ == '__main__':
