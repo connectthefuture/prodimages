@@ -111,7 +111,7 @@ def send_purge_request_edgecast(mediaPath):
         try:
             c.perform()
             c.close()
-            print " was Successfull" ##Sent Purge Request for --> {0}".format(mediaPath)
+            print " was Successful for ", mediaPath.split("?")[-1] ##Sent Purge Request for --> {0}".format(mediaPath)
         except pycurl.error, error:
             errno, errstr = error
             print 'An error occurred: ', errstr 
@@ -123,7 +123,7 @@ def compile_edgecast_urls_list(colorstyle_list=None):
     
     edgecast_listurls = []
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
-    print colorstyle_list
+    #print colorstyle_list
     for colorstyle in colorstyle_list:
         res = query_version_number(colorstyle)
         version = res[colorstyle]['version']
@@ -160,7 +160,7 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         ## Check for alt images and add thumb and zoom and list for each found
         #alts = [alt1,alt2,alt3,alt4,alt5]
         swatch     = res[colorstyle]['swatch']
-        print 'SWATCH ', swatch
+        #print 'SWATCH ', swatch
         #
         alts       = []
         alts.append(res[colorstyle]['alt01'])
@@ -168,12 +168,11 @@ def compile_edgecast_urls_list(colorstyle_list=None):
         alts.append(res[colorstyle]['alt03'])
         alts.append(res[colorstyle]['alt04'])
         alts.append(res[colorstyle]['alt05'])
-        print 'Alts ', alts
-        print edgecast_listurls
+        #print 'Alts ', alts
+        #print edgecast_listurls
         for alt in alts:
             altcount = 0
             if alt:
-                print alt
                 altcount += 1
                 pdpaltthumb  = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}_{1}.jpg&w=75&h=89&ver={2}'.format(colorstyle, alt, version)
                 edgecast_listurls.append(pdpaltthumb) 
@@ -217,10 +216,10 @@ def main(colorstyle_list=None):
             print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
             pass
     POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
-    print 'KVPAIRS ', kvpairs
+    #print 'KVPAIRS ', kvpairs
 
     ret = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
-    print ret
+    #print ret
     ## Now Clear Edgecast
     for url_purge in edgecast_listurls:
         send_purge_request_edgecast(url_purge)
