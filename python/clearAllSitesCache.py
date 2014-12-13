@@ -79,7 +79,7 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
 def send_purge_request_edgecast(mediaPath):
     import pycurl,json,sys,os,re
     ## Regex output
-    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?((?:&ver=)(?P<version>\d+?))?(?:&level=\d+?)?$', re.U)
+    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+=)(?P<colorstyle>[1-9][0-9]{8})(?:.*?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.*?)?((?:&ver=)(?P<version>\d+))?(?:&level=\d)?$', re.U)
     matched    = regex_url.match(mediaPath)
     colorstyle = matched.group('colorstyle')
     version    = matched.group('version')
@@ -207,7 +207,7 @@ def main(colorstyle_list=None):
 
     edgecast_listurls = compile_edgecast_urls_list(colorstyle_list=colorstyle_list)
     #regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?((?:&w=)|(?:&width=)|(?:&outputx=))(?P<width>\d+)?((?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?(?:&ver=)?(?P<version>\d+?)?$', re.U)
-    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+?=)(?P<colorstyle>[1-9][0-9]{8})(?:.+?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.+?)?((?:&ver=)(?P<version>\d+?))?(?:&level=\d+?)?$', re.U)
+    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+=)(?P<colorstyle>[1-9][0-9]{8})(?:.*?)?(?:(?:&w=)|(?:&width=)|(?:&outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.*?)?((?:&ver=)(?P<version>\d+))?(?:&level=\d)?$', re.U)
     ## Clear Local image servers first
     kvpairs = []
     for url_purge in edgecast_listurls:
