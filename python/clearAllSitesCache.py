@@ -213,11 +213,10 @@ def main(colorstyle_list=None):
     for url_purge in edgecast_listurls:
         try:
             matched = regex_url.match(url_purge)
-            matchgroups = matched.groups('0')
-            colorstyle  = matchgroups('colorstyle')
-            version     = matchgroups('version')
-            width       = matchgroups('width')
-            height      = matchgroups('height')
+            colorstyle = matched.group('colorstyle')
+            version    = matched.group('version')
+            width      = matched.group('width')
+            height     = matched.group('height')
             pair = (colorstyle, version)
             kvpairs.append(pair)
             print pair, ' Pair'
