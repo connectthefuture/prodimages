@@ -121,7 +121,7 @@ def send_purge_request_edgecast(mediaPath):
             c.perform()
             c.close()
 
-            print " \n--> was Successful for \vColorstyle: {0}\vVersion: {1}\vImageSize: {2}x{3}\n".format(colorstyle, version, width, height) ##Sent Purge Request for --> {0}".format(mediaPath)
+            print " \nPurge Sent Successfully --> \vColorstyle: {0}\vVersion: {1}\vImageSize: {2}x{3}\n".format(colorstyle, version, width, height) ##Sent Purge Request for --> {0}".format(mediaPath)
             return [colorstyle, version, width, height]
         except pycurl.error, error:
             errno, errstr = error
