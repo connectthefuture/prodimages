@@ -67,6 +67,7 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         c.setopt(c.VERBOSE, True)
         c.perform()
         c.close()
+        return 1
         #print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
         
         #head_authtoken = "Authorization: tok:{0}".format(token)
@@ -230,14 +231,16 @@ def main(colorstyle_list=None):
     #print 'KVPAIRS ', kvpairs
 
     ## Send unique pairs to local clear
-    [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
+    count = [ send_purge_request_localis(kvpair[0],kvpair[1],POSTURL_ALLSITES) for kvpair in kvpairs if kvpair[1] ]
     #print ret
     ## Now Clear Edgecast
+
     sent_items = []
     for url_purge in edgecast_listurls:
         sent = send_purge_request_edgecast(url_purge)
         sent_items.append(sent)
     ## return colorstyle, version, width, height as list of lists
+    print "Total Styles: ", count
     return sent_items
 
 
