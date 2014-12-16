@@ -10,15 +10,19 @@ def connect_gridfs_mongodb(db_name='None'):
     return db, fs
 
 
-def insert_file_gridfs_file7(filename=None, db_name='gridfs_file7'):
+def insert_file_gridfs_file7(filepath=None, metadata=None, db_name='gridfs_file7'):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
-    with fs.new_file() as fp:
-        with open(filename) as filedata:
+    filename=filepath.spilt('/')[-1]
+    content_type= 'image/' + filename.split('.')[-1]
+    #content-type=content_type
+    
+    with fs.new_file(filename=filename, metadata=metadata) as fp:
+        with open(filepath) as filedata:
             fp.write(filedata.read())
     return fp, db
 
 
-def retrieve_last_instance_gridfs_file7(filename=None, db_name='gridfs_file7'):
+def retrieve_last_instance_gridfs_file7(filepath=None, db_name='gridfs_file7'):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     return fp
 
@@ -37,8 +41,8 @@ def find_record_gridfs(key=None, database_name='gridfsFile7', collection_name=No
     return check
 
 
-def main(filename=None):
-    insert_res = insert_file_gridfs_file7(filename=filename)
+def main(filepath=None):
+    insert_res = insert_file_gridfs_file7(filepath=filepath)
     return insert_res.items()
 
 
@@ -46,7 +50,7 @@ if __name__ == '__main__':
     import sys
     try:
         filename = sys.argv[1]
-        res = insert_file_gridfs_file7(filename=filename)[0]
+        res = insert_file_gridfs_file7(filepath=filepath)[0]
         print res._id 
     except IndexError:
         print 'No File supplied for insert'
