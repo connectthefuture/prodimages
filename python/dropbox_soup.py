@@ -51,9 +51,6 @@ def soup_from_url(targeturl):
     soup = BeautifulSoup(r.text)
     return soup    
 
-testurl = 'https://www.dropbox.com/sh/f4mic906etxjktd/7nUIcN-0JA'
-
-
 def soup_get_links_dboxthumbs(soup):
     from bs4 import BeautifulSoup
     linklist = []
@@ -63,7 +60,7 @@ def soup_get_links_dboxthumbs(soup):
     ## Return list of unique links to jpg Files
     return list(set(linklist))
 
-imglinkslist = url_get_links(testurl)
+
 #print imglinkslist
 #target_url_list = []
 #for link in url_get_links(imglinkslist):
@@ -95,7 +92,12 @@ def final_img_get(targeturl):
     finalimg = finalimgs.pop()
     return finalimg
     
-    
+########################################### RUN ######################
+
+#testurl = 'https://www.dropbox.com/sh/f4mic906etxjktd/7nUIcN-0JA'
+testurl = 'https://www.dropbox.com/sh/fkr4510o0mpdeyf/AADD9qKHIO2XNOup_ry3dQg9a?dl=0'
+imglinkslist = url_get_links(testurl)
+
 dload_list = []    
 
 for finalurl in imglinkslist:
