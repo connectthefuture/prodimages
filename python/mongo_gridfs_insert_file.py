@@ -34,7 +34,7 @@ def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
     from bson.json_util import dumps
     #client = .authenticate('user', 'password', mechanism='SCRAM-SHA-1')
     db, fs = connect_gridfs_mongodb(db_name=db_name)
-    mongo_collection = db.[collection_name]
+    mongo_collection = db[collection_name]
     key = {'md5checksum': md5checksum}
     key_str = key.keys()[0]
     key_val = key.values()[0]
@@ -42,8 +42,9 @@ def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
     return check
 
 
-def main(filepath=None,metadata=None):
-    insert_res = insert_file_gridfs_file7(filepath=filepath)
+def main(filepath=None,metadata=None,db_name=None):
+    print filepath
+    insert_res = insert_file_gridfs_file7(filepath=filepath,metadata=metadata,db_name=db_name)
     return insert_res.items()
 
 
