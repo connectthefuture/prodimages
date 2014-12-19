@@ -7,7 +7,7 @@ def connect_gridfs_mongodb(db_name='None'):
     mongo = pymongo.MongoClient('127.0.0.1')
     mongo_db = mongo[db_name].authenticate('mongo', 'mongo')
     #mongo_db = mongo[db_name]
-    db = mongo.db_name
+    db = mongo_db
     fs = gridfs.GridFS(db)
     return db, fs
 
