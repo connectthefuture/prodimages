@@ -4,8 +4,10 @@
 
 def connect_gridfs_mongodb(db_name='None'):
     import pymongo, gridfs, __builtin__
-    conn = pymongo.Connection('127.0.0.1')
-    db = conn.db_name
+    mongo = pymongo.MongoClient('127.0.0.1')
+    mongo.authenticate('mongo', 'mongo', mechanism='SCRAM-SHA-1')
+    mongo_db = mongo[db_name]
+    db = mongo.db_name
     fs = gridfs.GridFS(db)
     return db, fs
 
@@ -27,12 +29,14 @@ def retrieve_last_instance_gridfs_file7(filepath=None, db_name='gridfs_file7'):
     return fp
 
 
-def find_record_gridfs(key=None, database_name='gridfsFile7', collection_name=None):
+def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
     import pymongo, bson, datetime
     from bson import Binary, Code
     from bson.json_util import dumps
-    mongo = pymongo.Connection('127.0.0.1')
-    mongo_db = mongo[database_name]
+    #client = .authenticate('user', 'password', mechanism='SCRAM-SHA-1')
+    mongo = pymongo.MongoClient('127.0.0.1')
+    mongo.authenticate('mongo', 'mongo', mechanism='SCRAM-SHA-1')
+    mongo_db = mongo[db_name]
     mongo_collection = mongo_db[collection_name]
     key = {'md5checksum': md5checksum}
     key_str = key.keys()[0]
