@@ -23,7 +23,7 @@ touch $LOCKFILE
 
 #### Run Script passed as 1st arg
 
-/usr/bin/python "$RUNFILE" "$RUNFILEARG1"
+/usr/bin/python ""$RUNFILE" "$RUNFILEARG1"
 
 echo "DONE ${PROCNAME}"
 ## Remove the LOCKFILE allowing process to run again
