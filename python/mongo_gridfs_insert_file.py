@@ -14,6 +14,7 @@ def connect_gridfs_mongodb(db_name='None'):
 
 def insert_file_gridfs_file7(filepath=None, metadata=None, db_name='gridfs_file7'):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db = db.authenticate('mongo', 'mongo')
     filename=filepath[0].spilt('/')[-1]
     content_type= 'image/' + filename.split('.')[-1]
     #content-type=content_type
@@ -25,6 +26,7 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name='gridfs_file7
 
 def retrieve_last_instance_gridfs_file7(filepath=None, db_name='gridfs_file7'):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db = db.authenticate('mongo', 'mongo')
     return fp
 
 
@@ -34,6 +36,7 @@ def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
     from bson.json_util import dumps
     #client = .authenticate('user', 'password', mechanism='SCRAM-SHA-1')
     db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db = db.authenticate('mongo', 'mongo')
     mongo_collection = db[collection_name]
     key = {'md5checksum': md5checksum}
     key_str = key.keys()[0]
