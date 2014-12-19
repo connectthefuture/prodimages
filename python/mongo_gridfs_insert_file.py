@@ -22,7 +22,7 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
             with open(filepath) as filedata:
                 fp.write(filedata.read())
         return fp, db
-    except:
+    except AttributeError:
         print 'Failed ', filepath
 
 
@@ -50,8 +50,10 @@ def main(filepath=None,metadata=None,db_name=None):
     if not db_name:
         db_name = 'gridfs_file7'
     insert_res = insert_file_gridfs_file7(filepath=filepath,metadata=metadata,db_name=db_name)
-    return insert_res.items()
-
+    try:
+        return insert_res.items()
+    except AttributeError:
+        return insert_res 
 
 if __name__ == '__main__':
     import sys
