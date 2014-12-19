@@ -14,13 +14,16 @@ def connect_gridfs_mongodb(db_name='None'):
 
 def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
-    filename=filepath[0].spilt('/')[-1]
-    content_type= 'image/' + filename.split('.')[-1]
-    #content-type=content_type
-    with fs.new_file(filename=filename, metadata=metadata) as fp:
-        with open(filepath) as filedata:
-            fp.write(filedata.read())
-    return fp, db
+    try:
+        filename=filepath[0].spilt('/')[-1]
+        content_type= 'image/' + filename.split('.')[-1]
+        #content-type=content_type
+        with fs.new_file(filename=filename, metadata=metadata) as fp:
+            with open(filepath) as filedata:
+                fp.write(filedata.read())
+        return fp, db
+    except:
+        print 'Failed ', filepath
 
 
 def retrieve_last_instance_gridfs_file7(filepath=None, db_name=None):
