@@ -12,7 +12,7 @@ def connect_gridfs_mongodb(db_name='None'):
     return mongo_db, fs
 
 
-def insert_file_gridfs_file7(filepath=None, metadata=None, db_name='gridfs_file7'):
+def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     filename=filepath[0].spilt('/')[-1]
     content_type= 'image/' + filename.split('.')[-1]
@@ -23,12 +23,12 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name='gridfs_file7
     return fp, db
 
 
-def retrieve_last_instance_gridfs_file7(filepath=None, db_name='gridfs_file7'):
+def retrieve_last_instance_gridfs_file7(filepath=None, db_name=None):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     return fp
 
 
-def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
+def find_record_gridfs(key=None, db_name=None, collection_name=None):
     import pymongo, bson, datetime
     from bson import Binary, Code
     from bson.json_util import dumps
@@ -44,6 +44,8 @@ def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
 
 def main(filepath=None,metadata=None,db_name=None):
     print filepath
+    if not db_name:
+        db_name = 'gridfs_file7'
     insert_res = insert_file_gridfs_file7(filepath=filepath,metadata=metadata,db_name=db_name)
     return insert_res.items()
 
