@@ -14,6 +14,8 @@ def connect_gridfs_mongodb(db_name='None'):
 
 def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
+    print type(filepath)
+    print dir(filepath)
     try:
         filename = filepath.spilt('/')[-1]
         content_type= 'image/' + filename.split('.')[-1]
