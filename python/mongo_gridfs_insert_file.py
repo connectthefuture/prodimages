@@ -5,11 +5,11 @@
 def connect_gridfs_mongodb(db_name='None'):
     import pymongo, gridfs, __builtin__
     mongo = pymongo.MongoClient('127.0.0.1')
-    mongo_db = mongo[db_name].authenticate('mongo', 'mongo')
+    mongo_db = mongo[db_name]
     #mongo_db = mongo[db_name]
-    db = mongo_db
-    fs = gridfs.GridFS(db)
-    return db, fs
+    mongo_db.authenticate('mongo', 'mongo')
+    fs = gridfs.GridFS(mongo_db)
+    return mongo_db, fs
 
 
 def insert_file_gridfs_file7(filepath=None, metadata=None, db_name='gridfs_file7'):
