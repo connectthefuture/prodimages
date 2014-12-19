@@ -5,7 +5,7 @@
 def connect_gridfs_mongodb(db_name='None'):
     import pymongo, gridfs, __builtin__
     mongo = pymongo.MongoClient('127.0.0.1')
-    mongo_db = mongo[db_name].authenticate('mongo', 'mongo', mechanism='SCRAM-SHA-1')
+    mongo_db = mongo[db_name].authenticate('mongo', 'mongo')
     #mongo_db = mongo[db_name]
     db = mongo.db_name
     fs = gridfs.GridFS(db)
@@ -17,7 +17,6 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name='gridfs_file7
     filename=filepath.spilt('/')[-1]
     content_type= 'image/' + filename.split('.')[-1]
     #content-type=content_type
-    
     with fs.new_file(filename=filename, metadata=metadata) as fp:
         with open(filepath) as filedata:
             fp.write(filedata.read())
@@ -34,10 +33,8 @@ def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
     from bson import Binary, Code
     from bson.json_util import dumps
     #client = .authenticate('user', 'password', mechanism='SCRAM-SHA-1')
-    mongo = pymongo.MongoClient('127.0.0.1')
-    mongo.authenticate('mongo', 'mongo', mechanism='SCRAM-SHA-1')
-    mongo_db = mongo[db_name]
-    mongo_collection = mongo_db[collection_name]
+    db, fs = connect_gridfs_mongodb(db_name=db_name)
+    mongo_collection = db.[collection_name]
     key = {'md5checksum': md5checksum}
     key_str = key.keys()[0]
     key_val = key.values()[0]
@@ -45,7 +42,7 @@ def find_record_gridfs(key=None, db_name='gridfsFile7', collection_name=None):
     return check
 
 
-def main(filepath=None):
+def main(filepath=None,metadata=None):
     insert_res = insert_file_gridfs_file7(filepath=filepath)
     return insert_res.items()
 
