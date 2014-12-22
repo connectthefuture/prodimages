@@ -12,7 +12,7 @@ def connect_gridfs_mongodb(db_name='None'):
     return mongo_db, fs
 
 
-def get_duplicate_records(db_name=None, collection_name=None, md5checksum=None, filename=None, filepath=None, colorstyle=None, alt=None, ext=None, create_dt=None):
+def get_duplicate_records(db_name=None, collection_name=None):
     # Insert a New Document
     import pymongo, bson, datetime
     from bson import Binary, Code
@@ -20,7 +20,7 @@ def get_duplicate_records(db_name=None, collection_name=None, md5checksum=None, 
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     mongo_collection = db[collection_name]
     data = { "$group": {"_id": { "firstField": "$filename","secondField": "$md5" },"uniqueIds": { "$addToSet": "$_id" },"count": { "$sum": 1 }}},{ "$match": {"count": { "$gt": 1 }}}
-    res = mongo_collection.aggregate([data])
+    res = mongo_collection.aggregate([data][0])
     return res
 
 
