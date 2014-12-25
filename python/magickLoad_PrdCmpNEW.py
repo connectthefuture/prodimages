@@ -41,39 +41,39 @@ def get_image_color_minmax(img):
     import subprocess, os, sys, re
     ret = subprocess.check_output([
     'convert',
-    img, 
+    img,
     '-median',
-    '5', 
-    '+dither', 
+    '5',
+    '+dither',
     '-colors',
-    '2', 
-    '-trim', 
-    '+repage',  
-    '-gravity', 
-    'center', 
-    '-crop', 
-    '50%', 
-    '-depth', 
-    '8', 
+    '2',
+    '-trim',
+    '+repage',
+    '-gravity',
+    'center',
+    '-crop',
+    '50%',
+    '-depth',
+    '8',
     '-format',
-    '%c', 
+    '%c',
     'histogram:info:-'])
-    
+
     ## Prepare cleaned output as list or dict
     colormax = str(ret).split('\n')[0].strip(' ')
     colormax =  re.sub(re.compile(r',\W'),',',colormax).replace(':','',1).split(' ')
     colormin = str(ret).split('\n')[1].strip(' ')
     colormin =  re.sub(re.compile(r',\W'),',',colormin).replace(':','',1).split(' ')
-    
+
     fields_top =  ['min_thresh', 'max_thresh']
     fields_l2  =  ['mean_avg', 'rgb_vals', 'webcolor_id', 'color_profile_vals']
     # x = { zip(field.split(','),color.split(',')) for color in colormin }
     colormin  = zip(fields_l2,colormin)
     colormax  = zip(fields_l2,colormax)
-    
+
     coloravgs = colormin,colormax
     colordata = zip(fields_top, coloravgs)
-    
+
     return colordata
 
 # Return Image data dict
@@ -85,25 +85,25 @@ def metadata_info_dict(img):
     fname=os.path.basename(img)
     dname=os.path.dirname(img)
     regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
-    
+
     metadata=subprocess.check_output(['identify', '-verbose', img])
 
     metadata_list = metadata.replace(' ','').split('\n')
-    
+
     g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
     g_height = [ g.split(':')[-1].split('+')[0].split('x')[1] for g in metadata_list if regex_geometry.findall(g) ]
-    
+
     metadata_width    = float(g_width[0])
     metadata_height   = float(g_height[0])
-    
+
     aspect_ratio =  metadata_height/metadata_width
     aspect_ratio = "{0:.2f}".format(round(aspect_ratio,2))
-    
+
     fileinfo['width'] = "{0:.0f}".format(round(metadata_width,2))
     fileinfo['height'] = "{0:.0f}".format(round(metadata_height,2))
     fileinfo['aspect'] = aspect_ratio
     orientation        = 'standard'
-    
+
     if float(round(metadata_height/metadata_width,2)) == float(round(1.00,2)):
         orientation    = 'square'
     elif float(round(metadata_height/metadata_width,2)) > float(round(1.00,2)):
@@ -117,7 +117,7 @@ def metadata_info_dict(img):
             orientation = 'bfly'
     if float(round(metadata_height/metadata_width,2)) == float(1.25):
         orientation    = 'bnc'
-        
+
     fileinfo['orientation'] = orientation
     fileinfo['mean'] = mean_tot[0]
     fileinfo['colorspace'] = colorspace[0]
@@ -174,12 +174,12 @@ def get_imagesize_variables(img):
     regex_geometry_attb = re.compile(r'.*?Geometry.*?[0-9,{1,4}]x[0-9,{1,4}].*?$')
 
     metadata=subprocess.check_output(['identify','-verbose', img])
-            
+
     metadata_list = metadata.replace(' ','').split('\n')
-    
+
     g_width = [ g.split(':')[-1].split('+')[0].split('x')[0] for g in metadata_list if regex_geometry.findall(g) ]
     g_height = [ g.split(':')[-1].split('+')[0].split('x')[1] for g in metadata_list if regex_geometry.findall(g) ]
-    
+
     dimensions = '{0}x{1}'.format(g_width[0],g_height[0])
 
     ## Vertical Portrait orientation or exact Square for taller images
@@ -200,8 +200,8 @@ def get_imagesize_variables(img):
         else:
             vert_horiz = "x480"
             dimensions = "400x480"
-    
-    ## Landscape Orientation for wider images  
+
+    ## Landscape Orientation for wider images
     elif int(dimensions.split(xdelim)[1]) > int(dimensions.split(xdelim)[-1]):
         if int(dimensions.split(xdelim)[-1]) > 2400:
             vert_horiz = "2000x"
@@ -210,7 +210,7 @@ def get_imagesize_variables(img):
         elif int(dimensions.split(xdelim)[-1]) < 2400 and int(dimensions.split(xdelim)[-1]) > 1680:
             vert_horiz = "1400x"
             dimensions = "1400x1680"
-        
+
         elif int(dimensions.split(xdelim)[-1]) < 1680 and int(dimensions.split(xdelim)[-1]) > 1200:
             vert_horiz = "1000x"
             dimensions = "1000x1200"
@@ -224,7 +224,7 @@ def get_imagesize_variables(img):
     print vert_horiz, dimensions
     return vert_horiz, dimensions
 
-# 
+#
 ### End Data extract Funx, below processors
 #
 
@@ -234,9 +234,9 @@ def subproc_magick_large_jpg(img, destdir=None):
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
-    
+
     os.chdir(os.path.dirname(img))
-    
+
     ## Destination name if Alt or Not
     if not destdir:
         destdir = os.path.abspath('.')
@@ -252,14 +252,14 @@ def subproc_magick_large_jpg(img, destdir=None):
         dimensions = get_dimensions(img)
         width  = dimensions.split('x')[0]
         height = dimensions.split('x')[1]
-        
+
         if aspect_ratio == '1.2':
             vert_horiz = '400x480'
         elif float(aspect_ratio) > float(1.2):
             vert_horiz = 'x480'
         elif float(aspect_ratio) < float(1.2):
             vert_horiz = '400x'
-        
+
         dimensions = "400x480"
         print dimensions,vert_horiz
         if regex_valid_style.findall(img):
@@ -290,15 +290,15 @@ def subproc_magick_large_jpg(img, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-extent', 
+            '-extent',
             dimensions,
             "-colorspace",
             "sRGB",
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.24+0.5+0', 
-            '-quality', 
+            '2x1.24+0.5+0',
+            '-quality',
             '95',
             outfile
             ])
@@ -309,7 +309,7 @@ def subproc_magick_large_jpg(img, destdir=None):
     else:
         pass
 
-# 
+#
 ###
 ### Medium Jpeg Convert to  _m jpgs
 def subproc_magick_medium_jpg(img, destdir=None):
@@ -317,10 +317,10 @@ def subproc_magick_medium_jpg(img, destdir=None):
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
-       
+
     os.chdir(os.path.dirname(img))
     #rgbmean = get_image_color_minmax(img)
-    
+
     ## Destination name if Alt or Not
     if not destdir:
         destdir = os.path.abspath('.')
@@ -338,14 +338,14 @@ def subproc_magick_medium_jpg(img, destdir=None):
     dimensions = get_dimensions(img)
     width  = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
-    
+
     if aspect_ratio == '1.2':
         vert_horiz = '300x360'
     elif float(aspect_ratio) > float(1.2):
         vert_horiz = 'x360'
     elif float(aspect_ratio) < float(1.2):
         vert_horiz = '300x'
-    
+
     dimensions = '300x360'
     print dimensions,vert_horiz
     if regex_valid_style.findall(img):
@@ -380,15 +380,15 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-extent', 
+            '-extent',
             dimensions,
             "-colorspace",
             "sRGB",
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.1+0.5+0', 
-            '-quality', 
+            '2x1.1+0.5+0',
+            '-quality',
             '95',
             #os.path.join(destdir, img.split('/')[-1])
             outfile
@@ -397,13 +397,13 @@ def subproc_magick_medium_jpg(img, destdir=None):
     else:
         return img
 
-### Png Create with Convert and aspect 
+### Png Create with Convert and aspect
 def subproc_magick_png(img, destdir=None):
     import subprocess,re,os
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
-     
+
     os.chdir(os.path.dirname(img))
 
     ## Destination name
@@ -420,9 +420,9 @@ def subproc_magick_png(img, destdir=None):
     dimensions = get_dimensions(img)
     width  = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
-    
+
     if aspect_ratio == '1.2':
-        vert_horiz = '{0}x{1}'.format(width,height)  
+        vert_horiz = '{0}x{1}'.format(width,height)
         dimensions = '{0}x{1}'.format(int(width),int(height))
     elif float(aspect_ratio) > float(int(1.2)):
         vert_horiz = 'x{0}'.format(height)
@@ -436,14 +436,14 @@ def subproc_magick_png(img, destdir=None):
         #h = float(round(h,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(width),int(h))
         print "H",h, aspect_ratio
-    
+
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
-    
+
     print dimensions,vert_horiz, width, height, aspect_ratio
     #imgformat = img.split('.')[-1]
-    if regex_valid_style.findall(img):        
+    if regex_valid_style.findall(img):
         subprocess.call([
             'convert',
             "-colorspace",
@@ -473,7 +473,7 @@ def subproc_magick_png(img, destdir=None):
             #"Mitchell",
             #"-define",
             #"filter:filter=QuadraticJinc",
-            "-define", 
+            "-define",
             "filter:win-support=12",
             "-define",
             "filter:support=8",
@@ -487,17 +487,17 @@ def subproc_magick_png(img, destdir=None):
             'white',
             '-gravity',
             'center',
-            '-extent', 
+            '-extent',
             dimensions,
             "-colorspace",
             "sRGB",
             '-unsharp',
-            '2x2.7+0.5+0', 
-            '-quality', 
+            '2x2.7+0.5+0',
+            '-quality',
             '100',
             outfile
             ])
-    
+
         print 'Done {}'.format(outfile)
         return outfile
     else:
@@ -534,8 +534,8 @@ def pycurl_upload_imagedrop(img):
         c.setopt(pycurl.INFILE, f)
         c.setopt(pycurl.INFILESIZE, os.path.getsize(localFilePath))
         c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(localFilePath))
-        #c.setopt(pycurl.READFUNCTION, f.read());        
-        #c.setopt(pycurl.READDATA, f.read()); 
+        #c.setopt(pycurl.READFUNCTION, f.read());
+        #c.setopt(pycurl.READDATA, f.read());
         c.setopt(pycurl.UPLOAD, 1L)
 
         try:
@@ -555,7 +555,7 @@ def pycurl_upload_imagedrop(img):
 
 #####
 ###
-## backup for 56 then 7 curl err            
+## backup for 56 then 7 curl err
 def upload_to_imagedrop(img):
     import ftplib
     session = ftplib.FTP('file3.bluefly.corp', 'imagedrop', 'imagedrop0')
@@ -683,7 +683,7 @@ if os.path.isdir(tmp_processing):
     #test_img = get_image_color_minmax(img)
 
 
-### Glob created PNGs and copy to Load Dir then Store in Arch dir 
+### Glob created PNGs and copy to Load Dir then Store in Arch dir
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
 [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
@@ -724,7 +724,7 @@ for upload_file in upload_tmp_loading:
             shutil.move(upload_file, archive_uploaded)
     except:
         print "Error moving Finals to Arch {}".format(file)
-        
+
 
 ## After completed Process and Load to imagedrop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
