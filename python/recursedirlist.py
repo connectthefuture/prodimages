@@ -18,7 +18,7 @@ def recurse_dir_list(directory):
         #print recursivefilelist
     #print recursivefilelist
     #regex = re.compile(r'^.+?[/][0-9]{9}_?[1-6]?.jpg$')
-    regex = re.compile(r'^.+?[.]png$')
+    regex = re.compile(r'^.+?[.]??g$')
     alljpgs = []
     alls = {}   
     for f in recursivefilelist:
