@@ -69,10 +69,21 @@ import sys,os
 #     directory = sys.argv[1]
 #     print directory
 # else:
-directory = os.path.abspath(os.curdir)
 
-dirfileslist = recurse_dir_list(directory)
-print dirfileslist
+if __name__ == '__main__':
+    import sys
+    try:
+        directory = sys.argv[1]
+        dirfileslist = recurse_dir_list(directory)
+        print dirfileslist
+    except IndexError:
+        print 'Using Curdir'
+        directory = os.path.abspath(os.curdir)
+        dirfileslist = recurse_dir_list(directory)
+        print dirfileslist
+    return dirfileslist
+
+
 #thumbs = makethumb(dirfileslist)
 #thumbs
 	
