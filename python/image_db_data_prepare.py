@@ -1,6 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+#def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
+#    import os
+#    db, fs = connect_gridfs_mongodb(db_name=db_name)
+#    try:
+#        filename = os.path.basename(filepath)
+#        content_type = {"content_type": 'image/' + filename.split('.')[-1]}
+#        if not metadata:
+#            exif_data,iptc_data,xmp_data,custom_data = get_metadata_for_gridfs(filepath)
+#            metadata['mgroup'] = mvalue
+#            metadata['mtag']   = mtag
+#            metadata['mvalue'] = mvalue
+#            metadata['content-type'] = content_type
+#        print metadata
+#        with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+#            with open(filepath) as filedata:
+#                fp.write(filedata.read())
+#        return fp, db
+#    except AttributeError:
+#        print 'Failed ', filepath
+#
+
 def raw_bfly_url_parser(url):
     import re
     regex_url  = re.compile(r'^(?:.+?\.ms\?\w+=)(?P<colorstyle>[1-9][0-9]{8})(?:.*?)?&(?:.*?)?(?:(?:w=)|(?:width=)|(?:outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.*?)?((?:&ver=)(?P<version>\d+))?(?:&level=\d)?$', re.U)
@@ -61,63 +83,53 @@ def get_metadata_for_gridfs(image_filepath):
     return
 
 
-def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
-    import os
-    db, fs = connect_gridfs_mongodb(db_name=db_name)
-    try:
-        filename = os.path.basename(filepath)
-        content_type = {"content_type": 'image/' + filename.split('.')[-1]}
-        if not metadata:
-            exif_data,iptc_data,xmp_data,custom_data = get_metadata_for_gridfs(filepath)
-            metadata['exif'] = exif_data
-            metadata['iptc'] = iptc_data
-            metadata['xmp']  = xmp_data
-            metadata['content-type'] = content_type
-        elif not metadata['content-type']:
-            metadata['content-type'] = content_type
-        print metadata
-        with fs.new_file(filename=filename, metadata=metadata) as fp:
-            with open(filepath) as filedata:
-                fp.write(filedata.read())
-        return fp, db
-    except AttributeError:
-        print 'Failed ', filepath
-
-
-def make_thumb(fileslist):
-	for f in fileslist:
-		from PIL import Image
-		size = 400, 480
-		file, ext = os.path.splitext(f)
-		print f
-		try:
-			im = Image.open(f)
-			print im.getbbox()
-			print im.getcolors()
-			im.thumbnail(size, Image.ANTIALIAS)
-			im.save(file + ".thumbnail", "JPEG")
-		except:
-			print 'failed {0}'.format(f)
-			continue
-
-	
-
+def getparse_metadata_from_imagefile(image_filepath):
+    import os, re
+    #mongo_gridfs_insert_file.main(filepath=os.path.abspath(f),metadata=None,db_name=None)
+    image_filepath = os.path.abspath(image_filepath)
+    mdata = get_exif_all_data(image_filepath)
+    from collections import defaultdict
+    mdatainsert = defaultdict(list)
+    for d in mdata.items():
+        metadict = {} #defaultdict(list)
+        try:
+            #print d[1]
+            mgroup, mtag = d[0].split(':')
+            mvalue = d[1]
+            metadict['metagroup'] = mgroup
+            metadict['metatag']   = mtag
+            metadict['metavalue'] = mvalue
+            mdatainsert[image_filepath].append(metadict)
+        except ValueError:
+            pass
+    #mdatainsert[image_filepath] = metadict
+    return mdatainsert.keys()[0], mdatainsert.values()[0]
 
 # if sys.argv[1]:
 #     directory = sys.argv[1]
 #     print directory
 # else:
+def insert_gridfs_extract_metadata(filename):    
+    from mongo_gridfs_insert_file import insert_file_gridfs_file7
+    image_filepath, metadata = getparse_metadata_from_imagefile(filename)
+    print image_filepath, metadata
+    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name='gridfs_file7')
+    return insert_record
+
 
 if __name__ == '__main__':
     import sys,os
     try:
         directory = sys.argv[1]
         dirfileslist = recursive_dirlist(directory)
+        for f in dirfileslist:
+            insert_gridfs_extract_metadata(f)
         #print dirfileslist
     except IndexError:
-        print 'Using Curdir'
-        directory = os.path.abspath(os.curdir)
-        dirfileslist = recursive_dirlist(directory)
+        print 'FAILED INDEX ERROR'
+        pass
+        #directory = os.path.abspath(os.curdir)
+        #dirfileslist = recursive_dirlist(directory)
         #print dirfileslist
     
 
@@ -126,7 +138,7 @@ def test():
     rootdir='/Users/johnb/Dropbox/DEVROOT/mnt/Post_Ready/Retouch_Still'
     os.chdir('/Users/johnb/virtualenvs/GitHub-prodimages/python')
     dirfileslist = recursive_dirlist(rootdir)
-    print dirfileslist
+    #print dirfileslist
     return dirfileslist
 
 
@@ -134,6 +146,6 @@ def test():
 #thumbs
 ret =test()
 #print ret
-import mongo_gridfs_insert_file
-for f in ret:
-    mongo_gridfs_insert_file.main(filepath=os.path.abspath(f),metadata=None,db_name=None)
+
+
+
