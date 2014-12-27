@@ -65,31 +65,44 @@ def get_metadata_for_gridfs(image_filepath):
 def getparse_metadata_from_imagefile(image_filepath):
     import os, re
     #mongo_gridfs_insert_file.main(filepath=os.path.abspath(f),metadata=None,db_name=None)
-    image_filepath = os.path.abspath(image_filepath)
-    mdata = get_exif_all_data(image_filepath)
     from collections import defaultdict
     mdatainsert = defaultdict(list)
-    for d in mdata.items():
-        metadict = {} #defaultdict(list)
+    image_filepath = os.path.abspath(image_filepath)
+    mdata = get_exif_all_data(image_filepath)
+    metagroupdict = defaultdict(list)
+    #defaultdict(list)
+    for k,v in mdata.items():
+        metadict = defaultdict(list)#{}    
+        print k,'----',v
+        #for v in vals:
         try:
             #print d[1]
-            mgroup, mtag = d[0].split(':')
-            mvalue = d[1]
-            metadict['metagroup'] = mgroup
-            metadict['metatag']   = mtag
-            metadict['metavalue'] = mvalue
-            mdatainsert[image_filepath].append(metadict)
+            mgroup, mtag = k.split(':')
+            mvalue = v
+            print mgroup, mtag, mvalue
+            
+            metatagval = {mtag: mvalue}
+            metadict[mgroup]
+            #metadict['metavalue'] = mvalue
+            metagroupdict[mgroup].append(metatagval)
         except ValueError:
             pass
+    mdatainsert[image_filepath].append(metagroupdict)
     #mdatainsert[image_filepath] = metadict
-    return mdatainsert.keys()[0], mdatainsert.values()[0]
+    return mdatainsert
+#    c= 1
+#    for i in metagroupdict.values()[0]:
+#        print c,i,'\n'
+#        c += 1
+#        break
+#    return mdatainsert.keys()[0], mdatainsert.values()[0]
 
 
-def insert_gridfs_extract_metadata(filename):    
+def insert_gridfs_extract_metadata(image_filepath):    
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
-    image_filepath, metadata = getparse_metadata_from_imagefile(filename)
+    metadata = getparse_metadata_from_imagefile(image_filepath)
     print image_filepath, metadata
-    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name='gridfs_file7')
+    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata.items(), db_name='gridfs_file7')
     return insert_record
 
 
@@ -98,7 +111,7 @@ if __name__ == '__main__':
     try:
         directory = sys.argv[1]
         dirfileslist = recursive_dirlist(directory)
-        for f in dirfileslist:
+        for f in dirfileslist[2:6]:
             insert_gridfs_extract_metadata(f)
         #print dirfileslist
     except IndexError:
