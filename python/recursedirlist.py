@@ -18,19 +18,19 @@ def recurse_dir_list(directory):
         #print recursivefilelist
     #print recursivefilelist
     #regex = re.compile(r'^.+?[/][0-9]{9}_?[1-6]?.jpg$')
-    regex = re.compile(r'^.+?[.]??g$')
-    allimgs = []
+    regex = re.compile(r'^.+?[.]png$')
+    alljpgs = []
     alls = {}   
     for f in recursivefilelist:
         alld = {}
-        foundimgs = re.findall(regex,f)
-        if foundimgs:
-            allimgs.append(f)
+        foundjpgs = re.findall(regex,f)
+        if foundjpgs:
+            alljpgs.append(f)
     	    alld['file_path'] = os.path.abspath(f)
             f1 = f.split('/')[-1]
     	    alld['colorstyle'] = f1.split('_')[0]
     	    alls[f] = alld
-    return allimgs
+    return alljpgs
 #    return alls
         
 # def get_exif(fn):
@@ -69,27 +69,13 @@ import sys,os
 #     directory = sys.argv[1]
 #     print directory
 # else:
+directory = os.path.abspath(os.curdir)
 
-if __name__ == '__main__':
-    import sys
-    try:
-        directory = sys.argv[1]
-        dirfileslist = recurse_dir_list(directory)
-        print dirfileslist
-    except IndexError:
-        print 'Using Curdir'
-        directory = os.path.abspath(os.curdir)
-        dirfileslist = recurse_dir_list(directory)
-        print dirfileslist
-    
-
+dirfileslist = recurse_dir_list(directory)
+print dirfileslist
 #thumbs = makethumb(dirfileslist)
 #thumbs
-def test():
-    rootdir='/Users/johnb/Dropbox/DEVROOT/mnt/Post_Ready/Retouch_Still'
-    os.chdir('/Users/johnb/virtualenvs/GitHub-prodimages/python')
-    import recursedirlist
-    recursedlist=recursedirlist.recurse_dir_list(rootdir)
-    print recursedlist
+	
 
-#test()
+
+

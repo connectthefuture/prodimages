@@ -30,8 +30,10 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
     try:
         filename = os.path.basename(filepath)
         content_type= 'image/' + filename.split('.')[-1]
+        if not metadata: #['content-type']:
+            metadata = {'content-type': content_type}
         #content-type=content_type
-        with fs.new_file(filename=filename, metadata=metadata) as fp:
+        with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
             with open(filepath) as filedata:
                 fp.write(filedata.read())
         return fp, db
