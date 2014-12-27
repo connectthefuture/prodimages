@@ -2,27 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-#def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
-#    import os
-#    db, fs = connect_gridfs_mongodb(db_name=db_name)
-#    try:
-#        filename = os.path.basename(filepath)
-#        content_type = {"content_type": 'image/' + filename.split('.')[-1]}
-#        if not metadata:
-#            exif_data,iptc_data,xmp_data,custom_data = get_metadata_for_gridfs(filepath)
-#            metadata['mgroup'] = mvalue
-#            metadata['mtag']   = mtag
-#            metadata['mvalue'] = mvalue
-#            metadata['content-type'] = content_type
-#        print metadata
-#        with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
-#            with open(filepath) as filedata:
-#                fp.write(filedata.read())
-#        return fp, db
-#    except AttributeError:
-#        print 'Failed ', filepath
-#
-
 def raw_bfly_url_parser(url):
     import re
     regex_url  = re.compile(r'^(?:.+?\.ms\?\w+=)(?P<colorstyle>[1-9][0-9]{8})(?:.*?)?&(?:.*?)?(?:(?:w=)|(?:width=)|(?:outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.*?)?((?:&ver=)(?P<version>\d+))?(?:&level=\d)?$', re.U)
@@ -105,10 +84,7 @@ def getparse_metadata_from_imagefile(image_filepath):
     #mdatainsert[image_filepath] = metadict
     return mdatainsert.keys()[0], mdatainsert.values()[0]
 
-# if sys.argv[1]:
-#     directory = sys.argv[1]
-#     print directory
-# else:
+
 def insert_gridfs_extract_metadata(filename):    
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
     image_filepath, metadata = getparse_metadata_from_imagefile(filename)
@@ -144,7 +120,7 @@ def test():
 
 #thumbs = makethumb(dirfileslist)
 #thumbs
-ret =test()
+#ret =test()
 #print ret
 
 
