@@ -29,8 +29,14 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     try:
         filename = os.path.basename(filepath)
-        content_type= 'image/' + filename.split('.')[-1]
-        if not metadata: #['content-type']:
+        ext = filename.split('.')[-1].lower()
+        if ext == 'jpg' or ext == 'jpeg':
+            content_type = 'image/jpeg'
+        elif ext == 'tif' or ext == 'tiff':
+            content_type= 'image/tiff'
+        else:
+            content_type= 'image/' + filename.split('.')[-1]
+        if not metadata:
             metadata = {'content-type': content_type}
         #content-type=content_type
         with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
