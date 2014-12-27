@@ -19,18 +19,18 @@ def recurse_dir_list(directory):
     #print recursivefilelist
     #regex = re.compile(r'^.+?[/][0-9]{9}_?[1-6]?.jpg$')
     regex = re.compile(r'^.+?[.]??g$')
-    alljpgs = []
+    allimgs = []
     alls = {}   
     for f in recursivefilelist:
         alld = {}
-        foundjpgs = re.findall(regex,f)
-        if foundjpgs:
-            alljpgs.append(f)
+        foundimgs = re.findall(regex,f)
+        if foundimgs:
+            allimgs.append(f)
     	    alld['file_path'] = os.path.abspath(f)
             f1 = f.split('/')[-1]
     	    alld['colorstyle'] = f1.split('_')[0]
     	    alls[f] = alld
-    return alljpgs
+    return allimgs
 #    return alls
         
 # def get_exif(fn):
@@ -81,8 +81,7 @@ if __name__ == '__main__':
         directory = os.path.abspath(os.curdir)
         dirfileslist = recurse_dir_list(directory)
         print dirfileslist
-    return dirfileslist
-
+    
 
 #thumbs = makethumb(dirfileslist)
 #thumbs
