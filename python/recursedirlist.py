@@ -85,7 +85,11 @@ if __name__ == '__main__':
 
 #thumbs = makethumb(dirfileslist)
 #thumbs
-	
+def test():
+    rootdir='/Users/johnb/Dropbox/DEVROOT/mnt/Post_Ready/Retouch_Still'
+    os.chdir('/Users/johnb/virtualenvs/GitHub-prodimages/python')
+    import recursedirlist
+    recursedlist=recursedirlist.recurse_dir_list(rootdir)
+    print recursedlist
 
-
-
+#test()
