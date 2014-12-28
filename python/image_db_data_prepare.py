@@ -38,7 +38,7 @@ def getparse_metadata_from_imagefile(image_filepath):
         try:
             mgroup, mtag = k.split(':')
             mvalue = v
-            metakvpairs = (mtag,mvalue)
+            metakvpairs = {mtag: mvalue}
             groupdict[mgroup].append(metakvpairs)
             #print mgroup, mtag, mvalue, '----_----', metagroupdict, '----\n----',groupdict
             #metagroupdict[mgroup].append(metatagval)
@@ -51,9 +51,9 @@ def getparse_metadata_from_imagefile(image_filepath):
 
 def insert_gridfs_extract_metadata(image_filepath):    
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
-    metadata = getparse_metadata_from_imagefile(image_filepath)
+    metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     print image_filepath, metadata
-    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata.items(), db_name='gridfs_file7')
+    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name='gridfs_file7')
     return #insert_record
 
 
