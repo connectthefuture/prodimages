@@ -1,25 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-def raw_bfly_url_parser(url):
-    import re
-    regex_url  = re.compile(r'^(?:.+?\.ms\?\w+=)(?P<colorstyle>[1-9][0-9]{8})(?:.*?)?&(?:.*?)?(?:(?:w=)|(?:width=)|(?:outputx=))?(?P<width>\d+)?(?:(?:&h=)|(?:&height=)|(?:&outputy=))?(?P<height>\d+)?(?:.*?)?((?:&ver=)(?P<version>\d+))?(?:&level=\d)?$', re.U)
-    ## Clear Local image servers first
-    kvpairs = []
-    try:
-        matched    = regex_url.match(url_purge)
-        colorstyle = matched.group('colorstyle')
-        version    = matched.group('version')
-        width      = matched.group('width')
-        height     = matched.group('height')
-        pair = ((colorstyle, version),(width,height))
-        kvpairs.append(pair)
-        return kvpairs
-    except:
-        print 'FAILED', url
-        pass
-
 ## Walk Root Directory and Return List or all Files in all Subdirs too
 def recursive_dirlist(rootdir):
     import os,re
@@ -39,27 +20,11 @@ def recursive_dirlist(rootdir):
     return walkedlist
 
 
-def get_PNG_datecreate(image_filepath):
-    import exiftool
-    with exiftool.ExifTool() as et:
-        datecreated = et.get_metadata(image_filepath)['PNG:datecreate'][:10]
-    return datecreated
-
-
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
         metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
     return metadata
-
-
-def get_metadata_for_gridfs(image_filepath):
-    metadata = get_exif_all_data(image_filepath)
-    exif_data    = metadata['exif'] 
-    iptc_data    = metadata['iptc'] 
-    xmp_data     = metadata['xmp'] 
-    content_type = metadata['content-type']
-    return
 
 
 def getparse_metadata_from_imagefile(image_filepath):
@@ -68,35 +33,26 @@ def getparse_metadata_from_imagefile(image_filepath):
     image_filepath = os.path.abspath(image_filepath)
     mdata = get_exif_all_data(image_filepath)
     mdatainsert = {} #defaultdict(list)
-    #defaultdict(list)
-    groupdict = defaultdict(set)
+    groupdict = defaultdict(list)
     for k,v in mdata.iteritems():
-        
-        #metakvpairs = {}#defaultdict(list)#{}
-        #print k,'----',v
-        #print v
         try:
-            #print d[1]
             mgroup, mtag = k.split(':')
             mvalue = v
             metakvpairs = (mtag,mvalue)
-            groupdict[mgroup].add(metakvpairs)
+            groupdict[mgroup].append(metakvpairs)
             #print mgroup, mtag, mvalue, '----_----', metagroupdict, '----\n----',groupdict
-            #metadict[mgroup]
-            #metadict['metavalue'] = mvalue
             #metagroupdict[mgroup].append(metatagval)
         except ValueError:
             pass
-    print groupdict
-    mdatainsert[image_filepath] = list(groupdict)
-    #mdatainsert[image_filepath] = metadict
+    #print groupdict  datagroupkey, datagroupvalues = groupdict.popitem()
+    mdatainsert[image_filepath] = groupdict #.items()
     return mdatainsert
 
 
 def insert_gridfs_extract_metadata(image_filepath):    
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
     metadata = getparse_metadata_from_imagefile(image_filepath)
-    #print image_filepath, metadata
+    print image_filepath, metadata
     insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata.items(), db_name='gridfs_file7')
     return #insert_record
 
@@ -106,30 +62,11 @@ if __name__ == '__main__':
     try:
         directory = sys.argv[1]
         dirfileslist = recursive_dirlist(directory)
-        for f in dirfileslist[2:6]:
+        for f in dirfileslist:
             insert_gridfs_extract_metadata(f)
         #print dirfileslist
     except IndexError:
         print 'FAILED INDEX ERROR'
         pass
-        #directory = os.path.abspath(os.curdir)
-        #dirfileslist = recursive_dirlist(directory)
-        #print dirfileslist
-    
-
-def test():
-    import sys,os
-    rootdir='/Users/johnb/Dropbox/DEVROOT/mnt/Post_Ready/Retouch_Still'
-    os.chdir('/Users/johnb/virtualenvs/GitHub-prodimages/python')
-    dirfileslist = recursive_dirlist(rootdir)
-    #print dirfileslist
-    return dirfileslist
-
-
-#thumbs = makethumb(dirfileslist)
-#thumbs
-#ret =test()
-#print ret
-
 
 
