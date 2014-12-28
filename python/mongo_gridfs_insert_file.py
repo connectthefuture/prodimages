@@ -8,8 +8,65 @@ def connect_gridfs_mongodb(db_name='None'):
     mongo_db = mongo[db_name]
     #mongo_db = mongo[db_name]
     mongo_db.authenticate('mongo', 'mongo')
+    fs = ''
     fs = gridfs.GridFS(mongo_db)
     return mongo_db, fs
+
+
+def insert_filerecord_pymongo(db_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
+    # Insert a New Document
+    import pymongo
+    mongo = pymongo.Connection('127.0.0.1')
+    mongo_db = mongo[db_name]
+    mongo_collection = mongo_db[collection_name]
+
+    # Returns the '_id' key associated with the newly created document
+    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp})
+    #    new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp})
+    #new_insertobj_id = mongo_collection.insert({'colorstyle': colorstyle,'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}, continue_on_error=True, upsert=True)
+    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
+    return new_insertobj_id
+
+
+def update_filerecord_pymongo(db_name=None, filename=None):
+    # Insert a New Document
+    #(filepath=None, metadata=None, db_name=None):
+    import os
+    import pymongo, bson
+    from bson import Binary, Code
+    from bson.json_util import dumps
+    mongo_db, fs = connect_gridfs_mongodb(db_name=db_name)
+    if fs:
+        collection_name = 'fs.files'
+    mongo_collection = mongo_db[collection_name]
+    key = {'colorstyle': colorstyle}  #, 'alt': alt, 'upload_ct': 1}
+    #data = { "$set":{'format': format,'batchid': batchid,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
+    datarow = {'colorstyle': colorstyle, 'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
+    key_str = key.keys()[0]
+    check = mongo_collection.find({key_str: colorstyle}).count()
+    if check == 1:
+        print 'REFRESH IT ', check
+        data = { "$set":{
+                        'colorstyle': colorstyle,
+                        'alt': {'$min': {'alt': alt}},
+                        'format': format,
+                        'batchid': batchid,
+                        #'upload_ct':
+                        '$inc': {'upload_ct': 1},
+                        'timestamp': { '$max': {'timestamp': timestamp}}
+                        }
+                    }
+        return check
+    else:
+        print 'NEW IT ', check
+        data = { "$set":{'format': format,'batchid': batchid,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
+        #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
+    mongo_collection.create_index("colorstyle", unique=True, sparse=False, background=True)
+    #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
+    new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
+    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
+    return new_insertobj_id
+
 
 
 def get_duplicate_records(db_name=None, collection_name=None):
@@ -62,6 +119,9 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
                 with open(filepath) as filedata:
                     fp.write(filedata.read())
             return fp, db
+        else:
+            r = find_record_gridfs(key={"filename": filename}, db_name='gridfs_file7', collection_name='fs.files')
+            print r
     except AttributeError:
         print 'Failed ', filepath
 
@@ -79,7 +139,7 @@ def main(filepath=None,metadata=None,db_name=None):
 if __name__ == '__main__':
     import sys
     try:
-        filename = sys.argv[1]
+        filepath = sys.argv[1]
         res = insert_file_gridfs_file7(filepath=filepath)[0]
         print res._id 
     except IndexError:
