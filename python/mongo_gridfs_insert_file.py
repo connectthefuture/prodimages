@@ -24,29 +24,6 @@ def get_duplicate_records(db_name=None, collection_name=None):
     return res
 
 
-def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
-    import os
-    db, fs = connect_gridfs_mongodb(db_name=db_name)
-    try:
-        filename = os.path.basename(filepath)
-        ext = filename.split('.')[-1].lower()
-        if ext == 'jpg' or ext == 'jpeg':
-            content_type = 'image/jpeg'
-        elif ext == 'tif' or ext == 'tiff':
-            content_type= 'image/tiff'
-        else:
-            content_type= 'image/' + filename.split('.')[-1]
-        if not metadata:
-            metadata = {'content-type': content_type}
-        #content-type=content_type
-        with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
-            with open(filepath) as filedata:
-                fp.write(filedata.read())
-        return fp, db
-    except AttributeError:
-        print 'Failed ', filepath
-
-
 def retrieve_last_instance_gridfs_file7(filepath=None, db_name=None):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     return fp
@@ -59,11 +36,34 @@ def find_record_gridfs(key=None, db_name=None, collection_name=None):
     #client = .authenticate('user', 'password', mechanism='SCRAM-SHA-1')
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     mongo_collection = db[collection_name]
-    key = {'md5checksum': md5checksum}
+    if not key:
+        key = {'md5checksum': md5checksum}
     key_str = key.keys()[0]
     key_val = key.values()[0]
     check = mongo_collection.find({key_str: key_val}).count()
     return check
+
+
+def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
+    import os
+    db, fs = connect_gridfs_mongodb(db_name=db_name)
+    try:
+        filename = os.path.basename(filepath)
+        ext = filename.split('.')[-1].lower()
+        if ext == 'jpg' or ext == 'jpeg':
+            content_type = 'image/jpeg'
+        elif ext == 'tif' or ext == 'tiff':
+            content_type= 'image/tiff'
+        else:
+            content_type= 'image/' + str(ext)
+        #content-type=content_type
+        if not find_record_gridfs(key={"filename": filename}, db_name='gridfs_file7', collection_name='fs.files'):    
+            with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+                with open(filepath) as filedata:
+                    fp.write(filedata.read())
+            return fp, db
+    except AttributeError:
+        print 'Failed ', filepath
 
 
 def main(filepath=None,metadata=None,db_name=None):
