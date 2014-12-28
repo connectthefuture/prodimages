@@ -64,46 +64,41 @@ def get_metadata_for_gridfs(image_filepath):
 
 def getparse_metadata_from_imagefile(image_filepath):
     import os, re
-    #mongo_gridfs_insert_file.main(filepath=os.path.abspath(f),metadata=None,db_name=None)
     from collections import defaultdict
-    mdatainsert = defaultdict(list)
     image_filepath = os.path.abspath(image_filepath)
     mdata = get_exif_all_data(image_filepath)
-    metagroupdict = defaultdict(list)
+    mdatainsert = {} #defaultdict(list)
     #defaultdict(list)
-    for k,v in mdata.items():
-        metadict = defaultdict(list)#{}    
-        print k,'----',v
-        #for v in vals:
+    groupdict = defaultdict(set)
+    for k,v in mdata.iteritems():
+        
+        #metakvpairs = {}#defaultdict(list)#{}
+        #print k,'----',v
+        #print v
         try:
             #print d[1]
             mgroup, mtag = k.split(':')
             mvalue = v
-            print mgroup, mtag, mvalue
-            
-            metatagval = {mtag: mvalue}
-            metadict[mgroup]
+            metakvpairs = (mtag,mvalue)
+            groupdict[mgroup].add(metakvpairs)
+            #print mgroup, mtag, mvalue, '----_----', metagroupdict, '----\n----',groupdict
+            #metadict[mgroup]
             #metadict['metavalue'] = mvalue
-            metagroupdict[mgroup].append(metatagval)
+            #metagroupdict[mgroup].append(metatagval)
         except ValueError:
             pass
-    mdatainsert[image_filepath].append(metagroupdict)
+    print groupdict
+    mdatainsert[image_filepath] = list(groupdict)
     #mdatainsert[image_filepath] = metadict
     return mdatainsert
-#    c= 1
-#    for i in metagroupdict.values()[0]:
-#        print c,i,'\n'
-#        c += 1
-#        break
-#    return mdatainsert.keys()[0], mdatainsert.values()[0]
 
 
 def insert_gridfs_extract_metadata(image_filepath):    
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
     metadata = getparse_metadata_from_imagefile(image_filepath)
-    print image_filepath, metadata
+    #print image_filepath, metadata
     insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata.items(), db_name='gridfs_file7')
-    return insert_record
+    return #insert_record
 
 
 if __name__ == '__main__':
