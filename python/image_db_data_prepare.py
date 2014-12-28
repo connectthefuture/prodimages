@@ -57,6 +57,13 @@ def insert_gridfs_extract_metadata(image_filepath):
     return #insert_record
 
 
+def update_gridfs_extract_metadata(image_filepath):    
+    from mongo_gridfs_insert_file import update_file_gridfs_file7
+    metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
+    print image_filepath, metadata
+    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name='gridfs_file7')
+    return #insert_record
+
 if __name__ == '__main__':
     import sys,os
     try:
