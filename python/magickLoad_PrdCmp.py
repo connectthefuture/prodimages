@@ -64,24 +64,36 @@ def rename_retouched_file(src_imgfilepath):
             return src_imgfilepath
 
 
-def get_exif_metadata_value(image_filepath, exiftag=None):
-    from PIL import Image
-    import pyexiv2
-    # Read EXIF data to initialize
-    image_metadata = pyexiv2.ImageMetadata(image_filepath)
-    metadata = image_metadata.read()
-    # Add and Write new Tag to File
-    if exiftag:
-        exifvalue = metadata[exiftag]
-        return (exiftag, exifvalue)
-    # image_metadata[exiftag] = exifvalue
-    # image_metadata.write()
-    else:
-        metadict = {}
-        for mtag, mvalue in metadata.iteritems():
-            metadict[mtag] = mvalue
-        return metadict
+def get_exif_all_data(image_filepath):
+    import exiftool
+    with exiftool.ExifTool() as et:
+        metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
+    return metadata
 
+
+## Returns False if file is Zero KB, True if file is valid - does not catch corrupt files greater than 1KB
+def zero_byte_file_filter(image_filepath,error_dir=None):
+    import os
+    if not error_dir:
+        imagedir  = os.path.dirname(image_filepath)
+        rootdir   = os.path.dirname(imagedir)
+        error_root = os.path.join(rootdir,'zero_byte_errors')
+        error_details_drop_dir = os.path.join(error_root, 'originated_in_' + imagedir.split('/')[-1])
+    mdata = get_exif_all_data(os.path.abspath(image_filepath))
+    if mdata.get('File:FileSize') <= 1:
+        try:
+            os.makedirs(error_details_drop_dir, 16877)
+        except:
+            pass
+        error_file_stored = os.path.join(error_details_drop_dir, os.path.filename(image_filepath))
+        if os.path.isfile(error_file_stored):
+            os.remove(error_file_stored)
+            os.rename(image_filepath, error_file_stored)
+        else:
+            os.rename(image_filepath, error_file_stored)
+        return False
+    else:
+        return True
 
 ######## Make Images For Upload to Website ##########
 
@@ -390,11 +402,11 @@ else:
 
 ## Move All DropFinal Files from Retouchers dirs to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
 walkedout_tmp = glob.glob(os.path.join(rootdir, '*/*.*g'))
-[ shutil.move(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
+[ shutil.move(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp if zero_byte_file_filter(file) ]
 
 ### Rename Files moved into Temp Processing Floder
 walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-[ rename_retouched_file(file) for file in walkedout_tmp ]
+[ rename_retouched_file(file) for file in walkedout_tmp if zero_byte_file_filter(file) ]
 
 
 ## Copy Full Size Retouched Jpg to tmp Large and Med jpg folders for Glob Mogrify AND to Final Archive JPG_RETOUCHED_ORIG
@@ -402,7 +414,7 @@ walkedout_renamed = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 
 
 ## Large
-[ shutil.copy2(file, os.path.join(tmp_processing_l, os.path.basename(file))) for file in walkedout_renamed ]
+[ shutil.copy2(file, os.path.join(tmp_processing_l, os.path.basename(file))) for file in walkedout_renamed if zero_byte_file_filter(file) ]
 walkedout_large = glob.glob(os.path.join(tmp_processing_l, '*.jpg'))
 ### Remove alt images and rename as _l
 for f in walkedout_large:
@@ -417,7 +429,7 @@ subproc_magick_large_jpg(tmp_processing_l)
 
 
 ## Medium
-[ shutil.copy2(file, os.path.join(tmp_processing_m, os.path.basename(file))) for file in walkedout_renamed ]
+[ shutil.copy2(file, os.path.join(tmp_processing_m, os.path.basename(file))) for file in walkedout_renamed if zero_byte_file_filter(file) ]
 walkedout_medium = glob.glob(os.path.join(tmp_processing_m, '*.jpg'))
 ### Bypass rename alt images and rename only primary jpgs as _m
 for f in walkedout_medium:
@@ -439,13 +451,13 @@ subproc_magick_png(tmp_processing)
 
 ### Glob created PNGs and copy to Load Dir then Store in Arch dir
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
-[ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
-[ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
+[ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png if zero_byte_file_filter(file) ]
+[ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png if zero_byte_file_filter(file) ]
 
 ## ARCHIVED Backup
 ## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
 jpgs_to_archive = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-[ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in jpgs_to_archive ]
+[ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in jpgs_to_archive if zero_byte_file_filter(file) ]
 
 
 ###### All PNGs Created and moved to Archive plus Copy sent to Load Directory
@@ -454,7 +466,7 @@ jpgs_to_archive = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 #### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
 ###
 load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
-[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
+[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs if zero_byte_file_filter(file) ]
 
 ## UPLOAD NFS with PyCurl everything in tmp_loading
 ###
