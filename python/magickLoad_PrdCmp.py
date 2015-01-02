@@ -85,7 +85,7 @@ def zero_byte_file_filter(image_filepath,error_dir=None):
             os.makedirs(error_details_drop_dir, 16877)
         except:
             pass
-        error_file_stored = os.path.join(error_details_drop_dir, os.path.filename(image_filepath))
+        error_file_stored = os.path.join(error_details_drop_dir, os.path.basename(image_filepath))
         if os.path.isfile(error_file_stored):
             os.remove(error_file_stored)
             shutil.move(image_filepath, error_file_stored)
