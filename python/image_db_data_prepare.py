@@ -27,6 +27,16 @@ def get_exif_all_data(image_filepath):
     return metadata
 
 
+## Returns False if file is Zero KB, True if file is valid - does not catch corrupt files greater than 1KB
+def zero_byte_file_filter(image_filepath):
+    import os
+    mdata = get_exif_all_data(os.path.abspath(image_filepath))
+    if mdata.get('File:FileSize') <= 1:
+        return False
+    else:
+        return True
+
+
 def getparse_metadata_from_imagefile(image_filepath):
     import os, re
     from collections import defaultdict
