@@ -17,8 +17,8 @@ def failed_upload_alerts(infile):
         email_addr = firstname.lower() + '.' + lastname.lower() + '@bluefly.com'
         return locals()
 
-def send_email_zerobyte_alerts(groupdict):
-    import smtplib
+def send_email_zerobyte_alerts(groupdict,gmail_user=None,gmail_pass=None):
+    import smtplib, email
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
 
@@ -30,8 +30,8 @@ def send_email_zerobyte_alerts(groupdict):
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
     msg['Subject'] = "Failed Upload"
-    msg['From']    = 'johnb@prodimages.ny.bluefly'
-    msg['To']      = you
+    msg['From']    = from_addr
+    msg['To']      = to_addr
 
     # Create the body of the message (a plain-text and an HTML version).
     text = "Failed Files:\n\vPlease Reload the Following Styles:\n{0}".format(failed_styles)
@@ -63,15 +63,14 @@ def send_email_zerobyte_alerts(groupdict):
     mailServer.starttls()
     mailServer.ehlo()
     mailServer.login(gmail_user, gmail_pass)
-    mailServer.sendmail(gmail_user, to, msg.as_string())
+    mailServer.sendmail(from_addr, to_addr, msg.as_string())
     # sendmail function takes 3 arguments: sender's address, recipient's address
     # and message to send - here it is sent as one string.
-    mailServer.sendmail(me, you, msg.as_string())
     mailServer.close()
 
 
 def send_attachment_gmail(to, subject, text, attach):
-    import smtplib, os
+    import smtplib, os, email
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEBase import MIMEBase
     from email.MIMEText import MIMEText
