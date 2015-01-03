@@ -29,7 +29,7 @@ def get_exif_all_data(image_filepath):
 
 ## Returns False if file is Zero KB, True if file is valid - does not catch corrupt files greater than 1KB
 def zero_byte_file_filter(image_filepath,error_dir=None):
-    import os,shutil
+    import os, shutil
     if not error_dir:
         imagedir  = os.path.dirname(image_filepath)
         rootdir   = os.path.dirname(imagedir)
@@ -41,7 +41,7 @@ def zero_byte_file_filter(image_filepath,error_dir=None):
             os.makedirs(error_details_drop_dir, 16877)
         except:
             pass
-        error_file_stored = os.path.join(error_details_drop_dir, os.path.filename(image_filepath))
+        error_file_stored = os.path.join(error_details_drop_dir, os.path.basename(image_filepath))
         if os.path.isfile(error_file_stored):
             os.remove(error_file_stored)
             shutil.move(image_filepath, error_file_stored)
