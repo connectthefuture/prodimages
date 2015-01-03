@@ -496,7 +496,13 @@ for upload_file in upload_tmp_loading:
     except:
         print "Error moving Finals to Arch {}".format(file)
 
-
+### Check for okb files and send to Uploader via email
+zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors, '*/*.*g'))
+if zerobytefiles:
+    import jbmodules.mailing_funcs
+    for f in zerobytefiles:
+        groupeddict = failed_upload_alerts(f)
+        send_email_zerobyte_alerts(groupeddict=groupeddict)
 ## After completed Process and Load to imagedrop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
 upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
