@@ -17,35 +17,40 @@ def failed_upload_alerts(infile):
         email_addr = firstname.lower() + '.' + lastname.lower() + '@bluefly.com'
         return locals()
 
-def send_email_zerobyte_alerts(groupdict,gmail_user=None,gmail_pass=None):
+def send_email_zerobyte_alerts(groupeddict,gmail_user=None,gmail_pass=None):
     import smtplib, email
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
-
+    firstname  = groupeddict['firstname']
+    lastname   = groupeddict['lastname']
+    colorstyle = groupeddict['colorstyle']
+    alt        = groupeddict['alt']
+    email_addr = groupeddict['email_addr']
+    filepath   = groupeddict['email_addr']
     # me == my email address
     # you == recipient's email address
     from_addr = "john.bragato@gmail.com"
-    to_addr = "john.bragato@gmail.com"
+    to_addr = email_addr
 
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
-    msg['Subject'] = "Failed Upload"
+    msg['Subject'] = "Failed Upload " + colorstyle
     msg['From']    = from_addr
     msg['To']      = to_addr
 
     # Create the body of the message (a plain-text and an HTML version).
-    text = "Failed Files:\n\vPlease Reload the Following Styles:\n{0}".format(failed_styles)
+    text = "Failed Files:\n\vPlease Reload the Following Files:\n{0}".format(filepath.replace('/mnt/','/Volumes/'))
     html = """\
     <html>
       <head></head>
       <body>
         <p>Failed Files<br>
-           Please Reload the Following Styles:<br>
-           {0}
+           Please Reload the Images: <a href='/Volumes/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors'> ZeroByteDir</a><br>
+           <table><a href='{0}'> {1}</a></table>
         </p>
       </body>
     </html>
-    """.format(failed_styles)
+    """.format(filepath.replace('/mnt/','/Volumes/'),colorstyle)
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
