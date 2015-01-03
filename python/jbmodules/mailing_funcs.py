@@ -1,6 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+def failed_upload_alerts(infile):
+    import os,re
+    regex_match_userstylealt_fail = re.compile(r'^(?:.*?/.*?originated_in_)(?P<firstname>[A-Z][a-z]+?)(?P<lastname>[A-Z][a-z]+?)/(?P<colorstyle>\d{9})(?P<alt>.*?)?(?:\.\w{2,4})$')
+    matches = regex_match_userstylealt_fail.match(infile)
+    if not matches:
+        pass
+    elif matches:
+        groups     = matches.groupdict()
+        filepath   = matches.string
+        firstname  = groups['firstname']
+        lastname    = groups['lastname']
+        colorstyle = groups['colorstyle']
+        alt        = groups['alt']
+        email_addr = firstname.lower() + '.' + lastname.lower() + '@bluefly.com'
+        return locals()
+
 def send_email_zerobyte_alerts(groupdict):
     import smtplib
     from email.mime.multipart import MIMEMultipart
@@ -8,8 +24,8 @@ def send_email_zerobyte_alerts(groupdict):
 
     # me == my email address
     # you == recipient's email address
-    me = "jbragato@yahoo.com"
-    you = "john.bragato@gmail.com"
+    from_addr = "john.bragato@gmail.com"
+    to_addr = "john.bragato@gmail.com"
 
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
@@ -42,11 +58,16 @@ def send_email_zerobyte_alerts(groupdict):
     msg.attach(part2)
 
     # Send the message via local SMTP server.
-    s = smtplib.SMTP('localhost')
+    mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+    mailServer.ehlo()
+    mailServer.starttls()
+    mailServer.ehlo()
+    mailServer.login(gmail_user, gmail_pass)
+    mailServer.sendmail(gmail_user, to, msg.as_string())
     # sendmail function takes 3 arguments: sender's address, recipient's address
     # and message to send - here it is sent as one string.
-    s.sendmail(me, you, msg.as_string())
-    s.quit()
+    mailServer.sendmail(me, you, msg.as_string())
+    mailServer.close()
 
 
 def send_attachment_gmail(to, subject, text, attach):
