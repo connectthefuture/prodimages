@@ -17,7 +17,7 @@ def failed_upload_alerts(infile):
         email_addr = firstname.lower() + '.' + lastname.lower() + '@bluefly.com'
         return locals()
 
-def send_email_zerobyte_alerts(groupeddict,gmail_user=None,gmail_pass=None):
+def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None):
     import smtplib, email
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
