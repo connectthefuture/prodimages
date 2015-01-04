@@ -88,9 +88,9 @@ def zero_byte_file_filter(image_filepath,error_dir=None):
         error_file_stored = os.path.join(error_details_drop_dir, os.path.basename(image_filepath))
         if os.path.isfile(error_file_stored):
             os.remove(error_file_stored)
-            shutil.move(image_filepath, error_file_stored)
+            shutil.copy2(image_filepath, error_file_stored)
         else:
-            shutil.move(image_filepath, error_file_stored)
+            shutil.copy2(image_filepath, error_file_stored)
         return False
     else:
         return True
