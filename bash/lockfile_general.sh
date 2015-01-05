@@ -11,11 +11,10 @@ then
     echo "Lockfile exists, process currently running."
     echo "If no processes exist, remove $LOCKFILE to clear."
     echo "Exiting..."
-mailx -s "AUTOMATED - ${PROCNAME} LOCK ERROR" john.bragato@bluefly.com 
-#<<+ Lockfile exists, process currently running.
-# If no processes exist, remove $LOCKFILE to clear.
-# +
-# exit
+mailx -s "AUTOMATED - ${PROCNAME} LOCK ERROR" john.bragato@bluefly.com <<+ Lockfile exists, process currently running.
+If no processes exist, remove $LOCKFILE to clear.
++
+exit
 fi
 
 ## Make LOCKFILE if not exists
