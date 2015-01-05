@@ -501,7 +501,7 @@ zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop
 if zerobytefiles:
     import jbmodules.mailing_funcs
     for f in zerobytefiles:
-        groupeddict = failed_upload_alerts(f)
+        groupeddict = jbmodules.mailing_funcs.failed_upload_alerts(f)
         send_email_zerobyte_alerts(groupeddict=groupeddict)
 ## After completed Process and Load to imagedrop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
