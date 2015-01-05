@@ -497,7 +497,7 @@ for upload_file in upload_tmp_loading:
         print "Error moving Finals to Arch {}".format(file)
 
 ### Check for okb files and send to Uploader via email
-zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors, '*/*.*g'))
+zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors', '*/*.*g'))
 if zerobytefiles:
     import jbmodules.mailing_funcs
     for f in zerobytefiles:
