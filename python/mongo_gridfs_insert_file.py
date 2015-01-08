@@ -4,7 +4,7 @@
 
 def connect_gridfs_mongodb(db_name='None'):
     import pymongo, gridfs, __builtin__
-    mongo = pymongo.MongoClient('127.0.0.1')
+    mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
     mongo_db = mongo[db_name]
     #mongo_db = mongo[db_name]
     mongo_db.authenticate('mongo', 'mongo')
@@ -16,7 +16,7 @@ def connect_gridfs_mongodb(db_name='None'):
 def insert_filerecord_pymongo(db_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     # Insert a New Document
     import pymongo
-    mongo = pymongo.Connection('127.0.0.1')
+    mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
     mongo_db = mongo[db_name]
     mongo_collection = mongo_db[collection_name]
 
