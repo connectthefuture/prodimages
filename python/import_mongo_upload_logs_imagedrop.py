@@ -46,7 +46,7 @@ def parse_upload_log_files_indir(dirname=None):
 def insert_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     # Insert a New Document
     import pymongo
-    mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
+    mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
 
@@ -63,7 +63,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
     import pymongo, bson
     from bson import Binary, Code
     from bson.json_util import dumps
-    mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
+    mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
 
@@ -98,7 +98,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, batchid=
 
 def get_filerecord_pymongo(database_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
     import pymongo
-    mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
+    mongo = pymongo.Connection('127.0.0.1')
     mongo_db = mongo[database_name]
     mongo_collection = mongo_db[collection_name]
     key = 'colorstyle'
