@@ -77,7 +77,7 @@ def insert_gridfs_extract_metadata(image_filepath):
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
     import os,sys
     try:
-        db_name = 'gridfs_file7'#sys.argv[2]
+        db_name = str(sys.argv[2]) #'gridfs_file7'
     except IndexError:
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]

@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-def connect_gridfs_mongodb(db_name='None'):
+def connect_gridfs_mongodb(hostname=None,db_name=None):
     import pymongo, gridfs, __builtin__
-    mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
+    if not hostname:
+        hostname='127.0.0.1'
+    mongo = pymongo.MongoClient(hostname, max_pool_size=50, waitQueueMultiple=10)
     mongo_db = mongo[db_name]
     #mongo_db = mongo[db_name]
     mongo_db.authenticate('mongo', 'mongo')
