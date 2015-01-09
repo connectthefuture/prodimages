@@ -73,11 +73,11 @@ def getparse_metadata_from_imagefile(image_filepath):
     mdatainsert[image_filepath] = groupdict #.items()
     return mdatainsert
 
-def insert_gridfs_extract_metadata(image_filepath):    
+def insert_gridfs_extract_metadata(image_filepath):
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
     import os,sys
     try:
-        db_name = sys.argv[2]
+        db_name = 'gridfs_file7'#sys.argv[2]
     except IndexError:
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
@@ -86,7 +86,7 @@ def insert_gridfs_extract_metadata(image_filepath):
     return #insert_record
 
 
-def update_gridfs_extract_metadata(image_filepath):    
+def update_gridfs_extract_metadata(image_filepath):
     from mongo_gridfs_insert_file import update_file_gridfs_file7
     import os,sys
     try:
@@ -109,5 +109,3 @@ if __name__ == '__main__':
     except IndexError:
         print 'FAILED INDEX ERROR'
         pass
-
-
