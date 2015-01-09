@@ -98,6 +98,7 @@ def update_gridfs_extract_metadata(image_filepath):
     insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
+
 if __name__ == '__main__':
     import sys,os
     try:
