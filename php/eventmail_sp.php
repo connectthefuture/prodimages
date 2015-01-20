@@ -123,7 +123,7 @@
 	$smtp_params['port'] = '465';
 	$smtp_params['auth'] = true;
 	$smtp_params['username'] = 'john.bragato@bluefly.com';
-	$smtp_params['password'] = '0zeroseven';
+	$smtp_params['password'] = 'forty000One';
 	$smtp_params['persist'] = true;
 	
 	$mail =& Mail::factory('smtp', $smtp_params);

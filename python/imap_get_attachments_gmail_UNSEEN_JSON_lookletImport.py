@@ -8,7 +8,7 @@ def download_email_attachments_by_label(email_address=None, email_password=None,
     ## Creds
     if not email_address:
         email_address  = 'john.bragato@bluefly.com'
-        email_password = '0zeroseven'
+        email_password = 'forty000One'
         ### directory where to save attachments (default is current dir)
     #    testdev='/Users/johnb/Dropbox/DEVROOT/var/www/srv/media/feeds'
     #    if os.path.isdir(testdev):
