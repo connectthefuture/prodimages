@@ -91,7 +91,7 @@ def update_gridfs_extract_metadata(image_filepath):
     from mongo_gridfs_insert_file import update_file_gridfs_file7
     import os,sys
     try:
-         db_name = sys.argv[2]
+         db_name = str(sys.argv[2])
     except IndexError:
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
@@ -103,11 +103,13 @@ def update_gridfs_extract_metadata(image_filepath):
 if __name__ == '__main__':
     import sys,os
     try:
-        directory = sys.argv[1]
-        dirfileslist = recursive_dirlist(directory)
-        for f in dirfileslist:
+        if os.path.isfile(sys.argv[1]):
+            f = sys.argv[1]
             insert_gridfs_extract_metadata(f)
-        #print dirfileslist
+        elif os.path.isdir(sys.argv[1]):
+            dirfileslist = recursive_dirlist(sys.argv[1])
+            for f in dirfileslist:
+                insert_gridfs_extract_metadata(f)
     except IndexError:
         print 'FAILED INDEX ERROR'
         pass
