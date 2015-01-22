@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 ## Walk Root Directory and Return List or all Files in all Subdirs too
-def recursive_dirlist(rootdir):
+def recursive_dirlist(rootdir, regex_bflyfile=None):
     import os,re
-    regex_bflyfile = re.compile(r'^(.*?/?)?.*?([0-9]{9})((_[1-7xX])|(_alt0[1-6]))?(\.[jpngJPNG]{3,4})?$')
+    if not regex_bflyfile:
+        regex_bflyfile = re.compile(r'^(.*?/?)?.*?([0-9]{9})((_[1-7xX])|(_alt0[1-6]))?(\.[jpngJPNG]{3,4})?$')
     walkedlist = []
     for dirname, subdirnames, filenames in os.walk(rootdir):
         # append path of all filenames to walkedlist
