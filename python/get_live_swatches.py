@@ -47,7 +47,7 @@ def return_cleaned_bfly_urls(text):
 
 def download_swatch_urls(styles_list):
     import sys, requests, re
-    regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=[0-9]{9}&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
+    regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=([0-9]{9})&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
     found_links = []
     for colorstyle in styles_list:
         #swatch_url="http://cdn.is.bluefly.com/mgen/Bluefly/swatch.ms?productCode={0}&width=49&height=59&origX={1}&origY={2}".format(colorstyle,xRun,yRise)    
@@ -55,12 +55,13 @@ def download_swatch_urls(styles_list):
         found_links
         found_links.append(url_get_links(pdp_url))
     swatch_links = []
+    colorstyle = ''
     for url in found_links[0]:
         print url
         matches = regex_swatch.match(url)
         if matches:
             try:
-                xRun,yRise = matches.groups()[:2]
+                colorstyle,xRun,yRise = matches.groups()[:3]
                 print xRun,yRise
                 res = requests.get(url)
                 with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
