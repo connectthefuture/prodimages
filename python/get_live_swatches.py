@@ -10,6 +10,7 @@ def url_get_links(targeturl):
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
     linklist = []
     for link in soup.find_all('img'):
+        print link
         linklist.append(link.get('src'))
         sorted(linklist)
     ## Return list of unique links
@@ -48,9 +49,10 @@ def return_cleaned_bfly_urls(text):
 def download_swatch_urls(styles_list):
     import sys, requests, re
     regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=([0-9]{9})&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
+    pdpg          =   re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img=(\d{9})\.jpg&w=75&h=89&(ver=\d{1,6})$')
+    
     found_links = []
     for colorstyle in styles_list:
-        #swatch_url="http://cdn.is.bluefly.com/mgen/Bluefly/swatch.ms?productCode={0}&width=49&height=59&origX={1}&origY={2}".format(colorstyle,xRun,yRise)    
         pdp_url="http://www.bluefly.com/insert-favorite-phrase/p/{0}/detail.fly".format(colorstyle)
         found_links
         found_links.append(url_get_links(pdp_url))
@@ -70,6 +72,17 @@ def download_swatch_urls(styles_list):
             except AttributeError:
                 print 'AtrribErr'
                 pass
+        elif pdpg.findall(url):
+            try:
+                colorstyle,version = pdpg.match.groups()[:2]
+                pdpimgurl     =   'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?productCode={0}.jpg&w=75&h=89&{1}'.format(colorstyle,version)
+                res = requests.get(pdpimgurl)
+                with open(colorstyle + '_PDP_Cached.jpg','wb') as f:
+                    f.write(res.content)
+            except AttributeError:
+                print 'PDPAtrribErr'
+                pass
+
         else:
             print 'Nuthin', url
     return swatch_links
@@ -81,7 +94,7 @@ def download_swatch_urls(styles_list):
 
 if __name__ == '__main__':
     import sys, os
-    os.chdir(os.path.expanduser('~') + '/Pictures')
+    os.chdir(os.path.expanduser('~') + '/Share') ##'/Pictures')
     styles_list = sys.argv[1:]
     swatches_found = download_swatch_urls(styles_list)
     print swatches_found, len(swatches_found)
