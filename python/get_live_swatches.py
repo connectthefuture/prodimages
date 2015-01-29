@@ -46,23 +46,31 @@ def return_cleaned_bfly_urls(text):
 
 
 def download_swatch_urls(styles_list):
-    import sys
-    links = []
+    import sys, requests, re
+    regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=[0-9]{9}&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
+    found_links = []
     for colorstyle in styles_list:
-        swatch_url="http://cdn.is.bluefly.com/mgen/Bluefly/swatch.ms?productCode={0}&width=49&height=59&origX={1}&origY={2}".format(colorstyle,xRun,yRise)    
+        #swatch_url="http://cdn.is.bluefly.com/mgen/Bluefly/swatch.ms?productCode={0}&width=49&height=59&origX={1}&origY={2}".format(colorstyle,xRun,yRise)    
         pdp_url="http://www.bluefly.com/insert-favorite-phrase/p/{0}/detail.fly".format(colorstyle)
-        found_links = url_get_links(pdp_url)
-        links.append(found_links)
+        found_links
+        found_links.append(url_get_links(pdp_url))
     swatch_links = []
-    for url in found_links:
-        try:
-            res = requests.get(url)
-            with open(colorstyle + '_swatch.jpg','wb') as f:
-                f.write(res.content)
-            swatch_links.append(colorstyle)
-        except AttributeError:
-            print 'AtrribErr'
-            pass
+    for url in found_links[0]:
+        print url
+        matches = regex_swatch.match(url)
+        if matches:
+            try:
+                xRun,yRise = matches.groups()[:2]
+                print xRun,yRise
+                res = requests.get(url)
+                with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
+                    f.write(res.content)
+                swatch_links.append(url)
+            except AttributeError:
+                print 'AtrribErr'
+                pass
+        else:
+            print 'Nuthin', url
     return swatch_links
 
 
@@ -72,7 +80,7 @@ def download_swatch_urls(styles_list):
 
 if __name__ == '__main__':
     import sys, os
-    os.chdir('~/Pictures')
+    os.chdir(os.path.expanduser('~') + '/Pictures')
     styles_list = sys.argv[1:]
-    download_swatch_urls(styles_list)
-
+    swatches_found = download_swatch_urls(styles_list)
+    print swatches_found, len(swatches_found)
