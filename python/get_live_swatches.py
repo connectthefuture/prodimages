@@ -10,7 +10,7 @@ def url_get_links(targeturl):
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
     linklist = []
     for link in soup.find_all('img'):
-        print link
+        #print link
         linklist.append(link.get('src'))
         sorted(linklist)
     ## Return list of unique links
@@ -59,12 +59,12 @@ def download_swatch_urls(styles_list):
     swatch_links = []
     colorstyle = ''
     for url in found_links[0]:
-        print url
+        #print url
         matches = regex_swatch.match(url)
         if matches:
             try:
                 colorstyle,xRun,yRise = matches.groups()[:3]
-                print xRun,yRise
+                print colorstyle, xRun,yRise
                 res = requests.get(url)
                 with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
                     f.write(res.content)
@@ -75,6 +75,7 @@ def download_swatch_urls(styles_list):
         elif pdpg.findall(url):
             try:
                 colorstyle,version = pdpg.match.groups()[:2]
+                print colorstyle,version
                 pdpimgurl     =   'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?productCode={0}.jpg&w=75&h=89&{1}'.format(colorstyle,version)
                 res = requests.get(pdpimgurl)
                 with open(colorstyle + '_PDP_Cached.jpg','wb') as f:
