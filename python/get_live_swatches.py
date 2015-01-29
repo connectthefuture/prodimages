@@ -94,7 +94,7 @@ def download_swatch_urls(styles_list):
 
 if __name__ == '__main__':
     import sys, os
-    os.chdir(os.path.expanduser('~') + '/Share') ##'/Pictures')
+    os.chdir(os.path.expanduser('~') + '/Pictures') ##'/Pictures')
     styles_list = sys.argv[1:]
     swatches_found = download_swatch_urls(styles_list)
     print swatches_found, len(swatches_found)
