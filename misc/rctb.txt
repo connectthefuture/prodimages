@@ -112,14 +112,14 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ######           ##########################################
 ######## Get FileSystem Info For Import MYSQL 3301 ########
 ###########################################################
-40 2,12,18 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 > /var/log/photopaths_RetouchStillselectshrezimport.log && date >> /var/log/photopaths_RetouchStillselectshrezimport.log ;
+40 2,12,18 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null ##&& date >> /var/log/photopaths_RetouchStillselectshrezimport.log ;
 ### Stopping sync of Retouch_Fashion 12-09-14 - keeping above for Retouch_Still which is all encompassing now
 # 42 2,12,18 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Fashion 2>&1 > /var/log/photopaths_RetouchFashionselectshrezimport.log && date >> /var/log/photopaths_RetouchFashionselectshrezimport.log ;
 #
 ## --> Daily
-10 3,9,10,11,12,13,14,15,16,17,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
+10 3,9,10,11,12,13,14,15,16,17,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 ## --> Weekend Runs much less
-10 3,10,13,16,22                     * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
+10 3,10,13,16,22                     * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null  ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 ### Stopping sync of Retouch_Fashion 12-09-14 - keeping above for Retouch_Still which is all encompassing now
 ## 12 3,9,10,11,12,13,14,15,16,17,18,22 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/eFashionPush 2>&1 > /var/log/photopaths_Fashionpushselects_import.log && date >> /var/log/photopaths_Fashionpushselects_import.log ;
 #
@@ -130,9 +130,8 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 # 47 9,19 * * * rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still
 #
 ########### Move All Jpegs extracted from Raw to .zimages hierarchy
-4,24 * * * * /usr/local/batchRunScripts/python/organize_zimages_4digit.py GLOBOUT 2>&1 > /var/log/orgfilesOUTPUT.log && `date` >> /var/log/orgfilesOUTPUT.log
-#
-#
+# Not shooting Raw ended 01302015
+## 4,24 * * * * /usr/local/batchRunScripts/python/organize_zimages_4digit.py GLOBOUT 2>&1 > /var/log/orgfilesOUTPUT.log && `date` >> /var/log/orgfilesOUTPUT.log
 #################################
 ###################################################################################
 ###################################################################################
@@ -246,7 +245,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ### Clear New Images via Edgecast
 ## 22 5,15 * * * /usr/local/batchRunScripts/bash/cronjob_nightly_india_cache_clear.sh 2>&1 > /var/log/edgecast_indiaclr.log
 ## Newer via local and edgecast using api every 30min
-2,22,42 * * * * /usr/local/batchRunScripts/python/nightly_image_complete_pmlist_clear.py 1 2>&1 > /var/log/edgecast_apiclr.log
+## 1/30/15  --> check on arg #1 '1' --> 2,22,42 * * * * /usr/local/batchRunScripts/python/nightly_image_complete_pmlist_clear.py 1 2>&1 > /var/log/edgecast_apiclr.log
 #
 ###
 ##########################################################
@@ -263,7 +262,11 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##########################################################
 ########  ---------------------- #########################
 ##########################################################
+########### THE Magickians Apprentice ####################
+####### Uploads to main ImageDrop without Magick Procs ###
+####### Only used by Retouchers ##########################
 ##########################################################
+25,55 * * * * mv /mnt/Post_Complete/Complete_to_Load/.uploadOnlyImageDrop/*.??g /mnt/Post_Complete/Complete_to_Load/ImageDrop/  
 ##################################################################
 ##################################################################
 ########           MARKETPLACE PROCESSES             #############
