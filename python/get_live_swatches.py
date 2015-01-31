@@ -49,7 +49,7 @@ def return_cleaned_bfly_urls(text):
 def download_swatch_urls(styles_list):
     import sys, requests, re
     regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=([0-9]{9})&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
-    pdpg          =   re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img=(\d{9})\.jpg&w=75&h=89&(ver=\d{1,6})$')
+    pdpg          =   re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms\?img=(\d{9})\.jpg&w=75&h=89&(ver=\d{1,6})$')
     
     found_links = []
     for colorstyle in styles_list:
@@ -81,7 +81,7 @@ def download_swatch_urls(styles_list):
                 with open(colorstyle + '_PDP_Cached.jpg','wb') as f:
                     f.write(res.content)
             except AttributeError:
-                print 'PDPAtrribErr'
+                print 'PDPAtrribErr', url
                 pass
 
         else:
@@ -94,8 +94,23 @@ def download_swatch_urls(styles_list):
 
 
 if __name__ == '__main__':
-    import sys, os
-    os.chdir(os.path.expanduser('~') + '/Pictures') ##'/Pictures')
+    import sys, os, datetime
+    root_dir = os.path.expanduser('~') + '/Pictures'
+    ################################################################
+    ## above for testing only will use sysargv 1 for root_dir     ##
+    ################################################################
+    os.chdir(root_dir)
+    todaysdate = str(datetime.date.today())
+    todaysdir = "{0}{1}{2}_swatchPDP".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
+    if os.path.isdir(todaysdir):
+        os.chdir(todaysdir)
+    else:
+        try:
+            os.makedirs(todaysdir)
+            os.chdir(todaysdir)
+        except:
+            print 'Error creating ', todaysoutdir
+    
     styles_list = sys.argv[1:]
     swatches_found = download_swatch_urls(styles_list)
     print swatches_found, len(swatches_found)
