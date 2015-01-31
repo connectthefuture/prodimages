@@ -102,9 +102,10 @@ def download_swatch_urls(styles_list):
 
 if __name__ == '__main__':
     import sys, os, datetime
-    root_dir = os.path.expanduser('~') + '/Pictures'
+    # root_dir = os.path.expanduser('~') + '/Pictures'
+    root_dir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/swatchAndPDP')
     ################################################################
-    ## above for testing only will use sysargv 1 for root_dir     ##
+    ## ~Pictures for testing only will use sysargv 1 for root_dir ##
     ################################################################
     os.chdir(root_dir)
     todaysdate = str(datetime.date.today())
