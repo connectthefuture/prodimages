@@ -82,10 +82,10 @@ def download_swatch_urls(styles_list):
                 reslg = requests.get(pdplgurl, stream=True, timeout=1)
                 try:
                     if res.status_code < 400:
-                        with open(colorstyle + '_PdpCdn_lg_' + str(version) + '.jpg','wb') as f:
+                        with open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
                             f.write(reslg.content)
                         
-                        with open(colorstyle + '_PDP_Cached.jpg','wb') as f:
+                        with open(colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
                             f.write(res.content)
                     else:
                         print "Status Failed with ",  res.status_code, url
