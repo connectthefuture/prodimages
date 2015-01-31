@@ -6,6 +6,7 @@ def url_get_links(targeturl):
     import re,sys,requests
     from bs4 import BeautifulSoup
     r = requests.get(targeturl)
+    #print r
     soup = BeautifulSoup(r.text,"html.parser")
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
     linklist = []
@@ -27,7 +28,7 @@ def return_versioned_urls(text):
         testswatch = regex_swatch.findall(line)
         if testfind:
             listurls.append(testfind)
-            #print testfind
+            ##print testfind
         if testswatch:
             listurls.append(testswatch)
     return listurls
@@ -48,44 +49,50 @@ def return_cleaned_bfly_urls(text):
 
 def download_swatch_urls(styles_list):
     import sys, requests, re
-    regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=([0-9]{9})&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
-    pdpg          =   re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms\?img=(\d{9})\.jpg&w=75&h=89&(ver=\d{1,6})$')
-    
+    regex_swatch    = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=([0-9]{9})&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
+    pdpg            =   re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms\?img=(\d{9})\.jpg&w=75&h=89&(ver=\d{1,6})$')
+    regex_pdplg     = re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms\?img=(\d{9})\.pct&outputx=583&outputy=700&level=1&(ver=\d{1,6})$')
     found_links = []
     for colorstyle in styles_list:
         pdp_url="http://www.bluefly.com/insert-favorite-phrase/p/{0}/detail.fly".format(colorstyle)
-        found_links
         found_links.append(url_get_links(pdp_url))
     swatch_links = []
     colorstyle = ''
-    for url in found_links[0]:
-        #print url
-        matches = regex_swatch.match(url)
-        if matches:
-            try:
+    print len(found_links[0])
+    for stylelinks in found_links:
+        for url in stylelinks:
+            print url
+            matches   = regex_swatch.match(url)
+            matcheslg = regex_pdplg.match(url)
+            if matches:
                 colorstyle,xRun,yRise = matches.groups()[:3]
-                print colorstyle, xRun,yRise
+                #print colorstyle, xRun,yRise
                 res = requests.get(url)
                 with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
                     f.write(res.content)
                 swatch_links.append(url)
-            except AttributeError:
-                print 'AtrribErr'
-                pass
-        elif pdpg.findall(url):
-            try:
-                colorstyle,version = pdpg.match.groups()[:2]
-                print colorstyle,version
-                pdpimgurl     =   'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?productCode={0}.jpg&w=75&h=89&{1}'.format(colorstyle,version)
-                res = requests.get(pdpimgurl)
-                with open(colorstyle + '_PDP_Cached.jpg','wb') as f:
-                    f.write(res.content)
-            except AttributeError:
-                print 'PDPAtrribErr', url
-                pass
-
-        else:
-            print 'Nuthin', url
+                
+            if matcheslg:
+                colorstyle,version = matcheslg.groups()[:2]
+                #print colorstyle,version
+                pdpimgurl = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&{1}'.format(colorstyle,version)
+                pdplgurl  = "http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}".format(colorstyle,version)
+                
+                res   = requests.get(pdpimgurl, stream=True, timeout=1)
+                reslg = requests.get(pdplgurl, stream=True, timeout=1)
+                try:
+                    if res.status_code < 400:
+                        with open(colorstyle + '_PdpCdn_lg_' + str(version) + '.jpg','wb') as f:
+                            f.write(reslg.content)
+                        
+                        with open(colorstyle + '_PDP_Cached.jpg','wb') as f:
+                            f.write(res.content)
+                    else:
+                        print "Status Failed with ",  res.status_code, url
+                except requests.exceptions.Timeout:
+                    print targeturl, " Timed Out"
+            else:
+                print 'Nuthin', url
     return swatch_links
 
 
@@ -105,12 +112,8 @@ if __name__ == '__main__':
     if os.path.isdir(todaysdir):
         os.chdir(todaysdir)
     else:
-        try:
-            os.makedirs(todaysdir)
-            os.chdir(todaysdir)
-        except:
-            print 'Error creating ', todaysoutdir
-    
+        os.makedirs(todaysdir)
+        os.chdir(todaysdir)
     styles_list = sys.argv[1:]
     swatches_found = download_swatch_urls(styles_list)
-    print swatches_found, len(swatches_found)
+    #print swatches_found, len(swatches_found)
