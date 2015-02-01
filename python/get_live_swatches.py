@@ -88,7 +88,7 @@ def download_swatch_urls(styles_list):
                 pdplgurl  = "http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}".format(colorstyle,version)
                 res   = requests.get(pdpimgurl, stream=False, timeout=(3.05))
                 reslg = requests.get(pdplgurl, stream=False, timeout=(4.05))
-                res_l = requests.get(netsrv101_url_file, stream=False, timeout=(4.05))
+                
                 try:
                     if res.status_code < 400:
                         with open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
@@ -98,6 +98,7 @@ def download_swatch_urls(styles_list):
                             f.write(res.content)
                         
                         try:
+                            res_l = requests.get(netsrv101_url_file, stream=False, timeout=(4.05))
                             with open(colorstyle + '_PDPSource_l_' + '.jpg','wb') as f:
                                 f.write(res_l.content)
                         except:
@@ -121,8 +122,8 @@ def download_swatch_urls(styles_list):
 
 if __name__ == '__main__':
     import sys, os, datetime
-    root_dir = os.path.expanduser('~') + '/Pictures'
-    #root_dir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/swatchAndPDP')
+    #root_dir = os.path.expanduser('~') + '/Pictures'
+    root_dir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/swatchAndPDP')
     ################################################################
     ## ~Pictures for testing only will use sysargv 1 for root_dir ##
     ################################################################
