@@ -24,6 +24,7 @@ def url_get_links(targeturl):
     except requests.exceptions.ReadTimeout:
         print "Read Timed Out",  targeturl
 
+
 def return_versioned_urls(text):
     import sys,re
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
@@ -98,9 +99,10 @@ def download_swatch_urls(styles_list):
                             f.write(res.content)
                         
                         try:
-                            res_l = requests.get(netsrv101_url_file, stream=False, timeout=(4.05))
-                            with open(colorstyle + '_PDPSource_l_' + '.jpg','wb') as f:
-                                f.write(res_l.content)
+                            import subprocess
+                            #res_l = requests.get(netsrv101_url_file, stream=False, timeout=(4.05))
+                            fname = colorstyle + '_PDPSource_l_' + '.jpg'
+                            subprocess.call(['wget', '-c', netsrv101_url_file, '-o',fname])
                         except:
                             pass
                     else:
