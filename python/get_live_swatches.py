@@ -91,7 +91,7 @@ def download_swatch_urls(styles_list):
                         print "Status Failed with ",  res.status_code, url
                 except requests.exceptions.Timeout:
                     print targeturl, " Timed Out"
-                except requests.exceptions.HttpConnection:
+                except requests.exceptions.HttpConnectionPool:
                     print targeturl, " HTTP Timed Out"
             else:
                 print 'Nuthin', url
