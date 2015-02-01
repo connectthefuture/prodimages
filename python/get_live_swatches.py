@@ -102,7 +102,7 @@ def download_swatch_urls(styles_list):
                             import subprocess
                             #res_l = requests.get(netsrv101_url_file, stream=False, timeout=(4.05))
                             fname = colorstyle + '_PDPSource_l_' + '.jpg'
-                            subprocess.call(['wget', '-c', netsrv101_url_file, '-o',fname])
+                            subprocess.call(['wget', '-c', netsrv101_url_file, '-O',fname])
                         except:
                             pass
                     else:
