@@ -5,8 +5,7 @@ import sys
 def url_get_links(targeturl):
     import re,sys,requests
     from bs4 import BeautifulSoup
-    read_timeout = 1.0
-    r = requests.get(targeturl, timeout=(10.0))
+    r = requests.get(targeturl, timeout=(2.2))
     #print r
     soup = BeautifulSoup(r.text,"html.parser")
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
@@ -59,7 +58,6 @@ def download_swatch_urls(styles_list):
         found_links.append(url_get_links(pdp_url))
     swatch_links = []
     colorstyle = ''
-    read_timeout = 1.0
     print len(found_links[0])
     for stylelinks in found_links:
         for url in stylelinks:
@@ -69,7 +67,7 @@ def download_swatch_urls(styles_list):
             if matches:
                 colorstyle,xRun,yRise = matches.groups()[:3]
                 #print colorstyle, xRun,yRise
-                res = requests.get(url, timeout=(10.0))
+                res = requests.get(url, timeout=(2.05))
                 with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
                     f.write(res.content)
                 swatch_links.append(url)
@@ -79,8 +77,8 @@ def download_swatch_urls(styles_list):
                 #print colorstyle,version
                 pdpimgurl = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&{1}'.format(colorstyle,version)
                 pdplgurl  = "http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}".format(colorstyle,version)
-                res   = requests.get(pdpimgurl, stream=False, timeout=(10.0))
-                reslg = requests.get(pdplgurl, stream=False, timeout=(10.0))
+                res   = requests.get(pdpimgurl, stream=False, timeout=(3.05))
+                reslg = requests.get(pdplgurl, stream=False, timeout=(4.05))
                 try:
                     if res.status_code < 400:
                         with open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
@@ -107,8 +105,8 @@ def download_swatch_urls(styles_list):
 
 if __name__ == '__main__':
     import sys, os, datetime
-    #root_dir = os.path.expanduser('~') + '/Pictures'
-    root_dir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/swatchAndPDP')
+    root_dir = os.path.expanduser('~') + '/Pictures'
+    #root_dir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/swatchAndPDP')
     ################################################################
     ## ~Pictures for testing only will use sysargv 1 for root_dir ##
     ################################################################
