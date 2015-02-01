@@ -5,18 +5,24 @@ import sys
 def url_get_links(targeturl):
     import re,sys,requests
     from bs4 import BeautifulSoup
-    r = requests.get(targeturl, timeout=(2.2))
-    #print r
-    soup = BeautifulSoup(r.text,"html.parser")
-    ###  soup is now Full HTML of target -- Below creates/returns list of unique links
-    linklist = []
-    for link in soup.find_all('img'):
-        #print link
-        linklist.append(link.get('src'))
-        sorted(linklist)
-    ## Return list of unique links
-    return list(set(linklist))
-
+    try:
+        r = requests.get(targeturl, timeout=(2.2))
+        #print r
+        soup = BeautifulSoup(r.text,"html.parser")
+        ###  soup is now Full HTML of target -- Below creates/returns list of unique links
+        linklist = []
+        for link in soup.find_all('img'):
+            #print link
+            linklist.append(link.get('src'))
+            sorted(linklist)
+        ## Return list of unique links
+        return list(set(linklist))
+    except requests.exceptions.ConnectTimeout:
+        print "Connect Timed Out ",  targeturl
+    except requests.exceptions.ReadTimeout:
+        print "Read Timed Out ",  targeturl
+    except requests.exceptions.ReadTimeout:
+        print "Read Timed Out",  targeturl
 
 def return_versioned_urls(text):
     import sys,re
