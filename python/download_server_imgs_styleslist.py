@@ -65,6 +65,10 @@ def main(styleslist=None, root_dir=None, primary_only=None, incl_jpgs=None, verb
         ext_JPG     = '_m.jpg'
         if not incl_jpgs:
             ext = ext_PNG
+        elif incl_jpgs == 'l':
+            ext_JPG     = '_l.jpg'
+            ext = ext_JPG
+            primary_only = True
         else:
             ext = ext_JPG
             primary_only = True
