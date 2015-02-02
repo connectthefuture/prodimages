@@ -23,8 +23,10 @@ def url_download_file(url,filepath):
 def get_exif_imagesize_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
-        metadata = et.get_metadata(image_filepath)['Composite:ImageSize']
-    return metadata
+        mwidth = et.get_metadata(image_filepath)['File:ImageWidth']
+        mheight = et.get_metadata(image_filepath)['File:ImageHeight']
+        imagesize="{0}x{1}".format(mwidth,mheight)
+    return imagesize
 
 #### Run ###
 def main(styleslist=None, root_dir=None, primary_only=None, incl_jpgs=None, verbosity=None):
