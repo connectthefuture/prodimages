@@ -87,8 +87,8 @@ def download_swatch_urls(styles_list):
                 #print colorstyle,version
                 pdpimgurl = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&{1}'.format(colorstyle,version)
                 pdplgurl  = "http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}".format(colorstyle,version)
-                res   = requests.get(pdpimgurl, stream=False, timeout=(3.05))
-                reslg = requests.get(pdplgurl, stream=False, timeout=(4.05))
+                res   = requests.get(pdpimgurl, stream=False, timeout=(9.05))
+                reslg = requests.get(pdplgurl, stream=False, timeout=(9.05))
                 
                 try:
                     if res.status_code < 400:
