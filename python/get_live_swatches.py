@@ -39,14 +39,14 @@ def return_versioned_urls(text):
         if testswatch:
             listurls.append(testswatch)
     return listurls
-    
+
 
 def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
     # fetch a binary file
     import ftplib
     session = ftplib.FTP("netsrv101.l3.bluefly.com", "imagedrop", "imagedrop0")
     if outfile is None:
-    outfile = sys.stdout
+        outfile = sys.stdout
     destfile = open(outfile, "wb")
     print remote_pathtofile
     session.retrbinary("RETR " + remote_pathtofile, destfile.write, 8*1024)
@@ -91,7 +91,7 @@ def download_swatch_urls(styles_list):
                 with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
                     f.write(res.content)
                 swatch_links.append(url)
-                
+
             if matcheslg:
                 colorstyle,version = matcheslg.groups()[:2]
                 netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
@@ -102,15 +102,15 @@ def download_swatch_urls(styles_list):
                 pdplgurl  = "http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}".format(colorstyle,version)
                 res   = requests.get(pdpimgurl, stream=False, timeout=(9.05))
                 reslg = requests.get(pdplgurl, stream=False, timeout=(9.05))
-                
+
                 try:
                     if res.status_code < 400:
                         with open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
                             f.write(reslg.content)
-                        
+
                         with open(colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
                             f.write(res.content)
-                        
+
                         try:
                             import subprocess
                             #res_l = requests.get(netsrv101_url_file, stream=False, timeout=(4.05))
@@ -132,7 +132,7 @@ def download_swatch_urls(styles_list):
 
 
 #def main(styles_list=None):
-    
+
 
 
 if __name__ == '__main__':
