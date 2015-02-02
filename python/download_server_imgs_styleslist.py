@@ -7,7 +7,7 @@ def url_download_file(url,filepath):
     #error_check = urllib.urlopen(url)
     #urlcode_value = error_check.getcode()
     #print urlcode_value
-    
+
     #if urlcode_value == 200:
     try:
         urllib.urlretrieve(url, os.path.join(filepath))
@@ -22,7 +22,7 @@ def url_download_file(url,filepath):
 
 
 #### Run ###
-def main(styleslist=None, root_dir=None, primary_only=None):
+def main(styleslist=None, root_dir=None, primary_only=None, incl_jpgs=None):
     import os,sys, urllib, datetime
     todaysdate = '{:%Y%m%d}'.format(datetime.datetime.now())
     username = os.path.expanduser('~').split('/')[-1].split('.')[0].lower()
@@ -57,30 +57,34 @@ def main(styleslist=None, root_dir=None, primary_only=None):
         netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
         colorstyle = str(style)
         ext_PNG     = '.png'
-        ext_JPG     = '.jpg'
-
-        netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext_PNG)
-    #try:
+        ext_JPG     = '_m.jpg'
+        if not incl_jpgs:
+            ext = ext_PNG
+        else:
+            ext = ext_JPG
+            primary_only = True
+        netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext)
+        #try:
         #error_check = urllib.urlopen(netsrv101_url_file)
         #urlcode_value = error_check.getcode()
         #print urlcode_value
         #try: #if urlcode_value == 200:
-        colorstyle_file = os.path.join(root_dir, colorstyle + ext_PNG)
+        colorstyle_file = os.path.join(root_dir, colorstyle + ext)
         print netsrv101_url_file, colorstyle_file
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
             countOne += 1
-            alt = 0   
-            if not primary_only:    
+            alt = 0
+            if not primary_only:
                 for x in range(1,6):
                     try:
-                        alt = x   
-                        ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
+                        alt = x
+                        ext_ALT = '_alt0{0}{1}'.format(str(alt),ext)
                         colorstylealt = colorstyle + ext_ALT
                         colorstyle_filealt = os.path.join(root_dir, 'ALT', colorstylealt)
-                        
+
                         netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
-                        
+
                         #error_check = urllib.urlopen(netsrv101_url_filealt)
                         #urlcode_value = error_check.getcode()
                         #if urlcode_value == 200:
@@ -94,13 +98,13 @@ def main(styleslist=None, root_dir=None, primary_only=None):
                             url_download_file(netsrv101_url_filealt, colorstyle_filealt)
                             countAlt += 1
                     except IOError:
-                        pass        
+                        pass
             else:
                 pass
         except IOError:
-            pass   
+            pass
 
-    perStyle = 'NA' 
+    perStyle = 'NA'
     countAll = countAlt + countOne
     try:
         perStyle = round((float(countAll)/float(countOne)),2)
@@ -108,7 +112,7 @@ def main(styleslist=None, root_dir=None, primary_only=None):
         return root_dir
     except ZeroDivisionError:
         print 'Sorry, Nothing was Found\n\n\...This time. Try Again'
-    
+
 
 if __name__ == '__main__':
     main()
