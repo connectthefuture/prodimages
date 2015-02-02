@@ -41,6 +41,19 @@ def return_versioned_urls(text):
     return listurls
     
 
+def getbinary_ftp_netsrv101(remote_pathtofile, outfile=None):
+    # fetch a binary file
+    import ftplib
+    session = ftplib.FTP("netsrv101.l3.bluefly.com", "imagedrop", "imagedrop0")
+    if outfile is None:
+    outfile = sys.stdout
+    destfile = open(outfile, "wb")
+    print remote_pathtofile
+    session.retrbinary("RETR " + remote_pathtofile, destfile.write, 8*1024)
+    destfile.close()
+    session.quit()
+
+
 def return_cleaned_bfly_urls(text):
     import sys,re
     import re
@@ -102,7 +115,7 @@ def download_swatch_urls(styles_list):
                             import subprocess
                             #res_l = requests.get(netsrv101_url_file, stream=False, timeout=(4.05))
                             fname = colorstyle + '_PDPSource_l_' + '.jpg'
-                            subprocess.call(['curl', '-G', netsrv101_url_file, '-o',fname])
+                            getbinary_ftp_netsrv101(netsrv101_url_file, outfile=fname)
                         except:
                             pass
                     else:
