@@ -82,7 +82,7 @@ def main(styleslist=None, root_dir=None, primary_only=None, incl_jpgs=None, verb
         print netsrv101_url_file, colorstyle_file
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
-            if verbosity and ext == ext_JPG:
+            if verbosity:
                 imageSize = get_exif_imagesize_data(colorstyle_file)
                 colorstyle_fileOld = os.path.join(root_dir, colorstyle + ext)
                 colorstyle_fileNew = os.path.join(root_dir, colorstyle + '_' + imageSize + ext)
