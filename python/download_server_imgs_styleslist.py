@@ -20,7 +20,7 @@ def url_download_file(url,filepath):
     #elif urlcode_value == 404:
     #    return urlcode_value
 
-def get_exif_all_data(image_filepath):
+def get_exif_imagesize_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
         metadata = et.get_metadata(image_filepath)['Composite:ImageSize']
@@ -79,7 +79,7 @@ def main(styleslist=None, root_dir=None, primary_only=None, incl_jpgs=None, verb
         try:
             url_download_file(netsrv101_url_file, colorstyle_file)
             if verbosity and ext == ext_JPG:
-                imageSize = get_exif_all_data(colorstyle_file)
+                imageSize = get_exif_imagesize_data(colorstyle_file)
                 colorstyle_fileOld = os.path.join(root_dir, colorstyle + ext)
                 colorstyle_fileNew = os.path.join(root_dir, colorstyle + '_' + imageSize + ext)
                 os.rename(colorstyle_fileOld, colorstyle_fileNew)
