@@ -23,9 +23,12 @@ def url_download_file(url,filepath):
 def get_exif_imagesize_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
-        mwidth = et.get_metadata(image_filepath)['File:ImageWidth']
-        mheight = et.get_metadata(image_filepath)['File:ImageHeight']
-        imagesize="{0}x{1}".format(mwidth,mheight)
+        try:
+            mwidth = et.get_metadata(image_filepath)['File:ImageWidth']
+            mheight = et.get_metadata(image_filepath)['File:ImageHeight']
+            imagesize="{0}x{1}".format(mwidth,mheight)
+        except KeyError:
+            imagesize="NA"
     return imagesize
 
 #### Run ###
