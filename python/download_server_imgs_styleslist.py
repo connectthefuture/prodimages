@@ -86,7 +86,10 @@ def main(styleslist=None, root_dir=None, primary_only=None, incl_jpgs=None, verb
                 imageSize = get_exif_imagesize_data(colorstyle_file)
                 colorstyle_fileOld = os.path.join(root_dir, colorstyle + ext)
                 colorstyle_fileNew = os.path.join(root_dir, colorstyle + '_' + imageSize + ext)
-                os.rename(colorstyle_fileOld, colorstyle_fileNew)
+                try:
+                    os.rename(colorstyle_fileOld, colorstyle_fileNew)
+                except:
+                    pass
             else:
                 pass
             countOne += 1
