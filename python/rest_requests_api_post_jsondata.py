@@ -126,6 +126,8 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
             return res
         except IndexError:
             print 'POST failed, Trying to PUT to -->', url, data
+        except requests.exceptions.ConnectionError:
+            pass
             try:
                 res = requests.put(url, headers=headers, data=data)
                 if res.status_code < 400:
@@ -133,6 +135,9 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
                 else:
                     print 'PUT request Failed to -->', url , ' with Code ', res.status_code, res.text
                 return res
+            except requests.exceptions.ConnectionError:
+                print '2nd Transmit Attempt using CNX ERR PUT failed to -->', url, data
+                return False
             except IndexError:
                 print '2nd Transmit Attempt using PUT failed to -->', url, data
                 return False
@@ -191,7 +196,7 @@ def iterate_post_data_kv(data):
 
 ########     RUN      ##########
 def main(filename=None):
-    import __builtin__, json, yaml, re, datetime, sys
+    import __builtin__, json, yaml, re, datetime, sys, requests
     from os import path
     today = datetime.date.strftime(datetime.date.today(), '%Y-%m-%d')
     if not filename:
