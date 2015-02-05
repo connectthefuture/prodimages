@@ -112,7 +112,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ######           ##########################################
 ######## Get FileSystem Info For Import MYSQL 3301 ########
 ###########################################################
-40 2,12,18 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null ##&& date >> /var/log/photopaths_RetouchStillselectshrezimport.log ;
+4 2 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null ##&& date >> /var/log/photopaths_RetouchStillselectshrezimport.log ;
 ### Stopping sync of Retouch_Fashion 12-09-14 - keeping above for Retouch_Still which is all encompassing now
 # 42 2,12,18 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Fashion 2>&1 > /var/log/photopaths_RetouchFashionselectshrezimport.log && date >> /var/log/photopaths_RetouchFashionselectshrezimport.log ;
 #
@@ -266,7 +266,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ####### Uploads to main ImageDrop without Magick Procs ###
 ####### Only used by Retouchers ##########################
 ##########################################################
-25,55 * * * * mv /mnt/Post_Complete/Complete_to_Load/.uploadOnlyImageDrop/*.??g /mnt/Post_Complete/Complete_to_Load/ImageDrop/  
+25,55 * * * * mv /mnt/Post_Complete/Complete_to_Load/.uploadOnlyImageDrop/*\.??g /mnt/Post_Complete/Complete_to_Load/ImageDrop/
 ##################################################################
 ##################################################################
 ########           MARKETPLACE PROCESSES             #############
