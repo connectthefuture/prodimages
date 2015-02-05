@@ -25,7 +25,7 @@ def normalize_json_tounicode(filename):
                         k = str(k)
                         k = to_unicode(k)
                     #print type(v), type(k)
-                    datarow[k] = v 
+                    datarow[k] = v
                 #data[to_unicode(row[k])] = datarow
                 data.append(datarow)
         else:
@@ -33,7 +33,7 @@ def normalize_json_tounicode(filename):
             print 'STR'
     elif type(filename) == dict:
         jsondata = filename
-        datarow =  {} ##defaultdict(list) 
+        datarow =  {} ##defaultdict(list)
         for k,v in jsondata.iteritems():
             if type(v) == unicode:
                 v = to_unicode(v)
@@ -46,12 +46,12 @@ def normalize_json_tounicode(filename):
                 k = str(k)
                 k = to_unicode(k)
             #print type(v), type(k)
-            #datarow[k].append(v) 
-            datarow[k] = v 
+            #datarow[k].append(v)
+            datarow[k] = v
         #data[to_unicode(row[k])] = datarow
         data.append(datarow)
         print 'ELSE', type(filename)
-    
+
     return data
 
 
@@ -79,7 +79,7 @@ def normalize_json_tobytes(filename):
                         k = str(k)
                         k = to_bytes(k)
                     #print type(v), type(k)
-                    datarow[k] = v 
+                    datarow[k] = v
                 #data[to_bytes(row[k])] = datarow
                 data.append(datarow)
         else:
@@ -100,18 +100,18 @@ def normalize_json_tobytes(filename):
                 k = str(k)
                 k = to_bytes(k)
             #print type(v), type(k)
-            #datarow[k].append(v) 
-            datarow[k] = v 
+            #datarow[k].append(v)
+            datarow[k] = v
         #data[to_bytes(row[k])] = datarow
         data.append(datarow)
         print 'ELSE', type(filename)
-    
+
     return data
 
 def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='prodimages.ny.bluefly.com/', api_path='api/v1/'):
     import json, requests
     url = 'http://' + host + api_path + api_endpoint
-    headers = {'Content-Type': 'application/json; charset=utf-8', 
+    headers = {'Content-Type': 'application/json; charset=utf-8',
                     'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0'
                     }
                     ## 'User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'
@@ -120,9 +120,9 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
         try:
             res = requests.post(url, headers=headers, data=data)
             if res.status_code < 400:
-                print 'POST request succeeded to -->', url 
+                print 'POST request succeeded to -->', url
             else:
-                print 'POST request Failed to -->', url , ' with Code ', res.status_code, res.text                
+                print 'POST request Failed to -->', url , ' with Code ', res.status_code, res.text
             return res
         except IndexError:
             print 'POST failed, Trying to PUT to -->', url, data
@@ -131,7 +131,7 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
                 if res.status_code < 400:
                     print 'Try 2 PUT request succeeded to -->', url
                 else:
-                    print 'PUT request Failed to -->', url , ' with Code ', res.status_code, res.text     
+                    print 'PUT request Failed to -->', url , ' with Code ', res.status_code, res.text
                 return res
             except IndexError:
                 print '2nd Transmit Attempt using PUT failed to -->', url, data
@@ -169,14 +169,14 @@ def iterate_post_data_kv(data):
                     #print jsondata
                 except KeyError:
                     print 'KeyError', k, v, key,
-    elif type(data) == list:        
+    elif type(data) == list:
         for row in data:
             #dd = defaultdict(list)
-            #r = [ dd[k].append(v) for k,v in val.iteritems() if val[k] ] 
+            #r = [ dd[k].append(v) for k,v in val.iteritems() if val[k] ]
             print r
             try:
                 #jsondata = json.dumps({key: {k: v} })
-                
+
                 response = post_to_api(data=json.dumps(row), api_endpoint='looklet-shot-list/')
                 if response != False: #and response.status_code == 200:
                     print response, 'LIST'
@@ -209,9 +209,13 @@ def main(filename=None):
     #result = iterate_post_data_kv(data)
     response = []
     for row in data:
-        res = post_to_api(data=json.dumps(row), api_endpoint='looklet-shot-list/')
-        print res
-        response.append(res)
+        try:
+            res = post_to_api(data=json.dumps(row), api_endpoint='looklet-shot-list/')
+            print res
+            response.append(res)
+        except requests.exceptions.ConnectionError:
+            response.append(res.status_code)
+            pass
     return response
 
 
@@ -221,7 +225,7 @@ if __name__ == '__main__':
     today = datetime.date.strftime(datetime.date.today(), '%Y-%m-%d')
     #filename='/Users/johnb/Nitrous/relic7.owncloud.arvixe.com/bflySync/{0}_LookletShotListImportJSON.json'.format(today)
     main()
-    
+
 
 #import __builtin__, json,yaml,re
 #def json_file_parse(filename):
