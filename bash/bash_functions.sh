@@ -336,7 +336,7 @@ function img_trim_set_aspectratio ()
 function img_trim_set_bfly_ratio ()
 {
     f="$1"
-    convert "${f}" -format jpg -crop $(convert "$f" -virtual-pixel edge -blur 0x15 -fuzz 1% -trim -format '%wx%h%O' info:) -background white +repage -gravity center -resize '1800x2160' -background white +repage -extent '2000x2400' -colorspace sRGB -unsharp 50 -strip -quality 100 "${f//.jpg/_x.jpg}";
+    convert "${f}" -format jpg -crop $(convert "$f" -virtual-pixel edge -blur 0x15 -fuzz 1% -trim -format '%wx%h%O' info:) -background white +repage -gravity center -resize '1800x2160' -background white +repage -extent '2000x2400' -colorspace sRGB -unsharp 50 -strip -quality 100 "${f//.jpg/.jpg}";
     echo "${f//.jpg/_x.jpg}" ;
 }
 
