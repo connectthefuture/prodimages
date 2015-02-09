@@ -365,6 +365,20 @@ function img_domclr ()
 }
 
 
+function img_return_wxhdpi ()
+{
+    identify -units 'PixelsPerInch' -format '"%w x %h %x x %y"' "$1";
+}
+
+
+function cache_clear_dir ()
+{
+    for f in $(find "$1" -iname \*.jpg -exec basename {} \;| sort -nru); do 
+    style="${f//%9}"
+    #/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py 
+    echo "${style}" ; 
+    done ;
+}
 
 # Local Variables:
 # mode:shell-script
