@@ -245,7 +245,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ## Func ##
 ##	Def	##
 ########################################
-59,11,38,44 * * * * function cache_clear_dir_postapi (){ for f in $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do    /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f"; done ;}	cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /var/log/cache_clear_postapi.log ;
+49,11,38,44 * * * * #!/bin/bash function cache_clear_dir_postapi (){ for f in $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do    /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f"; done ;}	cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /var/log/cache_clear_postapi.log ;
 ##########
 ##		##
 ########################################
