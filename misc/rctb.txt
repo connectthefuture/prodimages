@@ -144,8 +144,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###########      MySQL Database Updates From PM/Oracle  to prodimages:3301 ########
 ###################################################################################
 ##  Updates Primary DB with PM Data ####
-7 20,6     *   *   * /usr/local/batchRunScripts/offshore-processes/import_offshore_tosend.py
-#
+7 20,6  *   *   * /usr/local/batchRunScripts/offshore-processes/import_offshore_tosend.py
 5 5 * * * /usr/local/batchRunScripts/bash/importSKUToPhpMyAdmin.sh
 17 6,19 * * * /usr/local/batchRunScripts/bash/import_prodsnapshot.sh
 42 5 * * * /usr/local/batchRunScripts/bash/importSampleVendorStyle_pma.sh
@@ -237,7 +236,29 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##########################################################################
 ##### Clear Cache ImageDrop Mongo DB procs ###
 #2,13,34,54 * * * * /usr/local/batchRunScripts/python/import_mongo_upload_logs_imagedrop.py /mnt/Post_Complete/ImageDrop/bkup update ;
+########################################
+##		##
+## Func ##
+##	Def	##
+##########
+function cache_clear_dir_postapi ()
+	{
+    for f in $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do 
+    curl -u stephen:parker -d colorstyle="${f}" -X POST http://prodimages.ny.bluefly.com/image-update/
+    #curl -u stephen:parker -d colorstyle="f" -X PUT http://prodimages.ny.bluefly.com/image-update/
+    #/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f"; 
+    done ;
+}
+##########
+##		##
+##########
+##	Run	##
+##	as	##
+##########
+59,14,34,44 * * * * cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /dev/null
 ##############################################
+##############################################
+################### ------------ #############
 ################### ------------ #############
 ################### ------------ #############
 ################### ------------ #############
