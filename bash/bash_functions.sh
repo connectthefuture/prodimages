@@ -66,6 +66,74 @@ xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more
 }
 
 
+
+
+##### Resizer func
+# Output sizes -
+# Please note the format: each size is wrapped with quotes, width and height are separated with space.
+output=( "200 240" "300 360" "400 480" "2000 2400" "800 600" "1024 768" "1152 864" "1280 960" "1280 1024" "1400 1050" "1440 960" "1600 1200" "1920 1440" "1024 600" "1366 768" "1440 900" "1600 900" "1680 1050" "1280 800" "1920 1080" "1920 1200" "2560 1440" "2560 1600" "2880 1800")
+
+# If you frequently use the same source file (e.g. "~/Desktop/src.jpg"),
+# set it in "default_src"
+# default_src="src.jpg";
+
+# If you frequently use the same destination
+# (e.g. "~/Desktop/Some_folder/%.jpg"), set it in "default_dst"
+# Destination must include "%", it will be replaced by output size, e.g. "800x600"
+# default_dst="%.jpg";
+
+# Add signature?
+# default_sign='y'
+
+# If you frequently use the same signature file (e.g. "~/Desktop/sig.png"),
+# set it in "default_sig"
+# default_sig="sig.png";
+
+# Gravity is for cropping left/right edges for different proportions (center, east, west)
+default_gravity="center"
+
+# Output JPG quality: maximum is 100 (recommended)
+quality=100
+
+function math(){
+    echo $(python -c "from __future__ import division; print $@")
+    }
+
+
+function save_resized(){
+
+      # read target width and height from function parameters
+      local dst_w=${1}
+      local dst_h=${2}
+
+      # calculate ratio
+      local ratio=$(math $dst_w/$dst_h);
+
+      # calculate "intermediate" width and height
+      local inter_w=$(math "int(round($src_h*$ratio))")
+      local inter_h=${src_h}
+
+      # calculate best sharpness
+      local sharp=$(math "round((1/$ratio)/4, 2)")
+
+      # which size we're saving now
+      local size="${dst_w}x${dst_h}"
+      echo "Saving ${size}..."
+
+      #crop intermediate image (with target ratio)
+      convert ${src} -gravity ${gravity} -crop ${inter_w}x${inter_h}+0+0 +repage temp.psd
+
+      # apply signature
+      if [ "${sign}" == "y" ]; then
+      convert temp.psd ${sig} -gravity southeast -geometry ${sig_w}x${sig_h}+24+48 -composite temp.psd
+      fi
+
+      # final convert! resize, sharpen, save
+      convert temp.psd -interpolate bicubic -filter Lagrange -resize ${dst_w}x${dst_h} -unsharp 0x${sharp} +repage -density 72x72 +repage -quality ${quality} ${dst/%/${size}}
+}
+
+############
+
 function swap()
 { # Swap 2 filenames around, if they exist (from Uzi's bashrc).
     local TMPFILE=tmp.$$
@@ -249,73 +317,6 @@ function img_multithumb_file ()
     }
 
 
-
-
-##### Resizer func
-# Output sizes -
-# Please note the format: each size is wrapped with quotes, width and height are separated with space.
-output=( "200 240" "300 360" "400 480" "2000 2400" "800 600" "1024 768" "1152 864" "1280 960" "1280 1024" "1400 1050" "1440 960" "1600 1200" "1920 1440" "1024 600" "1366 768" "1440 900" "1600 900" "1680 1050" "1280 800" "1920 1080" "1920 1200" "2560 1440" "2560 1600" "2880 1800")
-
-# If you frequently use the same source file (e.g. "~/Desktop/src.jpg"),
-# set it in "default_src"
-# default_src="src.jpg";
-
-# If you frequently use the same destination
-# (e.g. "~/Desktop/Some_folder/%.jpg"), set it in "default_dst"
-# Destination must include "%", it will be replaced by output size, e.g. "800x600"
-# default_dst="%.jpg";
-
-# Add signature?
-# default_sign='y'
-
-# If you frequently use the same signature file (e.g. "~/Desktop/sig.png"),
-# set it in "default_sig"
-# default_sig="sig.png";
-
-# Gravity is for cropping left/right edges for different proportions (center, east, west)
-default_gravity="center"
-
-# Output JPG quality: maximum is 100 (recommended)
-quality=100
-
-function math(){
-    echo $(python -c "from __future__ import division; print $@")
-    }
-
-
-function save_resized(){
-
-      # read target width and height from function parameters
-      local dst_w=${1}
-      local dst_h=${2}
-
-      # calculate ratio
-      local ratio=$(math $dst_w/$dst_h);
-
-      # calculate "intermediate" width and height
-      local inter_w=$(math "int(round($src_h*$ratio))")
-      local inter_h=${src_h}
-
-      # calculate best sharpness
-      local sharp=$(math "round((1/$ratio)/4, 2)")
-
-      # which size we're saving now
-      local size="${dst_w}x${dst_h}"
-      echo "Saving ${size}..."
-
-      #crop intermediate image (with target ratio)
-      convert ${src} -gravity ${gravity} -crop ${inter_w}x${inter_h}+0+0 +repage temp.psd
-
-      # apply signature
-      if [ "${sign}" == "y" ]; then
-      convert temp.psd ${sig} -gravity southeast -geometry ${sig_w}x${sig_h}+24+48 -composite temp.psd
-      fi
-
-      # final convert! resize, sharpen, save
-      convert temp.psd -interpolate bicubic -filter Lagrange -resize ${dst_w}x${dst_h} -unsharp 0x${sharp} +repage -density 72x72 +repage -quality ${quality} ${dst/%/${size}}
-}
-
-
 #####
 function img_trim_set_aspectratio ()
     {
@@ -324,24 +325,21 @@ function img_trim_set_aspectratio ()
     fname=$(basename "$f")
     outdir="${dname}/output"
     export IFS="\n"
-    convert ${f} -format jpg -crop \
-        `convert ${f} -virtual-pixel edge -blur "0x15" -fuzz "1%" -trim -format "%wx%h%O" info:` \
-        -background white +repage -gravity center -resize "1800x2160" \
-        -background white +repage -extent "2000x2400" -density 72x72 +repage -strip -quality 100 ${f}_new.jpg ;
+    convert ${f} -format jpg -crop `convert ${f} -virtual-pixel edge -blur "0x15" -fuzz "1%" -trim -format "%wx%h%O" info:` -background white +repage -gravity center -resize "1800x2160" -background white +repage -extent "2000x2400" -density 72x72 +repage -strip -quality 100 ${f}_new.jpg ;
         ## echo "${f}"_new.jpg ;
         IFS="$IFSD";
 }
 
 
 function img_trim_set_bfly_ratio ()
-{
+    {
     f="$1"
     convert "${f}" -format jpg -crop $(convert "$f" -virtual-pixel edge -blur 0x15 -fuzz 1% -trim -format '%wx%h%O' info:) -background white +repage -gravity center -resize '1800x2160' -background white +repage -extent '2000x2400' -colorspace sRGB -unsharp 50 -strip -quality 100 "${f//.jpg/.jpg}";
-    echo "${f//.jpg/_x.jpg}" ;
-}
+    echo "${f//.jpg/_Ratioed_.jpg}" ;
+    }
 
 
-function img_width ()
+function img_return_width ()
     {
     f="$1"
     dmenwidth=$\(identify -verbose "${f}" | grep "Geometry" | grep -e "[0-9,{1,4}]x[0-9,{1,4}]" | sed -E 's/\+0\+0//g' | sed -E 's/Geometry\://g' | sed -E 's/\ //g' | awk -Fx '{ print $1 }'\);
@@ -349,7 +347,7 @@ function img_width ()
 }
 
 
-function img_height ()
+function img_return_height ()
     {
     f="$1"
     dmenheight=$\(identify -verbose  "${f}" | grep "Geometry" | grep -e "[0-9,{1,4}]x[0-9,{1,4}]" | sed -E 's/\+0\+0//g' | sed -E 's/Geometry\://g' | sed -E 's/\ //g' | awk -Fx '{ print $2 }'\);
@@ -357,7 +355,7 @@ function img_height ()
 }
 
 
-function img_domclr ()
+function img_return_domclr ()
     {
     f="$1"
     domclr=$\(convert "${f}" -posterize 3 -define histogram:unique-colors=true -format "%c" histogram:info:- | sort -k 1 -r | sed 's/(  /(/g' | sed 's/(  /(/g' | sed 's/,  /,/g' | sed 's/, /,/g' | head -n 1 | awk '{ print "srgb"$2 }'\);
@@ -373,10 +371,19 @@ function img_return_wxhdpi ()
 
 function cache_clear_dir ()
 {
-    for f in $(find "$1" -iname \*.jpg -exec basename {} \;| sort -nru); do 
-    style="${f//%9}"
-    #/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py 
-    echo "${style}" ; 
+    for f in $(find "$1" -maxdepth 4 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do 
+    curl -u stephen:parker -d colorstyle="f" -X PUT http://prodimages.ny.bluefly.com/image-update/
+    /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f"; 
+    done ;
+}
+
+
+function cache_clear_dir_postapi ()
+{
+    for f in $(find "$1" -maxdepth 4 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do 
+    curl -u stephen:parker -d colorstyle="f" -X POST http://prodimages.ny.bluefly.com/image-update/
+    #curl -u stephen:parker -d colorstyle="f" -X PUT http://prodimages.ny.bluefly.com/image-update/
+    #/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f"; 
     done ;
 }
 
