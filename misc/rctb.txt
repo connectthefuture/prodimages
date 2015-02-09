@@ -253,7 +253,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##	Run	##
 ##	as	##
 ########################################
-cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /var/log/cache_clear_postapi.log
+#cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /var/log/cache_clear_postapi.log
 ##############################################
 ##############################################
 ################### ------------ #############
