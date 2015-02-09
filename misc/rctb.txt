@@ -255,7 +255,7 @@ function cache_clear_dir_postapi ()
 ##	Run	##
 ##	as	##
 ##########
-59,14,34,44 * * * * cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /dev/null
+59,14,34,44 * * * * cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /var/log/cache_clear_postapi.log
 ##############################################
 ##############################################
 ################### ------------ #############
