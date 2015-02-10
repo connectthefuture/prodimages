@@ -69,7 +69,7 @@ def return_cleaned_bfly_urls(text):
 
 def download_swatch_urls(styles_list):
     import sys, requests, re
-    import os.path.join
+    import os, __builtin__
     regex_swatch    = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=([0-9]{9})&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
     pdpg            =   re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms\?img=(\d{9})\.jpg&w=75&h=89&(ver=\d{1,6})$')
     regex_pdplg     = re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms\?img=(\d{9})\.pct&outputx=583&outputy=700&level=1&(ver=\d{1,6})$')
@@ -89,7 +89,7 @@ def download_swatch_urls(styles_list):
                 colorstyle,xRun,yRise = matches.groups()[:3]
                 #print colorstyle, xRun,yRise
                 res = requests.get(url, timeout=(2.05))
-                with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
+                with __builtin__.open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
                     f.write(res.content)
                 swatch_links.append(url)
 
@@ -106,10 +106,10 @@ def download_swatch_urls(styles_list):
 
                 try:
                     if res.status_code < 400:
-                        with open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
+                        with __builtin__.open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
                             f.write(reslg.content)
 
-                        with open(colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
+                        with __builtin__.open(colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
                             f.write(res.content)
 
                         try:
