@@ -69,7 +69,7 @@ def return_cleaned_bfly_urls(text):
 
 def download_swatch_urls(styles_list):
     import sys, requests, re
-    import os, __builtin__
+    import os
     regex_swatch    = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=([0-9]{9})&width=49&height=59&orig(X=\d{1,4})&orig(Y=\d{1,4})$')
     pdpg            =   re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms\?img=(\d{9})\.jpg&w=75&h=89&(ver=\d{1,6})$')
     regex_pdplg     = re.compile(r'^http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms\?img=(\d{9})\.pct&outputx=583&outputy=700&level=1&(ver=\d{1,6})$')
@@ -89,7 +89,8 @@ def download_swatch_urls(styles_list):
                 colorstyle,xRun,yRise = matches.groups()[:3]
                 #print colorstyle, xRun,yRise
                 res = requests.get(url, timeout=(2.05))
-                with __builtin__.open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
+                wit open
+                (colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
                     f.write(res.content)
                 swatch_links.append(url)
 
@@ -97,7 +98,7 @@ def download_swatch_urls(styles_list):
                 colorstyle,version = matcheslg.groups()[:2]
                 netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
                 ext_JPG       = '_l.jpg'
-                netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext_JPG)
+                netsrv101_url_file = "{}{}{}".format(netsrv101_url, colorstyle[:4], colorstyle + ext_JPG)
                 #print colorstyle,version
                 pdpimgurl = 'http://cdn.is.bluefly.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=75&h=89&{1}'.format(colorstyle,version)
                 pdplgurl  = "http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=583&outputy=700&level=1&ver={1}".format(colorstyle,version)
@@ -106,10 +107,12 @@ def download_swatch_urls(styles_list):
 
                 try:
                     if res.status_code < 400:
-                        with __builtin__.open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
+                        wit open
+                        (colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
                             f.write(reslg.content)
 
-                        with __builtin__.open(colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
+                        wit open
+                        (colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
                             f.write(res.content)
 
                         try:
