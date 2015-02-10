@@ -389,7 +389,7 @@ function cache_clear_dir_postapi ()
 
 function listyles (){ 
         {
-        $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru) ;
+        echo $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru) ;
     } ;
 }
 
