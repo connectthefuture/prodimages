@@ -386,6 +386,13 @@ function cache_clear_dir_postapi ()
     done ;
 }
 
+
+function listyles (){ 
+        {
+        $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru) ;
+    } ;
+}
+
 # Local Variables:
 # mode:shell-script
 # sh-shell:bash
