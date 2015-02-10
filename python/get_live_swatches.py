@@ -89,8 +89,7 @@ def download_swatch_urls(styles_list):
                 colorstyle,xRun,yRise = matches.groups()[:3]
                 #print colorstyle, xRun,yRise
                 res = requests.get(url, timeout=(2.05))
-                wit open
-                (colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
+                with open(colorstyle + "_" + xRun + yRise + '_swatch.jpg','wb') as f:
                     f.write(res.content)
                 swatch_links.append(url)
 
@@ -107,12 +106,10 @@ def download_swatch_urls(styles_list):
 
                 try:
                     if res.status_code < 400:
-                        wit open
-                        (colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
+                        with open(colorstyle + '_Pdp_Cdn_lg_' + str(version) + '.jpg','wb') as f:
                             f.write(reslg.content)
 
-                        wit open
-                        (colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
+                        with open(colorstyle + '_PDPCached_'  + str(version) + '.jpg','wb') as f:
                             f.write(res.content)
 
                         try:
