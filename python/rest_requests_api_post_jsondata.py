@@ -126,8 +126,7 @@ def post_to_api(data=None, params=None, method=None, api_endpoint=None, host='pr
             return res
         except IndexError:
             print 'POST failed, Trying to PUT to -->', url, data
-        except requests.exceptions.ConnectionError:
-            pass
+        except OSError: ##requests.exceptions.ConnectionError:
             try:
                 res = requests.put(url, headers=headers, data=data)
                 if res.status_code < 400:
