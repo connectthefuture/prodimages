@@ -85,6 +85,8 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 #############    Looklet Processes Sync-Import     ###############
 ##################################################################
 ### Sync Massachusetts/ PhotoDrop --> folders to Pushfolders/NY###
+#############    Looklet Pushed to DropFinals JH   ###############
+##################################################################
 ##
 5,25,50 * * * * /usr/local/batchRunScripts/bash/syncMassImages.sh
 #
@@ -104,7 +106,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ############################# ******** ###########################
 ##########################
 ##### Rsyncn #############
-31 3,12,15,17,21 * * 1,2,3,4,5 rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still && echo "Sync Completed at `date`" >> /var/log/rsyncFile7Still.log ;
+31 3,12,15,17,21 * * 1,2,3,4,5,7 rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still && echo "Sync Completed at `date`" >> /var/log/rsyncFile7Still.log ;
 ########################
 ###########################################################
 #####  WALKEN with WALKIN  ################################
@@ -113,22 +115,36 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ######## Get FileSystem Info For Import MYSQL 3301 ########
 ###########################################################
 4 2 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null
-##  ##  && date >> /var/log/photopaths_RetouchStillselectshrezimport.log ;
-### Stopping sync of Retouch_Fashion 12-09-14 - keeping above for Retouch_Still which is all encompassing now
-# 42 2,12,18 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Fashion 2>&1 > /var/log/photopaths_RetouchFashionselectshrezimport.log && date >> /var/log/photopaths_RetouchFashionselectshrezimport.log ;
-#
-## --> Daily
+##############
+## --> Daily #
 10 3,9,10,11,12,13,14,15,16,17,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 ## --> Weekend Runs much less
 10 3,10,13,16,22                     * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null  ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
-### Stopping sync of Retouch_Fashion 12-09-14 - keeping above for Retouch_Still which is all encompassing now
-## 12 3,9,10,11,12,13,14,15,16,17,18,22 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/eFashionPush 2>&1 > /var/log/photopaths_Fashionpushselects_import.log && date >> /var/log/photopaths_Fashionpushselects_import.log ;
 #
 ##### Zimages_1
 17 5,13,23 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/zImages_1 2>&1 > /var/log/photopaths_Zimages_selectslowrezimport.log && date >> /var/log/photopaths_Zimages_selectslowrezimport.log ;
 #
-### Sync Push folders to Archive folders ###
-# 47 9,19 * * * rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still
+##########################
+## --> Mongo Imports ## ##
+##########################
+###### ########## ########
+###### ########## ########
+###### Still Push ########
+17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/aPhotoPush/ -maxdepth 1 -type d -mtime 4); do image_db_data_prepare.py "$d" "retouch_still"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
+###### Still Arch ########
+17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/Retouch_Still/ -maxdepth 1 -type d -mtime 4); do image_db_data_prepare.py "$d" "gridfs_file7"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
+###### ########## ########
+###### ########## ########
+###### ########## ########
+##########################
+###### --Obsolete-- #####
+#####  ---Alley---  #####
+#########################
+### Stopping sync of Retouch_Fashion 12-09-14 - keeping above for Retouch_Still which is all encompassing now
+## 12 3,9,10,11,12,13,14,15,16,17,18,22 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/eFashionPush 2>&1 > /var/log/photopaths_Fashionpushselects_import.log && date >> /var/log/photopaths_Fashionpushselects_import.log ;
+##  ##  && date >> /var/log/photopaths_RetouchStillselectshrezimport.log ;
+### Stopping sync of Retouch_Fashion 12-09-14 - keeping above for Retouch_Still which is all encompassing now
+# 42 2,12,18 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Fashion 2>&1 > /var/log/photopaths_RetouchFashionselectshrezimport.log && date >> /var/log/photopaths_RetouchFashionselectshrezimport.log ;
 #
 ########### Move All Jpegs extracted from Raw to .zimages hierarchy
 # Not shooting Raw ended 01302015
@@ -256,8 +272,10 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##################################################
 ##	Run	##
 ##	as	##
-##################################################
-#cache_clear_dir_postapi /mnt/Post_Complete/ImageDrop/ 2>&1 >> /var/log/cache_clear_postapi.log
+# Mongo ##
+#####################################################
+###### Still Push ###  ### Mongo Gridfs Md5 Store ###
+15,33,42,54 * * * * for d in $(find /mnt/Post_Complete/ImageDrop -maxdepth 1 -type f); do image_db_data_prepare.py "$d" "gridfs_bfly"; done ; 2>&1 > /var/log/mongoWalkerImageDrop.log && date >> /var/log/mongoWalkerImageDrop.log ;
 ############################################################################################
 ############################################################################################
 ################### ------------ ################################ ------------ #############
