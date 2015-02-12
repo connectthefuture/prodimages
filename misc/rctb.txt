@@ -267,7 +267,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##		##########################################
 ## Then Clear db modified hourly every 30 min ####
 ##################################################
-20,50 * * * * for f in $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e 'select distinct `t1`.colorstyle from `image_update` t1 join `product_snapshot_live` t2 on `t1`.colorstyle=`t2`.colorstyle where create_dt > date_sub(now(), interval 60 minute) and (`t2`.image_ready_dt is not null and not `t2`.image_ready_dt != "0000-00-00");' -D www_django); do /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f" ; done 2>&1 > /var/log/cache_clear_postapi.log ;
+20,50 * * * * for f in $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e 'select distinct `t1`.colorstyle from `image_update` t1 join `product_snapshot_live` t2 on `t1`.colorstyle=`t2`.colorstyle where create_dt > date_sub(now(), interval 60 minute) and (`t2`.image_ready_dt is not null and `t2`.image_ready_dt != "0000-00-00");' -D www_django); do /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f" ; done 2>&1 > /var/log/cache_clear_postapi.log ;
 ##################################################
 ##################################################
 ##	Run	##
