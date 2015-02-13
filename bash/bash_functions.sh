@@ -400,13 +400,17 @@ function listyles (){
 function profilePyScript ()
     {
     scriptin="$1"
+    scriptname=`basename "$scriptin"`
     scriptargs="$2"
     runtime=`date +%H%M%S`
-    mkdir ~/Pictures
-    graphout=~/"${scriptin}"_"${runtime}".png
-    pycallgraph -m --stdlib graphviz --tool sfdp --output-file="${graphout}" -- "${scriptin}" "${scriptargs}"
+    graphdir=~/Pictures/debug_graphs
+    raphout="${graphdir}"/"${scriptname//.py}"_"${runtime}".png
+    mkdir -p "${graphdir}" ;
+    cd "${graphdir}" ;
+    pycallgraph -m --stdlib graphviz --tool dot --output-file="${graphout}" -- "${scriptin}" "${scriptargs}" ;
     echo Graph Created "${graphout}" ;
 }
+
 
 # Local Variables:
 # mode:shell-script
