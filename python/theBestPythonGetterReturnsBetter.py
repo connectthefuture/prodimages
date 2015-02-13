@@ -46,13 +46,13 @@ def main():
     import mtags_reshoots
     mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@localhost:3301/data_imagepaths')
     connection = mysql_engine.connect()   
-    daily_incomplete_query = '''SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` FROM `data_imagepaths`.`push_photoselects` t1 join `data_imagepaths`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle` having (t2.`image_ready_dt` = '0000-00-00') ORDER BY t1.`file_path`  ASC '''
+    daily_incomplete_query = '''SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` FROM `data_imagepaths`.`push_photoselects` t1 join `www_django`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle` having (t2.`image_ready_dt` = '0000-00-00') ORDER BY t1.`file_path`  ASC '''
 
     daily_reshoot_query = """select distinct data.`file_path`, data.`photo_date`, data.`colorstyle`, CONCAT('/mnt/Post_Ready', t3.`file_path`),t3.`photo_date`
                 FROM 
                     (SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` , t1.`photo_date`,t1.alt
                     FROM `data_imagepaths`.`push_photoselects` t1 
-                    join `data_imagepaths`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle` 
+                    join `www_django`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle` 
                     where t1.photo_date BETWEEN SYSDATE( ) - INTERVAL 7 DAY AND SYSDATE( ) + INTERVAL 2 DAY
                     having (t2.`image_ready_dt` != '0000-00-00'))
                 AS data

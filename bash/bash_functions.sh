@@ -403,12 +403,13 @@ function profilePyScript ()
     scriptname=`basename "$scriptin"`
     scriptargs="$2"
     altoutdir="$3"
+    graphtype="$4"
     runtime=`date +%H%M%S`
     test -d -graphdir=~/Pictures/debug_graphs
     graphout="${altoutdir}"/"${scriptname//.py}"_"${runtime}".png
     mkdir -p "${altoutdir}" ;
     cd "${graphdir}" ;
-    pycallgraph -m --stdlib graphviz --tool dot --output-file="${graphout}" -- "${scriptin}" "${scriptargs}" ;
+    pycallgraph -m --stdlib graphviz --tool "${graphtype}" --output-file="${graphout}" -- "${scriptin}" "${scriptargs}" ;
     chmod ugo+rw "${graphout}" ;
     echo Graph Created "${graphout}" ;
 }
