@@ -395,6 +395,19 @@ function listyles (){
     } ;
 }
 
+
+
+function profilePyScript ()
+    {
+    scriptin="$1"
+    scriptargs="$2"
+    runtime=`date +%H%M%S`
+    mkdir ~/Pictures
+    graphout=~/"${scriptin}"_"${runtime}".png
+    pycallgraph -m --stdlib graphviz --tool sfdp --output-file="${graphout}" -- "${scriptin}" "${scriptargs}"
+    echo Graph Created "${graphout}" ;
+}
+
 # Local Variables:
 # mode:shell-script
 # sh-shell:bash
