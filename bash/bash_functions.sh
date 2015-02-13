@@ -405,8 +405,8 @@ function profilePyScript ()
     altoutdir="$3"
     runtime=`date +%H%M%S`
     test -d -graphdir=~/Pictures/debug_graphs
-    graphout="${graphdir}"/"${scriptname//.py}"_"${runtime}".png
-    mkdir -p "${graphdir}" ;
+    graphout="${altoutdir}"/"${scriptname//.py}"_"${runtime}".png
+    mkdir -p "${altoutdir}" ;
     cd "${graphdir}" ;
     pycallgraph -m --stdlib graphviz --tool dot --output-file="${graphout}" -- "${scriptin}" "${scriptargs}" ;
     chmod ugo+rw "${graphout}" ;
