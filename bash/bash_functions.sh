@@ -417,8 +417,8 @@ function profilePyScript ()
 
 function compfile_to_dir ()
 {
-    rootdir="$1"
-    testImage="$2"
+    testImage="$1"
+    rootdir="$2"
     cd "$rootdir"
     for f in `ls "$rootdir"`; do
     ## $img_trim_set_bfly_ratio "$f"
