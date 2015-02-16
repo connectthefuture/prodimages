@@ -415,6 +415,16 @@ function profilePyScript ()
 }
 
 
+function compfile_to_dir ()
+{
+    rootdir="$1"
+    testImage="$2"
+    cd "$rootdir"
+    for f in `ls "$rootdir"`; do
+    ## $img_trim_set_bfly_ratio "$f"
+    convert "$f" "$testImage" -resize '400x300!' MIFF:- | compare -metric AE -fuzz '10%' - null:t ;
+    done
+}
 # Local Variables:
 # mode:shell-script
 # sh-shell:bash
