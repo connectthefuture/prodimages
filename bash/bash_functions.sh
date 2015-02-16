@@ -416,13 +416,17 @@ function profilePyScript ()
 
 
 function compfile_to_dir ()
-{
+    {
     testImage="$1"
     rootdir="$2"
     cd "$rootdir"
     for f in `ls "$rootdir"`; do
     ## $img_trim_set_bfly_ratio "$f"
-    convert "$f" "$testImage" -resize '400x300!' MIFF:- | compare -metric AE -fuzz '10%' - null:t ;
+    diffpix=$(convert "${testImage}" "${f}" -resize "400x300!" MIFF:- | compare -metric AE -fuzz "10%" - null: 2>&1) ;
+    diffpixels=$(echo "$diffpix")
+    if [[ "$diffpixels" -gt 0 ]]; then
+        echo "File ${f} has $(echo "$diffpix") Different Pixels vs the base input file `basename ${1}`" 
+    fi;
     done
 }
 # Local Variables:
