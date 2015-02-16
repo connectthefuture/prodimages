@@ -415,20 +415,26 @@ function profilePyScript ()
 }
 
 
-function compfile_to_dir ()
+function compfile_to_basefile ()
     {
     testImage="$1"
-    rootdir="$2"
-    cd "$rootdir"
-    for f in `ls "$rootdir"`; do
-    ## $img_trim_set_bfly_ratio "$f"
-    diffpix=$(convert "${testImage}" "${f}" -resize "400x300!" MIFF:- | compare -metric AE -fuzz "10%" - null: 2>&1) ;
-    diffpixels=$(echo "$diffpix")
-    if [[ "$diffpixels" -gt 0 ]]; then
-        echo "File ${f} has $(echo "$diffpix") Different Pixels vs the base input file `basename ${1}`" 
+    baseImage="$2"
+    bnameTest=$(basename "${testImage}")
+    bnameBase=$(basename "${baseImage}")
+    cd $(dirname "${baseImage}")
+    diffpix=$(convert "${testImage}" "${baseImage}" -resize "400x300!" MIFF:- | compare -metric AE -fuzz "10%" - null: 2>&1) ;
+    if [[ $diffpix > 0 ]]; then
+        echo "File `basename ${testImage}` has $(echo "$diffpix") Different Pixels vs the base input file `basename ${baseImage}`"
+    else
+        
+        mkdir -p matches/"${bnameBase}"_matches
+        cp $baseImage matches/
+        cp $testImage matches/"${bnameBase}"_matches
+        
     fi;
-    done
 }
+
+
 # Local Variables:
 # mode:shell-script
 # sh-shell:bash
