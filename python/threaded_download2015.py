@@ -43,10 +43,8 @@ def url_get_links(targeturl):
         return list(set(linklist))
     except requests.exceptions.Timeout:
         print "Connect Timed Out ",  targeturl
-    except requests.exceptions.Timeout:
-        print "Read Timed Out ",  targeturl
-    except requests.exceptions.Timeout:
-        print "Read Timed Out",  targeturl
+    except requests.exceptions.MissingSchema:
+        print "MissingSchema Error ",  targeturl
 
 def download_swatch_urls(styles_list):
     import sys, requests, re
