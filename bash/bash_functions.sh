@@ -419,7 +419,7 @@ function compfile_to_basefile ()
     {
     testImage="$1"
     if [[ "$#" > 1 ]]; then
-            baseImage="$2"
+        baseImage="$2"
     else
         baseImage=/mnt/Post_Complete/Complete_Archive/.PDP/base_pdp_na_x700.jpg
     fi;
