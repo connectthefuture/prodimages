@@ -418,7 +418,11 @@ function profilePyScript ()
 function compfile_to_basefile ()
     {
     testImage="$1"
-    baseImage="$2"
+    if [[ "$#" > 1 ]]; then
+            baseImage="$2"
+    else
+        baseImage=/mnt/Post_Complete/Complete_Archive/.PDP/base_pdp_na_x700.jpg
+    fi;
     bnameTest=$(basename "${testImage}")
     bnameBase=$(basename "${baseImage}")
     cd $(dirname "${baseImage}")
@@ -426,7 +430,6 @@ function compfile_to_basefile ()
     if [[ $diffpix > 0 ]]; then
         echo "File `basename ${testImage}` has $(echo "$diffpix") Different Pixels vs the base input file `basename ${baseImage}`"
     else
-        
         mkdir -p matches/"${bnameBase}"_matches
         cp $baseImage matches/
         cp $testImage matches/"${bnameBase}"_matches
