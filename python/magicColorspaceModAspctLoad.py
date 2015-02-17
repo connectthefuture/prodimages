@@ -535,7 +535,9 @@ def upload_imagedrop(root_dir):
                             os.remove(dst_file)
                         shutil.move(upload_file, archive_uploaded)
                     except:
+                        print 'Failed ', upload_file
                         pass
+
             else:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.1))
