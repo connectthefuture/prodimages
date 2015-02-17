@@ -17,12 +17,12 @@ def url_get_links(targeturl):
             sorted(linklist)
         ## Return list of unique links
         return list(set(linklist))
-    except requests.exceptions.ConnectTimeout:
+    except requests.exceptions.Timeout:
         print "Connect Timed Out ",  targeturl
-    except requests.exceptions.ReadTimeout:
-        print "Read Timed Out ",  targeturl
-    except requests.exceptions.ReadTimeout:
-        print "Read Timed Out",  targeturl
+    except requests.exceptions.MissingSchema:
+        print "Missing Schema Timed Out ",  targeturl
+    # except requests.exceptions.ReadTimeout:
+    #     print "Read Timed Out",  targeturl
 
 
 def return_versioned_urls(text):
