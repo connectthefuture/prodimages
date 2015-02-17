@@ -108,6 +108,7 @@ def get_exif_metadata_value(img, exiftag=None):
             metadict[mtag] = mvalue
         return metadict
 
+
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
     try:
@@ -316,13 +317,13 @@ def subproc_magick_medium_jpg(img, destdir=None):
     height = dimensions.split('x')[1]
 
     if aspect_ratio == '1.2':
-        vert_horiz = '300x360'
+        vert_horiz = '200x240'
     elif float(aspect_ratio) > float(1.2):
-        vert_horiz = 'x360'
+        vert_horiz = 'x240'
     elif float(aspect_ratio) < float(1.2):
-        vert_horiz = '300x'
+        vert_horiz = '200x'
 
-    dimensions = '300x360'
+    dimensions = '200x240'
     print dimensions,vert_horiz
     if regex_valid_style.findall(img):
 
@@ -534,7 +535,9 @@ def upload_imagedrop(root_dir):
                             os.remove(dst_file)
                         shutil.move(upload_file, archive_uploaded)
                     except:
+                        print 'Failed ', upload_file
                         pass
+
             else:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.1))

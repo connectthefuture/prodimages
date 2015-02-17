@@ -17,12 +17,12 @@ def url_get_links(targeturl):
             sorted(linklist)
         ## Return list of unique links
         return list(set(linklist))
-    except requests.exceptions.ConnectTimeout:
+    except requests.exceptions.Timeout:
         print "Connect Timed Out ",  targeturl
-    except requests.exceptions.ReadTimeout:
-        print "Read Timed Out ",  targeturl
-    except requests.exceptions.ReadTimeout:
-        print "Read Timed Out",  targeturl
+    except requests.exceptions.MissingSchema:
+        print "Missing Schema Timed Out ",  targeturl
+    # except requests.exceptions.ReadTimeout:
+    #     print "Read Timed Out",  targeturl
 
 
 def return_versioned_urls(text):
@@ -143,7 +143,12 @@ if __name__ == '__main__':
     ################################################################
     ## ~Pictures for testing only will use sysargv 1 for root_dir ##
     ################################################################
-    os.chdir(root_dir)
+    if os.path.isdir(root_dir):
+        os.chdir(root_dir)
+    elif os.path.isdir('/Users/johnb/Pictures'):
+        root_dir = os.path.isdir(root_dir)
+        os.chdir(root_dir)
+
     todaysdate = str(datetime.date.today())
     todaysdir = "{0}{1}{2}_swatchPDP".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
     if os.path.isdir(todaysdir):
