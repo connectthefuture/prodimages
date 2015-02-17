@@ -108,6 +108,7 @@ def get_exif_metadata_value(img, exiftag=None):
             metadict[mtag] = mvalue
         return metadict
 
+
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
     try:
