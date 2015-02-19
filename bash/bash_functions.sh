@@ -403,7 +403,7 @@ function profilePyScript ()
     scriptname=`basename "$scriptin"`
     scriptargs="$2"
     altoutdir="$3"
-    graphtype="$4"
+    graphtype="dot" ##"$4"
     runtime=`date +%H%M%S`
     test -d -graphdir=~/Pictures/debug_graphs
     graphout="${altoutdir}"/"${scriptname//.py}"_"${runtime}".png
@@ -428,7 +428,7 @@ function compfile_to_basefile ()
     cd $(dirname "${baseImage}")
     diffpix=$(convert "${testImage}" "${baseImage}" -resize "400x300!" MIFF:- | compare -metric AE -fuzz "10%" - null: 2>&1) ;
     if [[ $diffpix > 0 ]]; then
-        echo "File `basename ${testImage}` has $(echo "$diffpix") Different Pixels vs the base input file `basename ${baseImage}`"
+        echo "File `basename ${testImage}` has $(echo \"$diffpix\") Different Pixels vs the base input file `basename \"${baseImage}\"`"
     else
         mkdir -p matches/"${bnameBase}"_matches
         cp $baseImage matches/
