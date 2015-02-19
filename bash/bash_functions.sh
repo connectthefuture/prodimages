@@ -437,7 +437,14 @@ function compfile_to_basefile ()
     fi;
 }
 
-
+env_parallel() {
+    export parallel_bash_environment='() {
+        '"$(echo "shopt -s expand_aliases 2>/dev/null"; alias;typeset -p | grep -vFf <(readonly; echo GROUPS; echo FUNCNAME; echo DIRSTACK; echo _; echo PIPESTATUS; echo USERNAME) | grep -v BASH_;typeset -f)"'
+    }'
+    # Run as: env_parallel parallel_bash_environment "2>/dev/null;" ...
+    `which parallel` "$@"
+    unset parallel_bash_environment
+}
 # Local Variables:
 # mode:shell-script
 # sh-shell:bash
