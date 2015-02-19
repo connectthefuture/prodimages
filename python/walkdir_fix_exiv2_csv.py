@@ -275,7 +275,7 @@ def main():
     rootdir = sys.argv[1]
     walkedout = recursive_dirlist(rootdir)
 
-    regex = re.compile(r'.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+    regex = re.compile(r'.*?[0-9]{9}_[1-6x]\.[jpgJPG]{3}$')
     #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 
 
@@ -321,8 +321,8 @@ def main():
 
             ## Test File path String to Determine which Table needs to be Updated Then Insert SQL statement
             sqlinsert_choose_test = v['file_path']
-            regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
-            regex_postreadyoriginal = re.compile(r'^/Retouch_.+?/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
+            regex_photoselects = re.compile(r'^/.+?/Post_Ready/.+?Push/.*?[0-9]{9}_[1-6x]\.[jpgJPG]{3}$')
+            regex_postreadyoriginal = re.compile(r'^.*?/Retouch_.+?/.*?[0-9]{9}_[1-6x]\.[jpgJPG]{3}$')
             regex_zimages = re.compile(r'^/zImages.*?/[0-9]{4}/.*?[0-9]{9}_[1-6]\.[jpgJPG]{3}$')
 
             if re.findall(regex_photoselects, sqlinsert_choose_test):
