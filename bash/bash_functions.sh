@@ -400,16 +400,16 @@ function listyles (){
 function profilePyScript ()
     {
     scriptin="$1"
-    scriptname=`basename "$scriptin"`
+    scriptname=`basename "${scriptin}"`
     scriptargs="$2"
     altoutdir="/home/johnb/Share"
     graphtype="dot" ##"$4"
     runtime=`date +%H%M%S`
     graphdir=/home/johnb/Share/Pictures/debug_graphs
-    graphout="${altoutdir}"/"${scriptname//.py}"_"${runtime}".png
-    mkdir -p "${altoutdir}" ;
+    graphout="${graphdir}"/"${scriptname//.py}"_"${runtime}".png
+    mkdir -p "${graphdir}" ;
     cd "${graphdir}" ;
-    pycallgraph --stdlib graphviz --tool "${graphtype}" --output-file="${graphout}" -- "${scriptin}" "${scriptargs}" ;
+    pycallgraph -s --output-file="${graphout}" graphviz --tool "${graphtype}" -- "${scriptin}" "${scriptargs}" ;
     chmod ugo+rw "${graphout}" ;
     echo Graph Created "${graphout}" ;
 }
