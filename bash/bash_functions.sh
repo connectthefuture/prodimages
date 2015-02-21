@@ -409,7 +409,7 @@ function profilePyScript ()
     graphout="${altoutdir}"/"${scriptname//.py}"_"${runtime}".png
     mkdir -p "${altoutdir}" ;
     cd "${graphdir}" ;
-    pycallgraph -m --stdlib graphviz --tool "${graphtype}" --output-file="${graphout}" -- "${scriptin}" "${scriptargs}" ;
+    pycallgraph --stdlib graphviz --tool "${graphtype}" --output-file="${graphout}" -- "${scriptin}" "${scriptargs}" ;
     chmod ugo+rw "${graphout}" ;
     echo Graph Created "${graphout}" ;
 }
