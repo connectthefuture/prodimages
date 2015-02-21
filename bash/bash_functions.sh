@@ -402,7 +402,7 @@ function profilePyScript ()
     scriptin="$1"
     scriptname=`basename "$scriptin"`
     scriptargs="$2"
-    altoutdir="$3"
+    altoutdir="/home/johnb/Share"
     graphtype="dot" ##"$4"
     runtime=`date +%H%M%S`
     graphdir=/home/johnb/Share/Pictures/debug_graphs
