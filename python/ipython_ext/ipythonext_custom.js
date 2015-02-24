@@ -103,3 +103,22 @@ IPython.load_extensions('usability/breakpoints')
 //    IPython.load_extensions('usability/hide_io_selected')
 IPython.load_extensions('usability/execute_time/ExecuteTime')
 //    IPython.load_extensions('usability/python-markdown')
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+//////      END Ipython Extentions Loading /////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////// Example from IPython install at top commented out ///
+$([IPython.events]).on('app_initialized.NotebookApp', function(){
+ IPython.toolbar.add_buttons_group([
+     {
+          'label'   : 'run qtconsole',
+          'icon'    : 'icon-terminal', // select your icon from http://fortawesome.github.io/Font-Awesome/icons
+          'callback': function () {
+              IPython.notebook.kernel.execute('%qtconsole')
+          }
+     }
+     // add more button here if needed.
+     ]);
+});
