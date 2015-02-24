@@ -17,7 +17,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, 
         update_time = 10
 
     ## Exclusion/Inclusion Vars ##
-    # Set vendor ID then choose All('') from Vendor and none from other vendors
+    # Manually Set vendor ID then choose All('') from Vendor and none from other vendors
     # or None('not') from vendid and All From other vendors
     # or comment out for All from All incomplete
     # Usually comment out for everything but allows to exclude slow and redundant vendors info
@@ -78,38 +78,38 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, 
     return styles
 
 
-def post_or_put_style_to_api(colorstyle, api_url=None, AuthToken=None):
-    import requests, json
-    import http.client, urllib.parse
-    if not api_url:
-        api_url = 'http://prodimages.ny.bluefly.com/image-update/'
+# rm --> #def post_or_put_style_to_api(colorstyle, api_url=None, AuthToken=None):
+    # import requests, json
+    # import http.client, urllib.parse
+    # if not api_url:
+    #     api_url = 'http://prodimages.ny.bluefly.com/image-update/'
 
-    update_styles = list(set(sorted(update_styles)))
-    for colorstyle in update_styles:
-        data = {'colorstyle': colorstyle}
-        #params = urllib.parse.urlencode(data)
-        params = json.dumps(data)
-        auth = {'Authorization': 'Token ' + AuthToken}
-        content_type = {'content-type': 'application/json'}
-        headers = json.dumps(auth,content_type)
-        # conn = http.client.HTTPConnection(api_url, 80)
-        # conn.request("PUT", "/", BODY)
-        #response = conn.getresponse()
-        try:
-            response = requests.post(api_url, headers=headers, params=params)
-            print response.status, response.method, data
-            #print(resp.status, response.reason)
-        except:
-            try:
-                response = requests.put(api_url, headers=headers, params=params)
-                print response.status, response.method, data
-            except:
-                curlauth = 'Authorization: Token ' + AuthToken
-                curldata = 'colorstyle=' + colorstyle
-                try:
-                    subprocess.call([ 'curl', '-u', 'james:hoetker', '-d', curldata, '-H', curlauth, '-X', 'PUT', api_url])
-                except:
-                    subprocess.call([ 'curl', '-u', 'james:hoetker' '-d', curldata, '-H', curlauth, api_url])
+    # update_styles = list(set(sorted(update_styles)))
+    # for colorstyle in update_styles:
+    #     data = {'colorstyle': colorstyle}
+    #     #params = urllib.parse.urlencode(data)
+    #     params = json.dumps(data)
+    #     auth = {'Authorization': 'Token ' + AuthToken}
+    #     content_type = {'content-type': 'application/json'}
+    #     headers = json.dumps(auth,content_type)
+    #     # conn = http.client.HTTPConnection(api_url, 80)
+    #     # conn.request("PUT", "/", BODY)
+    #     #response = conn.getresponse()
+    #     try:
+    #         response = requests.post(api_url, headers=headers, params=params)
+    #         print response.status, response.method, data
+    #         #print(resp.status, response.reason)
+    #     except:
+    #         try:
+    #             response = requests.put(api_url, headers=headers, params=params)
+    #             print response.status, response.method, data
+    #         except:
+    #             curlauth = 'Authorization: Token ' + AuthToken
+    #             curldata = 'colorstyle=' + colorstyle
+    #             try:
+    #                 subprocess.call([ 'curl', '-u', 'james:hoetker', '-d', curldata, '-H', curlauth, '-X', 'PUT', api_url])
+    #             except:
+    #                 subprocess.call([ 'curl', '-u', 'james:hoetker' '-d', curldata, '-H', curlauth, api_url])
 
 ############################################################ RUN ##################################################
 ############################################################ RUN ##################################################
@@ -246,13 +246,13 @@ for k,v in marketplace_styles.iteritems():
                             f.close()
                         if res != '2':
                             subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
-                            if updateonly_flag:
-                                update_styles.append(colorstyle)
+                            # if updateonly_flag:
+                            #     update_styles.append(colorstyle)
                     except:
                         subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                         print 'Failed Downloading HTTPS file {}'.format(image_url)
-                        if updateonly_flag:
-                            update_styles.append(colorstyle)
+                        # if updateonly_flag:
+                        #     update_styles.append(colorstyle)
 
                 elif urlcode_value == 404:
                     badurldir = os.path.join(destdir,'error404')
@@ -291,10 +291,10 @@ multiprocmagick.run_multiproccesses_magick(searchdir=imagedir)
 print 'Done With multiprocmagick'
 
 ## Send updated styles to api to clear
-if update_styles:
-    post_or_put_style_to_api(update_styles, api_url=None, AuthToken=None)
-else:
-    print 'NO UPDATES TO CLEAR'
+# if update_styles:
+#     post_or_put_style_to_api(update_styles, api_url=None, AuthToken=None)
+# else:
+#     print 'NO UPDATES TO CLEAR'
 
 # for d in dirlist:
 #     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
