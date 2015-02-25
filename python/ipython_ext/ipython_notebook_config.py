@@ -11,14 +11,14 @@ c.NotebookApp.port = 8888
 # c.NotebookApp.base_project_url = '/'
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
-c.NotebookApp.trust_xheaders = False
+#c.NotebookApp.trust_xheaders = False
 ### nbProjects
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
-c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
-c.NotebookApp.profile = u'jb'
+#c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
+#c.NotebookApp.profile = u'jb'
 ### nbExtentions
 c.NotebookApp.enable_mathjax = True
-c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
+#c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
 c.NotebookApp.extra_static_paths = [u'/home/johnb/.ipython/profile_default/static/components',
 									u'/home/johnb/.ipython/profile_default/static/components/backbone/',
 									u'/home/johnb/.ipython/profile_default/static/components/bootstrap'
