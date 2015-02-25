@@ -17,21 +17,20 @@ require(["base/js/events"], function(events) {
  */
 // PUBLISHING
     IPython.load_extensions('/static/custom/publishing/nbviewer_theme/main');
-    IPython.load_extensions('/static/custom/publishing/gist_it');
+    // IPython.load_extensions('/static/custom/publishing/gist_it');
     IPython.load_extensions('/static/custom/publishing/nbconvert_button');
     IPython.load_extensions('/static/custom/publishing/printview_button');
-//    IPython.load_extensions('/static/custom/publishing/printviewmenu_button')
+    IPython.load_extensions('/static/custom/publishing/printviewmenu_button')
 
 // SLIDEMODE
-//    IPython.load_extensions('/static/custom/slidemode/main')
-
+    IPython.load_extensions('/static/custom/slidemode/main')
 
 // STYLING
     IPython.load_extensions('/static/custom/styling/css_selector/main');
 
 // TESTING
     IPython.load_extensions('/static/custom/testing/hierarchical_collapse/main');
-//    IPython.load_extensions('/static/custom/testing/history/history'])å
+    IPython.load_extensions('/static/custom/testing/history/history']);
     IPython.load_extensions('/static/custom/testing/cellstate');
 
 // USABILITY
@@ -47,19 +46,19 @@ require(["base/js/events"], function(events) {
 //    IPython.load_extensions('/static/custom/usability/hide_input')
     IPython.load_extensions('/static/custom/usability/search');
     IPython.load_extensions('/static/custom/usability/split-combine');
-//    IPython.load_extensions('/static/custom/usability/read-only')
-//    IPython.load_extensions('/static/custom/usability/init_cell/main')
-//    IPython.load_extensions('/static/custom/usability/autosavetime')
-//    IPython.load_extensions('/static/custom/usability/autoscroll')
+    IPython.load_extensions('/static/custom/usability/read-only')
+    IPython.load_extensions('/static/custom/usability/init_cell/main')
+    IPython.load_extensions('/static/custom/usability/autosavetime')
+    IPython.load_extensions('/static/custom/usability/autoscroll')
     IPython.load_extensions('/static/custom/usability/breakpoints');
 //    IPython.load_extensions('/static/custom/usability/clean_start')
-//    IPython.load_extensions('/static/custom/usability/comment-uncomment')
-//    IPython.load_extensions('/static/custom/usability/linenumbers')
+    IPython.load_extensions('/static/custom/usability/comment-uncomment')
+    IPython.load_extensions('/static/custom/usability/linenumbers')
 //    IPython.load_extensions('/static/custom/usability/no_exec_dunder')
 //    IPython.load_extensions('/static/custom/usability/noscroll')
 //    IPython.load_extensions('/static/custom/usability/hide_io_selected')
     IPython.load_extensions('/static/custom/usability/execute_time/ExecuteTime');
-//    IPython.load_extensions('/static/custom/usability/python-markdown')
+    IPython.load_extensions('/static/custom/usability/python-markdown')
 });
 });
 ////////////////////////////////////////////////////////////
