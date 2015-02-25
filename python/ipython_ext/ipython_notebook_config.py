@@ -8,7 +8,7 @@ c.IPKernelApp.pylab = 'inline'  # if you want plotting support always
 ### nbServer Config
 c.NotebookApp.ip = '192.168.20.59'
 c.NotebookApp.port = 8888
-# c.NotebookApp.base_project_url = '/'
+c.NotebookApp.base_project_url = '/usr/local/batchRunScripts/python'
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
 #c.NotebookApp.trust_xheaders = False
@@ -16,22 +16,25 @@ c.NotebookApp.open_browser = False
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
 #c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
 #c.NotebookApp.profile = u'jb'
-### nbExtentions
+
+### nbextensions
+c.NotebookApp.nbextensions_path = [u'/home/johnb/.ipython/nbextensions',
+								   u'/home/johnb/.ipython/profile_default/static/custom']
 c.NotebookApp.enable_mathjax = True
 #c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
-c.NotebookApp.extra_static_paths = [u'/home/johnb/.ipython/profile_default/static/components',
-									u'/home/johnb/.ipython/profile_default/static/components/backbone/',
-									u'/home/johnb/.ipython/profile_default/static/components/bootstrap'
-									u'/home/johnb/.ipython/profile_default/static/components/bootstrap-tour',
-									u'/home/johnb/.ipython/profile_default/static/components/jquery',
-									u'/home/johnb/.ipython/profile_default/static/components/jquery-ui',
-									u'/home/johnb/.ipython/profile_default/static/components/requirejs',
-									u'/home/johnb/.ipython/profile_default/static/components/marked',
-									u'/home/johnb/.ipython/profile_default/static/components/google-caja',
-									u'/home/johnb/.ipython/profile_default/static/components/font-awesome',
-									u'/home/johnb/.ipython/profile_default/static/components/highlight.js/',
-									u'/home/johnb/.ipython/profile_default/static/components/codemirror'
-									]
+# c.NotebookApp.extra_static_paths = [u'/home/johnb/.ipython/profile_default/static/components',
+# 									u'/home/johnb/.ipython/profile_default/static/components/backbone/',
+# 									u'/home/johnb/.ipython/profile_default/static/components/bootstrap'
+# 									u'/home/johnb/.ipython/profile_default/static/components/bootstrap-tour',
+# 									u'/home/johnb/.ipython/profile_default/static/components/jquery',
+# 									u'/home/johnb/.ipython/profile_default/static/components/jquery-ui',
+# 									u'/home/johnb/.ipython/profile_default/static/components/requirejs',
+# 									u'/home/johnb/.ipython/profile_default/static/components/marked',
+# 									u'/home/johnb/.ipython/profile_default/static/components/google-caja',
+# 									u'/home/johnb/.ipython/profile_default/static/components/font-awesome',
+# 									u'/home/johnb/.ipython/profile_default/static/components/highlight.js/',
+# 									u'/home/johnb/.ipython/profile_default/static/components/codemirror'
+# 									]
 ### nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
 # c.NotebookApp.keyfile = u'/home/johnb/.ssh/id_rsa'
