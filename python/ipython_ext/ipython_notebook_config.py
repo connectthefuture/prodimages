@@ -8,7 +8,7 @@ c.IPKernelApp.pylab = 'inline'  # if you want plotting support always
 ### nbServer Config
 c.NotebookApp.ip = '192.168.20.59'
 c.NotebookApp.port = 8888
-c.NotebookApp.base_project_url = '/notebook-runner/'
+#c.NotebookApp.base_project_url = '/usr/local/batchRunScripts/python'
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
 #c.NotebookApp.trust_xheaders = False
