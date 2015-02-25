@@ -19,6 +19,8 @@ require(["base/js/events"], function(events) {
     IPython.load_extensions('/static/custom/publishing/nbviewer_theme/main');
     // IPython.load_extensions('/static/custom/publishing/gist_it');
     IPython.load_extensions('/static/custom/publishing/nbconvert_button');
+    IPython.load_extensions('/static/custom/publishing/nbviewer_theme/main');
+    IPython.load_extensions('/static/custom/publishing/html_tools/js_highlight');
     IPython.load_extensions('/static/custom/publishing/printview_button');
     IPython.load_extensions('/static/custom/publishing/printviewmenu_button')
 
@@ -40,6 +42,7 @@ require(["base/js/events"], function(events) {
     IPython.load_extensions('/static/custom/usability/runtools/runtools');
     IPython.load_extensions('/static/custom/usability/chrome_clipboard');
     IPython.load_extensions('/static/custom/usability/navigation-hotkeys');
+    IPython.load_extensions('/static/custom/usability/limit_output/main');
 //    IPython.load_extensions('/static/custom/usability/shift-tab')
     IPython.load_extensions('/static/custom/usability/toggle_all_line_number');
     IPython.load_extensions('/static/custom/usability/help_panel/help_panel');
