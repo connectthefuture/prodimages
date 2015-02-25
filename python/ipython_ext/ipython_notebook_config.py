@@ -15,7 +15,7 @@ c.NotebookApp.open_browser = False
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
 c.NotebookApp.profile = u'jb'
 ### nbExtentions
-# c.NotebookApp.extra_config_file = u''
+# c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
 # c.NotebookApp.extra_static_paths = []
 ### nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
