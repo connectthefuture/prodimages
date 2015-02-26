@@ -52,7 +52,7 @@ c.TerminalIPythonApp.profile = u'jb'
 # c.TerminalIPythonApp.log_level = 30
 
 # lines of code to run at IPython startup.
-c.TerminalIPythonApp.exec_lines = ['os.chdir("/usr/local/batchRunScripts/python")']
+# c.TerminalIPythonApp.exec_lines = ['os.chdir("/usr/local/batchRunScripts/python")']
 
 # Enable GUI event loop integration ('qt', 'wx', 'gtk', 'glut', 'pyglet').
 # c.TerminalIPythonApp.gui = None
