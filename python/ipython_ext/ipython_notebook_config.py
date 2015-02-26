@@ -18,38 +18,38 @@ c.NotebookApp.base_url = '/'
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
 # c.NotebookApp.trust_xheaders = True
-c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
+# c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
 c.NotebookApp.profile = u'default'
 ### nbProjects
 # The directory to use for notebooks and kernels.
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
-c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
+c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_default/ipython_notebook_config.py'
 
 ### nbextensions
 c.NotebookApp.nbextensions_path = ['/home/johnb/.ipython/nbextensions']
 c.NotebookApp.enable_mathjax = True
-c.NotebookApp.extra_static_paths = [
+c.NotebookApp.extra_/static_paths = [
 									### css
-									u'static/custom',
-									u'static/custom/custom.css',
-									u'static/custom/custom.js',
-									u'static/components',
-									u'static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
-									u'static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
-									u'static/components/codemirror/lib/codemirror.css',
+									u'/static/custom',
+									u'/static/custom/custom.css',
+									u'/static/custom/custom.js',
+									u'/static/components',
+									u'/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
+									u'/static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
+									u'/static/components/codemirror/lib/codemirror.css',
 									### js
-									u'static/components/backbone/backbone-min.js',
-									u'static/components/bootstrap/bootstrap/js/bootstrap.min.js',
-									u'static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
-									u'static/components/jquery/jquery.min.js',
-									u'static/components/jquery-ui/ui/minified/jquery-ui.min.js',
-									u'static/components/requirejs/require.js',
-									u'static/components/marked/lib/marked.js',
-									u'static/components/google-caja/html-css-sanitizer-minified.js',
-									u'static/components/codemirror/lib/codemirror.js',
-									# u'static/components/font-awesome',
-									u'static/components/highlight.js/build/highlight.pack.js',
-									u'static/components/underscore/underscore-min.js'
+									u'/static/components/backbone/backbone-min.js',
+									u'/static/components/bootstrap/bootstrap/js/bootstrap.min.js',
+									u'/static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
+									u'/static/components/jquery/jquery.min.js',
+									u'/static/components/jquery-ui/ui/minified/jquery-ui.min.js',
+									u'/static/components/requirejs/require.js',
+									u'/static/components/marked/lib/marked.js',
+									u'/static/components/google-caja/html-css-sanitizer-minified.js',
+									u'/static/components/codemirror/lib/codemirror.js',
+									# u'/static/components/font-awesome',
+									u'/static/components/highlight.js/build/highlight.pack.js',
+									u'/static/components/underscore/underscore-min.js'
 									]
 ## nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
@@ -191,11 +191,11 @@ c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 # If specified, load this config file in addition to any other IPython config.
 # c.NotebookApp.extra_config_file = u''
 
-# Extra paths to search for serving static files.
+# Extra paths to search for serving /static files.
 # 
 # This allows adding javascript/css to be available from the notebook server
 # machine, or overriding individual files in the IPython
-# c.NotebookApp.extra_static_paths = []
+# c.NotebookApp.extra_/static_paths = []
 
 # Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
 # For headerssent by the upstream reverse proxy. Necessary if the proxy handles
