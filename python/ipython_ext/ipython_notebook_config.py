@@ -8,37 +8,53 @@ c.IPKernelApp.pylab = 'inline'  # if you want plotting support always
 ### nbServer Config
 c.NotebookApp.ip = '192.168.20.59'
 c.NotebookApp.port = 8888
-c.NotebookApp.base_project_url = '/notebook-runner'
+# c.NotebookApp.file_to_run = ''
+
+# The IPython profile to use.
+# c.NotebookApp.profile = u'notebooks'
+# The base URL for the notebook server. Leading and trailing slashes can be omitted, and will automatically be added.
+# c.NotebookApp.base_url = '/'
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
-#c.NotebookApp.trust_xheaders = False
+# c.NotebookApp.trust_xheaders = True
 ### nbProjects
+# The directory to use for notebooks and kernels.
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
-#c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
-#c.NotebookApp.profile = u'jb'
+# c.NotebookApp.ipython_dir = u'/Users/johnb/.ipython'
+c.NotebookApp.profile = u'default'
+c.NotebookApp.extra_config_file = u'/Users/johnb/.ipython/profile_jb/ipython_notebook_config.py'
 
 ### nbextensions
-c.NotebookApp.nbextensions_path = [u'/home/johnb/.ipython/nbextensions',
-								   u'/home/johnb/.ipython/profile_default/static/custom']
+c.NotebookApp.nbextensions_path = [u'/Users/johnb/.ipython/nbextensions']
 c.NotebookApp.enable_mathjax = True
-#c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
-# c.NotebookApp.extra_static_paths = [u'/home/johnb/.ipython/profile_default/static/components',
-# 									u'/home/johnb/.ipython/profile_default/static/components/backbone/',
-# 									u'/home/johnb/.ipython/profile_default/static/components/bootstrap'
-# 									u'/home/johnb/.ipython/profile_default/static/components/bootstrap-tour',
-# 									u'/home/johnb/.ipython/profile_default/static/components/jquery',
-# 									u'/home/johnb/.ipython/profile_default/static/components/jquery-ui',
-# 									u'/home/johnb/.ipython/profile_default/static/components/requirejs',
-# 									u'/home/johnb/.ipython/profile_default/static/components/marked',
-# 									u'/home/johnb/.ipython/profile_default/static/components/google-caja',
-# 									u'/home/johnb/.ipython/profile_default/static/components/font-awesome',
-# 									u'/home/johnb/.ipython/profile_default/static/components/highlight.js/',
-# 									u'/home/johnb/.ipython/profile_default/static/components/codemirror'
-# 									]
-### nbAuth
+c.NotebookApp.extra_static_paths = [
+									### css
+									u'/Users/johnb/.ipython/profile_default/static/custom/custom.css',
+									u'/Users/johnb/.ipython/profile_default/static/components',
+									u'/Users/johnb/.ipython/profile_default/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
+									u'/Users/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
+									u'/Users/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.css',
+									### js
+									u'/Users/johnb/.ipython/profile_default/static/custom/custom.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/backbone/backbone-min.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/bootstrap/bootstrap/js/bootstrap.min.js'
+									u'/Users/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/jquery/jquery.min.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/jquery-ui/ui/minified/jquery-ui.min.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/requirejs/require.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/marked/lib/marked.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/google-caja/html-css-sanitizer-minified.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.js',
+									#u'/Users/johnb/.ipython/profile_default/static/components/font-awesome',
+									u'/Users/johnb/.ipython/profile_default/static/components/highlight.js/build/highlight.pack.js',
+									u'/Users/johnb/.ipython/profile_default/static/components/underscore/underscore-min.js'
+									]
+## nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
-# c.NotebookApp.keyfile = u'/home/johnb/.ssh/id_rsa'
+# c.NotebookApp.keyfile = u'/Users/johnb/.ssh/id_rsa'
 # c.NotebookApp.password = u'sha1:6ef273db12c3:57390074f04b2c340f79df42f5e8c71259d1b5ec'
+c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
+# c.FileNotebookManager.checkpoint_dir = '.ipynb_checkpoints'
 
 
 
@@ -149,7 +165,7 @@ c.NotebookApp.enable_mathjax = True
 
 # The name of the IPython directory. This directory is used for logging
 # configuration (through profiles), history storage, etc. The default is usually
-# /home/johnb/.ipython. This options can also be specified through the environment
+# /Users/johnb/.ipython. This options can also be specified through the environment
 # variable IPYTHONDIR.
 # c.NotebookApp.ipython_dir = u''
 
@@ -318,7 +334,7 @@ c.NotebookApp.enable_mathjax = True
 
 # The name of the IPython directory. This directory is used for logging
 # configuration (through profiles), history storage, etc. The default is usually
-# /home/johnb/.ipython. This options can also be specified through the environment
+# /Users/johnb/.ipython. This options can also be specified through the environment
 # variable IPYTHONDIR.
 # c.IPKernelApp.ipython_dir = u''
 
