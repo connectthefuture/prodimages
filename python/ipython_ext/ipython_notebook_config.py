@@ -20,38 +20,38 @@ c.NotebookApp.open_browser = False
 ### nbProjects
 # The directory to use for notebooks and kernels.
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
-# c.NotebookApp.ipython_dir = u'/Users/johnb/.ipython'
+# c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
 c.NotebookApp.profile = u'default'
-c.NotebookApp.extra_config_file = u'/Users/johnb/.ipython/profile_jb/ipython_notebook_config.py'
+c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
 
 ### nbextensions
-c.NotebookApp.nbextensions_path = [u'/Users/johnb/.ipython/nbextensions']
+c.NotebookApp.nbextensions_path = [u'/home/johnb/.ipython/nbextensions']
 c.NotebookApp.enable_mathjax = True
 c.NotebookApp.extra_static_paths = [
 									### css
-									u'/Users/johnb/.ipython/profile_default/static/custom/custom.css',
-									u'/Users/johnb/.ipython/profile_default/static/components',
-									u'/Users/johnb/.ipython/profile_default/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
-									u'/Users/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
-									u'/Users/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.css',
+									u'/home/johnb/.ipython/profile_default/static/custom/custom.css',
+									u'/home/johnb/.ipython/profile_default/static/components',
+									u'/home/johnb/.ipython/profile_default/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
+									u'/home/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
+									u'/home/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.css',
 									### js
-									u'/Users/johnb/.ipython/profile_default/static/custom/custom.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/backbone/backbone-min.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/bootstrap/bootstrap/js/bootstrap.min.js'
-									u'/Users/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/jquery/jquery.min.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/jquery-ui/ui/minified/jquery-ui.min.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/requirejs/require.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/marked/lib/marked.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/google-caja/html-css-sanitizer-minified.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.js',
-									#u'/Users/johnb/.ipython/profile_default/static/components/font-awesome',
-									u'/Users/johnb/.ipython/profile_default/static/components/highlight.js/build/highlight.pack.js',
-									u'/Users/johnb/.ipython/profile_default/static/components/underscore/underscore-min.js'
+									u'/home/johnb/.ipython/profile_default/static/custom/custom.js',
+									u'/home/johnb/.ipython/profile_default/static/components/backbone/backbone-min.js',
+									u'/home/johnb/.ipython/profile_default/static/components/bootstrap/bootstrap/js/bootstrap.min.js'
+									u'/home/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
+									u'/home/johnb/.ipython/profile_default/static/components/jquery/jquery.min.js',
+									u'/home/johnb/.ipython/profile_default/static/components/jquery-ui/ui/minified/jquery-ui.min.js',
+									u'/home/johnb/.ipython/profile_default/static/components/requirejs/require.js',
+									u'/home/johnb/.ipython/profile_default/static/components/marked/lib/marked.js',
+									u'/home/johnb/.ipython/profile_default/static/components/google-caja/html-css-sanitizer-minified.js',
+									u'/home/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.js',
+									#u'/home/johnb/.ipython/profile_default/static/components/font-awesome',
+									u'/home/johnb/.ipython/profile_default/static/components/highlight.js/build/highlight.pack.js',
+									u'/home/johnb/.ipython/profile_default/static/components/underscore/underscore-min.js'
 									]
 ## nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
-# c.NotebookApp.keyfile = u'/Users/johnb/.ssh/id_rsa'
+# c.NotebookApp.keyfile = u'/home/johnb/.ssh/id_rsa'
 # c.NotebookApp.password = u'sha1:6ef273db12c3:57390074f04b2c340f79df42f5e8c71259d1b5ec'
 c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 # c.FileNotebookManager.checkpoint_dir = '.ipynb_checkpoints'
@@ -165,7 +165,7 @@ c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 
 # The name of the IPython directory. This directory is used for logging
 # configuration (through profiles), history storage, etc. The default is usually
-# /Users/johnb/.ipython. This options can also be specified through the environment
+# /home/johnb/.ipython. This options can also be specified through the environment
 # variable IPYTHONDIR.
 # c.NotebookApp.ipython_dir = u''
 
@@ -334,7 +334,7 @@ c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 
 # The name of the IPython directory. This directory is used for logging
 # configuration (through profiles), history storage, etc. The default is usually
-# /Users/johnb/.ipython. This options can also be specified through the environment
+# /home/johnb/.ipython. This options can also be specified through the environment
 # variable IPYTHONDIR.
 # c.IPKernelApp.ipython_dir = u''
 
@@ -666,7 +666,7 @@ c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 # MappingKernelManager will inherit config from: MultiKernelManager
 
 # 
-# c.MappingKernelManager.root_dir = u'/Users/johnb/virtualenvs/FLASKREST/src'
+# c.MappingKernelManager.root_dir = u'/home/johnb/virtualenvs/FLASKREST/src'
 
 # The kernel manager class.  This is configurable to allow subclassing of the
 # KernelManager for customized behavior.
@@ -703,7 +703,7 @@ c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 # c.FileNotebookManager.save_script = False
 
 # 
-# c.FileNotebookManager.notebook_dir = u'/Users/johnb/virtualenvs/FLASKREST/src'
+# c.FileNotebookManager.notebook_dir = u'/home/johnb/virtualenvs/FLASKREST/src'
 
 #------------------------------------------------------------------------------
 # NotebookNotary configuration
