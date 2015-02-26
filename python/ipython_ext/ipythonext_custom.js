@@ -16,7 +16,6 @@ require(["base/js/events"], function(events) {
  * all exentensions from IPython-notebook-extensions, uncomment to activate
  */
 // PUBLISHING
-    IPython.load_extensions('/static/custom/publishing/nbviewer_theme/main');
     // IPython.load_extensions('/static/custom/publishing/gist_it');
     IPython.load_extensions('/static/custom/publishing/nbconvert_button');
     //IPython.load_extensions('/static/custom/publishing/nbviewer_theme/main');
@@ -42,8 +41,8 @@ require(["base/js/events"], function(events) {
     IPython.load_extensions('/static/custom/usability/runtools/runtools');
     IPython.load_extensions('/static/custom/usability/chrome_clipboard');
     IPython.load_extensions('/static/custom/usability/navigation-hotkeys');
-    IPython.load_extensions('/static/custom/usability/limit_output/main');
-    IPython.load_extensions('/static/custom/usability/shift-tab');
+    // IPython.load_extensions('/static/custom/usability/limit_output/main');
+    // IPython.load_extensions('/static/custom/usability/shift-tab');
     IPython.load_extensions('/static/custom/usability/toggle_all_line_number');
     IPython.load_extensions('/static/custom/usability/help_panel/help_panel');
 //    IPython.load_extensions('/static/custom/usability/hide_input')
@@ -51,14 +50,14 @@ require(["base/js/events"], function(events) {
     IPython.load_extensions('/static/custom/usability/split-combine');
     IPython.load_extensions('/static/custom/usability/read-only');
     IPython.load_extensions('/static/custom/usability/init_cell/main');
-    IPython.load_extensions('/static/custom/usability/autosavetime');
-    IPython.load_extensions('/static/custom/usability/autoscroll');
+    // IPython.load_extensions('/static/custom/usability/autosavetime');
+    // IPython.load_extensions('/static/custom/usability/autoscroll');
     IPython.load_extensions('/static/custom/usability/breakpoints');
 //    IPython.load_extensions('/static/custom/usability/clean_start')
-    IPython.load_extensions('/static/custom/usability/comment-uncomment');
+    // IPython.load_extensions('/static/custom/usability/comment-uncomment');
     IPython.load_extensions('/static/custom/usability/linenumbers');
 //    IPython.load_extensions('/static/custom/usability/no_exec_dunder')
-    IPython.load_extensions('/static/custom/usability/noscroll');
+//    IPython.load_extensions('/static/custom/usability/noscroll');
 //    IPython.load_extensions('/static/custom/usability/hide_io_selected')
     IPython.load_extensions('/static/custom/usability/execute_time/ExecuteTime');
     IPython.load_extensions('/static/custom/usability/python-markdown')
