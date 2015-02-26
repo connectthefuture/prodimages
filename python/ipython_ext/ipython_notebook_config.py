@@ -30,9 +30,9 @@ c.NotebookApp.nbextensions_path = ['/home/johnb/.ipython/nbextensions']
 c.NotebookApp.enable_mathjax = True
 c.NotebookApp.extra_static_paths = [
 									### css
-									u'/static/custom',
-									u'/static/custom/custom.css',
-									u'/static/custom/custom.js',
+									u'static/custom',
+									u'static/custom/custom.css',
+									u'static/custom/custom.js',
 									u'/static/components',
 									u'/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
 									u'/static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
