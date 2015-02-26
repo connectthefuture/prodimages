@@ -29,25 +29,26 @@ c.NotebookApp.nbextensions_path = [u'/home/johnb/.ipython/nbextensions/']
 c.NotebookApp.enable_mathjax = True
 c.NotebookApp.extra_static_paths = [
 									### css
-									u'/home/johnb/.ipython/profile_default/static/custom/custom.css',
-									u'/home/johnb/.ipython/profile_default/static/components',
-									u'/home/johnb/.ipython/profile_default/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
-									u'/home/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
-									u'/home/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.css',
+									u'static/custom',
+									u'static/custom/custom.css',
+									u'static/components',
+									u'static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
+									u'static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
+									u'static/components/codemirror/lib/codemirror.css',
 									### js
-									u'/home/johnb/.ipython/profile_default/static/custom/custom.js',
-									u'/home/johnb/.ipython/profile_default/static/components/backbone/backbone-min.js',
-									u'/home/johnb/.ipython/profile_default/static/components/bootstrap/bootstrap/js/bootstrap.min.js'
-									u'/home/johnb/.ipython/profile_default/static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
-									u'/home/johnb/.ipython/profile_default/static/components/jquery/jquery.min.js',
-									u'/home/johnb/.ipython/profile_default/static/components/jquery-ui/ui/minified/jquery-ui.min.js',
-									u'/home/johnb/.ipython/profile_default/static/components/requirejs/require.js',
-									u'/home/johnb/.ipython/profile_default/static/components/marked/lib/marked.js',
-									u'/home/johnb/.ipython/profile_default/static/components/google-caja/html-css-sanitizer-minified.js',
-									u'/home/johnb/.ipython/profile_default/static/components/codemirror/lib/codemirror.js',
-									#u'/home/johnb/.ipython/profile_default/static/components/font-awesome',
-									u'/home/johnb/.ipython/profile_default/static/components/highlight.js/build/highlight.pack.js',
-									u'/home/johnb/.ipython/profile_default/static/components/underscore/underscore-min.js'
+									u'static/custom/custom.js',
+									u'static/components/backbone/backbone-min.js',
+									u'static/components/bootstrap/bootstrap/js/bootstrap.min.js'
+									u'static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
+									u'static/components/jquery/jquery.min.js',
+									u'static/components/jquery-ui/ui/minified/jquery-ui.min.js',
+									u'static/components/requirejs/require.js',
+									u'static/components/marked/lib/marked.js',
+									u'static/components/google-caja/html-css-sanitizer-minified.js',
+									u'static/components/codemirror/lib/codemirror.js',
+									#u'static/components/font-awesome',
+									u'static/components/highlight.js/build/highlight.pack.js',
+									u'static/components/underscore/underscore-min.js'
 									]
 ## nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
