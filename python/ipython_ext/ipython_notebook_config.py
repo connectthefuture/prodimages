@@ -14,7 +14,7 @@ c.NotebookApp.port = 8888
 # The IPython profile to use.
 # c.NotebookApp.profile = u'notebooks'
 # The base URL for the notebook server. Leading and trailing slashes can be omitted, and will automatically be added.
-# c.NotebookApp.base_url = '/'
+c.NotebookApp.base_url = '/nbapp'
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
 # c.NotebookApp.trust_xheaders = True
@@ -32,12 +32,12 @@ c.NotebookApp.extra_static_paths = [
 									### css
 									u'static/custom',
 									u'static/custom/custom.css',
+									u'static/custom/custom.js',
 									u'static/components',
 									u'static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
 									u'static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
 									u'static/components/codemirror/lib/codemirror.css',
 									### js
-									u'static/custom/custom.js',
 									u'static/components/backbone/backbone-min.js',
 									u'static/components/bootstrap/bootstrap/js/bootstrap.min.js',
 									u'static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
@@ -47,7 +47,7 @@ c.NotebookApp.extra_static_paths = [
 									u'static/components/marked/lib/marked.js',
 									u'static/components/google-caja/html-css-sanitizer-minified.js',
 									u'static/components/codemirror/lib/codemirror.js',
-									#u'static/components/font-awesome',
+									# u'static/components/font-awesome',
 									u'static/components/highlight.js/build/highlight.pack.js',
 									u'static/components/underscore/underscore-min.js'
 									]
