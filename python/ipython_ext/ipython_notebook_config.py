@@ -28,7 +28,7 @@ c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_default/ipython
 ### nbextensions
 c.NotebookApp.nbextensions_path = ['/home/johnb/.ipython/nbextensions']
 c.NotebookApp.enable_mathjax = True
-c.NotebookApp.extra_/static_paths = [
+c.NotebookApp.extra_static_paths = [
 									### css
 									u'/static/custom',
 									u'/static/custom/custom.css',
