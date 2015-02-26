@@ -10,6 +10,7 @@ c.NotebookApp.ip = '192.168.20.59'
 c.NotebookApp.port = 8888
 # c.NotebookApp.file_to_run = ''
 
+## Env Set
 # The IPython profile to use.
 # c.NotebookApp.profile = u'notebooks'
 # The base URL for the notebook server. Leading and trailing slashes can be omitted, and will automatically be added.
@@ -17,11 +18,11 @@ c.NotebookApp.port = 8888
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
 # c.NotebookApp.trust_xheaders = True
+c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
+c.NotebookApp.profile = u'default'
 ### nbProjects
 # The directory to use for notebooks and kernels.
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
-# c.NotebookApp.ipython_dir = u'/home/johnb/.ipython'
-c.NotebookApp.profile = u'default'
 c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_jb/ipython_notebook_config.py'
 
 ### nbextensions
@@ -38,7 +39,7 @@ c.NotebookApp.extra_static_paths = [
 									### js
 									u'static/custom/custom.js',
 									u'static/components/backbone/backbone-min.js',
-									u'static/components/bootstrap/bootstrap/js/bootstrap.min.js'
+									u'static/components/bootstrap/bootstrap/js/bootstrap.min.js',
 									u'static/components/bootstrap-tour/build/js/bootstrap-tour.min.js',
 									u'static/components/jquery/jquery.min.js',
 									u'static/components/jquery-ui/ui/minified/jquery-ui.min.js',
