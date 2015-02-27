@@ -32,7 +32,7 @@ c.NotebookApp.extra_static_paths = [
 									### css
 									u'static/custom',
 									u'static/custom/custom.css',
-									u'static/custom/custom.js',
+									u'/default_profile/static/custom/custom.js',
 									u'/static/components',
 									u'/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
 									u'/static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
