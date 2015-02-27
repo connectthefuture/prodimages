@@ -16,50 +16,50 @@ require(["base/js/events"], function(events) {
          * all exentensions from IPython-notebook-extensions, uncomment to activate
          */
         // PUBLISHING
-        IPython.load_extensions('/custom/publishing/nbviewer_theme/main');
-        //IPython.load_extensions('/custom/publishing/gist_it');
-        IPython.load_extensions('/custom/publishing/nbconvert_button');
-        IPython.load_extensions('/custom/publishing/printview_button');
-        //    IPython.load_extensions('/custom/publishing/printviewmenu_button');
+        IPython.load_extensions('custom/publishing/nbviewer_theme/main');
+        //IPython.load_extensions('custom/publishing/gist_it');
+        IPython.load_extensions('custom/publishing/nbconvert_button');
+        IPython.load_extensions('custom/publishing/printview_button');
+        //    IPython.load_extensions('custom/publishing/printviewmenu_button');
 
         // SLIDEMODE
-        //    IPython.load_extensions('/custom/slidemode/main');
+        //    IPython.load_extensions('custom/slidemode/main');
 
 
         // STYLING
-        IPython.load_extensions('/custom/styling/css_selector/main');
+        IPython.load_extensions('custom/styling/css_selector/main');
 
         // TESTING
-        IPython.load_extensions('/custom/testing/hierarchical_collapse/main');
-        IPython.load_extensions('/custom/testing/history/history');
-        IPython.load_extensions('/custom/testing/cellstate');
+        IPython.load_extensions('custom/testing/hierarchical_collapse/main');
+        IPython.load_extensions('custom/testing/history/history');
+        IPython.load_extensions('custom/testing/cellstate');
 
         // USABILITY
-        //    IPython.load_extensions('/custom/usability/aspell/ipy-aspell');
-        IPython.load_extensions('/custom/usability/codefolding/codefolding');
-        IPython.load_extensions('/custom/usability/dragdrop/drag-and-drop');
-        IPython.load_extensions('/custom/usability/runtools/runtools');
-        IPython.load_extensions('/custom/usability/chrome_clipboard');
-        IPython.load_extensions('/custom/usability/navigation-hotkeys');
-        //    IPython.load_extensions('/custom/usability/shift-tab')
-        IPython.load_extensions('/custom/usability/toggle_all_line_number');
-        IPython.load_extensions('/custom/usability/help_panel/help_panel');
-        //    IPython.load_extensions('/custom/usability/hide_input')
-        IPython.load_extensions('/custom/usability/search');
-        IPython.load_extensions('/custom/usability/split-combine');
-        IPython.load_extensions('/custom/usability/read-only');
-        //    IPython.load_extensions('/custom/usability/init_cell/main')
-        //    IPython.load_extensions('/custom/usability/autosavetime')
-        //    IPython.load_extensions('/custom/usability/autoscroll')
-        IPython.load_extensions('/custom/usability/breakpoints');
-        //    IPython.load_extensions('/custom/usability/clean_start')
-        //    IPython.load_extensions('/custom/usability/comment-uncomment')
-        //    IPython.load_extensions('/custom/usability/linenumbers')
-        //    IPython.load_extensions('/custom/usability/no_exec_dunder')
-        //    IPython.load_extensions('/custom/usability/noscroll')
-        //    IPython.load_extensions('/custom/usability/hide_io_selected')
-        IPython.load_extensions('/custom/usability/execute_time/ExecuteTime');
-        IPython.load_extensions('/custom/usability/python-markdown')
+        //    IPython.load_extensions('custom/usability/aspell/ipy-aspell');
+        IPython.load_extensions('custom/usability/codefolding/codefolding');
+        IPython.load_extensions('custom/usability/dragdrop/drag-and-drop');
+        IPython.load_extensions('custom/usability/runtools/runtools');
+        IPython.load_extensions('custom/usability/chrome_clipboard');
+        IPython.load_extensions('custom/usability/navigation-hotkeys');
+        //    IPython.load_extensions('custom/usability/shift-tab')
+        IPython.load_extensions('custom/usability/toggle_all_line_number');
+        IPython.load_extensions('custom/usability/help_panel/help_panel');
+        //    IPython.load_extensions('custom/usability/hide_input')
+        IPython.load_extensions('custom/usability/search');
+        IPython.load_extensions('custom/usability/split-combine');
+        IPython.load_extensions('custom/usability/read-only');
+        //    IPython.load_extensions('custom/usability/init_cell/main')
+        //    IPython.load_extensions('custom/usability/autosavetime')
+        //    IPython.load_extensions('custom/usability/autoscroll')
+        IPython.load_extensions('custom/usability/breakpoints');
+        //    IPython.load_extensions('custom/usability/clean_start')
+        //    IPython.load_extensions('custom/usability/comment-uncomment')
+        //    IPython.load_extensions('custom/usability/linenumbers')
+        //    IPython.load_extensions('custom/usability/no_exec_dunder')
+        //    IPython.load_extensions('custom/usability/noscroll')
+        //    IPython.load_extensions('custom/usability/hide_io_selected')
+        IPython.load_extensions('custom/usability/execute_time/ExecuteTime');
+        IPython.load_extensions('custom/usability/python-markdown')
     });
 });
 ////////////////////////////////////////////////////////////
