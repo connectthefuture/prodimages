@@ -20,10 +20,10 @@ require(["base/js/events"], function(events) {
         //IPython.load_extensions('publishing/gist_it');
         IPython.load_extensions('publishing/nbconvert_button');
         IPython.load_extensions('publishing/printview_button');
-        //    IPython.load_extensions('publishing/printviewmenu_button');
+        IPython.load_extensions('publishing/printviewmenu_button');
 
         // SLIDEMODE
-        //    IPython.load_extensions('slidemode/main');
+        IPython.load_extensions('slidemode/main');
 
 
         // STYLING
@@ -35,7 +35,7 @@ require(["base/js/events"], function(events) {
         IPython.load_extensions('testing/cellstate');
 
         // USABILITY
-        //    IPython.load_extensions('usability/aspell/ipy-aspell');
+        IPython.load_extensions('usability/aspell/ipy-aspell');
         IPython.load_extensions('usability/codefolding/codefolding');
         IPython.load_extensions('usability/dragdrop/drag-and-drop');
         IPython.load_extensions('usability/runtools/runtools');
@@ -48,13 +48,13 @@ require(["base/js/events"], function(events) {
         IPython.load_extensions('usability/search');
         IPython.load_extensions('usability/split-combine');
         IPython.load_extensions('usability/read-only');
-        //    IPython.load_extensions('usability/init_cell/main')
-        //    IPython.load_extensions('usability/autosavetime')
-        //    IPython.load_extensions('usability/autoscroll')
+        IPython.load_extensions('usability/init_cell/main')
+        IPython.load_extensions('usability/autosavetime')
+        IPython.load_extensions('usability/autoscroll')
         IPython.load_extensions('usability/breakpoints');
         //    IPython.load_extensions('usability/clean_start')
-        //    IPython.load_extensions('usability/comment-uncomment')
-        //    IPython.load_extensions('usability/linenumbers')
+        IPython.load_extensions('usability/comment-uncomment')
+        IPython.load_extensions('usability/linenumbers')
         //    IPython.load_extensions('usability/no_exec_dunder')
         //    IPython.load_extensions('usability/noscroll')
         //    IPython.load_extensions('usability/hide_io_selected')
