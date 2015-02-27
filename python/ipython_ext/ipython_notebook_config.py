@@ -26,7 +26,7 @@ c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
 # c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_default/ipython_notebook_config.py'
 
 ### nbextensions
-c.NotebookApp.nbextensions_path = ['nbextensions/']
+c.NotebookApp.nbextensions_path = ['/home/johnb/.ipython/nbextensions']
 #c.NotebookApp.extra_extensions_paths = ['/home/johnb/.ipython/nbextensions'] 
 c.NotebookApp.enable_mathjax = True
 c.NotebookApp.extra_static_paths = [
