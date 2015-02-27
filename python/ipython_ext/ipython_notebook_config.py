@@ -14,7 +14,7 @@ c.NotebookApp.port = 8888
 # The IPython profile to use.
 # c.NotebookApp.profile = u'notebooks'
 # The base URL for the notebook server. Leading and trailing slashes can be omitted, and will automatically be added.
-c.NotebookApp.base_url = '/'
+# c.NotebookApp.base_url = '/'
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.open_browser = False
 # c.NotebookApp.trust_xheaders = True
@@ -26,9 +26,7 @@ c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
 # c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_default/ipython_notebook_config.py'
 
 ### nbextensions
-c.NotebookApp.nbextensions_path = ['/home/johnb/.ipython/nbextensions']
-#c.NotebookApp.extra_extensions_paths = ['/home/johnb/.ipython/nbextensions'] 
-c.NotebookApp.enable_mathjax = True
+
 c.NotebookApp.extra_static_paths = [
 									### css
 									u'static/custom',
@@ -52,6 +50,11 @@ c.NotebookApp.extra_static_paths = [
 									u'static/components/underscore/underscore-min.js',
 									u'static/custom/custom.js'
 									]
+
+c.NotebookApp.nbextensions_path = ['/home/johnb/.ipython/nbextensions']
+#c.NotebookApp.extra_extensions_paths = ['/home/johnb/.ipython/nbextensions'] 
+c.NotebookApp.enable_mathjax = True
+
 ## nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
 # c.NotebookApp.keyfile = u'/home/johnb/.ssh/id_rsa'
