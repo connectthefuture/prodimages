@@ -23,16 +23,16 @@ c.NotebookApp.profile = u'default'
 ### nbProjects
 # The directory to use for notebooks and kernels.
 c.NotebookApp.notebook_dir = u'/usr/local/batchRunScripts/python'
-#c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_default/ipython_notebook_config.py'
+# c.NotebookApp.extra_config_file = u'/home/johnb/.ipython/profile_default/ipython_notebook_config.py'
 
 ### nbextensions
 c.NotebookApp.nbextensions_path = ['/home/johnb/.ipython/nbextensions']
+c.NotebookApp.extra_extensions_paths = ['/home/johnb/.ipython/default_profile/nbextensions'] 
 c.NotebookApp.enable_mathjax = True
 c.NotebookApp.extra_static_paths = [
 									### css
 									u'static/custom',
 									u'static/custom/custom.css',
-									u'static/custom/custom.js',
 									u'static/components',
 									u'static/components/jquery-ui/themes/smoothness/jquery-ui.min.css',
 									u'static/components/bootstrap-tour/build/css/bootstrap-tour.min.css',
@@ -49,7 +49,8 @@ c.NotebookApp.extra_static_paths = [
 									u'static/components/codemirror/lib/codemirror.js',
 									# u'static/components/font-awesome',
 									u'static/components/highlight.js/build/highlight.pack.js',
-									u'static/components/underscore/underscore-min.js'
+									u'static/components/underscore/underscore-min.js',
+									u'static/custom/custom.js'
 									]
 ## nbAuth
 # c.NotebookApp.certfile = u'/usr/share/ssl-cert/mycert.pem'
@@ -634,7 +635,7 @@ c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 # c.InlineBackend.figure_format = u''
 
 # A set of figure formats to enable: 'png',  'retina', 'jpeg', 'svg', 'pdf'.
-# c.InlineBackend.figure_formats = set(['png'])
+# c.InlineBackend.figure_formats = set(['png', jpeg', 'svg', 'pdf'])
 
 # Extra kwargs to be passed to fig.canvas.print_figure.
 # 
@@ -705,7 +706,7 @@ c.FileNotebookManager.hide_globs = [u'*.pyc',u'*.project*']
 # c.FileNotebookManager.save_script = False
 
 # 
-# c.FileNotebookManager.notebook_dir = u'/home/johnb/virtualenvs/FLASKREST/src'
+# c.FileNotebookManager.notebook_dir = u'/usr/local/batchRunScripts/python'
 
 #------------------------------------------------------------------------------
 # NotebookNotary configuration
