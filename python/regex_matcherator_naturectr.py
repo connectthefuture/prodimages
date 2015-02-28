@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-patterns = [r'^/mnt/Post_Complete/Complete_to_Load/nature_center/bc_jpg_makerDrop/crop_fullsize_pad_anchor/?.*?/(\d{9}.*?)\.(.*?)$', 
-            r'^/mnt/Post_Complete/Complete_to_Load/nature_center/bc_jpg_makerDrop/crop_fullsize_pad_center/?.*?/(\d{9}.*?)\.(.*?)$',
-            r'^/mnt/Post_Complete/Complete_to_Load/nature_center/bc_jpg_makerDrop/crop_fullsize_anchor/?.*?/(\d{9}.*?)\.(.*?)$',
-            r'^/mnt/Post_Complete/Complete_to_Load/nature_center/bfly_jpg_makerDrop/crop_fullsize_center/?.*?/(\d{9}.*?)\.(.*?)$']*10
+patterns = [r'^.*?/bfly_jpg_makerDrop/crop_fullsize_center/?.*?/(\d{9}.*?)\.(.*?)$', 
+            r'^.*?/bc_jpg_makerDrop/crop_fullsize_pad_anchor/?.*?/(\d{9}.*?)\.(.*?)$',
+            r'^.*?/bc_jpg_makerDrop/crop_fullsize_pad_center/?.*?/(\d{9}.*?)\.(.*?)$',
+            r'^.*?/bfly_jpg_makerDrop/crop_fullsize_anchor/?.*?/(\d{9}.*?)\.(.*?)$']*10
 
 strings = ["/mnt/Post_Complete/Complete_to_Load/nature_center/bc_jpg_makerDrop/crop_fullsize_pad_anchor/346470401.png", 
             "/mnt/Post_Complete/Complete_to_Load/nature_center/bfly_jpg_makerDrop/crop_fullsize_anchor/336470401.png", 
