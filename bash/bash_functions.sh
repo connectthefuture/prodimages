@@ -305,16 +305,17 @@ function img_multithumb_file ()
         dname=$(dirname "$f")
         fname=$(basename "$f")
         outdir="${dname}/output"
-        format=$(echo "$fname" | awk -F'.' '{ print $NF}')
-        convert ${fname} \
-          \( +clone -resize x480  -write  ${fname}_l.jpg +delete \) \
-          \( +clone -resize x360   -write  ${fname}_big.jpg +delete \) \
-          \( +clone -resize x240   -write  ${fname}_m.jpg +delete \) \
+        mkdir -m 775 "${outdir}" ; 
+        format=`echo "$fname" | awk -F'.' '{ print $NF}'`;
+        convert -format "${format}" "${f}" \
+          \( +clone -resize x480 -write "${outdir}"/"${fname}"_l.jpg +delete \) \
+          \( +clone -resize x360 -write "${outdir}"/"${fname}"_big.jpg +delete \) \
+          \( +clone -resize x240 -write "${outdir}"/"${fname}"_m.jpg +delete \) \
              -define png:preserve-colormap -define png:format\=png24 \
              -define png:compression-level\=N -define png:compression-strategy\=N \
-             -define png:compression-filter\=N -format '%w%'png
-
+             -define png:compression-filter\=N -format "%w%"png "${outdir}"/"${fname}" ;
     }
+
 
 
 #####
