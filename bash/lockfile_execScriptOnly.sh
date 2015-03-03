@@ -2,9 +2,8 @@
 . ~/.bash_profile
 
 RUNFILE="$1"
-RUNFILEARG1="$2"
-PROCNAME=`basename "$RUNFILE" | sed 's/.py//g'`
-LOCKFILE=/tmp/"$PROCNAME"_lock
+PROCNAME=`basename "$RUNFILE" | sed 's/.py//g' | sed 's/.sh//g'`
+LOCKFILE=/tmp/"${PROCNAME}"_lock
 
 if [ -f "$LOCKFILE" ]
 then
@@ -21,7 +20,7 @@ fi
 touch "$LOCKFILE"
 
 #### Run Script passed as 1st arg
-python "$RUNFILE" "$RUNFILEARG1"
+"$RUNFILE"
 
 echo "DONE ${PROCNAME}"
 ## Remove the LOCKFILE allowing process to run again
