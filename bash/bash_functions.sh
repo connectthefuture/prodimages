@@ -305,7 +305,7 @@ function img_multithumb_file ()
         dname=$(dirname "$f")
         fname=$(basename "$f")
         outdir="${dname}/output"
-        mkdir -m 775 "${outdir}" ; 
+        mkdir -m 775 "${outdir}" ;
         format=`echo "$fname" | awk -F'.' '{ print $NF}'`;
         convert -format "${format}" "${f}" \
           \( +clone -resize x480 -write "${outdir}"/"${fname}"_l.jpg +delete \) \
@@ -322,6 +322,7 @@ function img_multithumb_file ()
 function img_trim_set_aspectratio ()
     {
     f="$1"
+    IFSD="$IFS";
     dname=$(dirname "$f")
     fname=$(basename "$f")
     outdir="${dname}/output"
@@ -372,25 +373,25 @@ function img_return_wxhdpi ()
 
 function cache_clear_dir ()
 {
-    for f in $(find "$1" -maxdepth 4 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do 
-    /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f"; 
+    for f in $(find "$1" -maxdepth 4 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do
+    /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f";
     done ;
 }
 
 
 function cache_clear_dir_postapi ()
 {
-    for f in $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do 
+    for f in $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru); do
     curl -u johnb:admin -d updated_by="$USER" -d colorstyle="${f}" -X PUT http://prodimages.ny.bluefly.com/image-update/;
     curl -u johnb:admin -d updated_by="$USER" -d colorstyle="${f}" -X POST http://prodimages.ny.bluefly.com/image-update/;
     #-H 'Authorization: Token fb49f24a29060a350628fd9e9fb08b3b9762abbd'
-    #/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f"; 
-    echo "${USER} updated ${f} "$(date)"" ; 
+    #/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f";
+    echo "${USER} updated ${f} "$(date)"" ;
     done ;
 }
 
 
-function listyles (){ 
+function listyles (){
         {
         echo $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru) ;
     } ;
@@ -434,7 +435,7 @@ function compfile_to_basefile ()
         mkdir -p matches/"${bnameBase}"_matches
         cp $baseImage matches/
         cp $testImage matches/"${bnameBase}"_matches
-        
+
     fi;
 }
 

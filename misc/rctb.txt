@@ -96,9 +96,24 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ## --> Gets Email then imports using rest API #####################
 4 20 * * * /usr/local/batchRunScripts/python/imap_get_attachments_gmail_UNSEEN_JSON_lookletImport.py 2>&1 > /var/log/looklet_json_import.log
 14 20 * * *  /usr/local/batchRunScripts/python/rest_requests_api_post_jsondata.py 2>&1 > /var/log/looklet_json_import.log
+### vvvv ###
+# 2 20 * * *  /usr/local/batchRunScripts/python/mongo_import_ll-shotlist_jsondata.py 2>&1 > /var/log/looklet_json_import.log
+### ^^^^ ###
+# mongo proc to replacefailing api puts, use mongo db instead to imort ll shotlist data from google dox
 #
 ##
+#
+##
+###
+####
 ##### End Looklet Procs ####
+#####
+#####
+####
+###
+##
+#
+##
 #
 ##################################################################
 ############################# ******** ###########################
@@ -111,7 +126,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###########################################################
 #####  WALKEN with WALKIN  ################################
 ########   OR    ##########################################
-######           ##########################################
+######  how to  ###########################################
 ######## Get FileSystem Info For Import MYSQL 3301 ########
 ###########################################################
 4 2 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null
@@ -153,7 +168,8 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###################################################################################
 ###################################################################################
 ################################ ------------ #####################################
-########################   DATA IMPORTS TO DATABASES    ###########################
+########################      DATA COLLECTION    ##################################
+########################   IMPORTS TO/FR DATABASES    #############################
 ################################ ------------ #####################################
 ###################################################################################
 ###################################################################################
@@ -220,10 +236,11 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 40 7 * * * /usr/local/batchRunScripts/python/Getter_copyready_noimg.py 2>&1 > /var/log/daily_copy_getter_python.log && date >> /var/log/daily_copy_getter_python.log
 #
 #
-################################################################################
-###############    WORKAROUNDS PERMISSION FIXES ETC.   #########################
-################################################################################
-################################################################################
+##############################################################################################
+###############    WORKAROUNDS PERMISSION FIXES ETC.   #######################################
+#####  .ie every script/proc modifying an NFS located file or to mkdirs  ######################
+####################  can only be run as root ################################################
+##############################################################################################
 #
 ##### Fix 3 digit file ext not Renamed by Photographers
 52 0,12,18 * * * /usr/local/batchRunScripts/python/python3digitext_incr_photorename.py 2>&1 >> /var/log/3digitFileRename.log && date >> /var/log/3digitFileRename.log
@@ -239,7 +256,8 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 25 * * * * find /mnt/Post_Complete/Complete_to_Load -type d -exec chmod -R 777 {} \;
 28 * * * * find  /mnt/Post_Complete/Complete_to_Load/.tmp_processing -type f -exec chmod -R 777 {} \;
 ###
-#######################
+###
+##########################################################################
 ##########################################################################
 ##########################################################################
 ################  Auto    ##########       ###############################
@@ -267,7 +285,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##		##########################################
 ## Then Clear db modified hourly every 30 min ####
 ##################################################
-20,50 * * * * for f in $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e 'select distinct `t1`.colorstyle from `image_update` t1 join `product_snapshot_live` t2 on `t1`.colorstyle=`t2`.colorstyle where create_dt > date_sub(now(), interval 60 minute) and (`t2`.image_ready_dt is not null and `t2`.image_ready_dt != "0000-00-00");' -D www_django); do /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f" ; done 2>&1 > /var/log/cache_clear_postapi.log ;
+2,19,39,49 * * * * for f in $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e 'select distinct `t1`.colorstyle from `image_update` t1 join `product_snapshot_live` t2 on `t1`.colorstyle=`t2`.colorstyle where create_dt > date_sub(now(), interval 60 minute) and (`t2`.image_ready_dt is not null and `t2`.image_ready_dt != "0000-00-00");' -D www_django); do /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f" ; done 2>&1 > /var/log/cache_clear_postapi.log ;
 ##################################################
 ##################################################
 ##	Run	##
@@ -283,12 +301,15 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ################### ------------ ################################ ------------ #############
 ############################################################################################
 ############################################################################################
-### Clear New Images via Edgecast
-## 22 5,15 * * * /usr/local/batchRunScripts/bash/cronjob_nightly_india_cache_clear.sh 2>&1 > /var/log/edgecast_indiaclr.log
-## Newer via local and edgecast using api every 30min
-## 1/30/15  --> check on arg #1 '1' --> 2,22,42 * * * * /usr/local/batchRunScripts/python/nightly_image_complete_pmlist_clear.py 1 2>&1 > /var/log/edgecast_apiclr.log
-#
+#######   ----------------------  ########################
+#######   Nature Center Droplets  ########################
+#######   ----------------------  ########################
+##########################################################
+# ---->     * * * * * /usr/local/batchRunScripts/bash/lockfile_execScriptOnly.sh /usr/local/batchRunScripts/bash/nature_center_normalizer_kiosk.sh 2>&1 > /var/log/nature_center_kiosk_log.log
+##########################################################
+##########################################################
 ###
+##########################################################
 ##########################################################
 ########  PROCESSES FOR WEBSITE  #########################
 ########  - ACTIVATIONS/LOADS -  #########################
