@@ -347,7 +347,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##################################################################
 ###############################################################################################
 #### Process My Retouchers Marketplace Dir if I run an update batch ### Checks hourly past hour
-2 * * * * parallel --progress magic_modulate-aspect-normalize_AND_Upload.py ::: `find /mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL/ -mindepth 2 -maxdepth 2 -type d -mmin -60`
+# 2 * * * * parallel --progress magic_modulate-aspect-normalize_AND_Upload.py ::: `find /mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL/ -mindepth 2 -maxdepth 2 -type d -mmin -60`
 ####
 ####
 ###############################################################################################
