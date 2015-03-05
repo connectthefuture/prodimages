@@ -79,7 +79,12 @@ def zero_byte_file_filter(image_filepath,error_dir=None):
         rootdir   = os.path.dirname(imagedir)
         error_root = os.path.join(rootdir,'zero_byte_errors')
         error_details_drop_dir = os.path.join(error_root, 'originated_in_' + imagedir.split('/')[-1])
-    mdata = get_exif_all_data(os.path.abspath(image_filepath))
+########
+    try:
+        mdata = get_exif_all_data(os.path.abspath(image_filepath))
+    except:
+        pass
+########
     if mdata.get('File:FileSize') <= 1:
         try:
             os.makedirs(error_details_drop_dir, 16877)

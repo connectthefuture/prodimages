@@ -394,7 +394,7 @@ function cache_clear_dir_postapi ()
 function listyles (){
         {
         echo $(find "$1" -maxdepth 1 -iname \*.jpg -exec basename {} \;| cut -c 1-9 | sort -nru) ;
-    } ;
+    };
 }
 
 
@@ -411,7 +411,7 @@ function profilePyScript ()
     graphout="${graphdir}"/"${scriptname//.py}"_"${runtime}".png
     mkdir -p "${graphdir}" ;
     cd "${graphdir}" ;
-    pycallgraph -s --output-file="${graphout}" graphviz --tool "${graphtype}" -- "${scriptin}" "${scriptargs}" ;
+    pycallgraph -s --output-file="${graphout}" --tool "${graphtype}" -- "${scriptin}" "${scriptargs}" ;
     chmod ugo+rw "${graphout}" ;
     echo Graph Created "${graphout}" ;
 }
@@ -439,7 +439,7 @@ function compfile_to_basefile ()
     fi;
 }
 
-env_parallel() {
+function env_parallel() {
     export parallel_bash_environment='() {
         '"$(echo "shopt -s expand_aliases 2>/dev/null"; alias;typeset -p | grep -vFf <(readonly; echo GROUPS; echo FUNCNAME; echo DIRSTACK; echo _; echo PIPESTATUS; echo USERNAME) | grep -v BASH_;typeset -f)"'
     }'
