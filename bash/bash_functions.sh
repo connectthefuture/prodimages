@@ -407,7 +407,7 @@ function profilePyScript ()
     altoutdir="/home/johnb/Share"
     graphtype="dot" ##"$4"
     runtime=`date +%H%M%S`
-    graphdir=/home/johnb/Share/Pictures/debug_graphs
+    graphdir=/home/johnb/Share/PRODIMAGES_OUTPUT/debug_graphs
     graphout="${graphdir}"/"${scriptname//.py}"_"${runtime}".png
     mkdir -p "${graphdir}" ;
     cd "${graphdir}" ;
