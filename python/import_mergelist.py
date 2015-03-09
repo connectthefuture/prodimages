@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Created on sun March 18 14:48:56 2014
+
+@author: jbragato
+"""
+#orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
+
+def sqlQueryMergedStyles():
+    import sqlalchemy
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
+    connection = orcl_engine.connect()
+    querymake_asset_ready='''SELECT DISTINCT POMGR_SNP.PRODUCT_SNAPSHOT.current_style AS "current_style", POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO AS "voided_style", SUM(POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD) AS "received_ct",SUM(POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND) AS "available_ct", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME AS "gender", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME AS "category", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME AS "product_type", POMGR_SNP.PRODUCT_SNAPSHOT.username AS "username", POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE AS "merge_date", POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY AS "image_ready_dt" FROM POMGR_SNP.PRODUCT_SNAPSHOT WHERE SUBSTR(POMGR_SNP.PRODUCT_SNAPSHOT.SKU,1,1) not like 1 AND POMGR_SNP.PRODUCT_SNAPSHOT.SAMPLE_STATUS_DATE >= (SysDate - 90) GROUP BY POMGR_SNP.PRODUCT_SNAPSHOT.current_style, POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.username, POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE, POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY ORDER BY "image_ready_dt" DESC, "username" DESC'''
+    #querymake_asset_ready='''SELECT DISTINCT POMGR_SNP.PRODUCT_SNAPSHOT.current_style AS "current_style", POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO AS "voided_style", SUM(POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD) AS "received_ct",SUM(POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND) AS "available_ct", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME AS "gender", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME AS "category", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME AS "product_type", POMGR_SNP.PRODUCT_SNAPSHOT.username AS "username", POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE AS "merge_date", POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY AS "image_ready_dt" FROM POMGR_SNP.PRODUCT_SNAPSHOT WHERE POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE < TRUNC(SysDate) AND POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD > 0 AND POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND > 0 GROUP BY POMGR_SNP.PRODUCT_SNAPSHOT.current_style, POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.username, POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE, POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY ORDER BY "current_style" DESC'''
+    q = """SELECT
+          POMGR_SNP.ADT_COLORSTYLE_MERGE.TRG_PRODUCTCOLOR_ID                        AS "current_style",
+          POMGR_SNP.ADT_COLORSTYLE_MERGE.SRC_PRODUCTCOLOR_ID                        AS "voided_style",
+          to_date(POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE, 'YYYY-MM-DD')       AS "merge_date",
+          POMGR_SNP.USERS.USERNAME                                                  AS "username"
+        FROM
+          POMGR_SNP.ADT_COLORSTYLE_MERGE
+        INNER JOIN POMGR_SNP.USERS
+        ON
+          POMGR_SNP.ADT_COLORSTYLE_MERGE.USER_ID = POMGR_SNP.USERS.ID
+        ORDER BY
+          POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE DESC;
+
+    """
+    result = connection.execute(querymake_asset_ready)
+    merged_styles = {}
+    for row in result:
+        merged_styles = {}
+        merged_styles['current_style'] = row['current_style']
+        merged_styles['voided_style'] = row['voided_style']
+        merged_styles['username'] = row['username']
+        merged_styles['merge_date'] = row['merge_date']
+        merged_styles[row['current_style']] = merged_styles
+    connection.close()
+    return merged_styles
+
+
+
+def main():
+    #### Run Import To Mysql
+    import sys
+    import os
+    import sqlalchemy
+
+
+    merged_styles = sqlQueryMergedStyles()
+    print "Merge Gotten"
+    ## Truncate Prior to Inserting new data
+    #mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
+    #connection1 = mysql_engine.connect()
+    #trunc_table = """TRUNCATE TABLE asset_status"""
+    #connection1.close()
+
+    ## Trunc www_django vers wont TRUNC du to Foreign Keys
+    #mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+    #connectiondj = mysql_engine_dj.connect()
+    #trunc_table = """TRUNCATE TABLE asset_status"""
+    #connectiondj.close()
+
+
+    for k,v in merged_styles.iteritems():
+        import datetime
+        print "Off"
+        try:
+            mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imports')
+            mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+            connection_data = mysql_engine_data.connect()
+            connection_data = mysql_engine_www.connect()
+            print "Connext"
+            try:
+                print "Begin Execute"
+                connection_data.execute("""INSERT INTO merged_styles (current_style, voided_style, username, merge_date) VALUES (%s, %s, %s, %s)
+                ON DUPLICATE KEY UPDATE
+                            voided_style         = VALUES(voided_style),
+                            username             = VALUES(username),
+                            merge_date           = VALUES(merge_date);
+                            """, str(k), v['voided_style'], v['username'], v['merge_date'])
+                print "Successful Insert asset_status --> {0}".format(k)
+            except sqlalchemy.exc.IntegrityError:
+                print "Duplicate Entry {0}".format(k)
+        except sqlalchemy.exc.IntegrityError:
+            print "Duplicate Entry {0}".format(k)
+        except sqlalchemy.exc.DatabaseError:
+            continue
+            print "DBERR" + k
+
+
+
+if __name__ == '__main__':
+    main()
+
