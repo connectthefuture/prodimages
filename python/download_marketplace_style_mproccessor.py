@@ -8,23 +8,15 @@ def multidownloader(styles_list=None, root_dir=None):
     import subprocess, datetime, download_server_imgs_styleslist
     import os
     os.chdir('/usr/local/batchRunScripts/python')
+    if not root_dir and os.path.isdir('/Users/johnb'):
+        root_dir = '/Volumes/Post_Complete/ImageDrop'
+    elif not root_dir:
+        root_dir = '/mnt/Post_Complete/ImageDrop'
     root_dir = os.path.abspath(root_dir)
-    todaysdate = str(datetime.date.today())
-    todaysdir = "{0}{1}{2}_output".format(todaysdate[5:7],todaysdate[8:10],todaysdate[2:4])
-    todaysdir = os.path.join(root_dir, todaysdir)
-    if os.path.isdir(todaysdir):
-        os.chdir(todaysdir)
-    else:
-        os.makedirs(todaysdir)
-        os.chdir(todaysdir)
 
     q = Queue.Queue()
     print len(styles_list), " len list"
     for s in styles_list: #put 30 tasks in the queue
-#             lls = url_get_links(i)
-#             for linx in lls:
-#                 print linx
-#                 ll= rmain(bfly_url=linx)
         q.put(s)
         print s, " putted"
 
