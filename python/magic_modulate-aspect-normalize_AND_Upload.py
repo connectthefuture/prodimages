@@ -550,6 +550,7 @@ def upload_imagedrop(root_dir):
                     shutil.move(upload_file, archive_uploaded)
                 except:
                     try:
+                        os.remove(os.path.join(tmp_failed, upload_file.split('')[-1]))
                         shutil.move(upload_file, tmp_failed)
                     except:
                         pass
