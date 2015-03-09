@@ -14,7 +14,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, 
     if updateonly_flag:
         updateonly_flag = 'not'
     if not update_time:
-        update_time = 10
+        update_time = 20
 
     ## Exclusion/Inclusion Vars ##
     # Manually Set vendor ID then choose All('') from Vendor and none from other vendors
