@@ -370,6 +370,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
     modulator = ''
     modulate = ''
+    vert_horiz = ''
     if not destdir:
         destdir = '.'
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
