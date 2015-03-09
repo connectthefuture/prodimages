@@ -549,8 +549,10 @@ def upload_imagedrop(root_dir):
                     time.sleep(float(.3))
                     shutil.move(upload_file, archive_uploaded)
                 except:
-                    shutil.move(upload_file, tmp_failed)
-                    pass
+                    try:
+                        shutil.move(upload_file, tmp_failed)
+                    except:
+                        pass
             else:
                 print "Uploaded {}".format(upload_file)
                 time.sleep(float(.3))
