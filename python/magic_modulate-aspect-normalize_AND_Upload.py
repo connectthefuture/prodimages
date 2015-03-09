@@ -250,12 +250,15 @@ def subproc_magick_large_jpg(img, destdir=None):
         width  = dimensions.split('x')[0]
         height = dimensions.split('x')[1]
 
-        if aspect_ratio == '1.2':
-            vert_horiz = '400x480'
-        elif float(aspect_ratio) > float(1.2):
-            vert_horiz = 'x480'
-        elif float(aspect_ratio) < float(1.2):
-            vert_horiz = '400x'
+        try:
+            if aspect_ratio == '1.2':
+                vert_horiz = '400x480'
+            elif float(aspect_ratio) > float(1.2):
+                vert_horiz = 'x480'
+            elif float(aspect_ratio) < float(1.2):
+                vert_horiz = '400x'
+        except ValueError:
+             vert_horiz = '400x'
 
         dimensions = "400x480"
         print dimensions,vert_horiz
@@ -318,12 +321,15 @@ def subproc_magick_medium_jpg(img, destdir=None):
     dimensions = get_dimensions(img)
     width  = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
+    try:
 
-    if aspect_ratio == '1.2':
-        vert_horiz = '200x240'
-    elif float(aspect_ratio) > float(1.2):
-        vert_horiz = 'x240'
-    elif float(aspect_ratio) < float(1.2):
+        if aspect_ratio == '1.2':
+            vert_horiz = '200x240'
+        elif float(aspect_ratio) > float(1.2):
+            vert_horiz = 'x240'
+        elif float(aspect_ratio) < float(1.2):
+            vert_horiz = '200x'
+    except ValueError:
         vert_horiz = '200x'
 
     dimensions = '200x240'
