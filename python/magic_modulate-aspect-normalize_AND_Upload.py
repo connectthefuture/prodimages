@@ -461,6 +461,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
+    if not vert_horiz:
+        vert_horiz = '100%'
 
     subprocess.call([
             'convert',
