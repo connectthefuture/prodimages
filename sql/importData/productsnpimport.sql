@@ -1,0 +1,1 @@
+'SourceFile','IPTC:CopyrightNotice','IPTC:PONumber','IPTC:MerchantName','IPTC:Source','IPTC:SampleStatusDate','IPTC:SampleInventory','COPY_READY','IMAGE_READY','START_DATE','PRODUCTION_COMPLETE_DT','ORIGINAL_START_DATE','BRAND','VENDOR_SIZE_CHART','COLOR_GROUP'
