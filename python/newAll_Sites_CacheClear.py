@@ -204,11 +204,19 @@ def main(colorstyle_list=None):
         email_img1   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
         email_img2   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
 
+        bnclistpg    = "http://cdn.is.belleandclive.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=320&height=430&ver={1}".format(colorstyle,version)
+        bncpdpmain   = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=340&outputy=408&level=1&ver={1}".format(colorstyle,version)
+        bncpdppopup  = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
+        bncZoomthumb = "http://cdn.is.belleandclive.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=59&h=78&ver={1}".format(colorstyle,version)
+        #bncZoom      = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
+
+
         mobile_list  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=226&height=271'.format(colorstyle)
         mobile_zoom  = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
 
         if not found_links:
             # remote cdn to clear
+            ## Bluefly
             edgecast_listurls.append(oldlistpg)
             edgecast_listurls.append(newlistpg)
             edgecast_listurls.append(pdpg)
@@ -226,6 +234,11 @@ def main(colorstyle_list=None):
             edgecast_listurls.append(pdpalt01l)
             edgecast_listurls.append(pdpaltthumb)
 
+            ## B and C
+            edgecast_listurls.append(bnclistpg)
+            edgecast_listurls.append(bncpdpmain)
+            edgecast_listurls.append(bncpdppopup)
+            edgecast_listurls.append(bncZoomthumb)
 
 
             ## Standard urls to clear
@@ -267,10 +280,19 @@ def main(colorstyle_list=None):
                     pdpalt01l    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                     email_img1   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
                     email_img2   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
+       
+
+                    bnclistpg    = "http://cdn.is.belleandclive.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=320&height=430&ver={1}".format(colorstyle,version)
+                    bncpdpmain   = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=340&outputy=408&level=1&ver={1}".format(colorstyle,version)
+                    bncpdppopup  = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
+                    bncZoomthumb = "http://cdn.is.belleandclive.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=59&h=78&ver={1}".format(colorstyle,version)
+                    #bncZoom      = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
+
 
                     mobile_list  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=226&height=271'.format(colorstyle)
                     mobile_zoom  = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
 
+                    ## Bluefly
                     edgecast_listurls.append(oldlistpg)
                     edgecast_listurls.append(newlistpg)
                     edgecast_listurls.append(pdpg)
@@ -282,6 +304,13 @@ def main(colorstyle_list=None):
                     edgecast_listurls.append(email_img2)
                     edgecast_listurls.append(mobile_list)
                     edgecast_listurls.append(mobile_zoom)
+
+                    ## B and C
+                    edgecast_listurls.append(bnclistpg)
+                    edgecast_listurls.append(bncpdpmain)
+                    edgecast_listurls.append(bncpdppopup)
+                    edgecast_listurls.append(bncZoomthumb)
+
 
                 if version:
                     ### ZOOM HI REZ
@@ -422,7 +451,7 @@ def main(colorstyle_list=None):
             #csv_write_datedOutfile(url_purge)
 
     else:
-        print "Failed -- Over 550 URLs Submitted"
+        print "Failed -- Over 8550 URLs Submitted"
 
 
 
