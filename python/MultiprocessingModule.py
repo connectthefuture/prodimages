@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
+def img_return_md5(fname):
+    import hashlib
+    md5 = hashlib.md5()
+    with open(fname,'rb') as f:
+        for chunk in iter(lambda: f.read(8192), b''):
+            md5.update(chunk)
+    return md5.hexdigest()
+
 def run_multiproccesses_magick(searchdir=None, magickProc=None):
     import multiprocessing
     import glob,os
