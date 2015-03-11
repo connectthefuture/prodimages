@@ -12,8 +12,6 @@ def sqlQueryMergedStyles():
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     connection = orcl_engine.connect()
-    querymake_asset_ready='''SELECT DISTINCT POMGR_SNP.PRODUCT_SNAPSHOT.current_style AS "current_style", POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO AS "voided_style", SUM(POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD) AS "received_ct",SUM(POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND) AS "available_ct", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME AS "gender", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME AS "category", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME AS "product_type", POMGR_SNP.PRODUCT_SNAPSHOT.username AS "username", POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE AS "merge_date", POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY AS "image_ready_dt" FROM POMGR_SNP.PRODUCT_SNAPSHOT WHERE SUBSTR(POMGR_SNP.PRODUCT_SNAPSHOT.SKU,1,1) not like 1 AND POMGR_SNP.PRODUCT_SNAPSHOT.SAMPLE_STATUS_DATE >= (SysDate - 90) GROUP BY POMGR_SNP.PRODUCT_SNAPSHOT.current_style, POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.username, POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE, POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY ORDER BY "image_ready_dt" DESC, "username" DESC'''
-    #querymake_asset_ready='''SELECT DISTINCT POMGR_SNP.PRODUCT_SNAPSHOT.current_style AS "current_style", POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO AS "voided_style", SUM(POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD) AS "received_ct",SUM(POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND) AS "available_ct", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME AS "gender", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME AS "category", POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME AS "product_type", POMGR_SNP.PRODUCT_SNAPSHOT.username AS "username", POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE AS "merge_date", POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY AS "image_ready_dt" FROM POMGR_SNP.PRODUCT_SNAPSHOT WHERE POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE < TRUNC(SysDate) AND POMGR_SNP.PRODUCT_SNAPSHOT.TOTAL_RECVD > 0 AND POMGR_SNP.PRODUCT_SNAPSHOT.AVAILABLE_ON_HAND > 0 GROUP BY POMGR_SNP.PRODUCT_SNAPSHOT.current_style, POMGR_SNP.PRODUCT_SNAPSHOT.voided_style_NO, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL2_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL3_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.LEVEL4_NAME, POMGR_SNP.PRODUCT_SNAPSHOT.username, POMGR_SNP.PRODUCT_SNAPSHOT.START_DATE, POMGR_SNP.PRODUCT_SNAPSHOT.IMAGE_READY ORDER BY "current_style" DESC'''
     q = '''SELECT POMGR_SNP.ADT_COLORSTYLE_MERGE.TRG_PRODUCTCOLOR_ID AS "current_style", POMGR_SNP.ADT_COLORSTYLE_MERGE.SRC_PRODUCTCOLOR_ID AS "voided_style", to_date(POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE, 'YYYY-MM-DD') AS "merge_date", POMGR_SNP.USERS.USERNAME AS "username" FROM POMGR_SNP.ADT_COLORSTYLE_MERGE INNER JOIN POMGR_SNP.USERS ON POMGR_SNP.ADT_COLORSTYLE_MERGE.USER_ID = POMGR_SNP.USERS.ID ORDER BY POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE DESC'''
     result = connection.execute(q)
     merged_styles = {}
@@ -38,6 +36,7 @@ def main():
 
     merged_styles = sqlQueryMergedStyles()
     print "Merge Gotten"
+    
     ## Truncate Prior to Inserting new data
     #mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
     #connection1 = mysql_engine.connect()
@@ -58,7 +57,7 @@ def main():
             mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imports')
             mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
             connection_data = mysql_engine_data.connect()
-            #connection_data = mysql_engine_www.connect()
+            #connection_www = mysql_engine_www.connect()
             print "Connext"
             try:
                 print "Begin Execute"
