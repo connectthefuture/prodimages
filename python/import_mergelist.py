@@ -25,10 +25,9 @@ def sqlQueryMergedStyles():
         ON
           POMGR_SNP.ADT_COLORSTYLE_MERGE.USER_ID = POMGR_SNP.USERS.ID
         ORDER BY
-          POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE DESC;
-
-    """
-    result = connection.execute(querymake_asset_ready)
+          POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE DESC; """
+    
+    result = connection.execute(q)
     merged_styles = {}
     for row in result:
         merged_styles = {}
