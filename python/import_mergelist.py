@@ -19,11 +19,11 @@ def sqlQueryMergedStyles():
     merged_styles = {}
     for row in result:
         merged_styles = {}
-        merged_styles['current_style'] = row['current_style']
-        merged_styles['voided_style'] = row['voided_style']
+        merged_styles['current_style'] = str(row['current_style'])
+        merged_styles['voided_style'] = str(row['voided_style'])
         merged_styles['username'] = row['username']
         merged_styles['merge_date'] = row['merge_date']
-        merged_styles[row['current_style']] = merged_styles
+        merged_styles[str(row['current_style'])] = merged_styles
     connection.close()
     return merged_styles
 
