@@ -177,7 +177,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###################################################################################
 ##  Updates Primary DB with PM Data ####
 7 20,6  *   *   * /usr/local/batchRunScripts/offshore-processes/import_offshore_tosend.py
-15 22,6  *   *   * /usr/local/batchRunScripts/offshore-processes/import_mergelist.py
+15 22,6  *   *   * /usr/local/batchRunScripts/python/import_mergelist.py
 5 5 * * * /usr/local/batchRunScripts/bash/importSKUToPhpMyAdmin.sh
 17 6,19 * * * /usr/local/batchRunScripts/bash/import_prodsnapshot.sh
 42 5 * * * /usr/local/batchRunScripts/bash/importSampleVendorStyle_pma.sh
