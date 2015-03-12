@@ -12,7 +12,7 @@ def sqlQueryMergedStyles():
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     connection = orcl_engine.connect()
-    q = '''SELECT POMGR_SNP.ADT_COLORSTYLE_MERGE.TRG_PRODUCTCOLOR_ID AS "current_style", POMGR_SNP.ADT_COLORSTYLE_MERGE.SRC_PRODUCTCOLOR_ID AS "voided_style", to_date(POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE, 'YYYY-MM-DD') AS "merge_date", POMGR_SNP.USERS.USERNAME AS "username" FROM POMGR_SNP.ADT_COLORSTYLE_MERGE INNER JOIN POMGR_SNP.USERS ON POMGR_SNP.ADT_COLORSTYLE_MERGE.USER_ID = POMGR_SNP.USERS.ID ORDER BY POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE DESC'''
+    q = '''SELECT POMGR_SNP.ADT_COLORSTYLE_MERGE.TRG_PRODUCTCOLOR_ID AS "current_style", POMGR_SNP.ADT_COLORSTYLE_MERGE.SRC_PRODUCTCOLOR_ID AS "voided_style", POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE AS "merge_date", POMGR_SNP.USERS.USERNAME AS "username" FROM POMGR_SNP.ADT_COLORSTYLE_MERGE INNER JOIN POMGR_SNP.USERS ON POMGR_SNP.ADT_COLORSTYLE_MERGE.USER_ID = POMGR_SNP.USERS.ID ORDER BY POMGR_SNP.ADT_COLORSTYLE_MERGE.DATE_OF_MERGE DESC'''
     result = connection.execute(q)
     merged_styles = {}
     for row in result:
@@ -62,7 +62,7 @@ def main():
                 print "Begin Execute"
                 connection_data.execute("""INSERT INTO merged_styles (current_style, voided_style, username, merge_dt) VALUES (%s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
-                            voided_style       = VALUES(voided_style),
+                            current_style       = VALUES(current_style),
                             username           = VALUES(username),
                             merge_dt           = VALUES(merge_dt);
                             """, str(k), v['voided_style'], v['username'], v['merge_dt'])
@@ -72,9 +72,8 @@ def main():
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
         except sqlalchemy.exc.DatabaseError:
-            continue
-            print "DBERR" + k
-
+            print "DBERR \t" + k
+            pass
 
 
 if __name__ == '__main__':
