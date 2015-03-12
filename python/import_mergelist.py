@@ -16,15 +16,14 @@ def sqlQueryMergedStyles():
     result = connection.execute(q)
     merged_styles = {}
     for row in result:
-        merged_styles = {}
-        merged_styles['current_style'] = str(row['current_style'])
-        merged_styles['voided_style'] = str(row['voided_style'])
-        merged_styles['username'] = row['username']
-        merged_styles['merge_date'] = row['merge_date']
-        merged_styles[str(row['current_style'])] = merged_styles
+        merged_style = {}
+        merged_style['current_style'] = row['current_style']
+        merged_style['voided_style']  = row['voided_style']
+        merged_style['username'] = row['username']
+        merged_style['merge_dt'] = row['merge_date']
+        merged_styles[str(row['current_style'])] = merged_style
     connection.close()
     return merged_styles
-
 
 
 def main():
@@ -36,7 +35,7 @@ def main():
 
     merged_styles = sqlQueryMergedStyles()
     print "Merge Gotten"
-    
+
     ## Truncate Prior to Inserting new data
     #mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
     #connection1 = mysql_engine.connect()
@@ -61,12 +60,12 @@ def main():
             print "Connext"
             try:
                 print "Begin Execute"
-                connection_data.execute("""INSERT INTO merged_styles (current_style, voided_style, username, merge_date) VALUES (%s, %s, %s, %s)
+                connection_data.execute("""INSERT INTO merged_styles (current_style, voided_style, username, merge_dt) VALUES (%s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
-                            voided_style         = VALUES(voided_style),
-                            username             = VALUES(username),
-                            merge_date           = VALUES(merge_date);
-                            """, str(k), v['voided_style'], v['username'], v['merge_date'])
+                            voided_style       = VALUES(voided_style),
+                            username           = VALUES(username),
+                            merge_dt           = VALUES(merge_dt);
+                            """, str(k), v['voided_style'], v['username'], v['merge_dt'])
                 print "Successful Insert asset_status --> {0}".format(k)
             except sqlalchemy.exc.IntegrityError:
                 print "Duplicate Entry {0}".format(k)
