@@ -83,7 +83,7 @@ def main():
 
     result = connection.execute(daily_incomplete_query)
     result_reshoot = connection.execute(daily_reshoot_query)
-
+    result_merges = sqlQueryMergedStyles()
 
     dt = str(datetime.datetime.now())
     today = dt.split(' ')[0]
