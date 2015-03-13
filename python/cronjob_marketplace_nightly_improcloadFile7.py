@@ -145,6 +145,24 @@ else:
     except:
         pass
 
+
+def google_drive_url_handler(image_url):
+    ####### Google Drive Fix ###############################
+    import re, requests
+    regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/edit\?usp\=.*?$')
+    regex_drive2=re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(.*?)\&?.*?$')
+    ## Strip query string and edit RETURNNG URL TO IMG ON GOOGLE DRIVE
+    if regex_drive2.findall(image_url):
+        image_url = requests.get(image_url).url
+        #image_url = image_url.split('?')[1]
+        #params = (image_url.split('&'))
+        print image_url
+    if regex_drive.findall(image_url):
+        image_url = image_url.split('/edit?')[0]
+        print image_url
+    return image_url
+
+
 updateonly_flag = ''
 update_time     = ''
 
@@ -210,11 +228,22 @@ for k,v in marketplace_styles.iteritems():
             image_url.replace('.jpg', '.jpg?dl=1')
             image_url.replace('.png', '.png?dl=1')
         ########################################################
-        ####### Google Drive Fix ###############################
-        regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
+        ########################################################
+        
+        ########################################################
+        ####### Google Drive Fixes #############################
+        ## regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
+        regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/edit\?usp\=.*?$')
+        regex_drive2=re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(.*?)\&?.*?$')
         ## Strip query string and edit RETURNNG URL TO IMG ON GOOGLE DRIVE
         if regex_drive.findall(image_url):
             image_url = image_url.split('/edit?')[0]
+        elif regex_drive2.findall(image_url):
+            image_url = google_drive_url_handler(image_url)
+        ########################################################
+        ########################################################
+        
+        ########################################################
         ########################################################
         ####### URL ENCODED % ESCAPES Fix ######################
         ## Strip error causing Line Feed ascii char
