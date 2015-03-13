@@ -58,7 +58,7 @@ def get_using_python(destdir,sqlcolorstyles):
                             os.mkdir(pending_folder, 16877)
                         dest_file = os.path.join(pending_folder, file_name)
                 except ValueError:
-                    #shutil.copy2(file_path, dest_file)
+                    shutil.copy2(file_path, dest_file)
                     # os.chmod(dest_file,00755)
                     # rowlist.append(cmdargs)
                     ncount += 1
@@ -130,16 +130,16 @@ def main():
     # Get Reshoots
     get_using_python(destdir_reshoot,result_reshoot)
 
-    # reshoots = glob.glob(os.path.join(destdir_reshoot,'*.jpg'))
-    # if reshoots:
-    #     print reshoots
-    #     for f in reshoots:
-    #         try:
-    #             mtags_reshoots.main(filename=f)
-    #         except AttributeError:
-    #             pass
-    # else:
-    #     os.rmdir(destdir_reshoot)
+    reshoots = glob.glob(os.path.join(destdir_reshoot,'*.jpg'))
+    if reshoots:
+        print reshoots
+        for f in reshoots:
+            try:
+                mtags_reshoots.main(filename=f)
+            except AttributeError:
+                pass
+    else:
+        os.rmdir(destdir_reshoot)
 
 
 if __name__ == '__main__':
