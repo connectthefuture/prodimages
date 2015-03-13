@@ -233,7 +233,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ######  FILES #######
 ###########################################################################
 ## AM-FILE-GET The Better Getter Gets Incomplete Files In the AM To Retouch
-20 7 * * * /usr/local/batchRunScripts/python/theBestPythonGetterReturnsBetter.py 2>&1 > /var/log/daily_getter_python.log && date >> /var/log/daily_getter_python.log
+20 7 * * * /usr/local/batchRunScripts/python/theBestPythonGetterReturnsBetterThanEver.py 2>&1 > /var/log/daily_getter_python.log && date >> /var/log/daily_getter_python.log
 40 7 * * * /usr/local/batchRunScripts/python/Getter_copyready_noimg.py 2>&1 > /var/log/daily_copy_getter_python.log && date >> /var/log/daily_copy_getter_python.log
 #
 #
