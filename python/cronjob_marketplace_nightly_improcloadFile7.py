@@ -228,11 +228,6 @@ for k,v in marketplace_styles.iteritems():
             image_url.replace('.jpg', '.jpg?dl=1')
             image_url.replace('.png', '.png?dl=1')
         ########################################################
-<<<<<<< HEAD
-        ####### Google Drive Fix ###############################
-        regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
-        regex_drive2=re.compile(r'^(https://drive.google.com/).*\?id\=(.*?)\&?.*?$')
-=======
         ########################################################
         
         ########################################################
@@ -240,7 +235,7 @@ for k,v in marketplace_styles.iteritems():
         ## regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
         regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/edit\?usp\=.*?$')
         regex_drive2=re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(.*?)\&?.*?$')
->>>>>>> 3db4fd7905b3e01a28a99d41f92d23e348448c81
+
         ## Strip query string and edit RETURNNG URL TO IMG ON GOOGLE DRIVE
         if regex_drive2.findall(image_url):
             image_url = image_url.split('?')[1]
