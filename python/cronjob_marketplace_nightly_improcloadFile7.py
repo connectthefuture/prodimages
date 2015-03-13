@@ -235,8 +235,13 @@ for k,v in marketplace_styles.iteritems():
         ## regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
         regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/edit\?usp\=.*?$')
         regex_drive2=re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(.*?)\&?.*?$')
+
         ## Strip query string and edit RETURNNG URL TO IMG ON GOOGLE DRIVE
-        if regex_drive.findall(image_url):
+        if regex_drive2.findall(image_url):
+            image_url = image_url.split('?')[1]
+            params = (image_url.split('&'))
+            
+        elif regex_drive.findall(image_url):
             image_url = image_url.split('/edit?')[0]
         elif regex_drive2.findall(image_url):
             image_url = google_drive_url_handler(image_url)
