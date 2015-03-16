@@ -329,7 +329,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ####### Uploads to main ImageDrop without Magick Procs ###
 ####### Only used by Retouchers ##########################
 ##########################################################
-25,55 * * * * mv /mnt/Post_Complete/Complete_to_Load/.uploadOnlyImageDrop/*\.??g /mnt/Post_Complete/ImageDrop/ 2>&1 >> /dev/null
+25,55 * * * * mv /mnt/Post_Complete/Complete_to_Load/.uploadOnlyImageDrop/*.??[Gg] /mnt/Post_Complete/ImageDrop/ 2>&1 >> /dev/null
 ##################################################################
 ##################################################################
 ########           MARKETPLACE PROCESSES             #############
