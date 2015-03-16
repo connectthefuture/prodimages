@@ -33,7 +33,23 @@ find $orignameLL -type f -maxdepth 1 -iname \*_[1-6x].jpg -exec mv {} $syncdname
 chmod -R ugo+rx $syncpardnameLL ;
 chmod -R ugo+rx $syncdnameLL ;
 
+
+######################################
+## Sync Looklet Images Stripped for Design ##
+######################################
+orignameLLDes='/mnt/Post_Ready/xsyncma/looklet/'
+syncpardnameLLDes="/mnt/Design/LookletSync/${DATE}_LLD/"
+syncdnameLLDes="/mnt/Design/LookletSync/${DATE}_LLD/"
+
+mkdir -p $syncdnameLLDes
+
+find $orignameLLDes -type f -maxdepth 1 -iname \*_[B1-9x][B1-9x].jpg -exec mv {} $syncdnameLLDes \;
+chmod -R ugo+rx $syncpardnameLLDes ;
+chmod -R ugo+rx $syncdnameLLDes ;
+
+
 ######################
 ## Remove empty folders
 ######################
 find /mnt/Post_Ready/aPhotoPush -type d -mindepth 1 -empty -exec rmdir {} \;
+find /mnt/Design/LookletSync -type d -mindepth 1 -empty -exec rmdir {} \;
