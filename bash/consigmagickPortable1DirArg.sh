@@ -88,7 +88,7 @@ find $convertedFolder_l -type f -iname \*.jpg -exec mv {} $uploadInProg \;
 ##Mogrify - Format as _m jpg and Alt Thumb
 cp -pR $convertedFolder_alt $convertedFolder_m
 cd $convertedFolder_m
-mogrify '*.jpg[300x360]' -compress none -format jpeg -adaptive-sharpen 100 -unsharp 40 -quality 100
+mogrify '*.jpg[200x240]' -compress none -format jpeg -adaptive-sharpen 100 -unsharp 40 -quality 100
 find $convertedFolder_m -type f -iname \*.jpg -exec mv {} $uploadInProg \;
 
 ##Mogrify - Format as Primary PNG, store originalRetouched

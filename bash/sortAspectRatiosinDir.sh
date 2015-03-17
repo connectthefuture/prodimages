@@ -43,14 +43,14 @@ then
         verhoriz="horizontal"
         #hrzdir=`mkdir "$foldername"/"HORIZONTAL"`
         
-        mogrify -format jpg -profile $cmyk_jpn01coat -resize '1300x' -profile $srgb_webrdy -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
+        mogrify -format jpg -profile $cmyk_jpn01coat -resize '1200x' -profile $srgb_webrdy -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
         #mv $f "$dname"/"$hrzdir"
     elif [ "$dmenwidth" -eq "$dmenheight" ];
     then
         verhoriz="square"
         #sqdir=`mkdir "$foldername"/SQUARE`
         #mv $f $sqdir
-        mogrify -format jpg -profile $cmyk_jpn01coat -resize '1300x' -profile $srgb_webrdy -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
+        mogrify -format jpg -profile $cmyk_jpn01coat -resize '1200x' -profile $srgb_webrdy -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
     else
         verhoriz="vertical"
         #vrtdir=`mkdir "$foldername"/"VERTICAL"`
@@ -70,13 +70,13 @@ else
         verhoriz="horizontal"
         #hrzdir=`mkdir "$foldername"/"HORIZONTAL"`
         
-        mogrify -format jpg -colorspace RGB -resize '1300x' -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
+        mogrify -format jpg -colorspace RGB -resize '1200x' -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
         #mv $f "$dname"/"$hrzdir"
     elif [ "$dmenwidth" -eq "$dmenheight" ];
     then
         verhoriz="square"
         sqdir=`mkdir "$foldername"/SQUARE`
-        mogrify -format jpg -colorspace RGB -resize '1300x' -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
+        mogrify -format jpg -colorspace RGB -resize '1200x' -background white -gravity center -extent 1400x1680 -colorspace sRGB $f ;
         #mv $f $sqdir
     else
         verhoriz="vertical"

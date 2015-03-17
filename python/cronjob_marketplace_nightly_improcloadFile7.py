@@ -35,16 +35,6 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, 
     else:
         query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE (POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS {1} NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.PO_LINE.PO_HDR_ID LIKE '%{0}%'  and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6  and BLUEFLY_PRODUCT_COLOR not like ('0_%') and POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%' ) and BLUEFLY_PRODUCT_COLOR not like ('0_%') ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(po_number, updateonly_flag)
     ##
-    # elif vendor:
-    #     #not null prd cmp
-    #     #query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE (POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT IS not NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor)
-    #     # null prdcmp
-    #     query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE (POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor)
-
-    # elif vendor_brand:
-    #     query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE (POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND LIKE '%{0}%' AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor_brand)
-
-
     ## WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "'"
     ## AND POMGR.PRODUCT_COLOR.COPY_READY_DT IS NOT NULL
     ##
@@ -78,38 +68,6 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None, 
     return styles
 
 
-# rm --> #def post_or_put_style_to_api(colorstyle, api_url=None, AuthToken=None):
-    # import requests, json
-    # import http.client, urllib.parse
-    # if not api_url:
-    #     api_url = 'http://prodimages.ny.bluefly.com/image-update/'
-
-    # update_styles = list(set(sorted(update_styles)))
-    # for colorstyle in update_styles:
-    #     data = {'colorstyle': colorstyle}
-    #     #params = urllib.parse.urlencode(data)
-    #     params = json.dumps(data)
-    #     auth = {'Authorization': 'Token ' + AuthToken}
-    #     content_type = {'content-type': 'application/json'}
-    #     headers = json.dumps(auth,content_type)
-    #     # conn = http.client.HTTPConnection(api_url, 80)
-    #     # conn.request("PUT", "/", BODY)
-    #     #response = conn.getresponse()
-    #     try:
-    #         response = requests.post(api_url, headers=headers, params=params)
-    #         print response.status, response.method, data
-    #         #print(resp.status, response.reason)
-    #     except:
-    #         try:
-    #             response = requests.put(api_url, headers=headers, params=params)
-    #             print response.status, response.method, data
-    #         except:
-    #             curlauth = 'Authorization: Token ' + AuthToken
-    #             curldata = 'colorstyle=' + colorstyle
-    #             try:
-    #                 subprocess.call([ 'curl', '-u', 'james:hoetker', '-d', curldata, '-H', curlauth, '-X', 'PUT', api_url])
-    #             except:
-    #                 subprocess.call([ 'curl', '-u', 'james:hoetker' '-d', curldata, '-H', curlauth, api_url])
 
 ############################################################ RUN ##################################################
 ############################################################ RUN ##################################################
@@ -127,11 +85,10 @@ except IndexError:
     imagedir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
 except:
     imagedir = os.path.abspath(os.path.join(os.path.expanduser('~'),'Pictures'))
-
     # imagedir = os.path.abspath(os.path.join(sys.argv[1], 'Pictures'))
 
-regex_swi   = re.compile(r'^.*?SWI.+?\.jpg$')
 
+regex_swi   = re.compile(r'^.*?SWI.+?\.jpg$')
 if os.path.isdir(imagedir):
     ## Remove previous days imports only from the PO dir prior to new import, SWI stays separate
     remove_prior_import = glob.glob(os.path.join(imagedir, '*/*/*.jpg'))
@@ -207,10 +164,9 @@ for k,v in marketplace_styles.iteritems():
             os.makedirs(destdir, 16877)
         except:
             pass
-    if image_url:
-        #with open(destpath,'wb') as f:
-        #f.write(requests.get(image_url).content)
 
+
+    if image_url:
         ########################################################
         ########################################################
         ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
@@ -229,13 +185,12 @@ for k,v in marketplace_styles.iteritems():
             image_url.replace('.png', '.png?dl=1')
         ########################################################
         ########################################################
-
-        ########################################################
         ####### Google Drive Fixes #############################
+        ########################################################
+        ########################################################
         ## regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
         regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/edit\?usp\=.*?$')
         regex_drive2=re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(.*?)\&?.*?$')
-
         ## Strip query string and edit RETURNNG URL TO IMG ON GOOGLE DRIVE
         if regex_drive2.findall(image_url):
             image_url = image_url.split('?')[1]
@@ -245,9 +200,8 @@ for k,v in marketplace_styles.iteritems():
             image_url = image_url.split('/edit?')[0]
         elif regex_drive2.findall(image_url):
             image_url = google_drive_url_handler(image_url)
-        ########################################################
-        ########################################################
 
+        ########################################################
         ########################################################
         ########################################################
         ####### URL ENCODED % ESCAPES Fix ######################
@@ -258,6 +212,7 @@ for k,v in marketplace_styles.iteritems():
         regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
 
         if regex_validurl.findall(image_url):
+            ########################################################
             ############       Finally     #########################
             #####     Replace ALL url encoding % escapes    ########
             ###  TO ACCOUNT FOR EX. %2520 --> %20 --> ' '   ########
@@ -322,16 +277,3 @@ import subprocess, multiprocmagick
 
 multiprocmagick.run_multiproccesses_magick(searchdir=imagedir)
 print 'Done With multiprocmagick'
-
-## Send updated styles to api to clear
-# if update_styles:
-#     post_or_put_style_to_api(update_styles, api_url=None, AuthToken=None)
-# else:
-#     print 'NO UPDATES TO CLEAR'
-
-# for d in dirlist:
-#     # Added try error handler so as not to hold up all vendors if file error from one of them raises CalledProcessError
-#     try:
-#         subprocess.call(['/usr/local/batchRunScripts/python/magicColorspace_modulate-aspect-normalize_AND_Upload.py', d])
-#     except: #subprocess.CalledProcessError:
-#         pass
