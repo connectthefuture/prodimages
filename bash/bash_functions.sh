@@ -309,7 +309,7 @@ function img_multithumb_file ()
         format=`echo "$fname" | awk -F'.' '{ print $NF}'`;
         convert -format "${format}" "${f}" \
           \( +clone -resize x480 -write "${outdir}"/"${fname}"_l.jpg +delete \) \
-          \( +clone -resize x360 -write "${outdir}"/"${fname}"_big.jpg +delete \) \
+          \( +clone -resize x240 -write "${outdir}"/"${fname}"_big.jpg +delete \) \
           \( +clone -resize x240 -write "${outdir}"/"${fname}"_m.jpg +delete \) \
              -define png:preserve-colormap -define png:format\=png24 \
              -define png:compression-level\=N -define png:compression-strategy\=N \

@@ -514,7 +514,7 @@ def magick_fragrance_proc_med(img, rgbmean=None, destdir=None):
         "filter:blur=0.88549061701764",
         "-distort",
         "Resize",
-        '300x360',
+        '200x240',
         "-colorspace",
         "sRGB",
         '-unsharp',
