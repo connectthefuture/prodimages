@@ -20,4 +20,3 @@ def update_pm_photodate(colorstyle):
 if __name__ == '__main__':
     import sys
     r = update_pm_photodate(sys.argv[1])
-    return r
