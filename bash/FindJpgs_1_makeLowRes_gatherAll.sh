@@ -49,7 +49,7 @@ cd $pmPhotoXdir
 cd $pmPhotoXdir
 exiftool -f -m -P -fast2 -'Directory='$pmPhotoDir'/%4f' $pmPhotoXdir
 #exiftool -fast2 -f -m -P -'Directory='"$pmPhotodir"'/%4f' -'FileName=%f%+lc.%e' $pmPhotoXdir
-##curl -d sample_image=Y -d photographed_date=now -X PUT http://ccapp101.l3.bluefly.com:8080/photo/"$outName"
+##curl -d sample_image=Y -d photographed_date=now -X PUT http://dmzimage01.l3.bluefly.com:8080/photo/"$outName"
 
 
 ##cp -p -R $pushStill $dirStill;
