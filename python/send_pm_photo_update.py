@@ -3,7 +3,7 @@ import os, sys, re, csv
 
 def update_pm_photodate(colorstyle):
     import subprocess
-    update_url = 'http://ccapp101.l3.bluefly.com:8080/photo/{0}'.format(colorstyle)
+    update_url = 'http://dmzimage01.l3.bluefly.com:8080/photo/{0}'.format(colorstyle)
 
     subprocess.call([
     "curl",
@@ -20,3 +20,6 @@ def update_pm_photodate(colorstyle):
 if __name__ == '__main__':
     import sys
     r = update_pm_photodate(sys.argv[1])
+
+
+
