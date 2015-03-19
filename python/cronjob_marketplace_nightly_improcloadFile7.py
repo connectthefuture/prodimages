@@ -167,6 +167,8 @@ for k,v in marketplace_styles.iteritems():
 
 
     if image_url:
+        ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
+        image_url = image_url.replace('https://marketplace.merchantry.com/mp/product/image/', 'http://pim2.merchantry.com/mp/product/image/')
         ########################################################
         ########################################################
         ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
