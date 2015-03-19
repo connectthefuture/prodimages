@@ -34,7 +34,7 @@ outName=`basename "$f" | sed s/_1.jpg//g`
 cd $pmPhotoXdir
 exiftool -f -m -P -'directory'=$pmPhotoDir/%4f $pmPhotoXdir/"$outName"_1.jpg
 
-#curl -d sample_image=Y -d photographed_date=now -X PUT http://ccapp101.l3.bluefly.com:8080/photo/"$outName"
+#curl -d sample_image=Y -d photographed_date=now -X PUT http://dmzimage01.l3.bluefly.com:8080/photo/"$outName"
 
 done;
 

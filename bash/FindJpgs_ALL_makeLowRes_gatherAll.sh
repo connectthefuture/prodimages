@@ -62,7 +62,7 @@ exiftool -r -m -f '-Directory=../%4f/' '-Filename=%f.%e' $pmPhotoXdir;
 ##exiftool -f -m -P -'Directory=$pmPhotodir/%4f' $f
 #exiftool -f -m -P -'Directory=$pmPhotodir/%4f' -'FileName=%f%+lc.%e' "'"$f"'"
 #exiftool -f -m -P -'Directory=$pmPhotodir/%4f' -'FileName=%f%+lc.%e' $pmPhotoXdir/"$f"
-##curl -d sample_image=Y -d photographed_date=now -X PUT http://ccapp101.l3.bluefly.com:8080/photo/"$outName"
+##curl -d sample_image=Y -d photographed_date=now -X PUT http://dmzimage01.l3.bluefly.com:8080/photo/"$outName"
 #>>done;
 
 ####<-----------Clean out Duplicates left over from exif Sort. Moves to tmpDeletePhoto on $PRODSRV
