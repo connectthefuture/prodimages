@@ -8,7 +8,7 @@ def create_googleDriveapi_service(serviceName=None, version=None, client_id=None
     from oauth2client.client import OAuth2WebServerFlow
     from oauth2client import tools
     import os, datetime, argparse, apiclient
-
+    from apiclient import http, errors
     # if serviceName == 'drive':
     #     print serviceName
     #     client_id = '390426411557-fsk0n5k1g5fnj1gs1te2f19kq5vfftgk.apps.googleusercontent.com'
@@ -43,8 +43,8 @@ def create_googleDriveapi_service(serviceName=None, version=None, client_id=None
     # If the Credentials don't exist or are invalid, run through the native client
     # flow. The Storage object will ensure that if successful the good
     # Credentials will get written back to a file.
-    #py_dir = os.path.dirname(os.path.realpath(__file__))
-    py_dir = os.path.dirname(os.path.realpath(os.curdir))
+    py_dir = os.path.dirname(os.path.realpath(__file__))
+    #py_dir = os.path.dirname(os.path.realpath(os.curdir))
     os.chdir(py_dir)
     #storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
     storage_file = os.path.join(os.path.dirname(py_dir), serviceName + '.dat')
@@ -79,8 +79,8 @@ def create_googleDriveapi_service(serviceName=None, version=None, client_id=None
     return service
 
 
-def instantiate_google_service():
-    import apiclient, sys
+def instantiate_google_drive_service():
+    #import apiclient, sys
     #from googleapi_service import create_googleapi_service
     serviceName = 'drive'
     version = 'v2'
@@ -103,7 +103,8 @@ def download_google_drive_file(image_url=None, destpath=None):
     destpath: io.Base or file object, the stream that the Drive file's
         contents will be written to.
   """
-  service = instantiate_google_service()
+  from apiclient import http, errors
+  service = instantiate_google_drive_service()
   request = service.files().get_media(fileId=image_url)
   media_request = http.MediaIoBaseDownload(destpath, request)
 
@@ -121,11 +122,15 @@ def download_google_drive_file(image_url=None, destpath=None):
 
 
 if __name__ == '__main__':
-  import sys
-  try:
-    image_url = sys.argv[1]
-    destpath  = sys.argv[2]
-    download_google_drive_file(image_url=None, destpath=None)
-  except:
-    print 'Failed, please supply bot the image_url and destpath args as sys.argv[1] and [2], respectively'
+    import sys
+    image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8ak03dFEwZzBOVGM&authuser=0'
+    destpath  = '~/MARKETPLACE/HidesignAmerica/154530/357944502_3.jpg'
+    res = download_google_drive_file(image_url=image_url, destpath=destpath)
+    print res
+#  try:
+#    image_url = sys.argv[1]
+#    destpath  = sys.argv[2]
+#    download_google_drive_file(image_url=None, destpath=None)
+#  except:
+#    print 'Failed, please supply bot the image_url and destpath args as sys.argv[1] and [2], respectively'
 
