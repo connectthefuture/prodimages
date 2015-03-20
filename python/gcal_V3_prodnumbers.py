@@ -21,8 +21,9 @@ def getServiceEvents():
     os.chdir(batchRunScripts)
 
     #here = os.path.dirname(os.path.realpath(os.path.curdir))
-    storage_file = os.path.join(batchRunScripts, 'calendar.dat')
-
+    #storage_file = os.path.join(batchRunScripts, 'calendar.dat')
+    py_dir = os.path.dirname(os.path.realpath(__file__))
+    storage_file = os.path.join(py_dir, serviceName + '.dat')
     ############################
     FLAGS = gflags.FLAGS
 
