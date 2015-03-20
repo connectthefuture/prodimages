@@ -115,16 +115,16 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     media_request = http.MediaIoBaseDownload(destpath, request)
 
     while True:
-    try:
-        download_progress, done = media_request.next_chunk()
-    except errors.HttpError, error:
-        print 'An error occurred: %s' % error
-        return
-    if download_progress:
-        print 'Download Progress: %d%%' % int(download_progress.progress() * 100)
-    if done:
-        print 'Download Complete'
-        return destpath
+        try:
+            download_progress, done = media_request.next_chunk()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return
+        if download_progress:
+            print 'Download Progress: %d%%' % int(download_progress.progress() * 100)
+        if done:
+            print 'Download Complete'
+            return destpath
 
 
 if __name__ == '__main__':
