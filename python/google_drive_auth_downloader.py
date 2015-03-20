@@ -3,8 +3,7 @@
 
 #import sys
 #sys.argv[1:] = ''
-
-def create_googleDriveapi_service(serviceName=None, version=None, client_id=None,client_secret=None,redirect_uri=None, scope=None):
+def create_googleDriveapi_service2(serviceName=None, version=None, client_id=None,client_secret=None,redirect_uri=None, scope=None):
     import httplib2
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
@@ -40,7 +39,7 @@ def create_googleDriveapi_service(serviceName=None, version=None, client_id=None
         scope=scope,
         redirect_uri=redirect_uri,
         user_agent=user_agent,)
-#        approval_prompt='force')
+    #        approval_prompt='force')
 
     # If the Credentials don't exist or are invalid, run through the native client
     # flow. The Storage object will ensure that if successful the good
@@ -83,7 +82,7 @@ def create_googleDriveapi_service(serviceName=None, version=None, client_id=None
     return service
 
 
-def instantiate_google_drive_service():
+def instantiate_google_drive_service2():
     #import apiclient, sys
     #from googleapi_service import create_googleapi_service
     serviceName = 'drive'
@@ -107,6 +106,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     """
     from apiclient import http, errors
     if not service:
+        from googleapi_service import instantiate_google_drive_service
         service       = instantiate_google_drive_service()
     else:
         pass
