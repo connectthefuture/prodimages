@@ -84,7 +84,7 @@ def instantiate_google_drive_service():
     #from googleapi_service import create_googleapi_service
     serviceName = 'drive'
     version = 'v2'
-    client_secret = 'Pvisql1TrWtRaOuud6ah6bDa'
+    client_secret = 'dccI63nfXqddT5BZcjcs67lj'
     client_id = '355881409068-167vm2c1oqjkmdmb2kulaugu63ehgcim.apps.googleusercontent.com'
     scope = 'https://www.googleapis.com/auth/drive'
     # drive_file = drive_file_instance
