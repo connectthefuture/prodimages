@@ -95,6 +95,7 @@
 #     service = create_googleDriveapi_service(serviceName=serviceName, version=version, client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri, scope=scope)
 #     return service
 
+download_file_content(service=None, drive_file=None)
 
 def download_google_drive_file(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
@@ -111,8 +112,14 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     else:
         pass
     
+    from google_drive_get_content import download_file_content
+    
     request       = service.files().get_media(fileId=image_url)
     media_request = http.MediaIoBaseDownload(destpath, request)
+    
+    file_content  = download_file_content(service=service, drive_file=image_url)
+    if file_content:
+        return file_content
 
     while True:
         try:
