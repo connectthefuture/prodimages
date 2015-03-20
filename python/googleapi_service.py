@@ -57,7 +57,7 @@ def create_googleapi_service(serviceName=None,
     ##
     #
     # To disable the local server feature, replace with '' in the following line:
-    args = '--noauth_local_webserver'
+    #args = '--noauth_local_webserver'
     parser = argparse.ArgumentParser(parents=[tools.argparser])
     FLAGS = parser.parse_args()
     ##
