@@ -61,10 +61,10 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     else:
         pass
     
-    file_id = qstring2kvpairs(image_url)['id']
+    file_id = qstring2kvpairs(image_url)['id'][0]
     request = service.files().get_media(fileId=file_id)
-    #fdest = open(destpath, 'wb+')
-    media_request = http.MediaIoBaseDownload(destpath, request)
+    fdest = open(destpath, 'w')
+    media_request = http.MediaIoBaseDownload(fdest, request)
     while True:
         try:
             download_progress, done = media_request.next_chunk()
@@ -78,78 +78,15 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
             return destpath
 
 
-   
-def download_gdrive_file_old(service=None, image_url=None, destpath=None):
-    """Download a Drive file's content to the local filesystem.
-    Args:
-    service: Drive API Service instance.
-    fileId/image_url: ID of the Drive file that will downloaded.
-    destpath: io.Base or file object, the stream that the Drive file's
-        contents will be written to.
-    """
-    from apiclient import http, errors
-    from os import chdir, path
-    import requests
-    pdir = path.dirname(path.realpath('__file__'))
-    ## TODO: Fix this conditional workaround to python dir for import
-    if not service:
-        chdir(pdir)
-        try:
-            chdir('python')
-        except:
-            pass
-        from googleapi_service import instantiate_google_drive_service
-        service = instantiate_google_drive_service()
-    else:
-        pass
-
-    #request = service.files().get_media(fileId=image_url)
-    #media_request = http.MediaIoBaseDownload(destpath, request)
-
-    #    file_content = download_file_content(service=service, drive_file=image_url)
-    #    if file_content:
-    #        with open(destpath, 'wb+') as f:
-    #            f.write(file_content)
-    #            f.close()
-    #            print 'WROTE ', destpath
-    #        return destpath
-    #result = client.execute(
-            #api_method: drive.files.get,
-            #parameters: { fileId: file_id }
-    #)
-    while True:
-        try:
-            #download_progress, done = media_request.next_chunk()
-            file_id = qstring2kvpairs(image_url)['id']
-            resp, content = service._http.request(file_id)
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
-            return
-        #if download_progress:
-        #    print 'Download Progress: %d%%' % int(download_progress.progress() * 100) 
-        #print resp.get('content-location')  
-        if resp.status == 200:
-            download_url = resp.get('downloadUrl')
-            print download_url
-            file_content = requests.get(download_url,allow_redirects=True,timeout=5)
-        if file_content:
-            print 'Download Complete'
-            with open(destpath, 'wb+') as f:
-                f.write(content)
-                f.close()
-            print content
-            return destpath
-
-
 if __name__ == '__main__':
     import sys
     try:
-        image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
-        #image_url = sys.argv[1]
-        destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
-        #destpath = sys.argv[2]
-        res = download_google_drive_file(image_url=image_url, destpath=destpath)
-        print res._total_size, res._uri, res._fd, res._request, res._rand
+        #image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
+        image_url = sys.argv[1]
+        #destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
+        destpath = sys.argv[2]
+        #res = download_google_drive_file(image_url=image_url, destpath=destpath)
+        #print res._total_size, res._uri, res._fd, res._request, res._rand
     except IndexError:
         print 'Failed, please supply both the image_url and destpath args as sys.argv[1] and [2], respectively'
     
