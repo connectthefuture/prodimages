@@ -47,7 +47,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
       """
     from os import chdir, path
     from apiclient import http, errors
-        
+    import StringIO
     pdir = path.dirname(path.realpath('__file__'))
     ## TODO: Fix this conditional workaround to python dir for import
     if not service:
@@ -63,8 +63,8 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     
     file_id = qstring2kvpairs(image_url)['id']
     request = service.files().get_media(fileId=file_id)
-    fdest = open(destpath, 'wb+')
-    media_request = http.MediaIoBaseDownload(fdest, request)
+    #fdest = open(destpath, 'wb+')
+    media_request = http.MediaIoBaseDownload(destpath, request)
     while True:
         try:
             download_progress, done = media_request.next_chunk()
