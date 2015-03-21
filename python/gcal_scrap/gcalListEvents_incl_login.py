@@ -69,7 +69,7 @@ def main():
     import getpass    
     username = raw_input("Enter your username: ")
     
-    password = "yankee17"
+    password = raw_input("Enter your password: ")
     #getpass.getpass("Enter your password: ")
     calendar_service = gdata.calendar.service.CalendarService(username, password, "Default")
     try:
