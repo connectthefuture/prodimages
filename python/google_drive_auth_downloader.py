@@ -70,7 +70,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
             download_progress, done = media_request.next_chunk()
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
-            return
+            return media_request
         if download_progress:
             print 'Download Progress: %d%%' % int(download_progress.progress() * 100)
         if done:
@@ -149,6 +149,7 @@ if __name__ == '__main__':
         destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
         #destpath = sys.argv[2]
         res = download_google_drive_file(image_url=image_url, destpath=destpath)
+        print res._total_size, res._uri, res._fd, res._request, res._rand
     except IndexError:
         print 'Failed, please supply both the image_url and destpath args as sys.argv[1] and [2], respectively'
     
