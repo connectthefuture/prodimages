@@ -243,7 +243,7 @@ def main(vendor=None, dest_root=None, ALL=None):
 	
 	## Process the files running each brand in a separate parallel process
 	## TODO: Make possible to include all the urls in 1 queue and send/add to and upload queue
-	import = multiprocmagick
+	import multiprocmagick
 	multiprocmagick.run_multiproccesses_magick(searchdir=imagedir)
 	print 'Done With multiprocmagick'
 
