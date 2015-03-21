@@ -15,13 +15,13 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
         service = instantiate_google_drive_service()
     else:
         pass
-    
+
     from googleapi_drive_content import download_file_content
-    
-    request       = service.files().get_media(fileId=image_url)
+
+    request = service.files().get_media(fileId=image_url)
     media_request = http.MediaIoBaseDownload(destpath, request)
-    
-    file_content  = download_file_content(service=service, drive_file=image_url)
+
+    file_content = download_file_content(service=service, drive_file=image_url)
     if file_content:
         with open(destpath, 'wb+') as f:
             f.write(file_content)
