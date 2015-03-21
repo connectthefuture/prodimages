@@ -69,7 +69,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
             return destpath
 
 
-
+   
 def download_gdrive_file_old(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
     Args:
@@ -104,7 +104,7 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
 #            f.close()
 #            print 'WROTE ', destpath
 #        return destpath
-
+    
     while True:
         try:
             #download_progress, done = media_request.next_chunk()
@@ -117,12 +117,12 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
         #print resp.get('content-location')  
         if resp.status == 200:
             download_url = resp.get('content-location')  ##resp.get('downloadUrl')
-            print download_url
-            file_content = requests.get(download_url,allow_redirects=True,timeout=5)
-        if file_content:
+            print download_url.split('\?')[0]
+            #file_content = requests.get(download_url,allow_redirects=True,timeout=5)
+        if content:
             print 'Download Complete'
             with open(destpath, 'wb+') as f:
-                f.write(file_content.content)
+                f.write(content)
                 f.close()
             print content
             return destpath
@@ -131,10 +131,10 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
 if __name__ == '__main__':
     import sys
     try:
-        #image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
-        image_url = sys.argv[1]
-        #destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
-        destpath = sys.argv[2]
+        image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
+        #image_url = sys.argv[1]
+        destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
+        #destpath = sys.argv[2]
         res = download_google_drive_file(image_url=image_url, destpath=destpath)
     except IndexError:
         print 'Failed, please supply both the image_url and destpath args as sys.argv[1] and [2], respectively'
