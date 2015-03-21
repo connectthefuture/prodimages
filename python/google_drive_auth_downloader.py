@@ -28,7 +28,7 @@ def download_file_content(service=None, drive_file=None):
         return None
 
 
-def download_gdrive_file(service=None, image_url=None, destpath=None):
+def download_google_drive_file(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
 
       Args:
@@ -69,7 +69,8 @@ def download_gdrive_file(service=None, image_url=None, destpath=None):
             return destpath
 
 
-def download_google_drive_file(service=None, image_url=None, destpath=None):
+
+def download_gdrive_file_old(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
     Args:
     service: Drive API Service instance.
@@ -134,7 +135,7 @@ if __name__ == '__main__':
         image_url = sys.argv[1]
         #destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
         destpath = sys.argv[2]
-        res = download_file(image_url=image_url, destpath=destpath)
+        res = download_google_drive_file(image_url=image_url, destpath=destpath)
     except IndexError:
         print 'Failed, please supply both the image_url and destpath args as sys.argv[1] and [2], respectively'
     
