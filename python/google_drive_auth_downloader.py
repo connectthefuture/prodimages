@@ -106,21 +106,17 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
     #request = service.files().get_media(fileId=image_url)
     #media_request = http.MediaIoBaseDownload(destpath, request)
 
-#    file_content = download_file_content(service=service, drive_file=image_url)
-#    if file_content:
-#        with open(destpath, 'wb+') as f:
-#            f.write(file_content)
-#            f.close()
-#            print 'WROTE ', destpath
-#        return destpath
-<<<<<<< HEAD
-    
-=======
+    #    file_content = download_file_content(service=service, drive_file=image_url)
+    #    if file_content:
+    #        with open(destpath, 'wb+') as f:
+    #            f.write(file_content)
+    #            f.close()
+    #            print 'WROTE ', destpath
+    #        return destpath
     #result = client.execute(
             #api_method: drive.files.get,
             #parameters: { fileId: file_id }
     #)
->>>>>>> 9cdd66c28e624d4ad4eac40d7ed5810a3760de56
     while True:
         try:
             #download_progress, done = media_request.next_chunk()
@@ -133,17 +129,10 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
         #    print 'Download Progress: %d%%' % int(download_progress.progress() * 100) 
         #print resp.get('content-location')  
         if resp.status == 200:
-<<<<<<< HEAD
-            download_url = resp.get('content-location')  ##resp.get('downloadUrl')
-            print download_url.split('\?')[0]
-            #file_content = requests.get(download_url,allow_redirects=True,timeout=5)
-        if content:
-=======
             download_url = resp.get('downloadUrl')
             print download_url
             file_content = requests.get(download_url,allow_redirects=True,timeout=5)
         if file_content:
->>>>>>> 9cdd66c28e624d4ad4eac40d7ed5810a3760de56
             print 'Download Complete'
             with open(destpath, 'wb+') as f:
                 f.write(content)
