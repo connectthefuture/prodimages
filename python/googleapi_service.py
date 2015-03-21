@@ -96,7 +96,7 @@ def instantiate_google_drive_service():
     scope = 'https://www.googleapis.com/auth/drive'
     # drive_file = drive_file_instance
     redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
-    service = create_googleDriveapi_service(serviceName=serviceName, version=version, client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri, scope=scope)
+    service = create_googleapi_service(serviceName=serviceName, version=version, client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri, scope=scope)
     return service
 
 
@@ -110,7 +110,7 @@ def instantiate_google_calendar_service():
     scope = 'https://www.googleapis.com/auth/calendar'
     # drive_file = drive_file_instance
     redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
-    service = create_googleDriveapi_service(serviceName=serviceName, version=version, client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri, scope=scope)
+    service = create_googleapi_service(serviceName=serviceName, version=version, client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri, scope=scope)
     return service
 
 
