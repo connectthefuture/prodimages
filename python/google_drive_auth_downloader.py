@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+def qstring2kvpairs(url_with_qstring):
+    from urlparse import urlparse, parse_qs
+    url = url_with_qstring.encode('UTF-8')
+    urlparse(url).query
+    qkvpairs = parse_qs(urlparse(url).query)
+    return qkvpairs
+
+
 def download_file_content(service=None, drive_file=None):
     """Download a file's content.
 
@@ -33,7 +41,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
 
       Args:
     service: Drive API Service instance.
-    image_url: ID of the Drive file that will downloaded.
+    image_url/fileId: ID of the Drive file that will downloaded.
     destpath: io.Base or file object, the stream that the Drive file's
     contents will be written to.
       """
@@ -53,7 +61,8 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     else:
         pass
     
-    request = service.files().get_media(fileId=image_url)
+    file_id = qstring2kvpairs(image_url)['id']
+    request = service.files().get_media(fileId=file_id)
     fdest = open(destpath, 'wb+')
     media_request = http.MediaIoBaseDownload(fdest, request)
     while True:
@@ -111,7 +120,8 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
     while True:
         try:
             #download_progress, done = media_request.next_chunk()
-            resp, content = service._http.request(image_url)
+            file_id = qstring2kvpairs(image_url)['id']
+            resp, content = service._http.request(file_id)
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return
@@ -119,7 +129,7 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
         #    print 'Download Progress: %d%%' % int(download_progress.progress() * 100) 
         #print resp.get('content-location')  
         if resp.status == 200:
-            download_url = resp.get('content-location')  ##resp.get('downloadUrl')
+            download_url = resp.get('downloadUrl')
             print download_url
             file_content = requests.get(download_url,allow_redirects=True,timeout=5)
         if file_content:
