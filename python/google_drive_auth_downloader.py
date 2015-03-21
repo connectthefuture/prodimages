@@ -112,7 +112,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     else:
         pass
     
-    from google_drive_get_content import download_file_content
+    from googleapi_drive_content import download_file_content
     
     request       = service.files().get_media(fileId=image_url)
     media_request = http.MediaIoBaseDownload(destpath, request)
