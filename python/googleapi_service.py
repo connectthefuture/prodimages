@@ -105,5 +105,11 @@ def instantiate_google_calendar_service():
 
 
 if __name__ == '__main__':
-    ret = create_googleapi_service(serviceName=serviceName,version=version,client_id=client_id,client_secret=client_secret,redirect_uri=redirect_uri,scope=scope)
-    return ret
+    create_googleapi_service(serviceName=serviceName, 
+                             version=version, 
+                             client_id=client_id, 
+                             client_secret=client_secret, 
+                             redirect_uri=redirect_uri, 
+                             scope=scope)
+
+
