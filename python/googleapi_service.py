@@ -41,7 +41,7 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
     # Credentials will get written back to a file.
     py_dir = os.path.dirname(os.path.realpath(__file__))
     #py_dir = os.path.dirname(os.path.realpath(os.curdir))
-    print py_dir
+    print py_dir, ' Pydir'
     os.chdir(py_dir)
     
     # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
