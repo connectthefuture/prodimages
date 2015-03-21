@@ -13,7 +13,7 @@ def download_file_content(service=None, drive_file=None):
     """
     import requests
     drive_resp = requests.get(drive_file)
-    download_url = drive_resp.get('downloadUrl')
+    download_url = drive_resp.json.get('downloadUrl')
     if download_url:
         resp, content = service._http.request(download_url)
         if resp.status == 200:
