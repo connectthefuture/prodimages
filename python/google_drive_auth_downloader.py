@@ -78,7 +78,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
             return destpath
 
 
-
+   
 def download_gdrive_file_old(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
     Args:
@@ -113,10 +113,14 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
 #            f.close()
 #            print 'WROTE ', destpath
 #        return destpath
+<<<<<<< HEAD
+    
+=======
     #result = client.execute(
             #api_method: drive.files.get,
             #parameters: { fileId: file_id }
     #)
+>>>>>>> 9cdd66c28e624d4ad4eac40d7ed5810a3760de56
     while True:
         try:
             #download_progress, done = media_request.next_chunk()
@@ -129,13 +133,20 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
         #    print 'Download Progress: %d%%' % int(download_progress.progress() * 100) 
         #print resp.get('content-location')  
         if resp.status == 200:
+<<<<<<< HEAD
+            download_url = resp.get('content-location')  ##resp.get('downloadUrl')
+            print download_url.split('\?')[0]
+            #file_content = requests.get(download_url,allow_redirects=True,timeout=5)
+        if content:
+=======
             download_url = resp.get('downloadUrl')
             print download_url
             file_content = requests.get(download_url,allow_redirects=True,timeout=5)
         if file_content:
+>>>>>>> 9cdd66c28e624d4ad4eac40d7ed5810a3760de56
             print 'Download Complete'
             with open(destpath, 'wb+') as f:
-                f.write(file_content.content)
+                f.write(content)
                 f.close()
             print content
             return destpath
@@ -144,10 +155,10 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
 if __name__ == '__main__':
     import sys
     try:
-        #image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
-        image_url = sys.argv[1]
-        #destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
-        destpath = sys.argv[2]
+        image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
+        #image_url = sys.argv[1]
+        destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
+        #destpath = sys.argv[2]
         res = download_google_drive_file(image_url=image_url, destpath=destpath)
     except IndexError:
         print 'Failed, please supply both the image_url and destpath args as sys.argv[1] and [2], respectively'
