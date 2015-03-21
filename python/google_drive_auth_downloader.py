@@ -104,7 +104,10 @@ def download_gdrive_file_old(service=None, image_url=None, destpath=None):
 #            f.close()
 #            print 'WROTE ', destpath
 #        return destpath
-
+    #result = client.execute(
+            #api_method: drive.files.get,
+            #parameters: { fileId: file_id }
+    #)
     while True:
         try:
             #download_progress, done = media_request.next_chunk()
