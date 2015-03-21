@@ -5,14 +5,14 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
     Args:
     service: Drive API Service instance.
-    fileId: ID of the Drive file that will downloaded.
+    fileId/image_url: ID of the Drive file that will downloaded.
     destpath: io.Base or file object, the stream that the Drive file's
         contents will be written to.
     """
     from apiclient import http, errors
     if not service:
         from googleapi_service import instantiate_google_drive_service
-        service       = instantiate_google_drive_service()
+        service = instantiate_google_drive_service()
     else:
         pass
     
