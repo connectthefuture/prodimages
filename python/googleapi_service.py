@@ -1,19 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def create_googleapi_service(serviceName=None, 
-                            version=None, 
-                            client_id=None,
-                            client_secret=None,
-                            redirect_uri=None, 
-                            scope=None):
-
+def create_googleapi_service(serviceName=None, version=None, client_id=None,client_secret=None,redirect_uri=None, scope=None):
     import httplib2
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
     from oauth2client import tools
     import os, datetime, argparse, apiclient
-
     # if serviceName == 'drive':
     #     print serviceName
     #     client_id = '390426411557-fsk0n5k1g5fnj1gs1te2f19kq5vfftgk.apps.googleusercontent.com'
@@ -21,21 +14,19 @@ def create_googleapi_service(serviceName=None,
     # elif serviceName == 'calendar':
     #     print serviceName
     #     client_id = '924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
-    
     client_id = client_id
     client_secret= client_secret  #'rqZxYuy0Cht37rJ0GSZ05YoY'
     scope =  scope
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0' ##'Python2.7'
     BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
     SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
-
-    ##
+    #####################
     # if not serviceName:
     #     serviceName = 'calendar'
     # if not version:
     #     version = 'v3'
-    ###########
-    ###########
+    #####################
+    #####################
     # The client_id and client_secret are copied from the API Access tab on
     # the Google APIs Console
     FLOW = OAuth2WebServerFlow(
@@ -53,7 +44,7 @@ def create_googleapi_service(serviceName=None,
     print py_dir
     os.chdir(py_dir)
     
-    #storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
+    # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
     storage_file = os.path.join(py_dir, serviceName + '.dat')
     STORAGE = Storage(storage_file)
 
@@ -82,7 +73,6 @@ def create_googleapi_service(serviceName=None,
     #client = apiclient.APIClient()
     # Build a service object for interacting with the API.
     service = build(serviceName=serviceName, version=version, http=http)
-
     return service
 
 
@@ -115,9 +105,5 @@ def instantiate_google_calendar_service():
 
 
 if __name__ == '__main__':
-    create_googleapi_service(serviceName=serviceName,
-                            version=version,
-                            client_id=client_id,
-                            client_secret=client_secret,
-                            redirect_uri=redirect_uri,
-                            scope=scope)
+    ret = create_googleapi_service(serviceName=serviceName,version=version,client_id=client_id,client_secret=client_secret,redirect_uri=redirect_uri,scope=scope)
+    return ret
