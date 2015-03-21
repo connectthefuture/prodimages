@@ -11,7 +11,6 @@ def qstring2kvpairs(url_with_qstring):
 
 def download_file_content(service=None, drive_file=None):
     """Download a file's content.
-
     Args:
     service: Drive API service instance.
     drive_file: Drive File instance.
@@ -38,8 +37,8 @@ def download_file_content(service=None, drive_file=None):
 
 def download_google_drive_file(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
-
       Args:
+
     service: Drive API Service instance.
     image_url/fileId: ID of the Drive file that will downloaded.
     destpath: io.Base or file object, the stream that the Drive file's

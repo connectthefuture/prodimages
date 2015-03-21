@@ -7,24 +7,12 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
     from oauth2client.client import OAuth2WebServerFlow
     from oauth2client import tools
     import os, datetime, argparse, apiclient
-    # if serviceName == 'drive':
-    #     print serviceName
-    #     client_id = '390426411557-fsk0n5k1g5fnj1gs1te2f19kq5vfftgk.apps.googleusercontent.com'
-    # ##########################Vars
-    # elif serviceName == 'calendar':
-    #     print serviceName
-    #     client_id = '924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
     client_id = client_id
     client_secret= client_secret  #'rqZxYuy0Cht37rJ0GSZ05YoY'
     scope =  scope
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0' ##'Python2.7'
     BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
     SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
-    #####################
-    # if not serviceName:
-    #     serviceName = 'calendar'
-    # if not version:
-    #     version = 'v3'
     #####################
     #####################
     # The client_id and client_secret are copied from the API Access tab on
@@ -77,8 +65,6 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
 
 
 def instantiate_google_drive_service():
-    #import apiclient, sys
-    #from googleapi_service import create_googleapi_service
     serviceName = 'drive'
     version = 'v2'
     client_secret = 'dccI63nfXqddT5BZcjcs67lj'
@@ -91,8 +77,6 @@ def instantiate_google_drive_service():
 
 
 def instantiate_google_calendar_service():
-    #import apiclient, sys
-    #from googleapi_service import create_googleapi_service
     serviceName = 'calendar'
     version = 'v3'
     client_secret = 'rqZxYuy0Cht37rJ0GSZ05YoY'
