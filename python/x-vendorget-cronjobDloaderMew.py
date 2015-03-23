@@ -119,7 +119,7 @@ def download_mplce_url(image_url=None, destpath=None):
         pass
     ########################################################
     ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
-    image_url = image_url.replace('https://marketplace.merchantry.com/mp/product/image/', 'http://pim2.merchantry.com/mp/product/image/')   
+    # image_url = image_url.replace('https://marketplace.merchantry.com/mp/product/image/', 'http://pim2.merchantry.com/mp/product/image/')   
     ########################################################
     ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
     ########################################################
