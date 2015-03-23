@@ -259,8 +259,8 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         ALL = ''
     if not vendor:
         vendor       = '%_%'  
-    if not vendor_brand:
-        vendor_brand = '%_%'
+    #if not vendor_brand:
+    #    vendor_brand = '%_%'
 
     ################################
     ## Get the New Style's Urls ####
