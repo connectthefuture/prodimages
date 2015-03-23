@@ -52,6 +52,11 @@ def sqlQueryMetatags(style,f):
             pass
         metatag['IPTC:Credit'] = row['event_title']
         metatag['IPTC:CopyrightNotice'] = row['production_status']
+
+        if metatag['IPTC:CopyrightNotice'] == 'Production Incomplete':
+            metatag['XMP:Label'] = 'Red'
+        else:
+            metatag['XMP:Label'] = 'Blue'
 #        metatag['IPTC:SpecialInstructions'] = '{:%d-%m-%Y}'.format(row['copy_dt'])
 #        metatag['IPTC:SpecialInstructions'] = row['copy_dt']
         metatag['IPTC:SimilarityIndex'] = row['sample_status']
