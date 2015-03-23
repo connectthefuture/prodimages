@@ -225,7 +225,7 @@ def multi_url_downloader(argslist=None):
     import multiprocessing
     import subprocess
     q = Queue.Queue()
-    for i in arglist: #put 30 tasks in the queue
+    for i in argslist: #put 30 tasks in the queue
         if i:
             q.put(i)
     
@@ -282,7 +282,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     #
     ########
     ## 2 ## Download the tuples urls
-    multi_url_downloader(urlsdload_list)
+    multi_url_downloader(argslist=urlsdload_list)
     print 'Done with downloader ', len(urlsdload_list)
     ########
     ## 3 ###
