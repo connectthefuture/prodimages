@@ -26,7 +26,7 @@ def getServiceEvents():
     storage_file = os.path.join(py_dir, serviceName + '.dat')
     ############################
     FLAGS = gflags.FLAGS
-
+    serviceName = 'calendar'
     # The client_id and client_secret are copied from the API Access tab on
     # the Google APIs Console
     FLOW = OAuth2WebServerFlow(
