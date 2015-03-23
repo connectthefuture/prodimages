@@ -107,12 +107,14 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
     return mproc_tuple_Qlist
 
 
-def download_mplce_url(image_url=None, destpath=None):
+#def download_mplce_url(urldest_tuple, image_url=None, destpath=None):
+def download_mplce_url(urldest_tuple):
     import requests, re, urllib, urllib2, subprocess
     import os.path
-    destdir = os.path.dirname(destpath)
     countimage = 0
     countstyle = 0
+    image_url, destpath = urldest_tuple
+    destdir = os.path.dirname(destpath)
     try:
         image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
     except:
@@ -217,17 +219,15 @@ def download_mplce_url(image_url=None, destpath=None):
         except IOError:
             pass
 
-def muliti_url_downloader(argslist=None):
+def multi_url_downloader(argslist=None):
     import Queue
     import threading
     import multiprocessing
     import subprocess
-    import get_live_swatches
     q = Queue.Queue()
     for i in arglist: #put 30 tasks in the queue
         if i:
-            for l in url_get_links(i):
-                q.put(l)
+            q.put(i)
     
     def worker():
         count = 0
@@ -235,14 +235,14 @@ def muliti_url_downloader(argslist=None):
             item = q.get()
             #execute a task: call a shell program and wait until it completes
             #subprocess.call("echo "+str(item), shell=True)
-            get_live_swatches.download_swatch_urls(item)
+            download_mplce_url(item)
             count += 1
             print count
             q.task_done()
 
     cpus=multiprocessing.cpu_count() #detect number of cores
     print("Creating %d threads" % cpus)
-    for i in xrange(cpus):
+    for i in xrange(cpus*2):
          t = threading.Thread(target=worker)
          t.daemon = True
          t.start()
@@ -250,7 +250,7 @@ def muliti_url_downloader(argslist=None):
     q.join() #block until all tasks are done
 
 
-def main(vendor=None, dest_root=None, ALL=None):
+def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     countimage = 0
     countstyle = 0
     if not dest_root:
@@ -258,23 +258,38 @@ def main(vendor=None, dest_root=None, ALL=None):
     if not ALL:
         ALL = ''
     if not vendor:
-        vendor = '%_%'
-    
-    ## Get the New Style's Urls ##
+        vendor       = '%_%'  
+    if not vendor_brand:
+        vendor_brand = '%_%'
+
+    ################################
+    ## Get the New Style's Urls ####
+    ########
+    ## 1 ## Query for new Marketplace Styles
     marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand='', po_number='', ALL=ALL)
     ## Create 2 item tuple list of every style with valid incomplete urls
     ## Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
+    #########
+    ## 1A ## Parse Query Result creating 2 item tuples as a list for multi thread
     urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root)
     ## Download the urls in the 2 tuple list
-    for t in urlsdload_list:
-        image_url, destpath = t
-        if image_url:
-            download_mplce_url(image_url=image_url, destpath=destpath)
-            countstyle += 1
-            print countstyle, ' countstyle'
-    
-    ## Process the files running each brand in a separate parallel process
+    # for t in urlsdload_list:
+    #     image_url, destpath = t
+    #     if image_url:
+    #         download_mplce_url(t)     ## image_url=image_url, destpath=destpath)
+    #         countstyle += 1
+    #         print countstyle, ' countstyle'
+    #
+    ########
+    ## 2 ## Download the tuples urls
+    multi_url_downloader(urlsdload_list)
+    print 'Done with downloader ', len(urlsdload_list)
+    ########
+    ## 3 ###
     ## TODO: Make possible to include all the urls in 1 queue and send/add to and upload queue
+    ## Process the files running each brand in a separate parallel process
+    ########
+    ## 3 ## Process the images
     import multiprocmagick
     multiprocmagick.run_multiproccesses_magick(searchdir=dest_root)
     print 'Done With multiprocmagick'
