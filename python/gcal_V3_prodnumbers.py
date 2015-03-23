@@ -19,6 +19,7 @@ def getServiceEvents():
 
     batchRunScripts = os.path.join('/usr/local', 'batchRunScripts')
     os.chdir(batchRunScripts)
+    serviceName = 'calendar'
 
     #here = os.path.dirname(os.path.realpath(os.path.curdir))
     #storage_file = os.path.join(batchRunScripts, 'calendar.dat')
@@ -26,7 +27,6 @@ def getServiceEvents():
     storage_file = os.path.join(py_dir, serviceName + '.dat')
     ############################
     FLAGS = gflags.FLAGS
-    serviceName = 'calendar'
     # The client_id and client_secret are copied from the API Access tab on
     # the Google APIs Console
     FLOW = OAuth2WebServerFlow(
