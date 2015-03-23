@@ -256,28 +256,28 @@ def main(vendor=None, dest_root=None, ALL=None):
     if not dest_root:
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     if not ALL:
-    	ALL = ''
+        ALL = ''
     if not vendor:
-    	vendor = '%_%'
-	
-	## Get the New Style's Urls ##
+        vendor = '%_%'
+    
+    ## Get the New Style's Urls ##
     marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand='', po_number='', ALL=ALL)
     ## Create 2 item tuple list of every style with valid incomplete urls
     ## Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
     urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root)
-	## Download the urls in the 2 tuple list
+    ## Download the urls in the 2 tuple list
     for t in urlsdload_list:
         image_url, destpath = t
         if image_url:
             download_mplce_url(image_url=image_url, destpath=destpath)
             countstyle += 1
             print countstyle, ' countstyle'
-	
-	## Process the files running each brand in a separate parallel process
-	## TODO: Make possible to include all the urls in 1 queue and send/add to and upload queue
-	import multiprocmagick
-	multiprocmagick.run_multiproccesses_magick(searchdir=dest_root)
-	print 'Done With multiprocmagick'
+    
+    ## Process the files running each brand in a separate parallel process
+    ## TODO: Make possible to include all the urls in 1 queue and send/add to and upload queue
+    import multiprocmagick
+    multiprocmagick.run_multiproccesses_magick(searchdir=dest_root)
+    print 'Done With multiprocmagick'
 
 if __name__ == '__main__':
     main()
