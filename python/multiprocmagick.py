@@ -40,8 +40,7 @@ def funkRunner(root_img_dir=None):
     import Queue
     import threading
     import glob, os
-    import magicColorspaceModAspctLoadFaster2 as magickProc2
-    from magickProc2 import rename_retouched_file, subproc_magick_png, subproc_magick_large_jpg, subproc_magick_medium_jpg, sort_files_by_values
+    from magicColorspaceModAspctLoadFaster2 import rename_retouched_file, subproc_magick_png, subproc_magick_large_jpg, subproc_magick_medium_jpg, sort_files_by_values
     import convert_img_srgb
     imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
     img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
