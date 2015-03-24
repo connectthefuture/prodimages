@@ -591,7 +591,6 @@ def main(root_img_dir=None):
         # except OSError:
         #     pass
 
-
     if not type(root_img_dir) == list and os.path.isdir(root_img_dir):
         #import md5_unique_dup_files
         #duplicates = md5_unique_dup_files.find_duplicate_imgs(root_img_dir)[1]
