@@ -73,7 +73,7 @@ def getparse_metadata_from_imagefile(image_filepath):
     mdatainsert[image_filepath] = groupdict #.items()
     return mdatainsert
 
-def insert_gridfs_extract_metadata(image_filepath):    
+def insert_gridfs_extract_metadata(image_filepath, db_name=None):    
     from mongo_gridfs_insert_file import insert_file_gridfs_file7
     import os,sys
     try:
