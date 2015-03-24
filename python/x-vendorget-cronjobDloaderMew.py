@@ -291,7 +291,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ########
     ## 3 ## Process the images
     import multiprocmagick
-    multiprocmagick.run_multiproccesses_magick(searchdir=dest_root)
+    multiprocmagick.funkRunner(root_img_dir=dest_root)
     print 'Done With multiprocmagick'
 
 if __name__ == '__main__':

@@ -1,6 +1,83 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
+
+def run_multiproccesses_magick2(searchdir=None):
+    import multiprocessing
+    import Queue
+    import subprocess
+    import glob,os
+    import magicColorspaceModAspctLoadFaster2 as magickProc2
+    if not searchdir:
+        searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
+    else:
+        pass
+
+    pool = multiprocessing.Pool(8)
+    img_list = []
+    if searchdir.split('/')[-1] == 'SWI':
+        [ img_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*.*')) if os.path.isfile(g) ]
+    else:
+        [ img_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*/*.*')) if os.path.isfile(g) ]
+
+    
+
+    results = pool.map(magickProc2.main,img_list)
+    print results
+
+    # close the pool and wait for the work to finish
+    pool.close()
+    print 'PoolClose'
+    pool.join()
+    print 'PoolJoin'
+
+
+
+def funkRunner(root_img_dir=None):
+    import multiprocessing
+    import Queue
+    import threading
+    import glob, os
+    import magicColorspaceModAspctLoadFaster2 as magickProc2
+    from magickProc2 import subproc_magick_png, subproc_magick_large_jpg, subproc_magick_medium_jpg, sort_files_by_values
+    import convert_img_srgb
+    imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
+    img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
+
+    q = Queue.Queue()
+    for k,v in img_dict.items():
+        try:
+            img_rgbmean = k, v.items()
+            q.put(img_rgbmean)
+        except AttributeError:
+            print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
+            pass
+
+    def worker():
+        count = 0
+        destdir =  '/mnt/Post_Complete/ImageDrop/'
+        while True:
+            img, rgbmean = q.get()
+            convert_img_srgb.main(image_file=img)
+            ## Get color pixel values from source img
+            #rgbmean     = v.items()
+            ## Generate png from source then jpgs from png
+            pngout = magickProc2.subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
+            magickProc2.subproc_magick_large_jpg(pngout, destdir=destdir)
+            magickProc2.subproc_magick_medium_jpg(pngout, destdir=destdir)
+            count += 1
+            print count
+            q.task_done()
+
+    cpus=multiprocessing.cpu_count() #detect number of cores
+    print("Creating %d threads" % cpus)
+    for i in xrange(cpus*2):
+         t = threading.Thread(target=worker)
+         t.daemon = True
+         t.start()
+
+
+
 def run_multiproccesses_magick(searchdir=None):
     import multiprocessing
     import glob,os
