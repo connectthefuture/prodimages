@@ -184,11 +184,9 @@ def evaluate_color_values(colordata):
             print "Value Error", colordata
             pass
 
-def sort_files_by_values(directory):
+def sort_files_by_values(fileslist):
     import os,glob
     filevalue_dict = {}
-    fileslist = directory
-
     count = len(fileslist)
     for f in fileslist:
         values = {}
@@ -220,7 +218,6 @@ def sort_files_by_values(directory):
             print "{0} Files Remaining-ZeroDivision".format(count)
             pass
     return filevalue_dict
-
 
 
 def subproc_magick_large_jpg(img, destdir=None):
@@ -562,33 +559,6 @@ def upload_imagedrop(root_dir):
         pass
 
 
-
-def run_multiproccesses_magick2(searchdir=None):
-    import multiprocessing
-    import glob,os
-    import magicColorspaceModAspctLoadFaster as magickProc
-    
-    if not searchdir:
-        searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
-    else:
-        pass
-
-    pool = multiprocessing.Pool(4)
-    directory_list = []
-    if searchdir.split('/')[-1] == 'SWI':
-        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
-    else:
-        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
-
-    results = pool.map(magickProc.main,directory_list)
-    print results
-
-    # close the pool and wait for the work to finish
-    pool.close()
-    print 'PoolClose'
-    pool.join()
-    print 'PoolJoin'
-
 def main(root_img_dir=None):
     import sys,glob,shutil,os,re
     import convert_img_srgb
@@ -653,12 +623,12 @@ def main(root_img_dir=None):
         subproc_magick_medium_jpg(pngout, destdir=destdir)
 
 
-    try:
-        upload_imagedrop(destdir)
-        failed_dir = os.path.join(destdir,'failed_upload','*.??[gG]')
-    except:
-        print 'PrintUploadFailed'
-        pass
+    #try:
+    #    upload_imagedrop(destdir)
+    #    failed_dir = os.path.join(destdir,'failed_upload','*.??[gG]')
+    #except:
+    #    print 'PrintUploadFailed'
+    #    pass
     # while True:
     #     if glob.glob(failed_dir):
     #         destdir = failed_dir

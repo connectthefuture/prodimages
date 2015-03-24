@@ -65,9 +65,9 @@ def funkRunner(root_img_dir=None):
             convert_img_srgb.main(image_file=img)
             ## Add to Mongo DB
             try:
-                jbmodules.mongo_image_prep.update_gridfs_extract_metadata(img, db_name='gridfs_mrktplce')
+                jbmodules.mongo_image_prep.update_gridfs_extract_metadata(image_file, db_name='gridfs_mrktplce')
             except:
-                jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(img, db_name='gridfs_mrktplce')
+                jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(image_file, db_name='gridfs_mrktplce')
             ## Generate png from source then jpgs from png
             pngout = magickProc2.subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
             magickProc2.subproc_magick_large_jpg(pngout, destdir=destdir)
