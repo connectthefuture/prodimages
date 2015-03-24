@@ -42,6 +42,9 @@ def funkRunner(root_img_dir=None):
     import glob, os
     from magicColorspaceModAspctLoadFaster2 import rename_retouched_file, subproc_magick_png, subproc_magick_large_jpg, subproc_magick_medium_jpg, sort_files_by_values
     import convert_img_srgb
+    import mongo_gridfs_insert_file
+    from jbmodules.mongo_image_prep import insert_gridfs_extract_metadata
+
     imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
     img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
 
@@ -60,8 +63,11 @@ def funkRunner(root_img_dir=None):
         while True:
             img, rgbmean = q.get()
             convert_img_srgb.main(image_file=img)
-            ## Get color pixel values from source img
-            #rgbmean     = v.items()
+            ## Add to Mongo DB
+            try:
+                jbmodules.mongo_image_prep.update_gridfs_extract_metadata(img, db_name='gridfs_mrktplce')
+            except:
+                jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(img, db_name='gridfs_mrktplce')
             ## Generate png from source then jpgs from png
             pngout = magickProc2.subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
             magickProc2.subproc_magick_large_jpg(pngout, destdir=destdir)
