@@ -7,6 +7,8 @@ def run_multiproccesses_magick2(searchdir=None):
     import Queue
     import subprocess
     import glob,os
+    import mongo_gridfs_insert_file
+    from jbmodules.mongo_image_prep import insert_gridfs_extract_metadata
     import magicColorspaceModAspctLoadFaster2 as magickProc2
     if not searchdir:
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
@@ -39,7 +41,7 @@ def funkRunner(root_img_dir=None):
     import threading
     import glob, os
     import magicColorspaceModAspctLoadFaster2 as magickProc2
-    from magickProc2 import subproc_magick_png, subproc_magick_large_jpg, subproc_magick_medium_jpg, sort_files_by_values
+    from magickProc2 import rename_retouched_file, subproc_magick_png, subproc_magick_large_jpg, subproc_magick_medium_jpg, sort_files_by_values
     import convert_img_srgb
     imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
     img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
@@ -75,6 +77,8 @@ def funkRunner(root_img_dir=None):
          t = threading.Thread(target=worker)
          t.daemon = True
          t.start()
+
+    q.join() #block until all tasks are done
 
 
 
