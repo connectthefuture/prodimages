@@ -563,38 +563,31 @@ def upload_imagedrop(root_dir):
 
 
 
-def multi_url_downloader(argslist=None):
-    import Queue
-    import threading
+def run_multiproccesses_magick2(searchdir=None):
     import multiprocessing
-    import subprocess
-    q = Queue.Queue()
-    for i in argslist: #put 30 tasks in the queue
-        if i:
-            q.put(i)
+    import glob,os
+    import magicColorspaceModAspctLoadFaster as magickProc
     
-    def worker():
-        count = 0
-        while True:
-            item = q.get()
-            #execute a task: call a shell program and wait until it completes
-            #subprocess.call("echo "+str(item), shell=True)
-            download_mplce_url(item)
-            count += 1
-            print count
-            q.task_done()
+    if not searchdir:
+        searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
+    else:
+        pass
 
-    cpus=multiprocessing.cpu_count() #detect number of cores
-    print("Creating %d threads" % cpus)
-    for i in xrange(cpus*2):
-         t = threading.Thread(target=worker)
-         t.daemon = True
-         t.start()
+    pool = multiprocessing.Pool(4)
+    directory_list = []
+    if searchdir.split('/')[-1] == 'SWI':
+        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*')) if os.path.isdir(g) ]
+    else:
+        [ directory_list.append(os.path.abspath(g)) for g in glob.glob(os.path.join(searchdir, '*/*')) if os.path.isdir(g) ]
 
-    q.join() #block until all tasks are done
+    results = pool.map(magickProc.main,directory_list)
+    print results
 
-
-
+    # close the pool and wait for the work to finish
+    pool.close()
+    print 'PoolClose'
+    pool.join()
+    print 'PoolJoin'
 
 def main(root_img_dir=None):
     import sys,glob,shutil,os,re
@@ -629,7 +622,7 @@ def main(root_img_dir=None):
         #     pass
 
 
-    if os.path.isdir(root_img_dir):
+    if not type(root_img_dir) == list and os.path.isdir(root_img_dir):
         #import md5_unique_dup_files
         #duplicates = md5_unique_dup_files.find_duplicate_imgs(root_img_dir)[1]
         #[ os.remove(f) for f in duplicates if f ]
