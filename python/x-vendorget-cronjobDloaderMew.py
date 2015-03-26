@@ -271,6 +271,27 @@ def multi_url_downloader(argslist=None):
     q.join() #block until all tasks are done
 
 
+def mongo_update_url_dest_info(image_url, destpath):
+    image_url          = image_url
+    tmpfilename        = str(destpath.split('/')[-1])
+    colorstyle         = str(tmpfilename[:9])
+    image_number       = str(tmpfilename.split('.')[-2][-1])
+    mimeContentHeader  = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
+
+    if image_url:
+        import jbmodules.mongo_image_prep.update_gridfs_extract_metadata
+        updateCheck = ''
+        updateCheck = jbmodules.mongo_image_prep.update_gridfs_extract_metadata(
+            db_name ='gridfs_mrktplce', 
+            image_url = image_url, 
+            filename = tmpfilename, 
+            colorstyle  = colorstyle, 
+            image_number  = image_number, 
+            mimeContentHeader  = 'image/{}'.format(mimeContentHeader)
+            )     ## image_url=image_url, destpath=destpath)
+    return updateCheck, destpath
+
+
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     countimage = 0
     countstyle = 0
@@ -294,13 +315,23 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## 1A ## Parse Query Result creating 2 item tuples as a list for multi thread
     urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root)
     ## Download the urls in the 2 tuple list
-    # for t in urlsdload_list:
-    #     image_url, destpath = t
-    #     if image_url:
-    #         download_mplce_url(t)     ## image_url=image_url, destpath=destpath)
-    #         countstyle += 1
-    #         print countstyle, ' countstyle'
-    #
+    ########
+    ## 1B ##
+    ## Import urls and download data+imageBlob into mongo db grisfs_mrktplce
+    ##########################
+    for t in urlsdload_list:
+        image_url, destpath = t
+        res, destpath = mongo_insert_url_dest_info(image_url, destpath)
+        if not res: pass
+        elif res == 'Duplicate':
+            ## Then remove the download and delete the tuple "t" in the urlsdload list
+            import os.remove
+            urlsdload_list.remove(t)
+            os.remove(destpath)
+        else: pass
+        print ' Mongo Res ', res
+    print ' Done With 1B Mongo'
+    ##########################
     ########
     ## 2 ## Download the tuples urls
     multi_url_downloader(argslist=urlsdload_list)
