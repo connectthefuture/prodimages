@@ -283,6 +283,7 @@ def mongo_update_url_dest_info(image_url, destpath):
         from jbmodules import mongo_image_prep as mongo_image_prep
         updateCheck = ''
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
+            destpath,
             db_name ='gridfs_mrktplce', 
             image_url = image_url, 
             filename = tmpfilename, 
