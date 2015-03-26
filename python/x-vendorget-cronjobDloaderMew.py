@@ -280,9 +280,9 @@ def mongo_update_url_dest_info(image_url, destpath):
 
     if image_url:
         import jbmodules
-        from jbmodules import mongo_image_prep.update_gridfs_extract_metadata as mongo_getmdata_importer
+        from jbmodules import mongo_image_prep as mongo_image_prep
         updateCheck = ''
-        updateCheck = mongo_getmdata_importer(
+        updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
             db_name ='gridfs_mrktplce', 
             image_url = image_url, 
             filename = tmpfilename, 
