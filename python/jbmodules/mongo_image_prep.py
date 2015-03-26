@@ -90,6 +90,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
     import mongo_gridfs_insert_file
     import os,sys
     try:
+        db_name = kwargs.get('db_name')
         if not db_name:
             db_name = sys.argv[2]
     except UnboundLocalError:
