@@ -318,7 +318,11 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root)
     ## Download the urls in the 2 tuple list
     ########
-    ## 1B ##
+    ########
+    ## 2 ## Download the tuples urls
+    multi_url_downloader(argslist=urlsdload_list)
+    print 'Done with downloader ', len(urlsdload_list)
+    ## 2B ##
     ## Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
     for t in urlsdload_list:
@@ -334,10 +338,6 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         print ' Mongo Res ', res
     print ' Done With 1B Mongo'
     ##########################
-    ########
-    ## 2 ## Download the tuples urls
-    multi_url_downloader(argslist=urlsdload_list)
-    print 'Done with downloader ', len(urlsdload_list)
     ########
     ## 3 ###
     ## TODO: Make possible to include all the urls in 1 queue and send/add to and upload queue
