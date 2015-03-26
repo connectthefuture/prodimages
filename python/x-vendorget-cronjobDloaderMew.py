@@ -197,7 +197,7 @@ def download_mplce_url(urldest_tuple):
             elif urlcode_value == 404:
                 ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
                 import urllib3
-                hostname = urllib3.get_host(u)[1]
+                hostname = urllib3.get_host(image_url)[1]
                 if hostname == 'marketplace.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
                 elif hostname == 'pim1.merchantry.com':
