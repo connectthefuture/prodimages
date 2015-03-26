@@ -279,9 +279,10 @@ def mongo_update_url_dest_info(image_url, destpath):
     mimeContentHeader  = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
 
     if image_url:
-        import jbmodules.mongo_image_prep.update_gridfs_extract_metadata
+        import jbmodules
+        from jbmodules import mongo_image_prep.update_gridfs_extract_metadata as mongo_getmdata_importer
         updateCheck = ''
-        updateCheck = jbmodules.mongo_image_prep.update_gridfs_extract_metadata(
+        updateCheck = mongo_getmdata_importer(
             db_name ='gridfs_mrktplce', 
             image_url = image_url, 
             filename = tmpfilename, 
