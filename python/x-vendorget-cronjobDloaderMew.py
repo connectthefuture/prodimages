@@ -119,9 +119,7 @@ def download_mplce_url(urldest_tuple):
         image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
     except:
         pass
-    ########################################################
-    ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
-    # image_url = image_url.replace('https://marketplace.merchantry.com/mp/product/image/', 'http://pim2.merchantry.com/mp/product/image/')   
+    ########################################################  
     ########################################################
     ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
     ########################################################
@@ -188,7 +186,7 @@ def download_mplce_url(urldest_tuple):
                 try:
                     print 'TRY'
                     res = requests.get(image_url, timeout=1,headers=headers)
-                    with open(destpath, 'ab+') as f:
+                    with open(destpath, 'w+') as f:
                         f.write(res.content)
                         f.close()
                     print res
@@ -197,22 +195,45 @@ def download_mplce_url(urldest_tuple):
                     print 'Failed Downloading HTTPS file {}'.format(image_url)
 
             elif urlcode_value == 404:
-                import os
-                print urlcode_value
-                badurldir = os.path.join(destdir,'error404')
-                if os.path.isdir(badurldir):
-                    pass
+                ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
+                import urllib3
+                hostname = urllib3.get_host(u)[1]
+                if hostname == 'marketplace.merchantry.com':
+                    image_url = image_url.replace(hostname, 'pim2.merchantry.com')
+                elif hostname == 'pim1.merchantry.com':
+                    image_url = image_url.replace(hostname, 'pim2.merchantry.com')
                 else:
-                    try:
-                        os.makedirs(badurldir, 16877)
-                    except:
-                        pass
+                    print hostname, ' MERCHANTRY URLs Respond with 404 Errors '
+                #######################################################################################
+                
+                #######################################################################################
+                
                 try:
-                    with open(os.path.join(os.path.abspath(badurldir), image_url + '_error404.txt'), 'wb+') as f:
-                        f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
-                except:
-                    print 'Print Failed write 404 file'
-                    pass
+                    print 'TRY'
+                    res = requests.get(image_url, timeout=1,headers=headers)
+                    with open(destpath, 'w+') as f:
+                        f.write(res.content)
+                        f.close()
+                    print res, ' 2nd Attempt using Merchantry Replaced URL OK'
+                except requests.exceptions.ConnectionError:
+                    print 'ConnectionError FinalFailureNotice'
+                    import os,path
+                    print urlcode_value
+                    badurldir = os.path.join(destdir,'error404')
+                    if os.path.isdir(badurldir):
+                        pass
+                    else:
+                        try:
+                            os.makedirs(badurldir, 16877)
+                        except:
+                            pass
+                    try:
+                        with open(os.path.join(os.path.abspath(badurldir), image_url + '_error404.txt'), 'a+') as f:
+                            f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
+                    except:
+                        print 'Print Failed write 404 file'
+                        pass
+
         except requests.exceptions.ConnectionError:
             print 'ConnectionError'
             pass
