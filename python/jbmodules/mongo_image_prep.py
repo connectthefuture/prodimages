@@ -85,7 +85,7 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
     insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
-db_name=''
+
 def update_gridfs_extract_metadata(image_filepath,**kwargs):    
     import mongo_gridfs_insert_file
     import os,sys
