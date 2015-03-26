@@ -87,7 +87,8 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
 
 
 def update_gridfs_extract_metadata(image_filepath,**kwargs):    
-    from mongo_gridfs_insert_file import update_file_gridfs_file7
+    import jbmodules
+    from jbmodules import mongo_gridfs_insert_file
     import os,sys
     try:
         if not db_name:
@@ -96,7 +97,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     print image_filepath, metadata
-    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    insert_record = mongo_gridfs_insert_file.insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 if __name__ == '__main__':
