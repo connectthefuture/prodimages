@@ -87,8 +87,7 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
 
 
 def update_gridfs_extract_metadata(image_filepath,**kwargs):    
-    import jbmodules
-    from jbmodules import mongo_gridfs_insert_file
+    import mongo_gridfs_insert_file
     import os,sys
     try:
         if not db_name:
