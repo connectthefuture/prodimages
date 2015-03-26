@@ -6,7 +6,12 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
     import pymongo, gridfs, __builtin__
     if not hostname:
         hostname='127.0.0.1'
-    mongo = pymongo.MongoClient(hostname, max_pool_size=50, waitQueueMultiple=10)
+    try:
+        mongo = pymongo.MongoClient(hostname, max_pool_size=50, waitQueueMultiple=10)
+    except pymongo.errors.ConnectionFailure:
+        hostname = '192.168.20.59'
+        mongo = pymongo.MongoClient(hostname, max_pool_size=50, waitQueueMultiple=10)
+    
     mongo_db = mongo[db_name]
     #mongo_db = mongo[db_name]
     mongo_db.authenticate('mongo', 'mongo')
@@ -15,7 +20,7 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
     return mongo_db, fs
 
 
-def insert_filerecord_pymongo(db_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None):
+def insert_filerecord_pymongo(db_name=None, collection_name=None, batchid=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
     # Insert a New Document
     import pymongo
     mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
@@ -30,7 +35,7 @@ def insert_filerecord_pymongo(db_name=None, collection_name=None, batchid=None, 
     return new_insertobj_id
 
 
-def update_filerecord_pymongo(db_name=None, filename=None):
+def update_filerecord_pymongo(db_name=None, filename=None,**kwargs):
     # Insert a New Document
     #(filepath=None, metadata=None, db_name=None):
     import os
@@ -103,7 +108,7 @@ def find_record_gridfs(key=None, db_name=None, collection_name=None):
     return check
 
 
-def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None):
+def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None, **kwargs):
     import os
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     try:
