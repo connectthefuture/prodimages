@@ -322,7 +322,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ##########################
     for t in urlsdload_list:
         image_url, destpath = t
-        res, destpath = mongo_insert_url_dest_info(image_url, destpath)
+        res, destpath = mongo_update_url_dest_info(image_url, destpath)
         if not res: pass
         elif res == 'Duplicate':
             ## Then remove the download and delete the tuple "t" in the urlsdload list
