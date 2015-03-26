@@ -85,13 +85,15 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
     insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
-
+db_name=''
 def update_gridfs_extract_metadata(image_filepath,**kwargs):    
     import mongo_gridfs_insert_file
     import os,sys
     try:
         if not db_name:
             db_name = sys.argv[2]
+    except UnboundLocalError:
+        db_name='gridfs_file7'
     except IndexError:
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
