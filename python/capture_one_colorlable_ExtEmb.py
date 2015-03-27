@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+m#!/usr/bin/env python
 
 
 def get_exif_all_data(image_filepath):
