@@ -119,7 +119,6 @@ def funkRunner(root_img_dir=None):
     from image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = '/mnt/Post_Comnplete/ImageDrop'
 
-
     # Enqueue jobs
     poolRename = multiprocessing.Pool(8)
     images = [ f for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
