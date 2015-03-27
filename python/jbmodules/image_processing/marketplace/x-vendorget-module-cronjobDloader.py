@@ -284,7 +284,8 @@ def mongo_update_url_dest_info(image_url, destpath):
     if image_url:
 
         # from jbmodules
-        import mongo_tools.mongo_image_prep as mongo_image_prep
+        import mongo_tools
+        from mongo_tools import mongo_image_prep as mongo_image_prep
         updateCheck = ''
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
             destpath,
@@ -355,7 +356,6 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     print 'Done With multiprocmagick'
 
 if __name__ == '__main__':
-    from jbmodules import *
     main()
 
 

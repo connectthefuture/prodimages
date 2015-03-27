@@ -35,7 +35,7 @@ def download_file_content(service=None, drive_file=None):
         return None
 
 
-def download_google_drive_file(service=None, image_url=None, destpath=None):
+def download_boxapi_drive_file(service=None, image_url=None, destpath=None):
     """Download a Drive file's content to the local filesystem.
       Args:
 
@@ -55,8 +55,8 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
             chdir('python')
         except:
             pass
-        from boxapi_service import instantiate_google_drive_service
-        service = instantiate_google_drive_service()
+        from boxapi_service import instantiate_boxapi_drive_service
+        service = instantiate_boxapi_drive_service()
     else:
         pass
     
@@ -80,11 +80,11 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
 if __name__ == '__main__':
     import sys
     try:
-        #image_url = 'https://drive.google.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
+        #image_url = 'https://drive.boxapi.com/open?id=0B6gg_FhatSi8cWF4RVFhMEtiRm8&authuser=0'
         image_url = sys.argv[1]
         #destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
         destpath = sys.argv[2]
-        #res = download_google_drive_file(image_url=image_url, destpath=destpath)
+        #res = download_boxapi_drive_file(image_url=image_url, destpath=destpath)
         #print res._total_size, res._uri, res._fd, res._request, res._rand
     except IndexError:
         print 'Failed, please supply both the image_url and destpath args as sys.argv[1] and [2], respectively'
