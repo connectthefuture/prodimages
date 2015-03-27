@@ -55,8 +55,8 @@ def download_boxapi_drive_file(service=None, image_url=None, destpath=None):
             chdir('python')
         except:
             pass
-        from boxapi_service import instantiate_boxapi_drive_service
-        service = instantiate_boxapi_drive_service()
+        from boxapi_service import instantiate_boxapi_service
+        service = instantiate_boxapi_service()
     else:
         pass
     

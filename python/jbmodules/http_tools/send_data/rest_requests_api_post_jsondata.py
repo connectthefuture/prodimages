@@ -178,7 +178,7 @@ def iterate_post_data_kv(data):
         for row in data:
             #dd = defaultdict(list)
             #r = [ dd[k].append(v) for k,v in val.iteritems() if val[k] ]
-            print r
+            print row
             try:
                 #jsondata = json.dumps({key: {k: v} })
 
@@ -190,7 +190,7 @@ def iterate_post_data_kv(data):
                     pass #print response.status_code, ' ERROR LIST', response.text, '\n\t', jsondata
                 #print jsondata
             except KeyError:
-                print 'KeyError', k, v,
+                print 'KeyError', row
     return
 
 
