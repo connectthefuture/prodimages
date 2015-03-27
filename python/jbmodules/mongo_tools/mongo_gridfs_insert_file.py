@@ -35,7 +35,7 @@ def insert_filerecord_pymongo(db_name=None, collection_name=None, batchid=None, 
     return new_insertobj_id
 
 
-def update_filerecord_pymongo(db_name=None, filename=None,**kwargs):
+def update_filerecord_pymongo(db_name=None, filename=None, **kwargs):
     # Insert a New Document
     #(filepath=None, metadata=None, db_name=None):
     import os

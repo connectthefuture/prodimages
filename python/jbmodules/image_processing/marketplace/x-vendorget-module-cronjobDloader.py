@@ -115,6 +115,7 @@ def download_mplce_url(urldest_tuple):
     countstyle = 0
     image_url, destpath = urldest_tuple
     destdir = os.path.dirname(destpath)
+    alt_number = destpath.split('_')[-1][0]
     try:
         image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
     except:
@@ -143,7 +144,9 @@ def download_mplce_url(urldest_tuple):
     regex_drive2 = re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(?P<fileId>.+?)\&?.*?$', re.U)
     if regex_drive2.findall(image_url):
         print image_url, ' DRIVE'
-        import google_drive_auth_downloader
+        #import jbmodules
+        #from jbmodules
+        import http_tools.auth.Google.google_drive_auth_downloader as google_drive_auth_downloader
         try:
             final_path = google_drive_auth_downloader.download_google_drive_file(image_url=image_url, destpath=destpath)
             if final_path:
@@ -279,8 +282,9 @@ def mongo_update_url_dest_info(image_url, destpath):
     mimeContentHeader  = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
 
     if image_url:
-        import jbmodules
-        from jbmodules import mongo_image_prep as mongo_image_prep
+        #import jbmodules
+        # from jbmodules
+        import mongo_tools.mongo_image_prep as mongo_image_prep
         updateCheck = ''
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
             destpath,
@@ -295,6 +299,7 @@ def mongo_update_url_dest_info(image_url, destpath):
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
+    #import jbmodules
     countimage = 0
     countstyle = 0
     if not dest_root:
@@ -345,7 +350,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## Process the files running each brand in a separate parallel process
     ########
     ## 3 ## Process the images
-    import multiprocmagick
+    from image_processing.marketplace import multiprocmagick as multiprocmagick
     multiprocmagick.funkRunner(root_img_dir=dest_root)
     print 'Done With multiprocmagick'
 

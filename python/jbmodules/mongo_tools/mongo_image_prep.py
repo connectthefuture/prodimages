@@ -22,8 +22,12 @@ def recursive_dirlist(rootdir):
 
 def get_exif_all_data(image_filepath):
     import exiftool
+    metadata = {}
     with exiftool.ExifTool() as et:
-        metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
+        try:
+            metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
+        except ValueError:
+            pass
     return metadata
 
 
