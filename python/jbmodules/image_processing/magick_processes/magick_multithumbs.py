@@ -87,7 +87,7 @@ def subproc_multithumbs_8_4_2(filepath,destdir,eight=None):
         #])
         
 import sys,os, datetime, glob
-todaysdirdate = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d_%f')
+todaysdirdate = datetime.datetime.strftime(str(datetime.datetime.now(), '%Y-%m-%d_%f' ))
 
 originaldir = os.path.abspath(sys.argv[1])
 os.chdir(originaldir)

@@ -220,7 +220,7 @@ def download_mplce_url(urldest_tuple):
                     print res, ' 2nd Attempt using Merchantry Replaced URL OK'
                 except requests.exceptions.ConnectionError:
                     print 'ConnectionError FinalFailureNotice'
-                    import os,path
+                    import os.path
                     print urlcode_value
                     badurldir = os.path.join(destdir,'error404')
                     if os.path.isdir(badurldir):
@@ -336,7 +336,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         if not res: pass
         elif res == 'Duplicate':
             ## Then remove the download and delete the tuple "t" in the urlsdload list
-            import os.remove
+            import os
             urlsdload_list.remove(t)
             os.remove(destpath)
             print ' Removed Duplicate image ', destpath.split('/')[-2], ' Style\v ', image_url, ' ---> ', destpath.split('/')[-1]
