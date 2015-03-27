@@ -280,7 +280,7 @@ def mongo_update_url_dest_info(image_url, destpath):
 
     if image_url:
         import jbmodules
-        from jbmodules import mongo_image_prep as mongo_image_prep
+        from jbmodules import legacy_mongo_img_prep as mongo_image_prep
         updateCheck = ''
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
             destpath,
