@@ -47,11 +47,11 @@ def identify_grey(images_list, outdir=None):
         try:
             if not outdir:
                 outdir = os.path.join(os.path.dirname(f), 'output')
-                if os.path.isdir():
+                if os.path.isdir(outdir):
                     pass
                 else:
                     try:
-                        os.makedir(outdir)
+                        os.makedirs(outdir)
                     except OSError:
                         print 'OSError'
                         pass
@@ -81,7 +81,7 @@ def identify_grey(images_list, outdir=None):
 
 def main(filesdir=None):
     import os, sys, re, glob
-    import MultiprocessingModule
+    from multiproc_tools import MultiprocessingModule
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
     BASE_PATH = os.path.abspath(__file__)
     identify_grey_func =  identify_grey 
@@ -92,7 +92,7 @@ def main(filesdir=None):
     gjpg, jpgout, gpng, pngout = get_images_mkdirs(filesdir)
     
     if gjpg:
-        magickProc = identify_grey(images_list, outdir)
+        # magickProc = identify_grey(images_list, outdir)
         ongreyjpg  = identify_grey(gjpg, jpgout)
 
     if gpng:

@@ -39,11 +39,9 @@ if sys.argv[1]:
 else:
     srcdir = '.'
 
-subproc_mogrify_RAWtoJPG5616h(srcdir)
 
 
-
-def subproc_mogrify_RAWtoJPG5616h(srcdir)
+def subproc_mogrify_RAWtoJPG5616h(srcdir):
     import subprocess, os, re, sys
 
 #    regex_CR2 = re.compile(r'.+?\.[CR2cr2]')

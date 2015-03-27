@@ -71,7 +71,7 @@ def download_server_imgs(style):
             
             netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
             
-            if urllib.urlretrieve(netsrv101_url_filealt, colorstyle_filealt) == None:
+            if urllib.urlretrieve(netsrv101_url_filealt, colorstyle_filealt) is None:
                 xf = url_download_file(netsrv101_url_filealt, colorstyle_filealt)
                 imgs.append(xf)
                 #return True
