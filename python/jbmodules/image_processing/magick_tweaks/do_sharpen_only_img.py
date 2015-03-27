@@ -63,7 +63,8 @@ def sharpen_image(img, destdir=None):
     
 
 if __name__ == '__main__':
-    
+    import sys
+    img = sys.argv[1]
     sharpen_image(img, destdir=None)
     
 
