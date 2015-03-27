@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def create_boxapi_service(serviceName=None, version=None, client_id=None,client_secret=None,redirect_uri=None, scope=None):
+def create_boxapi_service(serviceName=None, version=None, client_id=None, client_secret=None,redirect_uri=None, scope=None):
     import httplib2
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
@@ -63,7 +63,7 @@ def create_boxapi_service(serviceName=None, version=None, client_id=None,client_
     return service
 
 
-def instantiate_boxapi_drive_service():
+def instantiate_boxapi_service():
     #serviceName = 'drive'
     #version = 'v2'
     client_secret = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'
@@ -76,12 +76,28 @@ def instantiate_boxapi_drive_service():
 
 ## BoxAppGalleryUrl = 'https://app.box.com/services/auth_download_client'
 
+
+def store_tokens():
+    from boxsdk import OAuth2
+    oauth = OAuth2(
+        client_secret='g4R1o909fgf1PSsa5mLMDslpAwcbfIQl',
+        client_id = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9',
+        store_tokens=instantiate_boxapi_service,
+    )
+    auth_url, csrf_token = oauth.get_authorization_url('http://localhost')
+
+def create_boxapi_client(oauth=None):
+    from boxsdk import Client
+    oauth = instantiate_boxapi_service()
+    client = Client(oauth)
+    return client
+
+
 if __name__ == '__main__':
     import sys
     try:
         serviceName = sys.argv[1]
         create_boxapi_service(serviceName=serviceName,
-
                              client_id=client_id, 
                              client_secret=client_secret, 
                              redirect_uri=redirect_uri, 
