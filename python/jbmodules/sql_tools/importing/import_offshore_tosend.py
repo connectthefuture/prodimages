@@ -77,11 +77,11 @@ for k,v in offshore_styles.iteritems():
                         image_ready_dt     = VALUES(image_ready_dt);
                         """, str(k), v['vendor_style'], v['received_ct'], v['available_ct'], v['gender'], v['category'], v['product_type'], v['active'], v['start_dt'], v['image_ready_dt'])
             print "Successful Insert offshore_status --> {0}".format(k)
-        except sqlalchemy.exc.IntegrityError:
+        except sqlalchemy.except_.IntegrityError:
             print "Duplicate Entry {0}".format(k)
-    except sqlalchemy.exc.IntegrityError:
+    except sqlalchemy.except_.IntegrityError:
         print "Duplicate Entry {0}".format(k)
-    except sqlalchemy.exc.DatabaseError:
+    except sqlalchemy.except_.DatabaseError:
         continue
         print "DBERR" + k
 
