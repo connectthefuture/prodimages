@@ -10,7 +10,7 @@ def parse_gmail_mailbox_to_html_list(mailbox_name=None,searchTerms=None):
         searchTerms = '?dl=0'
     else: pass
     m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
-    m.login('john.bragato@bluefly.com','forty000one')
+    m.login('john.bragato@bluefly.com','forty000One')
     searchString = "(ALL TEXT '{0}')".format(searchTerms)
     m.select(mailbox_name)
     #### Logged in and Mbox selected

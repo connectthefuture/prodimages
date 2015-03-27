@@ -37,9 +37,11 @@ def send_gmail(to, subject, text, attach):
 
 import re,os,sys
 
+gmail_user  = '{}'.format(str(input('If not jbgmail, Enter your username: ')))
+if not gmail_user:
+  gmail_user = "john.bragato@gmail.com"
 
-gmail_user = "john.bragato@gmail.com"
-gmail_pwd = "yankee17"
+gmail_pwd   = '{}'.format(str(input('Enter your password: ')))
 
 #for arg in sys.argv[1]:
 #    print arg
