@@ -553,7 +553,7 @@ def upload_imagedrop(root_dir):
                 print code, upload_file
                 time.sleep(float(.3))
                 try:
-                    ftpload_to_imagedrop(upload_file)
+                    copy_to_imagedrop_upload(upload_file)
                     print "Uploaded {}".format(upload_file)
                     time.sleep(float(.3))
                     shutil.move(upload_file, archive_uploaded)
@@ -583,7 +583,8 @@ def upload_imagedrop(root_dir):
 
 
 def main():
-    import sys,glob,shutil,os,re, do_sharpen_only_img
+    import sys,glob,shutil,os,re
+    from image_processing.magick_tweaks import do_sharpen_only_img
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')

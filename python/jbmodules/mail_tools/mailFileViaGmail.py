@@ -21,7 +21,7 @@ def send_gmail(to, subject, text, attach):
    part.set_payload(open(attach, 'rb').read())
    Encoders.encode_base64(part)
    part.add_header('Content-Disposition',
-           'attachment; filename="%s"' % os.path.basename(attach))
+		   'attachment; filename="%s"' % os.path.basename(attach))
    msg.attach(part)
 
    mailServer = smtplib.SMTP("smtp.gmail.com", 587)
@@ -56,30 +56,30 @@ gmail_pwd = "yankee17"
 
 ## Test for HTML File is at sys.argv[3] to insert as Body of email
 try:
-    if sys.argv[2]:
-        test = sys.argv[2]
-        if os.path.isfile(test):
-            bodyfile    = sys.argv[2]
-            msgsubj     = "The Daily Completion Manifesto"
+	if sys.argv[2]:
+		test = sys.argv[2]
+		if os.path.isfile(test):
+			bodyfile    = sys.argv[2]
+			msgsubj     = "The Daily Completion Manifesto"
 ### Try to make body of message render HTML
-            try:
-                msgbody     = open(bodyfile, 'rb').read()
-            except NameError:
-                msgbody      = "NameErrorTestBody"
+			try:
+				msgbody     = open(bodyfile, 'rb').read()
+			except NameError:
+				msgbody      = "NameErrorTestBody"
 #                msgsubj      = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
 #                toaddrs      = "john.bragato@bluefly.com"
-            if sys.argv[3]:
-                toaddrs     = "john.bragato@bluefly.com"
-            else:
-			    toaddrs     = "john.bragato@bluefly.com"
-        else:
+			if sys.argv[3]:
+				toaddrs     = "john.bragato@bluefly.com"
+			else:
+				toaddrs     = "john.bragato@bluefly.com"
+		else:
 			toaddrs     = sys.argv[2]
 			msgbody     = "TestBody"
 			msgsubj     = "SentByPython"
 except IndexError:
-    toaddrs     = "john.bragato@bluefly.com"
-    msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
-    msgbody     = "TestBody"
+	toaddrs     = "john.bragato@bluefly.com"
+	msgsubj    = "File: {0} was attached ByPython".format(os.path.basename(sys.argv[1]))
+	msgbody     = "TestBody"
 
 ## Test for HTML File to insert as Body of email
 
@@ -90,10 +90,10 @@ except IndexError:
 
 ## Include file as first arg as an attachment to mail
 try:
-    attachfile   = sys.argv[1]
-    if os.path.isfile(attachfile):
-        send_gmail(toaddrs, msgsubj, msgbody, attachfile)
-    else:
-        send_gmail(toaddrs, msgsubj, msgbody, "NotAfile")
+	attachfile   = sys.argv[1]
+	if os.path.isfile(attachfile):
+		send_gmail(toaddrs, msgsubj, msgbody, attachfile)
+	else:
+		send_gmail(toaddrs, msgsubj, msgbody, "NotAfile")
 except:
-    print "Failed to Send File. Make Sure a valid file is your 1st Arg"
+	print "Failed to Send File. Make Sure a valid file is your 1st Arg"
