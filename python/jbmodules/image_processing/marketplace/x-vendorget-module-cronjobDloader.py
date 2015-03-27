@@ -282,7 +282,7 @@ def mongo_update_url_dest_info(image_url, destpath):
     mimeContentHeader  = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
 
     if image_url:
-        #import jbmodules
+
         # from jbmodules
         import mongo_tools.mongo_image_prep as mongo_image_prep
         updateCheck = ''
@@ -355,6 +355,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     print 'Done With multiprocmagick'
 
 if __name__ == '__main__':
+    from jbmodules import *
     main()
 
 
