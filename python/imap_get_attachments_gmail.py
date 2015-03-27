@@ -23,7 +23,7 @@ today = dt.split(' ')[0]
 
 feeds_dir = '/mnt/Post_Complete/.Vendor_to_Load/feeds'
 m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
-m.login('john.bragato@bluefly.com','forty000one')
+m.login('john.bragato@bluefly.com','forty000One')
 keywordsSearch = 'Feeds'
 searchString = "(ALL SUBJECT '%s')" % keywordsSearch
 
