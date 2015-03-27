@@ -48,4 +48,4 @@ if __name__ == '__main__':
     #url = 'https://lh6.googleusercontent.com/OIewDxLKKSkrPbeyzzvnokg5QaQGryNrMwQFV9IoxYZKtop6ow_OQ45bX0lvq1e9SUveGICEK-I=w1154-h561'
     url = 'https://drive.google.com/file/d/0B4p-sxy24gtqb3dLQjZzZUJqSmc/edit?usp=sharing'
 
-    download_file_content(service=service, drive_file=drive_file)
+    download_file_content(service=service, drive_file='TESTdrive_file')

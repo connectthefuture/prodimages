@@ -24,7 +24,7 @@ def download_googledrive_shared_image(targeturl, destdir=None):
     # download found img urls content
     link = regex_sourcefile.findall(imglinks[0])
     print link
-    localpath = os.path.join(destdir, link.split('/')[-1])
+    localpath = os.path.join(destdir, link[0].split('/')[-1])
     res = requests.get(link, stream=True, timeout=10)
     with open(localpath, 'ab+') as f:
         f.write(res.content)
