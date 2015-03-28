@@ -282,9 +282,9 @@ def mongo_update_url_dest_info(image_url, destpath):
     mimeContentHeader  = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
 
     if image_url:
-        # import jbmodules
+        import jbmodules
         from jbmodules import mongo_tools
-        from mongo_tools import mongo_image_prep as mongo_image_prep
+        from jbmodules.mongo_tools import mongo_image_prep as mongo_image_prep
         updateCheck = ''
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
             destpath,
