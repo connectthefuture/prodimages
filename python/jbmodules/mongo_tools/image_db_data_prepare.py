@@ -74,8 +74,9 @@ def getparse_metadata_from_imagefile(image_filepath):
     mdatainsert[image_filepath] = groupdict #.items()
     return mdatainsert
 
+
 def insert_gridfs_extract_metadata(image_filepath):
-    from mongo_gridfs_insert_file import insert_file_gridfs_file7
+    from mongo_gridfs_insert_file import insert_file_gridfs
     import os,sys
     try:
         db_name = str(sys.argv[2]) #'gridfs_file7'
@@ -83,12 +84,12 @@ def insert_gridfs_extract_metadata(image_filepath):
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     print image_filepath, metadata, db_name
-    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    insert_record = insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 
 def update_gridfs_extract_metadata(image_filepath):
-    from mongo_gridfs_insert_file import update_file_gridfs_file7
+    from mongo_gridfs_insert_file import insert_file_gridfs
     import os,sys
     try:
          db_name = str(sys.argv[2])
@@ -96,7 +97,7 @@ def update_gridfs_extract_metadata(image_filepath):
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     print image_filepath, metadata
-    insert_record = insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    insert_record = insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 
