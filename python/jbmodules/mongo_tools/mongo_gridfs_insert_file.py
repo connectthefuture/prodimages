@@ -122,10 +122,14 @@ def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
             content_type= 'image/' + str(ext)
         #content-type=content_type
         if not find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
-            with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
-                with open(filepath) as filedata:
-                    fp.write(filedata.read())
-            return fp, db
+            try:
+                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+                    with open(filepath) as filedata:
+                        fp.write(filedata.read())
+                return fp, db
+            except IOError:
+                print ' IO ERROR '
+                return False
         else:
             r = find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
             print r
