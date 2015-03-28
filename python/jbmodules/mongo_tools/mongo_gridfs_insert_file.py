@@ -88,7 +88,7 @@ def get_duplicate_records(db_name=None, collection_name=None):
     return res
 
 
-def retrieve_last_instance_gridfs_file7(filepath=None, db_name=None):
+def retrieve_last_instance_gridfs(filepath=None, db_name=None):
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     return fs
 
@@ -108,7 +108,7 @@ def find_record_gridfs(key=None, md5checksum=None, db_name=None, collection_name
     return check
 
 
-def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None, **kwargs):
+def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
     import os
     db, fs = connect_gridfs_mongodb(db_name=db_name)
     try:
@@ -121,13 +121,13 @@ def insert_file_gridfs_file7(filepath=None, metadata=None, db_name=None, **kwarg
         else:
             content_type= 'image/' + str(ext)
         #content-type=content_type
-        if not find_record_gridfs(key={"filename": filename}, db_name='gridfs_file7', collection_name='fs.files'):    
+        if not find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
             with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
                 with open(filepath) as filedata:
                     fp.write(filedata.read())
             return fp, db
         else:
-            r = find_record_gridfs(key={"filename": filename}, db_name='gridfs_file7', collection_name='fs.files')
+            r = find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
             print r
     except AttributeError:
         print 'Failed ', filepath
@@ -137,11 +137,11 @@ def main(filepath=None,metadata=None,db_name=None):
     print filepath
     if not db_name:
         db_name = 'gridfs_file7'
-    insert_res = insert_file_gridfs_file7(filepath=filepath,metadata=metadata,db_name=db_name)
+    insert_res = insert_file_gridfs(filepath=filepath,metadata=metadata,db_name=db_name)
     try:
         return insert_res.items()
     except AttributeError:
-        return insert_res 
+        return insert_res
 
 
 
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     import sys
     try:
         filepath = sys.argv[1]
-        res = insert_file_gridfs_file7(filepath=filepath)[0]
+        res = insert_file_gridfs(filepath=filepath)[0]
         print res._id 
     except IndexError:
         print 'No File supplied for insert'
