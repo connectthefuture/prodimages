@@ -74,7 +74,34 @@ def instantiate_boxapi_service():
     service = create_boxapi_service(serviceName=serviceName, client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri, scope=scope)
     return service
 
+
 ## BoxAppGalleryUrl = 'https://app.box.com/services/auth_download_client'
+
+def create_boxapi_client(oauth=None):
+    from boxsdk import Client
+    oauth = instantiate_boxapi_service()
+    client = Client(oauth)
+    return client
+
+
+def qstring2kvpairs(url_with_qstring):
+    from urlparse import urlparse, parse_qs
+    url = url_with_qstring.encode('UTF-8')
+    #urlparse(url).query
+    qkvpairs = parse_qs(urlparse(url).query)
+    return qkvpairs
+
+
+def download_boxapi_auth_file(client=None, image_url=None, destpath=None):
+    file_id = qstring2kvpairs(image_url)['id'][0]
+    content = client.file(file_id=file_id).content()
+    if not destpath:
+        return content
+    else:
+        with open(destpath,'w') as f:
+            f.write(content)
+            f.close()
+        return destpath
 
 
 def store_tokens():
@@ -85,12 +112,6 @@ def store_tokens():
         store_tokens=instantiate_boxapi_service,
     )
     auth_url, csrf_token = oauth.get_authorization_url('http://localhost')
-
-def create_boxapi_client(oauth=None):
-    from boxsdk import Client
-    oauth = instantiate_boxapi_service()
-    client = Client(oauth)
-    return client
 
 
 if __name__ == '__main__':
