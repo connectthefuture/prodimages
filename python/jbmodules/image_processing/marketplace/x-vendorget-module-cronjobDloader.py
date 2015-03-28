@@ -308,8 +308,9 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         ALL = ''
     if not vendor:
         vendor       = '%_%'  
-    #if not vendor_brand:
+    #if vendor_brand:
     #    vendor_brand = '%_%'
+    #   ALL='ALL'
 
     ################################
     ## Get the New Style's Urls ####
@@ -355,6 +356,14 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     print 'Done With multiprocmagick'
 
 if __name__ == '__main__':
-    main()
-
+    import sys
+    try:
+        vendor = sys.argv[1]
+        try:
+            vendor_brand = sys.argv[2]
+            main(vendor=vendor, vendor_brand=vendor_brand)
+        except IndexError:
+            main(vendor=vendor)
+    except IndexError:
+        main()
 
