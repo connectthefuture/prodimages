@@ -105,8 +105,7 @@ def main():
     xlspath = sys.argv[1]
     workbk = xlspath
 
-
-    send_post_bulkdataload_tool(xlspath, POSTURL=None)
+    send_post_bulkdataload_tool(xlspath)    # POSTURL=None)
     #outdict = readxl_outputdict(workbk)
     #compiled_rows = compile_outdict_by_rowkeys(outdict)
 
