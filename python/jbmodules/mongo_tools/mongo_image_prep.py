@@ -103,7 +103,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         db_name='gridfs_file7'
     metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     print image_filepath, metadata
-    insert_record = mongo_gridfs_insert_file.insert_file_gridfs_file7(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    insert_record = mongo_gridfs_insert_file.insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 if __name__ == '__main__':
