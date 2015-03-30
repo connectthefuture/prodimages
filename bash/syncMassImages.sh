@@ -53,3 +53,8 @@ chmod -R ugo+rx $syncdnameLLDes ;
 ######################
 find /mnt/Post_Ready/aPhotoPush -type d -mindepth 1 -empty -exec rmdir {} \;
 find /mnt/Design/LookletSync -type d -mindepth 1 -empty -exec rmdir {} \;
+
+
+#############
+## sync crontab 
+cd /root && crontab crontabmain ;
