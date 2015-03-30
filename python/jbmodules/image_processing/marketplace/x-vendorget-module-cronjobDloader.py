@@ -351,7 +351,9 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## Process the files running each brand in a separate parallel process
     ########
     ## 3 ## Process the images
-    import image_processing
+    import jbmodules
+    import jbmodules.image_processing
+    from jbmodules import image_processing
     from image_processing.marketplace import multiprocmagick as multiprocmagick
     multiprocmagick.funkRunner(root_img_dir=dest_root)
     print 'Done With multiprocmagick'
