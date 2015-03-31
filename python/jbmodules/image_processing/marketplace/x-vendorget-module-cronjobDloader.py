@@ -330,18 +330,22 @@ def mongo_upsert_threaded(argslist=None):
                     pass
                 elif res == 'Duplicate' and destpath is not None:
                     ## Then remove the download and delete
-                    os.remove(destpath)
+                    try:
+                        os.remove(destpath)
+                    except OSError:
+                        print ' OSError in MongoWorker '
+                        pass
                     print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
             else:
                 print ' NewsIt WITHALITTLE --> RES'
                 pass
-            print ' Mongo Res ', res
+            print ' Mongo Res Done', res
             # try:
             #     insertres =  jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(item)
             # except:
             #     insertres =  jbmodules.mongo_image_prep.update_gridfs_extract_metadata(item)
             count += 1
-            print count, res ## '\n\t', imgdata
+            print count, res, item, ' <-- now task done' ## '\n\t', imgdata
             qmongo.task_done()
 
     jobcount=len(argslist) #detect number of cores
