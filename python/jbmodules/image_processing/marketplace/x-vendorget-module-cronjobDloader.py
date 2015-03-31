@@ -274,7 +274,8 @@ def multi_url_downloader(argslist=None):
     q.join() #block until all tasks are done
 
 
-def mongo_update_url_dest_info(image_url, destpath):
+def mongo_update_url_dest_info(urldest_tuple):
+    image_url,destpath = urldest_tuple
     image_url          = image_url
     tmpfilename        = str(destpath.split('/')[-1])
     colorstyle         = str(tmpfilename[:9])
@@ -296,6 +297,53 @@ def mongo_update_url_dest_info(image_url, destpath):
             mimeContentHeader  = 'image/{}'.format(mimeContentHeader)
             )     ## image_url=image_url, destpath=destpath)
     return updateCheck, destpath
+
+
+def mongo_upsert_threaded(argslist=None):
+    import Queue
+    import threading
+    import multiprocessing
+    import mongo_tools
+    #from mongo_tools.mongo_image_prep import insert_gridfs_extract_metadata, update_gridfs_extract_metadata
+    
+    qmongo = Queue.Queue()
+    print type(argslist), type(argslist)
+    for i in argslist: #put 30 tasks in the queue
+        if i:
+            print i, ' Is a file to add to mongo argslist'
+            qmongo.put([i])
+
+    def mongoworker():
+        import os
+        count = 0
+        while True:
+            item = qmongo.get()
+            print item
+            res, destpath = mongo_update_url_dest_info(item)
+            if not res: pass
+            elif res == 'Duplicate':
+                ## Then remove the download and delete
+                os.remove(destpath)
+                print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
+            else: pass
+            print ' Mongo Res ', res
+            # try:
+            #     insertres =  jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(item)
+            # except:
+            #     insertres =  jbmodules.mongo_image_prep.update_gridfs_extract_metadata(item)
+            count += 1
+            print count, insertres ## '\n\t', imgdata
+            qmongo.task_done()
+
+    jobcount=len(argslist) #detect number of cores
+    print("Creating %d threads for the MongoMachine" % jobcount)
+    for i in xrange(jobcount):
+        t = threading.Thread(target=mongoworker)
+        tmongo.daemon = True
+        tmongo.start()
+
+    qmongo.join() #block until all tasks are done
+    return
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
@@ -332,19 +380,10 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
     import os
-    for t in urlsdload_list:
-        image_url, destpath = t
-        res, destpath = mongo_update_url_dest_info(image_url, destpath)
-        if not res: pass
-        elif res == 'Duplicate':
-            ## Then remove the download and delete the tuple "t" in the urlsdload list
-            
-            urlsdload_list.remove(t)
-            os.remove(destpath)
-            print ' Removed Duplicate image ', destpath.split('/')[-2], ' Style\v ', image_url, ' ---> ', destpath.split('/')[-1]
-        else: pass
-        print ' Mongo Res ', res
-    print ' Done With 2B Mongo'
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    import multiprocmagick as multiprocmagick
+    mongo_upsert_threaded(argslist=urlsdload_list)
+    print ' Done With 2B Mongo Upsert Threads'
     ##########################
     ########
     ## 3 ###
@@ -352,8 +391,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## Process the files running each brand in a separate parallel process
     ########
     ## 3 ## Process the images
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    import multiprocmagick as multiprocmagick
+    #
     multiprocmagick.funkRunner(root_img_dir=dest_root)
     print 'Done With multiprocmagick'
 
