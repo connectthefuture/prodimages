@@ -35,17 +35,11 @@ class Task(object):
         self.destdir = destdir
     def __call__(self):
         from jbmodules import image_processing
-        from image_processing import marketplace, magick_tweaks
-        import image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
-        import mongo_tools
+        from jbmodules.image_processing import marketplace, magick_tweaks
+        import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
         magick_tweaks.convert_img_srgb.main(image_file=self.img)
-        ## Add to Mongo DB
-        # try:
-        #     mongo_tools.mongo_image_prep.update_gridfs_extract_metadata(self.img, db_name='gridfs_mrktplce')
-        # except:
-        #     mongo_tools.mongo_image_prep.insert_gridfs_extract_metadata(self.img, db_name='gridfs_mrktplce')
-        ## Generate png from source then jpgs from png
+        
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=dict(self.rgbmean), destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
@@ -54,7 +48,7 @@ class Task(object):
         return '%s -- %s' % (self.img, self.destdir)
 
 
-def run_threaded(argslist=None):
+def run_threaded_imgdict(argslist=None):
     import Queue
     import threading
     import multiprocessing
@@ -138,7 +132,7 @@ def funkRunner2(root_img_dir=None):
     img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
     print type(img_list)
     print '\tLen ImageList preThreaded'
-    img_dict = run_threaded(argslist=(img_list,))
+    img_dict = run_threaded_imgdict(argslist=(img_list,))
     print len(img_list)
     tasks = multiprocessing.JoinableQueue()
     results = multiprocessing.Queue()
