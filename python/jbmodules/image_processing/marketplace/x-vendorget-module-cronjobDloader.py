@@ -352,7 +352,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## Process the files running each brand in a separate parallel process
     ########
     ## 3 ## Process the images
-    os.chdir(os.path.abspath(__file__))
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     import multiprocmagick as multiprocmagick
     multiprocmagick.funkRunner(root_img_dir=dest_root)
     print 'Done With multiprocmagick'
