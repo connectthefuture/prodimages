@@ -111,7 +111,7 @@ def run_threaded(argslist=None):
     return img_dict_list
 
 
-def funkRunner(root_img_dir=None):
+def funkRunner2(root_img_dir=None):
     import multiprocessing
     #import Queue
     import threading
@@ -119,10 +119,14 @@ def funkRunner(root_img_dir=None):
     from jbmodules import image_processing
     from image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = '/mnt/Post_Comnplete/ImageDrop'
-
+    print 'Starting Funkrunner2 Pools'
     # Enqueue jobs
+    if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
+        imagesGlob = os.path.join(root_img_dir,'*/*/*.??[gG]'))        
+    else:
+        imagesGlob = os.path.join(root_img_dir,'*.??[gG]'))
     poolRename = multiprocessing.Pool(8)
-    images = [ f for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
+    images = [ f for f in (glob.glob(imageGlob) if f not None ]
     resrename = poolRename.map(rename_retouched_file, images)
     poolRename.close()
     poolRename.join()
