@@ -322,15 +322,16 @@ def mongo_upsert_threaded(argslist=None):
         count = 0
         while True:
             item = qmongo.get()
-            print item
-            res, destpath = mongo_update_url_dest_info(item)
-            if not res:
-                print ' NewsIt NotRes' 
-                pass
-            elif res == 'Duplicate':
-                ## Then remove the download and delete
-                os.remove(destpath)
-                print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
+            print item, ' MongoWorker'
+            if item[1] is not None:
+                res, destpath = mongo_update_url_dest_info(item)
+                if not res:
+                    print ' NewsIt NotRes', count 
+                    pass
+                elif res == 'Duplicate' and destpath not None:
+                    ## Then remove the download and delete
+                    os.remove(destpath)
+                    print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
             else:
                 print ' NewsIt WITHALITTLE --> RES'
                 pass
