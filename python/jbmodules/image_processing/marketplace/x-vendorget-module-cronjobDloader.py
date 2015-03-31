@@ -311,6 +311,11 @@ def mongo_upsert_threaded(argslist=None):
         if i:
             print i, ' Is a file to add to mongo argslist'
             qmongo.put([i])
+    
+    ## Return for
+    restest = ''
+    if i:
+        restest = '/'.join(i[1].split('/')[:-1])
 
     def mongoworker():
         import os
@@ -319,12 +324,16 @@ def mongo_upsert_threaded(argslist=None):
             item = qmongo.get()
             print item
             res, destpath = mongo_update_url_dest_info(item)
-            if not res: pass
+            if not res:
+                print ' NewsIt NotRes' 
+                pass
             elif res == 'Duplicate':
                 ## Then remove the download and delete
                 os.remove(destpath)
                 print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
-            else: pass
+            else:
+                print ' NewsIt WITHALITTLE --> RES'
+                pass
             print ' Mongo Res ', res
             # try:
             #     insertres =  jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(item)
@@ -342,7 +351,10 @@ def mongo_upsert_threaded(argslist=None):
         tmongo.start()
 
     qmongo.join() #block until all tasks are done
-    return
+    if restest:
+        return restest
+    else:
+        return
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
@@ -380,8 +392,8 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## 2B ##
     ## Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
-    
-    mongo_upsert_threaded(argslist=urlsdload_list)
+    res = ''
+    res = mongo_upsert_threaded(argslist=urlsdload_list)
     print ' Done With 2B Mongo Upsert Threads'
     ##########################
     ########
@@ -394,10 +406,18 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     from jbmodules import image_processing
     import os
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    import image_processing.marketplace.multiprocmagick as multiprocmagick2
+    import jbmodules.image_processing.marketplace.multiprocmagick as multiprocmagick2
     from multiprocmagick2 import funkRunner2
-    multiprocmagick2.funkRunner2(root_img_dir=dest_root)
-    print 'Done With multiprocmagick --> ', dest_root
+    if res:
+        if os.path.isdir(res):
+            root_img_dir = res
+        else:
+            root_img_dir = os.path.join(dest_root, vendor, '*')
+    else:
+        root_img_dir = dest_root
+    multiprocmagick2.funkRunner2(root_img_dir=root_img_dir)
+    print 'Done With multiprocmagick --> ', root_img_dir
+
 
 if __name__ == '__main__':
     import sys
