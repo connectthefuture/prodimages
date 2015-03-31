@@ -303,8 +303,6 @@ def mongo_upsert_threaded(argslist=None):
     import Queue
     import threading
     import multiprocessing
-    import mongo_tools
-    #from mongo_tools.mongo_image_prep import insert_gridfs_extract_metadata, update_gridfs_extract_metadata
     
     qmongo = Queue.Queue()
     print type(argslist), type(argslist)
