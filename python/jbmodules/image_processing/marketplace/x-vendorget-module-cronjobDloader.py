@@ -352,6 +352,7 @@ def mongo_upsert_threaded(argslist=None):
         tmongo.start()
 
     qmongo.join() #block until all tasks are done
+    print 'Mongo Upsert threads done'
     if restest:
         return restest
     else:
