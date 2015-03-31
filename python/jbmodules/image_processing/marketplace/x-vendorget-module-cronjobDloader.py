@@ -328,7 +328,7 @@ def mongo_upsert_threaded(argslist=None):
                 if not res:
                     print ' NewsIt NotRes', count 
                     pass
-                elif res == 'Duplicate' and destpath not None:
+                elif res == 'Duplicate' and destpath is not None:
                     ## Then remove the download and delete
                     os.remove(destpath)
                     print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
