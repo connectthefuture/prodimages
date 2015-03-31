@@ -275,13 +275,13 @@ def multi_url_downloader(argslist=None):
 
 
 def mongo_update_url_dest_info(urldest_tuple):
-    print urldest_tuple ,' Url Dest Tuple'
-    image_url,destpath = urldest_tuple
-    image_url          = image_url
-    tmpfilename        = str(destpath.split('/')[-1])
-    colorstyle         = str(tmpfilename[:9])
-    image_number       = str(tmpfilename.split('.')[-2][-1])
-    mimeContentHeader  = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
+    print urldest_tuple, ' Url Dest Tuple'
+    image_url, destpath  = urldest_tuple[0]
+    image_url            = image_url
+    tmpfilename          = str(destpath.split('/')[-1])
+    colorstyle           = str(tmpfilename[:9])
+    image_number         = str(tmpfilename.split('.')[-2][-1])
+    mimeContentHeader    = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
 
     if image_url:
         import jbmodules
