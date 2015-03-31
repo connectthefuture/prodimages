@@ -77,7 +77,7 @@ def run_threaded(argslist=None):
         while True:
             item = q.get()
             print item
-            imgdata = sort_files_by_values([item])
+            imgdata = sort_files_by_values(item)
             img_dict_list.append(imgdata)
             insertres =  insert_gridfs_extract_metadata(item)
             count += 1
