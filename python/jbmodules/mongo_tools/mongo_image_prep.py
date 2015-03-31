@@ -86,6 +86,7 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
             db_name = sys.argv[2]
         except IndexError:
             db_name='gridfs_file7'
+    print ' is file --> ', image_filepath
     if os.path.isfile(image_filepath):
         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     else:
