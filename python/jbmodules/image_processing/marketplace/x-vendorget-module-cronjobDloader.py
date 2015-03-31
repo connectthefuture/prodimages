@@ -331,13 +331,14 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## 2B ##
     ## Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
+    import os
     for t in urlsdload_list:
         image_url, destpath = t
         res, destpath = mongo_update_url_dest_info(image_url, destpath)
         if not res: pass
         elif res == 'Duplicate':
             ## Then remove the download and delete the tuple "t" in the urlsdload list
-            import os
+            
             urlsdload_list.remove(t)
             os.remove(destpath)
             print ' Removed Duplicate image ', destpath.split('/')[-2], ' Style\v ', image_url, ' ---> ', destpath.split('/')[-1]
@@ -351,10 +352,8 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## Process the files running each brand in a separate parallel process
     ########
     ## 3 ## Process the images
-    import jbmodules
-    import jbmodules.image_processing
-    from jbmodules import image_processing
-    from image_processing.marketplace import multiprocmagick as multiprocmagick
+    os.chdir(os.path.abspath(__file__))
+    import multiprocmagick as multiprocmagick
     multiprocmagick.funkRunner(root_img_dir=dest_root)
     print 'Done With multiprocmagick'
 
