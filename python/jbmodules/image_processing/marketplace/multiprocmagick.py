@@ -117,7 +117,7 @@ def funkRunner2(root_img_dir=None):
     import threading
     import glob, os.path
     from jbmodules import image_processing
-    from image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
+    from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = '/mnt/Post_Comnplete/ImageDrop'
     print 'Starting Funkrunner2 Pools'
     # Enqueue jobs
