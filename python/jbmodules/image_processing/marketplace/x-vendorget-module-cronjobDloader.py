@@ -394,9 +394,8 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     from jbmodules import image_processing
     import os
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
     import image_processing.marketplace.multiprocmagick as multiprocmagick2
-
+    from multiprocmagick2 import funkRunner2
     multiprocmagick2.funkRunner2(root_img_dir=dest_root)
     print 'Done With multiprocmagick --> ', dest_root
 
