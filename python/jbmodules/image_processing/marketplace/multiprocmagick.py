@@ -134,7 +134,7 @@ def funkRunner2(root_img_dir=None):
     #poolDict = multiprocessing.Pool(num_consumers)
     #images_renamed = [ f for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
-    img_list =  glob.glob(imagesGlob)
+    img_list =  [ f for f in glob.glob(imagesGlob) if f ]
     print type(img_list)
     print '\tLen ImageList preThreaded'
     img_dict = run_threaded(argslist=(img_list,))
