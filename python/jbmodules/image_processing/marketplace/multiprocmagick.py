@@ -70,8 +70,9 @@ def run_threaded_imgdict(argslist=None):
         count = 0
         while True:
             item = q.get()
-            print item
-            imgdata = sort_files_by_values(item)
+            print item[0]
+            imgdata = sort_files_by_values(item[0])
+            print imgdata
             img_dict_list.append(imgdata)
             insertres =  insert_gridfs_extract_metadata(item[0])
             count += 1
