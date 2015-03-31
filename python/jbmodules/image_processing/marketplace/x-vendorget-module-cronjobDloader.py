@@ -336,7 +336,7 @@ def mongo_upsert_threaded(argslist=None):
     jobcount=len(argslist) #detect number of cores
     print("Creating %d threads for the MongoMachine" % jobcount)
     for i in xrange(jobcount):
-        t = threading.Thread(target=mongoworker)
+        tmongo = threading.Thread(target=mongoworker)
         tmongo.daemon = True
         tmongo.start()
 
