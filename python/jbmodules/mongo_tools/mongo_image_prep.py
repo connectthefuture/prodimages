@@ -59,6 +59,7 @@ def zero_byte_file_filter(image_filepath,error_dir=None):
 def getparse_metadata_from_imagefile(image_filepath):
     import os, re
     from collections import defaultdict
+    print 'mongo Prep ', image_filepath
     image_filepath = os.path.abspath(image_filepath)
     mdata = get_exif_all_data(image_filepath)
     mdatainsert = {} #defaultdict(list)

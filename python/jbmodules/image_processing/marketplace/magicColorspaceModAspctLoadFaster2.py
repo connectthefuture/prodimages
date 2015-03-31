@@ -214,7 +214,7 @@ def sort_files_by_values(fileslist):
                 print "{0} Files Remaining-TypeError".format(count)
                 pass
             except TypeError:
-                print ' PAssing '
+                print ' PAssing ', f
                 pass
         except ZeroDivisionError:
             filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
