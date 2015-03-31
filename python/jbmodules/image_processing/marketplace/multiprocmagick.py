@@ -188,11 +188,7 @@ def funkRunner(root_img_dir=None):
     img_list =  glob.glob(os.path.join(root_img_dir,'*.??[gG]'))
     print type(img_list)
     print '\tLen ImageList preThreaded'
-
     img_dict = run_threaded(argslist=(img_list,))
-    mongo_res = run_threaded_mongo_upsert(argslist=(img_list,))  
-
-
     print len(img_list)
     tasks = multiprocessing.JoinableQueue()
     results = multiprocessing.Queue()
