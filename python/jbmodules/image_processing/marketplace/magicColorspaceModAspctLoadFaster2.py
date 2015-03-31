@@ -618,6 +618,7 @@ def main(root_img_dir=None):
                 pass
 
     else:
+        'Image is ', root_img_dir
         img = root_img_dir
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
