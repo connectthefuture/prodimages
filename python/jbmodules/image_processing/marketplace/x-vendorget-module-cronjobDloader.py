@@ -380,9 +380,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## 2B ##
     ## Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
-    import os
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    import multiprocmagick as multiprocmagick
+    
     mongo_upsert_threaded(argslist=urlsdload_list)
     print ' Done With 2B Mongo Upsert Threads'
     ##########################
@@ -393,7 +391,13 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ########
     ## 3 ## Process the images
     #
-    multiprocmagick.funkRunner2(root_img_dir=dest_root)
+    from jbmodules import image_processing
+    import os
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+    import image_processing.marketplace.multiprocmagick as multiprocmagick2
+
+    multiprocmagick2.funkRunner2(root_img_dir=dest_root)
     print 'Done With multiprocmagick --> ', dest_root
 
 if __name__ == '__main__':
