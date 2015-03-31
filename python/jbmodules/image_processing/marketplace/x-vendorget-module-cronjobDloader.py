@@ -355,15 +355,17 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         ALL = ''
     if not vendor:
         vendor       = '%_%'  
-    #if vendor_brand:
-    #    vendor_brand = '%_%'
-    #   ALL='ALL'
-
+    if vendor_brand: 
+        pass
+    else:
+        vendor_brand = ''
+    
+    #ALL='ALL'
     ################################
     ## Get the New Style's Urls ####
     ########
     ## 1 ## Query for new Marketplace Styles
-    marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand='', po_number='', ALL=ALL)
+    marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, po_number='', ALL=ALL)
     ## Create 2 item tuple list of every style with valid incomplete urls
     ## Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
     #########
@@ -391,8 +393,8 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ########
     ## 3 ## Process the images
     #
-    multiprocmagick.funkRunner(root_img_dir=dest_root)
-    print 'Done With multiprocmagick'
+    multiprocmagick.funkRunner2(root_img_dir=dest_root)
+    print 'Done With multiprocmagick --> ', dest_root
 
 if __name__ == '__main__':
     import sys
