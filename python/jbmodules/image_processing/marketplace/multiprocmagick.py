@@ -58,9 +58,9 @@ def run_threaded(argslist=None):
     import Queue
     import threading
     import multiprocessing
-    import mongo_tools
-    from image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
-    from mongo_tools.mongo_image_prep import insert_gridfs_extract_metadata, update_gridfs_extract_metadata
+    import jbmodules
+    from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
+    from jbmodules.mongo_tools.mongo_image_prep import insert_gridfs_extract_metadata, update_gridfs_extract_metadata
     q = Queue.Queue()
     # print type(argslist), len(argslist), ' type and length argslist \n'
     print type(argslist), type(argslist)
@@ -79,7 +79,7 @@ def run_threaded(argslist=None):
             print item
             imgdata = sort_files_by_values([item])
             img_dict_list.append(imgdata)
-            insertres =  mongo_tools.mongo_image_prep.insert_gridfs_extract_metadata(item)
+            insertres =  insert_gridfs_extract_metadata(item)
             count += 1
             print count, ## '\n\t', imgdata
             q.task_done()
