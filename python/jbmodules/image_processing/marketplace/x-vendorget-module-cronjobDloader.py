@@ -323,7 +323,7 @@ def mongo_upsert_threaded(argslist=None):
         while True:
             item = qmongo.get()
             print item, ' MongoWorker'
-            if item[1] is not None:
+            if item is not None:
                 res, destpath = mongo_update_url_dest_info(item)
                 if not res:
                     print ' NewsIt NotRes', count 
