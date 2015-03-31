@@ -348,7 +348,7 @@ def mongo_upsert_threaded(argslist=None):
             print count, res, item, ' <-- now task done' ## '\n\t', imgdata
             qmongo.task_done()
 
-    jobcount=len(argslist) #detect number of cores
+    jobcount= 32 #len(argslist) #detect number of cores
     print("Creating %d threads for the MongoMachine" % jobcount)
     for i in xrange(jobcount):
         tmongo = threading.Thread(target=mongoworker)
