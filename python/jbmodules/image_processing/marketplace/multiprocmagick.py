@@ -38,7 +38,7 @@ class Task(object):
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
-        magick_tweaks.convert_img_srgb.main(image_file=self.img)
+        jbmodules.magick_tweaks.convert_img_srgb.main(image_file=self.img)
         
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=dict(self.rgbmean), destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
@@ -90,7 +90,7 @@ def run_threaded_imgdict(argslist=None):
     #             qmongo.task_done()
 
     print 'argsL ', argslist[0], type(argslist), ' Type ArgsList RunThreaded'
-    jobcount=len(argslist) #detect number of cores
+    jobcount=len(argslist[0]) #detect number of cores
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
         t = threading.Thread(target=worker)
