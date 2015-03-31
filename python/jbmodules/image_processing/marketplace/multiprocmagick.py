@@ -64,7 +64,7 @@ def run_threaded(argslist=None):
     q = Queue.Queue()
     # print type(argslist), len(argslist), ' type and length argslist \n'
     print type(argslist), type(argslist)
-    for i in argslist: #put 30 tasks in the queue
+    for i in argslist[0]: #put 30 tasks in the queue
         print i, ' argslist'
         if i:
             q.put([i])
@@ -134,6 +134,7 @@ def funkRunner2(root_img_dir=None):
     #poolDict = multiprocessing.Pool(num_consumers)
     #images_renamed = [ f for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
+    #img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
     img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
     print type(img_list)
     print '\tLen ImageList preThreaded'
