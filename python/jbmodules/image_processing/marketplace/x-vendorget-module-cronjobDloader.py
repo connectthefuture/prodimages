@@ -331,7 +331,7 @@ def mongo_upsert_threaded(argslist=None):
             # except:
             #     insertres =  jbmodules.mongo_image_prep.update_gridfs_extract_metadata(item)
             count += 1
-            print count, insertres ## '\n\t', imgdata
+            print count, res ## '\n\t', imgdata
             qmongo.task_done()
 
     jobcount=len(argslist) #detect number of cores
