@@ -409,7 +409,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     import jbmodules.image_processing.marketplace.multiprocmagick as multiprocmagick2
     #from multiprocmagick2 import funkRunner2
-    if vendor and res:
+    if vendor:
         if os.path.isdir(res):
             root_img_dir = res
         else:
