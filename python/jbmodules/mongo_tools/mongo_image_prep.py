@@ -60,7 +60,7 @@ def getparse_metadata_from_imagefile(image_filepath):
     import os, re
     from collections import defaultdict
     print 'mongo Prep ', image_filepath
-    image_filepath = os.path.abspath(image_filepath)
+    #image_filepath = os.path.abspath(image_filepath)
     mdata = get_exif_all_data(image_filepath)
     mdatainsert = {} #defaultdict(list)
     groupdict = defaultdict(list)
@@ -86,7 +86,10 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
             db_name = sys.argv[2]
         except IndexError:
             db_name='gridfs_file7'
-    metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
+    if os.path.isfile(image_filepath):
+        metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
+    else:
+        metadata = {'ERROR_PATH': image_filepath}
     print image_filepath, metadata
     insert_record = insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
