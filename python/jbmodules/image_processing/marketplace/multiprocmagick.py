@@ -126,7 +126,7 @@ def funkRunner2(root_img_dir=None):
     else:
         imagesGlob = os.path.join(root_img_dir,'*.??[gG]')
     poolRename = multiprocessing.Pool(8)
-    images = [ f for f in glob.glob(imagesGlob) if f ]
+    images = [ f for f in glob.glob(imagesGlob) if f is not None ]
     resrename = poolRename.map(rename_retouched_file, images)
     poolRename.close()
     poolRename.join()
@@ -134,7 +134,7 @@ def funkRunner2(root_img_dir=None):
     #poolDict = multiprocessing.Pool(num_consumers)
     #images_renamed = [ f for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
-    img_list =  [ f for f in glob.glob(imagesGlob) if f ]
+    img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
     print type(img_list)
     print '\tLen ImageList preThreaded'
     img_dict = run_threaded(argslist=(img_list,))
