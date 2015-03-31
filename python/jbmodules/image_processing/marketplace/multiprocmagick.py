@@ -91,7 +91,7 @@ def run_threaded_imgdict(argslist=None):
     #             qmongo.task_done()
 
     print 'argsL ', argslist[0], type(argslist), ' Type ArgsList RunThreaded'
-    jobcount=len(argslist[0]) #detect number of cores
+    jobcount= 16 #len(argslist[0]) #detect number of cores
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
         t = threading.Thread(target=worker)
