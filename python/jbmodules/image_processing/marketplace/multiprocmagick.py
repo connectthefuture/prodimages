@@ -34,6 +34,7 @@ class Task(object):
         self.rgbmean = rgbmean
         self.destdir = destdir
     def __call__(self):
+        from jbmodules import image_processing
         from image_processing import marketplace, magick_tweaks
         import image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         import mongo_tools
@@ -115,7 +116,7 @@ def funkRunner(root_img_dir=None):
     #import Queue
     import threading
     import glob, os.path
-    import image_processing
+    from jbmodules import image_processing
     from image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = '/mnt/Post_Comnplete/ImageDrop'
 
@@ -172,6 +173,7 @@ def funkRunner(root_img_dir=None):
 def run_multiproccesses_magick(searchdir=None):
     import multiprocessing
     import glob,os
+    from jbmodules import image_processing
     import image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc
     if not searchdir:
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
