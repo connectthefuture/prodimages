@@ -122,9 +122,9 @@ def funkRunner2(root_img_dir=None):
     print 'Starting Funkrunner2 Pools'
     # Enqueue jobs
     if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
-        imagesGlob = os.path.join(root_img_dir,'*/*/*.??[gG]'))        
+        imagesGlob = os.path.join(root_img_dir,'*/*/*.??[gG]')        
     else:
-        imagesGlob = os.path.join(root_img_dir,'*.??[gG]'))
+        imagesGlob = os.path.join(root_img_dir,'*.??[gG]')
     poolRename = multiprocessing.Pool(8)
     images = [ f for f in (glob.glob(imageGlob) if f not None ]
     resrename = poolRename.map(rename_retouched_file, images)
