@@ -126,7 +126,7 @@ def funkRunner2(root_img_dir=None):
     else:
         imagesGlob = os.path.join(root_img_dir,'*.??[gG]')
     poolRename = multiprocessing.Pool(8)
-    images = [ f for f in (glob.glob(imageGlob) if f not None ]
+    images = [ f for f in (glob.glob(imageGlob) if f ]
     resrename = poolRename.map(rename_retouched_file, images)
     poolRename.close()
     poolRename.join()
