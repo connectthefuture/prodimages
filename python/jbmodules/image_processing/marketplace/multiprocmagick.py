@@ -79,7 +79,7 @@ def run_threaded(argslist=None):
             print item
             imgdata = sort_files_by_values(item)
             img_dict_list.append(imgdata)
-            insertres =  insert_gridfs_extract_metadata(item)
+            insertres =  insert_gridfs_extract_metadata(item[0])
             count += 1
             print count, ## '\n\t', imgdata
             q.task_done()
