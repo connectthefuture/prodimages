@@ -39,7 +39,7 @@ class Task(object):
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
         jbmodules.magick_tweaks.convert_img_srgb.main(image_file=self.img)
-        print self.img, ' <-- self.img ' self.rgbmean = rgbmean
+        print self.img, ' <-- self.img ' self.rgbmean
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=dict(self.rgbmean), destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
@@ -71,7 +71,7 @@ def run_threaded_imgdict(argslist=None):
         while True:
             item = q.get()
             print item[0]
-            imgdata = sort_files_by_values(item[0])
+            imgdata = sort_files_by_values(item)
             print imgdata
             img_dict_list.append(imgdata)
             insertres =  insert_gridfs_extract_metadata(item[0])
@@ -161,7 +161,7 @@ def funkRunner2(root_img_dir=None):
 
     # Wait for all of the tasks to finish
     tasks.join()
-
+    print 'Joined Tasks'
     # Start printing results
     while num_jobs:
         result = results.get()
