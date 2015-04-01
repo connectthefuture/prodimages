@@ -34,11 +34,12 @@ class Task(object):
         self.rgbmean = rgbmean
         self.destdir = destdir
     def __call__(self):
+        import jbmodules
         from jbmodules import image_processing
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
-        jbmodules.magick_tweaks.convert_img_srgb.main(image_file=self.img)
+        jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
         print self.img, ' <-- self.img ', self.rgbmean
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=dict(self.rgbmean), destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
@@ -111,6 +112,7 @@ def funkRunner2(root_img_dir=None):
     #import Queue
     import threading
     import glob, os.path
+    import jbmodules
     from jbmodules import image_processing
     from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = '/mnt/Post_Comnplete/ImageDrop'
@@ -173,6 +175,7 @@ def funkRunner2(root_img_dir=None):
 def run_multiproccesses_magick(searchdir=None):
     import multiprocessing
     import glob,os
+    import jbmodules
     from jbmodules import image_processing
     import image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc
     if not searchdir:

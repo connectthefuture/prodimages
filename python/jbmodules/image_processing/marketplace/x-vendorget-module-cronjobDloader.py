@@ -304,7 +304,7 @@ def mongo_upsert_threaded(argslist=None):
     import Queue
     import threading
     import multiprocessing
-    
+    import jbmodules
     qmongo = Queue.Queue()
     print type(argslist), type(argslist)
     for i in argslist: #put 30 tasks in the queue
@@ -364,7 +364,7 @@ def mongo_upsert_threaded(argslist=None):
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
-    #import jbmodules
+    import jbmodules
     countimage = 0
     countstyle = 0
     if not dest_root:
