@@ -87,12 +87,12 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
         except IndexError:
             db_name='gridfs_file7'
     print image_filepath, ' <-- is file -- '
-    if os.path.isfile(image_filepath[1]):
-        metadata = getparse_metadata_from_imagefile(image_filepath[1]).items()[0][1]
+    if os.path.isfile(image_filepath):
+        metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     else:
-        metadata = {'ERROR_PATH': image_filepath[1], 'ERROR_URL': image_filepath[0] }
-    print image_filepath[1], metadata, ' <-- image_filepath[1] and metadata'
-    insert_record = insert_file_gridfs(filepath=image_filepath[1], metadata=metadata, db_name=db_name)
+        metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
+    print image_filepath, metadata, ' <-- image_filepath and metadata'
+    insert_record = insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 
@@ -107,12 +107,12 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         db_name='gridfs_file7'
     except IndexError:
         db_name='gridfs_file7'
-    print ' is file --> ', image_filepath[1]
-    if os.path.isfile(image_filepath[1]):
-        metadata = getparse_metadata_from_imagefile(image_filepath[1]).items()[0][1]
+    print ' is file --> ', image_filepath
+    if os.path.isfile(image_filepath):
+        metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     else:
-        metadata = {'ERROR_PATH': image_filepath[1]}
-    insert_record = mongo_gridfs_insert_file.insert_file_gridfs(filepath=image_filepath[1], metadata=metadata, db_name=db_name)
+        metadata = {'ERROR_PATH': image_filepath}
+    insert_record = mongo_gridfs_insert_file.insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 if __name__ == '__main__':
