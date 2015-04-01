@@ -39,7 +39,13 @@ class Task(object):
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
-        jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
+        import jbmodules.image_processing.magick_tweaks.convert_img_srgb
+        try:
+            jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
+        except AttributeError:
+            print self.img, ' <-- AttributeError'
+            convert_img_srgb.main(image_file=self.img)
+            pass
         print self.img, ' <-- self.img ', self.rgbmean
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=dict(self.rgbmean), destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
