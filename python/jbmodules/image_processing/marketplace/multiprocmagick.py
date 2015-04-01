@@ -148,7 +148,7 @@ def funkRunner2(root_img_dir=None):
 
     print 'RGB MEan Info', type(img_dict), ' len ', len(img_dict)
     num_jobs = len(img_dict)
-    print num_jobs, consumers, root_img_dir
+    print 'jobs -- consumers -- root_img_dir -->', num_jobs, consumers, root_img_dir
     for item in img_dict:
         for img, rgbmean in item.items():
             print img, rgbmean, ' Img -- RGB Mean'
