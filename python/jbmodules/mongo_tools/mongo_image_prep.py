@@ -91,7 +91,7 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
         metadata = getparse_metadata_from_imagefile(image_filepath[1]).items()[0][1]
     else:
         metadata = {'ERROR_PATH': image_filepath[1], 'ERROR_URL': image_filepath[0] }
-    print image_filepath[1], metadata
+    print image_filepath[1], metadata, ' <-- image_filepath[1] and metadata'
     insert_record = insert_file_gridfs(filepath=image_filepath[1], metadata=metadata, db_name=db_name)
     return #insert_record
 
