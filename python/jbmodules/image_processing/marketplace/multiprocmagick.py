@@ -42,8 +42,8 @@ class Task(object):
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
         try:
             jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
-        except AttributeError:
-            print self.img, ' <-- AttributeError'
+        except TypeError:
+            print self.img, ' <-- Type-AttributeError'
         #     convert_img_srgb.main(image_file=self.img)
             pass
         print self.img, ' <-- self.img ', self.rgbmean
