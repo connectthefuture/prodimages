@@ -102,10 +102,7 @@ def main(image_file=None,inprofile=None,outprofile=None):
     if not outprofile:
         outprofile = srgb_webrdy
 
-    try:
-        inmode = get_color_profile_mode(image_file).lower()
-    except AttributeError:
-        print ' srgbconvert Nonetype Error', image_file
+    inmode = get_color_profile_mode(image_file).lower()
 
     if inmode == 'cmyk' and not inprofile:
         inprofile = cmyk_ussheetfedcoat
