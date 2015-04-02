@@ -42,14 +42,16 @@ class Task(object):
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
         try:
             jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
-        except TypeError:
-            print self.img, ' <-- Type-AttributeError'
+        
         #     convert_img_srgb.main(image_file=self.img)
+        #    pass
+            print self.img, ' <-- self.img ', self.rgbmean
+            pngout = magickProc2.subproc_magick_png(self.img, rgbmean=dict(self.rgbmean), destdir=self.destdir)
+            magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
+            magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
+        except TypeError:
+            print self.img, ' <-- Type-AttributeError in Task -->', self.destdir
             pass
-        print self.img, ' <-- self.img ', self.rgbmean
-        pngout = magickProc2.subproc_magick_png(self.img, rgbmean=dict(self.rgbmean), destdir=self.destdir)
-        magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
-        magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
         return '%s -- %s' % (self.img, self.destdir)
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
