@@ -111,7 +111,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
     if os.path.isfile(image_filepath):
         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     else:
-        metadata = {'ERROR_PATH': image_filepath}
+        metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
     insert_record = mongo_gridfs_insert_file.update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
