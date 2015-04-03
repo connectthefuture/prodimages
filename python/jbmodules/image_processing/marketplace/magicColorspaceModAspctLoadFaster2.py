@@ -489,7 +489,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             dimensions,
             '-depth',
             '72x72',
-            '+repage',
+            #'+repage',
             "-colorspace",
             "sRGB",
             '-unsharp',
