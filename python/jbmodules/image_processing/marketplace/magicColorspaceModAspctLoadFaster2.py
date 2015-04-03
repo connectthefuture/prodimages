@@ -230,7 +230,7 @@ def subproc_magick_large_jpg(img, destdir=None):
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-    os.chdir(os.path.dirname(img))
+    #os.chdir(os.path.dirname(img))
 
     if not destdir:
         destdir = os.path.abspath('.')
@@ -298,7 +298,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-    os.chdir(os.path.dirname(img))
+    #os.chdir(os.path.dirname(img))
     if not destdir:
         destdir = os.path.abspath('.')
     else:
@@ -370,7 +370,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if not destdir:
         destdir = '.'
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
-    os.chdir(os.path.dirname(img))
+    #os.chdir(os.path.dirname(img))
     if not rgbmean:
         ratio_range = 'OutOfRange'
     else:
@@ -419,7 +419,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
     format = img.split('.')[-1]
 
-    os.chdir(os.path.dirname(img))
+    #os.chdir(os.path.dirname(img))
 
     ## Destination name
     if not destdir:
