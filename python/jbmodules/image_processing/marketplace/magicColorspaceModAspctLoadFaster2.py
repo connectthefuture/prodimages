@@ -445,7 +445,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         #w = float(round(w,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(w),int(height))
         print "W",w, aspect_ratio
-    elif float(aspect_ratio) < float(1.2):
+    elif float(aspect_ratio) < float(int(1.2)):
         vert_horiz = '{0}x'.format(width)
         h = float(1.2) * float(width)
         #h = float(round(h,2)*float(aspect_ratio))
@@ -483,6 +483,17 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "72",
             "-distort",
             "Resize",
+            if vert_horiz != '100%':
+                w=''
+                h=''
+                if vert_horiz[0] == 'x'
+                    h = int(vert_horiz.strip('x'))
+                    if h > 2400:
+                        vert_horiz = 'x2400'
+                else:
+                    w = int(vert_horiz.strip('x'))
+                    if w > 2000:
+                        vert_horiz = '2000x'
             vert_horiz,
             '-background',
             'white',
