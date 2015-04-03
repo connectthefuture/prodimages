@@ -270,14 +270,18 @@ def multi_url_downloader(argslist=None):
             #subprocess.call("echo "+str(item), shell=True)
             downloaded_file = download_mplce_url(item)
             ## Delete Non Images before the whole shebang continues
-            metadata = get_exif_all_data(downloaded_file)
-            if metadata['File:MIMEType'].split('/')[0] != 'image':
-                os.remove(downloaded_file)
-                print metadata['File:MIMEType'], ' <--BadImage - Removed --> ', downloaded_file
-                q.task_done()
-            else:    
-                count += 1
-                print count, ' NotRemoved --> ', downloaded_file
+            try:
+                metadata = get_exif_all_data(downloaded_file)
+                if metadata['File:MIMEType'].split('/')[0] != 'image':
+                    os.remove(downloaded_file)
+                    print metadata['File:MIMEType'], ' <--BadImage - Removed --> ', downloaded_file
+                    q.task_done()
+                else:    
+                    count += 1
+                    print count, ' NotRemoved --> ', downloaded_file
+                    q.task_done()
+            except AttributeError:
+                print 'AttributeError --> ', downloaded_file
                 q.task_done()
 
     cpus=multiprocessing.cpu_count() #detect number of cores
