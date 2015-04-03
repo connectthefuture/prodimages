@@ -481,6 +481,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
+            '-depth',
+            '72x72',
             '-background',
             'white',
             '-gravity',
