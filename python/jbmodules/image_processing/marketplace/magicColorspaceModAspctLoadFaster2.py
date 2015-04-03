@@ -230,7 +230,7 @@ def subproc_magick_large_jpg(img, destdir=None):
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-    #os.chdir(os.path.dirname(img))
+    os.chdir(os.path.dirname(img))
 
     if not destdir:
         destdir = os.path.abspath('.')
@@ -239,24 +239,24 @@ def subproc_magick_large_jpg(img, destdir=None):
 
     if not regex_alt.findall(img):
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
+
+        dimensions = ''
+
+        aspect_ratio = get_aspect_ratio(img)
+        dimensions = get_dimensions(img)
+        width  = dimensions.split('x')[0]
+        height = dimensions.split('x')[1]
+
+        if aspect_ratio == '1.2':
+            vert_horiz = '400x480'
+        elif float(aspect_ratio) > float(1.2):
+            vert_horiz = 'x480'
+        elif float(aspect_ratio) < float(1.2):
+            vert_horiz = '400x'
+
+        dimensions = "400x480"
+        print dimensions,vert_horiz
         if regex_valid_style.findall(img):
-
-            dimensions = ''
-
-            aspect_ratio = get_aspect_ratio(img)
-            dimensions = get_dimensions(img)
-            #width  = dimensions.split('x')[0]
-            #height = dimensions.split('x')[1]
-
-            if aspect_ratio == '1.2':
-                vert_horiz = '400x480'
-            elif float(aspect_ratio) > float(1.2):
-                vert_horiz = 'x480'
-            elif float(aspect_ratio) < float(1.2):
-                vert_horiz = '400x'
-
-            dimensions = "400x480"
-            print dimensions,vert_horiz
             subprocess.call([
             'convert',
             '-colorspace',
@@ -298,7 +298,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-    #os.chdir(os.path.dirname(img))
+    os.chdir(os.path.dirname(img))
     if not destdir:
         destdir = os.path.abspath('.')
     else:
@@ -310,23 +310,22 @@ def subproc_magick_medium_jpg(img, destdir=None):
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
 
     dimensions = ''
+
+    aspect_ratio = get_aspect_ratio(img)
+    dimensions = get_dimensions(img)
+    width  = dimensions.split('x')[0]
+    height = dimensions.split('x')[1]
+
+    if aspect_ratio == '1.2':
+        vert_horiz = '200x240'
+    elif float(aspect_ratio) > float(1.2):
+        vert_horiz = 'x240'
+    elif float(aspect_ratio) < float(1.2):
+        vert_horiz = '200x'
+
+    dimensions = '200x240'
+    print dimensions,vert_horiz
     if regex_valid_style.findall(img):
-        aspect_ratio = get_aspect_ratio(img)
-        dimensions = get_dimensions(img)
-
-        #width  = dimensions.split('x')[0]
-        #height = dimensions.split('x')[1]
-
-        if aspect_ratio == '1.2':
-            vert_horiz = '200x240'
-        elif float(aspect_ratio) > float(1.2):
-            vert_horiz = 'x240'
-        elif float(aspect_ratio) < float(1.2):
-            vert_horiz = '200x'
-
-        dimensions = '200x240'
-        print dimensions,vert_horiz
-        
 
         subprocess.call([
             'convert',
@@ -371,7 +370,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if not destdir:
         destdir = '.'
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
-    #os.chdir(os.path.dirname(img))
+    os.chdir(os.path.dirname(img))
     if not rgbmean:
         ratio_range = 'OutOfRange'
     else:
@@ -420,7 +419,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
     format = img.split('.')[-1]
 
-    #os.chdir(os.path.dirname(img))
+    os.chdir(os.path.dirname(img))
 
     ## Destination name
     if not destdir:
@@ -457,7 +456,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         dimensions = '100%'
         vert_horiz = '100%'
 
-    print ' PNG SUBproc --> ', img, os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
     subprocess.call([
             'convert',
             '-format',
