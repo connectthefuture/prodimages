@@ -239,24 +239,24 @@ def subproc_magick_large_jpg(img, destdir=None):
 
     if not regex_alt.findall(img):
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
-
-        dimensions = ''
-
-        aspect_ratio = get_aspect_ratio(img)
-        dimensions = get_dimensions(img)
-        width  = dimensions.split('x')[0]
-        height = dimensions.split('x')[1]
-
-        if aspect_ratio == '1.2':
-            vert_horiz = '400x480'
-        elif float(aspect_ratio) > float(1.2):
-            vert_horiz = 'x480'
-        elif float(aspect_ratio) < float(1.2):
-            vert_horiz = '400x'
-
-        dimensions = "400x480"
-        print dimensions,vert_horiz
         if regex_valid_style.findall(img):
+
+            dimensions = ''
+
+            aspect_ratio = get_aspect_ratio(img)
+            dimensions = get_dimensions(img)
+            width  = dimensions.split('x')[0]
+            height = dimensions.split('x')[1]
+
+            if aspect_ratio == '1.2':
+                vert_horiz = '400x480'
+            elif float(aspect_ratio) > float(1.2):
+                vert_horiz = 'x480'
+            elif float(aspect_ratio) < float(1.2):
+                vert_horiz = '400x'
+
+            dimensions = "400x480"
+            print dimensions,vert_horiz
             subprocess.call([
             'convert',
             '-colorspace',
@@ -310,22 +310,23 @@ def subproc_magick_medium_jpg(img, destdir=None):
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
 
     dimensions = ''
-
-    aspect_ratio = get_aspect_ratio(img)
-    dimensions = get_dimensions(img)
-    width  = dimensions.split('x')[0]
-    height = dimensions.split('x')[1]
-
-    if aspect_ratio == '1.2':
-        vert_horiz = '200x240'
-    elif float(aspect_ratio) > float(1.2):
-        vert_horiz = 'x240'
-    elif float(aspect_ratio) < float(1.2):
-        vert_horiz = '200x'
-
-    dimensions = '200x240'
-    print dimensions,vert_horiz
     if regex_valid_style.findall(img):
+        aspect_ratio = get_aspect_ratio(img)
+        dimensions = get_dimensions(img)
+
+        width  = dimensions.split('x')[0]
+        height = dimensions.split('x')[1]
+
+        if aspect_ratio == '1.2':
+            vert_horiz = '200x240'
+        elif float(aspect_ratio) > float(1.2):
+            vert_horiz = 'x240'
+        elif float(aspect_ratio) < float(1.2):
+            vert_horiz = '200x'
+
+        dimensions = '200x240'
+        print dimensions,vert_horiz
+        
 
         subprocess.call([
             'convert',
