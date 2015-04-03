@@ -278,7 +278,6 @@ def multi_url_downloader(argslist=None):
             else:    
                 count += 1
                 print count, ' NotRemoved --> ', downloaded_file
-                pass
                 q.task_done()
 
     cpus=multiprocessing.cpu_count() #detect number of cores
