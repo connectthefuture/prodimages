@@ -184,6 +184,7 @@ def download_mplce_url(urldest_tuple):
                 if alt_number == 1:
                     countstyle += 1
                 print "Total New Styles Downloaded: {}".format(countstyle)
+                return destpath
             elif urlcode_value < 400:
                 print urlcode_value
                 try:
@@ -193,6 +194,7 @@ def download_mplce_url(urldest_tuple):
                         f.write(res.content)
                         f.close()
                     print res
+                    return destpath
                 except:
                     #subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                     print 'Failed Downloading HTTPS file {}'.format(image_url)
@@ -218,6 +220,7 @@ def download_mplce_url(urldest_tuple):
                         f.write(res.content)
                         f.close()
                     print res, ' 2nd Attempt using Merchantry Replaced URL OK'
+                    return destpath
                 except requests.exceptions.ConnectionError:
                     print 'ConnectionError FinalFailureNotice'
                     import os.path
@@ -233,6 +236,7 @@ def download_mplce_url(urldest_tuple):
                     try:
                         with open(os.path.join(os.path.abspath(badurldir), image_url + '_error404.txt'), 'a+') as f:
                             f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
+                            return destpath
                     except:
                         print 'Print Failed write 404 file'
                         pass
