@@ -107,7 +107,12 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
     return mproc_tuple_Qlist
 
 
-#def download_mplce_url(urldest_tuple, image_url=None, destpath=None):
+def get_exif_all_data(image_filepath):
+    import exiftool
+    with exiftool.ExifTool() as et:
+        metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
+    return metadata
+
 def download_mplce_url(urldest_tuple):
     import requests, re, urllib, urllib2, subprocess
     import os.path
@@ -263,9 +268,15 @@ def multi_url_downloader(argslist=None):
             item = q.get()
             #execute a task: call a shell program and wait until it completes
             #subprocess.call("echo "+str(item), shell=True)
-            download_mplce_url(item)
-            count += 1
-            print count
+            downloaded_file = download_mplce_url(item)
+            ## Delete Non Images before the whole shebang continues
+            metadata = get_exif_all_data(downloaded_file)
+            if metadata['File:MIMEType'].split('/')[0] != 'image':
+                os.remove(downloaded_file)
+                print metadata['File:MIMEType'], ' <--BadImage - Removed --> ', downloaded_file
+            else:    
+                count += 1
+                print count, ' NotRemoved --> ', downloaded_file
             q.task_done()
 
     cpus=multiprocessing.cpu_count() #detect number of cores
