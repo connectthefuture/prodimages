@@ -79,7 +79,7 @@ def getparse_metadata_from_imagefile(image_filepath):
     return mdatainsert
 
 def insert_gridfs_extract_metadata(image_filepath, db_name=None):    
-    from mongo_gridfs_insert_file import insert_file_gridfs
+    from mongo_gridfs_insert_file import update_file_gridfs
     import os,sys
     if not db_name:
         try:
@@ -92,7 +92,7 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
     else:
         metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
     print image_filepath, metadata, ' <-- image_filepath and metadata'
-    insert_record = insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 
@@ -112,7 +112,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     else:
         metadata = {'ERROR_PATH': image_filepath}
-    insert_record = mongo_gridfs_insert_file.insert_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    insert_record = mongo_gridfs_insert_file.update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return #insert_record
 
 if __name__ == '__main__':
