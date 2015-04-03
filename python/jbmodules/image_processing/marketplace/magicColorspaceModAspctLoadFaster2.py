@@ -457,6 +457,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         dimensions = '100%'
         vert_horiz = '100%'
 
+    print ' PNG SUBproc --> ', img, os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
     subprocess.call([
             'convert',
             '-format',
