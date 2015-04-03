@@ -181,8 +181,8 @@ def evaluate_color_values(colordata):
         print "Type Error"
         pass
     except ValueError:
-            print "Value Error", colordata
-            pass
+        print "Value Error", colordata
+        pass
 
 def sort_files_by_values(fileslist):
     import os,glob
@@ -324,7 +324,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         vert_horiz = '200x'
 
     dimensions = '200x240'
-    print dimensions,vert_horiz
+    print dimensions,vert_horiz, ' _m.jpg '
     if regex_valid_style.findall(img):
 
         subprocess.call([
@@ -481,14 +481,15 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "-distort",
             "Resize",
             vert_horiz,
-            '-depth',
-            '72x72',
             '-background',
             'white',
             '-gravity',
             'center',
             '-extent',
             dimensions,
+            '-depth',
+            '72x72',
+            '+repage',
             "-colorspace",
             "sRGB",
             '-unsharp',
