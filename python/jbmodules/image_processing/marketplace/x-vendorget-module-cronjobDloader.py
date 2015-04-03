@@ -281,7 +281,7 @@ def mongo_update_url_dest_info(urldest_tuple):
     tmpfilename          = str(destpath.split('/')[-1])
     colorstyle           = str(tmpfilename[:9])
     image_number         = str(tmpfilename.split('.')[-2][-1])
-    mimeContentHeader    = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
+    content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
 
     if image_url:
         import jbmodules
@@ -295,7 +295,7 @@ def mongo_update_url_dest_info(urldest_tuple):
             filename = tmpfilename, 
             colorstyle  = colorstyle, 
             image_number  = image_number, 
-            mimeContentHeader  = 'image/{}'.format(mimeContentHeader)
+            content_type  = 'image/{}'.format(content_type)
             )     ## image_url=image_url, destpath=destpath)
     return updateCheck, destpath
 
