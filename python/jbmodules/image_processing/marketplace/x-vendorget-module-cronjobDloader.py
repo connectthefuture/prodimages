@@ -292,7 +292,7 @@ def multi_url_downloader(argslist=None):
 
 
 def mongo_update_url_dest_info(urldest_tuple):
-    print urldest_tuple, ' Url Dest Tuple'
+    print urldest_tuple, ' Url Dest Tuple mongo_update_url_dest_info'
     image_url, destpath  = urldest_tuple[0]
     image_url            = image_url
     tmpfilename          = str(destpath.split('/')[-1])
