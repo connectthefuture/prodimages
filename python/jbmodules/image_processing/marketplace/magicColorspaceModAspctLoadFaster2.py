@@ -429,10 +429,11 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
     outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
-    dimensions = ''
+    #dimensions = ''
     ## Get variable values for processing
     aspect_ratio = get_aspect_ratio(img)
     dimensions = get_dimensions(img)
+    print ' Img get dimensions --> ', dimensions, img, 
     width  = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
 
