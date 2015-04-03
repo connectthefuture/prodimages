@@ -162,7 +162,7 @@ def funkRunner2(root_img_dir=None):
     for item in img_dict:
         for img, rgbmean in item.items():
             print img, rgbmean, ' Img -- RGB Mean'
-            tasks.put(Task(img, rgbmean.values(), destdir))
+            tasks.put(Task(img, rgbmean.items(), destdir))
     print 'Put Tasks'
 
     # Add a poison pill for each consumer
