@@ -107,7 +107,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         db_name='gridfs_file7'
     except IndexError:
         db_name='gridfs_file7'
-    print ' is file --> ', image_filepath
+    print ' is file --> ', image_filepath, db_name
     if os.path.isfile(image_filepath):
         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     else:
