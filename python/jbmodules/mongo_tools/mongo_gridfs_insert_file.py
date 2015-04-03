@@ -84,7 +84,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
         mongo_collection.create_index("md5", unique=True, sparse=False, background=True)
-    except DuplicateKeyError:
+    except pymongo.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
     # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
