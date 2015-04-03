@@ -307,6 +307,7 @@ def mongo_upsert_threaded(argslist=None):
     import jbmodules
     qmongo = Queue.Queue()
     print type(argslist), type(argslist)
+    i = ''
     for i in argslist: #put 30 tasks in the queue
         if i:
             print i, ' Is a file to add to mongo argslist'
