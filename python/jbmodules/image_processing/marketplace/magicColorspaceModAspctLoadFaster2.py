@@ -455,6 +455,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
+        print ' Not Dimensions PNG faster2-->', img
 
     subprocess.call([
             'convert',
@@ -478,6 +479,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "-define",
             "filter:blur=0.625",
             #"filter:blur=0.88549061701764",
+            "-density",
+            "72",
             "-distort",
             "Resize",
             vert_horiz,
@@ -487,8 +490,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             'center',
             '-extent',
             dimensions,
-            '-depth',
-            '72x72',
+            
             #'+repage',
             "-colorspace",
             "sRGB",
