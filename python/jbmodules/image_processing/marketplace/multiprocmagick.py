@@ -178,7 +178,7 @@ def funkRunner2(root_img_dir=None):
     # Start printing results
     while num_jobs:
         result = results.get()
-        print 'Result:', result
+        print 'Result Q Results: ', result
         num_jobs -= 1
     #return
 
