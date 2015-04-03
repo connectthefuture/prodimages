@@ -71,7 +71,7 @@ def run_threaded_imgdict(argslist=None):
     # print type(argslist), len(argslist), ' type and length argslist \n'
     print type(argslist), type(argslist)
     for i in argslist[0]: #put 30 tasks in the queue
-        print i, ' argslist'
+        print 'i ' , ' argslist'
         if i:
             q.put([i])
 
@@ -88,7 +88,7 @@ def run_threaded_imgdict(argslist=None):
             img_dict_list.append(imgdata)
             insertres =  insert_gridfs_extract_metadata(item[0])
             count += 1
-            print count, ## '\n\t', imgdata
+            print count, '\n\t ImageDict Threade'#, imgdata
             q.task_done()
 
     #     def mongoworker():
@@ -102,7 +102,7 @@ def run_threaded_imgdict(argslist=None):
     #             print count, insertres ## '\n\t', imgdata
     #             qmongo.task_done()
 
-    print 'argsL ', argslist[0], type(argslist), ' Type ArgsList RunThreaded'
+    print 'argsL --> len arglist', len(argslist[0]), type(argslist), ' Type ArgsList RunThreaded'
     jobcount= 8 #len(argslist[0]) #detect number of cores
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
@@ -144,10 +144,9 @@ def funkRunner2(root_img_dir=None):
 
     #img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
     img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
-    print type(img_list)
-    print '\tLen ImageList preThreaded'
+    print type(img_list), '\tLen ImageList preThreaded'
     img_dict = run_threaded_imgdict(argslist=(img_list,))
-    print len(img_list)
+    #print len(img_list)
     tasks = multiprocessing.JoinableQueue()
     results = multiprocessing.Queue()
 
@@ -159,12 +158,12 @@ def funkRunner2(root_img_dir=None):
     for w in consumers:
         w.start()
 
-    print 'RGB MEan Info', type(img_dict), ' len ', len(img_dict)
+    #print 'RGB MEan Info', type(img_dict), ' len ', len(img_dict)
     num_jobs = len(img_dict)
     print 'jobs -- consumers -- root_img_dir --> ', num_jobs, consumers, root_img_dir
     for item in img_dict:
         for img, rgbmean in item.items():
-            print img, rgbmean, ' Img -- RGB Mean'
+            print img, 'rgbmean', ' Img -- RGB Mean'
             tasks.put(Task(img, rgbmean, destdir))
     print 'Put Tasks'
 
