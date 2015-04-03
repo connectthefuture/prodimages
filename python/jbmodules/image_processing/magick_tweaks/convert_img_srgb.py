@@ -110,9 +110,9 @@ def main(image_file=None,inprofile=None,outprofile=None):
         #    inprofile  = srgb_webrdy
         #elif not inprofile:
         #    inprofile  = srgb_webrdy
-        
+        print image_file, inmode, inprofile, outprofile, ' <-- color profile Conversion img, inmode, Inprofile, outprofile --- '
         ret = convert_colorprofile(image_file,inprofile,outprofile)
-        # print image_file, inmode, inprofile, outprofile
+        
     #return ret
 
 
