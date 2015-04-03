@@ -50,7 +50,10 @@ class Task(object):
             magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
             magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
         except TypeError:
-            print self.img, ' <-- Type-AttributeError in Task -->', self.destdir
+            print self.img, ' <-- Type-Error in Task -->', self.destdir
+            pass
+        except AttributeError:
+            print self.img, ' <-- AttributeError in Task -->', self.destdir
             pass
         return '%s -- %s' % (self.img, self.destdir)
     def __str__(self):
