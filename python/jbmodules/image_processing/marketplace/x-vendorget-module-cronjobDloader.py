@@ -147,6 +147,22 @@ def download_mplce_url(urldest_tuple):
     print image_url, ' URL'
     regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
     regex_drive2 = re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(?P<fileId>.+?)\&?.*?$', re.U)
+    
+    # regex_dropbox = re.compile(r'^https?://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
+    # regex_boxapi  = re.compile(r'^https?://www.box.com/.+?\.[jpngJPNG]{3}$')
+    
+    # if regex_dropbox.findall(image_url):
+    #     import http_tools.auth.Dropbox.dropboxapi_service as dropboxapi_service
+    #     final_path = dropboxapi_service.download_auth_file(image_url=image_url, destpath=destpath)
+    #     if final_path:
+    #         return final_path
+    # elif regex_boxapi.findall(image_url):
+    #     import http_tools.auth.Box.boxapi_auth_downloader as boxapi_auth_downloader
+    #     final_path = boxapi_auth_downloader.download_boxapi_drive_file(image_url=image_url, destpath=destpath)
+    #     if final_path:
+    #         return final_path
+    # elif regex_drive2.findall(image_url):
+    
     if regex_drive2.findall(image_url):
         print image_url, ' DRIVE'
         #import jbmodules
