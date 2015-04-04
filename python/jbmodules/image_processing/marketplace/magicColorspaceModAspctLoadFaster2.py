@@ -471,11 +471,15 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                     vert_horiz = 'x{0}'.format(h)
                     w = float(0.8) * float(h)
                     dimensions = '{0}x{1}'.format(int(w),int(h))
-                    
+
             elif w > h:
                 if w > 2000:
                     vert_horiz = '2000x'
                     dimensions = '2000x2400'
+                elif h == w:
+                    vert_horiz = '{0}x'.format(w)
+                    h = float(1.2) * float(width)
+                    dimensions = '{0}x{1}'.format(int(w),int(h))
 
     subprocess.call([
             'convert',
