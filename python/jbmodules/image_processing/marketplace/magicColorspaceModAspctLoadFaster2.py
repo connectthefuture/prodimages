@@ -458,12 +458,9 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         print ' Not Dimensions PNG faster2-->', img
     print dimensions, ' VERT PNG '
     
-    if dimensions != '100%':
-        w=''
-        h=''
-        if dimensions:
-            h = int(dimensions.split('x')[-1])
-            w = int(dimensions.split('x')[0])
+    if dimensions and dimensions != '100%':
+        h = int(dimensions.split('x')[-1])
+        w = int(dimensions.split('x')[0])
         if w > 2000 or h > 2400: 
             if h >= w:
                 if h > 2400:
