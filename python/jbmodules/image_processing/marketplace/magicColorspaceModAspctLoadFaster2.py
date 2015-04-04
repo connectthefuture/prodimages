@@ -495,6 +495,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             #"filter:blur=0.88549061701764",
             "-density",
             "72",
+            '+repage',
             "-distort",
             "Resize",
             vert_horiz,
@@ -504,7 +505,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             'center',
             '-extent',
             dimensions,
-            #'+repage',
+            
             "-colorspace",
             "sRGB",
             '-unsharp',
