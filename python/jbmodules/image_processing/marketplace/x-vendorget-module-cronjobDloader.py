@@ -283,6 +283,13 @@ def multi_url_downloader(argslist=None):
             except AttributeError:
                 print 'AttributeError --> ', downloaded_file
                 q.task_done()
+            except KeyError:
+                print 'KeyError --> ', downloaded_file
+                try:
+                    os.remove(downloaded_file)
+                except:
+                    pass
+                q.task_done()
 
     cpus=multiprocessing.cpu_count() #detect number of cores
     print("Creating %d threads" % cpus)
