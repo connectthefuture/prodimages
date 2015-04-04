@@ -462,8 +462,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         w=''
         h=''
         if dimensions:
-            h = int(vert_horiz.split('x')[-1])
-            w = int(vert_horiz.split('x')[0])
+            h = int(dimensions.split('x')[-1])
+            w = int(dimensions.split('x')[0])
         if w > 2000 or h > 2400: 
             if h >= w:
                 if h > 2400:
