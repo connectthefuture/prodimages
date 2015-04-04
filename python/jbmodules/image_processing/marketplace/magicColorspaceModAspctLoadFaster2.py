@@ -464,10 +464,12 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             h = int(vert_horiz.strip('x'))
             if h > 2400:
                 vert_horiz = 'x2400'
+                dimensions = '2000x2400'
         else:
             w = int(vert_horiz.strip('x'))
             if w > 2000:
                 vert_horiz = '2000x'
+                dimensions = '2000x2400'
 
     subprocess.call([
             'convert',
