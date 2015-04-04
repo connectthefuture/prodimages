@@ -456,20 +456,23 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         dimensions = '100%'
         vert_horiz = '100%'
         print ' Not Dimensions PNG faster2-->', img
-    print vert_horiz, ' VERT PNG '
-    if vert_horiz != '100%':
+    print dimensions, ' VERT PNG '
+    
+    if dimensions != '100%':
         w=''
         h=''
-        if vert_horiz[0] == 'x':
-            h = int(vert_horiz.strip('x'))
-            if h > 2400:
-                vert_horiz = 'x2400'
-                dimensions = '2000x2400'
-        else:
-            w = int(vert_horiz.strip('x'))
-            if w > 2000:
-                vert_horiz = '2000x'
-                dimensions = '2000x2400'
+        if dimensions:
+            h = int(vert_horiz.split('x')[-1])
+            w = int(vert_horiz.split('x')[0])
+        if w > 2000 or h > 2400: 
+            if h >= w:
+                if h > 2400:
+                    vert_horiz = 'x2400'
+                    dimensions = '2000x2400'
+            elif w > h:
+                if w > 2000:
+                    vert_horiz = '2000x'
+                    dimensions = '2000x2400'
 
     subprocess.call([
             'convert',
