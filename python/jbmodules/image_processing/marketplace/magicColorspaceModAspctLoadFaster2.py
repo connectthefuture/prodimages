@@ -452,6 +452,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         dimensions = '{0}x{1}'.format(int(width),int(h))
         print "H",h, aspect_ratio
 
+
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
@@ -466,6 +467,11 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                 if h > 2400:
                     vert_horiz = 'x2400'
                     dimensions = '2000x2400'
+                elif h == w:
+                    vert_horiz = 'x{0}'.format(h)
+                    w = float(0.8) * float(h)
+                    dimensions = '{0}x{1}'.format(int(w),int(h))
+                    
             elif w > h:
                 if w > 2000:
                     vert_horiz = '2000x'
