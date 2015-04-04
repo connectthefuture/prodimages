@@ -500,7 +500,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             "72",
             "-distort",
             "Resize",
-            
             vert_horiz,
             '-background',
             'white',
@@ -508,7 +507,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             'center',
             '-extent',
             dimensions,
-            
             #'+repage',
             "-colorspace",
             "sRGB",
