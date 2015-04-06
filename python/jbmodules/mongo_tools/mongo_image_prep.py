@@ -78,7 +78,131 @@ def getparse_metadata_from_imagefile(image_filepath):
     mdatainsert[image_filepath] = groupdict #.items()
     return mdatainsert
 
-def insert_gridfs_extract_metadata(image_filepath, db_name=None):    
+
+###
+
+def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
+    # Insert a New Document
+    # (filepath=None, metadata=None, db_name=None):
+    import os
+    import pymongo, bson
+    from bson import Binary, Code
+    from bson.json_util import dumps
+    import datetime
+    import mongo_gridfs_insert_file
+    mongo_db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+    if fs:
+        collection_name = 'fs.files'
+        if not alt:
+            alt = '1'
+
+    tmpfilename          = str(filepath.split('/')[-1])
+    colorstyle           = str(tmpfilename[:9])
+    image_number         = str(tmpfilename.split('.')[-2][-1])
+    alt                  = image_number
+    content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
+
+    if not timestamp:
+        timestamp = datetime.datetime.now()
+
+    mongo_collection = mongo_db[collection_name]
+    key = {'colorstyle': colorstyle}  #, 'alt': alt, 'upload_ct': 1}
+    # data = { "$set":{'format': format,'metadata': metadata,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
+    datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
+    key_str = key.keys()[0]
+    check = mongo_collection.find({key_str: colorstyle}).count()
+    if check == 1:
+        print 'REFRESH IT ', check
+        data = { "$set":{
+                        'colorstyle': colorstyle,
+                        'alt': {'$min': {'alt': alt}},
+                        'format': format,
+                        'metadata': metadata,
+                        'content_type': content_type,
+                        #'upload_ct':
+                        '$inc': {'upload_ct': 1},
+                        'timestamp': { '$max': {'timestamp': timestamp}}
+                        }
+                    }
+        return check
+    else:
+        print 'NEW IT ', check
+        data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
+        # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
+    try:
+        mongo_collection.create_index("md5", unique=True, sparse=False, background=True)
+    except pymongo.errors.DuplicateKeyError:
+        print ' DuplicateKey Error', key_str
+        pass
+    # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
+
+    new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
+    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
+    return new_insertobj_id
+
+
+def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
+    import os
+    import mongo_gridfs_insert_file
+    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+    try:
+        filename = os.path.basename(filepath)
+        ext = filename.split('.')[-1].lower()
+        if ext == 'jpg' or ext == 'jpeg':
+            content_type = 'image/jpeg'
+        elif ext == 'tif' or ext == 'tiff':
+            content_type= 'image/tiff'
+        else:
+            content_type= 'image/' + str(ext)
+        #content-type=content_type
+        if not mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
+            try:
+                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+                    with open(filepath) as filedata:
+                        fp.write(filedata.read())
+                return fp, db
+            except IOError:
+                print ' IO ERROR '
+                return False
+        else:
+            r = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
+            print r
+    except OSError:
+        print 'Failed ', filepath
+
+
+def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
+    import os, mongo_gridfs_insert_file
+    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+    try:
+        filename = os.path.basename(filepath)
+        ext = filename.split('.')[-1].lower()
+        if ext == 'jpg' or ext == 'jpeg':
+            content_type = 'image/jpeg'
+        elif ext == 'tif' or ext == 'tiff':
+            content_type= 'image/tiff'
+        else:
+            content_type= 'image/' + str(ext)
+        #content-type=content_type
+        if not mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
+            try:
+                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+                    with open(filepath) as filedata:
+                        fp.write(filedata.read())
+                return fp, db
+            except IOError:
+                print ' IO ERROR '
+                return False
+        else:
+
+            r = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
+            update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
+            print r
+    except OSError:
+        print 'Failed ', filepath
+
+
+def insert_gridfs_extract_metadata(image_filepath, db_name=None):
     from mongo_gridfs_insert_file import update_file_gridfs
     import os,sys
     if not db_name:
