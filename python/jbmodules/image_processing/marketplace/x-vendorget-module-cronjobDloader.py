@@ -411,40 +411,38 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     if not ALL:
         ALL = ''
+    # ALL='ALL'
     if not vendor:
-        vendor       = '%_%'  
-    if vendor_brand: 
-        pass
-    else:
-        vendor_brand = ''
-    
-    #ALL='ALL'
+        vendor = '%_%'
+
     ################################
-    ## Get the New Style's Urls ####
-    ########
+    # Get the New Style's Urls ####
+    #########
     ## 1 ## Query for new Marketplace Styles
     marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, po_number='', ALL=ALL)
-    ## Create 2 item tuple list of every style with valid incomplete urls
-    ## Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
+    #########
+    #  Create 2 item tuple list of every style with valid incomplete urls
+    #  Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
     #########
     ## 1A ## Parse Query Result creating 2 item tuples as a list for multi thread
     urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root)
     ## Download the urls in the 2 tuple list
     ########
     ########
-    ## 2 ## Download the tuples urls
+    ## 2 ###
+    # Download the tuples urls
     multi_url_downloader(argslist=urlsdload_list)
     print 'Done with downloader ', len(urlsdload_list)
-    ## 2B ##
-    ## Import urls and download data+imageBlob into mongo db grisfs_mrktplce
+    #########
+    ## 2A ##
+    #  Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
     res = ''
     res = mongo_upsert_threaded(argslist=urlsdload_list)
     print ' Done With 2B Mongo Upsert Threads'
     ##########################
     ########
-    ## 3 ###
-    ## TODO: Make possible to include all the urls in 1 queue and send/add to and upload queue
+    ## TDO: Make possible to include all the urls in 1 queue and send/add to and process and upload queue
     ## Process the files running each brand in a separate parallel process
     ########
     ## 3 ## Process the images
@@ -454,13 +452,16 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     import jbmodules.image_processing.marketplace.multiprocmagick as multiprocmagick2
     #from multiprocmagick2 import funkRunner2
-    if vendor:
+    if vendor or vendor_brand:
         if os.path.isdir(res):
             root_img_dir = res
+            print ' If Vend/VendBrd ResIsDir rootimgdir --> ', res
         else:
             root_img_dir = os.path.join(dest_root, vendor, '*')
+            print ' If Vend/VendBrd ResNOT-Dir rootimgdir then res --> ', root_img_dir, res
     else:
         root_img_dir = dest_root
+        print ' Not vend Res-->IsDir AND rootimgdir --> ', res
     multiprocmagick2.funkRunner2(root_img_dir=root_img_dir)
     print 'Done With multiprocmagick --> ', root_img_dir
 
@@ -469,7 +470,7 @@ if __name__ == '__main__':
     import sys
     try:
         vendor = sys.argv[1]
-        ## Uncomment and complete to use po number in SQL query
+        # Uncomment and complete to use po number in SQL query
         # if vendor.isdigit() and len(vendor) == 6:
         #     po_number = vendor
         # else: pass

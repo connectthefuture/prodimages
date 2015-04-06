@@ -73,7 +73,6 @@ def run_threaded_imgdict(argslist=None):
             q.put([i])
 
 
-    #qmongo = q
     img_dict_list = []
     def worker():
         count = 0
@@ -83,33 +82,21 @@ def run_threaded_imgdict(argslist=None):
             imgdata = sort_files_by_values(item)
             print imgdata
             img_dict_list.append(imgdata)
-            insertres =  insert_gridfs_extract_metadata(item[0])
+            # Can add functions to adjust based on imgdict params or store image data or delete etc.
+            # insertres =  insert_gridfs_extract_metadata(item[0])
             count += 1
             print count, '\n\t ImageDict Threade'#, imgdata
             q.task_done()
 
-    #     def mongoworker():
-    #         count = 0
-    #         while True:
-    #             item = qmongo.get()
-
-    #             print item
-    #             insertres =  jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(item)
-    #             count += 1
-    #             print count, insertres ## '\n\t', imgdata
-    #             qmongo.task_done()
 
     print 'argsL --> len arglist', len(argslist[0]), type(argslist), ' Type ArgsList RunThreaded'
     jobcount= 8 #len(argslist[0]) #detect number of cores
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
         t = threading.Thread(target=worker)
-        #tmongo = threading.Thread(target=mongoworker)
 
         t.daemon = True
         t.start()
-        #tmongo.daemon = True
-        #tmongo.start()
 
     q.join() #block until all tasks are done
     return img_dict_list
@@ -125,28 +112,46 @@ def funkRunner2(root_img_dir=None):
     from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = '/mnt/Post_Complete/ImageDrop'
     print 'Starting Funkrunner2 Pools'
-    # Enqueue jobs
+
+
+    ########## One ##########
+    #
+    # 1A
+    # List of images to run through processing as glob of the root_img_dir
+    print root_img_dir, ' <-- Rootimgdir FunkR2'
     if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
-        imagesGlob = os.path.join(root_img_dir,'*/*/*.??[gG]')        
+        imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
     else:
-        imagesGlob = os.path.join(root_img_dir,'*.??[gG]')
+        imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
+
+
+    # 1B
+    # Rename files using Multiproc pool
     poolRename = multiprocessing.Pool(8)
     images = [ f for f in glob.glob(imagesGlob) if f is not None ]
     resrename = poolRename.map(rename_retouched_file, images)
     poolRename.close()
     poolRename.join()
     print 'Images Renamed'
-    #poolDict = multiprocessing.Pool(num_consumers)
-    #images_renamed = [ f for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
-    #img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
+
+    ########## Two ##########
+    #
+    # 2
+    # Extract image pixel data for enhancements. As list of tuples, [<url>, {rgbdata} ].. ithink
     img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
     print type(img_list), '\tLen ImageList preThreaded'
     img_dict = run_threaded_imgdict(argslist=(img_list,))
-    #print len(img_list)
+
+
+    ########## Three ##########
+    #
+    # 3A
+    # Init Task and Results Queues
     tasks = multiprocessing.JoinableQueue()
     results = multiprocessing.Queue()
 
+    # 3B
     # Start consumers
     num_consumers = multiprocessing.cpu_count() * 2
     print 'Creating %d consumers' % num_consumers
@@ -155,7 +160,9 @@ def funkRunner2(root_img_dir=None):
     for w in consumers:
         w.start()
 
-    #print 'RGB MEan Info', type(img_dict), ' len ', len(img_dict)
+    # 3C --> Run
+    # Tasks Add
+    # Add Images and rgb data and dest to tasks
     num_jobs = len(img_dict)
     print 'jobs -- consumers -- root_img_dir --> ', num_jobs, consumers, root_img_dir
     for item in img_dict:
@@ -164,13 +171,20 @@ def funkRunner2(root_img_dir=None):
             tasks.put(Task(img, rgbmean, destdir))
     print 'Put Tasks'
 
+    # 3P --> Poinson pill to help stop hanging procs
     # Add a poison pill for each consumer
     for i in xrange(num_consumers):
         tasks.put(None)
 
+    # 3X --> End
     # Wait for all of the tasks to finish
     tasks.join()
     print 'Joined Tasks'
+
+
+    ########## Four ##########
+    #
+    # 4 --> Results
     # Start printing results
     while num_jobs:
         result = results.get()
