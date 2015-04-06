@@ -453,6 +453,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     import jbmodules.image_processing.marketplace.multiprocmagick as multiprocmagick2
     #from multiprocmagick2 import funkRunner2
     if vendor or vendor_brand:
+        print res, ' <-- CoercedUnicode Failed Cuz of'
         if os.path.isdir(res):
             root_img_dir = res
             print ' If Vend/VendBrd ResIsDir rootimgdir --> ', res
