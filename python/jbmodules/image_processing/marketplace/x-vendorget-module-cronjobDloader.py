@@ -194,8 +194,12 @@ def download_mplce_url(urldest_tuple):
             print urlcode_value
             if urlcode_value == 209:
                 print urlcode_value 
-                res = urllib.urlretrieve(image_url, destpath)
-                countimage += 1
+                #res = urllib.urlretrieve(image_url, destpath)
+                res = requests.get(image_url, timeout=1, headers=headers)
+                with open(destpath, 'w+') as f:
+                    f.write(res.content)
+                    f.close()
+                    countimage += 1
                 print "Image Download Count: {}".format(countimage)
                 if alt_number == 1:
                     countstyle += 1
@@ -205,7 +209,7 @@ def download_mplce_url(urldest_tuple):
                 print urlcode_value
                 try:
                     print 'TRY'
-                    res = requests.get(image_url, timeout=1,headers=headers)
+                    res = requests.get(image_url, timeout=5,headers=headers)
                     with open(destpath, 'w+') as f:
                         f.write(res.content)
                         f.close()
@@ -218,6 +222,7 @@ def download_mplce_url(urldest_tuple):
             elif urlcode_value == 404:
                 ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
                 import urllib3
+                print ' 404 Trying Urllib3 ', image_url
                 hostname = urllib3.get_host(image_url)[1]
                 if hostname == 'marketplace.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
