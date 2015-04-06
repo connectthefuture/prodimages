@@ -192,7 +192,7 @@ def download_mplce_url(urldest_tuple):
                 res = requests.get(image_url, timeout=5, headers=headers)
                 print ' HTTP Yippie '
             else:
-                res = requests.get(image_url, timeout=10, stream=True, headers=headers)
+                res = requests.get(image_url, timeout=10, verify=False, headers=headers)
                 print ' HTTPS Oh Yes '
             print 'ALMOST'
             urlcode_value = res.status_code
@@ -267,9 +267,9 @@ def download_mplce_url(urldest_tuple):
                         print 'Print Failed write 404 file'
                         pass
 
-        # except requests.exceptions.ConnectionError:
-        #     print 'ConnectionError'
-        #     pass
+        except requests.exceptions.ConnectionError:
+            print 'ConnectionError'
+            pass
         except IOError:
             pass
 
