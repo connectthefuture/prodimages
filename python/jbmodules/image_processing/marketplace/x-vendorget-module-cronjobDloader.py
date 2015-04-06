@@ -267,9 +267,9 @@ def download_mplce_url(urldest_tuple):
                         print 'Print Failed write 404 file'
                         pass
 
-        except requests.exceptions.ConnectionError:
-            print 'ConnectionError'
-            pass
+        # except requests.exceptions.ConnectionError:
+        #     print 'ConnectionError'
+        #     pass
         except IOError:
             pass
 
