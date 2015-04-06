@@ -190,7 +190,20 @@ def funkRunner2(root_img_dir=None):
         result = results.get()
         print 'Result Q Results: ', result
         num_jobs -= 1
+
+    ########## Five ##########
+    # Delete em all
+    if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
+        poolDelete = multiprocessing.Pool(8)
+        import os
+        poolDelete.map(os.remove, img_list)
+        poolDelete.close()
+        poolDelete.join()
+        print' And now they are Gone'
+
     #return
+
+
 
 
 def run_multiproccesses_magick(searchdir=None):
