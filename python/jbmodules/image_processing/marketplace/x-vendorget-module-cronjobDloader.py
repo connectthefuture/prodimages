@@ -445,13 +445,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## TDO: Make possible to include all the urls in 1 queue and send/add to and process and upload queue
     ## Process the files running each brand in a separate parallel process
     ########
-    ## 3 ## Process the images
-    #
-    from jbmodules import image_processing
-    import os
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    import jbmodules.image_processing.marketplace.multiprocmagick as multiprocmagick2
-    #from multiprocmagick2 import funkRunner2
+    # 3A Set root image dir from res or default
     if vendor or vendor_brand:
         print res, ' <-- CoercedUnicode Failed Cuz of None Type'
         if res is not None and os.path.isdir(res):
@@ -466,6 +460,15 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     else:
         root_img_dir = dest_root
         print ' Not vend Res-->IsDir AND rootimgdir --> ', res
+
+    #########
+    ## 3X ### Process the images
+    #
+    from jbmodules import image_processing
+    import os
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    import jbmodules.image_processing.marketplace.multiprocmagick as multiprocmagick2
+
     multiprocmagick2.funkRunner2(root_img_dir=root_img_dir)
     print 'Done With multiprocmagick --> ', root_img_dir
 
