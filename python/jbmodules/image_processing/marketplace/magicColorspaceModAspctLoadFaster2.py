@@ -229,6 +229,7 @@ def subproc_magick_large_jpg(img, destdir=None):
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
+    regex_valid_style_PNG = re.compile(r'^.+?/[1-9][0-9]{8}.[JjPpNnGg]{3}$')
 
     os.chdir(os.path.dirname(img))
 
@@ -237,17 +238,17 @@ def subproc_magick_large_jpg(img, destdir=None):
     else:
         destdir = os.path.abspath(destdir)
 
-    if not regex_alt.findall(img):
+    # if not regex_alt.findall(img):
+    if not regex_valid_style_PNG.findall(img):
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
 
-        dimensions = ''
+        # dimensions = get_dimensions(img)
+        # width  = dimensions.split('x')[0]
+        # height = dimensions.split('x')[1]
+        # if aspect_ratio == '1.2':
 
         aspect_ratio = get_aspect_ratio(img)
-        dimensions = get_dimensions(img)
-        width  = dimensions.split('x')[0]
-        height = dimensions.split('x')[1]
-
-        if aspect_ratio == '1.2':
+        if float(aspect_ratio) == float(1.2):
             vert_horiz = '400x480'
         elif float(aspect_ratio) > float(1.2):
             vert_horiz = 'x480'
@@ -255,13 +256,18 @@ def subproc_magick_large_jpg(img, destdir=None):
             vert_horiz = '400x'
 
         dimensions = "400x480"
-        print dimensions,vert_horiz
+        print dimensions, vert_horiz
+
+        ext = img.split('.')[-1]
+
         if regex_valid_style.findall(img):
             subprocess.call([
             'convert',
             '-colorspace',
             'sRGB',
             img,
+            '-format',
+            ext,
             '-background',
             'white',
             "-filter",
@@ -309,14 +315,14 @@ def subproc_magick_medium_jpg(img, destdir=None):
     else:
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
 
-    dimensions = ''
+
+    # dimensions = get_dimensions(img)
+    # width  = dimensions.split('x')[0]
+    # height = dimensions.split('x')[1]
+    #if aspect_ratio == '1.2':
 
     aspect_ratio = get_aspect_ratio(img)
-    dimensions = get_dimensions(img)
-    width  = dimensions.split('x')[0]
-    height = dimensions.split('x')[1]
-
-    if aspect_ratio == '1.2':
+    if float(aspect_ratio) == float(1.2):
         vert_horiz = '200x240'
     elif float(aspect_ratio) > float(1.2):
         vert_horiz = 'x240'
@@ -325,6 +331,9 @@ def subproc_magick_medium_jpg(img, destdir=None):
 
     dimensions = '200x240'
     print dimensions,vert_horiz, ' _m.jpg '
+
+    ext = img.split('.')[-1]
+
     if regex_valid_style.findall(img):
 
         subprocess.call([
@@ -332,6 +341,8 @@ def subproc_magick_medium_jpg(img, destdir=None):
             '-colorspace',
             'sRGB',
             img,
+            '-format',
+            ext,
             '-background',
             'white',
             "-filter",
@@ -436,7 +447,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     width  = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
 
-    if aspect_ratio == '1.2':
+    # if aspect_ratio == '1.2':
+    if float(aspect_ratio) == float(1.2):
         vert_horiz = '{0}x{1}'.format(width,height)
         dimensions = '{0}x{1}'.format(int(width),int(height))
     elif float(aspect_ratio) > float(int(1.2)):
