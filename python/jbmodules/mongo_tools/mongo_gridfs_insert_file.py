@@ -94,7 +94,6 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     return new_insertobj_id
 
 
-
 def get_duplicate_records(db_name=None, collection_name=None):
     # Insert a New Document
     import pymongo, bson, datetime
