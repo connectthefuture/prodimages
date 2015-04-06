@@ -151,7 +151,7 @@ def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
         else:
             r = find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
             print r
-    except AttributeError:
+    except OSError:
         print 'Failed ', filepath
 
 
@@ -182,7 +182,7 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
             r = find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
             update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
             print r
-    except AttributeError:
+    except OSError:
         print 'Failed ', filepath
 
 
