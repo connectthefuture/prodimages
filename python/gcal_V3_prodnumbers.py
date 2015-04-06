@@ -22,9 +22,9 @@ def getServiceEvents():
     serviceName = 'calendar'
 
     #here = os.path.dirname(os.path.realpath(os.path.curdir))
-    #storage_file = os.path.join(batchRunScripts, 'calendar.dat')
-    py_dir = os.path.dirname(os.path.realpath(__file__))
-    storage_file = os.path.join(py_dir, serviceName + '.dat')
+    storage_file = os.path.join(batchRunScripts, 'calendar.datB')
+    #py_dir = os.path.dirname(os.path.realpath(__file__))
+    #storage_file = os.path.join(py_dir, serviceName + '.dat')
     ############################
     FLAGS = gflags.FLAGS
     # The client_id and client_secret are copied from the API Access tab on
@@ -143,6 +143,8 @@ def insert_mysql_numbers(roletotalsdict):
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
             pass
+
+
 ###############
 
 def sql_query_production_numbers():
