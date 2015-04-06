@@ -30,6 +30,7 @@ class Task(object):
         self.img = img
         self.rgbmean = rgbmean
         self.destdir = destdir
+
     def __call__(self):
         import jbmodules
         from jbmodules import image_processing
@@ -51,6 +52,7 @@ class Task(object):
             print self.img, ' <-- AttributeError in Task -->', self.destdir
             pass
         return '%s -- %s' % (self.img, self.destdir)
+
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
 
