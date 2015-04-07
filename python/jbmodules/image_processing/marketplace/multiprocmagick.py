@@ -186,7 +186,7 @@ def funkRunner2(root_img_dir=None):
 
     # 3P --> Poinson pill to help stop hanging procs
     # Add a poison pill for each consumer
-    for i in xrange(num_consumers):
+    for i in xrange(num_consumers+1):
         tasks.put(None)
         print i, ' tasks put line 191 mutiroc --><END'
 
