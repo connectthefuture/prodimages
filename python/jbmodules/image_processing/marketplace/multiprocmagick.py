@@ -43,8 +43,8 @@ class Task(object):
 
             print self.img, ' <-- self.img ', self.rgbmean
             tmppngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
-            magickProc2.subproc_magick_large_jpg(tmppngout, destdir=self.destdir)
-            magickProc2.subproc_magick_medium_jpg(tmppngout, destdir=self.destdir)
+            magickProc2.subproc_magick_large_jpg(tmppngout[0], destdir=self.destdir)
+            magickProc2.subproc_magick_medium_jpg(tmppngout[0], destdir=self.destdir)
         except TypeError:
             print self.img, ' <-- Type-Error in Task -->', self.destdir
             pass
