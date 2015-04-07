@@ -45,10 +45,10 @@ class Task(object):
             tmppngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
             magickProc2.subproc_magick_large_jpg(tmppngout, destdir=self.destdir)
             magickProc2.subproc_magick_medium_jpg(tmppngout, destdir=self.destdir)
-        except TypeError:
+        except OSError:
             print self.img, ' <-- Type-Error in Task -->', self.destdir
             pass
-        except AttributeError:
+        except IOError:
             print self.img, ' <-- AttributeError in Task -->', self.destdir
             pass
         return '%s -- %s' % (self.img, self.destdir)
