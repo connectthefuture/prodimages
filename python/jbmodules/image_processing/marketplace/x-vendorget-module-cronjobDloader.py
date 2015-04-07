@@ -316,7 +316,7 @@ def multi_url_downloader(argslist=None):
 
     cpus=multiprocessing.cpu_count() #detect number of cores
     print("Creating %d threads" % cpus)
-    for i in xrange(cpus*2):
+    for i in xrange(cpus*4):
          t = threading.Thread(target=worker)
          t.daemon = True
          t.start()

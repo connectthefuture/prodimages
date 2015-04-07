@@ -125,7 +125,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     restest = mongo_collection.distinct({key_str: md5})
     print ' distinct Res Test --> ', restest
     check = mongo_collection.find({key_str: tmpfilename}).count()
-    if check == 1:
+    if check:
         print 'REFRESH IT ', check
         data = { "$set":{
                         'colorstyle': colorstyle,
