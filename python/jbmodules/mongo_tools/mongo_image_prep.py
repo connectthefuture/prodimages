@@ -140,35 +140,35 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
 
-
-def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
-    import os
-    import mongo_gridfs_insert_file
-    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
-    try:
-        filename = os.path.basename(filepath)
-        ext = filename.split('.')[-1].lower()
-        if ext == 'jpg' or ext == 'jpeg':
-            content_type = 'image/jpeg'
-        elif ext == 'tif' or ext == 'tiff':
-            content_type= 'image/tiff'
-        else:
-            content_type= 'image/' + str(ext)
-        #content-type=content_type
-        if not mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
-            try:
-                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
-                    with open(filepath) as filedata:
-                        fp.write(filedata.read())
-                return fp, db
-            except IOError:
-                print ' IO ERROR '
-                return False
-        else:
-            r = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
-            print r
-    except OSError:
-        print 'Failed ', filepath
+#
+# def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
+#     import os
+#     import mongo_gridfs_insert_file
+#     db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+#     try:
+#         filename = os.path.basename(filepath)
+#         ext = filename.split('.')[-1].lower()
+#         if ext == 'jpg' or ext == 'jpeg':
+#             content_type = 'image/jpeg'
+#         elif ext == 'tif' or ext == 'tiff':
+#             content_type= 'image/tiff'
+#         else:
+#             content_type= 'image/' + str(ext)
+#         #content-type=content_type
+#         if not mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
+#             try:
+#                 with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+#                     with open(filepath) as filedata:
+#                         fp.write(filedata.read())
+#                 return fp, db
+#             except IOError:
+#                 print ' IO ERROR '
+#                 return False
+#         else:
+#             r = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
+#             print r
+#     except OSError:
+#         print 'Failed ', filepath
 
 
 def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
