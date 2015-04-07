@@ -80,7 +80,7 @@ def getparse_metadata_from_imagefile(image_filepath):
 
 
 ###
-
+### Actually Updates Mongo
 def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
     # Insert a New Document
     # (filepath=None, metadata=None, db_name=None):
@@ -120,7 +120,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
                         'metadata': metadata,
                         'content_type': content_type,
                         #'upload_ct':
-                        '$inc': {'upload_ct': 1},
+                        '$inc': {'upload_ct': int(1)},
                         'timestamp': { '$max': {'timestamp': timestamp}}
                         }
                     }
@@ -140,6 +140,58 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
     return new_insertobj_id
+
+
+def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
+    import os, mongo_gridfs_insert_file
+    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+    try:
+        filename = os.path.basename(filepath)
+        ext = filename.split('.')[-1].lower()
+        if ext == 'jpg' or ext == 'jpeg':
+            content_type = 'image/jpeg'
+        elif ext == 'tif' or ext == 'tiff':
+            content_type= 'image/tiff'
+        else:
+            content_type= 'image/' + str(ext)
+        #content-type=content_type
+        if not mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
+            try:
+                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+                    with open(filepath) as filedata:
+                        fp.write(filedata.read())
+                return fp, db
+            except IOError:
+                print ' IO ERROR '
+                return False
+        else:
+
+            # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
+            check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
+            return check, res
+    except OSError:
+        print 'Failed ', filepath
+
+
+def update_gridfs_extract_metadata(image_filepath,**kwargs):
+    import os,sys
+    try:
+        db_name = kwargs.get('db_name')
+        if not db_name:
+            db_name = sys.argv[2]
+    except UnboundLocalError:
+        db_name='gridfs_file7'
+    except IndexError:
+        db_name='gridfs_file7'
+    print ' is file --> ', image_filepath, db_name
+    if os.path.isfile(image_filepath):
+        metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
+    else:
+        metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
+    checked_ct, update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    return update_record
+
+
 
 #
 # def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
@@ -172,71 +224,23 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
 #         print 'Failed ', filepath
 
 
-def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
-    import os, mongo_gridfs_insert_file
-    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
-    try:
-        filename = os.path.basename(filepath)
-        ext = filename.split('.')[-1].lower()
-        if ext == 'jpg' or ext == 'jpeg':
-            content_type = 'image/jpeg'
-        elif ext == 'tif' or ext == 'tiff':
-            content_type= 'image/tiff'
-        else:
-            content_type= 'image/' + str(ext)
-        #content-type=content_type
-        if not mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
-            try:
-                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
-                    with open(filepath) as filedata:
-                        fp.write(filedata.read())
-                return fp, db
-            except IOError:
-                print ' IO ERROR '
-                return False
-        else:
-
-            r = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
-            update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
-            print r
-    except OSError:
-        print 'Failed ', filepath
-
-
-def insert_gridfs_extract_metadata(image_filepath, db_name=None):
-    import os,sys
-    if not db_name:
-        try:
-            db_name = sys.argv[2]
-        except IndexError:
-            db_name='gridfs_file7'
-    print image_filepath, ' <-- is file -- '
-    if os.path.isfile(image_filepath):
-        metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
-    else:
-        metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
-    print image_filepath, metadata, ' <-- image_filepath and metadata'
-    update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
-    return #insert_record
-
-
-def update_gridfs_extract_metadata(image_filepath,**kwargs):    
-    import os,sys
-    try:
-        db_name = kwargs.get('db_name')
-        if not db_name:
-            db_name = sys.argv[2]
-    except UnboundLocalError:
-        db_name='gridfs_file7'
-    except IndexError:
-        db_name='gridfs_file7'
-    print ' is file --> ', image_filepath, db_name
-    if os.path.isfile(image_filepath):
-        metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
-    else:
-        metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
-    insert_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
-    return insert_record
+#
+# def insert_gridfs_extract_metadata(image_filepath, db_name=None):
+#     import os,sys
+#     if not db_name:
+#         try:
+#             db_name = sys.argv[2]
+#         except IndexError:
+#             db_name='gridfs_file7'
+#     print image_filepath, ' <-- is file -- '
+#     if os.path.isfile(image_filepath):
+#         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
+#     else:
+#         metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
+#     print image_filepath, metadata, ' <-- image_filepath and metadata'
+#     update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
+#     return #insert_record
+#
 
 if __name__ == '__main__':
     import sys,os

@@ -382,6 +382,7 @@ def mongo_upsert_threaded(argslist=None):
                     ## Then remove the download and delete
                     try:
                         os.remove(destpath)
+                        print ' -- MongoWorkerRemoved ', destpath, res
                     except OSError:
                         print ' OSError in MongoWorker '
                         pass
