@@ -153,7 +153,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         pass
     # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
 
-    upsertobjid = mongo_collection.update(key, data, upsert=True, multi=True, safe=True, new=True)
+    #findModifyobjid = mongo_collection.findAndModify(key, data, upsert=True, multi=True, safe=True, new=True)
+    upsertobjid = mongo_collection.update(key, data, upsert=True, multi=True, safe=True)
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}\nCheck: {4}".format(colorstyle,alt, format,upsertobjid, check)
     return check, upsertobjid
 
