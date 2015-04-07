@@ -239,7 +239,7 @@ def subproc_magick_large_jpg(img, destdir=None):
         destdir = os.path.abspath(destdir)
 
     # if not regex_alt.findall(img):
-    if not regex_valid_style_PNG.findall(img):
+    if regex_valid_style_PNG.findall(img):
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
 
         # dimensions = get_dimensions(img)
