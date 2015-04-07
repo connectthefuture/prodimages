@@ -497,6 +497,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             w = float(0.8) * float(h)
             dimensions = '{0}x{1}'.format(int(w),int(h))
 
+    import tempfile, shutil
+    tmpfile_path = tempfile.TemporaryFile()
 
     subprocess.call([
             'convert',
@@ -532,18 +534,19 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             'center',
             '-extent',
             dimensions,
-            
+
             "-colorspace",
             "sRGB",
             '-unsharp',
             '2x2.7+0.5+0',
             '-quality',
             '95',
-            os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
+            tmpfile_path
             ])
 
+    shutil.copyfile(tmpfile_path,outfile)
     print 'Done {}'.format(img)
-    return os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
+    return tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 
 def upload_imagedrop(root_dir):

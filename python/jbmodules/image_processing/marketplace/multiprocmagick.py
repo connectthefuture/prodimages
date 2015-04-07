@@ -42,9 +42,9 @@ class Task(object):
             jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
 
             print self.img, ' <-- self.img ', self.rgbmean
-            pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
-            magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
-            magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
+            tmppngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
+            magickProc2.subproc_magick_large_jpg(tmppngout, destdir=self.destdir)
+            magickProc2.subproc_magick_medium_jpg(tmppngout, destdir=self.destdir)
         except TypeError:
             print self.img, ' <-- Type-Error in Task -->', self.destdir
             pass
