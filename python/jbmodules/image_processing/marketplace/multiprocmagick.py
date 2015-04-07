@@ -123,7 +123,7 @@ def funkRunner2(root_img_dir=None):
     else:
         imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
 
-    print len(imagesGlob), '  <-- Length of the Images to Rename,Process etc. '
+    print len(imagesGlob), '  <-- Length of the Images to Rename,Process etc. Now the Renamer'
     # 1B
     # Rename files using Multiproc pool
     poolRename = multiprocessing.Pool(8)
