@@ -114,7 +114,8 @@ def funkRunner2(root_img_dir=None):
     import multiprocessing
     #import Queue
     import threading
-    import glob, os.path
+    import glob, os
+    #from os import os.path
     import jbmodules
     from jbmodules import image_processing
     from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
