@@ -32,7 +32,7 @@ class Task(object):
         self.img = img
         self.rgbmean = rgbmean
         self.destdir = destdir
-        self.tmppngout = tempfile.mkstemp(suffix=".png")
+        #self.tmppngout = tempfile.mkstemp(suffix=".png")
 
     def __call__(self):
         import jbmodules
@@ -46,10 +46,11 @@ class Task(object):
             jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
 
             print self.img, ' <-- self.img ', self.rgbmean
-            self.tmppngout(magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir))
-            magickProc2.subproc_magick_large_jpg(self.tmppngout[1], destdir=self.destdir)
-            magickProc2.subproc_magick_medium_jpg(self.tmppngout[1], destdir=self.destdir)
-            os.remove(self.tmppngout[1])
+            #self.tmppngout(
+            pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir))
+            magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
+            magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
+            #os.remove(self.tmppngout[1])
         except TypeError:
                 print self.img, ' <-- Type-Error in Task -->', self.destdir
                 pass
