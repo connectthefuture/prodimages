@@ -15,7 +15,8 @@ class Consumer(multiprocessing.Process):
             if next_task is None:
                 # Poison pill means shutdown
                 print '%s: Exiting' % proc_name
-                print dir(self)
+                fnx = dir(self)
+                fnx.result_queue, fnx.task_queue, ' resQ and TaskQ <-- --> isalive --> ', fnx.is_alive
                 self.task_queue.task_done()
                 break
             print '%s: %s' % (proc_name, next_task)
