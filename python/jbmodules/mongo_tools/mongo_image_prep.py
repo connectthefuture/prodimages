@@ -214,12 +214,15 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
         metadata['image_url'] = image_url
     else:
-        if image_url:
-            pass
-        elif not kwargs.get('metadata'):
+        if not kwargs.get('metadata'):
             metadata = {}
             metadata['ERROR_PATH'] = image_filepath
             metadata['ERROR_URL']  = image_url
+        else:
+            metadata = kwargs.get('metadata')
+            metadata['ERROR_PATH'] = image_filepath
+            metadata['ERROR_URL'] = image_url
+
     checked_ct, update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return update_record
 
