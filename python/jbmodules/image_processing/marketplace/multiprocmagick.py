@@ -68,7 +68,7 @@ def run_threaded_imgdict(argslist=None):
     # print type(argslist), len(argslist), ' type and length argslist \n'
     print type(argslist), type(argslist)
     for i in argslist[0]: #put 30 tasks in the queue
-        print 'i ' , ' argslist'
+        print 'i ', ' argslist adding to imgdictQ threadedQ'
         if i:
             q.put([i])
 
