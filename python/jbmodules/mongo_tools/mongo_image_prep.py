@@ -32,8 +32,8 @@ def get_exif_all_data(image_filepath):
 
 
 def md5_checksummer(filepath):
+    import __builtin__, hashlib
     try:
-
         _file = __builtin__.open(filepath, "rb")
         content = _file.read()
         _file.close()
