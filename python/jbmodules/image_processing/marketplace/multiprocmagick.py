@@ -47,7 +47,7 @@ class Task(object):
 
             print self.img, ' <-- self.img ', self.rgbmean
             #self.tmppngout(
-            pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir))
+            pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
             magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
             magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
             #os.remove(self.tmppngout[1])
