@@ -128,11 +128,8 @@ def funkRunner2(root_img_dir=None):
     # Rename files using Multiproc pool
     poolRename = multiprocessing.Pool(8)
     images = [ f for f in glob.glob(imagesGlob) if f is not None ]
-    while len(images) != 0:
+    while len(images) == 0:
         print len(images), '  <-- Length of the Images to Rename,Process etc. Now the Renamer'
-        continue
-    else:
-        print len(images), '  <-- Length of the Images to Rename,Process etc. Now Breaking before renamer'
         break
 
     resrename = poolRename.map(rename_retouched_file, images)
