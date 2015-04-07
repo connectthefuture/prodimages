@@ -124,7 +124,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
                         'timestamp': { '$max': {'timestamp': timestamp}}
                         }
                     }
-        return check
+        return check, data
+
     else:
         print 'NEW IT ', check
         data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
@@ -196,7 +197,7 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
         else:
 
             r = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
-            updateupdate_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
+            update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
             print r
     except OSError:
         print 'Failed ', filepath
