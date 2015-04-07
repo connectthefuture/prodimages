@@ -99,7 +99,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     alt                  = image_number
     if not kwargs.get('content_type'):
         content_type  = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
-
+    else:
+        content_type = kwargs.get('content_type')
     if not timestamp:
         timestamp = datetime.datetime.now()
 
@@ -166,7 +167,6 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
                 print ' IO ERROR '
                 return False
         else:
-
             # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
             check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
             return check, res
