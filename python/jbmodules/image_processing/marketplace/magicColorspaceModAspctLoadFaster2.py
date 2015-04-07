@@ -260,7 +260,7 @@ def subproc_magick_large_jpg(img, destdir=None):
 
         ext = img.split('.')[-1]
 
-        if regex_valid_style.findall(img):
+        if regex_valid_style_PNG.findall(img):
             subprocess.call([
             'convert',
             '-colorspace',
