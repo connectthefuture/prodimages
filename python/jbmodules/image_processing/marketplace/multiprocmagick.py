@@ -45,12 +45,12 @@ class Task(object):
             tmppngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
             magickProc2.subproc_magick_large_jpg(tmppngout, destdir=self.destdir)
             magickProc2.subproc_magick_medium_jpg(tmppngout, destdir=self.destdir)
-        except OSError:
-            print self.img, ' <-- Type-Error in Task -->', self.destdir
-            pass
-        except IOError:
-            print self.img, ' <-- AttributeError in Task -->', self.destdir
-            pass
+        except TypeError:
+                print self.img, ' <-- Type-Error in Task -->', self.destdir
+                pass
+        except AttributeError:
+                print self.img, ' <-- AttributeError in Task -->', self.destdir
+                pass
         return '%s -- %s' % (self.img, self.destdir)
 
     def __str__(self):
@@ -67,7 +67,7 @@ def run_threaded_imgdict(argslist=None):
     # print type(argslist), len(argslist), ' type and length argslist \n'
     print type(argslist), type(argslist)
     for i in argslist[0]: #put 30 tasks in the queue
-        print 'i ', ' argslist adding to imgdictQ threadedQ'
+        print 'i ', ' argslist'
         if i:
             q.put([i])
 
