@@ -168,7 +168,7 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
         else:
 
             # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
-            check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, contentType=content_type)
+            check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
             return check, res
     except OSError:
         print 'Failed ', filepath
