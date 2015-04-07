@@ -32,8 +32,8 @@ def get_exif_all_data(image_filepath):
 
 
 def md5_checksummer(filepath):
+    import __builtin__, hashlib
     try:
-
         _file = __builtin__.open(filepath, "rb")
         content = _file.read()
         _file.close()
@@ -144,7 +144,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
 
     else:
         print 'NEW IT ', check
-        data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
+        data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": 1},'timestamp': timestamp}}
         # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
         mongo_collection.create_index(key_str, unique=False, sparse=False, background=True)
@@ -153,7 +153,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         pass
     # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
 
-    upsertobjid = mongo_collection.update(key, data, upsert=True, multi=True, safe=True)
+    upsertobjid = mongo_collection.update(key, data, upsert=True, multi=True, safe=True, new=True)
     print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}\nCheck: {4}".format(colorstyle,alt, format,upsertobjid, check)
     return check, upsertobjid
 
