@@ -203,13 +203,24 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
     except IndexError:
         db_name='gridfs_file7'
     print ' is file --> ', image_filepath, db_name
+
+    if kwargs.get('image_url'):
+        image_url = kwargs.get('image_url')
+    else:
+        image_url = ''
+
     if os.path.isfile(image_filepath):
         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
+        metadata['image_url'] = image_url
     else:
-        metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
+        if image_url:
+            pass
+        elif not kwargs.get('metadata'):
+            metadata = {}
+            metadata['ERROR_PATH'] = image_filepath
+            metadata['ERROR_URL']  = image_url
     checked_ct, update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     return update_record
-
 
 
 #
