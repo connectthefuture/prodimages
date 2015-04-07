@@ -227,7 +227,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
     if checked_ct is False:
         return False, image_filepath
     elif str(checked_ct).isdigit():
-        return checked_ct,image_filepath
+        return checked_ct, image_filepath
 
 
 #
