@@ -119,7 +119,9 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
                         'metadata': metadata,
                         'content_type': content_type,
                         #'upload_ct':
-                        '$inc': {'upload_ct': int(1)},
+
+                        "$inc": {"upload_ct": 1},
+                        #'$inc': {'upload_ct': int(1)},
                         'timestamp': { '$max': {'timestamp': timestamp}}
                         }
                     }
@@ -130,7 +132,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
         # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
-        mongo_collection.create_index(key_str, unique=True, sparse=False, background=True)
+        mongo_collection.create_index("md5", unique=True, sparse=False, background=True)
     except pymongo.errors.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
