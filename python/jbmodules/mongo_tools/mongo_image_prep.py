@@ -31,6 +31,18 @@ def get_exif_all_data(image_filepath):
     return metadata
 
 
+def md5_checksummer(filepath):
+    try:
+
+        _file = __builtin__.open(filepath, "rb")
+        content = _file.read()
+        _file.close()
+        md5 = hashlib.md5(content)
+        _hash = md5.hexdigest()
+        return { "md5": _hash }
+    except:
+        pass
+
 ## Returns False if file is Zero KB, True if file is valid - does not catch corrupt files greater than 1KB
 def zero_byte_file_filter(image_filepath,error_dir=None):
     import os, shutil
@@ -105,7 +117,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         timestamp = datetime.datetime.now()
 
     mongo_collection = mongo_db[collection_name]
-    key = {'filename': tmpfilename}  #, 'alt': alt, 'upload_ct': 1}
+    md5 = md5_checksummer(filepath)
+    key = {'md5': md5}  #, 'alt': alt, 'upload_ct': 1}
     # data = { "$set":{'format': format,'metadata': metadata,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
     key_str = key.keys()[0]
@@ -158,7 +171,8 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
                 content_type= 'image/' + str(ext)
         else:
             content_type = kwargs.get('content_type')
-        if not mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files'):
+        md5 = md5_checksummer(filepath)
+        if not mongo_gridfs_insert_file.find_record_gridfs(key={'md5': md5}, db_name=db_name, collection_name='fs.files'):
             try:
                 ## Actually do an insert to gridfs instead
                 with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
