@@ -202,13 +202,13 @@ def funkRunner2(root_img_dir=None):
 
     ########## Five ##########
     # Delete em all
-    if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
-        poolDelete = multiprocessing.Pool(8)
-        import os
-        poolDelete.map(os.remove, img_list)
-        poolDelete.close()
-        poolDelete.join()
-        print' And now they are Gone'
+    # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
+    #     poolDelete = multiprocessing.Pool(8)
+    #     import os
+    #     poolDelete.map(os.remove, img_list)
+    #     poolDelete.close()
+    #     poolDelete.join()
+    #     print' And now they are Gone'
 
     #return
 
