@@ -549,7 +549,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     #tmpfileobj.close()
     #shutil.copy2(tmpfile_path,outfile)
     print 'Done {}'.format(img)
-    return outfile # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
+    return open(outfile).read() # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 
 def upload_imagedrop(root_dir):
