@@ -27,12 +27,16 @@ class Consumer(multiprocessing.Process):
 
 class Task(object):
     def __init__(self, img, rgbmean, destdir):
+        import tempfile, shutil
+        # tmpfileobj, tmpfile_path = tempfile.mkstemp(suffix=".png")
         self.img = img
         self.rgbmean = rgbmean
         self.destdir = destdir
+        self.tmppngout = tempfile.mkstemp(suffix=".png")
 
     def __call__(self):
         import jbmodules
+        import os.remove
         from jbmodules import image_processing
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
@@ -42,9 +46,10 @@ class Task(object):
             jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
 
             print self.img, ' <-- self.img ', self.rgbmean
-            tmppngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
-            magickProc2.subproc_magick_large_jpg(tmppngout, destdir=self.destdir)
-            magickProc2.subproc_magick_medium_jpg(tmppngout, destdir=self.destdir)
+            self.tmppngout(magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir))
+            magickProc2.subproc_magick_large_jpg(self.tmppngout[1], destdir=self.destdir)
+            magickProc2.subproc_magick_medium_jpg(self.tmppngout[1], destdir=self.destdir)
+            os.remove(self.tmppngout[1])
         except TypeError:
                 print self.img, ' <-- Type-Error in Task -->', self.destdir
                 pass
