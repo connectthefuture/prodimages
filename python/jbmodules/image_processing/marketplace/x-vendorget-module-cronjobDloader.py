@@ -376,9 +376,11 @@ def mongo_upsert_threaded(argslist=None):
             print item, ' MongoWorker'
             if item is not None:
                 res, destpath = mongo_update_url_dest_info(item)
-                if not res:
-                    print ' NewsIt NotRes', count 
+                if not res and res is not False:
+                    print ' NewsIt NotRes', count, res
                     pass
+                elif res != 'Duplicate':
+                    print ' NotRes Duplicate count is --> ', res, destpath
                 elif res == 'Duplicate' and destpath is not None:
                     ## Then remove the download and delete
                     try:

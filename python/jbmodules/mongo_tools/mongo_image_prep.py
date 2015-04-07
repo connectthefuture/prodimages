@@ -184,7 +184,7 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
                 return fp, db
             except IOError:
                 print ' IO ERROR '
-                return False
+                return False, False
         else:
             # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
             check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
@@ -224,7 +224,10 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
             metadata['ERROR_URL'] = image_url
 
     checked_ct, update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
-    return update_record
+    if checked_ct is False:
+        return False, image_filepath
+    elif str(checked_ct).isdigit():
+        return checked_ct,image_filepath
 
 
 #
