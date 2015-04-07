@@ -135,7 +135,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
                         'content_type': content_type,
                         #'upload_ct':
 
-                        "$inc": {"upload_ct": 1},
+                        "$inc": {"upload_ct": int(1)},
                         #'$inc': {'upload_ct': int(1)},
                         'timestamp': { '$max': {'timestamp': timestamp}}
                         }
