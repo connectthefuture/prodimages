@@ -20,8 +20,10 @@ class Consumer(multiprocessing.Process):
                 break
             print '%s: %s' % (proc_name, next_task)
             answer = next_task()
+
             self.task_queue.task_done()
             self.result_queue.put(answer)
+            print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
         return
 
 
