@@ -122,6 +122,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     # data = { "$set":{'format': format,'metadata': metadata,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
     key_str = key.keys()[0]
+    restest = mongo_collection.distinct({"md5": md5})
+    print ' distinct Res Test --> ', restest
     check = mongo_collection.find({key_str: tmpfilename}).count()
     if check == 1:
         print 'REFRESH IT ', check
