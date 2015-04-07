@@ -100,7 +100,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     colorstyle           = str(tmpfilename[:9])
     image_number         = str(tmpfilename.split('.')[-2][-1])
     alt                  = image_number
-    content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
+    if not kwargs.get('content_type'):
+        content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
 
     if not timestamp:
         timestamp = datetime.datetime.now()
@@ -138,8 +139,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("alt", pymongo.DECENDING)], background=True)
 
     new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
-    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}".format(colorstyle,alt, format,new_insertobj_id)
-    return new_insertobj_id
+    print "Inserted: {0}\nImageNumber: {1}\nFormat: {2}\nID: {3}\nCheck: {4}".format(colorstyle,alt, format,new_insertobj_id, check)
+    return check, new_insertobj_id
 
 
 def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
@@ -167,7 +168,7 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
         else:
 
             # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
-            check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
+            check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
             return check, res
     except OSError:
         print 'Failed ', filepath
