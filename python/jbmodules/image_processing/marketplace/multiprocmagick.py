@@ -63,7 +63,6 @@ def run_threaded_imgdict(argslist=None):
     import multiprocessing
     import jbmodules
     from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
-    from jbmodules.mongo_tools.mongo_image_prep import insert_gridfs_extract_metadata, update_gridfs_extract_metadata
     q = Queue.Queue()
     # print type(argslist), len(argslist), ' type and length argslist \n'
     print type(argslist), type(argslist)
