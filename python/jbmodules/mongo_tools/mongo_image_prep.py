@@ -106,11 +106,11 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         timestamp = datetime.datetime.now()
 
     mongo_collection = mongo_db[collection_name]
-    key = {'colorstyle': colorstyle}  #, 'alt': alt, 'upload_ct': 1}
+    key = {'filename': tmpfilename}  #, 'alt': alt, 'upload_ct': 1}
     # data = { "$set":{'format': format,'metadata': metadata,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
     key_str = key.keys()[0]
-    check = mongo_collection.find({key_str: colorstyle}).count()
+    check = mongo_collection.find({key_str: tmpfilename}).count()
     if check == 1:
         print 'REFRESH IT ', check
         data = { "$set":{
@@ -130,7 +130,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
         # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
-        mongo_collection.create_index("md5", unique=True, sparse=False, background=True)
+        mongo_collection.create_index(key_str, unique=True, sparse=False, background=True)
     except pymongo.errors.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
@@ -196,14 +196,13 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
         else:
 
             r = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
-            update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
+            updateupdate_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name)
             print r
     except OSError:
         print 'Failed ', filepath
 
 
 def insert_gridfs_extract_metadata(image_filepath, db_name=None):
-    from mongo_gridfs_insert_file import update_file_gridfs
     import os,sys
     if not db_name:
         try:
@@ -221,7 +220,6 @@ def insert_gridfs_extract_metadata(image_filepath, db_name=None):
 
 
 def update_gridfs_extract_metadata(image_filepath,**kwargs):    
-    import mongo_gridfs_insert_file
     import os,sys
     try:
         db_name = kwargs.get('db_name')
@@ -236,8 +234,8 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         metadata = getparse_metadata_from_imagefile(image_filepath).items()[0][1]
     else:
         metadata = {'ERROR_PATH': image_filepath, 'ERROR_URL': image_filepath }
-    insert_record = mongo_gridfs_insert_file.update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
-    return #insert_record
+    insert_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    return insert_record
 
 if __name__ == '__main__':
     import sys,os
