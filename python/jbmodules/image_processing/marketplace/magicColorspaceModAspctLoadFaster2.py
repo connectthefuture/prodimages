@@ -497,8 +497,10 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             w = float(0.8) * float(h)
             dimensions = '{0}x{1}'.format(int(w),int(h))
 
+
+    # Create a safe png then copy it and reuse tmp in following procs
     import tempfile, shutil
-    tmpfile_path = tempfile.mkstemp(suffix=".png")
+    tmpfileobj, tmpfile_path = tempfile.mkstemp(suffix=".png")
 
     subprocess.call([
             'convert',
@@ -541,12 +543,13 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             '2x2.7+0.5+0',
             '-quality',
             '95',
-            tmpfile_path
+            tmpfileobj
             ])
 
-    shutil.copy2(tmpfile_path[0],outfile)
+    tmpfileobj.close()
+    shutil.copy2(tmpfile_path,outfile)
     print 'Done {}'.format(img)
-    return tmpfile_path[1]  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
+    return tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 
 def upload_imagedrop(root_dir):
