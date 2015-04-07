@@ -543,7 +543,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             '2x2.7+0.5+0',
             '-quality',
             '95',
-            tmpfileobj
+            tmpfile_path
             ])
 
     tmpfileobj.close()
