@@ -36,7 +36,7 @@ class Task(object):
 
     def __call__(self):
         import jbmodules
-        import os.remove
+        import os
         from jbmodules import image_processing
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
