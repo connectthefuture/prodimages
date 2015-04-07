@@ -285,6 +285,7 @@ def multi_url_downloader(argslist=None):
             q.put(i)
     
     def worker():
+
         count = 0
         while True:
             item = q.get()
@@ -309,6 +310,7 @@ def multi_url_downloader(argslist=None):
             except KeyError:
                 print 'KeyError --> ', downloaded_file
                 try:
+                    import os
                     os.remove(downloaded_file)
                 except:
                     pass
@@ -337,7 +339,7 @@ def mongo_update_url_dest_info(urldest_tuple):
         import jbmodules
         from jbmodules import mongo_tools
         from jbmodules.mongo_tools import mongo_image_prep as mongo_image_prep
-        updateCheck = ''
+
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
             destpath,
             db_name ='gridfs_mrktplce', 
@@ -347,7 +349,7 @@ def mongo_update_url_dest_info(urldest_tuple):
             image_number  = image_number, 
             content_type  = 'image/{}'.format(content_type)
             )     ## image_url=image_url, destpath=destpath)
-    return updateCheck, destpath
+        return updateCheck, destpath
 
 
 def mongo_upsert_threaded(argslist=None):
@@ -369,7 +371,7 @@ def mongo_upsert_threaded(argslist=None):
         restest = '/'.join(i[1].split('/')[:-1])
 
     def mongoworker():
-        import os
+
         count = 0
         while True:
             item = qmongo.get()
@@ -384,6 +386,7 @@ def mongo_upsert_threaded(argslist=None):
                 elif res == 'Duplicate' and destpath is not None:
                     ## Then remove the download and delete
                     try:
+                        import os
                         os.remove(destpath)
                         print ' -- MongoWorkerRemoved ', destpath, res
                     except OSError:
@@ -470,7 +473,11 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         #    root_img_dir = os.path.join(dest_root, vendor, '*')
         #    print ' If Vend/VendBrd ResNOT-Dir rootimgdir then res --> ', root_img_dir, res
         #else:
-        root_img_dir = dest_root
+        if not ALL:
+            root_img_dir = dest_root
+        else:
+            root_img_dir = res
+
         print ' YES to the vend Res-->IsNotDir AND rootimgdir --> ', res
     else:
         root_img_dir = dest_root
