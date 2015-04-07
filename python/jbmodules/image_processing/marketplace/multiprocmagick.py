@@ -45,21 +45,21 @@ class Task(object):
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
-        try:
-            jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
+        #try:
+        jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
 
-            print self.img, ' <-- self.img ', self.rgbmean
-            #self.tmppngout(
-            pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
-            magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
-            magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
-            #os.remove(self.tmppngout[1])
-        except TypeError:
-                print self.img, ' <-- Type-Error in Task -->', self.destdir
-                pass
-        except AttributeError:
-                print self.img, ' <-- AttributeError in Task -->', self.destdir
-                pass
+        print self.img, ' <-- self.img ', self.rgbmean
+        #self.tmppngout(
+        pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
+        magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
+        magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
+        #os.remove(self.tmppngout[1])
+        # except TypeError:
+        #         print self.img, ' <-- Type-Error in Task -->', self.destdir
+        #         pass
+        # except AttributeError:
+        #         print self.img, ' <-- AttributeError in Task -->', self.destdir
+        #         pass
         return '%s -- %s' % (self.img, self.destdir)
 
     def __str__(self):
