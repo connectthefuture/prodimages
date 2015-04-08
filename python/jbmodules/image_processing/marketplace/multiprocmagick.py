@@ -26,6 +26,7 @@ class Consumer(multiprocessing.Process):
             self.task_queue.task_done()
             self.result_queue.put(answer)
             print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
+        return
     #except TypeError:
         #' None Type Error End '
         #pass
@@ -200,9 +201,7 @@ def funkRunner2(root_img_dir=None):
     # 3X --> End
     # Wait for all of the tasks to finish
     tasks.join()
-    while tasks.empty():
-        print 'Joined Tasks But hung up Enumerating and Breaking'
-        break
+    
 
 
     ########## Four ##########
