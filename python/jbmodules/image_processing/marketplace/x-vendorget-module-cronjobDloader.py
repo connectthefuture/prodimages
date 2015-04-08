@@ -147,7 +147,7 @@ def download_mplce_url(urldest_tuple):
 
     ######################
     #### BOX API AUTH ####
-    regex_boxapi  = re.compile(r'^(http)?s?(://)?(.*?)?app.box.com/.+?\.?[jpngJPNG]{3,4}\??(.*?)?$')
+    regex_boxapi  = re.compile(r'^(http)?s?(://)?(.*?)?app.box.com/(.+?)?(\.?[jpngJPNG]{3,4})?\??(.*?)?$')
     if regex_boxapi.findall(image_url):
         #import jbmodules.http_tools.auth.Box.boxapi_auth_downloader as boxapi_auth_downloader
         #final_path = boxapi_auth_downloader.download_boxapi_drive_file(image_url=image_url, destpath=destpath)
