@@ -65,7 +65,7 @@ class Task(object):
             # except AttributeError:
             #         print self.img, ' <-- AttributeError in Task -->', self.destdir
             #         pass
-        except TypeError:
+        except IndexError:
             ' None Type Error End '
             pass
         return '%s -- %s' % (self.img, self.destdir)
