@@ -196,7 +196,7 @@ def funkRunner2(root_img_dir=None):
     # Add a poison pill for each consumer
     for i in xrange(num_consumers):
         tasks.put(None)
-        print i, ' tasks put line 191 mutiroc --><END'
+        #print i, ' tasks put line 191 mutiroc --><END'
 
     # 3X --> End
     # Wait for all of the tasks to finish
