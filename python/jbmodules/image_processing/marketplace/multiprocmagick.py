@@ -29,7 +29,6 @@ class Consumer(multiprocessing.Process):
             return
         except TypeError:
             print ' None Type Error End '
-            pass
             return
 
 
