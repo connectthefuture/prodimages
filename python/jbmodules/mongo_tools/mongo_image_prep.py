@@ -123,10 +123,10 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
     key_str = key.keys()[0]
     restest = mongo_collection.distinct({key_str: md5})
-    print ' distinct Res Test --> ', restest
+    #print ' distinct Res Test --> ', restest
     check = mongo_collection.find({key_str: tmpfilename}).count()
     if check:
-        print 'REFRESH IT ', check
+        
         data = { "$set":{
                         "colorstyle": colorstyle,
                         "alt": {"$min": {"alt": alt}},
@@ -139,14 +139,16 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
                         "timestamp": { "$max": {"timestamp": timestamp}}
                         }
                     }
+        print 'REFRESH IT ', check, data
         return check, data
 
     else:
-        print 'NEW IT ', check
+        
         data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": int(1)},'timestamp': timestamp}}
+        print 'NEW ', check, data
         # mongo_collection.ensure_index([("md5", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
-        mongo_collection.ensure_index(key_str, unique=True, sparse=True, background=True)
+        mongo_collection.ensure_index(key_str, unique=True, sparse=False, background=True)
     except pymongo.errors.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
@@ -202,7 +204,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
         db_name='gridfs_file7'
     except IndexError:
         db_name='gridfs_file7'
-    print ' is file --> ', image_filepath, db_name
+    #print ' is file --> ', image_filepath, db_name
 
     if kwargs.get('image_url'):
         image_url = kwargs.get('image_url')

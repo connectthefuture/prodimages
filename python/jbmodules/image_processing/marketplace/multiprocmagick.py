@@ -82,9 +82,9 @@ def run_threaded_imgdict(argslist=None):
     from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
     q = Queue.Queue()
     # print type(argslist), len(argslist), ' type and length argslist \n'
-    print type(argslist), type(argslist)
+    #print type(argslist), type(argslist)
     for i in argslist[0]: #put 30 tasks in the queue
-        print 'i ', ' argslist'
+        #print 'i ', ' argslist'
         if i:
             q.put([i])
 
@@ -94,9 +94,9 @@ def run_threaded_imgdict(argslist=None):
         count = 0
         while True:
             item = q.get()
-            print item[0]
+            #print item[0]
             imgdata = sort_files_by_values(item)
-            print imgdata
+            #print imgdata
             img_dict_list.append(imgdata)
             # Can add functions to adjust based on imgdict params or store image data or delete etc.
             # insertres =  insert_gridfs_extract_metadata(item[0])
@@ -105,7 +105,7 @@ def run_threaded_imgdict(argslist=None):
             q.task_done()
 
 
-    print 'argsL --> len arglist', len(argslist[0]), type(argslist), ' Type ArgsList RunThreaded'
+    #print 'argsL --> len arglist', len(argslist[0]), type(argslist), ' Type ArgsList RunThreaded'
     jobcount= 16 #len(argslist[0]) #detect number of cores
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
@@ -134,7 +134,7 @@ def funkRunner2(root_img_dir=None):
     #
     # 1A
     # List of images to run through processing as glob of the root_img_dir
-    print root_img_dir, ' <-- Rootimgdir FunkR2'
+    #print root_img_dir, ' <-- Rootimgdir FunkR2'
     if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
     else:
@@ -160,7 +160,7 @@ def funkRunner2(root_img_dir=None):
     # 2
     # Extract image pixel data for enhancements. As list of tuples, [<url>, {rgbdata} ].. ithink
     img_list =  [ f for f in glob.glob(imagesGlob) if f is not None ]
-    print type(img_list), '\tLen ImageList preThreaded'
+    #print type(img_list), '\tLen ImageList preThreaded'
     img_dict = run_threaded_imgdict(argslist=(img_list,))
 
 
@@ -184,10 +184,10 @@ def funkRunner2(root_img_dir=None):
     # Tasks Add
     # Add Images and rgb data and dest to tasks
     num_jobs = len(img_dict)
-    print 'jobs -- consumers -- root_img_dir --> ', num_jobs, consumers, root_img_dir
+    #print 'jobs -- consumers -- root_img_dir --> ', num_jobs, consumers, root_img_dir
     for item in img_dict:
         for img, rgbmean in item.items():
-            print img, 'rgbmean', ' Img -- RGB Mean'
+            #print img, 'rgbmean', ' Img -- RGB Mean'
             tasks.put(Task(img, rgbmean, destdir))
     print 'Put Tasks'
 
