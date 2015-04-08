@@ -200,7 +200,7 @@ def funkRunner2(root_img_dir=None):
     # 3X --> End
     # Wait for all of the tasks to finish
     tasks.join()
-    while not tasks.empty():
+    while tasks.empty():
         print 'Joined Tasks But hung up Enumerating and Breaking'
         break
 
