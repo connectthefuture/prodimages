@@ -252,11 +252,11 @@ def subproc_magick_large_jpg(img, destdir=None):
         # if aspect_ratio == '1.2':
 
         aspect_ratio = get_aspect_ratio(img)
-        if float(aspect_ratio) == float(1.2):
+        if float(str(aspect_ratio)) == float(1.2):
             vert_horiz = '400x480'
-        elif float(aspect_ratio) > float(1.2):
+        elif float(str(aspect_ratio)) > float(1.2):
             vert_horiz = 'x480'
-        elif float(aspect_ratio) < float(1.2):
+        elif float(str(aspect_ratio)) < float(1.2):
             vert_horiz = '400x'
 
         dimensions = "400x480"
@@ -326,11 +326,11 @@ def subproc_magick_medium_jpg(img, destdir=None):
     #if aspect_ratio == '1.2':
 
     aspect_ratio = get_aspect_ratio(img)
-    if float(aspect_ratio) == float(1.2):
+    if float(str(aspect_ratio)) == float(1.2):
         vert_horiz = '200x240'
-    elif float(aspect_ratio) > float(1.2):
+    elif float(str(aspect_ratio)) > float(1.2):
         vert_horiz = 'x240'
-    elif float(aspect_ratio) < float(1.2):
+    elif float(str(aspect_ratio)) < float(1.2):
         vert_horiz = '200x'
 
     dimensions = '200x240'
@@ -452,16 +452,16 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     height = dimensions.split('x')[1]
 
     # if aspect_ratio == '1.2':
-    if float(aspect_ratio) == float(1.2):
+    if float(str(aspect_ratio)) == float(1.2):
         vert_horiz = '{0}x{1}'.format(width,height)
         dimensions = '{0}x{1}'.format(int(width),int(height))
-    elif float(aspect_ratio) > float(int(1.2)):
+    elif float(str(aspect_ratio)) > float(int(1.2)):
         vert_horiz = 'x{0}'.format(height)
         w = float(0.8) * float(height)
         #w = float(round(w,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(w),int(height))
         print "W",w, aspect_ratio
-    elif float(aspect_ratio) < float(int(1.2)):
+    elif float(str(aspect_ratio)) < float(int(1.2)):
         vert_horiz = '{0}x'.format(width)
         h = float(1.2) * float(width)
         #h = float(round(h,2)*float(aspect_ratio))
