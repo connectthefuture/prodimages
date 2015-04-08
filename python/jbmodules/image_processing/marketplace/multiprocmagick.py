@@ -10,27 +10,27 @@ class Consumer(multiprocessing.Process):
         self.result_queue = result_queue
     def run(self):
         proc_name = self.name
-    #try:
-        while True:
-            next_task = self.task_queue.get()
-            if next_task is None:
-                # Poison pill means shutdown
-                print '%s: Exiting' % proc_name
-                #fnx = dir(self)
-                print self.result_queue, self.task_queue, ' resQ and TaskQ <-- --> pid -- isalive --> ', self.pid, self.is_alive
-                self.task_queue.task_done()
-                break
-            print '%s: %s' % (proc_name, next_task)
-            answer = next_task()
+        try:
+            while True:
+                next_task = self.task_queue.get()
+                if next_task is None:
+                    # Poison pill means shutdown
+                    print '%s: Exiting' % proc_name
+                    #fnx = dir(self)
+                    print self.result_queue, self.task_queue, ' resQ and TaskQ <-- --> pid -- isalive --> ', self.pid, self.is_alive
+                    self.task_queue.task_done()
+                    break
+                print '%s: %s' % (proc_name, next_task)
+                answer = next_task()
 
-            self.task_queue.task_done()
-            self.result_queue.put(answer)
-            print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
-        return
-    #except TypeError:
-        #' None Type Error End '
-        #pass
-        #return
+                self.task_queue.task_done()
+                self.result_queue.put(answer)
+                print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
+            return
+        except TypeError:
+            print ' None Type Error End '
+            pass
+            return
 
 
 
@@ -201,7 +201,7 @@ def funkRunner2(root_img_dir=None):
     # 3X --> End
     # Wait for all of the tasks to finish
     tasks.join()
-    
+
 
 
     ########## Four ##########
