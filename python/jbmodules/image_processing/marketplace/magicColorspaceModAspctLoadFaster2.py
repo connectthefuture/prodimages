@@ -84,6 +84,7 @@ def get_aspect_ratio(img):
     except IOError:
         pass
 
+
 def get_dimensions(img):
     from PIL import Image
     try:
@@ -93,6 +94,7 @@ def get_dimensions(img):
         return dimensions
     except IOError:
         pass
+
 
 def get_exif_metadata_value(img, exiftag=None):
     import pyexiv2
@@ -107,6 +109,7 @@ def get_exif_metadata_value(img, exiftag=None):
         for mtag, mvalue in metadata.iteritems():
             metadict[mtag] = mvalue
         return metadict
+
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
@@ -183,6 +186,7 @@ def evaluate_color_values(colordata):
     except ValueError:
         print "Value Error", colordata
         pass
+
 
 def sort_files_by_values(fileslist):
     import os,glob
