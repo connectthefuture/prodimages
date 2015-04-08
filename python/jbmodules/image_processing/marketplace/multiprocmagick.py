@@ -200,7 +200,7 @@ def funkRunner2(root_img_dir=None):
 
     # 3X --> End
     # Wait for all of the tasks to finish
-    tasks.join(5)
+    tasks.join(10)
     print 'Joined Tasks'
 
 
