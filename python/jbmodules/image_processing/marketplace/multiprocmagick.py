@@ -110,7 +110,6 @@ def run_threaded_imgdict(argslist=None):
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
         t = threading.Thread(target=worker)
-
         t.daemon = True
         t.start()
 
