@@ -16,7 +16,7 @@ class Consumer(multiprocessing.Process):
             if next_task is None:
                 # Poison pill means shutdown
                 print '%s: Exiting' % proc_name
-                fnx = dir(self)
+                #fnx = dir(self)
                 print self.result_queue, self.task_queue, ' resQ and TaskQ <-- --> pid -- isalive --> ', self.pid, self.is_alive
                 self.task_queue.task_done()
                 break
@@ -200,7 +200,7 @@ def funkRunner2(root_img_dir=None):
     # 3X --> End
     # Wait for all of the tasks to finish
     tasks.join()
-    while not tasks.empty():
+    while tasks.empty():
         print 'Joined Tasks But hung up Enumerating and Breaking'
         break
 
