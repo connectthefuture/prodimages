@@ -215,15 +215,15 @@ def sort_files_by_values(fileslist):
             try:
                 filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
                 count -= 1
-                print "{0} Files Remaining-TypeError".format(count)
+                #print "{0} Files Remaining-TypeError".format(count)
                 pass
             except TypeError:
-                print ' PAssing ', f
+                #print ' PAssing ', f
                 pass
         except ZeroDivisionError:
             filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
             count -= 1
-            print "{0} Files Remaining-ZeroDivision".format(count)
+            #print "{0} Files Remaining-ZeroDivision".format(count)
             pass
     return filevalue_dict
 
@@ -260,7 +260,7 @@ def subproc_magick_large_jpg(img, destdir=None):
             vert_horiz = '400x'
 
         dimensions = "400x480"
-        print dimensions, vert_horiz
+        #print dimensions, vert_horiz
 
         ext = img.split('.')[-1]
 
@@ -334,7 +334,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         vert_horiz = '200x'
 
     dimensions = '200x240'
-    print dimensions,vert_horiz, ' _m.jpg '
+    #print dimensions,vert_horiz, ' _m.jpg '
 
     ext = img.split('.')[-1]
 
@@ -552,7 +552,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
     #tmpfileobj.close()
     #shutil.copy2(tmpfile_path,outfile)
-    print 'Done {}'.format(img)
+    #print 'Done {}'.format(img)
     return outfile #open(outfile).read() # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 

@@ -138,8 +138,8 @@ def download_mplce_url(urldest_tuple):
     ############       Finally     #########################
     #####     Replace ALL url encoding % escapes    ########
     ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
-    #image_url  = image_url.replace('/Flat%2520Images/', '/Flat%20Images/')
-    print image_url, ' URL'
+    # image_url  = image_url.replace('/Flat%2520Images/', '/Flat%20Images/')
+    # print image_url, ' URL'
     regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
     regex_drive2 = re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(?P<fileId>.+?)\&?.*?$', re.U)
     
@@ -190,7 +190,7 @@ def download_mplce_url(urldest_tuple):
     elif regex_validurl.findall(image_url):
         import httplib2
         image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
-        print 'RRR final', image_url
+        #print 'RRR final', image_url
         headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
         ########################################################
         ####### Google Drive Fix ###############################
@@ -205,10 +205,10 @@ def download_mplce_url(urldest_tuple):
             print image_url, destpath
             if not image_url[:5] == 'https':
                 res = requests.get(image_url, timeout=5, headers=headers)
-                print ' HTTP Yippie ', res
+                #print ' HTTP Yippie ', res
             else:
                 res = requests.get(image_url, timeout=10, verify=False, headers=headers)
-                print ' HTTPS Oh Yes ', res
+                #print ' HTTPS Oh Yes ', res
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value
@@ -313,17 +313,17 @@ def multi_url_downloader(argslist=None):
                 if metadata['File:MIMEType'] is not None and metadata['File:MIMEType'].split('/')[0] != 'image':
                     import os
                     os.remove(downloaded_file)
-                    print metadata['File:MIMEType'], ' <--BadImage - Removed --> ', downloaded_file
+                    #print metadata['File:MIMEType'], ' <--BadImage - Removed --> ', downloaded_file
                     q.task_done()
                 else:    
                     count += 1
-                    print count, ' NotRemoved --> ', downloaded_file, metadata['File:MIMEType']
+                    #print count, ' NotRemoved --> ', downloaded_file, metadata['File:MIMEType']
                     q.task_done()
             except AttributeError:
-                print 'AttributeError --> ', downloaded_file
+                #print 'AttributeError --> ', downloaded_file
                 q.task_done()
             except KeyError:
-                print 'KeyError --> ', downloaded_file
+                #print 'KeyError --> ', downloaded_file
                 try:
                     import os
                     os.remove(downloaded_file)
@@ -342,7 +342,7 @@ def multi_url_downloader(argslist=None):
 
 
 def mongo_update_url_dest_info(urldest_tuple):
-    print urldest_tuple, ' Url Dest Tuple mongo_update_url_dest_info'
+    #print urldest_tuple, ' Url Dest Tuple mongo_update_url_dest_info'
     image_url, destpath  = urldest_tuple[0]
     image_url            = image_url
     tmpfilename          = str(destpath.split('/')[-1])
@@ -373,11 +373,11 @@ def mongo_upsert_threaded(argslist=None):
     import multiprocessing
     import jbmodules
     qmongo = Queue.Queue()
-    print type(argslist), type(argslist)
+    #print type(argslist), type(argslist)
     i = ''
     for i in argslist: #put 30 tasks in the queue
         if i:
-            print i, ' Is a file to add to mongo argslist'
+            #print i, ' Is a file to add to mongo argslist'
             qmongo.put([i])
     
     ## Return for
@@ -390,14 +390,14 @@ def mongo_upsert_threaded(argslist=None):
         count = 0
         while True:
             item = qmongo.get()
-            print item, ' MongoWorker'
+            #print item, ' MongoWorker'
             if item is not None:
                 res, destpath = mongo_update_url_dest_info(item)
                 if not res and res is not False:
-                    print ' NewsIt NotRes', count, res
+                    #print ' NewsIt NotRes', count, res
                     pass
                 elif res != 'Duplicate':
-                    print ' NotRes Duplicate count is --> ', res, destpath
+                    pass #print ' NotRes Duplicate count is --> ', res, destpath
                 elif res == 'Duplicate' and destpath is not None:
                     ## Then remove the download and delete
                     try:
@@ -409,7 +409,7 @@ def mongo_upsert_threaded(argslist=None):
                         pass
                     print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
             else:
-                print ' NewsIt WITHALITTLE --> RES'
+                #print ' NewsIt WITHALITTLE --> RES'
                 pass
             print ' Mongo Res Done', res
             # try:
@@ -417,7 +417,7 @@ def mongo_upsert_threaded(argslist=None):
             # except:
             #     insertres =  jbmodules.mongo_image_prep.update_gridfs_extract_metadata(item)
             count += 1
-            print count, res, item, ' <-- now task done MongoWorker' ## '\n\t', imgdata
+            #print count, res, item, ' <-- now task done MongoWorker' ## '\n\t', imgdata
             qmongo.task_done()
 
     jobcount= 8 #len(argslist) #detect number of cores
