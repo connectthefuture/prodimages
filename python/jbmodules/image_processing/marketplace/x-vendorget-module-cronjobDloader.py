@@ -144,8 +144,17 @@ def download_mplce_url(urldest_tuple):
     regex_drive2 = re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(?P<fileId>.+?)\&?.*?$', re.U)
     
     # regex_dropbox = re.compile(r'^https?://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
-    # regex_boxapi  = re.compile(r'^https?://www.box.com/.+?\.[jpngJPNG]{3}$')
-    
+
+    ######################
+    #### BOX API AUTH ####
+    regex_boxapi  = re.compile(r'^(http)?s?(://)?(.*?)?app.box.com/.+?\.?[jpngJPNG]{3,4}?\??(.*?)?$')
+    if regex_boxapi.findall(image_url):
+        import jbmodules.http_tools.auth.Box.boxapi_auth_downloader as boxapi_auth_downloader
+        final_path = boxapi_auth_downloader.download_boxapi_drive_file(image_url=image_url, destpath=destpath)
+        if final_path:
+            return final_path
+    else:
+        pass
     # if regex_dropbox.findall(image_url):
     #     import http_tools.auth.Dropbox.dropboxapi_service as dropboxapi_service
     #     final_path = dropboxapi_service.download_auth_file(image_url=image_url, destpath=destpath)
@@ -157,7 +166,9 @@ def download_mplce_url(urldest_tuple):
     #     if final_path:
     #         return final_path
     # elif regex_drive2.findall(image_url):
-    
+
+    ########################
+    #### DRIVE API AUTH ####
     if regex_drive2.findall(image_url):
         print image_url, ' DRIVE'
         #import jbmodules
@@ -172,6 +183,9 @@ def download_mplce_url(urldest_tuple):
         except IndexError:
             print 'Final DRIVE Exception ', destpath, '\n', image_url
             #return
+
+    #############
+    ## No Auth ##
     elif regex_validurl.findall(image_url):
         import httplib2
         image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
