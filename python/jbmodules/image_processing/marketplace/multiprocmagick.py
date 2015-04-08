@@ -25,7 +25,7 @@ class Consumer(multiprocessing.Process):
             self.task_queue.task_done()
             self.result_queue.put(answer)
             print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
-        return
+        #return
 
 
 
