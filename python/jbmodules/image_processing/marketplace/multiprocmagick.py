@@ -12,20 +12,20 @@ class Consumer(multiprocessing.Process):
         proc_name = self.name
         try:
             while True:
-            next_task = self.task_queue.get()
-            if next_task is None:
-                # Poison pill means shutdown
-                print '%s: Exiting' % proc_name
-                fnx = dir(self)
-                print self.result_queue, self.task_queue, ' resQ and TaskQ <-- --> pid -- isalive --> ', self.pid, self.is_alive
-                self.task_queue.task_done()
-                break
-            print '%s: %s' % (proc_name, next_task)
-            answer = next_task()
+                next_task = self.task_queue.get()
+                if next_task is None:
+                    # Poison pill means shutdown
+                    print '%s: Exiting' % proc_name
+                    fnx = dir(self)
+                    print self.result_queue, self.task_queue, ' resQ and TaskQ <-- --> pid -- isalive --> ', self.pid, self.is_alive
+                    self.task_queue.task_done()
+                    break
+                print '%s: %s' % (proc_name, next_task)
+                answer = next_task()
 
-            self.task_queue.task_done()
-            self.result_queue.put(answer)
-            print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
+                self.task_queue.task_done()
+                self.result_queue.put(answer)
+                print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
         except TypeError:
             ' None Type Error End '
             pass
