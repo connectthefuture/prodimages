@@ -520,7 +520,11 @@ if __name__ == '__main__':
         # else: pass
         try:
             vendor_brand = sys.argv[2]
-            main(vendor=vendor, vendor_brand=vendor_brand)
+            ALL = ''
+            if sys.argv[2] == 'ALL':
+                ALL = 'ALL'
+                vendor_brand = ''
+            main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
         except IndexError:
             main(vendor=vendor)
     except IndexError:

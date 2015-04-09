@@ -30,6 +30,8 @@ class Consumer(multiprocessing.Process):
         except TypeError:
             print ' None Type Error End '
             return
+        finally:
+            return
 
 
 
