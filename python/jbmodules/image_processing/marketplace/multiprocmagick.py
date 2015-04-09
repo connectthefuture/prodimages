@@ -137,7 +137,7 @@ def funkRunner2(root_img_dir=None):
     # 1A
     # List of images to run through processing as glob of the root_img_dir
     #print root_img_dir, ' <-- Rootimgdir FunkR2'
-    if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
+    if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE' or root_img_dir is None:
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
     else:
         imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
