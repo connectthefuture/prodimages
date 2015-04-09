@@ -188,7 +188,7 @@ def funkRunner2(root_img_dir=None):
     num_jobs = len(img_dict)
     #print 'jobs -- consumers -- root_img_dir --> ', num_jobs, consumers, root_img_dir
     for item in img_dict:
-        img, rgbmean = item.key(), item.values() #.items()
+        img, rgbmean = item.keys()[0], item.values() #.items()
         #print img, 'rgbmean', ' Img -- RGB Mean'
         tasks.put(Task(img, rgbmean, destdir))
     print 'Put Tasks'
