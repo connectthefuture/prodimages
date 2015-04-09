@@ -478,7 +478,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     ## Process the files running each brand in a separate parallel process
     ########
     # 3A Set root image dir from res or default
-    if vendor or vendor_brand:
+    if vendor != '_' or vendor_brand:
         print res, ' <-- CoercedUnicode Failed Cuz of None Type'
         import os.path
         #if res is not None and os.path.isdir(res):
