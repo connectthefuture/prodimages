@@ -488,7 +488,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         #    root_img_dir = os.path.join(dest_root, vendor, '*')
         #    print ' If Vend/VendBrd ResNOT-Dir rootimgdir then res --> ', root_img_dir, res
         #else:
-        if not ALL:
+        if ALL:
             root_img_dir = dest_root
         else:
             root_img_dir = res
