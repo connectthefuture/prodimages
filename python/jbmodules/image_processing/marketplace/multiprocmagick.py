@@ -27,7 +27,7 @@ class Consumer(multiprocessing.Process):
                 self.result_queue.put(answer)
                 print '%s: AnsweredPUT-taskDone in Consumer ' % proc_name
             return
-        except TypeError:
+        except AttributeError:
             print ' None Type Error End '
             return
         finally:
