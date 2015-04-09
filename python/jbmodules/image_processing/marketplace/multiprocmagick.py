@@ -188,9 +188,9 @@ def funkRunner2(root_img_dir=None):
     num_jobs = len(img_dict)
     #print 'jobs -- consumers -- root_img_dir --> ', num_jobs, consumers, root_img_dir
     for item in img_dict:
-        for img, rgbmean in item.items():
-            #print img, 'rgbmean', ' Img -- RGB Mean'
-            tasks.put(Task(img, rgbmean, destdir))
+        img, rgbmean = item.items()
+        #print img, 'rgbmean', ' Img -- RGB Mean'
+        tasks.put(Task(img, rgbmean, destdir))
     print 'Put Tasks'
 
     # 3P --> Poinson pill to help stop hanging procs
