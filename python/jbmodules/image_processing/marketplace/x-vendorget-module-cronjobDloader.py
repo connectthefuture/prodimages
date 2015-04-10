@@ -521,10 +521,17 @@ if __name__ == '__main__':
         try:
             vendor_brand = sys.argv[2]
             ALL = ''
+            date_range_int = '30'
             if sys.argv[2] == 'ALL':
                 ALL = 'ALL'
                 vendor_brand = ''
-            main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
+                try:
+                    date_range = str(sys.argv[3])
+                    if date_range.isdigit() == True:
+                        date_range_int = date_range
+                except IndexError:
+                    pass
+            main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range_int=date_range_int)
         except IndexError:
             main(vendor=vendor)
     except IndexError:
