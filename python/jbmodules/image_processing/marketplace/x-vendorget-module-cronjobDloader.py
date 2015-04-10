@@ -495,9 +495,10 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
         #else:
         if ALL:
             root_img_dir = dest_root
-        else:
+        elif res is not None and os.path.isdir(res):
             root_img_dir = res
-
+        else:
+            root_img_dir = dest_root
         print ' YES to the vend Res-->IsNotDir AND rootimgdir --> ', res
     else:
         root_img_dir = dest_root
