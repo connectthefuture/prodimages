@@ -6,6 +6,13 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None,vendor_brand=None, po_number=None,A
     import sqlalchemy,sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     #orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
+    try:
+        import sys
+        date_range = str(sys.argv[3])
+        if date_range.isdigit() == True:
+            kwargs.update(date_range_int=date_range)
+    except IndexError:
+        pass
 
     connection = orcl_engine.connect()
     if po_number:
@@ -436,14 +443,12 @@ def mongo_upsert_threaded(argslist=None):
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
-    import jbmodules
     countimage = 0
     countstyle = 0
     if not dest_root:
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     if not ALL:
         ALL = ''
-    # ALL='ALL'
     if not vendor:
         vendor = '_'
 
@@ -501,7 +506,6 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     #########
     ## 3X ### Process the images
     #
-    from jbmodules import image_processing
     import os
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     import jbmodules.image_processing.marketplace.multiprocmagick as multiprocmagick2
@@ -521,17 +525,10 @@ if __name__ == '__main__':
         try:
             vendor_brand = sys.argv[2]
             ALL = ''
-            date_range_int = '30'
             if sys.argv[2] == 'ALL':
                 ALL = 'ALL'
                 vendor_brand = ''
-                try:
-                    date_range = str(sys.argv[3])
-                    if date_range.isdigit() == True:
-                        date_range_int = date_range
-                except IndexError:
-                    pass
-            main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range_int=date_range_int)
+            main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
         except IndexError:
             main(vendor=vendor)
     except IndexError:
