@@ -1,6 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+
+def store_tokens(access_token, refresh_token):
+    from oauth2client.file import Storage
+    import os    
+    py_dir = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(py_dir)
+    # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
+    storage_file = os.path.join(py_dir, 'boxapi' + '.dat')
+    STORAGE = Storage(storage_file)
+    credentials = STORAGE.get()
+    if credentials is None or credentials.invalid == True:
+        STORAGE.put(access_token, refresh_token)
+        credentials = STORAGE.get()   
+    else:
+        access_token, refresh_token = credentials
+    return credentials
+    
+
 def create_boxapi_service(serviceName=None, version=None, client_id=None, client_secret=None,redirect_uri=None, scope=None):
     import httplib2
     from oauth2client.file import Storage
@@ -63,56 +82,30 @@ def create_boxapi_service(serviceName=None, version=None, client_id=None, client
     return service
 
 
-def instantiate_boxapi_service():
-    #serviceName = 'drive'
-    #version = 'v2'
+
+def authorize_client(**kwargs):
+    from boxsdk import OAuth2
+    oauth = OAuth2(
+        client_secret=kwargs.get('client_secret'),
+        client_id = kwargs.get('client_id'),
+        store_tokens=store_tokens,
+    )
+    auth_url, csrf_token = oauth.get_authorization_url(kwargs.get('redirect_uri'))
+    return auth_url, csrf_token
+
+
+def instantiate_boxapi_client():
+    from boxsdk import Client
     client_secret = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'
     client_id = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'
-    scope = 'https://app.box.com/services/auth_download_client'
-    # box_file = drive_file_instance
+    #scope = 'https://app.box.com/services/auth_download_client'
     redirect_uri = 'http://localhost' #'urn:ietf:wg:oauth:2.0:oob'
-    service = create_boxapi_service(serviceName=serviceName, client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri, scope=scope)
-    return service
-
-
-## BoxAppGalleryUrl = 'https://app.box.com/services/auth_download_client'
-
-def create_boxapi_client(oauth=None):
-    from boxsdk import Client
-    oauth = instantiate_boxapi_service()
+    oauth  = authorize_client(client_secret=client_secret, client_id=client_id,redirect_uri=redirect_uri)
     client = Client(oauth)
     return client
 
 
-def qstring2kvpairs(url_with_qstring):
-    from urlparse import urlparse, parse_qs
-    url = url_with_qstring.encode('UTF-8')
-    #urlparse(url).query
-    qkvpairs = parse_qs(urlparse(url).query)
-    return qkvpairs
-
-
-def download_boxapi_auth_file(client=None, image_url=None, destpath=None):
-    file_id = qstring2kvpairs(image_url)['id'][0]
-    content = client.file(file_id=file_id).content()
-    if not destpath:
-        return content
-    else:
-        with open(destpath,'w') as f:
-            f.write(content)
-            f.close()
-        return destpath
-
-
-def store_tokens():
-    from boxsdk import OAuth2
-    oauth = OAuth2(
-        client_secret='g4R1o909fgf1PSsa5mLMDslpAwcbfIQl',
-        client_id = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9',
-        store_tokens=instantiate_boxapi_service,
-    )
-    auth_url, csrf_token = oauth.get_authorization_url('http://localhost')
-
+## BoxAppGalleryUrl = 'https://app.box.com/services/auth_download_client'
 
 def regex_boxapi_ret_fileid(url):
     import re
@@ -126,6 +119,31 @@ def regex_boxapi_ret_fileid(url):
     else:
         pass
 
+def qstring2kvpairs(url_with_qstring):
+    from urlparse import urlparse, parse_qs
+    url = url_with_qstring.encode('UTF-8')
+    #urlparse(url).query
+    qkvpairs = parse_qs(urlparse(url).query)
+    return qkvpairs
+
+
+def download_boxapi_auth_file(client=None, image_url=None, destpath=None):
+    try:
+        file_id = qstring2kvpairs(image_url)['id'][0]
+    except IndexError:
+        file_id = regex_boxapi_ret_fileid(image_url)       
+        pass
+    
+    content = client.file(file_id=file_id).content()
+    if not destpath:
+        return content
+    else:
+        with open(destpath,'w') as f:
+            f.write(content)
+            f.close()
+        return destpath
+
+
 
 if __name__ == '__main__':
     import sys
@@ -136,6 +154,6 @@ if __name__ == '__main__':
                              client_secret=client_secret, 
                              redirect_uri=redirect_uri, 
                              scope=scope)
-    except:
+    except IndexError:
         pass
 
