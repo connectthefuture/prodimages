@@ -59,7 +59,7 @@ class Task(object):
         #self.tmppngout(
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
-        magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
+        ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
         #os.remove(self.tmppngout[1])
         # except TypeError:
         #         print self.img, ' <-- Type-Error in Task -->', self.destdir
@@ -70,7 +70,7 @@ class Task(object):
         # except IndexError:
         #     ' None Type Error End '
         #     pass
-        return '%s -- %s' % (self.img, self.destdir)
+        return '%s -- %s' % (ret, self.img, self.destdir)
 
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
