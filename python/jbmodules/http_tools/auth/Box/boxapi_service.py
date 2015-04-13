@@ -114,6 +114,19 @@ def store_tokens():
     auth_url, csrf_token = oauth.get_authorization_url('http://localhost')
 
 
+def regex_boxapi_ret_fileid(url):
+    import re
+    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(.+)\.box\.com/(.+)?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
+    matches = regex_boxapi.match(url)
+    if matches:
+        protocol = matches.groups()[0]
+        appname  = matches.groups()[1]
+        fileId   = {'file_id': matches.groups()[2].split('/')[-1]}
+        return fileId
+    else:
+        pass
+
+
 if __name__ == '__main__':
     import sys
     try:
