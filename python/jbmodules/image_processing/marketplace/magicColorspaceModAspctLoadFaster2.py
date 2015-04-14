@@ -467,7 +467,10 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         #h = float(round(h,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(width),int(h))
         print "H",h, aspect_ratio
-
+    elif aspect_ratio == '1.0':
+        vert_horiz = '{0}x'.format(width)
+        h = float(1.2) * float(width)
+        dimensions = '{0}x{1}'.format(int(width), int(h))
 
     if not dimensions:
         dimensions = '100%'
