@@ -455,30 +455,33 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     if float(str(aspect_ratio)) == float(1.2):
         vert_horiz = '{0}x{1}'.format(width,height)
         dimensions = '{0}x{1}'.format(int(width),int(height))
-    elif float(str(aspect_ratio)) > float(int(1.2)):
+    elif float(str(aspect_ratio)) > float(1.2):
         vert_horiz = 'x{0}'.format(height)
         w = float(0.8) * float(height)
         #w = float(round(w,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(w),int(height))
         print "W",w, aspect_ratio
-    elif float(str(aspect_ratio)) < float(int(1.2)):
+    elif float(str(aspect_ratio)) < float(1.2):
         vert_horiz = '{0}x'.format(width)
         h = float(1.2) * float(width)
         #h = float(round(h,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(width),int(h))
         print "H",h, aspect_ratio
-
+    elif aspect_ratio == '1.0':
+        vert_horiz = '{0}x'.format(width)
+        h = float(1.2) * float(width)
+        dimensions = '{0}x{1}'.format(int(width), int(h))
 
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
         print ' Not Dimensions PNG faster2-->', img
     print dimensions, ' VERT PNG '
-    
+
     if dimensions and dimensions != '100%' or not vert_horiz:
         h = int(dimensions.split('x')[-1])
         w = int(dimensions.split('x')[0])
-        if w > 2000 or h > 2400: 
+        if w > 2000 or h > 2400:
             if h >= w:
                 if h > 2400:
                     vert_horiz = 'x2400'

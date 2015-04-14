@@ -342,6 +342,8 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 #17 6,13,20 * * * /usr/local/batchRunScripts/python/cronjob_marketplace_nightly_improcloadFile7.py run '/mnt/Post_Complete/ImageDrop'  2>&1 > /var/log/marketplace_images.log
 49 2,13,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
 ###########
+## Delete previous days MArketplace files
+39 11 * * * parallel -P32 --progress rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/* -type f`
 ###########
 ##################################################################
 ##################################################################
