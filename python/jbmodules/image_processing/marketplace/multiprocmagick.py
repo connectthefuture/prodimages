@@ -108,7 +108,7 @@ def run_threaded_imgdict(argslist=None):
 
 
     #print 'argsL --> len arglist', len(argslist[0]), type(argslist), ' Type ArgsList RunThreaded'
-    jobcount= 16 #len(argslist[0]) #detect number of cores
+    jobcount = multiprocessing.cpu_count() - 2 #len(argslist[0]) #detect number of cores
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
         t = threading.Thread(target=worker)
@@ -175,7 +175,7 @@ def funkRunner2(root_img_dir=None):
 
     # 3B
     # Start consumers
-    num_consumers = multiprocessing.cpu_count() * 2
+    num_consumers = multiprocessing.cpu_count() - 2
     print 'Creating %d consumers' % num_consumers
     consumers = [ Consumer(tasks, results)
                   for i in xrange(num_consumers) ]
