@@ -477,11 +477,11 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         vert_horiz = '100%'
         print ' Not Dimensions PNG faster2-->', img
     print dimensions, ' VERT PNG '
-    
+
     if dimensions and dimensions != '100%' or not vert_horiz:
         h = int(dimensions.split('x')[-1])
         w = int(dimensions.split('x')[0])
-        if w > 2000 or h > 2400: 
+        if w > 2000 or h > 2400:
             if h >= w:
                 if h > 2400:
                     vert_horiz = 'x2400'
@@ -550,7 +550,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             '2x2.7+0.5+0',
             '-quality',
             '95',
-            outfile
+            outfile + '_procd'
             ])
 
     #tmpfileobj.close()
