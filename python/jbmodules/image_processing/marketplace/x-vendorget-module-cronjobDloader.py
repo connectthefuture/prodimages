@@ -338,9 +338,9 @@ def multi_url_downloader(argslist=None):
                     pass
                 q.task_done()
 
-    cpus=multiprocessing.cpu_count() #detect number of cores
+    cpus=multiprocessing.cpu_count() - 2 #detect number of cores
     print("Creating %d threads" % cpus)
-    for i in xrange(cpus*4):
+    for i in xrange(cpus):
          t = threading.Thread(target=worker)
          t.daemon = True
          t.start()
@@ -427,7 +427,7 @@ def mongo_upsert_threaded(argslist=None):
             #print count, res, item, ' <-- now task done MongoWorker' ## '\n\t', imgdata
             qmongo.task_done()
 
-    jobcount= 8 #len(argslist) #detect number of cores
+    jobcount = multiprocessing.cpu_count() - 2 #len(argslist) #detect number of cores
     print("Creating %d threads for the MongoMachine" % jobcount)
     for i in xrange(jobcount):
         tmongo = threading.Thread(target=mongoworker)
