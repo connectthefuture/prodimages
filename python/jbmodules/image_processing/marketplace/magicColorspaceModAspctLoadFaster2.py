@@ -504,7 +504,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
             w = float(0.8) * float(h)
             dimensions = '{0}x{1}'.format(int(w),int(h))
 
-
+    print dimensions, ' VERT PNG After vert_horiz etc subprocess starts now'
     # Create a safe png then copy it and reuse tmp in following procs
     #import tempfile, shutil
     #tmpfileobj, tmpfile_path = tempfile.mkstemp(suffix=".png")
