@@ -54,3 +54,12 @@ nosetests.xml
 .metadata
 
 *.db
+$IPYTHONDIR/.ipython/README
+.ipynb_checkpoints/Untitled0-checkpoint.ipynb
+Untitled0.ipynb
+bash/prodimages_bfly.sublime-project
+bash/prodimages_bfly.sublime-workspace
+ipython_config_stilv.py
+ipython_notebook_config_stilv.py
+php/.BridgeLabelsAndRatings
+python/.ipynb_checkpoints/Devbook-checkpoint.ipynb
