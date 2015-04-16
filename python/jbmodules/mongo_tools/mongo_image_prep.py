@@ -120,11 +120,12 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     md5 = md5_checksummer(filepath)
     key = {'md5': md5}  #, 'alt': alt, 'upload_ct': 1}
     # data = { "$set":{'format': format,'metadata': metadata,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
-    datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': 1,'timestamp': timestamp}
+    datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': "1",'timestamp': timestamp}
     key_str = key.keys()[0]
     restest = mongo_collection.distinct({key_str: md5})
     #print ' distinct Res Test --> ', restest
-    check = mongo_collection.find({key_str: tmpfilename}).count()
+    check = mongo_collection.find({key_str: md5}).count()
+    #check = mongo_collection.find({key_str: tmpfilename}).count()
     if check:
         
         data = { "$set":{
@@ -134,7 +135,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
                         "metadata": metadata,
                         "content_type": content_type,
                         #"upload_ct":
-                        "$inc": {"upload_ct": int(1)},
+                        "$inc": {"upload_ct": "1"},
                         #"$inc": {"upload_ct": int(1)},
                         "timestamp": { "$max": {"timestamp": timestamp}}
                         }
@@ -144,11 +145,11 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
 
     else:
         
-        data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": int(1)},'timestamp': timestamp}}
+        data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": "1"},'timestamp': timestamp}}
         print 'NEW ', check, data
         # mongo_collection.ensure_index([("md5", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
-        mongo_collection.ensure_index(key_str, unique=True, sparse=False, background=True)
+        mongo_collection.ensure_index(key_str, unique=True, background=True)
     except pymongo.errors.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
