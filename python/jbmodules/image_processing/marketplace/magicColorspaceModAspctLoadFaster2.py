@@ -448,25 +448,27 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     ## Get variable values for processing
     aspect_ratio = get_aspect_ratio(img)
     dimensions = get_dimensions(img)
-    width  = dimensions.split('x')[0]
+    width = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
+    vert_horiz = ''
 
+    print '', '==> InitiaDims widXheight == --> ', dimensions, width, height
     # if aspect_ratio == '1.2':
     if float(str(aspect_ratio)) == float(1.2):
-        vert_horiz = '{0}x{1}'.format(width,height)
-        dimensions = '{0}x{1}'.format(int(width),int(height))
+        vert_horiz = '{0}x{1}'.format(width, height)
+        dimensions = '{0}x{1}'.format(int(width), int(height))
     elif float(str(aspect_ratio)) > float(1.2):
         vert_horiz = 'x{0}'.format(height)
         w = float(0.8) * float(height)
-        #w = float(round(w,2)*float(aspect_ratio))
-        dimensions = '{0}x{1}'.format(int(w),int(height))
-        print "W",w, aspect_ratio
+        # w = float(round(w,2)*float(aspect_ratio))
+        dimensions = '{0}x{1}'.format(int(w), int(height))
+        print "W", w, aspect_ratio
     elif float(str(aspect_ratio)) < float(1.2):
         vert_horiz = '{0}x'.format(width)
         h = float(1.2) * float(width)
-        #h = float(round(h,2)*float(aspect_ratio))
-        dimensions = '{0}x{1}'.format(int(width),int(h))
-        print "H",h, aspect_ratio
+        # h = float(round(h,2)*float(aspect_ratio))
+        dimensions = '{0}x{1}'.format(int(width), int(h))
+        print "H", h, width, aspect_ratio
     elif aspect_ratio == '1.0':
         vert_horiz = '{0}x'.format(width)
         h = float(1.2) * float(width)
@@ -476,82 +478,114 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         dimensions = '100%'
         vert_horiz = '100%'
         print ' Not Dimensions PNG faster2-->', img
-    print dimensions, ' VERT PNG '
+    print dimensions, ' VERT PNG ', vert_horiz
 
     if dimensions and dimensions != '100%' or not vert_horiz:
         h = int(dimensions.split('x')[-1])
         w = int(dimensions.split('x')[0])
+        print '==> widXheight ==', w, 'x', h
         if w > 2000 or h > 2400:
-            if h >= w:
+            if height >= width:
                 if h > 2400:
                     vert_horiz = 'x2400'
                     dimensions = '2000x2400'
                 elif h == w:
                     vert_horiz = 'x{0}'.format(h)
                     w = float(0.8) * float(h)
-                    dimensions = '{0}x{1}'.format(int(w),int(h))
+                    dimensions = '{0}x{1}'.format(int(w), int(h))
 
-            elif w > h:
+            elif width > height:
                 if w > 2000:
                     vert_horiz = '2000x'
                     dimensions = '2000x2400'
                 elif h == w:
                     vert_horiz = '{0}x'.format(w)
                     h = float(1.2) * float(width)
-                    dimensions = '{0}x{1}'.format(int(w),int(h))
+                    dimensions = '{0}x{1}'.format(int(w), int(h))
         elif h == w:
             vert_horiz = 'x{0}'.format(h)
             w = float(0.8) * float(h)
-            dimensions = '{0}x{1}'.format(int(w),int(h))
+            dimensions = '{0}x{1}'.format(int(w), int(h))
 
-    print dimensions, ' VERT PNG After vert_horiz etc subprocess starts now'
+    print dimensions, ' VERT PNG Fin ', vert_horiz, aspect_ratio
+
     # Create a safe png then copy it and reuse tmp in following procs
     #import tempfile, shutil
     #tmpfileobj, tmpfile_path = tempfile.mkstemp(suffix=".png")
 
     subprocess.call([
-            'convert',
-            '-format',
-            format,
-            img,
-            '-define',
-            'png:preserve-colormap',
-            '-define',
-            'png:format\=png24',
-            '-define',
-            'png:compression-level\=N',
-            '-define',
-            'png:compression-strategy\=N',
-            '-define',
-            'png:compression-filter\=N',
-            '-format',
-            'png',
-            '-modulate',
-            modulate,
-            "-define",
-            "filter:blur=0.625",
-            #"filter:blur=0.88549061701764",
-            "-density",
-            "72",
-            #'+repage',
-            "-distort",
-            "Resize",
-            vert_horiz,
-            '-background',
-            'white',
-            '-gravity',
-            'center',
-            '-extent',
-            dimensions,
+        'convert',
+        '-format',
+        format,
+        img,
+        # "-define",
+        #                    "stream:buffer-size\=0",
+        '-define',
+        'png:preserve-colormap\=true',
+        '-define',
+        'png:preserve-iCCP\=true',
+        '-define',
+        'png:format\=png24',
+        '-define',
+        'png:compression-level\=N',
+        '-define',
+        'png:compression-strategy\=N',
+        '-define',
+        'png:compression-filter\=N',
+        '-format',
+        'png',
+        '-modulate',
+        modulate,
 
-            "-colorspace",
-            "sRGB",
-            '-unsharp',
-            '2x2.7+0.5+0',
-            '-quality',
-            '95',
-            outfile
-            ])
+        "-density",
+        "72",
+
+        '-bordercolor',
+        'white',
+        '-border',
+        '1x1',
+
+        '-background',
+        'white',
+
+        "-define",
+        "filter:blur=0.625",
+        #"filter:blur=0.88549061701764",
+
+        "-fuzz",
+        "15%",
+        "-trim",
+        '-gravity',
+        'center',
+        '+repage',
+
+        #"-gamma",
+        #".45455",
+
+        "-distort",
+        "Resize",
+        vert_horiz,
+
+        #"-gamma",
+        #"2.2",
+
+        '-background',
+        'white',
+        '-gravity',
+        'center',
+        '-extent',
+        dimensions,  ## +">",
+
+        "-colorspace",
+        "sRGB",
+        #"-strip",
+        '-unsharp',
+        '2x2.7+0.5+0',
+        '-quality',
+        '95',
+        outfile
+    ])
+
 
     #tmpfileobj.close()
     #shutil.copy2(tmpfile_path,outfile)
