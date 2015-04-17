@@ -537,8 +537,12 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         '-modulate',
         modulate,
 
+
+        "-units", 
+        "PixelsPerInch",
         "-density",
-        "72",
+        "72x72",
+        
 
         '-bordercolor',
         'white',
