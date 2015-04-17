@@ -70,7 +70,7 @@ class Task(object):
         # except IndexError:
         #     ' None Type Error End '
         #     pass
-        return '%s -- %s' % (ret, self.img, self.destdir)
+        return '-ret- %s \n-path- %s \n-dest- %s \n' % (ret, self.img, self.destdir)
 
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
