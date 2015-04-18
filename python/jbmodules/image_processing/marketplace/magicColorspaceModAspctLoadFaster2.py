@@ -498,7 +498,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                 if w > 2000:
                     vert_horiz = '2000x'
                     dimensions = '2000x2400'
-                elif h == w:
+                else:
                     vert_horiz = '{0}x'.format(w)
                     h = float(1.2) * float(width)
                     dimensions = '{0}x{1}'.format(int(w), int(h))
@@ -539,22 +539,25 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
 
         "-density",
-        "72x72",
+        "72",
         "-units", 
-        "PixelsPerInch",        
-
-
+        "pixelsperinch",
+                           
         '-bordercolor',
         'white',
         '-border',
         '1x1',
-
+        
         '-background',
         'white',
-
+        
         "-define",
         "filter:blur=0.625",
         #"filter:blur=0.88549061701764",
+
+        # '-crop',
+        # str(subprocess.call(["convert", img, "-virtual-pixel", "edge", "-blur", "0x15", "-fuzz", "1%", "-trim", "-format", "%wx%h%O", "info:"], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+        # ,
 
         "-fuzz",
         "15%",
@@ -562,7 +565,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         '-gravity',
         'center',
         '+repage',
-
         #"-gamma",
         #".45455",
 
@@ -583,7 +585,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
         "-colorspace",
         "sRGB",
-        #"-strip",
+        "-strip",
         '-unsharp',
         '2x2.7+0.5+0',
         '-quality',
