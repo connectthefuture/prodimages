@@ -570,7 +570,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
         "-distort",
         "Resize",
-        "-resample",
+        #"-resample",
         vert_horiz,
 
         #"-gamma",
