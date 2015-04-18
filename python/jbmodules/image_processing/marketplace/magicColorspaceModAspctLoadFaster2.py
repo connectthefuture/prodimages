@@ -541,7 +541,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         "-density",
         "72",
         "-units", 
-        "PixelsPerInch",
+        "pixelsperinch",
                            
         '-bordercolor',
         'white',
@@ -555,9 +555,9 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         "filter:blur=0.625",
         #"filter:blur=0.88549061701764",
 
-        '-crop',
-        str(subprocess.call(["convert", img, "-virtual-pixel", "edge", "-blur", "0x15", "-fuzz", "1%", "-trim", "-format", "%wx%h%O", "info:"], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-        ,
+        # '-crop',
+        # str(subprocess.call(["convert", img, "-virtual-pixel", "edge", "-blur", "0x15", "-fuzz", "1%", "-trim", "-format", "%wx%h%O", "info:"], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
+        # ,
 
         "-fuzz",
         "15%",
