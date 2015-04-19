@@ -291,6 +291,7 @@ def subproc_magick_large_jpg(img, destdir=None):
             "jpeg",
             '-unsharp',
             '2x1.24+0.5+0',
+            # '-strip',
             '-quality',
             '95',
             outfile
@@ -366,6 +367,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "jpeg",
             '-unsharp',
             '2x1.1+0.5+0',
+            '-strip',
             '-quality',
             '95',
             outfile
@@ -585,7 +587,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
         "-colorspace",
         "sRGB",
-        "-strip",
+        #"-strip",
         '-unsharp',
         '2x2.7+0.5+0',
         '-quality',
