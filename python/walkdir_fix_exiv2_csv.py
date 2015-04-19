@@ -288,10 +288,15 @@ def main():
 
 
     ## Create Dir Struct under ZIMAGES_1 if dir doesnt Exist and make/copy Jpeg Thumbs files to it
-    for k,v in stylestringsdict.iteritems():
-        import os,sys,shutil, re
-        pathname = k
-        make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname)
+    import datetime
+    tm = datetime.datetime.now().time()
+    char1 = int(str(tm)[0])
+    if char1 > 0: pass
+    else: 
+        for k,v in stylestringsdict.iteritems():
+            import os,sys,shutil, re
+            pathname = k
+            make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname)
 
     #Iterate through Dict of Walked Directory, then Import to MySql DB
     import sqlalchemy
