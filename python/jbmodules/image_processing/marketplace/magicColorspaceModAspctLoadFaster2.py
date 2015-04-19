@@ -543,10 +543,10 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         "-units", 
         "pixelsperinch",
                            
-        '-bordercolor',
-        'white',
-        '-border',
-        '1x1',
+        # '-bordercolor',
+        # 'white',
+        # '-border',
+        # '1x1',
         
         '-background',
         'white',
@@ -560,7 +560,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         # ,
 
         "-fuzz",
-        "15%",
+        "10%",
         "-trim",
         '-gravity',
         'center',
