@@ -22,7 +22,7 @@ class Consumer(multiprocessing.Process):
                 self.results.put("STOP")
                 self.consumers_finished[self.name] = True
             else:
-                task_result = self.results(task)
+                task_result = self.process_data(task)
                 self.results.put(task_result)
 
             def process_data(self, html):
