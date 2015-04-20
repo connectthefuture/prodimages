@@ -5,8 +5,6 @@ import os
 import multiprocessing
 from Queue import Empty
 
-
-
 class Consumer(multiprocessing.Process):
 
     def __init__(self, tasks, results, consumers_finished):
@@ -32,16 +30,12 @@ class Consumer(multiprocessing.Process):
                 return html
 
 
-
-
 class Task(object):
     def __init__(self, img, rgbmean, destdir):
         import tempfile, shutil
-        # tmpfileobj, tmpfile_path = tempfile.mkstemp(suffix=".png")
         self.img = img
         self.rgbmean = rgbmean
         self.destdir = destdir
-        #self.tmppngout = tempfile.mkstemp(suffix=".png")
 
     def __call__(self):
         import jbmodules
@@ -49,26 +43,12 @@ class Task(object):
         from jbmodules import image_processing
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
-        #time.sleep(0.1) # pretend to take some time to do the work
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
-        # try:
         jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
-
         print self.img, ' <-- self.img ', self.rgbmean
-        #self.tmppngout(
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
-        #os.remove(self.tmppngout[1])
-        # except TypeError:
-        #         print self.img, ' <-- Type-Error in Task -->', self.destdir
-        #         pass
-        # except AttributeError:
-        #         print self.img, ' <-- AttributeError in Task -->', self.destdir
-        #         pass
-        # except IndexError:
-        #     ' None Type Error End '
-        #     pass
         return '%s -- %s' % (ret, self.img, self.destdir)
 
     def __str__(self):
