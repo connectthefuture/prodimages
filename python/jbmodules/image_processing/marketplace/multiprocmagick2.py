@@ -177,7 +177,8 @@ def funkRunner3(root_img_dir=None):
     # Init Task and Results Queues
     from ConsumerManager import Starter
 
-    s = Starter.start(img_dict=img_dict)
+    s = Starter()
+    s.start(img_dict=img_dict)
 
 
     ########## Five ##########
