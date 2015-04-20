@@ -111,7 +111,7 @@ pythonpath = ['',
              #'/home/johnb/virtualenvs/DJDAM/lib/python2.7/site-packages',
              #'/home/johnb/virtualenvs/DJDAM/src/djdam',
              #'/home/johnb/virtualenvs/DJDAM/src',
-#              '~/.ipython']
+             '~/.ipython']
 # #### REGEX PATTERN DEFINITIONS
 # ###
 # ## Walk Root Directory and Return List or all Files in all Subdirs too
@@ -842,3 +842,4 @@ Query Mysql DB using 2 attribs. Filed(ie. 'colorstyle', param(ie.'302332901'))
 #     # don't go into any .git directories.
 #     #    dirnames.remove('.git')
 #     return walkedlist
+
