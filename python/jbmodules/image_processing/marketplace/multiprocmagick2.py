@@ -178,7 +178,8 @@ def funkRunner3(root_img_dir=None):
     from ConsumerManager import Starter
 
     s = Starter()
-    s.start(img_dict=img_dict)
+    s.img_dict = img_dict
+    s.start()
 
 
     ########## Five ##########
