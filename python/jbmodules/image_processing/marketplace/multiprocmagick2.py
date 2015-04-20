@@ -179,6 +179,7 @@ def funkRunner3(root_img_dir=None):
 
     s = Starter()
     s.img_dict = img_dict
+    s.destdir  = destdir
     s.start()
 
 
