@@ -8,7 +8,8 @@ def get_images_mkdirs(filesdir):
     if os.path.isfile(filesdir):
         gjpg = [filesdir] 
         gpng = [filesdir] 
-        pngout=os.path.join(os.path.dirname(filesdir),'pngnonwhitebg')
+        pngout=os.path.join(os.
+            path.dirname(filesdir),'pngnonwhitebg')
         if filesdir.split('.')[-1] == 'png':
             try:
                 os.makedirs(pngout, 16877)

@@ -13,7 +13,7 @@ class Consumer(multiprocessing.Process):
         self.results = results
         self.consumers_finished = consumers_finished
         self.process_data = self.process_data()
-        
+
     def run(self):
         while not all(flag for flag in self.consumers_finished.values()):
             try:
