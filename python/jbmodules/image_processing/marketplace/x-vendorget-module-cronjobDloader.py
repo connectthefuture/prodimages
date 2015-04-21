@@ -360,6 +360,8 @@ def mongo_update_url_dest_info(urldest_tuple):
     if image_url:
         #import jbmodules
         #from jbmodules import mongo_tools
+        import sys
+        print sys.path
         from mongo_tools import mongo_image_prep as mongo_image_prep
 
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
