@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
+urls = ['https://capturemrg.box.com/s/4ocv51zmv5wsb181nvej01awio1wm2qk',
+        'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu',
+        'https://capturemrg.box.com/s/z2894tj1fdtyw4aix36h3zfxdowf7g3k',
+        'https://capturemrg.box.com/s/b7jgrvdrhx6g2z810nzgi3dpveb71b0g',
+        'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu'
+        ]
 
 def store_tokens(access_token, refresh_token):
     from oauth2client.file import Storage
