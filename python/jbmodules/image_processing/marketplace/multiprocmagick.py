@@ -45,15 +45,15 @@ class Task(object):
         #self.tmppngout = tempfile.mkstemp(suffix=".png")
 
     def __call__(self):
-        import jbmodules
+        #import jbmodules
         import os
-        from jbmodules import image_processing
-        from jbmodules.image_processing import marketplace, magick_tweaks
-        import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
+        import image_processing
+        from image_processing import marketplace, magick_tweaks
+        import image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
-        import jbmodules.image_processing.magick_tweaks.convert_img_srgb
+        import image_processing.magick_tweaks.convert_img_srgb
         # try:
-        jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
+        image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
 
         print self.img, ' <-- self.img ', self.rgbmean
         #self.tmppngout(
@@ -86,7 +86,7 @@ def run_threaded_imgdict(argslist=None):
     import threading
     import multiprocessing
     import jbmodules
-    from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
+    from image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
     q = Queue.Queue()
     # print type(argslist), len(argslist), ' type and length argslist \n'
     #print type(argslist), type(argslist)
@@ -130,9 +130,9 @@ def funkRunner2(root_img_dir=None):
     import threading
     import glob, os
     #from os import os.path
-    import jbmodules
-    from jbmodules import image_processing
-    from jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
+    #import jbmodules
+    import image_processing
+    from image_processing.marketplace.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = '/mnt/Post_Complete/ImageDrop'
     print 'Starting Funkrunner2 Pools'
 
@@ -237,8 +237,8 @@ def funkRunner2(root_img_dir=None):
 def run_multiproccesses_magick(searchdir=None):
     import multiprocessing
     import glob,os
-    import jbmodules
-    from jbmodules import image_processing
+    #import jbmodules
+    import image_processing
     import image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc
     if not searchdir:
         searchdir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE/SWI')
