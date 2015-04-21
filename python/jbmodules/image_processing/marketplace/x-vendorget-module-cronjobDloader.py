@@ -361,7 +361,10 @@ def mongo_update_url_dest_info(urldest_tuple):
         #import jbmodules
         #from jbmodules import mongo_tools
         import sys
-        sys.path.append('../../')
+        jbmade = os.path.join('../..', os.path.dirname( __file__))
+        print jbmade
+        sys.path.append(jbmade)
+        sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
         from mongo_tools import mongo_image_prep as mongo_image_prep
 
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
