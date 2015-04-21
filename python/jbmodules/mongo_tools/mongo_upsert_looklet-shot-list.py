@@ -1,7 +1,9 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
-# In[10]:
+import sys, os.path
+mongotoolsdir = os.path.dirname('__file__')
+sys.path.append(mongotoolsdir)
 
 def connect_gridfs_mongodb(hostname=None,db_name=None):
     import pymongo, gridfs, __builtin__
