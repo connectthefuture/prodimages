@@ -378,7 +378,7 @@ def mongo_upsert_threaded(argslist=None):
     import Queue
     import threading
     import multiprocessing
-    import jbmodules
+    # import jbmodules
     qmongo = Queue.Queue()
     #print type(argslist), type(argslist)
     i = ''
