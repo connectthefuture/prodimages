@@ -7,10 +7,10 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
     if not hostname:
         hostname='127.0.0.1'
     try:
-        mongo = pymongo.MongoClient(hostname, max_pool_size=50, waitQueueMultiple=10)
+        mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
     except pymongo.errors.ConnectionFailure:
         hostname = '192.168.20.59'
-        mongo = pymongo.MongoClient(hostname, max_pool_size=50, waitQueueMultiple=10)
+        mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
     
     mongo_db = mongo[db_name]
     #mongo_db = mongo[db_name]
@@ -23,7 +23,7 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
 def insert_filerecord_pymongo(db_name=None, collection_name=None, filename=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
     # Insert a New Document
     import pymongo
-    mongo = pymongo.MongoClient('127.0.0.1', max_pool_size=50, waitQueueMultiple=10)
+    mongo = pymongo.MongoClient('127.0.0.1', waitQueueMultiple=10)
     mongo_db = mongo[db_name]
     mongo_collection = mongo_db[collection_name]
 
