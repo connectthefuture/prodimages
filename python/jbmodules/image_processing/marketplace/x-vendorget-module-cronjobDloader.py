@@ -509,10 +509,10 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     #
     import os
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    import multiprocmagick as multiprocmagick2
-    #import jbmodules.image_processing.marketplace.multiprocmagick2 as multiprocmagick3
+    import multiprocmagick as multiprocmagick
+    #import jbmodules.image_processing.marketplace.multiprocmagick2 as multiprocmagick2
 
-    multiprocmagick2.funkRunner2(root_img_dir=root_img_dir)
+    multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
     #multiprocmagick3.funkRunner3(root_img_dir=root_img_dir)
     print 'Done With multiprocmagick --> ', root_img_dir
 
