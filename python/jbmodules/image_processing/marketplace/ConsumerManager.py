@@ -29,7 +29,7 @@ class Consumer(multiprocessing.Process):
 
     def process_data(self, task):
         print "Processing %s" % task
-        return task
+        return item
 
 
 class Task(object):
