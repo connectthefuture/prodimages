@@ -9,7 +9,7 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
     import pymongo, gridfs, __builtin__
     if not hostname:
         hostname='127.0.0.1'
-    mongo = pymongo.MongoClient(hostname, max_pool_size=50, waitQueueMultiple=10)
+    mongo = pymongo.MongoClient(hostname, maxPoolSize=50, waitQueueMultiple=10)
     mongo_db = mongo[db_name]
     #mongo_db = mongo[db_name]
     mongo_db.authenticate('mongo', 'mongo')
@@ -31,7 +31,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, username
 
     key = {'timestamp': timestamp}  #, 'photodate': photodate, 'shoot_ct': 1}
     #data = { "$set":{'reshoot': reshoot,'username': username,'photodate': photodate, shoot_ct: 1,'timestamp': timestamp}},
-    datarow = {'colorstyle': colorstyle, 'reshoot': reshoot,'username': username,'photodate': photodate, 'shoot_ct': 1,'timestamp': timestamp}
+    #datarow = {'colorstyle': colorstyle, 'reshoot': reshoot,'username': username,'photodate': photodate, 'shoot_ct': 1,'timestamp': timestamp}
     key_str = key.keys()[0]
     check = mongo_collection.find({key_str: colorstyle}).count()
     if check == 1:
@@ -49,7 +49,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, username
         return check
     else:
         print 'NEW IT ', check
-        data = { "$set":{'reshoot': reshoot,'username': username,'photodate': photodate, 'shoot_ct': 1,'timestamp': timestamp}}
+        data = { "$set":{'reshoot': reshoot,'username': username, 'photodate': photodate, 'shoot_ct': 1,'timestamp': timestamp}}
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     mongo_collection.create_index("timestamp", unique=True, sparse=False, background=True)
     #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("photodate", pymongo.DECENDING)], background=True)
@@ -58,8 +58,8 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, username
     return new_insertobj_id
 
 
-def main(jsonfile=None):
-    import sys,os,re, sqlalchemy, json, datetime, brequests
+def main(filename=None):
+    import sys,os,re, sqlalchemy, json, datetime, requests
     from os import path
     today = datetime.date.strftime(datetime.date.today(), '%Y-%m-%d')
     if not filename:
@@ -71,12 +71,7 @@ def main(jsonfile=None):
                 filename='/var/www/srv/media/feeds/{0}_LookletShotListImportJSON.json'.format(today)
         except IndexError:
             filename='/var/www/srv/media/feeds/{0}_LookletShotListImportJSON.json'.format(today)
-    #print filename
-    data=normalize_json_tounicode(filename)
-    regex_valid_colorstyle = re.compile(r'^([0-9]{9})')
-    if not jsonfile:
-        jsonfile = sys.argv[1]
-    data_insert = json.load(open(jsonfile,'rb'))
+    data_insert = json.load(open(filename,'rb'))
     #print data_insert
     for d in data_insert:
         try:
@@ -96,7 +91,7 @@ def main(jsonfile=None):
             #for c in collection_name.find(expr):
             #    print [ k.upper() for k in sorted(c.keys()) ]
             #if regex_valid_colorstyle.findall(d['colorstyle']):
-                ##updates/upserts, will not create multiple records if timesramp exists already
+            ##updates/upserts, will not create multiple records if timesramp exists already
             update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, photodate=photodate, colorstyle=colorstyle, username=username, reshoot=reshoot, timestamp=timestamp)
             print "Successful Insert to {0} --> {1}".format(database_name + collection_name, colorstyle)
         except KeyError:
@@ -106,5 +101,8 @@ def main(jsonfile=None):
 
 if __name__ == '__main__':
     import sys
-    jsonfile=sys.argv[1]
-    main(jsonfile=jsonfile)
+    try:
+        jsonfile=sys.argv[1]
+    except IndexError:
+        jsonfile = None
+    main(filename=jsonfile)
