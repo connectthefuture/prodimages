@@ -19,7 +19,7 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
 
 
 
-def update_filerecord_pymongo(database_name=None, collection_name=None, username=None, colorstyle=None, photodate=None, reshoot='N', timestamp=None):
+def update_filerecord_pymongo(database_name=None, collection_name=None, username=None, colorstyle=None, photodate=None, reshoot=None, timestamp=None):
     # Insert a New Document
     import pymongo, bson
     from bson import Binary, Code
@@ -80,13 +80,19 @@ def main(filename=None):
             #print d
             # Build object of key/values for insert
             colorstyle = d['colorstyle']
-            photodate = d['photodate']
+
+            timestamp = d['timestamp']
+            username = d['username']
+
+            try:
+                photodate = d['photodate']
+            except KeyError:
+                photodate = d['timestamp']
             try:
                 reshoot = d['reshoot']
             except KeyError:
                 reshoot = 'N'
-            timestamp = d['timestamp']
-            username = d['username']
+
             #print locals()
             ## Perform the Insert to mongodb
             #uploads_imagedrop.find({'colorstyle': colorstyle, 'app_config_id':{'$in':app_config_ids}})
