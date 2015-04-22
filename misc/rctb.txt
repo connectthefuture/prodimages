@@ -95,7 +95,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ## Looklet Data Imports -- MA set and Looklet Inbound + Metadata ##
 ## --> Gets Email then imports using rest API #####################
 4 20 * * * /usr/local/batchRunScripts/python/imap_get_attachments_gmail_UNSEEN_JSON_lookletImport.py 2>&1 > /var/log/looklet_json_import.log
-7 21 * * *  /usr/local/batchRunScripts/python/jbmodules/mongo_tools/mongo_upsert_looklet-shot-list.py 2>&1 > /var/log/looklet_json_import.log
+9 21 * * *  /usr/local/batchRunScripts/python/jbmodules/mongo_tools/mongo_upsert_looklet-shot-list.py 2>&1 > /var/log/looklet_json_import.log
 ### vvvv ###
 # 2 20 * * *  /usr/local/batchRunScripts/python/mongo_import_ll-shotlist_jsondata.py 2>&1 > /var/log/looklet_json_import.log
 ### ^^^^ ###
