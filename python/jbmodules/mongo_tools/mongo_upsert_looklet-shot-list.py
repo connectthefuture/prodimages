@@ -49,7 +49,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, username
         return check
     else:
         print 'NEW IT ', check
-        data = { "$set":{'reshoot': reshoot,'username': username, 'photodate': photodate, 'shoot_ct': 1,'timestamp': timestamp}}
+        data = { "$set":{'colorstyle': colorstyle, 'reshoot': reshoot,'username': username, 'photodate': photodate, 'shoot_ct': 1,'timestamp': timestamp}}
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     mongo_collection.ensure_index("timestamp", unique=True, background=True)
     #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("photodate", pymongo.DECENDING)], background=True)

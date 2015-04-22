@@ -80,7 +80,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         return check
     else:
         print 'NEW IT ', check
-        data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
+        data = { "$set":{ 'colorstyle': colorstyle, 'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
         # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
         mongo_collection.create_index("md5", unique=True, sparse=False, background=True)
