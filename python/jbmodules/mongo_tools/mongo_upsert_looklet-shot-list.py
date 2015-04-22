@@ -94,7 +94,8 @@ def main(filename=None):
             ##updates/upserts, will not create multiple records if timesramp exists already
             update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, photodate=photodate, colorstyle=colorstyle, username=username, reshoot=reshoot, timestamp=timestamp)
             print "Successful Insert to {0} --> {1}".format(database_name + collection_name, colorstyle)
-        except KeyError:
+        except OSError:
+            print 'OSKEY ERROR'
             pass
 
 
