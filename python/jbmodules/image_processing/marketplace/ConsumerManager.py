@@ -13,7 +13,7 @@ class Consumer(multiprocessing.Process):
         self.tasks = tasks
         self.results = results
         self.consumers_finished = consumers_finished
-        self.process_data = self.process_data()
+        #self.process_data = self.process_data()
 
     def run(self):
         while not all(flag for flag in self.consumers_finished.values()):
@@ -46,6 +46,7 @@ class Task(object):
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
+        
         jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
         print self.img, ' <-- self.img ', self.rgbmean
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
