@@ -26,9 +26,9 @@ class Consumer(multiprocessing.Process):
                 task_result = self.process_data(task)
                 self.results.put(task_result)
 
-    def process_data(self, html):
-        print "Processing %s" % html
-        return html
+    def process_data(self, item):
+        print "Processing %s" % item
+        return item
 
 
 class Task(object):
