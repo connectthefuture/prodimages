@@ -28,8 +28,9 @@ class Consumer(multiprocessing.Process):
                 self.results.put(task_result)
 
     def process_data(self, task):
-        print "Processing %s" % dir(task)
-        return task
+        print "Processing %s" % task
+        res = task()
+        return res
 
 
 class Task(object):
