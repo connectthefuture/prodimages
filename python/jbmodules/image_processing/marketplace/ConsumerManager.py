@@ -57,6 +57,7 @@ class Task(object):
         except TypeError:
             print 'TypeError in __call__'
             pass
+
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
 
