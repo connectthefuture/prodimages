@@ -51,7 +51,7 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, username
         print 'NEW IT ', check
         data = { "$set":{'reshoot': reshoot,'username': username, 'photodate': photodate, 'shoot_ct': 1,'timestamp': timestamp}}
         #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
-    mongo_collection.ensure_index("timestamp", unique=True, sparse=False, background=True)
+    mongo_collection.ensure_index("timestamp", unique=True, background=True)
     #mongo_collection.create_index([("colorstyle", pymongo.ASCENDING),("photodate", pymongo.DECENDING)], background=True)
     new_insertobj_id = mongo_collection.update(key, data, upsert=True, multi=True)
     print "Inserted: {0}\nPhotodate: {1}\nReshoot: {2}\nID: {3}".format(colorstyle,photodate, reshoot,new_insertobj_id)
