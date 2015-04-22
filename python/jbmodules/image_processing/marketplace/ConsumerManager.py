@@ -47,13 +47,16 @@ class Task(object):
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
-        ret = ''
         jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
         print self.img, ' <-- self.img ', self.rgbmean
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
-        return '%s -- %s' % (ret, self.img, self.destdir)
+        try:
+            return '%s -- %s' % (ret, self.img, self.destdir)
+        except TypeError:
+            print 'TypeError in __call__'
+            pass
 
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
