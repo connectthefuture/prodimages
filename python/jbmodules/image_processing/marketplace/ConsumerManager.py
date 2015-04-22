@@ -8,11 +8,12 @@ from Queue import Empty
 class Consumer(multiprocessing.Process):
 
     def __init__(self, tasks, results, consumers_finished):
-        self.process_data = multiprocessing.Process.__init__(self)
+        # self.process_data =
+        multiprocessing.Process.__init__(self)
         self.tasks = tasks
         self.results = results
         self.consumers_finished = consumers_finished
-        #self.process_data = self.process_data()
+        self.process_data = self.process_data()
 
     def run(self):
         while not all(flag for flag in self.consumers_finished.values()):
