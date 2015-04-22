@@ -81,7 +81,10 @@ def main(filename=None):
             # Build object of key/values for insert
             colorstyle = d['colorstyle']
             photodate = d['photodate']
-            reshoot = d['reshoot']
+            try:
+                reshoot = d['reshoot']
+            except KeyError:
+                reshoot = 'N'
             timestamp = d['timestamp']
             username = d['username']
             #print locals()
@@ -95,6 +98,7 @@ def main(filename=None):
             update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, photodate=photodate, colorstyle=colorstyle, username=username, reshoot=reshoot, timestamp=timestamp)
             print "Successful Insert to {0} --> {1}".format(database_name + collection_name, colorstyle)
         except OSError:
+            #reshoot = 'N'
             print 'OSKEY ERROR'
             pass
 
