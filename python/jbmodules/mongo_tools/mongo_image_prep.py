@@ -144,8 +144,8 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
         return check, data
 
     else:
-        
-        data = { "$set":{'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": "1"},'timestamp': timestamp}}
+
+        data = { "$set":{'colorstyle': colorstyle, 'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": 1},'timestamp': timestamp}}
         print 'NEW ', check, data
         # mongo_collection.ensure_index([("md5", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
