@@ -537,8 +537,8 @@ def subproc_magick_png(img, destdir=None):
         'png:compression-filter\=N',
         '-format',
         'png',
-        '-modulate',
-        modulate,
+        #'-modulate',
+        #modulate,
         '-depth',
         '8',
 
