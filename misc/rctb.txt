@@ -321,7 +321,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##########################################################
 ########  ---------------------- #########################
 ########### THE Image Magickian ##########################
-1,11,21,31,37,51 * * * * /usr/local/batchRunScripts/python/magickLoad_PrdCmpNEW.py 2>&1 >> /var/log/magickupload_daily.log
+1,11,21,31,37,51 * * * * /usr/local/batchRunScripts/python/magickLoad_PrdCmp.py 2>&1 >> /var/log/magickupload_daily.log
 ##########################################################
 ########  ---------------------- #########################
 ##########################################################
