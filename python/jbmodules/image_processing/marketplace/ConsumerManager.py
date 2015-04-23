@@ -52,11 +52,11 @@ class Task(object):
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
-        try:
-            return '%s -- %s' % (ret, self.img, self.destdir)
-        except TypeError:
-            print 'TypeError in __call__'
-            pass
+        #try:
+        return ##'%s -- %s' % (ret, self.img, self.destdir)
+        #except TypeError:
+        #    print 'TypeError in __call__'
+        #    pass
 
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
