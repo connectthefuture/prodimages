@@ -713,7 +713,7 @@ if os.path.isdir(tmp_processing):
     for img in glob.glob(os.path.join(tmp_processing,'*.??g')):
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
-        pngout = subproc_magick_png(img, destdir=tmp_processing)
+        pngout = subproc_magick_png(img, destdir=tmp_loading)
         subproc_magick_large_jpg(pngout, destdir=tmp_loading)
         subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
         #subproc_magick_large_jpg(img, destdir=destdir)
@@ -779,19 +779,19 @@ zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop
 
 ## After completed Process and Load to imagedrop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
-try:
-    upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
-    if len(upload_tmp_loading_remainder) == 0:
-        shutil.rmtree(tmp_loading)
-except:
-    pass
-try:
-    upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
-    upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
-    if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
-        shutil.rmtree(tmp_processing)
-except:
-    pass
+# try:
+#     upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
+#     if len(upload_tmp_loading_remainder) == 0:
+#         shutil.rmtree(tmp_loading)
+# except:
+#     pass
+# try:
+#     upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
+#     upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
+#     if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
+#         shutil.rmtree(tmp_processing)
+# except:
+#     pass
 
 ###################
 ## Remove Lock file
