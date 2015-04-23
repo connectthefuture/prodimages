@@ -789,9 +789,12 @@ try:
     upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
     if len(upload_tmp_loading_remainder) == 0:
         shutil.rmtree(tmp_loading)
-        shutil.rmtree(tmp_processing)
+
 except:
     pass
+
+## remove the processing tmp folder
+shutil.rmtree(tmp_processing)
 
 # try:
 #     upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
