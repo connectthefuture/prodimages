@@ -376,7 +376,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
         return img
 
 
-def subproc_magick_png(img, rgbmean=None, destdir=None):
+def subproc_magick_png(img, destdir=None):
     import subprocess,re,os
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
@@ -387,51 +387,51 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         destdir = '.'
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
-    if not rgbmean:
-        ratio_range = 'OutOfRange'
-    else:
-        try:
-            ratio_range = rgbmean['ratio_range']
-        except:
-            ratio_range = 'OutOfRange'
-            pass
+    # if not rgbmean:
+    #     ratio_range = 'OutOfRange'
+    # else:
+    #     try:
+    #         ratio_range = rgbmean['ratio_range']
+    #     except:
+    #         ratio_range = 'OutOfRange'
+    #         pass
 
-    if ratio_range != 'OutOfRange':
-        high        = rgbmean['high']
-        low         = rgbmean['low']
-        ratio       = rgbmean['ratio']
-    #rgbmean = float(128)
-    #rgbmean = get_image_color_minmax(img)
-    if ratio_range == 'LOW':
-        if float(round(high,2)) > float(240):
-            modulator = '-modulate'
-            modulate = '104,100'
-        elif float(round(high,2)) > float(200):
-            modulator = '-modulate'
-            modulate = '107,110'
-        elif float(round(high,2)) > float(150):
-            modulator = '-modulate'
-            modulate =  '110,110'
-        else:
-            modulator = '-modulate'
-            modulate =  '112,110'
+    # if ratio_range != 'OutOfRange':
+    #     high        = rgbmean['high']
+    #     low         = rgbmean['low']
+    #     ratio       = rgbmean['ratio']
+    # #rgbmean = float(128)
+    # #rgbmean = get_image_color_minmax(img)
+    # if ratio_range == 'LOW':
+    #     if float(round(high,2)) > float(240):
+    #         modulator = '-modulate'
+    #         modulate = '104,100'
+    #     elif float(round(high,2)) > float(200):
+    #         modulator = '-modulate'
+    #         modulate = '107,110'
+    #     elif float(round(high,2)) > float(150):
+    #         modulator = '-modulate'
+    #         modulate =  '110,110'
+    #     else:
+    #         modulator = '-modulate'
+    #         modulate =  '112,110'
 
-    elif ratio_range == 'HIGH':
-        if float(round(high,2)) > float(230):
-            modulator = '-modulate'
-            modulate = '100,100'
-        elif float(round(high,2)) > float(200):
-            modulator = '-modulate'
-            modulate = '103,100'
-        elif float(round(high,2)) > float(150):
-            modulator = '-modulate'
-            modulate = '105,105'
-        else:
-            modulator = '-modulate'
-            modulate =  '108,107'
-    elif ratio_range == 'OutOfRange':
-        modulator = '-modulate'
-        modulate = '100,100'
+    # elif ratio_range == 'HIGH':
+    #     if float(round(high,2)) > float(230):
+    #         modulator = '-modulate'
+    #         modulate = '100,100'
+    #     elif float(round(high,2)) > float(200):
+    #         modulator = '-modulate'
+    #         modulate = '103,100'
+    #     elif float(round(high,2)) > float(150):
+    #         modulator = '-modulate'
+    #         modulate = '105,105'
+    #     else:
+    #         modulator = '-modulate'
+    #         modulate =  '108,107'
+    # elif ratio_range == 'OutOfRange':
+    #     modulator = '-modulate'
+    #     modulate = '100,100'
 
     format = img.split('.')[-1]
 
@@ -713,12 +713,13 @@ walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.jpg'))
 [ rename_retouched_file(file) for file in walkedout_tmp ]
 
 if os.path.isdir(tmp_processing):
-    for img in glob.glob(os.path.join(tmp_processing,'*.??g')):
+    for img in glob.glob(os.path.join(tmp_processing,'*.??[gG]')):
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
         pngout = subproc_magick_png(img, destdir=tmp_loading)
         subproc_magick_large_jpg(pngout, destdir=tmp_loading)
         subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
+        #os.rename(pngout,os.path.join())
         #subproc_magick_large_jpg(img, destdir=destdir)
         #subproc_magick_medium_jpg(img, destdir=destdir)
 
