@@ -647,6 +647,11 @@ try:
 except:
     root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/DropFinalFiles_Only'
     destdir      =  tmp_loading
+if os.path.isdir(root_img_dir): pass
+else:
+    root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/DropFinalFiles_Only'
+    destdir      =  tmp_loading
+
 
 ###########
 ## Test for ex
