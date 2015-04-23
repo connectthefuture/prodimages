@@ -1,4 +1,6 @@
-#/usr/bin/env python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
     import pycurl, os, shutil, re
@@ -598,69 +600,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     #shutil.copy2(tmpfile_path,outfile)
     #print 'Done {}'.format(img)
     return outfile #open(outfile).read() # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
-
-
-def upload_imagedrop(root_dir):
-    import os, sys, re, csv, shutil, glob
-    archive_uploaded = os.path.join(root_dir, 'uploaded')
-    tmp_failed = os.path.join(root_dir, 'failed_upload')
-    try:
-        os.makedirs(archive_uploaded, 16877)
-    except OSError:
-        try:
-            shutil.rmtree(archive_uploaded, ignore_errors = True)
-            os.makedirs(archive_uploaded, 16877)
-        except:
-            pass
-
-    try:
-        os.makedirs(tmp_failed, 16877)
-    except:
-        pass
-
-    import time
-    upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
-    for upload_file in upload_tmp_loading:
-        try:
-            code = copy_to_imagedrop_upload(upload_file)
-            if code == True or code == '200':
-                try:
-                    shutil.move(upload_file, archive_uploaded)
-                    time.sleep(float(.1))
-                    print "1stTryOK", upload_file
-                except:
-                    dst_file = upload_file.replace(root_dir, archive_uploaded)
-                    try:
-                        if os.path.exists(dst_file):
-                            os.remove(dst_file)
-                        shutil.move(upload_file, archive_uploaded)
-                    except:
-                        pass
-            else:
-                print "Uploaded {}".format(upload_file)
-                time.sleep(float(.1))
-                try:
-                    shutil.move(upload_file, archive_uploaded)
-                except shutil.Error:
-                    pass
-        except OSError:
-            print "Error moving Finals to Arch {}".format(file)
-            try:
-                shutil.move(upload_file, tmp_failed)
-            except shutil.Error:
-                pass
-
-    try:
-        if os.path.isdir(sys.argv[2]):
-            finaldir = os.path.abspath(sys.argv[2])
-            for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
-                try:
-                    shutil.move(f, finaldir)
-                except shutil.Error:
-                    pass
-    except:
-        print 'Failed to Archive {}'.format(upload_tmp_loading)
-        pass
 
 #############################
 
