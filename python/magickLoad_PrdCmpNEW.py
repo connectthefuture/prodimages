@@ -657,10 +657,13 @@ else:
 ## Test for ex
 #root_img_dir =  tmp_processing
 walkedout_tmp = glob.glob(os.path.join(root_img_dir, '*/*.*g'))
-if len(walkedout_tmp) == 0:
+image_ct = len(walkedout_tmp)
+starttime = todaysdatefull
+if image_ct == 0:
     print "Nothing to Process"
 else:
 ### Make Tmp Folders for Processing And Uploading -- tmp_dirs are dated with time(hr:min)to prevent collisions
+    print 'Processing -- %s Files \nStarted --> %s \n' % (image_ct, starttime)
     try:
         os.makedirs(archive_uploaded, 16877)
     except:
