@@ -718,7 +718,7 @@ if os.path.isdir(tmp_processing):
     for img in glob.glob(os.path.join(tmp_processing,'*.??[gG]')):
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
-        pngout = subproc_magick_png(img, destdir=tmp_loading)
+        pngout = subproc_magick_png(img, destdir=tmp_processing)
         subproc_magick_large_jpg(pngout, destdir=tmp_loading)
         subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
         #os.rename(pngout,os.path.join())
