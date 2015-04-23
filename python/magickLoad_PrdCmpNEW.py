@@ -326,6 +326,8 @@ def subproc_magick_medium_jpg(img, destdir=None):
     #if aspect_ratio == '1.2':
 
     aspect_ratio = get_aspect_ratio(img)
+    print img, aspect_ratio, ' <--X '
+
     if float(str(aspect_ratio)) == float(1.2):
         vert_horiz = '200x240'
     elif float(str(aspect_ratio)) > float(1.2):
