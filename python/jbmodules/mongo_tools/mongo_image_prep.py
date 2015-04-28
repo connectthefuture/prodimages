@@ -100,10 +100,12 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     import datetime
     import mongo_gridfs_insert_file
     mongo_db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
-    if fs:
+    if fs and hostname[:7] != 'mongodb':
         collection_name = 'fs.files'
         if not alt:
             alt = '1'
+    elif not collection_name:
+        collection_name = 'general'
 
     tmpfilename          = str(filepath.split('/')[-1])
     colorstyle           = str(tmpfilename[:9])
