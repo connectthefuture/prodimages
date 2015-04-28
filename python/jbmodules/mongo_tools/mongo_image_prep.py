@@ -93,13 +93,13 @@ def getparse_metadata_from_imagefile(image_filepath):
 
 ###
 ### Actually Updates Mongo
-def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
+def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
     import pymongo, bson
     from bson import Binary, Code
     from bson.json_util import dumps
     import datetime
     import mongo_gridfs_insert_file
-    mongo_db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+    mongo_db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
     if fs:
         collection_name = 'fs.files'
         if not alt:
@@ -161,9 +161,9 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     return check, upsertobjid
 
 
-def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
+def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None, **kwargs):
     import os, mongo_gridfs_insert_file
-    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
     try:
         filename = os.path.basename(filepath)
         ext = filename.split('.')[-1].lower()
@@ -195,7 +195,7 @@ def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
         print 'Failed ', filepath
 
 
-def update_gridfs_extract_metadata(image_filepath,**kwargs):
+def update_gridfs_extract_metadata(hostname=None, image_filepath, **kwargs):
     import os,sys
     try:
         db_name = kwargs.get('db_name')
@@ -225,7 +225,7 @@ def update_gridfs_extract_metadata(image_filepath,**kwargs):
             metadata['ERROR_PATH'] = image_filepath
             metadata['ERROR_URL'] = image_url
 
-    checked_ct, update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
+    checked_ct, update_record = update_file_gridfs(hostname=hostname, filepath=image_filepath, metadata=metadata, db_name=db_name)
     if checked_ct is False:
         return False, image_filepath
     elif str(checked_ct).isdigit():

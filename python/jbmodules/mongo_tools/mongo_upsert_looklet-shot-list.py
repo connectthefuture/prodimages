@@ -5,26 +5,39 @@ import sys, os.path
 mongotoolsdir = os.path.dirname('__file__')
 sys.path.append(mongotoolsdir)
 
-def connect_gridfs_mongodb(hostname=None,db_name=None):
-    import pymongo, gridfs, __builtin__
+def connect_gridfs_mongodb(hostname=None, db_name=None):
+    import pymongo, gridfs
+    db_nameMlab = 'gridfs'
     if not hostname:
-        hostname='127.0.0.1'
-    mongo = pymongo.MongoClient(hostname, maxPoolSize=50, waitQueueMultiple=10)
-    mongo_db = mongo[db_name]
-    #mongo_db = mongo[db_name]
-    mongo_db.authenticate('mongo', 'mongo')
+        hostname = '127.0.0.1'
+        try:
+            mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+            mongo_db = mongo[db_name]
+        except pymongo.errors.ConnectionFailure:
+            hostname = '192.168.20.59'
+            mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+            mongo_db = mongo[db_name]
+            mongo_db.authenticate('mongo', 'mongo')
+    else:
+        try:
+            mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+            if hostname[:7] == 'mongodb':
+                db_name = hostname.split('/')[-1]   
+            mongo_db = mongo[db_name]
+        except pymongo.errors.ConnectionFailure:
+            print 'Failed --> '
+            pass
     fs = ''
-    #fs = gridfs.GridFS(mongo_db)
+    fs = gridfs.GridFS(mongo_db)
     return mongo_db, fs
 
 
-
-def update_filerecord_pymongo(database_name=None, collection_name=None, username=None, colorstyle=None, photodate=None, reshoot=None, timestamp=None):
+def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None, username=None, colorstyle=None, photodate=None, reshoot=None, timestamp=None):
     # Insert a New Document
     import pymongo, bson
     from bson import Binary, Code
     from bson.json_util import dumps
-    mongo_db, fs = connect_gridfs_mongodb(db_name=database_name)
+    mongo_db, fs = connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
     if fs:
         collection_name = 'fs.files'
     mongo_collection = mongo_db[collection_name]
@@ -75,7 +88,7 @@ def main(filename=None):
     #print data_insert
     for d in data_insert:
         try:
-            database_name = 'images'
+            db_name = 'images'
             collection_name = 'looklet_shot_list'
             #print d
             # Build object of key/values for insert
@@ -101,8 +114,8 @@ def main(filename=None):
             #    print [ k.upper() for k in sorted(c.keys()) ]
             #if regex_valid_colorstyle.findall(d['colorstyle']):
             ##updates/upserts, will not create multiple records if timesramp exists already
-            update_filerecord_pymongo(database_name=database_name, collection_name=collection_name, photodate=photodate, colorstyle=colorstyle, username=username, reshoot=reshoot, timestamp=timestamp)
-            print "Successful Insert to {0} --> {1}".format(database_name + collection_name, colorstyle)
+            update_filerecord_pymongo(db_name=db_name, collection_name=collection_name, photodate=photodate, colorstyle=colorstyle, username=username, reshoot=reshoot, timestamp=timestamp)
+            print "Successful Insert to {0} --> {1}".format(db_name + collection_name, colorstyle)
         except OSError:
             #reshoot = 'N'
             print 'OSKEY ERROR'
