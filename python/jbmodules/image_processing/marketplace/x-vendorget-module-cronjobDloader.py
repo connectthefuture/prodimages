@@ -356,12 +356,14 @@ def mongo_update_url_dest_info(urldest_tuple):
     colorstyle           = str(tmpfilename[:9])
     image_number         = str(tmpfilename.split('.')[-2][-1])
     content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
-
+    hostname             = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs' # None
+    db_name              = hostname.split('/')[-1]
+  
     if image_url:
         #import jbmodules
         #from jbmodules import mongo_tools
         import sys, os
-        jbmade = os.path.join('../..', os.path.dirname( __file__))
+        jbmade = os.path.join('../..', os.path.dirname(__file__))
         print jbmade
         sys.path.append(jbmade)
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
@@ -369,7 +371,8 @@ def mongo_update_url_dest_info(urldest_tuple):
 
         updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
             destpath,
-            db_name ='gridfs_mrktplce', 
+            hostname = hostname,
+            db_name = db_name, 
             image_url = image_url, 
             filename = tmpfilename, 
             colorstyle  = colorstyle, 
