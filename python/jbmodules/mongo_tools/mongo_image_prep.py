@@ -195,10 +195,11 @@ def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None
         print 'Failed ', filepath
 
 
-def update_gridfs_extract_metadata(hostname=None, image_filepath, **kwargs):
+def update_gridfs_extract_metadata(image_filepath, **kwargs):
     import os,sys
     try:
         db_name = kwargs.get('db_name')
+        hostname = kwargs.get('hostname')
         if not db_name:
             db_name = sys.argv[2]
     except UnboundLocalError:
