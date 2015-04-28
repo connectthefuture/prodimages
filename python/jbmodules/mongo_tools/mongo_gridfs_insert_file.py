@@ -7,7 +7,7 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
     if not hostname:
         #hostname='127.0.0.1'
         hostname = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs'
-        db_name = 'gridfs'
+        db_nameMlab = 'gridfs'
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
             mongo_db = mongo[db_name]
@@ -19,6 +19,8 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
     else:
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+            if hostname[:7] == 'mongodb':
+                db_name = db_nameMlab   
             mongo_db = mongo[db_name]
         except pymongo.errors.ConnectionFailure:
             pass
