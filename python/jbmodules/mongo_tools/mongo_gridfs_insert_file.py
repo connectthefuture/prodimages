@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-def connect_gridfs_mongodb(hostname=None,db_name=None):
+def connect_gridfs_mongodb(hostname=None, db_name=None):
     import pymongo, gridfs
+    db_nameMlab = 'gridfs'
     if not hostname:
-        #hostname='127.0.0.1'
-        hostname = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs'
-        db_nameMlab = 'gridfs'
+        hostname = '127.0.0.1'
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
             mongo_db = mongo[db_name]
@@ -20,11 +19,11 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
             if hostname[:7] == 'mongodb':
-                db_name = db_nameMlab   
+                db_name = hostname.split('/')[-1]   
             mongo_db = mongo[db_name]
         except pymongo.errors.ConnectionFailure:
+            print 'Failed --> '
             pass
-
     fs = ''
     fs = gridfs.GridFS(mongo_db)
     return mongo_db, fs
@@ -54,7 +53,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     from bson.json_util import dumps
     import datetime
 
-    mongo_db, fs = connect_gridfs_mongodb(db_name=db_name)
+    mongo_db, fs = connect_gridfs_mongodb(hostname=None, db_name=db_name)
     if fs:
         collection_name = 'fs.files'
         if not alt:
@@ -110,7 +109,7 @@ def get_duplicate_records(db_name=None, collection_name=None):
     import pymongo, bson, datetime
     from bson import Binary, Code
     from bson.json_util import dumps
-    db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db, fs = connect_gridfs_mongodb(hostname=None, db_name=db_name)
     mongo_collection = db[collection_name]
     data = { "$group": {"_id": { "firstField": "$filename","secondField": "$md5" },"uniqueIds": { "$addToSet": "$_id" },"count": { "$sum": 1 }}},{ "$match": {"count": { "$gt": 1 }}}
     res = mongo_collection.aggregate([data][0])
@@ -118,7 +117,7 @@ def get_duplicate_records(db_name=None, collection_name=None):
 
 
 def retrieve_last_instance_gridfs(filepath=None, db_name=None):
-    db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db, fs = connect_gridfs_mongodb(hostname=None, db_name=db_name)
     return fs
 
 
@@ -127,7 +126,7 @@ def find_record_gridfs(key=None, md5checksum=None, db_name=None, collection_name
     from bson import Binary, Code
     from bson.json_util import dumps
     # client = .authenticate('user', 'password', mechanism='SCRAM-SHA-1')
-    db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db, fs = connect_gridfs_mongodb(hostname=None, db_name=db_name)
     mongo_collection = db[collection_name]
     if not key:
         key = {'md5checksum': md5checksum}
@@ -139,7 +138,7 @@ def find_record_gridfs(key=None, md5checksum=None, db_name=None, collection_name
 
 def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
     import os
-    db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db, fs = connect_gridfs_mongodb(hostname=None, db_name=db_name)
     try:
         filename = os.path.basename(filepath)
         ext = filename.split('.')[-1].lower()
@@ -168,7 +167,7 @@ def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
 
 def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
     import os
-    db, fs = connect_gridfs_mongodb(db_name=db_name)
+    db, fs = connect_gridfs_mongodb(hostname=None, db_name=db_name)
     try:
         filename = os.path.basename(filepath)
         ext = filename.split('.')[-1].lower()
