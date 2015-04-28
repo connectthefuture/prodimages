@@ -5,16 +5,23 @@
 def connect_gridfs_mongodb(hostname=None,db_name=None):
     import pymongo, gridfs
     if not hostname:
-        hostname='127.0.0.1'
-    try:
-        mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
-    except pymongo.errors.ConnectionFailure:
-        hostname = '192.168.20.59'
-        mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
-    
-    mongo_db = mongo[db_name]
-    #mongo_db = mongo[db_name]
-    mongo_db.authenticate('mongo', 'mongo')
+        #hostname='127.0.0.1'
+        hostname = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs'
+
+        try:
+            mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+        except pymongo.errors.ConnectionFailure:
+            hostname = '192.168.20.59'
+            mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+            mongo_db = mongo[db_name]
+            mongo_db.authenticate('mongo', 'mongo')
+    else:
+        try:
+            mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+            mongo_db = mongo[db_name]
+        except pymongo.errors.ConnectionFailure:
+            pass
+
     fs = ''
     fs = gridfs.GridFS(mongo_db)
     return mongo_db, fs
@@ -43,6 +50,7 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     from bson import Binary, Code
     from bson.json_util import dumps
     import datetime
+
     mongo_db, fs = connect_gridfs_mongodb(db_name=db_name)
     if fs:
         collection_name = 'fs.files'
