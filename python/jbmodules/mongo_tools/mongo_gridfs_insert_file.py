@@ -5,7 +5,9 @@
 def connect_gridfs_mongodb(hostname=None,db_name=None):
     import pymongo, gridfs
     if not hostname:
-        hostname='127.0.0.1'
+        #hostname='127.0.0.1'
+        hostname = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs'
+
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
         except pymongo.errors.ConnectionFailure:
@@ -48,7 +50,6 @@ def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None,
     from bson import Binary, Code
     from bson.json_util import dumps
     import datetime
-    hostname = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs'
 
     mongo_db, fs = connect_gridfs_mongodb(db_name=db_name)
     if fs:
