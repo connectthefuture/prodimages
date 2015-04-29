@@ -126,30 +126,31 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     key_str = key.keys()[0]
     # restest = mongo_collection.distinct({key_str: md5})
     #print ' distinct Res Test --> ', restest
-    check = mongo_collection.find({key_str: md5}).count()
-    #check = mongo_collection.find({key_str: tmpfilename}).count()
-    if check:
-        
-        data = { "$set":{
-                        "colorstyle": colorstyle,
-                        "alt": {"$min": {"alt": alt}},
-                        "format": format,
-                        "metadata": metadata,
-                        "content_type": content_type,
-                        #"upload_ct":
-                        "$inc": {"upload_ct": "1"},
-                        #"$inc": {"upload_ct": int(1)},
-                        "timestamp": { "$max": {"timestamp": timestamp}}
+    try:
+        check = mongo_collection.find({key_str: md5}).count()
+        #check = mongo_collection.find({key_str: tmpfilename}).count()
+        if check:
+            data = { "$set":{
+                            "colorstyle": colorstyle,
+                            "alt": {"$min": {"alt": alt}},
+                            "format": format,
+                            "metadata": metadata,
+                            "content_type": content_type,
+                            #"upload_ct":
+                            "$inc": {"upload_ct": "1"},
+                            #"$inc": {"upload_ct": int(1)},
+                            "timestamp": { "$max": {"timestamp": timestamp}}
+                            }
                         }
-                    }
-        print 'REFRESH IT ', check, data
-        return check, data
+            print 'REFRESH IT ', check, data
+            return check, data
+        else:
+            data = { "$set":{'colorstyle': colorstyle, 'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": 1},'timestamp': timestamp}}
+            print 'NEW ', check, data
+            # mongo_collection.ensure_index([("md5", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
+    except pymongo.errors.OperationFailure:
+        pass
 
-    else:
-
-        data = { "$set":{'colorstyle': colorstyle, 'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": 1},'timestamp': timestamp}}
-        print 'NEW ', check, data
-        # mongo_collection.ensure_index([("md5", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
         mongo_collection.ensure_index(key_str, unique=True, background=True)
     except pymongo.errors.DuplicateKeyError:
