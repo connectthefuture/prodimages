@@ -165,6 +165,7 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
 
 def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None, **kwargs):
     import os, mongo_gridfs_insert_file
+    import pymongo
     db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
     try:
         filename = os.path.basename(filepath)
@@ -179,18 +180,22 @@ def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None
         else:
             content_type = kwargs.get('content_type')
         md5 = md5_checksummer(filepath)
-        if not mongo_gridfs_insert_file.find_record_gridfs(key={'md5': md5}, db_name=db_name, collection_name='fs.files'):
-            try:
-                ## Actually do an insert to gridfs instead
-                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
-                    with open(filepath) as filedata:
-                        fp.write(filedata.read())
-                return fp, db
-            except IOError:
-                print ' IO ERROR '
-                return False, False
-        else:
-            # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
+        try:
+            if not mongo_gridfs_insert_file.find_record_gridfs(key={'md5': md5}, db_name=db_name, collection_name='fs.files'):
+                try:
+                    ## Actually do an insert to gridfs instead
+                    with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+                        with open(filepath) as filedata:
+                            fp.write(filedata.read())
+                    return fp, db
+                except IOError:
+                    print ' IO ERROR '
+                    return False, False
+            else:
+                # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
+                check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
+                return check, res
+        except pymongo.errors.OperationFailure:
             check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
             return check, res
     except OSError:
