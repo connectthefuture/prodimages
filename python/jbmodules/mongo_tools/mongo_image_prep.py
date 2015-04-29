@@ -119,7 +119,7 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
         timestamp = datetime.datetime.now()
 
     mongo_collection = mongo_db[collection_name]
-    md5 = md5_checksummer(filepath)
+    md5 = md5_checksummer(filepath).items()[0]
     key = {'md5': md5}  #, 'alt': alt, 'upload_ct': 1}
     # data = { "$set":{'format': format,'metadata': metadata,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': "1",'timestamp': timestamp}
@@ -180,7 +180,7 @@ def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None
                 content_type= 'image/' + str(ext)
         else:
             content_type = kwargs.get('content_type')
-        md5 = md5_checksummer(filepath)
+        md5 = md5_checksummer(filepath).items()[0]
         try:
             if not mongo_gridfs_insert_file.find_record_gridfs(key={'md5': md5}, db_name=db_name, collection_name='fs.files'):
                 try:
