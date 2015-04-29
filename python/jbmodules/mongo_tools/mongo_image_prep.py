@@ -93,19 +93,17 @@ def getparse_metadata_from_imagefile(image_filepath):
 
 ###
 ### Actually Updates Mongo
-def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
+def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
     import pymongo, bson
     from bson import Binary, Code
     from bson.json_util import dumps
     import datetime
     import mongo_gridfs_insert_file
-    mongo_db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
-    if hostname is not None and fs and hostname[:7] != 'mongodb':
+    mongo_db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
+    if fs:
         collection_name = 'fs.files'
         if not alt:
             alt = '1'
-    elif not collection_name:
-        collection_name = 'general'
 
     tmpfilename          = str(filepath.split('/')[-1])
     colorstyle           = str(tmpfilename[:9])
@@ -119,46 +117,43 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
         timestamp = datetime.datetime.now()
 
     mongo_collection = mongo_db[collection_name]
-    md5 = md5_checksummer(filepath).items()[0]
+    md5 = md5_checksummer(filepath)
     key = {'md5': md5}  #, 'alt': alt, 'upload_ct': 1}
     # data = { "$set":{'format': format,'metadata': metadata,'alt': alt, upload_ct: 1,'timestamp': timestamp}},
     datarow = {'colorstyle': colorstyle, 'format': format,'metadata': metadata,'alt': alt, 'upload_ct': "1",'timestamp': timestamp}
     key_str = key.keys()[0]
-    # restest = mongo_collection.distinct({key_str: md5})
+    restest = mongo_collection.distinct({key_str: md5})
     #print ' distinct Res Test --> ', restest
-    try:
-        check = mongo_collection.find({key_str: md5}).count()
-        #check = mongo_collection.find({key_str: tmpfilename}).count()
-        if check:
-            data = { "$set":{
-                            "colorstyle": colorstyle,
-                            "alt": {"$min": {"alt": alt}},
-                            "format": format,
-                            "metadata": metadata,
-                            "content_type": content_type,
-                            #"upload_ct":
-                            "$inc": {"upload_ct": "1"},
-                            #"$inc": {"upload_ct": int(1)},
-                            "timestamp": { "$max": {"timestamp": timestamp}}
-                            }
+    check = mongo_collection.find({key_str: md5}).count()
+    #check = mongo_collection.find({key_str: tmpfilename}).count()
+    if check:
+        
+        data = { "$set":{
+                        "colorstyle": colorstyle,
+                        "alt": {"$min": {"alt": alt}},
+                        "format": format,
+                        "metadata": metadata,
+                        "content_type": content_type,
+                        #"upload_ct":
+                        "$inc": {"upload_ct": "1"},
+                        #"$inc": {"upload_ct": int(1)},
+                        "timestamp": { "$max": {"timestamp": timestamp}}
                         }
-            print 'REFRESH IT ', check, data
-            return check, data
-        else:
-            data = { "$set":{'colorstyle': colorstyle, 'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": 1},'timestamp': timestamp}}
-            print 'NEW ', check, data
-            # mongo_collection.ensure_index([("md5", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
-    except pymongo.errors.OperationFailure:
-        pass
+                    }
+        print 'REFRESH IT ', check, data
+        return check, data
 
+    else:
+
+        data = { "$set":{'colorstyle': colorstyle, 'format': format, 'metadata': metadata, 'alt': alt, "$setOnInsert": {"upload_ct": 1},'timestamp': timestamp}}
+        print 'NEW ', check, data
+        # mongo_collection.ensure_index([("md5", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
         mongo_collection.ensure_index(key_str, unique=True, background=True)
     except pymongo.errors.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
-    except pymongo.errors.OperationFailure:
-        pass
-    mongo_collection.ensure_index([("colorstyle", pymongo.DESCENDING),("alt", pymongo.ASCENDING)], background=True)
+    mongo_collection.create_index([("colorstyle", pymongo.DECENDING),("md5", pymongo.ASCENDING)], background=True)
 
     upsertobjid = mongo_collection.findAndModify(key, data, multi=True, safe=True, new=True)
     #upsertobjid = mongo_collection.update(key, data, upsert=True, multi=True, safe=True)
@@ -166,10 +161,9 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     return check, upsertobjid
 
 
-def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None, **kwargs):
+def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
     import os, mongo_gridfs_insert_file
-    import pymongo
-    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
+    db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(db_name=db_name)
     try:
         filename = os.path.basename(filepath)
         ext = filename.split('.')[-1].lower()
@@ -183,34 +177,28 @@ def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None
         else:
             content_type = kwargs.get('content_type')
         md5 = md5_checksummer(filepath)
-        print md5.items()[0]
-        try:
-            if not mongo_gridfs_insert_file.find_record_gridfs(key={'md5': md5}, db_name=db_name, collection_name='fs.files'):
-                try:
-                    ## Actually do an insert to gridfs instead
-                    with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
-                        with open(filepath) as filedata:
-                            fp.write(filedata.read())
-                    return fp, db
-                except IOError:
-                    print ' IO ERROR '
-                    return False, False
-            else:
-                # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
-                check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
-                return check, res
-        except pymongo.errors.OperationFailure:
+        if not mongo_gridfs_insert_file.find_record_gridfs(key={'md5': md5}, db_name=db_name, collection_name='fs.files'):
+            try:
+                ## Actually do an insert to gridfs instead
+                with fs.new_file(filename=filename, content_type=content_type, metadata=metadata) as fp:
+                    with open(filepath) as filedata:
+                        fp.write(filedata.read())
+                return fp, db
+            except IOError:
+                print ' IO ERROR '
+                return False, False
+        else:
+            # = mongo_gridfs_insert_file.find_record_gridfs(key={"filename": filename}, db_name=db_name, collection_name='fs.files')
             check, res = update_filerecord_pymongo(filepath=filepath,metadata=metadata,db_name=db_name, content_type=content_type)
             return check, res
     except OSError:
         print 'Failed ', filepath
 
 
-def update_gridfs_extract_metadata(image_filepath, **kwargs):
+def update_gridfs_extract_metadata(image_filepath,**kwargs):
     import os,sys
     try:
         db_name = kwargs.get('db_name')
-        hostname = kwargs.get('hostname')
         if not db_name:
             db_name = sys.argv[2]
     except UnboundLocalError:
@@ -237,7 +225,7 @@ def update_gridfs_extract_metadata(image_filepath, **kwargs):
             metadata['ERROR_PATH'] = image_filepath
             metadata['ERROR_URL'] = image_url
 
-    checked_ct, update_record = update_file_gridfs(hostname=hostname, filepath=image_filepath, metadata=metadata, db_name=db_name)
+    checked_ct, update_record = update_file_gridfs(filepath=image_filepath, metadata=metadata, db_name=db_name)
     if checked_ct is False:
         return False, image_filepath
     elif str(checked_ct).isdigit():
