@@ -356,7 +356,7 @@ def mongo_update_url_dest_info(urldest_tuple):
     colorstyle           = str(tmpfilename[:9])
     image_number         = str(tmpfilename.split('.')[-2][-1])
     content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
-    hostname             = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs' # None
+    hostname             = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs_mrktplce' # 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs' # None
     db_name              = hostname.split('/')[-1]
   
     if image_url:
