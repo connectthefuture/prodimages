@@ -452,6 +452,7 @@ def mongo_upsert_threaded(argslist=None):
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
+    sys.path.append('/usr/local/batchRunScripts/python')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
