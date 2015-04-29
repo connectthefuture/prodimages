@@ -182,7 +182,8 @@ def update_file_gridfs(hostname=None, filepath=None, metadata=None, db_name=None
                 content_type= 'image/' + str(ext)
         else:
             content_type = kwargs.get('content_type')
-        md5 = md5_checksummer(filepath).items()[0]
+        md5 = md5_checksummer(filepath)
+        print md5.items()[0]
         try:
             if not mongo_gridfs_insert_file.find_record_gridfs(key={'md5': md5}, db_name=db_name, collection_name='fs.files'):
                 try:
