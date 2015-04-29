@@ -100,7 +100,7 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     import datetime
     import mongo_gridfs_insert_file
     mongo_db, fs = mongo_gridfs_insert_file.connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
-    if hostname not None and fs and hostname[:7] != 'mongodb':
+    if hostname is not None and fs and hostname[:7] != 'mongodb':
         collection_name = 'fs.files'
         if not alt:
             alt = '1'
