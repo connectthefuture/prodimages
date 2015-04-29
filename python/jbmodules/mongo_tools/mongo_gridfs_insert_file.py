@@ -2,14 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
-def connect_gridfs_mongodb(hostname=None, db_name=None):
+def connect_gridfs_mongodb(hostname=None,db_name=None):
     import pymongo, gridfs
-    db_nameMlab = 'gridfs'
     if not hostname:
-        hostname = '127.0.0.1'
+        hostname='127.0.0.1'
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
-            mongo_db = mongo[db_name]
         except pymongo.errors.ConnectionFailure:
             hostname = '192.168.20.59'
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
@@ -18,21 +16,19 @@ def connect_gridfs_mongodb(hostname=None, db_name=None):
     else:
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
-            if hostname[:7] == 'mongodb':
-                db_name = hostname.split('/')[-1]   
             mongo_db = mongo[db_name]
         except pymongo.errors.ConnectionFailure:
-            print 'Failed --> '
             pass
+
     fs = ''
     fs = gridfs.GridFS(mongo_db)
     return mongo_db, fs
 
 
-def insert_filerecord_pymongo(hostname=None, db_name=None, collection_name=None, filename=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
+def insert_filerecord_pymongo(db_name=None, collection_name=None, filename=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
     # Insert a New Document
     import pymongo
-    mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+    mongo = pymongo.MongoClient('127.0.0.1', waitQueueMultiple=10)
     mongo_db = mongo[db_name]
     mongo_collection = mongo_db[collection_name]
 
@@ -44,7 +40,7 @@ def insert_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     return new_insertobj_id
 
 
-def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
+def update_filerecord_pymongo(db_name=None, collection_name=None, filename=None, filepath=None, metadata=None, colorstyle=None, alt=None, format=None, timestamp=None, **kwargs):
     # Insert a New Document
     # (filepath=None, metadata=None, db_name=None):
     import os
@@ -52,8 +48,9 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     from bson import Binary, Code
     from bson.json_util import dumps
     import datetime
+    hostname = 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs'
 
-    mongo_db, fs = connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
+    mongo_db, fs = connect_gridfs_mongodb(db_name=db_name)
     if fs:
         collection_name = 'fs.files'
         if not alt:
@@ -93,8 +90,7 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
         data = { "$set":{ 'colorstyle': colorstyle, 'format': format, 'metadata': metadata, 'alt': alt, 'upload_ct': 1,'timestamp': timestamp}}
         # mongo_collection.create_index([("colorstyle", pymongo.ASCENDING)], unique=True, sparse=True, background=True)
     try:
-        # mongo_collection.create_index("md5", unique=True, sparse=False, background=True)
-        mongo_collection.create_index([("colorstyle", pymongo.DECENDING),("alt", pymongo.ASCENDING)], unique=True, background=True)
+        mongo_collection.create_index("md5", unique=True, sparse=False, background=True)
     except pymongo.errors.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
@@ -105,12 +101,12 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     return new_insertobj_id
 
 
-def get_duplicate_records(db_name=None, collection_name=None, hostname=None):
+def get_duplicate_records(db_name=None, collection_name=None):
     # Insert a New Document
     import pymongo, bson, datetime
     from bson import Binary, Code
     from bson.json_util import dumps
-    db, fs = connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
+    db, fs = connect_gridfs_mongodb(db_name=db_name)
     mongo_collection = db[collection_name]
     data = { "$group": {"_id": { "firstField": "$filename","secondField": "$md5" },"uniqueIds": { "$addToSet": "$_id" },"count": { "$sum": 1 }}},{ "$match": {"count": { "$gt": 1 }}}
     res = mongo_collection.aggregate([data][0])
@@ -118,16 +114,16 @@ def get_duplicate_records(db_name=None, collection_name=None, hostname=None):
 
 
 def retrieve_last_instance_gridfs(filepath=None, db_name=None):
-    db, fs = connect_gridfs_mongodb(hostname=None, db_name=db_name)
+    db, fs = connect_gridfs_mongodb(db_name=db_name)
     return fs
 
 
-def find_record_gridfs(key=None, md5checksum=None, db_name=None, collection_name=None, hostname=None):
+def find_record_gridfs(key=None, md5checksum=None, db_name=None, collection_name=None):
     import pymongo, bson, datetime
     from bson import Binary, Code
     from bson.json_util import dumps
     # client = .authenticate('user', 'password', mechanism='SCRAM-SHA-1')
-    db, fs = connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
+    db, fs = connect_gridfs_mongodb(db_name=db_name)
     mongo_collection = db[collection_name]
     if not key:
         key = {'md5checksum': md5checksum}
@@ -137,9 +133,9 @@ def find_record_gridfs(key=None, md5checksum=None, db_name=None, collection_name
     return check
 
 
-def insert_file_gridfs(filepath=None, metadata=None, db_name=None, hostname=None, **kwargs):
+def insert_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
     import os
-    db, fs = connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
+    db, fs = connect_gridfs_mongodb(db_name=db_name)
     try:
         filename = os.path.basename(filepath)
         ext = filename.split('.')[-1].lower()
@@ -166,9 +162,9 @@ def insert_file_gridfs(filepath=None, metadata=None, db_name=None, hostname=None
         print 'Failed ', filepath
 
 
-def update_file_gridfs(filepath=None, metadata=None, db_name=None, hostname=None, **kwargs):
+def update_file_gridfs(filepath=None, metadata=None, db_name=None, **kwargs):
     import os
-    db, fs = connect_gridfs_mongodb(hostname=hostname, db_name=db_name)
+    db, fs = connect_gridfs_mongodb(db_name=db_name)
     try:
         filename = os.path.basename(filepath)
         ext = filename.split('.')[-1].lower()
