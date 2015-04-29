@@ -8,6 +8,8 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
         hostname='127.0.0.1'
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
+            mongo_db = mongo[db_name]
+            mongo_db.authenticate('mongo', 'mongo')
         except pymongo.errors.ConnectionFailure:
             hostname = '192.168.20.59'
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
