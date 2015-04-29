@@ -19,6 +19,7 @@ def connect_gridfs_mongodb(hostname=None,db_name=None):
         try:
             mongo = pymongo.MongoClient(hostname, waitQueueMultiple=10)
             mongo_db = mongo[db_name]
+            mongo_db.authenticate('mongo', 'mongo7')
         except pymongo.errors.ConnectionFailure:
             pass
 
