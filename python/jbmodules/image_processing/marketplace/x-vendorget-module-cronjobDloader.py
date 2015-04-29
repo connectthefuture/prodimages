@@ -364,7 +364,7 @@ def mongo_update_url_dest_info(urldest_tuple):
         #import jbmodules
         #from jbmodules import mongo_tools
         import sys, os
-        jbmade = os.path.join('../..', os.path.dirname(__file__))
+        jbmade = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         print jbmade
         sys.path.append(jbmade)
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
