@@ -156,6 +156,8 @@ def update_filerecord_pymongo(hostname=None, db_name=None, collection_name=None,
     except pymongo.errors.DuplicateKeyError:
         print ' DuplicateKey Error', key_str
         pass
+    except pymongo.errors.OperationFailure:
+        pass
     mongo_collection.create_index([("colorstyle", pymongo.DECENDING),("alt", pymongo.ASCENDING)], background=True)
 
     upsertobjid = mongo_collection.findAndModify(key, data, multi=True, safe=True, new=True)
