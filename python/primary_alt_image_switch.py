@@ -172,6 +172,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
 
     ## reload ALL styles's images
     elif currentalt_newalt_pairs is None or str(currentalt_newalt_pairs[0]).upper() == str('ALL'):
+        print root_img_dir, root_img_dir, root_img_dir
         os.chdir(root_img_dir)
         root_img_dir = root_img_dir
         getpngall_ftp_netsrv101(colorstyle, root_img_dir=root_img_dir)
