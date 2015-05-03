@@ -143,6 +143,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
             try:
                 os.remove(os.path.abspath(image))
             except:
+                print image, ' IMAGE'
                 pass
 
     if len(currentalt_newalt_pairs) == 2:
