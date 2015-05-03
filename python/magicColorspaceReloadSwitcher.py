@@ -587,7 +587,7 @@ def main(root_img_dir=None, destdir=None):
             destdir = os.path.join(root_img_dir, 'output')
             try:
                 os.makedirs(destdir, 16877)
-            except OSError:
+            except IOError:
                 print 'Sneaky OSError 1 '
                 pass
 
