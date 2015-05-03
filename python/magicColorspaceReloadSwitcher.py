@@ -577,7 +577,7 @@ def main(root_img_dir=None, destdir=None):
             pass
     else:
         pass
-
+    print destdir, '  dest dir'
     if not destdir:
         try:
             destdir = os.path.abspath(sys.argv[2])
