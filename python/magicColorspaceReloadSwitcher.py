@@ -593,7 +593,7 @@ def subproc_magick_png(img, destdir=None):
         "sRGB",
         #"-strip",
         '-unsharp',
-        '2x2.7+0.5+0',
+        '2x1.5+0.5+0',
         '-quality',
         '95',
         outfile
