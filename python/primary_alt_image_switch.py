@@ -189,7 +189,7 @@ if __name__ == '__main__':
             a1 = sys.argv[2]
         except IndexError:
             # if only colorstylee provide assume to just reload the primary
-            a1 = 1
+            a1 = 'ALL'
     except:
         print 'You need at least 2 args, first is colorstyle then img # to Download. primary img is 1, etc. A 3rd arg can be the img# to swap with arg 2 or empty reloads the image only'
         pass
