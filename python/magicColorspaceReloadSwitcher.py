@@ -640,10 +640,10 @@ def main(root_img_dir=None, destdir=None):
         os.makedirs(destdir, 16877)
 
     if os.path.isdir(root_img_dir):
-        imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
+        images_downloaded = [f for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
-        for img in imgs_renamed:
-            print type(imgs_renamed), ' <-- Img in img renamd', imgs_renamed
+        for img in images_downloaded:
+            #print type(images_downloaded), ' <-- Img in img renamd', images_downloaded
             if img is not None:
                 try:
                     ## Generate png from source then jpgs from png
