@@ -568,7 +568,7 @@ def main(root_img_dir=None, destdir=None):
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
-    print destdir, '  dest dir', root_img_dir
+
     if not root_img_dir:
         try:
             root_img_dir = sys.argv[1]
@@ -577,7 +577,7 @@ def main(root_img_dir=None, destdir=None):
             pass
     else:
         pass
-    print destdir, '  dest dir', root_img_dir
+
     if not destdir:
         try:
             destdir = os.path.abspath(sys.argv[2])
@@ -589,7 +589,7 @@ def main(root_img_dir=None, destdir=None):
                 os.makedirs(destdir, 16877)
             except OSError:
                 print 'Sneaky OSError 1 '
-                #pass
+                pass
 
     if not os.path.isdir(destdir):
         os.makedirs(destdir, 16877)

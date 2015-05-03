@@ -111,7 +111,6 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
     if not os.path.isdir(uploaddir):
         uploaddir = uploaddir.replace('/mnt/','/Volumes/')
     print uploaddir, root_img_dir
-    print root_img_dir, root_img_dir, root_img_dir, 'RRROOOO'
     if not root_img_dir:
         try:
             root_img_dir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
@@ -214,7 +213,7 @@ if __name__ == '__main__':
     # Run it
     if colorstyle:
         print colorstyle, pairs
-        results = main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, root_img_dir=None)
+        results = main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs)
         print 'Success ', colorstyle, results,'results'
     else:
         try:
