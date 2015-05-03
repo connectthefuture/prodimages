@@ -577,7 +577,7 @@ def main(root_img_dir=None, destdir=None):
             pass
     else:
         pass
-    print destdir, '  dest dir'
+    print destdir, '  dest dir', root_img_dir
     if not destdir:
         try:
             destdir = os.path.abspath(sys.argv[2])
@@ -587,7 +587,7 @@ def main(root_img_dir=None, destdir=None):
             destdir = os.path.join(root_img_dir, 'output')
             try:
                 os.makedirs(destdir, 16877)
-            except IOError:
+            except OSError:
                 print 'Sneaky OSError 1 '
                 pass
 
