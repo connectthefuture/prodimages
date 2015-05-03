@@ -644,7 +644,7 @@ def main(root_img_dir=None, destdir=None):
 
         for img in images_downloaded:
             print img, type(img)' <-- Img in img renamd', images_downloaded
-            if img is not None:
+            if img:
                 try:
                     ## Generate png from source then jpgs from png
                     print img, ' prepng'
