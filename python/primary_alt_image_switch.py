@@ -89,18 +89,9 @@ def getpngall_ftp_netsrv101(colorstyle, root_img_dir=None):
                 alt = x
                 ext_ALT = '_alt0{0}{1}'.format(str(alt),ext)
                 colorstylealt = colorstyle + ext_ALT
-                colorstyle_filealt = os.path.join(root_img_dir, 'ALT', colorstylealt)
+                colorstyle_filealt = os.path.join(root_img_dir, colorstylealt)
 
                 netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
-
-                #error_check = urllib.urlopen(netsrv101_url_filealt)
-                #urlcode_value = error_check.getcode()
-                #if urlcode_value == 200:
-                colorstyle_filealt_root = os.path.join(root_img_dir, 'ALT')
-                if os.path.isdir(colorstyle_filealt_root):
-                    pass
-                else:
-                    os.makedirs(colorstyle_filealt_root)
 
                 if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
                     url_download_file(netsrv101_url_filealt, colorstyle_filealt)
