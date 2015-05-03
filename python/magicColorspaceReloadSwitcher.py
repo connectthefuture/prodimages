@@ -644,17 +644,17 @@ def main(root_img_dir=None, destdir=None):
 
         for img in images_downloaded:
             print img, type(img), ' <-- Img in img renamd', images_downloaded
-            if img:
-                try:
-                    ## Generate png from source then jpgs from png
-                    print img, ' prepng'
-                    pngout = subproc_magick_png(img, destdir=destdir)
-                    subproc_magick_large_jpg(pngout, destdir=destdir)
-                    subproc_magick_medium_jpg(pngout, destdir=destdir)
-                    return True
-                except AttributeError:
-                    print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
-                    return False
+            #if img:
+            try:
+                ## Generate png from source then jpgs from png
+                print img, ' prepng'
+                pngout = subproc_magick_png(img, destdir=destdir)
+                subproc_magick_large_jpg(pngout, destdir=destdir)
+                subproc_magick_medium_jpg(pngout, destdir=destdir)
+                return True
+            except AttributeError:
+                print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
+                return False
 
     else:
         img = root_img_dir
