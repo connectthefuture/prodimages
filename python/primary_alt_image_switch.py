@@ -110,7 +110,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
     uploaddir = '/mnt/Post_Complete/ImageDrop'
     if not os.path.isdir(uploaddir):
         uploaddir = uploaddir.replace('/mnt/','/Volumes/')
-    
+
     if not root_img_dir:
         try:
             root_img_dir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
@@ -175,6 +175,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
         os.chdir(root_img_dir)
         root_img_dir = root_img_dir
         getpngall_ftp_netsrv101(colorstyle, root_img_dir=root_img_dir)
+        print uploaddir, ' uploaddir'
         magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
         print os.listdir(root_img_dir), ' <-- root_img_dir'
         import shutil
