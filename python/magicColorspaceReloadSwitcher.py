@@ -642,15 +642,16 @@ def main(root_img_dir=None, destdir=None):
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
         for img in imgs_renamed:
-            try:
-                ## Generate png from source then jpgs from png
-                pngout = subproc_magick_png(img, destdir=destdir)
-                subproc_magick_large_jpg(pngout, destdir=destdir)
-                subproc_magick_medium_jpg(pngout, destdir=destdir)
-                return True
-            except AttributeError:
-                print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
-                return False
+            if img is not None:
+                try:
+                    ## Generate png from source then jpgs from png
+                    pngout = subproc_magick_png(img, destdir=destdir)
+                    subproc_magick_large_jpg(pngout, destdir=destdir)
+                    subproc_magick_medium_jpg(pngout, destdir=destdir)
+                    return True
+                except AttributeError:
+                    print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
+                    return False
 
     else:
         img = root_img_dir
