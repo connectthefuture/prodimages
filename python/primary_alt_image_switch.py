@@ -104,8 +104,8 @@ def getpngall_ftp_netsrv101(colorstyle, root_img_dir=None):
 
 #ex currentalt_newalt_pairs=tuple((1,4,))
 def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
-    import os, sys, glob
-    os.chdir(os.path.dirname(__file__))
+    import os, sys, glob, sys
+    sys.path.append(os.path.dirname(__file__))
     import magicColorspaceReloadSwitcher as magickProcLoad
     uploaddir = '/mnt/Post_Complete/ImageDrop'
     if not os.path.isdir(uploaddir):
