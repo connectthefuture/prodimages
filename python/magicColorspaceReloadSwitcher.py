@@ -637,17 +637,11 @@ def main(root_img_dir=None, destdir=None):
 
     if os.path.isdir(root_img_dir):
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
-        img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
 
-        for k,v in img_dict.items():
+        for img in imgs_renamed:
             try:
-                img = k
-                ## Convert profile of source img if CMYK ignores if RGB
-                convert_img_srgb.main(image_file=img)
-                ## Get color pixel values from source img
-                rgbmean     = v.items()
                 ## Generate png from source then jpgs from png
-                pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
+                pngout = subproc_magick_png(img, destdir=destdir)
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
                 return True
