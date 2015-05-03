@@ -68,8 +68,11 @@ def rename_retouched_file(img):
                     os.rename(img, renamed)
                     if os.path.isfile(renamed):
                         return renamed
-        else:
+        elif img is not None:
             return img
+        else:
+            print 'Img is none End'
+            pass
 
 
 def get_aspect_ratio(img):
@@ -645,7 +648,7 @@ def main(root_img_dir=None, destdir=None):
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
                 return True
-            except OSError:
+            except AttributeError:
                 print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
                 return False
 
