@@ -155,6 +155,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
             # Process newely named files and upload
             root_img_dir = root_img_dir
             magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
+            print root_img_dir, ' ROOOOOTOOTOTO ', destdir
             import shutil
             shutil.rmtree(root_img_dir)
             print 'Done Switching Style {2} Image #{0} With Image #{1}'.format(old_alt, new_alt, colorstyle)
