@@ -606,11 +606,11 @@ def main(root_img_dir=None, destdir=None):
                 pngout = subproc_magick_png(img, destdir=destdir)
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
-                return True
+                
             except AttributeError:
                 print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
                 return False
-
+        return True
     else:
         img = root_img_dir
         if regex_coded.findall(img):
