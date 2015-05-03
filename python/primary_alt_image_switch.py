@@ -7,10 +7,10 @@ def url_download_file(url,filepath):
     import urllib, subprocess
     try:
         urllib.urlretrieve(url, os.path.join(filepath))
-        print "Retrieved: " + url + " ---> " + filepath
+        #print "Retrieved: " + url + " ---> " + filepath
         return filepath
     except:
-        print  'FAILED ', url, filepath
+        #print  'FAILED ', url, filepath
         pass
 
 ## Download via FTP
