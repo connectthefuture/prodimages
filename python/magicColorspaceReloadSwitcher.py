@@ -599,7 +599,7 @@ def subproc_magick_png(img, destdir=None):
 
     #tmpfileobj.close()
     #shutil.copy2(tmpfile_path,outfile)
-    #print 'Done {}'.format(img)
+    print 'Done {} {}'.format(img,outfile)
     return outfile #open(outfile).read() # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 
