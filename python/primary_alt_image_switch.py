@@ -176,27 +176,6 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
          pass
 
-    ## Clear downloaded pngs from root_img_dir, leaving uploaded files in 1/uploaded dir 
-    # todelete1 = glob.glob(os.path.join(root_img_dir, '*.*g'))
-    # todelete2 = glob.glob(os.path.join(root_img_dir, '*/*.??g'))
-    # todelete = todelete1 + todelete2
-    # #filter(os.path.isfile, os.listdir(root_img_dir))
-    # for image in todelete:
-    #     import shutil,os
-    #     try:
-    #         os.remove(os.path.abspath(image))
-    #     except:
-    #         pass
-        #shutil.rmtree()
-        #shutil.rmtree()
-
-    # if todelete:
-    #     for f in todelete:
-    #         os.remove(os.path.abspath(f))
-    #         print 'Deleted {}'.format(os.path.abspath(f))
-    # else:
-    #     pass
-
 
 ##########################
 ##########################

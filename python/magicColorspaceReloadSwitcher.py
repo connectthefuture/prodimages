@@ -369,7 +369,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.1+0.5+0',
+            '2x1.4+0.5+0',
             '-strip',
             '-quality',
             '95',
@@ -391,51 +391,6 @@ def subproc_magick_png(img, destdir=None):
         destdir = '.'
     #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
     os.chdir(os.path.dirname(img))
-    # if not rgbmean:
-    #     ratio_range = 'OutOfRange'
-    # else:
-    #     try:
-    #         ratio_range = rgbmean['ratio_range']
-    #     except:
-    #         ratio_range = 'OutOfRange'
-    #         pass
-
-    # if ratio_range != 'OutOfRange':
-    #     high        = rgbmean['high']
-    #     low         = rgbmean['low']
-    #     ratio       = rgbmean['ratio']
-    # #rgbmean = float(128)
-    # #rgbmean = get_image_color_minmax(img)
-    # if ratio_range == 'LOW':
-    #     if float(round(high,2)) > float(240):
-    #         modulator = '-modulate'
-    #         modulate = '104,100'
-    #     elif float(round(high,2)) > float(200):
-    #         modulator = '-modulate'
-    #         modulate = '107,110'
-    #     elif float(round(high,2)) > float(150):
-    #         modulator = '-modulate'
-    #         modulate =  '110,110'
-    #     else:
-    #         modulator = '-modulate'
-    #         modulate =  '112,110'
-
-    # elif ratio_range == 'HIGH':
-    #     if float(round(high,2)) > float(230):
-    #         modulator = '-modulate'
-    #         modulate = '100,100'
-    #     elif float(round(high,2)) > float(200):
-    #         modulator = '-modulate'
-    #         modulate = '103,100'
-    #     elif float(round(high,2)) > float(150):
-    #         modulator = '-modulate'
-    #         modulate = '105,105'
-    #     else:
-    #         modulator = '-modulate'
-    #         modulate =  '108,107'
-    # elif ratio_range == 'OutOfRange':
-    #     modulator = '-modulate'
-    #     modulate = '100,100'
 
     format = img.split('.')[-1]
 
@@ -591,9 +546,9 @@ def subproc_magick_png(img, destdir=None):
 
         "-colorspace",
         "sRGB",
-        #"-strip",
+        "-strip",
         '-unsharp',
-        '2x1.5+0.5+0',
+        '2x1.1+0.5+0',
         '-quality',
         '95',
         outfile
