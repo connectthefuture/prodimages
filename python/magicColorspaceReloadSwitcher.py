@@ -369,7 +369,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
             "-format",
             "jpeg",
             '-unsharp',
-            '2x1.3+0.5+0',
+            '2x1.1+0.5+0',
             '-strip',
             '-quality',
             '95',
