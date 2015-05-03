@@ -589,7 +589,7 @@ def main(root_img_dir=None, destdir=None):
     #         except IOError:
     #             print 'Sneaky OSError 1 ', os.path.abspath(destdir)
     #             pass
-
+    print ' Macigk Colordplar '
     if not os.path.isdir(destdir):
         os.makedirs(destdir, 16877)
 
