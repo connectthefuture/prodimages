@@ -3,7 +3,7 @@
 
 # Path to file below is from the mountpoint on FTP, ie /mnt/images..
 ## Download via FTP
-def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=None, ext='.png', destdir=None):
+def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=None, ext='.png', root_img_dir=None):
     # fetch a binary file from primary bfly site repo
     import ftplib,sys, os
     ftp_host        = "netsrv101.l3.bluefly.com" 
@@ -21,7 +21,7 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
     # Reprocess and upload old_alt img# for style in case jpgs failed to generate and load
     if not new_alt:
         remote_pathtofile = os.path.join(ftp_host, remote_img_dir, fname_parent, fname1)
-        outfile = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(old_alt) + ext)
+        outfile = os.path.join(os.path.abspath(root_img_dir), colorstyle + '_' + str(old_alt) + ext)
         destfile = open(outfile, "wb")
         session = ftplib.FTP(ftp_host, ftp_user, ftp_pass)    
         session.retrbinary("RETR " + remote_pathtofile, destfile.write, 8*1024)
@@ -39,8 +39,8 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
         remote_pathtofile1 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname1)
         remote_pathtofile2 = os.path.join(ftp_host, remote_img_dir, fname_parent, fname2)
 
-        outfile1 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(new_alt) + ext)
-        outfile2 = os.path.join(os.path.abspath(destdir), colorstyle + '_' + str(old_alt) + ext)
+        outfile1 = os.path.join(os.path.abspath(root_img_dir), colorstyle + '_' + str(new_alt) + ext)
+        outfile2 = os.path.join(os.path.abspath(root_img_dir), colorstyle + '_' + str(old_alt) + ext)
 
         destfile1 = open(outfile1, "wb")
         destfile2 = open(outfile2, "wb")
@@ -54,7 +54,7 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
 
         return [os.path.abspath(outfile1), os.path.abspath(outfile2)]
 
-def getpngall_ftp_netsrv101(colorstyle, destdir=None):
+def getpngall_ftp_netsrv101(colorstyle, root_img_dir=None):
     import os
     countOne = 0
     countAlt = 0
@@ -64,9 +64,9 @@ def getpngall_ftp_netsrv101(colorstyle, destdir=None):
 
     netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext)
 
-    if not destdir:
-        destdir = os.path.abspath('.')    
-    colorstyle_file = os.path.join(destdir, colorstyle + ext)
+    if not root_img_dir:
+        root_img_dir = os.path.abspath('.')    
+    colorstyle_file = os.path.join(root_img_dir, colorstyle + ext)
     
     print netsrv101_url_file, colorstyle_file
     try:
@@ -78,14 +78,14 @@ def getpngall_ftp_netsrv101(colorstyle, destdir=None):
                 alt = x
                 ext_ALT = '_alt0{0}{1}'.format(str(alt),ext)
                 colorstylealt = colorstyle + ext_ALT
-                colorstyle_filealt = os.path.join(destdir, 'ALT', colorstylealt)
+                colorstyle_filealt = os.path.join(root_img_dir, 'ALT', colorstylealt)
 
                 netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
 
                 #error_check = urllib.urlopen(netsrv101_url_filealt)
                 #urlcode_value = error_check.getcode()
                 #if urlcode_value == 200:
-                colorstyle_filealt_root = os.path.join(destdir, 'ALT')
+                colorstyle_filealt_root = os.path.join(root_img_dir, 'ALT')
                 if os.path.isdir(colorstyle_filealt_root):
                     pass
                 else:
@@ -100,28 +100,29 @@ def getpngall_ftp_netsrv101(colorstyle, destdir=None):
         pass
 
 #ex currentalt_newalt_pairs=tuple((1,4,))
-def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
+def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
     import os, sys, glob
     os.chdir(os.path.dirname(__file__))
     import magicColorspaceReloadSwitcher as magickProcLoad
     uploaddir = '/mnt/Post_Complete/ImageDrop'
-    if not destdir:
+    if not root_img_dir:
         try:
-            destdir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
-            if os.path.isdir(destdir):
-                destdir_reproc = destdir
-                destdir = os.path.join(destdir_reproc, str(colorstyle))
-                pass            
+            root_img_dir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
+            if os.path.isdir(root_img_dir):
+                root_img_dir_reproc = root_img_dir
+                root_img_dir = os.path.join(root_img_dir_reproc, str(colorstyle))
+                if not os.path.isdir(root_img_dir):
+                    os.makedirs(root_img_dir)
             else:
-                destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', 'reprocess')
-                if not os.path.isdir(destdir):
-                    os.makedirs(destdir)
+                root_img_dir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', 'reprocess')
+                if not os.path.isdir(root_img_dir):
+                    os.makedirs(root_img_dir)
         except:
-            destdir = os.path.abspath('.')
+            root_img_dir = os.path.abspath('.')
 
     # # Clean out desination dir prior to running new files
-    cleardest = glob.glob(os.path.join(destdir, '*.??g'))
-    # filter(os.path.isfile, os.listdir(destdir))
+    cleardest = glob.glob(os.path.join(root_img_dir, '*.??g'))
+    # filter(os.path.isfile, os.listdir(root_img_dir))
     if cleardest:
         for image in cleardest:
             import shutil, os
@@ -136,10 +137,10 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         new_alt = currentalt_newalt_pairs[1]
         if old_alt != new_alt:
             # Download Zoom of both files renaming on dest dir save
-            res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
-            os.chdir(destdir)
+            res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, root_img_dir=root_img_dir)
+            os.chdir(root_img_dir)
             # Process newely named files and upload
-            root_img_dir = destdir
+            root_img_dir = root_img_dir
             magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
             import shutil
             shutil.rmtree(root_img_dir)
@@ -147,10 +148,10 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
     
     elif len(currentalt_newalt_pairs) == 1 and str(currentalt_newalt_pairs[0]).isdigit():
         old_alt = currentalt_newalt_pairs[0]
-        res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
+        res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, root_img_dir=root_img_dir)
         # Reprocess Downloaded Style's Image and re-upload
-        os.chdir(destdir)
-        root_img_dir = destdir
+        os.chdir(root_img_dir)
+        root_img_dir = root_img_dir
         magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
         import shutil
         shutil.rmtree(root_img_dir)
@@ -159,9 +160,9 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
 
     ## reload ALL styles's images
     elif str(currentalt_newalt_pairs[0]).upper() == str('ALL'):
-        os.chdir(destdir)
-        root_img_dir = destdir
-        getpngall_ftp_netsrv101(colorstyle, destdir=root_img_dir)
+        os.chdir(root_img_dir)
+        root_img_dir = root_img_dir
+        getpngall_ftp_netsrv101(colorstyle, root_img_dir=root_img_dir)
         magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
         import shutil
         shutil.rmtree(root_img_dir)
@@ -171,11 +172,11 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
          pass
 
-    ## Clear downloaded pngs from destdir, leaving uploaded files in 1/uploaded dir 
-    # todelete1 = glob.glob(os.path.join(destdir, '*.*g'))
-    # todelete2 = glob.glob(os.path.join(destdir, '*/*.??g'))
+    ## Clear downloaded pngs from root_img_dir, leaving uploaded files in 1/uploaded dir 
+    # todelete1 = glob.glob(os.path.join(root_img_dir, '*.*g'))
+    # todelete2 = glob.glob(os.path.join(root_img_dir, '*/*.??g'))
     # todelete = todelete1 + todelete2
-    # #filter(os.path.isfile, os.listdir(destdir))
+    # #filter(os.path.isfile, os.listdir(root_img_dir))
     # for image in todelete:
     #     import shutil,os
     #     try:
@@ -219,7 +220,7 @@ if __name__ == '__main__':
     # Run it
     if colorstyle:
         print colorstyle, pairs
-        results = main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, destdir=None)
+        results = main(colorstyle=colorstyle, currentalt_newalt_pairs=pairs, root_img_dir=None)
         print 'Success ', colorstyle, results,'results'
     else:
         try:
