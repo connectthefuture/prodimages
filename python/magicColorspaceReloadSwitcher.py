@@ -593,7 +593,7 @@ def subproc_magick_png(img, destdir=None):
         "sRGB",
         #"-strip",
         '-unsharp',
-        '2x2.7+0.5+0',
+        '2x1.5+0.5+0',
         '-quality',
         '95',
         outfile
@@ -643,7 +643,7 @@ def main(root_img_dir=None, destdir=None):
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
         for img in imgs_renamed:
-            print img, ' <-- Img in img renamd'
+            print img, ' <-- Img in img renamd', imgs_renamed
             if img is not None:
                 try:
                     ## Generate png from source then jpgs from png

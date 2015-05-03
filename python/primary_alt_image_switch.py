@@ -167,6 +167,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
         root_img_dir = root_img_dir
         getpngall_ftp_netsrv101(colorstyle, root_img_dir=root_img_dir)
         magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
+        
         import shutil
         shutil.rmtree(root_img_dir)
         print 'Done Reloading ALL Images for Style {0} to {1}'.format(colorstyle,uploaddir)
