@@ -110,7 +110,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
     uploaddir = '/mnt/Post_Complete/ImageDrop'
     if not os.path.isdir(uploaddir):
         uploaddir = uploaddir.replace('/mnt/','/Volumes/')
-    print uploaddir, root_img_dir
+    print uploaddir, root_img_dir, 'UPLOAD DIR THE' 
     if not root_img_dir:
         try:
             root_img_dir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
