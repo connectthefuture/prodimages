@@ -645,7 +645,7 @@ def main(root_img_dir=None, destdir=None):
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
                 return True
-            except AttributeError:
+            except OSError:
                 print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
                 return False
 
