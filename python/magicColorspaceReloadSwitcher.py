@@ -589,7 +589,7 @@ def main(root_img_dir=None, destdir=None):
                 os.makedirs(destdir, 16877)
             except OSError:
                 print 'Sneaky OSError 1 '
-                pass
+                #pass
 
     if not os.path.isdir(destdir):
         os.makedirs(destdir, 16877)
