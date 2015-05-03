@@ -2,6 +2,17 @@
 # -*- coding: utf-8 -*-
 
 # Path to file below is from the mountpoint on FTP, ie /mnt/images..
+
+def url_download_file(url,filepath):
+    import urllib, subprocess
+    try:
+        urllib.urlretrieve(url, os.path.join(filepath))
+        print "Retrieved: " + url + " ---> " + filepath
+        return filepath
+    except:
+        print  'FAILED ', url, filepath
+        pass
+
 ## Download via FTP
 def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=None, ext='.png', root_img_dir=None):
     # fetch a binary file from primary bfly site repo
