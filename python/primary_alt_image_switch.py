@@ -108,6 +108,9 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
     os.chdir(os.path.dirname(__file__))
     import magicColorspaceReloadSwitcher as magickProcLoad
     uploaddir = '/mnt/Post_Complete/ImageDrop'
+    if not os.path.isdir(uploaddir):
+        uploaddir = uploaddir.replace('/mnt/','/Volumes/')
+    
     if not root_img_dir:
         try:
             root_img_dir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
