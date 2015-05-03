@@ -630,5 +630,5 @@ def main(root_img_dir=None, destdir=None):
     #print 'NOT UPLOADING YET'
 
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+#    main()
