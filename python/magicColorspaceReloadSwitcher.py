@@ -561,7 +561,6 @@ def subproc_magick_png(img, destdir=None):
     return outfile #open(outfile).read() # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 
-
 def main(root_img_dir=None, destdir=None):
     import sys,glob,shutil,os,re
     import convert_img_srgb
@@ -569,27 +568,27 @@ def main(root_img_dir=None, destdir=None):
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-    if not root_img_dir:
-        try:
-            root_img_dir = sys.argv[1]
-        except IndexError:
-            root_img_dir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
-            pass
-    else:
-        pass
+    # if not root_img_dir:
+    #     try:
+    #         root_img_dir = sys.argv[1]
+    #     except IndexError:
+    #         root_img_dir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
+    #         pass
+    # else:
+    #     pass
 
-    if not destdir:
-        try:
-            destdir = os.path.abspath(sys.argv[2])
-            if destdir.isdigit():
-                destdir = os.path.join(root_img_dir, 'output')
-        except IndexError:
-            destdir = os.path.join(root_img_dir, 'output')
-            try:
-                os.makedirs(destdir, 16877)
-            except IOError:
-                print 'Sneaky OSError 1 ', os.path.abspath(destdir)
-                pass
+    # if not destdir:
+    #     try:
+    #         destdir = os.path.abspath(sys.argv[2])
+    #         if destdir.isdigit():
+    #             destdir = os.path.join(root_img_dir, 'output')
+    #     except IndexError:
+    #         destdir = os.path.join(root_img_dir, 'output')
+    #         try:
+    #             os.makedirs(destdir, 16877)
+    #         except IOError:
+    #             print 'Sneaky OSError 1 ', os.path.abspath(destdir)
+    #             pass
 
     if not os.path.isdir(destdir):
         os.makedirs(destdir, 16877)
