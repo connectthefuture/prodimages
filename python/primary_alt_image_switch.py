@@ -132,7 +132,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
                     os.makedirs(root_img_dir)
         except:
             root_img_dir = os.path.abspath('.')
-
+            'ROOT IS CURR ', root_img_dir
     # # Clean out desination dir prior to running new files
     cleardest = glob.glob(os.path.join(root_img_dir, '*.??g'))
     # filter(os.path.isfile, os.listdir(root_img_dir))
