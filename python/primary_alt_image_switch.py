@@ -97,6 +97,7 @@ def getpngall_ftp_netsrv101(colorstyle, root_img_dir=None):
                     url_download_file(netsrv101_url_filealt, colorstyle_filealt)
                     countAlt += 1
             except IOError:
+                print 'IOERROR --> {} -- {}'.format(colorstyle, alt)
                 pass
     except IOError:
         pass
