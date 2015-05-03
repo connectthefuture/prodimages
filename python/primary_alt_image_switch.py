@@ -54,15 +54,63 @@ def getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=None, new_alt=No
 
         return [os.path.abspath(outfile1), os.path.abspath(outfile2)]
 
+def getpngall_ftp_netsrv101(colorstyle, destdir=None):
+    import os
+    countOne = 0
+    countAlt = 0
+    netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
+    colorstyle = str(colorstyle)
+    ext     = '.png'
+
+    netsrv101_url_file = os.path.join(netsrv101_url, colorstyle[:4], colorstyle + ext)
+
+    if not destdir:
+        destdir = os.path.abspath('.')    
+    colorstyle_file = os.path.join(destdir, colorstyle + ext)
+    
+    print netsrv101_url_file, colorstyle_file
+    try:
+        url_download_file(netsrv101_url_file, colorstyle_file)
+        countOne += 1
+        alt = 0
+        for x in xrange(1,6):
+            try:
+                alt = x
+                ext_ALT = '_alt0{0}{1}'.format(str(alt),ext)
+                colorstylealt = colorstyle + ext_ALT
+                colorstyle_filealt = os.path.join(destdir, 'ALT', colorstylealt)
+
+                netsrv101_url_filealt = os.path.join(netsrv101_url, colorstyle[:4], colorstylealt)
+
+                #error_check = urllib.urlopen(netsrv101_url_filealt)
+                #urlcode_value = error_check.getcode()
+                #if urlcode_value == 200:
+                colorstyle_filealt_root = os.path.join(destdir, 'ALT')
+                if os.path.isdir(colorstyle_filealt_root):
+                    pass
+                else:
+                    os.makedirs(colorstyle_filealt_root)
+
+                if url_download_file(netsrv101_url_filealt, colorstyle_filealt):
+                    url_download_file(netsrv101_url_filealt, colorstyle_filealt)
+                    countAlt += 1
+            except IOError:
+                pass
+    except IOError:
+        pass
 
 #ex currentalt_newalt_pairs=tuple((1,4,))
 def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
     import os, sys, glob
-    import magicColorspaceModAspctLoad_ArgSafe as magickProcLoad
+    os.chdir(os.path.dirname(__file__))
+    import magicColorspaceReloadSwitcher as magickProcLoad
+    uploaddir = '/mnt/Post_Complete/ImageDrop'
     if not destdir:
         try:
             destdir = '/mnt/Post_Complete/Complete_to_Load/reprocess'
             if os.path.isdir(destdir):
+                destdir_reproc = destdir
+                destdir = os.path.join(destdir_reproc, str(colorstyle))
                 pass            
             else:
                 destdir = os.path.join(os.path.abspath(os.path.expanduser('~')), 'Pictures', 'reprocess')
@@ -71,7 +119,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         except:
             destdir = os.path.abspath('.')
 
-            # # Clean out desination dir prior to running new files
+    # # Clean out desination dir prior to running new files
     cleardest = glob.glob(os.path.join(destdir, '*.??g'))
     # filter(os.path.isfile, os.listdir(destdir))
     if cleardest:
@@ -91,18 +139,34 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, new_alt=new_alt, destdir=destdir)
             os.chdir(destdir)
             # Process newely named files and upload
-            magickProcLoad.main(root_img_dir=destdir)
+            root_img_dir = destdir
+            magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
+            import shutil
+            shutil.rmtree(root_img_dir)
             print 'Done Switching Style {2} Image #{0} With Image #{1}'.format(old_alt, new_alt, colorstyle)
-            #return res
     
-    elif len(currentalt_newalt_pairs) == 1:
+    elif len(currentalt_newalt_pairs) == 1 and str(currentalt_newalt_pairs).isdigit():
         old_alt = currentalt_newalt_pairs[0]
         res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
         # Reprocess Downloaded Style's Image and re-upload
         os.chdir(destdir)
-        magickProcLoad.main(root_img_dir=destdir)
-        print 'Done Reloading Image {0} For Only the Main for Style {1}'.format(old_alt, colorstyle)
-        #return res
+        root_img_dir = destdir
+        magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
+        import shutil
+        shutil.rmtree(root_img_dir)
+        print 'Done Reloading Image {0} For Only the Main for Style {1} to {2}'.format(old_alt, colorstyle, uploaddir)
+        print 'Deleted dir --> {0}'.format(root_img_dir)
+
+    ## reload ALL styles's images
+    elif str(currentalt_newalt_pairs).upper() == str('ALL'):
+        os.chdir(destdir)
+        root_img_dir = destdir
+        getpngall_ftp_netsrv101(colorstyle, destdir=root_img_dir)
+        magickProcLoad.main(root_img_dir=root_img_dir, destdir=uploaddir)
+        import shutil
+        shutil.rmtree(root_img_dir)
+        print 'Done Reloading ALL Images for Style {0} to {1}'.format(colorstyle,uploaddir)
+        print 'Deleted dir --> {0}'.format(root_img_dir)
     else:
          print 'Pair Tuple aint len 1 or 2. Thats too bad. Why not try something else that works?'
          pass
