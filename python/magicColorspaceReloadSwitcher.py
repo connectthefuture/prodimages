@@ -642,7 +642,7 @@ def main(root_img_dir=None, destdir=None):
     if os.path.isdir(root_img_dir):
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
 
-        for img in imgs_renamed:
+        for img in imgs_renamed[0]:
             print img, ' <-- Img in img renamd', imgs_renamed
             if img is not None:
                 try:
