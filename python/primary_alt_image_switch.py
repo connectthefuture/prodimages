@@ -145,7 +145,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
             shutil.rmtree(root_img_dir)
             print 'Done Switching Style {2} Image #{0} With Image #{1}'.format(old_alt, new_alt, colorstyle)
     
-    elif len(currentalt_newalt_pairs) == 1 and str(currentalt_newalt_pairs).isdigit():
+    elif len(currentalt_newalt_pairs) == 1 and str(currentalt_newalt_pairs[0]).isdigit():
         old_alt = currentalt_newalt_pairs[0]
         res = getpngpair_ftp_netsrv101_renamed_output(colorstyle, old_alt=old_alt, destdir=destdir)
         # Reprocess Downloaded Style's Image and re-upload
@@ -158,7 +158,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, destdir=None):
         print 'Deleted dir --> {0}'.format(root_img_dir)
 
     ## reload ALL styles's images
-    elif str(currentalt_newalt_pairs).upper() == str('ALL'):
+    elif str(currentalt_newalt_pairs[0]).upper() == str('ALL'):
         os.chdir(destdir)
         root_img_dir = destdir
         getpngall_ftp_netsrv101(colorstyle, destdir=root_img_dir)
