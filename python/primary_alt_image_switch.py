@@ -117,6 +117,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
             if os.path.isdir(root_img_dir):
                 root_img_dir_reproc = root_img_dir
                 root_img_dir = os.path.join(root_img_dir_reproc, str(colorstyle))
+                print root_img_dir_reproc, ' root reproc and root --> ', root_img_dir
                 if not os.path.isdir(root_img_dir):
                     os.makedirs(root_img_dir)
             elif os.path.isdir(root_img_dir.replace('/mnt/','/Volumes/')):
