@@ -162,7 +162,7 @@ def main(colorstyle=None, currentalt_newalt_pairs=None, root_img_dir=None):
         print 'Deleted dir --> {0}'.format(root_img_dir)
 
     ## reload ALL styles's images
-    elif str(currentalt_newalt_pairs[0]).upper() == str('ALL'):
+    elif currentalt_newalt_pairs is None or str(currentalt_newalt_pairs[0]).upper() == str('ALL'):
         os.chdir(root_img_dir)
         root_img_dir = root_img_dir
         getpngall_ftp_netsrv101(colorstyle, root_img_dir=root_img_dir)
