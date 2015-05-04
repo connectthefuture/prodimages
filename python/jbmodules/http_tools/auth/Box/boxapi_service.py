@@ -20,14 +20,14 @@ def store_tokens(access_token, refresh_token):
     STORAGE = Storage(storage_file)
     credentials = STORAGE.get()
     if credentials is None or credentials.invalid == True:
-        tokens = access_token, refresh_token
-        credentials = json.dump(credentials)
-        STORAGE.put(credentials)
+        tokens = json.dumps({'access_token: ' + access_token + ', refresh_token: ' + refresh_token}, 
+                            sort_keys=True, 
+                            separators=(',', ': '))
+        STORAGE.put(tokens)
         credentials = STORAGE.get()   
         return credentials
     else:
-        access_token, refresh_token = credentials
-        return access_token, refresh_token
+        return credentials
 
 
 import bottle
@@ -35,15 +35,10 @@ import os
 from threading import Thread, Event
 import webbrowser
 from wsgiref.simple_server import WSGIServer, WSGIRequestHandler, make_server
-
 from boxsdk import OAuth2
 
 
-CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
-CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
-
-
-def authenticate():
+def authenticate(client_secret=None, client_id=None, redirect_uri=None):
     class StoppableWSGIServer(bottle.ServerAdapter):
         def __init__(self, *args, **kwargs):
             super(StoppableWSGIServer, self).__init__(*args, **kwargs)
@@ -58,11 +53,10 @@ def authenticate():
         def stop(self):
             self._server.shutdown()
 
+
     auth_code = {}
     auth_code_is_available = Event()
-
     local_oauth_redirect = bottle.Bottle()
-
     @local_oauth_redirect.get('/')
     def get_token():
         auth_code['auth_code'] = bottle.request.query.code
@@ -74,30 +68,28 @@ def authenticate():
     server_thread.start()
 
     oauth = OAuth2(
-        client_id=globals()['client_id'],
-        client_secret=globals()['client_secret'],
+        client_id=client_id,
+        client_secret=client_secret,
     )
-    auth_url, csrf_token = oauth.get_authorization_url(globals()['redirect_uri'])
+    auth_url, csrf_token = oauth.get_authorization_url(redirect_uri)
     webbrowser.open(auth_url)
-
     auth_code_is_available.wait()
     local_server.stop()
     assert auth_code['state'] == csrf_token
     access_token, refresh_token = oauth.authenticate(auth_code['auth_code'])
-
     print('access_token: ' + access_token)
     print('refresh_token: ' + refresh_token)
-
     return oauth
 
 
-def get_validated_oauth(client_secret=client_secret, client_id=client_id,redirect_uri=redirect_uri):
+def get_validated_oauth(client_secret=None, client_id=None, redirect_uri=None):
     from boxsdk import OAuth2
     from oauth2client.file import Storage
     import os
     oauth = authenticate(client_secret=client_secret, client_id=client_id)
     auth_url, csrf_token = oauth.get_authorization_url(redirect_uri)
     access_token, refresh_token = oauth.refresh(auth_url)
+    
     # ref_access_token, ref_refresh_token = store_tokens(access_token, refresh_token)
     return oauth #access_token, ref_refresh_token
 
@@ -123,9 +115,10 @@ def regex_boxapi_ret_fileid(url):
         protocol = matches.groups()[0]
         appname  = matches.groups()[1]
         fileId   = {'file_id': matches.groups()[2].split('/')[-1]}
-        return fileId
+        return fileId.values()[0]
     else:
         pass
+
 
 def qstring2kvpairs(url_with_qstring):
     from urlparse import urlparse, parse_qs
@@ -135,13 +128,13 @@ def qstring2kvpairs(url_with_qstring):
     return qkvpairs
 
 
-def download_boxapi_auth_file(client=None, image_url=None, destpath=None):
-    try:
-        file_id = qstring2kvpairs(image_url)['id'][0]
-    except IndexError:
-        file_id = regex_boxapi_ret_fileid(image_url)       
-        pass
-    
+def download_boxapi_auth_file(client=None, file_id=None, image_url=None, destpath=None):
+    if not file_id:
+        try:
+            file_id = qstring2kvpairs(image_url)['id'][0]
+        except KeyError:
+            file_id = regex_boxapi_ret_fileid(image_url)       
+            pass    
     content = client.file(file_id=file_id).content()
     if not destpath:
         return content
