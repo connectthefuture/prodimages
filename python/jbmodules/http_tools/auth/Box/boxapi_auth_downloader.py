@@ -36,7 +36,7 @@ def download_file_content(service=None, drive_file=None):
 
 
 def download_boxapi_drive_file(service=None, image_url=None, destpath=None):
-    """Download a Drive file's content to the local filesystem.
+    """Download a Box file's content to the local filesystem.
       Args:
 
     service: Drive API Service instance.
