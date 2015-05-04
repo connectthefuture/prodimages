@@ -32,7 +32,7 @@ def instantiate_boxapi_client():
     client_id = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'
     #scope = 'https://app.box.com/services/auth_download_client'
     access_token = 'DTPwrgGkhZkxKvTWVTT4KBwLwr6ELPvj' 
-    redirect_uri = 'http://localhost' #'urn:ietf:wg:oauth:2.0:oob'
+    redirect_uri = 'http://localhost:8080' #'urn:ietf:wg:oauth:2.0:oob'
     oauth  = authorize_client(client_secret=client_secret, client_id=client_id,access_token=access_token,redirect_uri=redirect_uri)
     client = Client(oauth)
     return client
@@ -83,10 +83,10 @@ print dir(res)
 print res
 
 print requests.head(url2).raw
-#file_id = regex_boxapi_ret_fileid(url)
-#
-#if file_id:
-#    print file_id
-#client = instantiate_boxapi_client()
-#
-#print client.file(file_id.values()[0]).content()
+file_id = regex_boxapi_ret_fileid(url)
+
+if file_id:
+    print file_id
+client = instantiate_boxapi_client()
+
+print client.file(file_id.values()[0]).content()
