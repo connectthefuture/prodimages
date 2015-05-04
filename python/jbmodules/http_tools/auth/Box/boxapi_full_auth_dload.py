@@ -65,21 +65,22 @@ def authenticate():
 
     return oauth
 
-    def store_tokens(access_token, refresh_token):
-        from oauth2client.file import Storage
-        import os    
-        py_dir = os.path.dirname(os.path.realpath(__file__))
-        os.chdir(py_dir)
-        # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
-        storage_file = os.path.join(py_dir, 'boxapi' + '.dat')
-        STORAGE = Storage(storage_file)
-        credentials = STORAGE.get()
-        if credentials is None or credentials.invalid == True:
-            STORAGE.put(access_token, refresh_token)
-            credentials = STORAGE.get()   
-        else:
-            access_token, refresh_token = credentials
-        return credentials
+
+def store_tokens(access_token, refresh_token):
+    from oauth2client.file import Storage
+    import os    
+    py_dir = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(py_dir)
+    # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
+    storage_file = os.path.join(py_dir, 'boxapi' + '.dat')
+    STORAGE = Storage(storage_file)
+    credentials = STORAGE.get()
+    if credentials is None or credentials.invalid == True:
+        STORAGE.put(access_token, refresh_token)
+        credentials = STORAGE.get()   
+    else:
+        access_token, refresh_token = credentials
+    return credentials
 
 
 def authorize_client(**kwargs):
