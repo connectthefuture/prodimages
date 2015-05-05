@@ -16,13 +16,35 @@ urls = ['https://capturemrg.box.com/s/4ocv51zmv5wsb181nvej01awio1wm2qk',
         'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu'
         ]
 
+
+def pickler(data):
+    import cPickle as pickle
+    filename = 'boxtokens.pkl'
+    output = open(filename, 'wb')
+    # Pickle dictionary using protocol 0.
+    pickle.dump(data, output)
+    output.close()
+    import os.path
+    return os.path.join(os.path.abspath('.'), filename)
+
+def depickler(filename)
+    import pprint, pickle
+    pkl_file = open(filename, 'rb')
+    data = pickle.load(pkl_file)
+    pkl_file.close()
+    return data
+
+
 def jdefault(obj):
     if isinstance(o, set):
         return list(obj)
     return obj.__dict__
 
+
+
 def store_tokens(access_token=None, refresh_token=None):
     from oauth2client.file import Storage
+    StringIO()
     import os  
     import json 
     py_dir = os.path.dirname(os.path.realpath('/Users/johnb/virtualenvs/GitHub-prodimages/python'))
@@ -32,6 +54,8 @@ def store_tokens(access_token=None, refresh_token=None):
     credentials = STORAGE.get()
     if credentials is None or credentials.invalid == True:
         data = dict({"access_token": access_token, "refresh_token": refresh_token})
+        with open(storage_file, 'w') as f:
+            
         #tokens = json.dumps({'"access_token": "' + access_token + '", "refresh_token": "' + refresh_token + '"'})
         #tokens = json.dumps(data, default=jdefault)
         #tokens = json.JSONEncoder().encode(data)
