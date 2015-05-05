@@ -1,6 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+urls = ['https://capturemrg.box.com/s/4ocv51zmv5wsb181nvej01awio1wm2qk',
+        'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu',
+        'https://capturemrg.box.com/s/z2894tj1fdtyw4aix36h3zfxdowf7g3k',
+        'https://capturemrg.box.com/s/b7jgrvdrhx6g2z810nzgi3dpveb71b0g',
+        'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu'
+        ]
+
+
+def pickler(data, filename=None):
+    import cPickle as pickle
+    import os.path
+    if not filename:
+        filename = os.path.join(py_dir, 'boxapi.pkl')
+    with open(filename, 'wb', 0) as f:
+        # Pickle dictionary using protocol 0.
+        pickle.dump(data, output)
+        output.close()
+    return os.path.join(os.path.abspath('.'), filename)
+
+
+def depickler(filename,data=None):
+    import cPickle as pickle
+    with open(filename, 'rb') as f:
+        data = pickle.load(f)
+        f.close()
+    return data
+
+
 import bottle
 import os
 from threading import Thread, Event
@@ -9,38 +37,32 @@ from wsgiref.simple_server import WSGIServer, WSGIRequestHandler, make_server
 from boxsdk import OAuth2
 
 
-urls = ['https://capturemrg.box.com/s/4ocv51zmv5wsb181nvej01awio1wm2qk',
-        'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu',
-        'https://capturemrg.box.com/s/z2894tj1fdtyw4aix36h3zfxdowf7g3k',
-        'https://capturemrg.box.com/s/b7jgrvdrhx6g2z810nzgi3dpveb71b0g',
-        'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu'
-        ]
-
 def jdefault(obj):
     if isinstance(o, set):
         return list(obj)
     return obj.__dict__
 
-def store_tokens(access_token=None, refresh_token=None):
-    from oauth2client.file import Storage
-    import os  
+
+def get_store_tokens(access_token=None, refresh_token=None):
+    import os.path
+    from os import chdir  
     import json 
     py_dir = os.path.dirname(os.path.realpath('/Users/johnb/virtualenvs/GitHub-prodimages/python'))
-    os.chdir(py_dir)
-    storage_file = os.path.join(py_dir, 'boxapi' + '.dat')
-    STORAGE = Storage(storage_file)
-    credentials = STORAGE.get()
-    if credentials is None or credentials.invalid == True:
-        data = dict({"access_token": access_token, "refresh_token": refresh_token})
-        #tokens = json.dumps({'"access_token": "' + access_token + '", "refresh_token": "' + refresh_token + '"'})
-        #tokens = json.dumps(data, default=jdefault)
-        #tokens = json.JSONEncoder().encode(data)
-        STORAGE.put(data)
-        credentials = STORAGE.get()   
+    chdir(py_dir)
+    storage_file = os.path.join(py_dir, 'boxapi' + '.pkl')
+    credentials = ''
+    try:
+        credentials = depickler(storage_file)
+    except:
+        pass 
+    if credentials is None or credentials == False:
+        data = { "access_token": access_token, 
+                 "refresh_token": refresh_token }
+        pickled = pickler(data, filename=storage_file)
+        credentials = depickler(storage_file)
         return credentials
     else:
-        return credentials['access_token']
-
+        return credentials
 
 
 def authenticate(client_secret=None, client_id=None, redirect_uri=None, access_token=None):
@@ -75,7 +97,7 @@ def authenticate(client_secret=None, client_id=None, redirect_uri=None, access_t
     oauth = OAuth2(
         client_id=client_id,
         client_secret=client_secret,
-        store_tokens=store_tokens
+        store_tokens=get_store_tokens
     )
     auth_url, csrf_token = oauth.get_authorization_url(redirect_uri)
     #try:
@@ -90,13 +112,11 @@ def authenticate(client_secret=None, client_id=None, redirect_uri=None, access_t
     access_token, refresh_token = oauth.authenticate(auth_code['auth_code'])
     print('access_token: ' + access_token)
     print('refresh_token: ' + refresh_token)
-    return oauth, ''
+    return oauth
 
 
-def get_validated_oauth(client_secret=None, client_id=None, redirect_uri=None):
+def get_validated_oauth_accesstoken(client_secret=None, client_id=None, redirect_uri=None):
     from boxsdk import OAuth2
-    from oauth2client.file import Storage
-    import os
     oauth = authenticate(client_secret=client_secret, client_id=client_id)
     auth_url, csrf_token = oauth.get_authorization_url(redirect_uri)
     access_token, refresh_token = oauth.refresh(auth_url)
@@ -105,20 +125,7 @@ def get_validated_oauth(client_secret=None, client_id=None, redirect_uri=None):
     return oauth, access_token #, ref_refresh_token
 
 
-def instantiate_boxapi_client():
-    from boxsdk import Client
-    client_secret = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'
-    client_id = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'
-    #scope = 'https://app.box.com/services/auth_download_client'
-    redirect_uri = 'http://localhost:51711' #'urn:ietf:wg:oauth:2.0:oob'
-    oauth, access_token = get_validated_oauth(client_secret=client_secret, client_id=client_id,redirect_uri=redirect_uri)
-    client = Client(oauth)
-    return client, access_token
-
-
 ## BoxAppGalleryUrl = 'https://app.box.com/services/auth_download_client'
-
-
 def download_boxapi_auth_file(client=None, file_id=None, destpath=None):    
     content = client.file(file_id=file_id).content()
     if not destpath:
@@ -130,11 +137,16 @@ def download_boxapi_auth_file(client=None, file_id=None, destpath=None):
         return destpath
 
 
-
 def main(image_url, destpath):
     import requests
+    from boxsdk import Client
     box_api_shared_root = "https://api.box.com/2.0/shared_items"
-    client, access_token = instantiate_boxapi_client()
+    client_secret = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'
+    client_id = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'
+    #scope = 'https://app.box.com/services/auth_download_client'
+    redirect_uri = 'http://localhost:51711' #'urn:ietf:wg:oauth:2.0:oob'
+    oauth, access_token  = get_validated_oauth_accesstoken(client_secret=None, client_id=None, redirect_uri=None)
+    client = Client(oauth)
     headers = {
                 'Authorization': "Bearer " + access_token,
                 'BoxApi': "shared_link=" + image_url
@@ -144,19 +156,14 @@ def main(image_url, destpath):
     download_boxapi_auth_file(client=client, file_id=file_id, destpath=destpath)
 
 
-
 if __name__ == '__main__':
     import sys
-    image_url = 'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu',
-    destpath = '/Users/johnb/Desktop/misc_tests2'
+    image_url = 'https://capturemrg.box.com/s/cyh1md18r4y6tv1j7isaqeu9quwe30qu'
+    destpath  = '/Users/johnb/Desktop/misc_tests2'
     #image_url = sys.argv[1]
     #destpath  = sys.argv[2]
     main(image_url, destpath)
         
-
-
-
-
 
 
 #    headers = {
