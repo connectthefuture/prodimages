@@ -45,7 +45,8 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     contents will be written to.
       """
     from os import chdir, path
-    from apiclient import http, errors
+    import apiclient
+    from apiclient import errors
     import StringIO
     pdir = path.dirname(path.realpath('__file__'))
     ## TODO: Fix this conditional workaround to python dir for import
@@ -63,7 +64,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     file_id = qstring2kvpairs(image_url)['id'][0]
     request = service.files().get_media(fileId=file_id)
     fdest = open(destpath, 'w')
-    media_request = http.MediaIoBaseDownload(fdest, request)
+    media_request = aptclient.http.MediaIoBaseDownload(fdest, request)
     while True:
         try:
             download_progress, done = media_request.next_chunk()
