@@ -68,7 +68,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     while True:
         try:
             download_progress, done = media_request.next_chunk()
-        except errors.HttpError, error:
+        except aptclient.errors.HttpError, error:
             print 'An error occurred: %s' % error
             return media_request
         if download_progress:
