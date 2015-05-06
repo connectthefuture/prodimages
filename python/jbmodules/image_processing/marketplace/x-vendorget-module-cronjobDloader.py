@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+## Bypass Certificate authentication
+import urllib3
+urllib3.disable_warnings()
 
 def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None, ALL=None, **kwargs):
     import sqlalchemy,sys
