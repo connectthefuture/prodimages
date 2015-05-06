@@ -118,7 +118,7 @@ def get_exif_all_data(image_filepath):
 def get_real_box_download_url(shared_link, access_token=None):
     import requests
     if not access_token:
-        access_token='79jatMLN3zGnqXlVJy4gyhEMgQIL2Cl2'
+        access_token='WgiqU6nLLm6pZLvDS2YzhSqBj7MMMhZB'
     box_api_shared_root = "https://api.box.com/2.0/shared_items"
     headers = {
          'Authorization': "Bearer " + access_token,
