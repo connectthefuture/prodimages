@@ -571,7 +571,7 @@ if __name__ == '__main__':
             vendor_brand = sys.argv[2]
             ALL = ''
             if sys.argv[2][-3:] == 'ALL':
-                ##ALL = 'ALL'
+                ALL = sys.argv[2]
                 vendor_brand = ''
             main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
         except IndexError:
