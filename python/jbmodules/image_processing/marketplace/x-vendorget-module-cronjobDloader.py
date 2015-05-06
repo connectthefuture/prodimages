@@ -147,8 +147,13 @@ def get_real_box_download_url(shared_link, access_token=None):
 
 
 def download_mplce_url(urldest_tuple):
-    import requests, re, urllib, urllib2, subprocess
+    import requests, re, urllib, urllib2, urllib3, PyOpenSSL, subprocess
     import os.path
+    
+    import urllib3.contrib.pyopenssl
+    urllib3.contrib.pyopenssl.inject_into_urllib3()
+    urllib3.disable_warnings()
+
     countimage = 0
     countstyle = 0
     image_url, destpath = urldest_tuple
