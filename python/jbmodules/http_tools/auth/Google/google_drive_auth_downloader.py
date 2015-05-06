@@ -46,7 +46,7 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
       """
     from os import chdir, path
     import apiclient
-    from apiclient import errors
+    # from apiclient import http, errors
     import StringIO
     pdir = path.dirname(path.realpath('__file__'))
     ## TODO: Fix this conditional workaround to python dir for import
