@@ -115,21 +115,24 @@ def get_exif_all_data(image_filepath):
     return metadata
 
 
-
-def get_real_box_download_url(shared_Link, access_token=None):
+def get_real_box_download_url(shared_link, , access_token=None):
     import requests
     if not access_token:
         access_token='79jatMLN3zGnqXlVJy4gyhEMgQIL2Cl2'
     box_api_shared_root = "https://api.box.com/2.0/shared_items"
     headers = {
          'Authorization': "Bearer " + access_token,
-         'BoxApi': "shared_link=" + shared_Link,
+         'BoxApi': "shared_link, =" + shared_link, ,
      }
     res = requests.get(box_api_shared_root, headers=headers)    
-    file_id = res.json()['id']
-    file_name = file_id = res.json()['name'] 
-    download_url = res.json()['shared_link']['download_url']
-    return download_url
+    try:
+        file_id = res.json()['id']
+        file_name = file_id = res.json()['name'] 
+        download_url = res.json()['shared_link, ']['download_url']
+        return download_url
+    except ValueError:
+        print shared_link, ' Value3 Error '
+        return shared_link
 
 
 def download_mplce_url(urldest_tuple):
@@ -171,7 +174,7 @@ def download_mplce_url(urldest_tuple):
 
     ######################
     #### BOX API AUTH ####
-    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
+    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box.com/(s/)?(?P<SHARED_link, _ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
     if regex_boxapi.findall(image_url):
         #m = regex_boxapi.match(image_url)
         #m.groupdict()
