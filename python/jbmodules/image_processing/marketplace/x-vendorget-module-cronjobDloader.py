@@ -174,7 +174,7 @@ def download_mplce_url(urldest_tuple):
 
     ######################
     #### BOX API AUTH ####
-    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box.com/(s/)?(?P<SHARED_LINK, _ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
+    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
     if regex_boxapi.findall(image_url):
         #m = regex_boxapi.match(image_url)
         #m.groupdict()
