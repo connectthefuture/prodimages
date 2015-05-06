@@ -85,7 +85,7 @@ if __name__ == '__main__':
         image_url = sys.argv[1]
         #destpath  = '/Users/johnb/Desktop/pix/testfile.jpg' 
         destpath = sys.argv[2]
-        #res = download_google_drive_file(image_url=image_url, destpath=destpath)
+        res = download_google_drive_file(image_url=image_url, destpath=destpath)
         #print res._total_size, res._uri, res._fd, res._request, res._rand
     except IndexError:
         print 'Failed, please supply both the image_url and destpath args as sys.argv[1] and [2], respectively'
