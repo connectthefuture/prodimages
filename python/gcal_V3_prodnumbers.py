@@ -5,8 +5,7 @@
 def getServiceEvents():
     # import gflags
     from os import chdir, path
-    chdir(path.dirname(__file__))
-    from jbmodules.http_tools.auth.Google.googleapi_service import instantiate_googleapi_service
+    from jbmodules.http_tools.auth.Google.googleapi_service import instantiate_google_calendar_service
 
     ##########################Vars
     
