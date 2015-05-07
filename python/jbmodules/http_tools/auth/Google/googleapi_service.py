@@ -79,7 +79,6 @@ def instantiate_google_calendar_service():
     version = 'v3'
     client_secret = 'idvHTmZ8pTc41-RsRBk2Ib_w'
     client_id = '787143200382-vl8v4q10n4ke3a6l0amirpp830a84upe.apps.googleusercontent.com'
-    
     # OlderNewsies client_id = '924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
     scope = 'https://www.googleapis.com/auth/calendar'
     # drive_file = drive_file_instance
