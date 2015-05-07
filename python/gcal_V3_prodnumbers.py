@@ -509,5 +509,4 @@ def main():
 
 
 if __name__ == '__main__':
-    s, e = getServiceEvents() #main()
-    print s, e
+    main()
