@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def getServiceEvents():
-    import gflags
+    #import gflags
     import httplib2
     from apiclient.discovery import build
     from oauth2client.file import Storage
@@ -26,7 +26,7 @@ def getServiceEvents():
     #py_dir = os.path.dirname(os.path.realpath(__file__))
     #storage_file = os.path.join(py_dir, serviceName + '.dat')
     ############################
-    FLAGS = gflags.FLAGS
+    #FLAGS = gflags.FLAGS
     # The client_id and client_secret are copied from the API Access tab on
     # the Google APIs Console
     FLOW = OAuth2WebServerFlow(
@@ -36,11 +36,15 @@ def getServiceEvents():
         user_agent=user_agent)
 
     # To disable the local server feature, uncomment the following line:
-    FLAGS.auth_local_webserver = False
-
+    #FLAGS.auth_local_webserver = False
+    import argparse
+    args = '--noauth_local_webserver'
+    parser = argparse.ArgumentParser(parents=[tools.argparser])
+    FLAGS = parser.parse_args()
     # If the Credentials don't exist or are invalid, run through the native client
     # flow. The Storage object will ensure that if successful the good
     # Credentials will get written back to a file.
+    
     storage = Storage(storage_file)
     credentials = storage.get()
     if credentials is None or credentials.invalid == True:
