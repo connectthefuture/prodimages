@@ -4,6 +4,7 @@
 def getServiceEvents():
     #import gflags
     import httplib2
+    from apiclient import *
     from apiclient.discovery import build
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
