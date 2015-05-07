@@ -14,7 +14,7 @@ def getServiceEvents():
     # prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
 
     # Build a service object for interacting with the API.
-    service = instantiate_googleapi_service
+    service = instantiate_google_calendar_service()
     #service = create_googleapi_service(scope='calendar', version='v3')
     #build(serviceName='calendar', version='v3', http=http)
 
