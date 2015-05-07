@@ -92,7 +92,7 @@ def getServiceEvents():
     py_dir = os.path.dirname(os.path.realpath(__file__))
     storage_file = os.path.join(py_dir, serviceName + '.dat')
     ############################
-    #FLAGS = gflags.FLAGS
+    # FLAGS = gflags.FLAGS
     # The client_id and client_secret are copied from the API Access tab on
     # the Google APIs Console
     FLOW = OAuth2WebServerFlow(
@@ -102,11 +102,11 @@ def getServiceEvents():
         user_agent=user_agent)
 
     # To disable the local server feature, uncomment the following line:
-    #FLAGS.auth_local_webserver = False
-    import argparse
-    #args = '--noauth_local_webserver'
-    #parser = argparse.ArgumentParser(parents=[tools.argparser])
-    #FLAGS = parser.parse_args()
+    # FLAGS.auth_local_webserver = False
+    # import argparse
+    # args = '--noauth_local_webserver'
+    # parser = argparse.ArgumentParser(parents=[tools.argparser])
+    # FLAGS = parser.parse_args()
     # If the Credentials don't exist or are invalid, run through the native client
     # flow. The Storage object will ensure that if successful the good
     # Credentials will get written back to a file.
@@ -126,7 +126,8 @@ def getServiceEvents():
     # prodnumberscal = 'https://www.google.com/calendar/feeds/k8oohvl27sq3u0odgafpbmdl6s@group.calendar.google.com/private-cfbcfde94d17e48fbf1f824a8536e0ba/basic'
 
     # Build a service object for interacting with the API.
-    service = create_googleapi_service(scope='calendar', version='v3')
+    service = instantiate_googleapi_service
+    #service = create_googleapi_service(scope='calendar', version='v3')
     #build(serviceName='calendar', version='v3', http=http)
 
     # Getting All Event Ids
