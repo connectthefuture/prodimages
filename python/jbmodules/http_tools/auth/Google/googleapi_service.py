@@ -90,14 +90,12 @@ def instantiate_google_calendar_service():
 
 if __name__ == '__main__':
     import sys
-    try:
-        serviceName = sys.argv[1]
-        create_googleapi_service(serviceName=serviceName, 
-                             version=version, 
-                             client_id=client_id, 
-                             client_secret=client_secret, 
-                             redirect_uri=redirect_uri, 
-                             scope=scope)
-    except:
-        pass
+    instantiate_google_calendar_service()
+    #serviceName = sys.argv[1]
+#    create_googleapi_service(serviceName=serviceName, 
+#                         version=version, 
+#                         client_id=client_id, 
+#                         client_secret=client_secret, 
+#                         redirect_uri=redirect_uri, 
+#                         scope=scope)
 
