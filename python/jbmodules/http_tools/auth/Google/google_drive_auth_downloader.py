@@ -64,11 +64,11 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
     file_id = qstring2kvpairs(image_url)['id'][0]
     request = service.files().get_media(fileId=file_id)
     fdest = open(destpath, 'w')
-    media_request = aptclient.http.MediaIoBaseDownload(fdest, request)
+    media_request = apiclient.http.MediaIoBaseDownload(fdest, request)
     while True:
         try:
             download_progress, done = media_request.next_chunk()
-        except aptclient.errors.HttpError, error:
+        except apiclient.errors.HttpError, error:
             print 'An error occurred: %s' % error
             return media_request
         if download_progress:
