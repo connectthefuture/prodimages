@@ -55,10 +55,10 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
     http = httplib2.Http()
     http = credentials.authorize(http)
 
-    from apiclient.discovery import build
+    from apiclient import discovery
     #client = apiclient.APIClient()
     # Build a service object for interacting with the API.
-    service = build(serviceName=serviceName, version=version, http=http)
+    service = discovery.build(serviceName=serviceName, version=version, http=http)
     return service
 
 
