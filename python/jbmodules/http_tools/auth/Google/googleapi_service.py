@@ -89,6 +89,7 @@ def instantiate_google_calendar_service():
 
 if __name__ == '__main__':
     print ' Not a command line tool. Import with python... '
+    instantiate_google_calendar_service()
 #    import sys
 #    instantiate_google_calendar_service()
 #    serviceName = sys.argv[1]
