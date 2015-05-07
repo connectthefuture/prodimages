@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 def create_googleapi_service(serviceName=None, version=None, client_id=None,client_secret=None,redirect_uri=None, scope=None):
     import httplib2
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
     from oauth2client import tools
     import os, datetime, argparse, apiclient
-    client_id = client_id
-    client_secret= client_secret  #'rqZxYuy0Cht37rJ0GSZ05YoY'
-    scope =  scope
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0' ##'Python2.7'
     BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
     SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
@@ -79,8 +77,10 @@ def instantiate_google_drive_service():
 def instantiate_google_calendar_service():
     serviceName = 'calendar'
     version = 'v3'
-    client_secret = 'rqZxYuy0Cht37rJ0GSZ05YoY'
-    client_id = '924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
+    client_secret = 'idvHTmZ8pTc41-RsRBk2Ib_w'
+    client_id = '787143200382-vl8v4q10n4ke3a6l0amirpp830a84upe.apps.googleusercontent.com'
+    
+    # OlderNewsies client_id = '924881045523-kc7leju7role0too3k4itlo864eprl1u.apps.googleusercontent.com'
     scope = 'https://www.googleapis.com/auth/calendar'
     # drive_file = drive_file_instance
     redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
@@ -89,15 +89,14 @@ def instantiate_google_calendar_service():
 
 
 if __name__ == '__main__':
-    import sys
-    try:
-        serviceName = sys.argv[1]
-        create_googleapi_service(serviceName=serviceName, 
-                             version=version, 
-                             client_id=client_id, 
-                             client_secret=client_secret, 
-                             redirect_uri=redirect_uri, 
-                             scope=scope)
-    except:
-        pass
+    print ' Not a command line tool. Import with python... '
+#    import sys
+#    instantiate_google_calendar_service()
+#    serviceName = sys.argv[1]
+    #    create_googleapi_service(serviceName=serviceName, 
+    #                         version=version, 
+    #                         client_id=client_id, 
+    #                         client_secret=client_secret, 
+    #                         redirect_uri=redirect_uri, 
+    #                         scope=scope)
 
