@@ -74,14 +74,21 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     mailServer.close()
 
 
-def send_attachment_gmail(to, subject, text, attach):
+## Send the stings in text variable via gmail as an attachment
+def send_attachment_gmail(to, subject, text=None, attach=None):
     import smtplib, os, email
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEBase import MIMEBase
     from email.MIMEText import MIMEText
     from email import Encoders
-    gmail_user = 'john.bragato@gmail.com'
-    gmail_pass = ''
+    gmail_user = '{}'.format(str(input('Enter your username: ')))
+    if not gmail_user:
+        gmail_user = 'john.bragato@gmail.com'
+    gmail_pass = '{}'.format(str(input('Enter your password: %s' % gmail_user)))
+    if not to:
+        to = gmail_user
+        subject = 'File sent by ', gmail_user
+
     msg = MIMEMultipart()
     msg['From']    = gmail_user
     msg['To']      = to
@@ -101,3 +108,8 @@ def send_attachment_gmail(to, subject, text, attach):
     mailServer.sendmail(gmail_user, to, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
     mailServer.close()
+
+
+if __name__ == '__main__':
+    import sys
+    send_attachment_gmail(sys.argv)
