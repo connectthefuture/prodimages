@@ -74,7 +74,8 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     mailServer.close()
 
 
-def send_attachment_gmail(to, subject, text, attach):
+## Send the stings in text variable via gmail as an attachment
+def send_attachment_gmail(to, subject, text=None, attach=None):
     import smtplib, os, email
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEBase import MIMEBase
@@ -84,6 +85,9 @@ def send_attachment_gmail(to, subject, text, attach):
     if not gmail_user:
         gmail_user = 'john.bragato@gmail.com'
     gmail_pass = '{}'.format(str(input('Enter your password: %s' % gmail_user)))
+    if not to:
+        to = gmail_user
+        subject = 'File sent by ', gmail_user
 
     msg = MIMEMultipart()
     msg['From']    = gmail_user
