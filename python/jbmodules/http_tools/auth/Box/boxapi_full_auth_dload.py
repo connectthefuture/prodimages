@@ -97,7 +97,7 @@ def instantiate_boxapi_client():
     client_secret = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'
     client_id = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'
     #scope = 'https://app.box.com/services/auth_download_client'
-    redirect_uri = 'http://localhost:8080' #'urn:ietf:wg:oauth:2.0:oob'
+    redirect_uri = 'http://localhost:51711' #'urn:ietf:wg:oauth:2.0:oob'
     oauth  = authorize_client(client_secret=client_secret, client_id=client_id,redirect_uri=redirect_uri)
     client = Client(oauth)
     return client
