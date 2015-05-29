@@ -134,12 +134,12 @@ def get_box_access_token():
     access_token, refresh_token = exchange_tokens()
     #--# Return the fresh access and return token
     os.chdir(initdir)
-    return access_token, refresh_token
+    return access_token
 
 def get_real_box_download_url(shared_link, access_token=None):
     import requests
     try:
-        access_token, refresh_token = get_box_access_token()
+        access_token = get_box_access_token()
     except:
         pass
 
