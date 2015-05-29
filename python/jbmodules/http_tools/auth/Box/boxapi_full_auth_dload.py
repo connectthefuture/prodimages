@@ -77,11 +77,12 @@ def exchange_tokens(refresh_token=None):
     CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
     CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
 
-    from os import chdir, path
+    from os import chdir, path, curdir
     ## Check for stored tokens
     import cPickle as pickle
     import __builtin__
-    chdir(path.abspath(__file__)    
+    initdir = path.abspath(curdir)
+    chdir(path.abspath(__file__))    
     #tokens_file = 'tokens.pkl'
     tokens_file = 'tokens_priv.pkl'
     if path.isfile(tokens_file):
@@ -110,6 +111,7 @@ def exchange_tokens(refresh_token=None):
     else:
         access_token, refresh_token = authenticate()
         pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
+    chdir(initdir)
     return access_token, refresh_token
 
 ###################### ONLY USING ABOVE IN PROD #################
