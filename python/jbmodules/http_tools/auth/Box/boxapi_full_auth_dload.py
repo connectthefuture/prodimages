@@ -82,7 +82,7 @@ def exchange_tokens(refresh_token=None):
     import cPickle as pickle
     import __builtin__
     initdir = path.abspath(curdir)
-    chdir(path.dirname(path.realname(__file__)))    
+    chdir(path.dirname(path.realpath(__file__)))    
     #tokens_file = 'tokens.pkl'
     tokens_file = 'tokens_priv.pkl'
     if path.isfile(tokens_file):
