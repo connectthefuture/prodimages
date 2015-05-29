@@ -138,13 +138,13 @@ def get_box_access_token():
 
 def get_real_box_download_url(shared_link, access_token=None):
     import requests
-    try:
-        access_token = get_box_access_token()
-    except:
-        pass
+    # try:
+    #     access_token = get_box_access_token()
+    # except:
+    #     pass
 
     if not access_token:
-        access_token='sHHScQfe4HK90dTlEtnWreaNd6xJpT59'
+        access_token = get_box_access_token() #access_token='sHHScQfe4HK90dTlEtnWreaNd6xJpT59'
     box_api_shared_root = "https://api.box.com/2.0/shared_items"
     headers = {
          'Authorization': "Bearer " + access_token,
