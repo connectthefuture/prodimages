@@ -81,7 +81,7 @@ def exchange_tokens(refresh_token=None):
     ## Check for stored tokens
     import cPickle as pickle
     import __builtin__
-    chdir(path.join(path.abspath(__file__), '../../http_tools/auth/Box'))    
+    chdir(path.abspath(__file__)    
     tokens_file = 'tokens.pkl'
     if path.isfile(tokens_file):
         import requests, json
@@ -110,7 +110,7 @@ def exchange_tokens(refresh_token=None):
         pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
     return access_token, refresh_token
 
-####
+###################### ONLY USING ABOVE IN PROD #################
 
 def store_tokens(access_token, refresh_token):
     from oauth2client.file import Storage
