@@ -118,16 +118,31 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
 
     return mproc_tuple_Qlist
 
-
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
         metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
     return metadata
 
+def get_box_access_token():
+    import os
+    # reg
+    initdir = os.path.abspath(__file__)
+    os.chdir(os.path.join(os.path.abspath(__file__), '../../http_tools/auth/Box'))
+
+    from boxapi_full_auth_dload import exchange_tokens
+    access_token, refresh_token = exchange_tokens()
+    #--# Return the fresh access and return token
+    os.chdir(initdir)
+    return access_token, refresh_token
 
 def get_real_box_download_url(shared_link, access_token=None):
     import requests
+    try:
+        access_token, refresh_token = get_box_access_token()
+    except:
+        pass
+
     if not access_token:
         access_token='sHHScQfe4HK90dTlEtnWreaNd6xJpT59'
     box_api_shared_root = "https://api.box.com/2.0/shared_items"
