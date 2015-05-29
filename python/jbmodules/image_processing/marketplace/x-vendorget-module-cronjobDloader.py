@@ -127,14 +127,13 @@ def get_exif_all_data(image_filepath):
 def get_box_access_token():
     import os
     # reg
-    initdir = os.path.abspath(__file__)
-    os.chdir(os.path.join(os.path.abspath(__file__), '../../http_tools/auth/Box'))
-
-    from boxapi_full_auth_dload import exchange_tokens
+    #initdir = os.path.abspath(__file__)
+    #os.chdir(os.path.join(os.path.abspath(__file__), '../../http_tools/auth/Box'))
+    from http_tools.auth.Box.boxapi_full_auth_dload import exchange_tokens
     access_token, refresh_token = exchange_tokens()
     #--# Return the valid access and fresh return token
     ##---NOTE---## refresh token is valid for 60 days, afterwhich the pickle file should be manually synced
-    os.chdir(initdir)
+    #os.chdir(initdir)
     return access_token
 
 def get_real_box_download_url(shared_link, access_token=None):
