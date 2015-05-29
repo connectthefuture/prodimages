@@ -17,6 +17,10 @@ CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret h
 
 
 def authenticate(refresh_token=None):
+
+    CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
+    CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
+
     class StoppableWSGIServer(bottle.ServerAdapter):
         def __init__(self, *args, **kwargs):
             super(StoppableWSGIServer, self).__init__(*args, **kwargs)
@@ -69,6 +73,10 @@ def authenticate(refresh_token=None):
 ####
 
 def exchange_tokens(refresh_token=None):
+    
+    CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
+    CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
+
     from os import chdir, path
     ## Check for stored tokens
     import cPickle as pickle
@@ -76,11 +84,24 @@ def exchange_tokens(refresh_token=None):
     chdir(path.join(path.abspath(__file__), '../../http_tools/auth/Box'))    
     tokens_file = 'tokens.pkl'
     if path.isfile(tokens_file):
-        oldaccess_token, oldrefresh_token = pickle.load(__builtin__.open(tokens_file,'rb'))
-        # Now pass the refresh to get new creds
-        
-        #--TODO--# access_token, refresh_token = oldaccess_token, oldrefresh_token
-        
+        import requests, json
+        oldaccess_token, valid_refresh_token = pickle.load(__builtin__.open(tokens_file,'rb'))
+        box_api_token_root = "https://app.box.com/api/oauth2/token"
+        data = {
+             ##'Authorization': "Bearer " + access_token,
+             ##'BoxApi': "shared_link=" + shared_link,
+             'grant_type': 'refresh_token',
+             'refresh_token': valid_refresh_token,
+             'client_id': CLIENT_ID,
+             'client_secret': CLIENT_SECRET
+             }
+        headers = {
+                'Content-Type': 'application/json; charset=UTF-8'
+        }
+        res = requests.post(box_api_token_root, data=data, headers=headers)
+        newcreds = json.loads(res.content)
+        access_token = newcreds['access_token']
+        refresh_token = newcreds['refresh_token']
         ## Replace old cred dumping new creds to tokens.pkl
         pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
     ###################
