@@ -132,7 +132,7 @@ def get_box_access_token():
 
     from boxapi_full_auth_dload import exchange_tokens
     access_token, refresh_token = exchange_tokens()
-    #--# Return the fresh access and return token
+    #--# Return the valid access and fresh return token
     os.chdir(initdir)
     return access_token
 
