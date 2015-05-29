@@ -16,7 +16,7 @@ CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
 CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
 
 
-def authenticate():
+def authenticate(refresh_token=None):
     class StoppableWSGIServer(bottle.ServerAdapter):
         def __init__(self, *args, **kwargs):
             super(StoppableWSGIServer, self).__init__(*args, **kwargs)
@@ -30,6 +30,8 @@ def authenticate():
 
         def stop(self):
             self._server.shutdown()
+
+    
 
     auth_code = {}
     auth_code_is_available = Event()
@@ -61,8 +63,33 @@ def authenticate():
     print('access_token: ' + access_token)
     print('refresh_token: ' + refresh_token)
 
+    #return (access_token, refresh_token,)
     return oauth
 
+####
+
+def exchange_tokens(refresh_token=None):
+    from os import chdir, path
+    ## Check for stored tokens
+    import cPickle as pickle
+    import __builtin__
+    chdir(path.join(path.abspath(__file__), '../../http_tools/auth/Box'))    
+    tokens_file = 'tokens.pkl'
+    if path.isfile(tokens_file):
+        oldaccess_token, oldrefresh_token = pickle.load(__builtin__.open(tokens_file,'rb'))
+        # Now pass the refresh to get new creds
+        
+        #--TODO--# access_token, refresh_token = oldaccess_token, oldrefresh_token
+        
+        ## Replace old cred dumping new creds to tokens.pkl
+        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
+    ###################
+    else:
+        access_token, refresh_token = authenticate()
+        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
+    return access_token, refresh_token
+
+####
 
 def store_tokens(access_token, refresh_token):
     from oauth2client.file import Storage
