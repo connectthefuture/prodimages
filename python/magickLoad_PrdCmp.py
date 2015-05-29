@@ -451,6 +451,7 @@ def subproc_magick_png(img, destdir=None):
     ## Get variable values for processing
     aspect_ratio = get_aspect_ratio(img)
     dimensions = get_dimensions(img)
+    print aspect_ratio, dimensions, ' <-- Aspect Dimensions'
     width = dimensions.split('x')[0]
     height = dimensions.split('x')[1]
     vert_horiz = ''
