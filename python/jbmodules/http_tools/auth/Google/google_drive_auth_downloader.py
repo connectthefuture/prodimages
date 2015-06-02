@@ -62,6 +62,8 @@ def download_google_drive_file(service=None, image_url=None, destpath=None):
         pass
     
     file_id = qstring2kvpairs(image_url)['id'][0]
+    if not file_id:
+        file_id = image_url
     request = service.files().get_media(fileId=file_id)
     fdest = open(destpath, 'w')
     media_request = apiclient.http.MediaIoBaseDownload(fdest, request)
