@@ -234,7 +234,7 @@ def download_mplce_url(urldest_tuple):
     ########################
     #### DRIVE API AUTH ####
     #if regex_drive2.findall(image_url):
-    if regex_drive2.findall(image_url) and 2 == 1:
+    if regex_drive2.findall(image_url):
         print image_url, ' DRIVE'
         #import jbmodules
         #from jbmodules
@@ -259,10 +259,11 @@ def download_mplce_url(urldest_tuple):
         ########################################################
         ####### Google Drive Fix ###############################
         ########################################################
-        regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
-        #regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/edit\?usp\=.*?$')
+        #regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
+        regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/(edit|view)\?usp\=.*?$')
         if regex_drive.findall(image_url):
             image_url = image_url.split('/edit?')[0]
+            image_url = image_url.split('/view?')[0]
         else: pass
 
         try:
