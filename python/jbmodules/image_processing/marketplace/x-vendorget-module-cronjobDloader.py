@@ -129,7 +129,6 @@ def drive_match_fileid(image_url):
         fileid = drivefile.groupdict()['fileid']
         return fileid
 
-
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
