@@ -126,7 +126,7 @@ def drive_match_fileid(image_url):
     regex_drive3 = re.compile(r'^(https://d(.+?)\.google\.com/file/d/)(?P<fileid>.+?)/(edit|view)\?usp\=.*?$', re.U)
     drivefile = regex_drive3.match(image_url)
     if drivefile:
-        fileid = drivefile.groupdict()['fileId']
+        fileid = drivefile.groupdict()['fileid']
         return fileid
 
 
