@@ -103,7 +103,7 @@ def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Ple
     mailServer.sendmail(gmail_user, to, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
     mailServer.quit()
-    print "Mail with attachment %s \nSent to: %s" % attach, to
+    print "Mail with attachment {} \nSent to: {}".format(attach, to)
     return
 
 
