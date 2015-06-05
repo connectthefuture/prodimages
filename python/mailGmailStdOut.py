@@ -33,7 +33,11 @@ if __name__ == '__main__':
     import sys
     try:
         toaddr = sys.argv[1]
-        content = sys.argv[2]
+        if len(toaddr.split('@')) == 2:
+            content = sys.argv[2]
+        else:
+            content = toaddr
+            toaddr  = 'john.bragato@gmail.com'
         send_text_via_gmail(toaddr, text=str(content).splitlines())
     except IndexError:
         print('Please supply the to address and email content as arg 1 and 2, respectively.')
