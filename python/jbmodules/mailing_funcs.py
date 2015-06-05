@@ -29,7 +29,7 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     filepath   = groupeddict['email_addr']
     # me == my email address
     # you == recipient's email address
-    from_addr = "john.bragato@gmail.com"
+    from_addr = str(input('Enter your Gmail or GoogleApps Address: ')) 
     to_addr = email_addr
 
     # Create message container - the correct MIME type is multipart/alternative.
@@ -73,19 +73,20 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     # and message to send - here it is sent as one string.
     mailServer.close()
 
-
-def send_attachment_gmail(to, subject, text, attach):
-    import smtplib, os, email
+    
+def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Please save the attachement and open file locally.'):
+    import smtplib, os.path, email
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEBase import MIMEBase
     from email.MIMEText import MIMEText
     from email import Encoders
-    gmail_user = 'john.bragato@gmail.com'
-    gmail_pass = ''
+    #print('Enter username or return to accept the default: \n')
+    gmail_user = str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
+    gmail_pass = str(input('Enter your password in single quotes: '))
     msg = MIMEMultipart()
     msg['From']    = gmail_user
     msg['To']      = to
-    msg['Subject'] = subject
+    msg['Subject'] = subject + ' Filename %s ' % os.path.basename(attach)
 
     msg.attach(MIMEText(text))
     part = MIMEBase('application', 'octet-stream')
@@ -93,11 +94,25 @@ def send_attachment_gmail(to, subject, text, attach):
     Encoders.encode_base64(part)
     part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(attach))
     msg.attach(part)
+    
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
-    mailServer.ehlo()
+    #mailServer.ehlo()
     mailServer.starttls()
-    mailServer.ehlo()
+    #mailServer.ehlo()
     mailServer.login(gmail_user, gmail_pass)
     mailServer.sendmail(gmail_user, to, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
-    mailServer.close()
+    mailServer.quit()
+    print "Mail with attachment %s \nSent to: %s" % attach, to
+    return
+
+
+if __name__ == '__main__':
+    import sys
+    try:
+        toaddr = sys.argv[1]
+        attachment = sys.argv[2]
+        send_attachment_gmail(toaddr, attachment)
+    except IndexError:
+        print('Please supply the to address and the path to your attachment as arg 1 and 2, respectively.')
+
