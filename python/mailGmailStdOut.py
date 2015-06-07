@@ -10,8 +10,8 @@ def send_text_via_gmail(toaddr, text=None):
     from email.mime.text import MIMEText
     from email import Encoders
     #print('Enter username or return to accept the default: \n')
-    gmail_user = str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
-    gmail_pass = str(input('Enter your password in single quotes: '))
+    gmail_user = 'john.bragato@bluefly.com' #str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
+    gmail_pass = '$cutler2377' #str(input('Enter your password in single quotes: '))
     msg = MIMEText(text)
     msg['From']    = gmail_user
     msg['To']      = toaddr
