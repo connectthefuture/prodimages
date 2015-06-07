@@ -123,10 +123,10 @@ def main(dirname=None):
                     print query_insert
                     try:
                         ##mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-                        mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-                        connection = mysql_engine.connect()
+                        # mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+                        # connection = mysql_engine.connect()
                         if regex_valid_colorstyle_file.findall(row['filename']):
-                            connection.execute(query_insert)
+                            #connection.execute(query_insert)
                             print "Successful Insert to uploads_imagedrop {0} --> {1}".format(k,v)
                         else:
                             print "Database Table not Found for Inserting {0} --> {1}".format(k,v)
