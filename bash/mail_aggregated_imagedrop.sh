@@ -14,6 +14,6 @@ subject=$(echo "Uploaded: ${allfiles} files - ${primaryonly} Styles")
 content=$("Total Styles:\t${allfiles} \nMain Images Total: \t${primaryonly} \n Total Alts: \t${altonly}")
 
 
-mailGmailStdOut.py "${content}" "${subject}"
+python mailGmailStdOut.py "${content}" "${subject}"
 
 echo "${subject} -- \n ${text}"
