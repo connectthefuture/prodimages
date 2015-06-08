@@ -11,6 +11,9 @@ primaryonly=`cat "$fname" | grep \_m.jpg | wc -l`
 altonly=`cat "$fname" | grep \_alt0?.*ng | wc -l`
 
 subject=$(echo "Uploaded: ${allfiles} files - ${primaryonly} Styles")
-text=$("Total Styles:\t${allfiles} \nMain Images Total: \t${primaryonly} \n Total Alts: \t${altonly}")
+content=$("Total Styles:\t${allfiles} \nMain Images Total: \t${primaryonly} \n Total Alts: \t${altonly}")
+
+
+python mailGmailStdOut.py "${content}" "${subject}"
 
 echo "${subject} -- \n ${text}"
