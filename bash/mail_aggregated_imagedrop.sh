@@ -10,4 +10,4 @@ allfiles=`cat "$fname" | grep \.png | wc -l`
 primaryonly=`cat "$fname" | grep \.png | wc -l`
 altonly=`cat "$fname" | grep \_alt0?.png | wc -l`
 
-
+echo "${allfiles} -- ${primaryonly} -- ${altonly}"
