@@ -8,6 +8,9 @@ fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -20 -e
 
 allfiles=`cat "$fname" | grep \.png | wc -l`
 primaryonly=`cat "$fname" | grep \_m.jpg | wc -l`
-altonly=`cat "$fname" | grep \_alt0?.*pg | wc -l`
+altonly=`cat "$fname" | grep \_alt0?.*ng | wc -l`
 
-echo "${allfiles} -- ${primaryonly} -- ${altonly}"
+subject=$(echo "Uploaded: ${allfiles} files - ${primaryonly} Styles")
+text=$("Total Styles:\t${allfiles} \nMain Images Total: \t${primaryonly} \n Total Alts: \t${altonly}")
+
+echo "${subject} -- \n ${text}"
