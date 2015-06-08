@@ -24,6 +24,7 @@ def send_text_via_gmail(toaddr, text=None, subject=None):
     #mailServer.ehlo()
     mailServer.starttls()
     #mailServer.ehlo()
+    print("{}\n{}".format(gmail_user,gmail_pass))
     mailServer.login(gmail_user, gmail_pass)
     print(type(msg), type( msg.as_string()))
     mailServer.sendmail(gmail_user, toaddr, msg.as_string())
