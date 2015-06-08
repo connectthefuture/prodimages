@@ -3,7 +3,7 @@
 
 
 
-def send_text_via_gmail(toaddr, text=None):
+def send_text_via_gmail(toaddr, text=None, subject=None):
     import smtplib, os.path, email
 
     from email.MIMEBase import MIMEBase
@@ -15,8 +15,10 @@ def send_text_via_gmail(toaddr, text=None):
     msg = MIMEText(text)
     msg['From']    = gmail_user
     msg['To']      = toaddr
-    msg['Subject'] = str(len(text.splitlines())) + ' Lines Included'
-
+    if not subject:
+        msg['Subject'] = str(len(text.splitlines())) + ' Lines Included'
+    else:
+        msg['Subject'] = subject
 
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
     #mailServer.ehlo()
@@ -31,14 +33,23 @@ def send_text_via_gmail(toaddr, text=None):
     
 if __name__ == '__main__':
     import sys
+    subject = ''
     try:
         toaddr = str(sys.argv[1])
         if len(toaddr.split('@')) == 2:
             content = str(sys.argv[2])
+            try:
+                subject = sys.argv[3]
+            except IndexError:
+                pass
         else:
             content = toaddr
             toaddr  = 'john.bragato@gmail.com'
-        send_text_via_gmail(toaddr, text=content)
+            try:
+                subject = sys.argv[2]
+            except IndexError:
+                pass
+        send_text_via_gmail(toaddr, text=content, subject=subject)
     except IndexError:
-        print('Please supply the to address and email content as arg 1 and 2, respectively.')
+        print('Please supply at least the to address and email content as arg 1 and 2, respectively.')
 
