@@ -11,7 +11,7 @@ def send_text_via_gmail(toaddr, text=None, subject=None):
     from email import Encoders
     #print('Enter username or return to accept the default: \n')
     gmail_user = 'john.bragato@bluefly.com' #str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
-    gmail_pass = open('/home/johnb/.gcreds.dat','rb').read() #str(input('Enter your password in single quotes: '))
+    gmail_pass = open(os.path.join(os.path.expanduser('~'), '.gcreds.dat','rb')).read() #str(input('Enter your password in single quotes: '))
     msg = MIMEText(text)
     msg['From']    = gmail_user
     msg['To']      = toaddr
@@ -24,7 +24,6 @@ def send_text_via_gmail(toaddr, text=None, subject=None):
     #mailServer.ehlo()
     mailServer.starttls()
     #mailServer.ehlo()
-    print("{}\n{}".format(gmail_user,gmail_pass))
     mailServer.login(gmail_user, gmail_pass)
     print(type(msg), type( msg.as_string()))
     mailServer.sendmail(gmail_user, toaddr, msg.as_string())
