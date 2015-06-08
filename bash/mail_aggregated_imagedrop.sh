@@ -8,6 +8,6 @@ fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -20 -e
 
 allfiles=`cat "$fname" | grep \.png | wc -l`
 primaryonly=`cat "$fname" | grep \_m.jpg | wc -l`
-altonly=`cat "$fname" | grep \_alt0?.jpg | wc -l`
+altonly=`cat "$fname" | grep \_alt0?.*pg | wc -l`
 
 echo "${allfiles} -- ${primaryonly} -- ${altonly}"
