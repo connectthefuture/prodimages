@@ -8,26 +8,30 @@ fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -
 
 allfiles=`cat "$fname" | grep \.*ng | wc -l`
 primaryonly=`cat "$fname" | grep \_m.*pg | wc -l`
-altonly=$(cat "$fname" | grep \_alt0?.*ng | wc -l)
+altonly=`cat "$fname" | grep \_alt0?.*ng | wc -l)`
 process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 
-main_styles_list=`cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run` 
-alt_styles_list=`cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run` 
+main_styles_list=`cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}'`
+alt_styles_list=`cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}'`
 
-main_query_list=$(for X in "${main_styles_list}"; do echo "${X}";done)
-alt_query_list=$(for X in "${alt_styles_list}"; do echo "${X}";done)
 
 # Format string as list for MySQL IN clause
-mainstyles=`echo $(echo $main_styles_list | xargs -n1 | awk '{ print ",-" $1 }' | xargs | tr " " "'" | tr "-" "'" | sed 's/^,/(/1') "')"|sed 's/ //g'`
-altstyles=`echo $(echo $alt_styles_list | xargs -n1 | awk '{ print ",-" $1 }' | xargs | tr " " "'" | tr "-" "'" | sed 's/^,/(/1') "')"|sed 's/ //g'`
+mainstyles=`echo "(" $(echo $main_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
+altstyles=`echo "(" $(echo $alt_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
 
 echo  "${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
 
-#$(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ${styles};""" -D www_django);
+main_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ${mainstyles}; );""" -D www_django);
+
+alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ${altstyles}; );""" -D www_django);
+
+#
+# $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ('',''));""" -D www_django);
+
 aggregates="PLACE_HOLDER"
 
 subject=$(echo "Most_Recent_Upload: ${allfiles} files - ${primaryonly} Styles at ${process_time}")
-content=`echo "Total Styles: ${allfiles} Main Images Total: ${primaryonly} Total Alts: ${altonly} -- Results --> ${aggregates}"`
+content=`echo "Total Styles: ${allfiles} Main Images Total: ${primaryonly} Total Alts: ${altonly} -- Results --> ${main_results}"`
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
