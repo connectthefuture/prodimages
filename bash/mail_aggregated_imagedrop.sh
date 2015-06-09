@@ -22,4 +22,4 @@ content=$(echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main I
 
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
 
-echo "${subject} -- \n ${text}"
+echo "${subject} -- \n ${content}"
