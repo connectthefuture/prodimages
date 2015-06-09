@@ -34,9 +34,9 @@ chmod -R ugo+rx $syncpardnameLL ;
 chmod -R ugo+rx $syncdnameLL ;
 
 
-######################################
+#############################################
 ## Sync Looklet Images Stripped for Design ##
-######################################
+#############################################
 orignameLLDes='/mnt/Post_Ready/xsyncma/looklet/'
 syncpardnameLLDes="/mnt/Design/LookletSync/${DATE}_LLD/"
 syncdnameLLDes="/mnt/Design/LookletSync/${DATE}_LLD/"
@@ -48,13 +48,36 @@ chmod -R ugo+rx $syncpardnameLLDes ;
 chmod -R ugo+rx $syncdnameLLDes ;
 
 
-######################
-## Remove empty folders
-######################
-find /mnt/Post_Ready/aPhotoPush -type d -mindepth 1 -empty -exec rmdir {} \;
-find /mnt/Design/LookletSync -type d -mindepth 1 -empty -exec rmdir {} \;
+######################################################
+## Sync Looklet Editorials for Design And Merchants ##
+######################################################
+orignameLLED='/mnt/Post_Ready/xsyncma/looklet/'
+syncpardnameLLED="/mnt/Design/LookletEditorial/${DATE}_ED/"
+syncdnameLLED="/mnt/Design/LookletEditorial/${DATE}_ED/"
+
+mkdir -p $syncdnameLLED
+
+find $orignameLLED -type f -maxdepth 1 -iname \*[0-9][0-9][0-9][0-9][0-9][0-9]_[lL]\*_ED\*.jpg -exec mv {} $syncdnameLLED \;
+
+chmod -R ugo+rx $syncpardnameLLED ;
+chmod -R ugo+rx $syncdnameLLED ;
+
+### TODO: Embed MEtadata in Files if Product Style Can be Retrieved
+##---#
+##################################
+### TODO: Now Sync Editorial to ##
+###  Shared GDrive FolderUrls ####
+########################Ø#########
+
+
+#########################
+## Remove empty folders #
+#########################
+find /mnt/Post_Ready/aPhotoPush -mindepth 1 -type d -empty -exec rmdir {} \;
+find /mnt/Design/LookletSync -mindepth 1 -type d -empty -exec rmdir {} \;
+find /mnt/Design/LookletEditorial -mindepth 1 -type d -empty -exec rmdir {} \;
 
 
 #############
-## sync crontab 
-cd /root && crontab crontabmain ;
+## sync crontab
+# cd /root && crontab crontabmain ;
