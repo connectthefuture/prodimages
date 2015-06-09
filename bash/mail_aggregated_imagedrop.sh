@@ -6,8 +6,8 @@
 
 fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -1)
 
-allfiles=`cat "$fname" | grep \.png | wc -l`
-primaryonly=`cat "$fname" | grep \_m.jpg | wc -l`
+allfiles=`cat "$fname" | grep \.*ng | wc -l`
+primaryonly=`cat "$fname" | grep \_m.*pg | wc -l`
 altonly=`cat "$fname" | grep \_alt0?.*ng | wc -l`
 process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 
