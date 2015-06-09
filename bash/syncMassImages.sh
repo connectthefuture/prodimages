@@ -62,7 +62,7 @@ find $orignameLLED -type f -maxdepth 1 -iname \*[0-9][0-9][0-9][0-9][0-9][0-9]_[
 chmod -R ugo+rx $syncpardnameLLED ;
 chmod -R ugo+rx $syncdnameLLED ;
 
-### TODO: Embed MEtadata in Files if Product Style Can be Retrieved
+### TODO: Embed Metadata in Files if Product Style Can be Retrieved
 ##---#
 ##################################
 ### TODO: Now Sync Editorial to ##
