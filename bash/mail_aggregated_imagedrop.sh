@@ -21,9 +21,9 @@ altstyles=`echo "(" $(echo $alt_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
 
 echo  "${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
 
-main_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ${mainstyles}; );""" -D www_django);
+main_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --html --user=root --password=mysql -e """select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${mainstyles} group by brand order by 1 desc;""" -D www_django);
 
-alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ${altstyles}; );""" -D www_django);
+alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --html --user=root --password=mysql -e """select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${altstyles} group by brand order by 1 desc;""" -D www_django);
 
 #
 # $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ('',''));""" -D www_django);
@@ -31,7 +31,7 @@ alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=roo
 aggregates="PLACE_HOLDER"
 
 subject=$(echo "Most_Recent_Upload: ${allfiles} files - ${primaryonly} Styles at ${process_time}")
-content=`echo "Total Styles: ${allfiles} Main Images Total: ${primaryonly} Total Alts: ${altonly} -- Results --> ${main_results}"`
+content=`echo """Total Styles: ${allfiles} Main Images Total: ${primaryonly} Total Alts: ${altonly} -- \\\\n ----------------- Main-Results --> ${main_results} -- \\\\n --------------- Alt-Results --> ${altstyles}"""`
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
