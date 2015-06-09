@@ -14,12 +14,13 @@ process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 main_styles_list=`cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run` 
 alt_styles_list=`cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run` 
 
-echo  """${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"""
+echo  "${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
 
 subject=$(echo "Uploaded: ${allfiles} files - ${primaryonly} Styles at ${process_time}")
-content=$(echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> <tr>${main_styles_list}</tr><tr> ${main_styles_list}</tr></table></body></html>")
+##content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo \"<tr>${X}</tr>\";done)</table><table> $(for X in ${main_styles_list};do echo \"<tr>${X}</tr>\"; done) </table></body></html>"`
+content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
 
 
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
 
-echo "${subject} -- \n ${text}"
+echo "${subject} -- \n ${content}"
