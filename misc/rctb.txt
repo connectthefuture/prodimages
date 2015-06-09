@@ -135,7 +135,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ## --> Daily #
 10 3,9,10,11,12,13,14,15,16,17,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 ## --> Weekend Runs much less
-10 3,10,13,16,22                     * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null  ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
+10 3,10,13,16,22    * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null  ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 #
 ##### Zimages_1
 17 5,13,23 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/zImages_1 2>&1 > /var/log/photopaths_Zimages_selectslowrezimport.log && date >> /var/log/photopaths_Zimages_selectslowrezimport.log ;
@@ -146,9 +146,9 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###### ########## ########
 ###### ########## ########
 ###### Still Push ########
-17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/aPhotoPush/ -maxdepth 1 -type d -mtime 4); do image_db_data_prepare.py "$d" "retouch_still"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
+17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/aPhotoPush/ -maxdepth 1 -type d -mtime 2); do image_db_data_prepare.py "$d" "retouch_still"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
 ###### Still Arch ########
-17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/Retouch_Still/ -maxdepth 1 -type d -mtime 4); do image_db_data_prepare.py "$d" "gridfs_file7"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
+17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/Retouch_Still/ -maxdepth 1 -type d -mtime 2); do image_db_data_prepare.py "$d" "gridfs_file7"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
 ###### ########## ########
 ###### ########## ########
 ###### ########## ########
