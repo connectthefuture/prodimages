@@ -12,7 +12,7 @@ altonly=`cat "$fname" | grep \_alt0*.png | wc -l`
 process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 
 main_styles_list=`cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run` 
-alt_styles_list=`cat "$fname" | grep \_alt0*.png | awk '{ print $NF }' | cut -c1-9 | sort -run` 
+alt_styles_list=`cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run` 
 
 echo  """${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"""
 
