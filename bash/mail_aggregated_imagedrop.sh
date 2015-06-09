@@ -8,9 +8,11 @@ fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -20 -e
 
 allfiles=`cat "$fname" | grep \.png | wc -l`
 primaryonly=`cat "$fname" | grep \_m.jpg | wc -l`
-altonly=`cat "$fname" | grep \_alt0?.png | wc -l`
+altonly=$(cat "${fname}" | grep \_alt0?.png | wc -l)
 process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 
+main_styles_list=`` 
+alt_styles_list=`` 
 subject=$(echo "Uploaded: ${allfiles} files - ${primaryonly} Styles at ${process_time}")
 content=$(echo "Total Styles: ${allfiles} \ 
 	\\nMain Images Total: \\t${primaryonly}  \
