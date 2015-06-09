@@ -8,7 +8,7 @@ fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -
 
 allfiles=`cat "$fname" | grep \.png | wc -l`
 primaryonly=`cat "$fname" | grep \_m.jpg | wc -l`
-altonly=`cat "$fname" | grep \_alt0*.png | wc -l`
+altonly=`cat "$fname" | grep \_alt0?.*ng | wc -l`
 process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 
 main_styles_list=`cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run` 
