@@ -8,15 +8,16 @@ fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -20 -e
 
 allfiles=`cat "$fname" | grep \.png | wc -l`
 primaryonly=`cat "$fname" | grep \_m.jpg | wc -l`
-altonly=$(cat "${fname}" | grep \_alt0?.png | wc -l)
+altonly=`cat "$fname" | grep \_alt0*.png | wc -l`
 process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 
-main_styles_list=`` 
-alt_styles_list=`` 
+main_styles_list=`cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run` 
+alt_styles_list=`cat "$fname" | grep \_alt0*.png | awk '{ print $NF }' | cut -c1-9 | sort -run` 
+
+echo  ${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"""
+
 subject=$(echo "Uploaded: ${allfiles} files - ${primaryonly} Styles at ${process_time}")
-content=$(echo "Total Styles: ${allfiles} \ 
-	\\nMain Images Total: \\t${primaryonly}  \
-	\\n Total Alts: \\t${altonly}")
+content=$(echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> <tr>${main_styles_list}</tr><tr> ${main_styles_list}</tr></table></body></html>")
 
 
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
