@@ -37,8 +37,6 @@ content=`echo "Total Styles: ${allfiles} Main Images Total: ${primaryonly} Total
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
 
 
-
-
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
 
-echo "${subject} -- \n ${content}"
+echo "${subject} -- \\\\n ${content}"
