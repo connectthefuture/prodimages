@@ -56,12 +56,13 @@ PRODSRV=$POSTREADY/zProd_Server/imageServer7
 SHELL=/bin/bash
 TODAY=`date +%Y%b%d`
 TODAY_REG=`date +%Y-%m-%d`
-PYTHONPATH=/usr/local/batchRunScripts/python:/usr/local/lib/python2.7/dist-packages
+PYTHONPATH=/usr/local/batchRunScripts/python:/usr/local/lib/python2.7/dist-packages:"$PYTHONPATH"
 PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
 ORACLE_HOME=/usr/lib/oracle/11.2/client64
-ORACLE_SID=ORCLE
-LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib
-DYLD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib:/usr/lib/oracle/11.2/client64:
+ORACLE_SID=ORCL
+## ORACLE_SID=ORCLE -- How foolish
+LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib:"$LD_LIBRARY_PATH"
+DYLD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib:/usr/lib/oracle/11.2/client64:"$DYLD_LIBRARY_PATH"
 TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 #
 ## Debugging Output Scripts in tmp dir
@@ -88,7 +89,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 #############    Looklet Pushed to DropFinals JH   ###############
 ##################################################################
 ##
-5,25,50 * * * * /usr/local/batchRunScripts/bash/syncMassImages.sh
+5,25,45 * * * * /usr/local/batchRunScripts/bash/syncMassImages.sh
 #
 ##################################################################
 ####### ----------->  Looklet Restful Imap/HTTP Procs <--------- ##
@@ -289,7 +290,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ## Then Clear db modified hourly every 30 min ####
 ##################################################
 2,19,39,49 * * * * for f in $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e 'select distinct `t1`.colorstyle from `image_update` t1 join `product_snapshot_live` t2 on `t1`.colorstyle=`t2`.colorstyle where create_dt > date_sub(now(), interval 60 minute) and (`t2`.image_ready_dt is not null and `t2`.image_ready_dt != "0000-00-00");' -D www_django); do /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f" ; done 2>&1 > /var/log/cache_clear_postapi.log ;
-## Clear previous days modified files once per day to 
+## Clear previous days modified files once per day to
 ## deal with long delayed loads falling out of hourly range
 29 1 * * * for f in $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e 'select distinct `t1`.colorstyle from `image_update` t1 join `product_snapshot_live` t2 on `t1`.colorstyle=`t2`.colorstyle where create_dt > date_sub(now(), interval 1440 minute) and (`t2`.image_ready_dt is not null and `t2`.image_ready_dt != "0000-00-00");' -D www_django); do /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py "$f" ; done 2>&1 > /var/log/cache_clear_postapi.log ;
 ##################################################
@@ -347,7 +348,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 # 17 6,13,20 * * * /usr/local/batchRunScripts/python/cronjob_marketplace_nightly_improcloadFile7.py run '/mnt/Post_Complete/ImageDrop'  2>&1 > /var/log/marketplace_images.log
 24 7,15,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
 ###########
-## Delete previous days MArketplace files
+## Delete previous 12 hours Marketplace files
 39 11,23 * * * parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/* -type f`
 ###########
 ##################################################################
