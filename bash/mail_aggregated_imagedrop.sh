@@ -17,9 +17,13 @@ alt_styles_list=`cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1
 main_query_list=$(for X in "${main_styles_list}"; do echo "${X}";done)
 alt_query_list=$(for X in "${alt_styles_list}"; do echo "${X}";done)
 
+# Format string as list for MySQL IN clause
+mainstyles=`echo $(echo $main_styles_list | xargs -n1 | awk '{ print ",-" $1 }' | xargs | tr " " "'" | tr "-" "'" | sed 's/^,/(/1') "')"|sed 's/ //g'`
+altstyles=`echo $(echo $alt_styles_list | xargs -n1 | awk '{ print ",-" $1 }' | xargs | tr " " "'" | tr "-" "'" | sed 's/^,/(/1') "')"|sed 's/ //g'`
 
 echo  "${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
 
+#$(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ${styles};""" -D www_django);
 aggregates="PLACE_HOLDER"
 
 subject=$(echo "Most_Recent_Upload: ${allfiles} files - ${primaryonly} Styles at ${process_time}")
