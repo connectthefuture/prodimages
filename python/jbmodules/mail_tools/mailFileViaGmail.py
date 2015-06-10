@@ -39,7 +39,7 @@ import re,os,sys
 
 
 gmail_user = "john.bragato@gmail.com"
-gmail_pwd = "yankee17"
+gmail_pwd = ""
 
 #for arg in sys.argv[1]:
 #    print arg
