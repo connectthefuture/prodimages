@@ -14,7 +14,7 @@ WITH
           POMGR.PRODUCT_COLOR.IMAGE_READY_DT)
         THEN 'Update'
         ELSE 'NoChange'
-      END "req_action",
+      END as "req_action",
       CASE
         WHEN
           (
@@ -24,7 +24,7 @@ WITH
           )
         THEN 'Y'
         ELSE 'N'
-      END "record_mod",
+      END as "record_mod",
       POMGR.PO_LINE.PO_HDR_ID                      AS po_number,
       POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID        AS vendor_name,
       POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE     AS image_dt,
