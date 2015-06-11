@@ -102,6 +102,7 @@ def exchange_tokens(refresh_token=None):
         }
         res = requests.post(box_api_token_root, data=data, headers=headers)
         newcreds = json.loads(res.content)
+        print res.code, res
         access_token = newcreds['access_token']
         refresh_token = newcreds['refresh_token']
         ## Replace old cred dumping new creds to tokens.pkl
