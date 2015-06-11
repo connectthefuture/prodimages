@@ -83,9 +83,10 @@ def exchange_tokens(refresh_token=None):
     import cPickle as pickle
     import __builtin__
     initdir = path.abspath(curdir)
-    chdir(path.dirname(path.realpath(__file__)))    
+    #chdir(path.dirname(path.realpath(__file__)))    
     #tokens_file = 'tokens.pkl'
     tokens_file = path.join(initdir,'tokens_priv.pkl')
+    tokens_store = path.join(initdir,'tokens_store.pkl')
     if path.isfile(tokens_file):
         import requests, json
         oldaccess_token, valid_refresh_token = pickle.load(__builtin__.open(tokens_file,'rb'))
@@ -109,11 +110,11 @@ def exchange_tokens(refresh_token=None):
         ## Replace old cred dumping new creds to tokens.pkl
         ##---NOTE---## refresh token is valid for 60 days, 
         ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
-        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
+        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_store,'wb'))
     ###################
     else:
         access_token, refresh_token = authenticate()
-        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
+        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_store,'wb'))
     chdir(initdir)
     return access_token, refresh_token
 
