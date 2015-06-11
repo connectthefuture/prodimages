@@ -11,6 +11,7 @@ result=$(echo "$sqlcmd")
 cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
 echo "$result" | xargs -n1 | wc -l ;
+echo "$result" 
 
 for f in "$result"; do
 #/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
