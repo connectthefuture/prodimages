@@ -84,7 +84,7 @@ def exchange_tokens(refresh_token=None):
     initdir = path.abspath(curdir)
     chdir(path.dirname(path.realpath(__file__)))    
     #tokens_file = 'tokens.pkl'
-    tokens_file = 'tokens_priv.pkl'
+    tokens_file = path.join(initdir,'tokens_priv.pkl')
     if path.isfile(tokens_file):
         import requests, json
         oldaccess_token, valid_refresh_token = pickle.load(__builtin__.open(tokens_file,'rb'))
