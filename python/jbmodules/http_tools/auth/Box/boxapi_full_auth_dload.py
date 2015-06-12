@@ -81,7 +81,6 @@ def exchange_tokens(refresh_token=None):
     from os import chdir, path, curdir
     ## Check for stored tokens
     import cPickle as pickle
-    import __builtin__
     initdir = path.abspath(curdir)
     #chdir(path.dirname(path.realpath(__file__)))    
     #tokens_file = 'tokens.pkl'
@@ -135,6 +134,7 @@ def exchange_tokens(refresh_token=None):
             return
     ###################
     else:
+        import __builtin__
         access_token, refresh_token = authenticate()
         pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
         #chdir(initdir)
