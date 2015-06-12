@@ -106,8 +106,12 @@ def exchange_tokens(refresh_token=None):
         res = requests.post(box_api_token_root, data=data, headers=headers)
         newcreds = json.loads(res.content)
         print(newcreds)
-        access_token = newcreds['access_token']
         refresh_token = newcreds['refresh_token']
+        try:
+            access_token = newcreds['access_token']
+        except KeyError:
+            access_token = 'ACCESSTOKEN-PlaceHolder'
+        
         ## Replace old cred dumping new creds to tokens.pkl
         ##---NOTE---## refresh token is valid for 60 days, 
         ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
@@ -117,7 +121,7 @@ def exchange_tokens(refresh_token=None):
     ###################
     else:
         access_token, refresh_token = authenticate()
-        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_store,'wb'))
+        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
         #chdir(initdir)
         return access_token, refresh_token
 
