@@ -114,7 +114,7 @@ def exchange_tokens(refresh_token=None):
         try:
             access_token = newcreds['access_token']
         except KeyError:
-            pass #access_token = 'ACCESSTOKEN-PlaceHolder'
+            access_token = 'ACCESSTOKEN-PlaceHolder'
         
         ## Replace old cred dumping new creds to tokens.pkl
         ##---NOTE---## refresh token is valid for 60 days, 
@@ -125,6 +125,7 @@ def exchange_tokens(refresh_token=None):
                 return access_token, refresh_token
         except UnboundLocalError:
             pass
+        return
     ###################
     else:
         access_token, refresh_token = authenticate()
