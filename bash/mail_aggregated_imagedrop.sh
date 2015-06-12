@@ -22,10 +22,11 @@ altstyles=`echo "( $(echo ${alt_styles_list}) )"`
 # altstyles=`echo "( $(echo $alt_styles_list | sed 's/ //g' | sed 's/,//1') )"`
 
 #echo  "${allfiles} files - ${mainstyles} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
-echo $mainstyles
-main_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${mainstyles} group by brand order by 1 desc;" -D www_django)
+msql="select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${mainstyles} group by brand order by 1 desc;"
+asql="select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${altstyles} group by brand order by 1 desc;"
 
-alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${altstyles} group by brand order by 1 desc;" -D www_django)
+main_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "${msql}" -D www_django)
+alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "${asql}" -D www_django)
 
 #
 # $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e """select distinct t1.colorstyle from image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where t2.colorstyle in ('',''));""" -D www_django);
