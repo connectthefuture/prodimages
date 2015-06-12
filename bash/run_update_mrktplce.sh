@@ -16,6 +16,6 @@ result=`echo "$res" | grep -v selected | xargs -n1`
 echo "$res" | xargs -n1 | grep -v selected | wc -l ;
 
 for f in "$result"; do
-#/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
-echo Completed "$f" ;
+	/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
+	#echo Completed "$f" ;
 done
