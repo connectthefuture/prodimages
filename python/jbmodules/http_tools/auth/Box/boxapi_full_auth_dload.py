@@ -121,8 +121,8 @@ def exchange_tokens(refresh_token=None):
         newcreds = json.loads(res.content)
         print(newcreds)
 
-        access_token = newcreds['access_token']
-        refresh_token = newcreds['refresh_token']
+        access_token = newcreds[0]['access_token']
+        refresh_token = newcreds[0]['refresh_token']
         
         ## Replace old cred dumping new creds to tokens.pkl
         ##---NOTE---## refresh token is valid for 60 days, 
