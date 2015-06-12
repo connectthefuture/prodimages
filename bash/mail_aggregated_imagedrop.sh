@@ -31,7 +31,7 @@ alt_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table --us
 aggregates="PLACE_HOLDER"
 
 subject=$(echo "Most_Recent_Upload: ${allfiles} files - ${primaryonly} Styles at ${process_time}")
-content=`echo "Total Styles: ${allfiles} Main Images Total: ${primaryonly} Total Alts: ${altonly} ---- Main-Results --> ${main_results} ----> Alt-Results --> ${alt_results} --- ${main_styles_list} - ${alt_styles_list}`
+content=`echo "Total Styles: ${allfiles} Main Images Total: ${primaryonly} Total Alts: ${altonly} ---- Main-Results --> ${main_results} ----> Alt-Results --> ${alt_results} --- ${main_styles_list} - ${alt_styles_list}"`
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
