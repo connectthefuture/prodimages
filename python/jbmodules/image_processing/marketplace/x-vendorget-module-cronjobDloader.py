@@ -323,6 +323,7 @@ def download_mplce_url(urldest_tuple):
                 print urlcode_value
                 try:
                     print 'TRY'
+                    print image_url, destpath
                     res = requests.get(image_url, timeout=5, verify=False, headers=headers)
                     with open(destpath, 'w+') as f:
                         f.write(res.content)
