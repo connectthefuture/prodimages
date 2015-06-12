@@ -165,7 +165,7 @@ def get_real_box_download_url(shared_link, access_token=None):
     res = requests.get(box_api_shared_root, headers=headers)    
     try:
         file_id = res.json()['id']
-        file_name = file_id = res.json()['name'] 
+        file_name = res.json()['name']
         download_url = res.json()['shared_link']['download_url']
         return download_url
     except ValueError:
