@@ -24,7 +24,8 @@ altstyles=`echo "( $(echo ${alt_styles_list}) )"`
 #echo  "${allfiles} files - ${mainstyles} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
 msql="select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${mainstyles} group by brand order by 1 desc;"
 asql="select distinct count(colorstyle) as style_ct, brand from product_snapshot_live where colorstyle in ${altstyles} group by brand order by 1 desc;"
-
+echo "$msql"
+echo "$asql"
 main_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "${msql}" -D www_django)
 alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "${asql}" -D www_django)
 
