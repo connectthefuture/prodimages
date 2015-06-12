@@ -217,14 +217,19 @@ def download_mplce_url(urldest_tuple):
     # regex_dropbox = re.compile(r'^https?://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
     ######################
     #### BOX API AUTH ####
-    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
+    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box\.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
     if regex_boxapi.findall(image_url):
         m = regex_boxapi.match(image_url)
         m.groupdict()
-        image_url = get_real_box_download_url(image_url)
+        try:
+            image_url = get_real_box_download_url(image_url)
+        except TypeError:
+            pass
     else:
         pass
-        #import jbmodules.http_tools.auth.Box.boxapi_auth_downloader as boxapi_auth_downloader
+    # finally:
+    #     pass
+    #         #import jbmodules.http_tools.auth.Box.boxapi_auth_downloader as boxapi_auth_downloader
         #final_path = boxapi_auth_downloader.download_boxapi_drive_file(image_url=image_url, destpath=destpath)
         #if final_path:
             #return final_path
