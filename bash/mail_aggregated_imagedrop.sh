@@ -11,14 +11,14 @@ primaryonly=`cat "$fname" | grep \_m.*pg | wc -l`
 altonly=`cat "$fname" | grep \_alt0?.*ng | wc -l`
 process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
 
-main_styles_list=$(cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1' | tr " " ",")
-alt_styles_list=$(cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1' |tr " " ",")
+main_styles_list=$(cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1')
+alt_styles_list=$(cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1')
 
 
 # Format string as list for MySQL IN clause
 # mainstyles=`echo "(" $(echo $main_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
-mainstyles=`echo "( $(echo ${main_styles_list}) )"`
-altstyles=`echo "( $(echo ${alt_styles_list}) )"`
+mainstyles=`echo "( $(echo ${main_styles_list} | -s tr ' ' ',') )"`
+altstyles=`echo "( $(echo ${alt_styles_list} | -s tr ' ' ',') )"`
 # altstyles=`echo "( $(echo $alt_styles_list | sed 's/ //g' | sed 's/,//1') )"`
 
 #echo  "${allfiles} files - ${mainstyles} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
