@@ -92,7 +92,10 @@ def exchange_tokens(refresh_token=None):
         #with open(tokens_file,'rb') as fr:
         #    oldaccess_token, valid_refresh_token = pickle.load(fr)
         with open(tokens_file,'rb') as fr:
-            oldaccess_token, valid_refresh_token = pickle.load(fr)
+            try:
+                oldaccess_token, valid_refresh_token = pickle.load(fr)
+            except:pass
+
             if valid_refresh_token:
                 pass
             else:
