@@ -86,7 +86,6 @@ def exchange_tokens(refresh_token=None):
     #chdir(path.dirname(path.realpath(__file__)))    
     #tokens_file = 'tokens.pkl'
     tokens_file = 'tokens_priv.pkl'
-    tokens_store = 'tokens_store.pkl'
     if path.isfile(tokens_file):
         import requests, json
         #with open(tokens_file,'rb') as fr:
@@ -102,7 +101,7 @@ def exchange_tokens(refresh_token=None):
                 pass
             else:
                 return
-                
+
             #else:
             #    oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
         
