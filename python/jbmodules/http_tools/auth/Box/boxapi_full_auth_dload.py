@@ -101,7 +101,10 @@ def exchange_tokens(refresh_token=None):
             if valid_refresh_token is not None:
                 pass
             else:
-                oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
+                return
+                
+            #else:
+            #    oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
         
         box_api_token_root = "https://app.box.com/api/oauth2/token"
         data = {
