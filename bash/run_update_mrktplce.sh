@@ -17,4 +17,4 @@ echo "Total to Update ...." ;
 # 	#echo Completed "$f" ;
 # done
 
-parallel -P4 --progress /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py {} ::: `echo "$res" | grep -v selected`;
+parallel -P2 --progress /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py {} ::: `echo "$res" | grep -v selected`;
