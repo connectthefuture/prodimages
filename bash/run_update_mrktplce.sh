@@ -11,7 +11,7 @@ res=$(${runit})
 
 cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
-result=`echo "$res" | xargs -n1 | grep -v selected`
+result=`echo "$res" | grep -v selected | xargs -n1`
 
 echo "$res" | xargs -n1 | grep -v selected | wc -l ;
 
