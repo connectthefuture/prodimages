@@ -89,8 +89,15 @@ def exchange_tokens(refresh_token=None):
     tokens_store = 'tokens_store.pkl'
     if path.isfile(tokens_file):
         import requests, json
+        #with open(tokens_file,'rb') as fr:
+        #    oldaccess_token, valid_refresh_token = pickle.load(fr)
         with open(tokens_file,'rb') as fr:
             oldaccess_token, valid_refresh_token = pickle.load(fr)
+            if valid_refresh_token:
+                pass
+            else:
+                oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
+        
         box_api_token_root = "https://app.box.com/api/oauth2/token"
         data = {
              ##'Authorization': "Bearer " + access_token,
