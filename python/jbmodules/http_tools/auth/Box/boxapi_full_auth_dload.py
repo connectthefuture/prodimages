@@ -119,14 +119,14 @@ def exchange_tokens(refresh_token=None):
         res = requests.post(box_api_token_root, data=data, headers=headers)
         newcreds = json.loads(res.content)
         print(newcreds)
-
-        access_token = newcreds[0]['access_token']
-        refresh_token = newcreds[0]['refresh_token']
-        
-        ## Replace old cred dumping new creds to tokens.pkl
-        ##---NOTE---## refresh token is valid for 60 days, 
-        ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
         try:
+            access_token = newcreds['access_token']
+            refresh_token = newcreds['refresh_token']
+            
+            ## Replace old cred dumping new creds to tokens.pkl
+            ##---NOTE---## refresh token is valid for 60 days, 
+            ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
+           
             with open(tokens_file,'wb') as fw:
                 pickle.dump((access_token, refresh_token,),  fw)
                 return access_token, refresh_token
