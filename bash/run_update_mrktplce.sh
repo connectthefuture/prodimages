@@ -7,12 +7,12 @@ query_marketplace_inprog="/usr/local/batchRunScripts/sql/marketplace_update_filt
 
 sqlcmd="sqlplus -S prod_team_ro/9thfl00r@//borac101-vip.l3.bluefly.com:1521/bfyprd1 @${query_marketplace_inprog}"
 runit=$(echo "$sqlcmd")
-result=$(${runit})
+res=$(${runit})
 
 cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
-echo "$result" | xargs -n1 | wc -l ;
-echo "$result" 
+echo "$result" | xargs -n1 | grep -v selected | wc -l ;
+result=`echo "$result"  xargs -n1 | grep -v selected`
 
 for f in "$result"; do
 #/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
