@@ -16,8 +16,9 @@ alt_styles_list=`cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1
 
 
 # Format string as list for MySQL IN clause
-mainstyles=`echo "(" $(echo $main_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
-altstyles=`echo "(" $(echo $alt_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
+#mainstyles=`echo "(" $(echo $main_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
+mainstyles=`echo "\( $(echo $main_styles_list | sed 's/ //g' | sed 's/,//1') \)"`
+altstyles=`echo "\( $(echo $alt_styles_list | sed 's/ //g' | sed 's/,//1') \)"`
 
 echo  "${allfiles} files - ${primaryonly} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
 
