@@ -127,9 +127,12 @@ def exchange_tokens(refresh_token=None):
         ## Replace old cred dumping new creds to tokens.pkl
         ##---NOTE---## refresh token is valid for 60 days, 
         ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
-        with open(tokens_file,'wb') as fw:
-            pickle.dump((access_token, refresh_token,),  fw)
-            return access_token, refresh_token
+        try:
+            with open(tokens_file,'wb') as fw:
+                pickle.dump((access_token, refresh_token,),  fw)
+                return access_token, refresh_token
+        except KeyError:
+            return
     ###################
     else:
         access_token, refresh_token = authenticate()
