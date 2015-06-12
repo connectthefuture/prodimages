@@ -11,8 +11,8 @@ res=$(${runit})
 
 cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
-echo "$result" | xargs -n1 | grep -v selected | wc -l ;
-result=`echo "$result" | xargs -n1 | grep -v selected`
+echo "$res" | xargs -n1 | grep -v selected | wc -l ;
+result=`echo "$res" | xargs -n1 | grep -v selected`
 
 for f in "$result"; do
 #/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
