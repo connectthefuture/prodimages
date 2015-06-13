@@ -81,6 +81,7 @@ WITH
       colorstyle DESC Nulls Last,
       vendor_name Nulls Last
   )
+
 SELECT data.colorstyle from data WHERE data."imgstyle_amt" < 10 AND data."imgstyle_amt" > 1 and data."req_action" = 'Update';
 
 exit;
