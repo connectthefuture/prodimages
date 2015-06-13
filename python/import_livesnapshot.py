@@ -101,7 +101,7 @@ for k,v in livesnapshot.iteritems():
         
         
         
-        print v['start_dt']
+        print v['colorstyle']
         try:
             connection_www.execute("""
                     INSERT INTO product_snapshot_live 
