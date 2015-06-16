@@ -36,14 +36,8 @@ alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --u
 
 subject=$(echo "Last Upload: ${allfiles} Files - Total Styles: ${primaryonly} at ${process_time}")
 
-content=$(echo "Total Styles: 	${allfiles} \
-				Primary-Images: ${primaryonly} \
-				Alt-Images: 	${altonly} \
-				---- Main-Results --> \
-				${main_results}  \
-				----> Alt-Results --> \
-				${alt_results}") 
-				## --- \n -- ${msql} - ${asql}")
+content=$(echo "Total Styles: ${allfiles}   Primary-Images: ${primaryonly}   Alt-Images: ${altonly}  ---- Main-Results -->  ${main_results} ----> Alt-Results -->  ${alt_results}") 
+                ## --- \n -- ${msql} - ${asql}")
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
