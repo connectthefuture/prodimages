@@ -29,7 +29,7 @@ def oracle_query_dict(q):
         style['prodclr_create_dt']  = row['prodclr_create_dt']
         style['gender']  = row['gender']
         style['product_type']  = row['product_type']
-        style['prod_subtype']  = row['prod_subtype']
+        style['product_subtype']  = row['product_subtype']
         style['category']  = row['category']
         style['image_number']  = row['image_number']
         style['url']  = row['url']
@@ -50,7 +50,7 @@ def import_to_mysql(res):
             try:
                 connection_www.execute("""
                         INSERT INTO product_snapshot_vendor 
-                            (colorstyle, vendor, brand, po_number, prdclr_create_dt, vendor_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type, prod_subtype, image_create_dt, vendor_style, color, vendor_color, vendor_mod_dt, image_number, url) 
+                            (colorstyle, vendor, brand, po_number, prdclr_create_dt, vendor_create_dt, vendor_mod_dt, image_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type, product_subtype, vendor_style, color, vendor_color,  image_number, url) 
                         VALUES 
                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                         ON DUPLICATE KEY UPDATE 
@@ -65,7 +65,7 @@ def import_to_mysql(res):
                             url                     = VALUES(url), 
                             vendor_create_dt        = VALUES(vendor_create_dt), 
                             prdclr_create_dt        = VALUES(prdclr_create_dt);
-                                   """, v['colorstyle'], v['vendor'], v['po_number'], v['prdclr_create_dt'], v['vendor_create_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['gender'], v['category'], v['product_type'], v['prod_subtype'], v['image_create_dt'], v['vendor_style'], v['color'], v['vendor_color'], v['vendor_mod_dt'], v['image_number'],  v['url'])
+                                   """, v['colorstyle'], v['vendor'], v['po_number'], v['prdclr_create_dt'], v['vendor_create_dt'],  v['vendor_mod_dt'], v['image_create_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['gender'], v['category'], v['product_type'], v['product_subtype'], v['vendor_style'], v['color'], v['vendor_color'],v['image_number'],  v['url'])
             #print "Updated Entry {0}".format(k)
             except sqlalchemy.exc.IntegrityError:
                 print "Duplicate Entry {0}".format(k)
@@ -98,7 +98,7 @@ query_vendor_snapshot= """
             THEN POMGR.PRODUCT_FOLDER.NAME
             ELSE PROD_FAMILY_DENORM_LK1.PROD_FAMILY_DESC
           END) product_type,
-        POMGR.PRODUCT_FOLDER.NAME AS prod_subtype,
+        POMGR.PRODUCT_FOLDER.NAME AS product_subtype,
         (
           CASE
             WHEN POMGR.PROD_FAMILY_DENORM_LK.PROD_FAMILY_TREE IS NULL
