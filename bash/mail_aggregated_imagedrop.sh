@@ -32,7 +32,7 @@ alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --u
 
 subject=$(echo "Last Upload: ${allfiles} Files - Total Styles: ${primaryonly} at ${process_time}")
 
-content=$(echo "Primary-Images: ${primaryonly}  Alt-Images: ${altonly}  '\n' Main-Results -->  ${main_results} ----- Alt-Results -->  ${alt_results}")
+content=$(echo "Primary-Images: ${primaryonly}  Alt-Images: ${altonly}  '\n' Main-Results -->  ${main_results} ----- Alt-Results -->  ${alt_results} -----XX---- ${$msql}")
                 ## --- \n -- ${msql} - ${asql}")
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
