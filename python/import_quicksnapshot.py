@@ -64,7 +64,7 @@ def import_to_mysql(res):
                             image_number            = VALUES(image_number),
                             url                     = VALUES(url),
                             vendor_create_dt        = VALUES(vendor_create_dt),
-                            prodclr_create_dt        = VALUES(prodclr_create_dt);
+                            prodclr_create_dt       = VALUES(prodclr_create_dt);
                                    """, v['colorstyle'], v['vendor'], v['brand'], v['po_number'], v['prodclr_create_dt'], v['vendor_create_dt'],  v['vendor_mod_dt'], v['image_create_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['gender'], v['category'], v['product_type'], v['product_subtype'], v['vendor_style'], v['color'], v['vendor_color'],v['image_number'],  v['url'])
             #print "Updated Entry {0}".format(k)
             except sqlalchemy.exc.IntegrityError:
