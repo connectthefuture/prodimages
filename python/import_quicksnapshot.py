@@ -58,10 +58,10 @@ def import_to_mysql(res):
                             production_complete_dt  = VALUES(production_complete_dt), 
                             copy_ready_dt           = VALUES(copy_ready_dt), 
                             image_ready_dt          = VALUES(image_ready_dt), 
-                            vendor_color            = VALUES(vendor_color), 
+                            color                   = VALUES(color), 
                             vendor_mod_dt           = VALUES(vendor_mod_dt), 
-                            gender                  = VALUES(gender), 
                             image_create_dt         = VALUES(image_create_dt), 
+                            image_number            = VALUES(image_number), 
                             url                     = VALUES(url), 
                             vendor_create_dt        = VALUES(vendor_create_dt), 
                             prodclr_create_dt        = VALUES(prodclr_create_dt);

@@ -92,6 +92,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
 def parse_mplace_dict2tuple(styles_dict,dest_root=None):
     import os.path
     mproc_tuple_Qlist = []
+    count = len(set(list(styles_dict.keys())))
     for k,v in styles_dict.iteritems():
         colorstyle  = v['colorstyle']
         image_url   = v['image_url']
@@ -108,7 +109,10 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
         if alt_number:
             bfly_ext = "_{0}{1}".format(alt_number,ext)
             ext = bfly_ext
-        destdir  = os.path.join(dest_root, str(vendor_name), str(po_number))
+        if count > 1:
+            destdir  = os.path.join(dest_root, str(vendor_name), str(po_number))
+        else:
+            destdir  = os.path.join(dest_root, str(vendor_name), str(po_number), str(colorstyle))
         destpath = os.path.join(destdir, colorstyle + ext)
         tupleargs = (image_url, destpath, )
         mproc_tuple_Qlist.append(tupleargs)
@@ -564,6 +568,10 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     # Get the New Style's Urls ####
     #########
     ## 1 ## Query for new Marketplace Styles
+    single_flag = False
+    testflag = str(vendor)
+    if testflag.isdigit() and len(testflag) == 9:
+        single_flag = str(vendor)
     marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, po_number='', ALL=ALL)
     #########
     #  Create 2 item tuple list of every style with valid incomplete urls
@@ -621,7 +629,8 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     #import jbmodules.image_processing.marketplace.multiprocmagick2 as multiprocmagick2
 
     #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
-    multiprocmagick2.funkRunner3(root_img_dir=root_img_dir)
+    print 'Single Flaggin It with --> ', single_flag
+    multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_flag=single_flag)
     print 'Done With multiprocmagick --> ', root_img_dir
 
 

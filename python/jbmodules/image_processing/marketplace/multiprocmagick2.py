@@ -124,7 +124,7 @@ def run_threaded_imgdict(argslist=None):
     return img_dict_list
 
 
-def funkRunner3(root_img_dir=None):
+def funkRunner3(root_img_dir=None, single_flag=None):
     import multiprocessing
     #import Queue
     import threading
@@ -143,7 +143,11 @@ def funkRunner3(root_img_dir=None):
     # List of images to run through processing as glob of the root_img_dir
     #print root_img_dir, ' <-- Rootimgdir FunkR2'
     if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE' or root_img_dir is None:
-        imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
+        if single_flag:
+            imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
+        else:
+            imagesGlob = os.path.join(root_img_dir, '*/*/*/{0}_[1-6].??[gG]'.format(single_flag))
+
     else:
         imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
 
@@ -183,6 +187,11 @@ def funkRunner3(root_img_dir=None):
     s.start()
 
 
+    if single_flag:
+        for img in imagesGlob:
+            os.remove(img)
+            print 'Deleted {0} after uploading'.format(img)
+    
     ########## Five ##########
     # Delete em all
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
