@@ -2,11 +2,11 @@
 
 
 """
-Created on sun jul 22 14:48:56 2013
+Created on sun jun 12 14:48:56 2015
 
 @author: jb
 """
-    
+
 def oracle_query_dict(q):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
@@ -49,21 +49,21 @@ def import_to_mysql(res):
             connection_www = mysql_engine_www.connect()
             try:
                 connection_www.execute("""
-                        INSERT INTO product_snapshot_vendor 
-                            (colorstyle, vendor, brand, po_number, prodclr_create_dt, vendor_create_dt, vendor_mod_dt, image_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type, product_subtype, vendor_style, color, vendor_color,  image_number, url) 
-                        VALUES 
+                        INSERT INTO product_snapshot_vendor
+                            (colorstyle, vendor, brand, po_number, prodclr_create_dt, vendor_create_dt, vendor_mod_dt, image_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type, product_subtype, vendor_style, color, vendor_color,  image_number, url)
+                        VALUES
                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                        ON DUPLICATE KEY UPDATE 
-                            category                = VALUES(category), 
-                            production_complete_dt  = VALUES(production_complete_dt), 
-                            copy_ready_dt           = VALUES(copy_ready_dt), 
-                            image_ready_dt          = VALUES(image_ready_dt), 
-                            color                   = VALUES(color), 
-                            vendor_mod_dt           = VALUES(vendor_mod_dt), 
-                            image_create_dt         = VALUES(image_create_dt), 
-                            image_number            = VALUES(image_number), 
-                            url                     = VALUES(url), 
-                            vendor_create_dt        = VALUES(vendor_create_dt), 
+                        ON DUPLICATE KEY UPDATE
+                            category                = VALUES(category),
+                            production_complete_dt  = VALUES(production_complete_dt),
+                            copy_ready_dt           = VALUES(copy_ready_dt),
+                            image_ready_dt          = VALUES(image_ready_dt),
+                            color                   = VALUES(color),
+                            vendor_mod_dt           = VALUES(vendor_mod_dt),
+                            image_create_dt         = VALUES(image_create_dt),
+                            image_number            = VALUES(image_number),
+                            url                     = VALUES(url),
+                            vendor_create_dt        = VALUES(vendor_create_dt),
                             prodclr_create_dt        = VALUES(prodclr_create_dt);
                                    """, v['colorstyle'], v['vendor'], v['brand'], v['po_number'], v['prodclr_create_dt'], v['vendor_create_dt'],  v['vendor_mod_dt'], v['image_create_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['gender'], v['category'], v['product_type'], v['product_subtype'], v['vendor_style'], v['color'], v['vendor_color'],v['image_number'],  v['url'])
             #print "Updated Entry {0}".format(k)
@@ -193,7 +193,7 @@ def run_threaded_mysql_insert(import_dict=None):
 def main():
     print 'Getting Data from Oracle'
     res = oracle_query_dict(query_vendor_snapshot)
-    print 'Importing to MySql' 
+    print 'Importing to MySql'
     #run_threaded_mysql_insert(import_dict=(list(res.items()),))
     import_to_mysql(res)
     print 'Import Complete'
