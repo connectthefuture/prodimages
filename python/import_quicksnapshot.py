@@ -177,7 +177,7 @@ query_vendor_snapshot= """
         1 DESC Nulls Last"""
 
 def main():
-    #### Run Import To Mysql
+    ### Run Import To Mysql
     import sys
     import os
     import sqlalchemy
