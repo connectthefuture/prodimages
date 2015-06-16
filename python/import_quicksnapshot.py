@@ -147,12 +147,12 @@ query_vendor_snapshot= """
         POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID
       WHERE
         (
-          Pomgr.Product_Color.CREATED_DATE >= SysDate - 90
+          Pomgr.Product_Color.CREATED_DATE >= SysDate - 240
         )
       OR
         (
           POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER   <= 1
-        AND trunc(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) >= SysDate - 90
+        AND trunc(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) >= SysDate - 240
         )
       ORDER BY
         prodclr_create_dt DESC,
