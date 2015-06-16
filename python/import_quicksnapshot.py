@@ -158,11 +158,43 @@ query_vendor_snapshot= """
         prodclr_create_dt DESC,
         1 DESC Nulls Last"""
 
+def run_threaded_mysql_insert(import_dict=None):
+    import Queue
+    import threading
+    import multiprocessing
+
+    q = Queue.Queue()
+    for i in import_dict.iteritems(): #put 30 tasks in the queue
+        #print 'i ', ' import_dict'
+        if i:
+            q.put([i])
+
+    def worker():
+        count = 0
+        while True:
+            item = q.get()
+            #
+            import_to_mysql(item)
+            count += 1
+            print count, '\n\t Insert Threade'#, imgdata
+            q.task_done()
+
+    jobcount = multiprocessing.cpu_count() - 2  # --> detects number of cores on host manchine
+    print("Creating %d threads" % jobcount)
+    for i in xrange(jobcount):
+        t = threading.Thread(target=worker)
+        t.daemon = True
+        t.start()
+
+    q.join() #block until all tasks are done
+
+
 def main():
     print 'Getting Data from Oracle'
     res = oracle_query_dict(query_vendor_snapshot)
-    print 'Importing to MySql'
-    import_to_mysql(res)
+    print 'Importing to MySql' 
+    run_threaded_mysql_insert(argslist=(list(res.items()),))
+    ##import_to_mysql(res)
     print 'Import Complete'
     for k,v in res.iteritems():
         print "{0}: {1}".format(k,v)
