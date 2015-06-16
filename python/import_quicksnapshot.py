@@ -107,9 +107,9 @@ query_vendor_snapshot= """
           END) category,
         POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER  AS image_number,
         POMGR.SUPPLIER_INGEST_IMAGE.URL           AS url,
-        POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE  AS image_create_dt,
-        POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS vendor_create_dt,
-        POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE AS vendor_mod_dt
+        trunc(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) AS image_create_dt,
+        trunc(POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE)  AS vendor_create_dt,
+        trunc(POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE) AS vendor_mod_dt
       FROM
         Pomgr.Product_Color
       LEFT OUTER JOIN POMGR.SUPPLIER_INGEST_STYLE
@@ -152,7 +152,7 @@ query_vendor_snapshot= """
       OR
         (
           POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER   <= 1
-        AND POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE >= SysDate - 90
+        AND trunc(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) >= SysDate - 90
         )
       ORDER BY
         prodclr_create_dt DESC,
