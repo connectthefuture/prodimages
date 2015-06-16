@@ -45,7 +45,6 @@ def import_to_mysql(res):
     import sqlalchemy
     for k,v in res.iteritems():
         try:
-
             mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
             connection_www = mysql_engine_www.connect()
             try:
