@@ -147,12 +147,12 @@ query_vendor_snapshot= """
         POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID
       WHERE
         (
-          Pomgr.Product_Color.CREATED_DATE >= SysDate - 90
+          Pomgr.Product_Color.CREATED_DATE >= SysDate - 240
         )
       OR
         (
           POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER   <= 1
-        AND trunc(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) >= SysDate - 90
+        AND trunc(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) >= SysDate - 240
         )
       ORDER BY
         prodclr_create_dt DESC,
@@ -193,8 +193,8 @@ def main():
     print 'Getting Data from Oracle'
     res = oracle_query_dict(query_vendor_snapshot)
     print 'Importing to MySql' 
-    run_threaded_mysql_insert(argslist=(list(res.items()),))
-    ##import_to_mysql(res)
+    #run_threaded_mysql_insert(import_dict=(list(res.items()),))
+    import_to_mysql(res)
     print 'Import Complete'
     for k,v in res.iteritems():
         print "{0}: {1}".format(k,v)

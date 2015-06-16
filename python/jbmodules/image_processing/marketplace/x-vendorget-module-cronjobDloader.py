@@ -629,7 +629,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     #import jbmodules.image_processing.marketplace.multiprocmagick2 as multiprocmagick2
 
     #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
-    print 'Single Flaggin It with --> ', single_flag
+    print 'Single Flaggin It with --> ', single_flag, '\n', urlsdload_list
     multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_flag=single_flag)
     print 'Done With multiprocmagick --> ', root_img_dir
 
