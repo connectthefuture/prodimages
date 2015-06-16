@@ -79,6 +79,7 @@ def import_to_mysql(res):
 
 #     except KeyError:
 #         continue
+
 query_vendor_snapshot= """
         SELECT DISTINCT
         Pomgr.Product_Color.ID                AS colorstyle,
