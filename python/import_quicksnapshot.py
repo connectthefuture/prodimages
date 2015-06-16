@@ -50,7 +50,7 @@ def import_to_mysql(res):
             try:
                 connection_www.execute("""
                         INSERT INTO product_snapshot_vendor 
-                            (colorstyle, vendor, brand, po_number, prdclr_create_dt, vendor_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type,  prod_subtype, image_create_dt, vendor_style, color, vendor_color, vendor_mod_dt, image_number, url) 
+                            (colorstyle, vendor, brand, po_number, prdclr_create_dt, vendor_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type, prod_subtype, image_create_dt, vendor_style, color, vendor_color, vendor_mod_dt, image_number, url) 
                         VALUES 
                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                         ON DUPLICATE KEY UPDATE 
@@ -162,7 +162,7 @@ def main():
     print 'Getting Data from Oracle'
     res = oracle_query_dict(query_vendor_snapshot)
     print 'Importing to MySql'
-    #import_to_mysql(res)
+    import_to_mysql(res)
     print 'Import Complete'
     for k,v in res.iteritems():
         print "{0}: {1}".format(k,v)
