@@ -41,19 +41,8 @@ def oracle_query_dict(q):
     return styles
 
 
-
-## Truncate Prior to Inserting new data
-#mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-#connection1 = mysql_engine.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_vendor"""
-#connection1.close()
-
-## Trunc www_django vers wont TRUNC du to Foreign Keys
-#mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-#connectiondj = mysql_engine_dj.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_vendor"""
-#connectiondj.close()
 def import_to_mysql(res):
+    import sqlalchemy
     for k,v in res.iteritems():
         try:
 
@@ -82,11 +71,6 @@ def import_to_mysql(res):
         #print "Updated Entry {0}".format(k)
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
-
-
-
-        #print "Successful Insert Push_Photoselecs --> {0}".format(k)
-
 
         except sqlalchemy.exc.IntegrityError:
             print "Duplicate Entry {0}".format(k)
@@ -177,10 +161,6 @@ query_vendor_snapshot= """
         1 DESC Nulls Last"""
 
 def main():
-    ### Run Import To Mysql
-    import sys
-    import os
-    import sqlalchemy
     print 'Getting Data from Oracle'
     res = oracle_query_dict(query_vendor_snapshot)
     print 'Importing to MySql'
