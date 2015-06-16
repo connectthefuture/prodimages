@@ -93,37 +93,44 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
     import os.path
     mproc_tuple_Qlist = []
     count = len(set(list(styles_dict.keys())))
+    print count, styles_dict.keys()
     for k,v in styles_dict.iteritems():
-        colorstyle  = v['colorstyle']
-        image_url   = v['image_url']
-        po_number   = v['po_number']
-        vendor_name = v['vendor_name']
-        alt_number  = v['alt']
-        ext = '.' + image_url.split('.')[-1]
-        if len(image_url.split('.')[-1]) == 3:
-            ext = '.' + str(image_url.split('.')[-1][:3])
-            ext = ext.lower().strip('?dl=0')
-            ext = ext.lower().strip('?dl=1')
-        else:
-            ext = '.jpg'
-        if alt_number:
-            bfly_ext = "_{0}{1}".format(alt_number,ext)
-            ext = bfly_ext
-        if count > 1:
-            destdir  = os.path.join(dest_root, str(vendor_name), str(po_number))
-        else:
-            destdir  = os.path.join(dest_root, str(vendor_name), str(po_number), str(colorstyle))
-        destpath = os.path.join(destdir, colorstyle + ext)
-        tupleargs = (image_url, destpath, )
-        mproc_tuple_Qlist.append(tupleargs)
-        if os.path.isdir(destdir):
-            pass
-        else:
-            try:
-                os.makedirs(destdir)
-            except:
-                pass
+        try:
+            colorstyle  = v['colorstyle']
+            image_url   = v['image_url']
+            po_number   = v['po_number']
+            vendor_name = v['vendor_name']
+            alt_number  = v['alt']
+            ext = '.' + image_url.split('.')[-1]
+            if len(image_url.split('.')[-1]) == 3:
+                ext = '.' + str(image_url.split('.')[-1][:3])
+                ext = ext.lower().strip('?dl=0')
+                ext = ext.lower().strip('?dl=1')
+            else:
+                ext = '.jpg'
+            if alt_number:
+                bfly_ext = "_{0}{1}".format(alt_number,ext)
+                ext = bfly_ext
+            if count > 1:
+                destdir  = os.path.join(dest_root, str(vendor_name), str(po_number))
+            elif count == 1:
+                destdir  = os.path.join(dest_root, str(vendor_name), str(po_number), str(colorstyle))
+            else:
+                raise ValueError
 
+            destpath = os.path.join(destdir, colorstyle + ext)
+            tupleargs = (image_url, destpath, )
+            mproc_tuple_Qlist.append(tupleargs)
+            if os.path.isdir(destdir):
+                pass
+            else:
+                try:
+                    os.makedirs(destdir)
+                except:
+                    pass
+        except ValueError:
+            print 'Raised ValueError ', count, k,' ',v
+            pass
     return mproc_tuple_Qlist
 
 def drive_match_fileid(image_url):
