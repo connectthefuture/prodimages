@@ -50,7 +50,7 @@ def import_to_mysql(res):
             try:
                 connection_www.execute("""
                         INSERT INTO product_snapshot_vendor 
-                            (colorstyle, vendor, brand, po_number, prdclr_create_dt, vendor_create_dt, vendor_mod_dt, image_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type, product_subtype, vendor_style, color, vendor_color,  image_number, url) 
+                            (colorstyle, vendor, brand, po_number, prodclr_create_dt, vendor_create_dt, vendor_mod_dt, image_create_dt, copy_ready_dt, image_ready_dt, production_complete_dt, gender, category, product_type, product_subtype, vendor_style, color, vendor_color,  image_number, url) 
                         VALUES 
                             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                         ON DUPLICATE KEY UPDATE 
@@ -64,8 +64,8 @@ def import_to_mysql(res):
                             image_create_dt         = VALUES(image_create_dt), 
                             url                     = VALUES(url), 
                             vendor_create_dt        = VALUES(vendor_create_dt), 
-                            prdclr_create_dt        = VALUES(prdclr_create_dt);
-                                   """, v['colorstyle'], v['vendor'], v['po_number'], v['prdclr_create_dt'], v['vendor_create_dt'],  v['vendor_mod_dt'], v['image_create_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['gender'], v['category'], v['product_type'], v['product_subtype'], v['vendor_style'], v['color'], v['vendor_color'],v['image_number'],  v['url'])
+                            prodclr_create_dt        = VALUES(prodclr_create_dt);
+                                   """, v['colorstyle'], v['vendor'], v['po_number'], v['prodclr_create_dt'], v['vendor_create_dt'],  v['vendor_mod_dt'], v['image_create_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['gender'], v['category'], v['product_type'], v['product_subtype'], v['vendor_style'], v['color'], v['vendor_color'],v['image_number'],  v['url'])
             #print "Updated Entry {0}".format(k)
             except sqlalchemy.exc.IntegrityError:
                 print "Duplicate Entry {0}".format(k)
@@ -83,12 +83,12 @@ query_vendor_snapshot= """
         Pomgr.Product_Color.ID                AS colorstyle,
         POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor,
         POMGR.BRAND.NAME                      AS brand,
-        POMGR.PO_HDR.ID as po_number,
-        Pomgr.Product_Color.VENDOR_STYLE vendor_style,
-        Pomgr.Product_Color.VENDOR_COLOR vendor_color,
+        POMGR.PO_HDR.ID AS po_number,
+        Pomgr.Product_Color.VENDOR_STYLE AS vendor_style,
+        Pomgr.Product_Color.VENDOR_COLOR AS vendor_color,
         POMGR.COLOR_GROUP.DESCRIPTION      AS color,
         Pomgr.Product_Color.IMAGE_READY_DT AS image_ready_dt,
-        Pomgr.Product_Color.COPY_READY_DT copy_ready_dt,
+        Pomgr.Product_Color.COPY_READY_DT AS copy_ready_dt,
         Pomgr.Product_Color.PRODUCTION_COMPLETE_DT AS production_complete_dt,
         Pomgr.Product_Color.CREATED_DATE           AS prodclr_create_dt,
         POMGR.LK_DEPT.NAME                         AS gender,
