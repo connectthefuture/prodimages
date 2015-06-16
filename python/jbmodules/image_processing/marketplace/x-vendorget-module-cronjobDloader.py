@@ -133,6 +133,7 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
             pass
     return mproc_tuple_Qlist
 
+
 def drive_match_fileid(image_url):
     import re
     regex_drive3 = re.compile(r'^(https://d(.+?)\.google\.com/file/d/)(?P<fileid>.+?)/(edit|view)\?usp\=.*?$', re.U)
@@ -141,11 +142,13 @@ def drive_match_fileid(image_url):
         fileid = drivefile.groupdict()['fileid']
         return fileid
 
+
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
         metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
     return metadata
+
 
 def get_box_access_token():
     import os
