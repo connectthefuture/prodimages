@@ -45,82 +45,54 @@ def oracle_query_dict(q):
 ## Truncate Prior to Inserting new data
 #mysql_engine = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
 #connection1 = mysql_engine.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+#trunc_table = """TRUNCATE TABLE product_snapshot_vendor"""
 #connection1.close()
 
 ## Trunc www_django vers wont TRUNC du to Foreign Keys
 #mysql_engine_dj  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
 #connectiondj = mysql_engine_dj.connect()
-#trunc_table = """TRUNCATE TABLE product_snapshot_live"""
+#trunc_table = """TRUNCATE TABLE product_snapshot_vendor"""
 #connectiondj.close()
 def import_to_mysql(res):
-  for k,v in res.iteritems():
-      try:
+    for k,v in res.iteritems():
+        try:
 
-          mysql_engine_data = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/data_imagepaths')
-          mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-          connection_data = mysql_engine_data.connect()
-          connection_www = mysql_engine_www.connect()
+            mysql_engine_www  = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
+            connection_www = mysql_engine_www.connect()
 
-          try:
-              connection_data.execute("""
-                      INSERT INTO product_snapshot_live 
-                          (colorstyle, brand, production_status, po_number, sample_status, status_dt, copy_ready_dt, image_ready_dt, production_complete_dt, start_dt, orig_start_dt, gender, category, product_type, sample_image_dt, vendor_style, color, product_subtype, sample_id, sku, track_number, track_dt, sample_location, track_user, po_type) 
-                      VALUES 
-                          (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                      ON DUPLICATE KEY UPDATE 
-                          production_status       = VALUES(production_status), 
-                          production_complete_dt  = VALUES(production_complete_dt), 
-                          copy_ready_dt           = VALUES(copy_ready_dt), 
-                          image_ready_dt          = VALUES(image_ready_dt), 
-                          track_number            = VALUES(track_number), 
-                          track_dt                = VALUES(track_dt), 
-                          track_user              = VALUES(track_user), 
-                          sample_image_dt         = VALUES(sample_image_dt), 
-                          sample_id               = VALUES(sample_id), 
-                          status_dt               = VALUES(status_dt), 
-                          sample_status           = VALUES(sample_status);
-                                 """, v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
-              #print "Updated Entry {0}".format(k)
-          except sqlalchemy.exc.IntegrityError:
-              print "Duplicate Entry {0}".format(k)
-          
-          
-          
-          print v['colorstyle']
-          try:
-              connection_www.execute("""
-                      INSERT INTO product_snapshot_live 
-                          (colorstyle, brand, production_status, po_number, sample_status, status_dt, copy_ready_dt, image_ready_dt, production_complete_dt, start_dt, orig_start_dt, gender, category, product_type, sample_image_dt, vendor_style, color, product_subtype, sample_id, sku, track_number, track_dt, sample_location, track_user, po_type) 
-                      VALUES 
-                          (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                      ON DUPLICATE KEY UPDATE 
-                          production_status       = VALUES(production_status), 
-                          production_complete_dt  = VALUES(production_complete_dt), 
-                          copy_ready_dt           = VALUES(copy_ready_dt), 
-                          image_ready_dt          = VALUES(image_ready_dt), 
-                          track_number            = VALUES(track_number), 
-                          track_dt                = VALUES(track_dt), 
-                          track_user              = VALUES(track_user), 
-                          sample_image_dt         = VALUES(sample_image_dt), 
-                          sample_id               = VALUES(sample_id), 
-                          status_dt               = VALUES(status_dt), 
-                          sample_status           = VALUES(sample_status);
-                                 """, v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
-              #print "Updated Entry {0}".format(k)
-          except sqlalchemy.exc.IntegrityError:
-              print "Duplicate Entry {0}".format(k)
-          
-          
-          
-          #print "Successful Insert Push_Photoselecs --> {0}".format(k)
+    try:
+        connection_www.execute("""
+              INSERT INTO product_snapshot_vendor 
+                  (colorstyle, brand, production_status, po_number, sample_status, status_dt, copy_ready_dt, image_ready_dt, production_complete_dt, start_dt, orig_start_dt, gender, category, product_type, sample_image_dt, vendor_style, color, product_subtype, sample_id, sku, track_number, track_dt, sample_location, track_user, po_type) 
+              VALUES 
+                  (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+              ON DUPLICATE KEY UPDATE 
+                  production_status       = VALUES(production_status), 
+                  production_complete_dt  = VALUES(production_complete_dt), 
+                  copy_ready_dt           = VALUES(copy_ready_dt), 
+                  image_ready_dt          = VALUES(image_ready_dt), 
+                  track_number            = VALUES(track_number), 
+                  track_dt                = VALUES(track_dt), 
+                  track_user              = VALUES(track_user), 
+                  sample_image_dt         = VALUES(sample_image_dt), 
+                  sample_id               = VALUES(sample_id), 
+                  status_dt               = VALUES(status_dt), 
+                  sample_status           = VALUES(sample_status);
+                         """, v['colorstyle'], v['brand'], v['production_status'], v['po_number'], v['sample_status'], v['status_dt'], v['copy_ready_dt'], v['image_ready_dt'], v['production_complete_dt'], v['start_dt'], v['orig_start_dt'], v['gender'], v['category'], v['product_type'], v['sample_image_dt'], v['vendor_style'], v['color'], v['product_subtype'], v['sample_id'], v['sku'], v['track_number'], v['track_dt'], v['sample_location'], v['track_user'], v['po_type'])
+#print "Updated Entry {0}".format(k)
+    except sqlalchemy.exc.IntegrityError:
+        print "Duplicate Entry {0}".format(k)
 
 
-      except sqlalchemy.exc.IntegrityError:
-          print "Duplicate Entry {0}".format(k)
-      except sqlalchemy.exc.DatabaseError:
-          continue
-          print "DBERR" + k
+
+    #print "Successful Insert Push_Photoselecs --> {0}".format(k)
+
+
+    except sqlalchemy.exc.IntegrityError:
+        print "Duplicate Entry {0}".format(k)
+    except sqlalchemy.exc.DatabaseError:
+        continue
+        print "DBERR" + k
 
 #     except KeyError:
 #         continue
@@ -205,16 +177,17 @@ query_vendor_snapshot= """
         1 DESC Nulls Last"""
 
 def main():
-  #### Run Import To Mysql
-  import sys
-  import os
-  import sqlalchemy
-  print 'Getting Data from Oracle'
-  res = oracle_query_dict(query_vendor_snapshot)
-  print 'Importing to MySql'
-  #import_to_mysql(res)
-  print 'Import Complete'
-
+    #### Run Import To Mysql
+    import sys
+    import os
+    import sqlalchemy
+    print 'Getting Data from Oracle'
+    res = oracle_query_dict(query_vendor_snapshot)
+    print 'Importing to MySql'
+    #import_to_mysql(res)
+    print 'Import Complete'
+    for k,v in res:
+        print "\{{0}: {1}\}".format(k,v)
 
 if __name__ == '__main__':
     main()
