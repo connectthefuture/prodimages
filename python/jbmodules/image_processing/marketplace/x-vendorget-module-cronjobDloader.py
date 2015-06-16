@@ -90,10 +90,19 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
 
 
 def parse_mplace_dict2tuple(styles_dict,dest_root=None):
-    import os.path
-    mproc_tuple_Qlist = []
-    count = len(set(list(styles_dict.keys())))
+    import os.path, sys
+    count = ''
+    try:
+        if str(sys.argv[1]).isdigit() and len(str(sys.argv[1])) == 9:
+            count = 1
+        else:
+            count = len(set(list(styles_dict.keys())))
+    except KeyError:
+        count = len(set(list(styles_dict.keys())))
+
     print count, styles_dict.keys()
+    
+    mproc_tuple_Qlist = []
     for k,v in styles_dict.iteritems():
         try:
             colorstyle  = v['colorstyle']
