@@ -165,7 +165,7 @@ def main():
     #import_to_mysql(res)
     print 'Import Complete'
     for k,v in res.iteritems():
-        print "\{{0}: {1}\}".format(k,v)
+        print "{0}: {1}".format(k,v)
 
 if __name__ == '__main__':
     main()
