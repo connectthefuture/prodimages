@@ -45,3 +45,4 @@ content=$(echo "Total Styles: ${allfiles} \nPrimary-Images: ${primaryonly} \t Al
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
 
 echo "${subject} -- \\\\n ${content}"
+
