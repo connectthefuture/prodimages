@@ -193,7 +193,7 @@ def main():
     print 'Getting Data from Oracle'
     res = oracle_query_dict(query_vendor_snapshot)
     print 'Importing to MySql' 
-    run_threaded_mysql_insert(argslist=(list(res.items()),))
+    run_threaded_mysql_insert(import_dict=(list(res.items()),))
     ##import_to_mysql(res)
     print 'Import Complete'
     for k,v in res.iteritems():
