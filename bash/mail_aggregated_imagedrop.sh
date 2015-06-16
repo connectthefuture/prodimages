@@ -50,5 +50,5 @@ content=$(echo "Total Styles: 	${allfiles} \
 
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
 
-echo "${subject} -- \\\\n ${content}"
+echo "${subject} -- \\\\n ${content} \\\\\n ${msql}"
 
