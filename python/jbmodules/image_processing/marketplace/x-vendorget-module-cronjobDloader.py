@@ -185,6 +185,7 @@ def download_mplce_url(urldest_tuple):
     countstyle = 0
     image_url, destpath = urldest_tuple
     destdir = os.path.dirname(destpath)
+    colorstyle = destpath.split('/')[-1][:9]
     alt_number = destpath.split('_')[-1][0]
     try:
         image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
@@ -425,6 +426,11 @@ def multi_url_downloader(argslist=None):
                 except:
                     pass
                 q.task_done()
+            # finally:
+            #     try:
+            #         q.task_done()
+            #     except:
+            #         pass
 
     cpus=multiprocessing.cpu_count() * 2 #detect number of cores
     print("Creating %d threads" % cpus)
