@@ -25,5 +25,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: System :: Filesystems',
         'Topic :: System :: Operating System',
-    ]
+    ], requires=['sqlalchemy']
 )

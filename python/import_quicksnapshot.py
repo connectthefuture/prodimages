@@ -73,8 +73,9 @@ def import_to_mysql(res):
             except sqlalchemy.exc.IntegrityError:
                 print "Duplicate Entry {0}".format(k)
         except sqlalchemy.exc.DatabaseError:
-            continue
             print "DBERR" + k
+            continue
+
 
 #     except KeyError:
 #         continue
