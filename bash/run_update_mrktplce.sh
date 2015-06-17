@@ -5,12 +5,12 @@
 
 query_marketplace_inprog="/usr/local/batchRunScripts/sql/marketplace_update_filter.sql"
 
-cnx=`$BFYPRDLOGIN @$query_marketplace_inprog` ;
+cnx=`$BFYPRDLOGIN @$query_marketplace_inprog;`
 RES=`"$cnx" | xargs -n1 | grep -v selected`
 
 echo "Total to Update ...." ;
 
-for f in $RES ;
+for f in `$RES` ;
 do
 # 	/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
 echo Completed "$f" ;
