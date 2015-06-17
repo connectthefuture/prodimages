@@ -6,7 +6,7 @@ SET PAGESIZE 0
 SET SERVEROUTPUT OFF
 SET HEADING OFF
 SET NEWPAGE 0
---SET ECHO OFF
+SET ECHO ON
 SET VERIFY OFF
 SET WRAP OFF ;
 
@@ -79,8 +79,7 @@ WITH data AS
 			"colorstyle" DESC
 	)
 
-SELECT "data".colorstyle
-from "data"
+SELECT "data".colorstyle FROM "data"
 WHERE "data".imgstyle_amt < 10
 AND "data".imgstyle_amt > 1
 AND "data".req_action = 'Update' ;
