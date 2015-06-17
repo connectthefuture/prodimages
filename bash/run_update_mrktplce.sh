@@ -10,6 +10,6 @@ echo "Total to Update ...." ;
 
 for f in $(echo -e `$BFYPRDLOGIN '@'$query_marketplace_inprog`); 
 do 
-echo -e "$f" ; 
-# /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
+/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
+echo "Done with ${f}"
 done ;
