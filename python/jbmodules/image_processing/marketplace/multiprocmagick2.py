@@ -187,10 +187,12 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     s.start()
 
 
-    # if single_flag:
-    #     for img in imagesGlob:
-    #         os.remove(img)
-    #         print 'Deleted {0} after uploading'.format(img)
+    if single_flag and len(imagesGlob) <= 7:
+        settest = list(set([ f.split('/')[:9] for f in glob.glob(imagesGlob) if f is not None ] ))
+        print settest, len(settest), ' <=====END FLAG TEST'
+        for img in imagesGlob:
+            os.remove(img)
+            print 'Deleted {0} after uploading'.format(img)
     
     ########## Five ##########
     # Delete em all
