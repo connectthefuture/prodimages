@@ -12,7 +12,8 @@ RES='$(sqlplus prod_team_ro/9thfl00r@//borac101-vip.l3.bluefly.com:1521/bfyprd1 
 #runit=$(${sqlcmd} | /bin/bash)
 #res=$runit
 #res=`$sqlcmd`
-cat 
+`echo \`cat $query_marketplace_inprog\``
+
 #locale ;
 #cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
