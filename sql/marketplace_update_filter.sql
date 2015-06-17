@@ -1,5 +1,6 @@
 SET TRIMOUT ON
 --SET FLUSH OFF
+SET FEEDBACK OFF
 SET TAB ON
 SET PAGESIZE 0
 SET HEADING OFF
@@ -7,6 +8,7 @@ SET NEWPAGE NONE
 SET ECHO OFF
 SET VERIFY OFF
 SET WRAP OFF
+--SET NULL "NULL"
 
 WITH
   data AS
@@ -62,8 +64,7 @@ WITH
       POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID
     LEFT JOIN POMGR.PO_LINE
     ON
-      POMGR.PO_LINE.PRODUCT_COLOR_ID =
-      POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR
+      POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR
     LEFT JOIN POMGR.PRODUCT_COLOR
     ON
       POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID
@@ -78,10 +79,13 @@ WITH
     ORDER BY
       4 DESC,
       3,
-      colorstyle DESC Nulls Last,
-      vendor_name Nulls Last
+      colorstyle DESC
   )
 
-SELECT data.colorstyle from data WHERE data."imgstyle_amt" < 10 AND data."imgstyle_amt" > 1 and data."req_action" = 'Update';
+SELECT data.colorstyle 
+from data 
+WHERE data.imgstyle_amt < 10 
+AND data.imgstyle_amt > 1 
+AND data.req_action = 'Update' ;
 
 exit;
