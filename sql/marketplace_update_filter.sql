@@ -73,15 +73,8 @@ WITH data AS
 		AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID not LIKE '%Skye%'
 		AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID not LIKE '%SWI%'
 		AND POMGR.PRODUCT_COLOR.IMAGE_READY_DT       <= SysDate - 2
-		ORDER BY
-			4 DESC,
-			3,
-			"colorstyle" DESC
-	)
 
-SELECT "data".colorstyle FROM "data"
-WHERE "data".imgstyle_amt < 10
-AND "data".imgstyle_amt > 1
-AND "data".req_action = 'Update' ;
+	)
+SELECT "data".colorstyle FROM "data" WHERE "data".imgstyle_amt < 10 AND "data".imgstyle_amt > 1 AND "data".req_action = 'Update' ;
 
 exit;
