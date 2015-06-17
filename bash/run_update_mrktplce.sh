@@ -1,6 +1,6 @@
-#!/bin/bash -xv
+#!/usr/bin/env bash -xv
 
-#. ~/.bash_profile
+# . ~/.bash_profile
 
 # shopt -s xpg_echo expand_aliases direxpand
 # shopt -u hostcomplete extquote
@@ -15,6 +15,7 @@ res='sqlplus -S prod_team_ro/9thfl00r@//borac101-vip.l3.bluefly.com:1521/bfyprd1
 locale ;
 #cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
+$($res) ; 
 
 for f in $($res)
 do
