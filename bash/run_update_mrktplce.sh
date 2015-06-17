@@ -16,7 +16,7 @@ locale ;
 #cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
 
-for f in $(${res})
+for f in $($res)
 do
 # 	/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
 echo Completed "$f" ;
