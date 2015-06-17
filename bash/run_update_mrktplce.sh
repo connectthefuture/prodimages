@@ -9,7 +9,7 @@ cnx=$($BFYPRDLOGIN @$query_marketplace_inprog;)
 
 echo "Total to Update ...." ;
 
-for f in $cnx ;
+for f in "$cnx" ;
 do
 # 	/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
 echo Completed "$f" ;
