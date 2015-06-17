@@ -100,7 +100,7 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
     except IndexError:
         count = 0 #len(set(list([k for k in styles_dict.keys()])))
 
-    print count, styles_dict.keys()
+    print ' Count ', count, styles_dict.keys()
     
     mproc_tuple_Qlist = []
     for k,v in styles_dict.iteritems():
