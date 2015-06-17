@@ -2,7 +2,7 @@
 
 . ~/.bash_profile
 
-shopt -s xpg_echo
+shopt -s xpg_echo expand_aliases dir_expand
 shopt -u hostcomplete extquote
 
 query_marketplace_inprog="/usr/local/batchRunScripts/sql/marketplace_update_filter.sql"
