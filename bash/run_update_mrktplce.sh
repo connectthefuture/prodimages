@@ -19,7 +19,7 @@ echo "Total to Update ...." ;
 # done
 
 ##parallel -P2 -X --progress echo {} ::: 
-
+$runit
 echo $(echo "$res" | grep -v selected | xargs -n1) | wc -l
 
 echo $(shopt)
