@@ -260,6 +260,7 @@ def subproc_magick_large_jpg(img, destdir=None):
             vert_horiz = '400x'
 
         dimensions = "400x480"
+
         #print dimensions, vert_horiz
 
         ext = img.split('.')[-1]
@@ -543,17 +544,17 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
         "-density",
         "72",
-        "-units", 
+        "-units",
         "pixelsperinch",
-                           
+
         # '-bordercolor',
         # 'white',
         # '-border',
         # '1x1',
-        
+
         '-background',
         'white',
-        
+
         "-define",
         "filter:blur=0.625",
         #"filter:blur=0.88549061701764",
