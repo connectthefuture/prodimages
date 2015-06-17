@@ -1,13 +1,12 @@
 #!/bin/bash -xv
 
-# . ~/.bash_profile
+. ~/.bash_profile
 
-# shopt -s xpg_echo expand_aliases direxpand
-# shopt -u hostcomplete extquote
-# export LANGUAGE="en" ;
+
 query_marketplace_inprog="/usr/local/batchRunScripts/sql/marketplace_update_filter.sql"
 
-RES=$(sqlplus -s prod_team_ro\\"/\\"9thfl00r\\"@\\"//borac101-vip.l3.bluefly.com:1521/bfyprd1 \\"@\\"$query_marketplace_inprog | xargs -n1 | grep -v selected)
+cnx=$BFYPRDLOGIN @$query_marketplace_inprog ;
+RES=$($cnx | xargs -n1 | grep -v selected)
 
 echo "Total to Update ...." ;
 
