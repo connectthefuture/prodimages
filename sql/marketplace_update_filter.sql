@@ -22,7 +22,7 @@ WITH data AS
 			END imgstyle_amt,
 			CASE
 				WHEN to_date(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) > to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT)
-				THEN "Update"
+				THEN 'Update'
 				ELSE 'NoChange'
 			END req_action,
 			CASE
@@ -75,6 +75,6 @@ WITH data AS
 		AND POMGR.PRODUCT_COLOR.IMAGE_READY_DT       <= SysDate - 2
 
 	)
-SELECT "data".colorstyle FROM "data" WHERE "data".imgstyle_amt < 10 AND "data".imgstyle_amt > 1 AND "data".req_action = 'Update' ;
+SELECT data.colorstyle FROM data WHERE data.imgstyle_amt < 10 AND data.imgstyle_amt > 1 AND data.req_action = 'Update' ;
 
 exit;
