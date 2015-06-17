@@ -4,14 +4,13 @@ SET FEEDBACK OFF
 SET TAB ON
 SET PAGESIZE 0
 SET HEADING OFF
-SET NEWPAGE NONE
+SET NEWPAGE 0
 SET ECHO OFF
 SET VERIFY OFF
 SET WRAP OFF
 -- SET NULL 'NULL'
 
-WITH
-  data AS
+WITH "data" AS
   (
     SELECT DISTINCT
       POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle,
@@ -77,13 +76,13 @@ WITH
     ORDER BY
       4 DESC,
       3,
-      colorstyle DESC
+      "colorstyle" DESC
   )
 
-SELECT data.colorstyle 
-from data
-WHERE data.imgstyle_amt < 10 
-AND data.imgstyle_amt > 1 
-AND data.req_action = 'Update' ;
+SELECT "data".colorstyle
+from "data"
+WHERE "data".imgstyle_amt < 10
+AND "data".imgstyle_amt > 1
+AND "data".req_action = 'Update' ;
 
 exit;
