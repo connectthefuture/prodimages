@@ -32,8 +32,7 @@ alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --u
 
 subject=$(echo "Last Upload: ${allfiles} Files - Total Styles: ${primaryonly} at ${process_time}")
 
-content=$(echo "Primary-Images: ${primaryonly}  Alt-Images: ${altonly}  '\n' Main-Results -->  ${main_results} ----- Alt-Results -->  ${alt_results} -----XX---- ${msql}")
-                ## --- \n -- ${msql} - ${asql}")
+content=$(echo -e "Primary-Images: ${primaryonly} \n  Alt-Images: ${altonly}  \n Main-Results -->  ${main_results} \n ----- Alt-Results -->\n  ${alt_results} -----XX---- ${msql}")
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
@@ -41,5 +40,5 @@ content=$(echo "Primary-Images: ${primaryonly}  Alt-Images: ${altonly}  '\n' Mai
 
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
 
-echo "${subject} -- \\\\n ${content} \\\\\n ${msql}"
+echo -e "${subject} -- \\\\n ${content} \\\\\n ${msql}"
 
