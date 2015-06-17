@@ -8,7 +8,7 @@ SET NEWPAGE NONE
 SET ECHO OFF
 SET VERIFY OFF
 SET WRAP OFF
---SET NULL "NULL"
+--SET NULL 'NULL'
 
 WITH
   data AS
@@ -20,13 +20,13 @@ WITH
         WHEN to_date(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) > to_date( POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE)
         THEN to_date(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) - to_date( POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE)
         ELSE to_date(POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE) - to_date( POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE)
-      END AS "imgstyle_amt",
+      END imgstyle_amt,
       CASE
         WHEN to_date(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) > to_date(
           POMGR.PRODUCT_COLOR.IMAGE_READY_DT)
         THEN 'Update'
         ELSE 'NoChange'
-      END as "req_action",
+      END req_action,
       CASE
         WHEN
           (
@@ -36,7 +36,7 @@ WITH
           )
         THEN 'Y'
         ELSE 'N'
-      END as "record_mod",
+      END record_mod,
       POMGR.PO_LINE.PO_HDR_ID                      AS po_number,
       POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID        AS vendor_name,
       POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE     AS image_dt,
@@ -52,8 +52,7 @@ WITH
       POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID  AS third_supplierid,
       POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE     AS vendor_style,
       POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID         AS genstyleid,
-      POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder,
-      POMGR.PO_LINE.CREATED_DATE
+      POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder
     FROM
       POMGR.SUPPLIER_INGEST_STYLE
     LEFT JOIN POMGR.SUPPLIER_INGEST_SKU
@@ -83,7 +82,7 @@ WITH
   )
 
 SELECT data.colorstyle 
-from data 
+from data
 WHERE data.imgstyle_amt < 10 
 AND data.imgstyle_amt > 1 
 AND data.req_action = 'Update' ;
