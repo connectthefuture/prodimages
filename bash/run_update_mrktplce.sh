@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -xv
+#!/bin/bash -xv
 
 # . ~/.bash_profile
 
