@@ -5,7 +5,7 @@
 
 query_marketplace_inprog="/usr/local/batchRunScripts/sql/marketplace_update_filter.sql"
 
-cnx=$($BFYPRDLOGIN \"@\"$query_marketplace_inprog;)
+cnx=$($BFYPRDLOGIN @$query_marketplace_inprog;)
 
 echo "Total to Update ...." ;
 
