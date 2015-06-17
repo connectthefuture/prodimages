@@ -1,14 +1,14 @@
 
---SET TRIMOUT ON
--- SET FEEDBACK OFF
--- --SET TAB ON
--- SET PAGESIZE 0
--- SET SERVEROUTPUT OFF
--- SET HEADING OFF
--- SET NEWPAGE 0
--- SET ECHO ON
--- SET VERIFY OFF
--- SET WRAP OFF ;
+SET TRIMOUT ON
+SET FEEDBACK OFF
+--SET TAB ON
+SET PAGESIZE 0
+SET SERVEROUTPUT OFF
+SET HEADING OFF
+SET NEWPAGE 0
+SET ECHO ON
+SET VERIFY OFF
+SET WRAP OFF
 
 WITH data AS
 	(
@@ -79,9 +79,10 @@ WITH data AS
 			"colorstyle" DESC
 	)
 
-SELECT "data".colorstyle FROM "data"
-WHERE "data".imgstyle_amt < 10
-AND "data".imgstyle_amt > 1
-AND "data".req_action = 'Update' ;
+SELECT data.colorstyle FROM data
+WHERE data.imgstyle_amt < 10
+AND data.imgstyle_amt > 1
+AND data.req_action = 'Update'
+ORDER BY 1 DESC;
 
 exit;
