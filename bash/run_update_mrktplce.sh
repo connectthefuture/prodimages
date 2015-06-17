@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ~/.bash_profile
+# . ~/.bash_profile
 
 shopt -s xpg_echo expand_aliases dir_expand
 shopt -u hostcomplete extquote
