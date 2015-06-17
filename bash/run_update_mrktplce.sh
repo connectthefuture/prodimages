@@ -7,19 +7,11 @@
 # export LANGUAGE="en" ;
 query_marketplace_inprog="/usr/local/batchRunScripts/sql/marketplace_update_filter.sql"
 
-RES=`$($ORACLE_HOME/bin/sqlplus prod_team_ro/9thfl00r@//borac101-vip.l3.bluefly.com:1521/bfyprd1 @$query_marketplace_inprog) | xargs -n1 | grep -v selected'`
-#res='sqlplus -S prod_team_ro/9thfl00r@//borac101-vip.l3.bluefly.com:1521/bfyprd1 @/usr/local/batchRunScripts/sql/marketplace_update_filter.sql'
-#runit=$(${sqlcmd} | /bin/bash)
-#res=$runit
-#res=`$sqlcmd`
-`echo \`cat $query_marketplace_inprog\``
+RES=$(sqlplus -S prod_team_ro\\"/\\"9thfl00r\\"@\\"//borac101-vip.l3.bluefly.com:1521/bfyprd1 \\"@\\"$query_marketplace_inprog | xargs -n1 | grep -v selected)
 
-#locale ;
-#cd /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace
 echo "Total to Update ...." ;
-echo $RES ;
-echo 'ENDDDN'
-for f in `${RES}` ;
+
+for f in ${RES}` ;
 do
 # 	/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
 echo Completed "$f" ;
