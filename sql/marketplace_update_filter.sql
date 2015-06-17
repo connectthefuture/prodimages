@@ -22,7 +22,7 @@ WITH data AS
 			END imgstyle_amt,
 			CASE
 				WHEN to_date(POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE) > to_date(POMGR.PRODUCT_COLOR.IMAGE_READY_DT)
-				THEN 'Update'
+				THEN "Update"
 				ELSE 'NoChange'
 			END req_action,
 			CASE
