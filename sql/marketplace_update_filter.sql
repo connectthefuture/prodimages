@@ -79,10 +79,9 @@ WITH data AS
 			"colorstyle" DESC
 	)
 
-SELECT data.colorstyle FROM data
-WHERE data.imgstyle_amt < 10
-AND data.imgstyle_amt > 1
-AND data.req_action = 'Update'
-ORDER BY 1 DESC;
+SELECT "data".colorstyle FROM "data"
+WHERE "data".imgstyle_amt < 10
+AND "data".imgstyle_amt > 1
+AND "data".req_action = 'Update' ;
 
 exit;
