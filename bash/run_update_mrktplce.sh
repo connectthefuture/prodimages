@@ -12,4 +12,5 @@ for f in $(echo -e `$BFYPRDLOGIN '@'$query_marketplace_inprog`);
 do 
 /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py "$f" ;
 echo "Done with ${f}"
+find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/${f}/ -type f -exec rm {} \;
 done ;
