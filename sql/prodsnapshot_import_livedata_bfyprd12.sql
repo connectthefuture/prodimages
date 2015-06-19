@@ -1,7 +1,7 @@
 set echo off
 set verify off
 set termout on
-set array 4000    
+set array 4000
 set wrap off
 --set heading on
 --set headsep "|"
@@ -14,7 +14,7 @@ set trimspool on
 --set recsep "|"
 --set trimout on
 set null "-"
-set newpage none
+set newpage 0
 set linesize 32766
 spool /mnt/Post_Ready/zProd_Server/imageServer7/tmp/limbo/spoolpmaimportprodsnapshotlive.csv
 
