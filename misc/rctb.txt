@@ -186,9 +186,9 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 #
 ## Once a day update snapshot instead of Truncating
 ## 1 3 * * * 
-38 1,6,8,10,11,12,13,14,15,16,17,18,19,20 * * * /usr/local/batchRunScripts/python/import_livesnapshot.py
+38 1,6,8,10,11,12,13,14,15,16,17,18 * * * /usr/local/batchRunScripts/python/import_livesnapshot.py
 ## 38 1,6,8,10,11,12,13,14,15,16,17,18,19,20 * * * /usr/local/batchRunScripts/bash/import_prodsnapshot_livedata_bfyprd1.sh
-48 1,6,8,10,12,14,16,17,18,19,20 * * * /usr/local/batchRunScripts/python/import_quicksnapshot.py
+48 1,6,8,10,12,14,16,18,20 * * * /usr/local/batchRunScripts/python/import_quicksnapshot.py
 ###################################################################################
 ###################################################################################
 #### Import marketplace Data from PM -- Supplier Ingest and Multi Images tables

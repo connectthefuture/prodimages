@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash -xv
 
-#. ~/.bash_profile
+. ~/.bash_profile
 
 
 
@@ -26,14 +26,13 @@ msql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CA
 asql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today, sum(CASE WHEN production_complete_dt is not null and production_complete_dt < current_date() THEN 1 ELSE 0 END) reshoot_reload from product_snapshot_vendor where colorstyle in ${altstyles} group by brand, product_type order by 1 desc, 2 asc;"
 echo "$msql"
 echo "$asql"
-main_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "${msql}" -D www_django)
-alt_results=$(mysql --host=127.0.0.1 --port=3301 --column-names=True --table --user=root --password=mysql -e "${asql}" -D www_django)
+main_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H --user=root --password=mysql -e $(echo -e $msql) -D www_django`
+alt_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H --user=root --password=mysql -e $(echo -e $asql) -D www_django`
 
 
 subject=$(echo "Last Upload: ${allfiles} Files - Total Styles: ${primaryonly} at ${process_time}")
 
-content=$(echo "Primary-Images: ${primaryonly}  Alt-Images: ${altonly}  '\n' Main-Results -->  ${main_results} ----- Alt-Results -->  ${alt_results} -----XX---- ${msql}")
-                ## --- \n -- ${msql} - ${asql}")
+content=$(echo -e "Primary-Images: \t\t\t\t${primaryonly} \nAlt-Images: \t\t\t\t${altonly}  \n\n\nMain-Results --> \n\n\n\n${main_results} \n -----\n\n\nAlt-Results --> \n\n\n\n${alt_results} \n-----XX---- \n\n\n\v\v${msql}")
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
@@ -41,5 +40,5 @@ content=$(echo "Primary-Images: ${primaryonly}  Alt-Images: ${altonly}  '\n' Mai
 
 /usr/local/batchRunScripts/python/mailGmailStdOut.py "${content}" "${subject}"
 
-echo "${subject} -- \\\\n ${content} \\\\\n ${msql}"
+echo -e "${subject} -- \\\\n ${content} \\\\\n ${msql}"
 
