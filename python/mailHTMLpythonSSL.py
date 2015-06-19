@@ -28,14 +28,14 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     <html>
     <head lang="en">
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=50% ">
         <title><strong>{0}</strong></title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
         <link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     </head>
     <body>
-    <hr>
+    <div class="container-fluid">
         <div class="table-responsive">
         {1}
         </div>
@@ -43,6 +43,7 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    </div>
     </body>
     </html>
     """.format(subject, html_body).replace('<TABLE BORDER=1>', '<table class="table table-striped">').replace('<TR>', '<tr><span class="glyphicon glyphicon-empty-star"></span>')
