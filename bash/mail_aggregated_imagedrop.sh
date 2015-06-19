@@ -22,12 +22,12 @@ altstyles=`echo -e "( $(echo -e ${alt_styles_list} | tr -s ' ' ',') )"`
 # altstyles=`echo "( $(echo $alt_styles_list | sed 's/ //g' | sed 's/,//1') )"`
 
 #echo  "${allfiles} files - ${mainstyles} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
-msql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today, sum(CASE WHEN production_complete_dt is not null and production_complete_dt < current_date() THEN 1 ELSE 0 END) reshoot_reload from product_snapshot_vendor where colorstyle in ${mainstyles} group by brand, product_type order by 1 desc, 2 asc;"
-asql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today, sum(CASE WHEN production_complete_dt is not null and production_complete_dt < current_date() THEN 1 ELSE 0 END) reshoot_reload from product_snapshot_vendor where colorstyle in ${altstyles} group by brand, product_type order by 1 desc, 2 asc;"
+msql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today from product_snapshot_vendor where colorstyle in ${mainstyles} group by brand, product_type order by 1 desc, 2 asc;"
+# asql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today from product_snapshot_vendor where colorstyle in ${altstyles} group by brand, product_type order by 1 desc, 2 asc;"
 #echo "$msql"
 #echo "$asql"
 main_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H --user=root --password=mysql -e "$msql" -D www_django`
-alt_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H --user=root --password=mysql -e "$asql" -D www_django`
+# alt_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H --user=root --password=mysql -e "$asql" -D www_django`
 
 
 subject=$(echo -e "Last Upload Total Styles: ${primaryonly} -- Alts Only ${altonly}  at ${process_time}")
@@ -36,7 +36,7 @@ subject=$(echo -e "Last Upload Total Styles: ${primaryonly} -- Alts Only ${alton
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 # content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
 
-content=$(echo -e "${main_results} ${alt_results}")
+content=$(echo -e "${main_results}")
 
 
 /usr/local/batchRunScripts/python/mailHTMLpythonSSL.py "${content}" "${subject}"
