@@ -15,3 +15,8 @@ echo -e "Loaded: \t${f}"
 find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/${f}/ -type f -exec rm {} \;
 echo -e "Deleted: \t${f}"
 done ;
+
+
+
+##
+parallel -
