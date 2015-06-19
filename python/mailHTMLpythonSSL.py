@@ -28,7 +28,7 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     <html>
     <head lang="en">
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=50% ">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><strong>{0}</strong></title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
