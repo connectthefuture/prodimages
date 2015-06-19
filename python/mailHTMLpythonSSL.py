@@ -44,7 +44,7 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     <script src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     </body>
     </html>
-    """.format(subject, html_body).replace('<TABLE BORDER=1>', '<table class="table table-stripped>"')
+    """.format(subject, html_body).replace('<TABLE BORDER=1>', '<table class="table table-striped>"')
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
