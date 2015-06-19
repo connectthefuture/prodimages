@@ -17,8 +17,8 @@ alt_styles_list=$(cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c
 
 # Format string as list for MySQL IN clause
 # mainstyles=`echo "(" $(echo $main_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
-mainstyles=`echo "( $(echo ${main_styles_list} | tr -s ' ' ',') )"`
-altstyles=`echo "( $(echo ${alt_styles_list} | tr -s ' ' ',') )"`
+mainstyles=`echo -e "( $(echo -e ${main_styles_list} | tr -s ' ' ',') )"`
+altstyles=`echo -e "( $(echo -e ${alt_styles_list} | tr -s ' ' ',') )"`
 # altstyles=`echo "( $(echo $alt_styles_list | sed 's/ //g' | sed 's/,//1') )"`
 
 #echo  "${allfiles} files - ${mainstyles} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
@@ -36,7 +36,7 @@ subject=$(echo "Last Upload: Total Styles: ${primaryonly} - ${allfiles} Files at
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
-content=$(echo -e "${main_results} <hr><hr>${alt_results}<hr>")
+content=$(echo -e "${main_results}\<hr\>${alt_results}\<hr\>")
 
 
 /usr/local/batchRunScripts/python/mailHTMLpythonSSL.py "${content}" "${subject}"
