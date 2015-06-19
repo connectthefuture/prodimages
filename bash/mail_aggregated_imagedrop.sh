@@ -4,7 +4,7 @@
 
 
 
-fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -1)
+fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -5 | sort -s | head -1)
 
 allfiles=`cat "$fname" | grep \.*ng | wc -l`
 primaryonly=`cat "$fname" | grep \_m.*pg | wc -l`
@@ -33,9 +33,9 @@ alt_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H -
 subject=$(echo -e "Last Upload: Total Styles: ${primaryonly} -- ${allfiles} Files at ${process_time}")
 
 #content=$(echo -e "Primary-Images: \t\t\t\t${primaryonly} \nAlt-Images: \t\t\t\t${altonly}  \n\n\nMain-Results --> \n\n\n\n${main_results} \n -----\n\n\nAlt-Results --> \n\n\n\n${alt_results} \n-----XX---- \n\n\n\v\v${msql}")
-
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
-#content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
+# content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
+
 content=$(echo -e "${main_results} ${alt_results}")
 
 
