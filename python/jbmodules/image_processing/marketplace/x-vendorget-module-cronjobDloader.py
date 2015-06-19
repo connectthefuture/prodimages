@@ -98,7 +98,7 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None):
         else:
             count = len(set(list([k for k in styles_dict.keys()])))
     except IndexError:
-        count = 0 #len(set(list([k for k in styles_dict.keys()])))
+        count = 2 #len(set(list([k for k in styles_dict.keys()])))
 
     print ' Count ', count, styles_dict.keys()
 

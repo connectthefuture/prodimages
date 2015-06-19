@@ -209,4 +209,4 @@ def funkRunner3(root_img_dir=None, single_flag=None):
 
 
 if __name__ == '__main__':
-    main()
+    print 'Dont call this separately '
