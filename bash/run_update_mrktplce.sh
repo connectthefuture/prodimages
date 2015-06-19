@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#. ~/.bash_profile
+. ~/.bash_profile
 
 
 query_marketplace_inprog="/usr/local/batchRunScripts/sql/marketplace_update_filter.sql"
