@@ -29,17 +29,19 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     <head lang="en">
         <meta charset="UTF-8">
         <title><strong>{0}</strong></title>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
         <link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
-        <link href="//code.jquery.com/jquery-1.11.1.min.js">
-        <link href="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js">
-        <link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js">
     </head>
     <body>
     <hr>
         <div class="table-responsive">
         {1}
         </div>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     </body>
     </html>
     """.format(subject, html_body).replace('<TABLE BORDER=1>', '<table class="table table-condensed>"')
