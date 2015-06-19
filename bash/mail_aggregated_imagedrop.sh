@@ -4,8 +4,8 @@
 
 
 
-timefname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -1)
-fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200  | xargs ls -lrSh | awk '{ print $NF }' | tail -1)
+fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -5)
+sizefname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200  | xargs ls -lrSh | awk '{ print $NF }')
 
 allfiles=`cat ${fname[@]} | grep \.*ng | wc -l`
 primaryonly=`cat ${fname[@]} | grep \_m.*pg | wc -l`
