@@ -36,7 +36,7 @@ subject=$(echo "Last Upload: Total Styles: ${primaryonly} - ${allfiles} Files at
 
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
 #content=`echo "<html><body><table><tr>Total Styles: ${allfiles} </tr><tr>Main Images Total: ${primaryonly} </tr><tr>Total Alts: ${altonly}</tr></table><table> $(for X in ${alt_styles_list}; do echo "<tr>${X}</tr>";done)</table><table> $(for X in ${main_styles_list};do echo "<tr>${X}</tr>"; done) </table></body></html>"`
-content=$(echo -e "${main_results}\<hr\>${alt_results}\<hr\>")
+content=$(echo -e "${main_results} ${alt_results}")
 
 
 /usr/local/batchRunScripts/python/mailHTMLpythonSSL.py "${content}" "${subject}"
