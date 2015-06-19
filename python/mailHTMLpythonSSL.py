@@ -10,7 +10,6 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     gmail_user = 'john.bragato@bluefly.com'  #str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
     gmail_pass = open('/home/johnb/.gcreds.dat', 'rb').read()  #str(input('Enter your password in single quotes: '))
 
-
     toaddr = toaddr #"john.bragato@gmail.com,john.bragato@bluefly.com"
 
     # Create message container - the correct MIME type is multipart/alternative.
@@ -23,15 +22,27 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
         msg['Subject'] = subject
 
     # Create the body of the message (a plain-text and an HTML version).
-    text = text_body
-    html = """\
+    text = '\v'.join(text_body.split())
+    html = """
+    <!DOCTYPE html>
     <html>
-      <head>//cdn.datatables.net/responsive/1.0.6/js/dataTables.responsive.js</head>
-      <body><strong>{0}</strong><hr>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title><strong>{0}</strong></title>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
+        <link href="//code.jquery.com/jquery-1.11.1.min.js">
+        <link href="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js">
+        <link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js">
+    </head>
+    <body>
+    <hr>
+        <div class="table-responsive">
         {1}
-      </body>
+        </div>
+    </body>
     </html>
-    """.format(html_body)
+    """.format(subject, html_body).replace('<TABLE BORDER=1>', '<table class="table table-condensed>"')
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
@@ -53,7 +64,7 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     server_ssl.sendmail(gmail_user, toaddr, msg)
     #server_ssl.quit()
     server_ssl.close()
-    print 'successfully sent the mail'
+    print 'successfully sent the mail: {0}'.format(subject)
 
 
     #s = smtplib.SMTP('localhost')
