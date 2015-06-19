@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     import smtplib, os.path
