@@ -6,7 +6,6 @@
 def send_text_via_gmail(toaddr, text=None, subject=None):
     import smtplib, os.path, email, __builtin__
 
-    from email.MIMEBase import MIMEBase
     from email.mime.text import MIMEText
     from email import Encoders
     #print('Enter username or return to accept the default: \n')
@@ -27,9 +26,9 @@ def send_text_via_gmail(toaddr, text=None, subject=None):
     mailServer.login(gmail_user, gmail_pass)
     mailServer.sendmail(gmail_user, toaddr, msg.as_string())
     mailServer.quit()
-    print(' Mail has been sent to %s' % toaddr)    
+    print(' Mail has been sent to %s' % toaddr)
 
-    
+
 if __name__ == '__main__':
     import sys
     subject = ''
