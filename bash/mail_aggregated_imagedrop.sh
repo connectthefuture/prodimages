@@ -4,16 +4,16 @@
 
 
 
-fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -1)
+timefname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -1)
+fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200  | xargs ls -lrSh | awk '{ print $NF }' | tail -1)
 
-allfiles=`cat "$fname" | grep \.*ng | wc -l`
-primaryonly=`cat "$fname" | grep \_m.*pg | wc -l`
-altonly=`cat "$fname" | grep \_alt0?.*ng | wc -l`
-process_time=`ls -cltrs "$fname" | awk '{print $7,$8,$9}'`
+allfiles=`cat ${fname[@]} | grep \.*ng | wc -l`
+primaryonly=`cat ${fname[@]} | grep \_m.*pg | wc -l`
+altonly=`cat ${fname[@]} | grep \_alt0?.*ng | wc -l`
+process_time=`ls -cltrs ${fname[-1]} | awk '{print $7,$8,$9}'`
 
-main_styles_list=$(cat "$fname" | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1')
-alt_styles_list=$(cat "$fname" | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1')
-
+main_styles_list=$(cat ${fname[@]} | grep \_m.jpg | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1')
+alt_styles_list=$(cat ${fname[@]} | grep \_alt0?.*ng | awk '{ print $NF }' | cut -c1-9 | sort -run | awk '{ print ",""\""$NF"\""}' | sed 's/ //g' | sed 's/,//1')
 
 # Format string as list for MySQL IN clause
 # mainstyles=`echo "(" $(echo $main_styles_list) ")"| sed 's/ //g' | sed 's/,//1'`
