@@ -338,7 +338,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
     except ValueError:
         print 'ValueError with --> ', img
         vert_horiz = '200x240'
-    
+
     dimensions = '200x240'
     #print dimensions,vert_horiz, ' _m.jpg '
 
