@@ -4,7 +4,7 @@
 
 
 
-fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -5 | sort -s | head -1)
+fname=$(find /mnt/Post_Complete/ImageDrop/bkup/*LSTransfer* -type f -mmin -200 -exec ls -cltrs {} \;| awk '{ print $NF }' | tail -1)
 
 allfiles=`cat "$fname" | grep \.*ng | wc -l`
 primaryonly=`cat "$fname" | grep \_m.*pg | wc -l`
