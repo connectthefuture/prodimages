@@ -328,13 +328,17 @@ def subproc_magick_medium_jpg(img, destdir=None):
     #if aspect_ratio == '1.2':
 
     aspect_ratio = get_aspect_ratio(img)
-    if float(str(aspect_ratio)) == float(1.2):
+    try:
+        if float(str(aspect_ratio)) == float(1.2):
+            vert_horiz = '200x240'
+        elif float(str(aspect_ratio)) > float(1.2):
+            vert_horiz = 'x240'
+        elif float(str(aspect_ratio)) < float(1.2):
+            vert_horiz = '200x'
+    except ValueError:
+        print 'ValueError with --> ', img
         vert_horiz = '200x240'
-    elif float(str(aspect_ratio)) > float(1.2):
-        vert_horiz = 'x240'
-    elif float(str(aspect_ratio)) < float(1.2):
-        vert_horiz = '200x'
-
+    
     dimensions = '200x240'
     #print dimensions,vert_horiz, ' _m.jpg '
 
