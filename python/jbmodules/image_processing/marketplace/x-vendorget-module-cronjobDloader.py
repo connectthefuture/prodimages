@@ -8,7 +8,7 @@ urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 urllib3.disable_warnings()
 
-global
+global single_flag
 
 def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None, ALL=None, **kwargs):
     import sqlalchemy,sys
