@@ -63,7 +63,7 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     server_ssl.ehlo() # optional, called by login()
     server_ssl.login(gmail_user, gmail_pass)
     # ssl server doesn't support or need tls, so don't call server_ssl.starttls()
-    server_ssl.sendmail(gmail_user, toaddr, msg)
+    server_ssl.sendmail(gmail_user, toaddr, msg.as_string())
     #server_ssl.quit()
     server_ssl.close()
     print 'successfully sent the mail: {0}'.format(subject)
