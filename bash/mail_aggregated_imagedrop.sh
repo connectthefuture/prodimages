@@ -22,7 +22,7 @@ altstyles=`echo -e "( $(echo -e ${alt_styles_list} | tr -s ' ' ',') )"`
 # altstyles=`echo "( $(echo $alt_styles_list | sed 's/ //g' | sed 's/,//1') )"`
 
 #echo  "${allfiles} files - ${mainstyles} Styles at ${process_time} ${altonly} --- ${main_styles_list} - ${alt_styles_list}"
-msql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today from product_snapshot_vendor where colorstyle in ${mainstyles} group by brand, product_type order by 1 desc, 2 asc;"
+msql="select distinct count(colorstyle) as style_ct, brand, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today from product_snapshot_vendor where colorstyle in ${mainstyles} group by brand order by 1 desc, 2 asc;"
 # asql="select distinct count(colorstyle) as style_ct, brand, product_type, sum(CASE WHEN production_complete_dt = current_date() THEN 1 WHEN image_ready_dt is null THEN 1 ELSE 0 END) complete_today from product_snapshot_vendor where colorstyle in ${altstyles} group by brand, product_type order by 1 desc, 2 asc;"
 #echo "$msql"
 #echo "$asql"
@@ -30,8 +30,8 @@ main_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H 
 # alt_results=`mysql --host=127.0.0.1 --port=3301 --column-names=True --table -H --user=root --password=mysql -e "$asql" -D www_django`
 
 
-subject=$(echo -e "Last Hours Total Styles: ${primaryonly} -- Alts Only ${altonly}")
-#subject=$(echo -e "Last Upload Total Styles: ${primaryonly} -- Alts Only ${altonly}  at ${process_time}")
+subject=$(echo -e "Last Hours Total Styles: ${primaryonly} -- Alts Only ${altonly} -- Last Complete at ${process_time}")
+#subject=$(echo -e "Last Upload Total Styles: ${primaryonly} -- Alts Only ${altonly} at ${process_time}")
 
 #content=$(echo -e "Primary-Images: \t\t\t\t${primaryonly} \nAlt-Images: \t\t\t\t${altonly}  \n\n\nMain-Results --> \n\n\n\n${main_results} \n -----\n\n\nAlt-Results --> \n\n\n\n${alt_results} \n-----XX---- \n\n\n\v\v${msql}")
 # $(for X in ${alt_styles_list}; do echo \"${X}\";done) -- $(for X in ${main_styles_list};do echo \"${X}\"; done)"`
