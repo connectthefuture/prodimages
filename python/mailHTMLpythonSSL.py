@@ -28,6 +28,7 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     <html>
     <head lang="en">
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><strong>{0}</strong></title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
@@ -44,7 +45,7 @@ def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
     <script src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     </body>
     </html>
-    """.format(subject, html_body).replace('<TABLE BORDER=1>', '<table class="table table-striped">').replace('<TR>', '<tr><span class="glyphicon glyphicon-gift"></span>')
+    """.format(subject, html_body).replace('<TABLE BORDER=1>', '<table class="table table-striped">').replace('<TR>', '<tr><span class="glyphicon glyphicon-empty-star"></span>')
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
