@@ -21,7 +21,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
             kwargs.update(date_range_int=date_range)
     except IndexError:
         pass
-    print vendor_brand, "Vendorbrand"
+    #print vendor_brand, "Vendorbrand"
     connection = orcl_engine.connect()
     if po_number:
         if ALL == 'Image':
