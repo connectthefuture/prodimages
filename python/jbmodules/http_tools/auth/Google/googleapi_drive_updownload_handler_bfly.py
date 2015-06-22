@@ -31,7 +31,7 @@ def instantiate_google_drive_serviceAccount_bfly():
     return drive_service
 
 
-def download_file_drive(file_id=file_id, destpath=destpath):
+def download_file_drive(file_id=None, destpath=None):
     from os import chdir, path
     import apiclient
     drive_service = instantiate_google_drive_serviceAccount_bfly()
@@ -69,4 +69,3 @@ if __name__ == '__main__':
     import sys
     srcfile = sys.argv[1]
     upload_file_drive(srcfile)
-
