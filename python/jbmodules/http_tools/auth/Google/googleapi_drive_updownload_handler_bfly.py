@@ -71,7 +71,7 @@ def create_drive_folder(pardir_fileid):
         "description": "Images",
         "parents": [{"id": pardir_fileid}],
         "mimeType": "application/vnd.google-apps.folder"
-    }        
+    }
 
 
 def save_movefile_drive_folder(file_id, pardir_fileid):
@@ -88,7 +88,7 @@ def save_movefile_drive_folder(file_id, pardir_fileid):
 
 
 def print_application_data_folder_metadata(file_id = 'appfolder'):
-    drive_service = instantiate_google_drive_serviceAccount_bfly()
+    service = instantiate_google_drive_serviceAccount_bfly()
     try:
         file = service.files().get(fileId=file_id).execute()
         print 'Id: %s' % file['id']
@@ -104,7 +104,7 @@ def insert_file_in_application_data_folder(service, description, mime_type, file
     body = {
         'title': '{}'.format(srcfile.split('/')[-1]),
         "description": "Images",
-        "parents": [{"id": pardir_fileid}],    
+        "parents": [{"id": pardir_fileid}],
         'mimeType': mime_type,
         'parents': [{'id': pardir_fileid}]
     }
@@ -151,7 +151,7 @@ def batch_callback(request_id, response, exception):
         raise exception
 
 
-def batch_upload(service):
+def batch_upload(service, FILE_ID):
     batch_request = BatchHttpRequest(callback=batch_callback)
     batch_entry_1 = service.permissions().insert(fileId=FILE_ID, body={
       'value': 'johnb@relic7.uk.to',
