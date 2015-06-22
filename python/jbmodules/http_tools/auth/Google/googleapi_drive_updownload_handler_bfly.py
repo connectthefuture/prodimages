@@ -102,11 +102,11 @@ def insert_file_in_application_data_folder(service, description, mime_type, file
     pardir_fileid =  'appfolder'
     media_body = MediaFileUpload(filename, mimetype=mime_type, resumable=True)
     body = {
-    'title': '{}'.format(srcfile.split('/')[-1]),
-    "description": "Images",
-    "parents": [{"id": pardir_fileid}],    
-    'mimeType': mime_type   
-    'parents': [{'id': pardir_fileid}]
+        'title': '{}'.format(srcfile.split('/')[-1]),
+        "description": "Images",
+        "parents": [{"id": pardir_fileid}],    
+        'mimeType': mime_type,
+        'parents': [{'id': pardir_fileid}]
     }
 
     try:
