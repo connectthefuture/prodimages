@@ -7,6 +7,7 @@ class GoogleDriveClient:
 
     def __init__(self, file_id=None, local_filepath=None, description=None, title=None, local_metadata=None):
         import googleapiclient
+        self.client = googleapiclient
         self.file_id = file_id
         self.pardir_fileid = ''
         self.drive_file_content = ''
@@ -19,9 +20,12 @@ class GoogleDriveClient:
         if not local_metadata:
             self.local_metadata = {}
         if not title:
-            self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[1])
+            try:
+                self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[1])
+            except AttributeError:
+                self.title = ''
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
-        self.client = googleapiclient
+
 
     def instantiate_google_drive_serviceAccount_bfly(self):
         # self.drive_file = self.drive_file_instance
