@@ -527,7 +527,9 @@ def mongo_upsert_threaded(argslist=None):
         while True:
             item = qmongo.get()
             #print item, ' MongoWorker'
-            if item is not None:
+            if item is None:
+                break
+            elif item is not None:
                 res, destpath = mongo_update_url_dest_info(item)
                 if not res and res is not False:
                     #print ' NewsIt NotRes', count, res
@@ -544,9 +546,7 @@ def mongo_upsert_threaded(argslist=None):
                         print ' OSError in MongoWorker '
                         pass
                     print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
-            else:
-                #print ' NewsIt WITHALITTLE --> RES'
-                pass
+
             print ' Mongo Res Done', res
             # try:
             #     insertres =  jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(item)
