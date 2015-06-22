@@ -119,6 +119,12 @@ def insert_file_in_application_data_folder(service, description, mime_type, file
         return None
 
 
+def list_files_current_dir(service):
+    req= service.files().list()
+    res = req.execute()
+    return res
+
+
 def list_files_in_application_data_folder(service):
     result = []
     page_token = None
