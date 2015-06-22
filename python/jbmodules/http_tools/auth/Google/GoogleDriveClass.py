@@ -19,7 +19,7 @@ class GoogleDriveClient:
         self.fileid_permissions = ''
         self.user_permission = ''
         #if not role:
-        self.role = 'reader'
+        #    self.role = 'reader'
         if not share_email:
             self.share_email = 'john.bragato@gmail.com'
         if not properties:
@@ -182,7 +182,7 @@ class GoogleDriveClient:
             body = {
                 'value': self.share_email,
                 'type': 'group',
-                'role': self.role,
+                'role': 'reader', ##self.role,
                 'fileId': self.file_id
             })
         self.fileid_permissions = permission_data.execute()
