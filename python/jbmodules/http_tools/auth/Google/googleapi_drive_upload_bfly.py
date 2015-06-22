@@ -82,7 +82,7 @@ def instantiate_google_drive_service_bfly():
 
 
 def upload_file_drive(srcfile):
-    drive_service = instantiate_google_drive_service()
+    drive_service = instantiate_google_drive_service_bfly()
 
     media_body = MediaFileUpload(srcfile, mimetype='image/jpeg', resumable=True)
     body = {
