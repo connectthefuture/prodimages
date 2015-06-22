@@ -78,7 +78,7 @@ def save_movefile_drive_folder(file_id, pardir_fileid):
     body = {
           'title': '{}'.format(srcfile.split('/')[-1]),
             'description': 'Image',
-            'mimeType': 'image/jpeg',ß
+            'mimeType': 'image/jpeg',
             "parents": [{
             "kind": "drive#fileLink",
             "id": pardir_fileid
