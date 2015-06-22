@@ -3,18 +3,15 @@
 
 import httplib2
 import pprint
-from apiclient.discovery import build
-from oauth2client.client import SignedJwtAssertionCredentials
-from apiclient.http import MediaFileUpload
-from apiclient import errors
+from googleapiclient.http import MediaFileUpload
+from googleapiclient import errors
 
 def instantiate_google_drive_serviceAccount_bfly():
     # drive_file = drive_file_instance
     import httplib2
     import pprint
-    from apiclient.discovery import build
+    from googleapiclient.discovery import build
     from oauth2client.client import SignedJwtAssertionCredentials
-    from apiclient.http import MediaFileUpload
     serviceName = 'drive'
     version = 'v2'
     client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
@@ -33,15 +30,15 @@ def instantiate_google_drive_serviceAccount_bfly():
 
 def download_file_drive(file_id=None, destpath=None):
     from os import chdir, path
-    import apiclient
+    import googleapiclient
     drive_service = instantiate_google_drive_serviceAccount_bfly()
     request = drive_service.files().get_media(fileId=file_id)
     fdest = open(destpath, 'w')
-    media_request = apiclient.http.MediaIoBaseDownload(fdest, request)
+    media_request = googleapiclient.http.MediaIoBaseDownload(fdest, request)
     while True:
         try:
             download_progress, done = media_request.next_chunk()
-        except apiclient.errors.HttpError, error:
+        except googleapiclient.errors.HttpError, error:
             print 'An error occurred: %s' % error
             return media_request
         if download_progress:
@@ -148,7 +145,7 @@ def list_files_in_application_data_folder(service):
 
 
 def batch_callback(request_id, response, exception):
-    from apiclient.http import BatchHttpRequest
+
     print "Response for request_id (%s):" % request_id
     print response
 
@@ -157,9 +154,10 @@ def batch_callback(request_id, response, exception):
         raise exception
 
 
-def batch_upload(service, FILE_ID):
+def batch_upload(service, file_id):
+    from googleapiclient.http import BatchHttpRequest
     batch_request = BatchHttpRequest(callback=batch_callback)
-    batch_entry_1 = service.permissions().insert(fileId=FILE_ID, body={
+    batch_entry_1 = service.permissions().insert(fileId=file_id, body={
       'value': 'johnb@relic7.uk.to',
       'type': 'user',
       'role': 'writer'
@@ -167,7 +165,7 @@ def batch_upload(service, FILE_ID):
 
     batch_request.add(batch_entry_1, request_id="batch1")
 
-    batch_entry_2 = service.permissions().insert(fileId=FILE_ID, body={
+    batch_entry_2 = service.permissions().insert(fileId=file_id, body={
       'value': 'johnb@relic7.uk.to',
       'type': 'group',
       'role': 'reader'
