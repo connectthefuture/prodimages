@@ -37,6 +37,7 @@ class GoogleDriveClient:
             self.description = ''
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
+
     def instantiate_google_drive_serviceAccount_bfly(self):
         import httplib2
         from googleapiclient.discovery import build
@@ -79,23 +80,21 @@ class GoogleDriveClient:
             'title': self.title,
             'description': self.description,
             'mimeType': self.mimetype,
-            "properties": self.properties
+            'properties': self.properties
         }
-
         self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
-
         pprint.pprint(self.drive_file_data)
         return self.drive_file_data
 
 
     def create_drive_folder(self):
         folder_body = {
-            "title": self.title,
-            "description": self.description,
-            "parents": [{"id": self.pardir_fileid}],
-            "mimeType": "application/vnd.google-apps.folder",
-            "folderColorRgb": self.folder_color_rgb,
-            "userPermission": self.user_permission
+            'title': self.title,
+            'description': self.description,
+            'parents': [{'id': self.pardir_fileid}],
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb,
+            'userPermission': self.user_permission
         }
         self.drive_folder_data = self.service.files().insert(media_body=folder_body).execute()
         return self.drive_folder_data
