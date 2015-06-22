@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath=None, description=None, title=None, properties=None, role=None, share_email=None, folder_color_rgb=None, database_id=None):
+    def __init__(self, file_id=None, local_filepath='', description='', title='', properties='', role='', share_email='', folder_color_rgb='', database_id=''):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
