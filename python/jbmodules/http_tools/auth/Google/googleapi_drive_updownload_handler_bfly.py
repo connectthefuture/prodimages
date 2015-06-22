@@ -99,9 +99,6 @@ def print_application_data_folder_metadata(file_id = 'appfolder'):
 
 
 def insert_file_in_application_data_folder(service, description, mime_type, filename):
-  """Insert new file in the Application Data folder.
-  Returns: Inserted file metadata if successful, None otherwise.
-  """
     pardir_fileid =  'appfolder'
     media_body = MediaFileUpload(filename, mimetype=mime_type, resumable=True)
     body = {
