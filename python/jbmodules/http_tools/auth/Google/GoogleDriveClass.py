@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath=None, description=None, title=None, local_metadata=None, share_email=None):
+    def __init__(self, file_id=None, local_filepath=None, description=None, title=None, local_metadata=None, share_email=None, folder_color_rgb=None):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -13,11 +13,17 @@ class GoogleDriveClient:
         self.drive_file_data = {}
         self.drive_folder_files = []
         self.drive_folder_data = {}
-        self.permissions = ''
         self.local_filepath = local_filepath
         self.mime_type = ''
-        if not share_email:
-            self.share_email = ''
+        self.folder_color_rgb = folder_color_rgb
+        self.fileid_permissions = ''
+        self.user_permission = ''
+        self.role = ''
+        if not self.role:
+            self.role = 'reader'
+        if not self.share_email:
+            self.share_email = 'john.bragato@gmail.com'
+
         if not description:
             self.description = ''
         if not local_metadata:
@@ -84,7 +90,9 @@ class GoogleDriveClient:
             "title": self.title,
             "description": self.description,
             "parents": [{"id": self.pardir_fileid}],
-            "mimeType": "application/vnd.google-apps.folder"
+            "mimeType": "application/vnd.google-apps.folder",
+            "folderColorRgb": self.folder_color_rgb,
+            "userPermission": self.user_permission
         }
         self.drive_folder_data = self.service.files().insert(media_body=folder_body).execute()
         return self.drive_folder_data
@@ -171,7 +179,7 @@ class GoogleDriveClient:
             body = {
                 'value': self.share_email,
                 'type': 'group',
-                'role': 'reader'
+                'role': self.role
             })
-        self.permissions = permission_data.execute()
-        return self.permissions
+        self.fileid_permissions = permission_data.execute()
+        return self.fileid_permissions
