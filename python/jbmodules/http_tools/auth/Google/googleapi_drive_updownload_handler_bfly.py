@@ -53,7 +53,6 @@ def download_file_drive(file_id=None, destpath=None):
 
 def upload_file_drive(srcfile):
     drive_service = instantiate_google_drive_serviceAccount_bfly()
-
     media_body = MediaFileUpload(srcfile, mimetype='image/jpeg', resumable=True)
     body = {
         'title': '{}'.format(srcfile.split('/')[-1]),
@@ -66,6 +65,7 @@ def upload_file_drive(srcfile):
 
 
 def create_drive_folder(pardir_fileid):
+    drive_service = instantiate_google_drive_serviceAccount_bfly()
     folder_body = {
         "title": pardir_fileid,
         "description": "Images",
@@ -75,6 +75,7 @@ def create_drive_folder(pardir_fileid):
 
 
 def save_movefile_drive_folder(file_id, pardir_fileid):
+    drive_service = instantiate_google_drive_serviceAccount_bfly()
     body = {
           'title': '{}'.format(srcfile.split('/')[-1]),
             'description': 'Image',
@@ -85,6 +86,15 @@ def save_movefile_drive_folder(file_id, pardir_fileid):
           }]
         }
 
+
+def print_application_data_folder_metadata(file_id = 'appfolder'):
+    drive_service = instantiate_google_drive_serviceAccount_bfly()
+    try:
+        file = service.files().get(fileId=file_id).execute()
+        print 'Id: %s' % file['id']
+        print 'Title: %s' % file['title']
+    except errors.HttpError, error:
+        print 'An error occurred: %s' % error
 
 
 if __name__ == '__main__':
