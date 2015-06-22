@@ -81,7 +81,6 @@ class GoogleDriveClient:
 
 
     def create_drive_folder(self):
-        self.pardir_fileid = self.file_id
         folder_body = {
             "title": self.title,
             "description": self.description,
@@ -95,7 +94,6 @@ class GoogleDriveClient:
     def save_file_drive_folder(self):
         import pprint
         self.service= self.instantiate_google_drive_serviceAccount_bfly()
-        self.pardir_fileid = self.file_id
         body = {
             'title': self.title,
             'description': self.description,
@@ -133,7 +131,6 @@ class GoogleDriveClient:
 
     def insert_file_in_folder(self):
         #self.pardir_fileid =  'appfolder'
-
         media_body = self.client.MediaFileUpload(self.local_filepath, mimetype=self.mime_type, resumable=True)
         body = {
             'title': self.title,
@@ -150,13 +147,13 @@ class GoogleDriveClient:
             return None
 
 
-    def list_files_current_dir(self):
+    def list_filesdata_current_dir(self):
         req = self.service.files().list()
-        self.folder_data = req.execute()
-        return self.folder_data
+        self.drive_folder_data = req.execute()
+        return self.drive_folder_data
 
 
-    def list_files_in_application_data_folder(self):
+    def list_files_in_pardir(self):
         self.drive_folder_files = []
         page_token = None
         while True:
