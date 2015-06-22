@@ -65,14 +65,16 @@ def upload_file_drive(srcfile):
     pprint.pprint(drive_file)
 
 
-def create_drive_folder():
+def create_drive_folder(pardir_fileid):
     folder_body = {
+        "title": pardir_fileid,
+        "description": "Images",
         "parents": [{"id": pardir_fileid}],
         "mimeType": "application/vnd.google-apps.folder"
     }        
 
 
-def save_movefile_drive_folder(pardir_fileid):
+def save_movefile_drive_folder(file_id, pardir_fileid):
     body = {
           'title': '{}'.format(srcfile.split('/')[-1]),
             'description': 'Image',
