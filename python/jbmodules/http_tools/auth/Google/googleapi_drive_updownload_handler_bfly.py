@@ -6,7 +6,7 @@ import pprint
 from apiclient.discovery import build
 from oauth2client.client import SignedJwtAssertionCredentials
 from apiclient.http import MediaFileUpload
-
+from apiclient import errors
 
 def instantiate_google_drive_serviceAccount_bfly():
     # drive_file = drive_file_instance
