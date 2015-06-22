@@ -13,6 +13,7 @@ class GoogleDriveClient:
         self.drive_file_data = {}
         self.drive_folder_files = []
         self.drive_folder_data = {}
+        self.permissions = ''
         self.local_filepath = local_filepath
         self.mime_type = ''
         if not share_email:
@@ -27,7 +28,6 @@ class GoogleDriveClient:
             except AttributeError:
                 self.title = ''
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
-        self.result = ''
 
     def instantiate_google_drive_serviceAccount_bfly(self):
         import httplib2
@@ -156,7 +156,6 @@ class GoogleDriveClient:
                 else:
                     param['q'] = "{} in parents".format(self.title)
                 listdir = self.service.files().list(**param).execute()
-
                 self.drive_folder_files.extend(listdir['items'])
                 page_token = listdir.get('nextPageToken')
                 if not page_token:
@@ -174,5 +173,5 @@ class GoogleDriveClient:
                 'type': 'group',
                 'role': 'reader'
             })
-        self.result = permission_data.execute()
-        return self.result
+        self.permissions = permission_data.execute()
+        return self.permissions
