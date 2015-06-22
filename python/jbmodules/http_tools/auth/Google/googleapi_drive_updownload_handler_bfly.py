@@ -65,6 +65,26 @@ def upload_file_drive(srcfile):
     pprint.pprint(drive_file)
 
 
+def create_drive_folder():
+    folder_body = {
+        "parents": [{"id": pardir_fileid}]
+        "mimeType": "application/vnd.google-apps.folder"
+    }        
+
+
+def save_movefile_drive_folder(pardir_fileid):
+    body = {
+          'title': '{}'.format(srcfile.split('/')[-1]),
+            'description': 'Image',
+            'mimeType': 'image/jpeg'
+            "parents": [{
+            "kind": "drive#fileLink",
+            "id": pardir_fileid
+          }]
+        }
+
+
+
 if __name__ == '__main__':
     import sys
     srcfile = sys.argv[1]
