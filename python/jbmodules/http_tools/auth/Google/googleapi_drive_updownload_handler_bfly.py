@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import httplib2
 import pprint
 from googleapiclient.http import MediaFileUpload
 from googleapiclient import errors
@@ -59,6 +58,7 @@ def upload_file_drive(srcfile):
 
     drive_file = drive_service.files().insert(body=body, media_body=media_body).execute()
     pprint.pprint(drive_file)
+    return drive_file
 
 
 def create_drive_folder(pardir_fileid):
@@ -69,20 +69,36 @@ def create_drive_folder(pardir_fileid):
         "parents": [{"id": pardir_fileid}],
         "mimeType": "application/vnd.google-apps.folder"
     }
+    drive_folder = drive_service.files().insert(media_body=folder_body).execute()
+    return drive_folder
 
 
-def save_movefile_drive_folder(file_id, pardir_fileid):
+def save_move_file_drive_folder(srcfile, pardir_fileid):
     drive_service = instantiate_google_drive_serviceAccount_bfly()
     body = {
-          'title': '{}'.format(srcfile.split('/')[-1]),
-            'description': 'Image',
-            'mimeType': 'image/jpeg',
-            "parents": [{
+        'title': '{}'.format(srcfile.split('/')[-1]),
+        'description': 'Image',
+        'mimeType': 'image/jpeg',
+        "parents": [{
             "kind": "drive#fileLink",
             "id": pardir_fileid
-          }]
+            }]
         }
+    mimetype = ''
+    ext = srcfile.format(srcfile.split('.')[-1])
+    if ext == 'jpg':
+        mimetype = 'image/jpeg'
+    elif ext[:3].lower() == 'png':
+        mimetype = 'image/png'
+    elif ext[:3].lower() == 'tif':
+        mimetype = 'image/tiff'
+    elif ext[:3].lower() == 'gif':
+        mimetype = 'image/gif'
 
+    media_body = MediaFileUpload(srcfile, mimetype=mimetype, resumable=True)
+    drive_file = drive_service.files().insert(body=body, media_body=media_body).execute()
+    pprint.pprint(drive_file)
+    return drive_file
 
 def print_application_data_folder_metadata(file_id = 'appfolder'):
     service = instantiate_google_drive_serviceAccount_bfly()
@@ -100,17 +116,16 @@ def insert_file_in_application_data_folder(service, description, mime_type, file
     media_body = MediaFileUpload(filename, mimetype=mime_type, resumable=True)
     body = {
         'title': '{}'.format(srcfile.split('/')[-1]),
-        "description": "Images",
+        "description": description,
         "parents": [{"id": pardir_fileid}],
-        'mimeType': mime_type,
-        'parents': [{'id': pardir_fileid}]
+        'mimeType': mime_type
     }
 
     try:
-        file = service.files().insert(
+        inserted = service.files().insert(
             body=body,
             media_body=media_body).execute()
-        return file
+        return inserted
     except errors.HttpError, error:
         print 'An error occured: %s' % error
         return None
@@ -122,7 +137,7 @@ def list_files_current_dir(service):
     return res
 
 
-def list_files_in_application_data_folder(service):
+def list_files_in_application_data_folder(service, folder_title='appfolder'):
     result = []
     page_token = None
     while True:
@@ -131,7 +146,7 @@ def list_files_in_application_data_folder(service):
             if page_token:
                 param['pageToken'] = page_token
             else:
-                param['q'] = "'appfolder' in parents"
+                param['q'] = "{} in parents".format(folder_title)
             files = service.files().list(**param).execute()
 
             result.extend(files['items'])
