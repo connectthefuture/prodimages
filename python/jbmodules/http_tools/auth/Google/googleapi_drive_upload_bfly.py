@@ -81,8 +81,34 @@ def instantiate_google_drive_service_bfly():
     return service
 
 
+
+def instantiate_google_drive_serviceAccount_bfly():
+    # drive_file = drive_file_instance
+    import httplib2
+    import pprint
+    from apiclient.discovery import build
+    from oauth2client.client import SignedJwtAssertionCredentials
+    from apiclient.http import MediaFileUpload
+    serviceName = 'drive'
+    version = 'v2'
+    client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
+    client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
+    scope = 'https://www.googleapis.com/auth/drive'
+
+    f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
+    key = f.read()
+    f.close()
+    credentials = SignedJwtAssertionCredentials(client_email, key, scope=scope)
+    http = httplib2.Http()
+    http = credentials.authorize(http)
+    drive_service = build(serviceName, version, http=http)
+    return drive_service
+
+
+
+
 def upload_file_drive(srcfile):
-    drive_service = instantiate_google_drive_service_bfly()
+    drive_service = instantiate_google_drive_serviceAccount_bfly()
 
     media_body = MediaFileUpload(srcfile, mimetype='image/jpeg', resumable=True)
     body = {
