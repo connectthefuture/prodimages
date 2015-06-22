@@ -1,11 +1,10 @@
-__author__ = 'johnb'
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+__author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath=None, description=None, title=None, local_metadata=None):
+    def __init__(self, file_id=None, local_filepath=None, description=None, title=None, local_metadata=None, share_email=None):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -15,8 +14,11 @@ class GoogleDriveClient:
         self.drive_folder_files = []
         self.drive_folder_data = {}
         self.local_filepath = local_filepath
-        self.description = description
         self.mime_type = ''
+        if not share_email:
+            self.share_email = ''
+        if not description:
+            self.description = ''
         if not local_metadata:
             self.local_metadata = {}
         if not title:
@@ -25,10 +27,9 @@ class GoogleDriveClient:
             except AttributeError:
                 self.title = ''
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
-
+        self.result = ''
 
     def instantiate_google_drive_serviceAccount_bfly(self):
-        # self.drive_file = self.drive_file_instance
         import httplib2
         from googleapiclient.discovery import build
         from oauth2client.client import SignedJwtAssertionCredentials
@@ -37,7 +38,6 @@ class GoogleDriveClient:
         client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
         client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
         scope = 'https://www.googleapis.com/auth/drive'
-
         f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
         key = f.read()
         f.close()
@@ -46,7 +46,6 @@ class GoogleDriveClient:
         http = credentials.authorize(http)
         self.service = build(serviceName, version, http=http)
         return self.service
-
 
     def download_file_drive(self):
         request = self.service.files().get_media(fileId=self.file_id)
@@ -102,8 +101,7 @@ class GoogleDriveClient:
                 "kind": "drive#fileLink",
                 "id": self.pardir_fileid
                 }]
-            }
-
+        }
         ext = self.local_filepath.format(self.local_filepath.split('.')[-1])
         if ext == 'jpg':
             self.mimetype = 'image/jpeg'
@@ -113,12 +111,10 @@ class GoogleDriveClient:
             self.mimetype = 'image/tiff'
         elif ext[:3].lower() == 'gif':
             self.mimetype = 'image/gif'
-
         media_body = self.client.MediaFileUpload(self.local_filepath, mimetype=self.mimetype, resumable=True)
         self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
         pprint.pprint(self.drive_file_data)
         return self.drive_file_data
-
 
     def print_application_data_folder_metadata(self):
         try:
@@ -127,7 +123,6 @@ class GoogleDriveClient:
             print 'Title: %s' % self.drive_file_data['title']
         except self.errors.HttpError, error:
             print 'An error occurred: %s' % error
-
 
     def insert_file_in_folder(self):
         #self.pardir_fileid =  'appfolder'
@@ -138,7 +133,6 @@ class GoogleDriveClient:
             "parents": [{"id": self.pardir_fileid}],
             'mimeType': self.mime_type
         }
-
         try:
             self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
             return self.drive_file_data
@@ -146,12 +140,10 @@ class GoogleDriveClient:
             print 'An error occured: %s' % error
             return None
 
-
     def list_filesdata_current_dir(self):
         req = self.service.files().list()
         self.drive_folder_data = req.execute()
         return self.drive_folder_data
-
 
     def list_files_in_pardir(self):
         self.drive_folder_files = []
@@ -174,4 +166,13 @@ class GoogleDriveClient:
                 break
         return self.drive_folder_files
 
-
+    def change_permissions_by_fileid(self):
+        permission_data = self.service.permissions().insert(
+            fileId=self.file_id,
+            body = {
+                'value': self.share_email,
+                'type': 'group',
+                'role': 'reader'
+            })
+        self.result = permission_data.execute()
+        return self.result
