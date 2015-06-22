@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath=None, description=None, title=None, local_metadata=None, share_email=None, folder_color_rgb=None):
+    def __init__(self, file_id=None, local_filepath=None, description=None, title=None, properties=None, role=None, share_email=None, folder_color_rgb=None, database_id=None):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -18,21 +18,23 @@ class GoogleDriveClient:
         self.folder_color_rgb = folder_color_rgb
         self.fileid_permissions = ''
         self.user_permission = ''
-        self.role = ''
-        if not self.role:
+        if not role:
             self.role = 'reader'
-        if not self.share_email:
+        if not share_email:
             self.share_email = 'john.bragato@gmail.com'
-
-        if not description:
-            self.description = ''
-        if not local_metadata:
-            self.local_metadata = {}
+        if not properties:
+            self.properties = [{
+                'key': 'databaseId',
+                'value': database_id,
+                'visability': 'PRIVATE'
+            }]
         if not title:
             try:
                 self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[1])
             except AttributeError:
                 self.title = ''
+        if not description:
+            self.description = ''
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
     def instantiate_google_drive_serviceAccount_bfly(self):
@@ -76,7 +78,8 @@ class GoogleDriveClient:
         body = {
             'title': self.title,
             'description': self.description,
-            'mimeType': self.mimetype
+            'mimeType': self.mimetype,
+            "properties": self.properties
         }
 
         self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
@@ -105,6 +108,7 @@ class GoogleDriveClient:
             'title': self.title,
             'description': self.description,
             'mimeType': self.mimetype,
+            "properties": self.properties,
             "parents": [{
                 "kind": "drive#fileLink",
                 "id": self.pardir_fileid
@@ -139,7 +143,8 @@ class GoogleDriveClient:
             'title': self.title,
             "description": self.description,
             "parents": [{"id": self.pardir_fileid}],
-            'mimeType': self.mime_type
+            'mimeType': self.mime_type,
+            "properties": self.properties
         }
         try:
             self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
@@ -175,11 +180,11 @@ class GoogleDriveClient:
 
     def change_permissions_by_fileid(self):
         permission_data = self.service.permissions().insert(
-            fileId=self.file_id,
             body = {
                 'value': self.share_email,
                 'type': 'group',
-                'role': self.role
+                'role': self.role,
+                'fileId': self.file_id
             })
         self.fileid_permissions = permission_data.execute()
         return self.fileid_permissions
