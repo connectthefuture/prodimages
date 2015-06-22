@@ -123,22 +123,54 @@ def list_files_in_application_data_folder(service):
     result = []
     page_token = None
     while True:
-    try:
-        param = {}
-        if page_token:
-            param['pageToken'] = page_token
-        else:
-            param['q'] = "'appfolder' in parents"
-        files = service.files().list(**param).execute()
+        try:
+            param = {}
+            if page_token:
+                param['pageToken'] = page_token
+            else:
+                param['q'] = "'appfolder' in parents"
+            files = service.files().list(**param).execute()
 
-        result.extend(files['items'])
-        page_token = files.get('nextPageToken')
-        if not page_token:
+            result.extend(files['items'])
+            page_token = files.get('nextPageToken')
+            if not page_token:
+                break
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
             break
-    except errors.HttpError, error:
-        print 'An error occurred: %s' % error
-        break
     return result
+
+
+def batch_callback(request_id, response, exception):
+    from apiclient.http import BatchHttpRequest
+    print "Response for request_id (%s):" % request_id
+    print response
+
+    # Potentially log or re-raise exceptions
+    if exception:
+        raise exception
+
+
+def batch_upload(service)
+    batch_request = BatchHttpRequest(callback=batch_callback)
+    batch_entry_1 = service.permissions().insert(fileId=FILE_ID, body={
+      'value': 'johnb@relic7.uk.to',
+      'type': 'user',
+      'role': 'writer'
+    })
+
+    batch_request.add(batch_entry_1, request_id="batch1")
+
+    batch_entry_2 = service.permissions().insert(fileId=FILE_ID, body={
+      'value': 'johnb@relic7.uk.to',
+      'type': 'group',
+      'role': 'reader'
+    })
+
+    batch_request.add(batch_entry_2, request_id="batch2")
+
+    batch_request.execute(http)
+
 
 
 if __name__ == '__main__':
