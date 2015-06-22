@@ -67,7 +67,7 @@ def upload_file_drive(srcfile):
 
 def create_drive_folder():
     folder_body = {
-        "parents": [{"id": pardir_fileid}]
+        "parents": [{"id": pardir_fileid}],
         "mimeType": "application/vnd.google-apps.folder"
     }        
 
@@ -76,7 +76,7 @@ def save_movefile_drive_folder(pardir_fileid):
     body = {
           'title': '{}'.format(srcfile.split('/')[-1]),
             'description': 'Image',
-            'mimeType': 'image/jpeg'
+            'mimeType': 'image/jpeg',ß
             "parents": [{
             "kind": "drive#fileLink",
             "id": pardir_fileid
