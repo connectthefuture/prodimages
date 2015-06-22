@@ -31,7 +31,7 @@ class GoogleDriveClient:
         if not title:
             try:
                 self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[1])
-            except AttributeError or IndexError:
+            except IndexError:
                 self.title = ''
         if not description:
             self.description = ''
