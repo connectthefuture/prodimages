@@ -151,7 +151,7 @@ def batch_callback(request_id, response, exception):
         raise exception
 
 
-def batch_upload(service)
+def batch_upload(service):
     batch_request = BatchHttpRequest(callback=batch_callback)
     batch_entry_1 = service.permissions().insert(fileId=FILE_ID, body={
       'value': 'johnb@relic7.uk.to',
