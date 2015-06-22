@@ -18,8 +18,12 @@ class GoogleDriveClient:
         self.folder_color_rgb = folder_color_rgb
         self.fileid_permissions = ''
         self.user_permission = ''
-        if not share_email:
-            self.share_email = ''
+        self.role = ''
+        if not self.role:
+            self.role = 'reader'
+        if not self.share_email:
+            self.share_email = 'john.bragato@gmail.com'
+
         if not description:
             self.description = ''
         if not local_metadata:
@@ -175,7 +179,7 @@ class GoogleDriveClient:
             body = {
                 'value': self.share_email,
                 'type': 'group',
-                'role': 'reader'
+                'role': self.role
             })
         self.fileid_permissions = permission_data.execute()
         return self.fileid_permissions
