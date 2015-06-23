@@ -111,17 +111,12 @@ def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Ple
 if __name__ == '__main__':
     import sys
     try:
-        if len(sys.argv) == 2:
+        if len(sys.argv[0]) == 2:
             toaddr = sys.argv[1]
             attachment = sys.argv[2]
-        elif len(sys.argv) == 1:
-            toaddr = 'john.bragato@gmail.com'
-            attachment = sys.argv[1]
         else:
-            print sys.argv
             toaddr = 'john.bragato@gmail.com'
             attachment = sys.argv[1]
-            
         send_attachment_gmail(toaddr, attachment)
     except IndexError:
         print('Please supply the to address and the path to your attachment as arg 1 and 2, respectively.')
