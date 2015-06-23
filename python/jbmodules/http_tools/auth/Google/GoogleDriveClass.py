@@ -15,13 +15,13 @@ class GoogleDriveClient:
         self.drive_folder_data = {}
         self.local_filepath = local_filepath
         self.mime_type = ''
-        self.kind = ["drive#fileLink", ]
-        self.folder_title = ''
+        self.kinds = ["drive#fileLink", "drive#file", "drive#user", "drive#parentReference", "drive#permission"]
+        self.roles = ['reader', 'writer', 'owner']
+        self.folder_title = folder_title
         self.folder_color_rgb = folder_color_rgb
         self.fileid_permissions = ''
         self.user_permission = []
         #if not role:
-        #    self.role = 'reader'
         if not share_email:
             self.share_email = 'john.bragato@gmail.com'
         if not properties:
