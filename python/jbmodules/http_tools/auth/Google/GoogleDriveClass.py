@@ -21,7 +21,7 @@ class GoogleDriveClient:
         self.user_permission = []
         self.visibility = 'Public'
         self.kinds = ["drive#file", "drive#fileList", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission", "drive#comment", "drive#commentReply"]
-        self.roles = ['reader', 'writer', 'owner']
+        self.roles = ['reader', 'writer', 'owner', 'commenter']
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         if not share_email:
             self.share_email = 'john.bragato@gmail.com'
@@ -83,6 +83,8 @@ class GoogleDriveClient:
         client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
         client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
         scope = 'https://www.googleapis.com/auth/drive'
+        # filescope='https://www.googleapis.com/auth/drive.file'
+        # metadatascope='https://www.googleapis.com/auth/drive.metadata'
         f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
         key = f.read()
         f.close()
@@ -276,6 +278,16 @@ class GoogleDriveClient:
                 break
         return self.drive_folder_files
 
+
+    def create_file_shortcut(self):
+        body = {
+            'title': self.title,
+            'description': self.description,
+            'mimeType': 'application/vnd.google-apps.drive-sdk'
+        }
+        _file = self.service.files().insert(body=body).execute()
+        print 'File ID: %s' % _file['id']
+        return _file
 
     ## Shared Folder
     def create_public_folder(self):
