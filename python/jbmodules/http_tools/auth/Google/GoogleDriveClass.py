@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', acct_type='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
+    def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -24,9 +24,9 @@ class GoogleDriveClient:
         self.user_permission = []
         self.kinds = ["drive#file", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission"]
         self.roles = ['reader', 'writer', 'owner']
-        self.acct_types = ['user', 'group', 'domain', 'anyone']
-        if not acct_type:
-            self.acct_type = self.acct_types[0]
+        self.perm_types = ['user', 'group', 'domain', 'anyone']
+        if not perm_type:
+            self.perm_type = self.perm_types[0]
         if not kind:
             self.kind = self.kinds[0]
         else:
@@ -39,15 +39,9 @@ class GoogleDriveClient:
         if not share_email:
             self.share_email = 'john.bragato@gmail.com'
         else:
-            self.permission_id = self.get_permission_id_for_email(self.share_email)
+            self.permission_id = self.get_permission_id_for_email()
 
-        ## AdditionalData
-        if not properties:
-            self.properties = [{
-                'key': 'databaseId',
-                'value': database_id,
-                'visability': 'PRIVATE'
-            }]
+        ## Filename + Desc and AdditionalData Properties
         if not title:
             try:
                 self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[0])
@@ -55,6 +49,12 @@ class GoogleDriveClient:
                 self.title = ''
         if not description:
             self.description = ''
+        if not properties:
+            self.properties = [{
+               'key': 'databaseId',
+               'value': database_id,
+               'visability': 'PRIVATE'
+            }]
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
 
@@ -225,8 +225,8 @@ class GoogleDriveClient:
             body = {
                 'value': self.share_email,
                 #'type': 'group',
-                'type': 'user',
-                'role': 'reader', ##self.role
+                'type': self.perm_type,
+                'role': self.role, ##self.role
                 'fileId': self.file_id
             })
         self.fileid_permissions = permission_data.execute()
@@ -241,6 +241,17 @@ class GoogleDriveClient:
         return self.permission_id
       except self.client.errors.HttpError, error:
         print 'An error occured: %s' % error
+
+
+    def update_fileid_permission(self):
+        try:
+            # First retrieve the permission from the API.
+            permission = self.service.permissions().get(fileId=self.file_id, permissionId=self.permission_id).execute()
+            permission['role'] = self.role
+            return self.service.permissions().update(fileId=self.file_id, permissionId=self.permission_id, body=permission).execute()
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
 
 
     ## Utils
