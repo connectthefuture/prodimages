@@ -17,7 +17,7 @@ class GoogleDriveClient:
         self.mime_type = ''
         self.kinds = ["drive#fileLink", "drive#file", "drive#user", "drive#parentReference", "drive#permission"]
         self.roles = ['reader', 'writer', 'owner']
-        self.folder_title = ''
+        self.folder_title = folder_title
         self.folder_color_rgb = folder_color_rgb
         self.fileid_permissions = ''
         self.user_permission = []
