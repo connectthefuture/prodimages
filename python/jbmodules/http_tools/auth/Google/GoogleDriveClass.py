@@ -10,9 +10,9 @@ class GoogleDriveClient:
         self.file_id = file_id
         self.pardir_fileid = ''
         self.drive_file_content = ''
-        self.drive_file_data = {}
+        self.drive_file_data = []
         self.drive_folder_files = []
-        self.drive_folder_data = {}
+        self.drive_folder_data = []
         self.local_filepath = local_filepath
         self.mime_type = ''
 
@@ -20,7 +20,7 @@ class GoogleDriveClient:
         self.fileid_permissions = ''
         self.user_permission = []
         self.visibility = 'Public'
-        self.kinds = ["drive#file", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission", "drive#comment", "drive#commentReply"]
+        self.kinds = ["drive#file", "drive#fileList", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission", "drive#comment", "drive#commentReply"]
         self.roles = ['reader', 'writer', 'owner']
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         if not share_email:
@@ -182,6 +182,26 @@ class GoogleDriveClient:
             print 'An error occured: %s' % error
             return None
 
+    ##
+    def find_retrieve_all_files(self):
+        self.drive_folder_files = []
+        page_token = None
+        while True:
+            try:
+                param = {}
+                if page_token:
+                    param['pageToken'] = page_token
+                param['q'] = "properties has {key={0} and value={1} and visibility={2}".format(self.prop_key ,self.prop_value, self.visibility)
+                _files = self.service.files().list(**param).execute()
+                self.drive_folder_files.extend(_files['items'])
+                page_token = _files.get('nextPageToken')
+                if not page_token:
+                    break
+            except self.client.errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+        return self.drive_folder_files
+
     ## Print File Parts Info
     def print_return_file_metadata(self):
         try:
@@ -263,7 +283,6 @@ class GoogleDriveClient:
             'title': self.title,
             'mimeType': 'application/vnd.google-apps.folder'
         }
-
         _public_folder = self.service.files().insert(body=body).execute()
         permission = {
             'value': '',
