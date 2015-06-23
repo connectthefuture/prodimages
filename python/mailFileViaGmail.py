@@ -29,7 +29,7 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     filepath   = groupeddict['email_addr']
     # me == my email address
     # you == recipient's email address
-    from_addr = str(input('Enter your Gmail or GoogleApps Address: ')) 
+    from_addr = str(input('Enter your Gmail or GoogleApps Address: '))
     to_addr = email_addr
 
     # Create message container - the correct MIME type is multipart/alternative.
@@ -73,7 +73,7 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     # and message to send - here it is sent as one string.
     mailServer.close()
 
-    
+
 def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Please save the attachement and open file locally.'):
     import smtplib, os.path, email
     from email.MIMEMultipart import MIMEMultipart
@@ -86,7 +86,7 @@ def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Ple
     msg = MIMEMultipart()
     msg['From']    = gmail_user
     msg['To']      = to
-    
+
 
     msg.attach(MIMEText(text))
     part = MIMEBase('application', 'octet-stream')
@@ -95,7 +95,7 @@ def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Ple
     part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(attach))
     msg.attach(part)
     msg['Subject'] = 'Filesize: ' + str(len(open(attach, 'rb').read())) + subject + ' Filename %s ' % os.path.basename(attach)
-    
+
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
     #mailServer.ehlo()
     mailServer.starttls()
@@ -111,8 +111,12 @@ def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Ple
 if __name__ == '__main__':
     import sys
     try:
-        toaddr = sys.argv[1]
-        attachment = sys.argv[2]
+        if len(sys.argv[0]) == 2:
+            toaddr = sys.argv[1]
+            attachment = sys.argv[2]
+        elif len(sys.argv[0]) == 1:
+            toaddr = 'john.bragato@gmail.com'
+            attachment = sys.argv[1]
         send_attachment_gmail(toaddr, attachment)
     except IndexError:
         print('Please supply the to address and the path to your attachment as arg 1 and 2, respectively.')

@@ -157,6 +157,9 @@ class GoogleDriveClient:
         self.drive_folder_data = req.execute()
         return self.drive_folder_data
 
+    def list_fileitems_current_dir(self):
+        self.drive_folder_data['items'][1].items()
+
     def list_files_in_pardir(self):
         self.drive_folder_files = []
         page_token = None
