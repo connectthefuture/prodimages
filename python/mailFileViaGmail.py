@@ -119,6 +119,9 @@ if __name__ == '__main__':
             attachment = sys.argv[1]
         else:
             print sys.argv
+            toaddr = 'john.bragato@gmail.com'
+            attachment = sys.argv[1]
+            
         send_attachment_gmail(toaddr, attachment)
     except IndexError:
         print('Please supply the to address and the path to your attachment as arg 1 and 2, respectively.')
