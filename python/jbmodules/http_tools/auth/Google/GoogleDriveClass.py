@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
+    def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', perm_value='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -25,8 +25,17 @@ class GoogleDriveClient:
         self.kinds = ["drive#file", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission"]
         self.roles = ['reader', 'writer', 'owner']
         self.perm_types = ['user', 'group', 'domain', 'anyone']
+        if not share_email:
+            self.share_email = 'john.bragato@gmail.com'
+            self.permission_id = self.get_permission_id_for_email()
+        else:
+            self.share_email = share_email
+            self.permission_id = self.get_permission_id_for_email()
+        self.perm_value = perm_value
         if not perm_type:
             self.perm_type = self.perm_types[0]
+        else:
+            self.perm_type = perm_type
         if not kind:
             self.kind = self.kinds[0]
         else:
@@ -35,11 +44,7 @@ class GoogleDriveClient:
             self.role = self.roles[0]
         else:
             self.role = role
-        self.share_email = ''
-        if not share_email:
-            self.share_email = 'john.bragato@gmail.com'
-        else:
-            self.permission_id = self.get_permission_id_for_email()
+
 
         ## Filename + Desc and AdditionalData Properties
         if not title:
@@ -47,14 +52,23 @@ class GoogleDriveClient:
                 self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[0])
             except IndexError:
                 self.title = ''
+        else:
+            self.title = title
+
         if not description:
             self.description = ''
+        else:
+            self.description = description
+
         if not properties:
             self.properties = [{
                'key': 'databaseId',
                'value': database_id,
                'visability': 'PRIVATE'
             }]
+        else:
+            self.properties = properties
+
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
 
@@ -201,8 +215,16 @@ class GoogleDriveClient:
                 break
         return self.drive_folder_files
 
+    def insert_property(self):
+        body = self.properties[0]
+        try:
+            p = self.service.properties().insert(fileId=self.file_id, body=body).execute()
+            return p
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
 
-    ### Permissions
+    ## Shared Folder
     def create_public_folder(self):
         body = {
             'title': self.title,
@@ -219,39 +241,51 @@ class GoogleDriveClient:
         self.pardir_fileid = _public_folder['id']
         return self.pardir_fileid
 
-
-    def change_permissions_by_fileid(self):
-        permission_data = self.service.permissions().insert(
-            body = {
-                'value': self.share_email,
-                #'type': 'group',
-                'type': self.perm_type,
-                'role': self.role, ##self.role
-                'fileId': self.file_id
-            })
-        self.fileid_permissions = permission_data.execute()
-        return self.fileid_permissions
-
-
-    def get_permission_id_for_email(self):
-      try:
-        _permission_data = self.service.permissions().getIdForEmail(email=self.share_email).execute()
-        print _permission_data['id']
-        self.permission_id = _permission_data['id']
-        return self.permission_id
-      except self.client.errors.HttpError, error:
-        print 'An error occured: %s' % error
-
+    ### Permissions
+    def insert_new_permission(self):
+        _permission = {
+            'value': self.perm_value,
+            'type':  self.perm_type,
+            'role':  self.role
+        }
+        try:
+            return self.service.permissions().insert(fileId=self.file_id, body=_permission).execute()
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
 
     def update_fileid_permission(self):
         try:
             # First retrieve the permission from the API.
-            permission = self.service.permissions().get(fileId=self.file_id, permissionId=self.permission_id).execute()
-            permission['role'] = self.role
-            return self.service.permissions().update(fileId=self.file_id, permissionId=self.permission_id, body=permission).execute()
+            _permission_data = self.service.permissions().get(fileId=self.file_id, permissionId=self.permission_id).execute()
+            _permission_data['role'] = self.role
+            return self.service.permissions().update(fileId=self.file_id, permissionId=self.permission_id, body=_permission_data).execute()
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
+
+
+    def change_permission_by_fileid(self):
+        _permission_data = self.service.permissions().insert(
+            body={
+                'value': self.share_email,
+                # 'type': 'group',
+                'type': self.perm_type,
+                'role': self.role,  ##self.role
+                'fileId': self.file_id
+            })
+        self.fileid_permissions = _permission_data.execute()
+        return self.fileid_permissions
+
+
+    def get_permission_id_for_email(self):
+        try:
+            _permission_data = self.service.permissions().getIdForEmail(email=self.share_email).execute()
+            print _permission_data['id']
+            self.permission_id = _permission_data['id']
+            return self.permission_id
+        except self.client.errors.HttpError, error:
+            print 'An error occured: %s' % error
 
 
     ## Utils
