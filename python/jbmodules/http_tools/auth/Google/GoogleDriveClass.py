@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath='', description='', title='', properties='', role='', share_email='', folder_color_rgb='', database_id=''):
+    def __init__(self, file_id=None, local_filepath='', description='', title='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -15,6 +15,8 @@ class GoogleDriveClient:
         self.drive_folder_data = {}
         self.local_filepath = local_filepath
         self.mime_type = ''
+        self.kind = ["drive#fileLink", ]
+        self.folder_title = ''
         self.folder_color_rgb = folder_color_rgb
         self.fileid_permissions = ''
         self.user_permission = []
@@ -110,7 +112,7 @@ class GoogleDriveClient:
             'mimeType': self.mimetype,
             "properties": self.properties,
             "parents": [{
-                "kind": "drive#fileLink",
+                "kind": self.kind,
                 "id": self.pardir_fileid
                 }]
         }
@@ -126,15 +128,13 @@ class GoogleDriveClient:
         media_body = self.client.MediaFileUpload(self.local_filepath, mimetype=self.mimetype, resumable=True)
         self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
         pprint.pprint(self.drive_file_data)
-        return self.drive_file_data
-
-    def print_application_data_folder_metadata(self):
         try:
-            self.drive_file_data = self.service.files().get(fileId=self.file_id).execute()
-            print 'Id: %s' % self.drive_file_data['id']
-            print 'Title: %s' % self.drive_file_data['title']
-        except self.errors.HttpError, error:
-            print 'An error occurred: %s' % error
+            self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
+            return self.drive_file_data
+        except self.client.errors.HttpError, error:
+            print 'An error occured: %s' % error
+            return None
+
 
     def insert_file_in_folder(self):
         #self.pardir_fileid =  'appfolder'
@@ -146,12 +146,19 @@ class GoogleDriveClient:
             'mimeType': self.mime_type,
             "properties": self.properties
         }
+
+
+
+    def get_idtitle_by_fileid(self):
         try:
-            self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
-            return self.drive_file_data
-        except self.client.errors.HttpError, error:
-            print 'An error occured: %s' % error
-            return None
+            self.drive_file_data = self.service.files().get(fileId=self.file_id).execute()
+            print 'Title: %s' % self.drive_file_data['title']
+            print 'Id: %s' % self.drive_file_data['id']
+            self.file_id = self.drive_file_data['id']
+            self.title = self.drive_file_data['title']
+            return self.file_id, self.title
+        except self.errors.HttpError, error:
+            print 'An error occurred: %s' % error
 
     def list_filesdata_current_dir(self):
         req = self.service.files().list()
@@ -183,12 +190,31 @@ class GoogleDriveClient:
                 break
         return self.drive_folder_files
 
+
+    def create_public_folder(self):
+        body = {
+            'title': self.title,
+            'mimeType': 'application/vnd.google-apps.folder'
+        }
+
+        _public_folder = self.service.files().insert(body=body).execute()
+        permission = {
+            'value': '',
+            'type': 'anyone',
+            'role': 'reader'
+        }
+
+        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
+        return _public_folder
+
+
     def change_permissions_by_fileid(self):
         permission_data = self.service.permissions().insert(
             body = {
                 'value': self.share_email,
-                'type': 'group',
-                'role': 'reader', ##self.role,
+                #'type': 'group',
+                'type': 'user',
+                'role': 'reader', ##self.role, 'writer', 'owner'
                 'fileId': self.file_id
             })
         self.fileid_permissions = permission_data.execute()
