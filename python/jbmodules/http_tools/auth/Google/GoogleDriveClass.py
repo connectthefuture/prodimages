@@ -17,7 +17,7 @@ class GoogleDriveClient:
         self.mime_type = ''
         self.folder_color_rgb = folder_color_rgb
         self.fileid_permissions = ''
-        self.user_permission = ''
+        self.user_permission = []
         #if not role:
         #    self.role = 'reader'
         if not share_email:
