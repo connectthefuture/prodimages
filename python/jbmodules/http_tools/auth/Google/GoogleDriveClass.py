@@ -20,7 +20,7 @@ class GoogleDriveClient:
         self.fileid_permissions = ''
         self.user_permission = []
         self.visibility = 'Public'
-        self.kinds = ["drive#file", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission"]
+        self.kinds = ["drive#file", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission", "drive#comment", "drive#commentReply"]
         self.roles = ['reader', 'writer', 'owner']
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         if not share_email:
@@ -333,6 +333,17 @@ class GoogleDriveClient:
             return _about
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
+
+
+    def insert_file_comment(self, _content):
+        _new_comment = {
+            'content': _content
+        }
+        try:
+            return self.service.comments().insert(fileId=self.file_id, body=_new_comment).execute()
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
 
 
     ## Utils
