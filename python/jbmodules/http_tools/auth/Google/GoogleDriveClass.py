@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', perm_value='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
+    def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', perm_value='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id='', prop_key='', prop_value= ''):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -22,6 +22,7 @@ class GoogleDriveClient:
         ### Permissions
         self.fileid_permissions = ''
         self.user_permission = []
+        self.visibility = 'Public'
         self.kinds = ["drive#file", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission"]
         self.roles = ['reader', 'writer', 'owner']
         self.perm_types = ['user', 'group', 'domain', 'anyone']
@@ -60,7 +61,8 @@ class GoogleDriveClient:
         else:
             self.description = description
 
-        if not properties:
+        ### Properties
+        if not properties and not prop_key and not prop_value:
             self.properties = [{
                'key': 'databaseId',
                'value': database_id,
@@ -68,6 +70,8 @@ class GoogleDriveClient:
             }]
         else:
             self.properties = properties
+            self.prop_key = prop_key
+            self.prop_value = prop_value
 
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
@@ -215,6 +219,7 @@ class GoogleDriveClient:
                 break
         return self.drive_folder_files
 
+    ## Additional Custom File Properties
     def insert_property(self):
         body = self.properties[0]
         try:
@@ -223,6 +228,18 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
+
+
+    def update_property(self):
+        try:
+            # First retrieve the property from the API.
+            _prop = self.service.properties().get(fileId=self.file_id, propertyKey=self.prop_key, visibility=self.visibility).execute()
+            _prop['value'] = self.prop_value
+            return self.service.properties().update(fileId=self.file_id, propertyKey=self.prop_key, visibility=self.visibility, body=_prop).execute()
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
 
     ## Shared Folder
     def create_public_folder(self):
@@ -246,7 +263,8 @@ class GoogleDriveClient:
         _permission = {
             'value': self.perm_value,
             'type':  self.perm_type,
-            'role':  self.role
+            'role':  self.role,
+            'visibility': self.visibility
         }
         try:
             return self.service.permissions().insert(fileId=self.file_id, body=_permission).execute()
