@@ -184,6 +184,43 @@ class GoogleDriveClient:
             print 'An error occured: %s' % error
             return None
 
+    ## Print File Parts Info
+    def print_file_metadata(self):
+        try:
+            _file = self.service.files().get(fileId=self.file_id).execute()
+            print 'Title: %s' % _file['title']
+            print 'MIME type: %s' % _file['mimeType']
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+    def print_file_content(self):
+        try:
+            print self.service.files().get_media(fileId=self.file_id).execute()
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
+    ## Add-Edit Additional Custom File Properties
+    def insert_property(self):
+        body = self.properties[0]
+        try:
+            p = self.service.properties().insert(fileId=self.file_id, body=body).execute()
+            return p
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
+    def update_property(self):
+        try:
+            # First retrieve the property from the API.
+            _prop = self.service.properties().get(fileId=self.file_id, propertyKey=self.prop_key,
+                                                  visibility=self.visibility).execute()
+            _prop['value'] = self.prop_value
+            return self.service.properties().update(fileId=self.file_id, propertyKey=self.prop_key,
+                                                    visibility=self.visibility, body=_prop).execute()
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
 
     ## List Contents of Dirs
     def list_filesdata_current_dir(self):
@@ -217,27 +254,6 @@ class GoogleDriveClient:
                 print 'An error occurred: %s' % error
                 break
         return self.drive_folder_files
-
-    ## Additional Custom File Properties
-    def insert_property(self):
-        body = self.properties[0]
-        try:
-            p = self.service.properties().insert(fileId=self.file_id, body=body).execute()
-            return p
-        except self.client.errors.HttpError, error:
-            print 'An error occurred: %s' % error
-        return None
-
-
-    def update_property(self):
-        try:
-            # First retrieve the property from the API.
-            _prop = self.service.properties().get(fileId=self.file_id, propertyKey=self.prop_key, visibility=self.visibility).execute()
-            _prop['value'] = self.prop_value
-            return self.service.properties().update(fileId=self.file_id, propertyKey=self.prop_key, visibility=self.visibility, body=_prop).execute()
-        except self.client.errors.HttpError, error:
-            print 'An error occurred: %s' % error
-        return None
 
 
     ## Shared Folder
