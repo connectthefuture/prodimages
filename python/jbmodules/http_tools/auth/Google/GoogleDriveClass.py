@@ -16,9 +16,6 @@ class GoogleDriveClient:
         self.local_filepath = local_filepath
         self.mime_type = ''
 
-        self.folder_title = folder_title
-        self.folder_color_rgb = folder_color_rgb
-
         ### Permissions
         self.fileid_permissions = ''
         self.user_permission = []
@@ -46,8 +43,9 @@ class GoogleDriveClient:
         else:
             self.role = role
 
-
         ## Filename + Desc and AdditionalData Properties
+        self.folder_title = folder_title
+        self.folder_color_rgb = folder_color_rgb
         if not title:
             try:
                 self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[0])
@@ -185,17 +183,20 @@ class GoogleDriveClient:
             return None
 
     ## Print File Parts Info
-    def print_file_metadata(self):
+    def print_return_file_metadata(self):
         try:
-            _file = self.service.files().get(fileId=self.file_id).execute()
-            print 'Title: %s' % _file['title']
-            print 'MIME type: %s' % _file['mimeType']
+            _filedata = self.service.files().get(fileId=self.file_id).execute()
+            print 'Title: %s' % _filedata['title']
+            print 'MIME type: %s' % _filedata['mimeType']
+            return _filedata
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
-    def print_file_content(self):
+    def print_return_file_content(self):
         try:
-            print self.service.files().get_media(fileId=self.file_id).execute()
+            _content = self.service.files().get_media(fileId=self.file_id).execute()
+            print(_content)
+            return _content
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
@@ -319,6 +320,19 @@ class GoogleDriveClient:
             return self.permission_id
         except self.client.errors.HttpError, error:
             print 'An error occured: %s' % error
+
+
+    ### Print User and Drive Info
+    def print_about(self):
+        try:
+            _about = self.service.about().get().execute()
+            print 'Current user name: %s' % _about['name']
+            print 'Root folder ID: %s' % _about['rootFolderId']
+            print 'Total quota (bytes): %s' % _about['quotaBytesTotal']
+            print 'Used quota (bytes): %s' % _about['quotaBytesUsed']
+            return _about
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
 
 
     ## Utils
