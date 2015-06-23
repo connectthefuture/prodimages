@@ -29,10 +29,17 @@ class GoogleDriveClient:
             self.acct_type = self.acct_types[0]
         if not kind:
             self.kind = self.kinds[0]
+        else:
+            self.kind = kind
         if not role:
             self.role = self.roles[0]
+        else:
+            self.role = role
+        self.share_email = ''
         if not share_email:
             self.share_email = 'john.bragato@gmail.com'
+        else:
+            self.permission_id = self.get_permission_id_for_email(self.share_email)
 
         ## AdditionalData
         if not properties:
@@ -70,6 +77,8 @@ class GoogleDriveClient:
         return self.service
 
 
+
+    ## File and Folder Ops
     def download_file_drive(self):
         request = self.service.files().get_media(fileId=self.file_id)
         fdest = open(self.local_filepath, 'w')
@@ -128,7 +137,7 @@ class GoogleDriveClient:
                 }]
         }
         ext = self.local_filepath.format(self.local_filepath.split('.')[-1])
-        if ext == 'jpg':
+        if ext[:3].lower() == 'jpg':
             self.mimetype = 'image/jpeg'
         elif ext[:3].lower() == 'png':
             self.mimetype = 'image/png'
@@ -159,19 +168,7 @@ class GoogleDriveClient:
         }
 
 
-
-    def get_idtitle_by_fileid(self):
-        try:
-            self.drive_file_data = self.service.files().get(fileId=self.file_id).execute()
-            print 'Title: %s' % self.drive_file_data['title']
-            print 'Id: %s' % self.drive_file_data['id']
-            self.file_id = self.drive_file_data['id']
-            self.title = self.drive_file_data['title']
-            return self.file_id, self.title
-        except self.errors.HttpError, error:
-            print 'An error occurred: %s' % error
-
-
+    ## List Contents of Dirs
     def list_filesdata_current_dir(self):
         req = self.service.files().list()
         self.drive_folder_data = req.execute()
@@ -205,6 +202,7 @@ class GoogleDriveClient:
         return self.drive_folder_files
 
 
+    ### Permissions
     def create_public_folder(self):
         body = {
             'title': self.title,
@@ -217,9 +215,9 @@ class GoogleDriveClient:
             'type': 'anyone',
             'role': 'reader'
         }
-
         self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
-        return _public_folder
+        self.pardir_fileid = _public_folder['id']
+        return self.pardir_fileid
 
 
     def change_permissions_by_fileid(self):
@@ -233,4 +231,27 @@ class GoogleDriveClient:
             })
         self.fileid_permissions = permission_data.execute()
         return self.fileid_permissions
+
+
+    def get_permission_id_for_email(self):
+      try:
+        _permission_data = self.service.permissions().getIdForEmail(email=self.share_email).execute()
+        print _permission_data['id']
+        self.permission_id = _permission_data['id']
+        return self.permission_id
+      except self.client.errors.HttpError, error:
+        print 'An error occured: %s' % error
+
+
+    ## Utils
+    def get_idtitle_by_fileid(self):
+        try:
+            self.drive_file_data = self.service.files().get(fileId=self.file_id).execute()
+            print 'Title: %s' % self.drive_file_data['title']
+            print 'Id: %s' % self.drive_file_data['id']
+            self.file_id = self.drive_file_data['id']
+            self.title = self.drive_file_data['title']
+            return self.file_id, self.title
+        except self.errors.HttpError, error:
+            print 'An error occurred: %s' % error
 
