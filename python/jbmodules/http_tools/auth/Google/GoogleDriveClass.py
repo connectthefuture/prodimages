@@ -128,6 +128,17 @@ class GoogleDriveClient:
         return self.drive_file_data
 
 
+    def rename_drive_file(self):
+        try:
+            _file = {'title': self.title}
+            # Rename the file.
+            _updated_file = self.service.files().patch(fileId=self.file_id, body=_file, fields='title').execute()
+            return _updated_file
+        except self.client.errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+
     def create_drive_folder(self):
         folder_body = {
             'title': self.title,
@@ -141,7 +152,7 @@ class GoogleDriveClient:
         return self.drive_folder_data
 
 
-    def save_file_drive_folder(self):
+    def insert_file_drive_folder(self):
         import pprint
         self.service= self.instantiate_google_drive_serviceAccount_bfly()
         body = {
@@ -172,18 +183,6 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occured: %s' % error
             return None
-
-
-    def insert_file_in_folder(self):
-        #self.pardir_fileid =  'appfolder'
-        media_body = self.client.MediaFileUpload(self.local_filepath, mimetype=self.mime_type, resumable=True)
-        body = {
-            'title': self.title,
-            "description": self.description,
-            "parents": [{"id": self.pardir_fileid}],
-            'mimeType': self.mime_type,
-            "properties": self.properties
-        }
 
 
     ## List Contents of Dirs
@@ -315,6 +314,6 @@ class GoogleDriveClient:
             self.file_id = self.drive_file_data['id']
             self.title = self.drive_file_data['title']
             return self.file_id, self.title
-        except self.errors.HttpError, error:
+        except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
