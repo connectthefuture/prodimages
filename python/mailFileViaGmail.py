@@ -74,18 +74,21 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     mailServer.close()
 
 
-def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Please save the attachement and open file locally.'):
-    import smtplib, os.path, email
+def send_attachment_gmail(toaddr, attach, subject=' -- File Attached -- ', text='Please save the attachement and open file locally.'):
+    import smtplib, os.path, email, sys.argv
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEBase import MIMEBase
     from email.MIMEText import MIMEText
     from email import Encoders
     #print('Enter username or return to accept the default: \n')
-    gmail_user = str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
+    if len(sys.argv) == 1:
+        gmail_user = 'john.bragato@gmail.com'
+    else:
+        gmail_user = str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
     gmail_pass = str(input('Enter your password in single quotes: '))
     msg = MIMEMultipart()
     msg['From']    = gmail_user
-    msg['To']      = to
+    msg['To']      = toaddr
 
     msg.attach(MIMEText(text))
     part = MIMEBase('application', 'octet-stream')

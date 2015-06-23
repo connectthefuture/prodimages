@@ -4,7 +4,7 @@ __author__ = 'johnb'
 
 class GoogleDriveClient:
 
-    def __init__(self, file_id=None, local_filepath='', description='', title='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
+    def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', acct_type='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id=''):
         import googleapiclient
         self.client = googleapiclient
         self.file_id = file_id
@@ -15,15 +15,26 @@ class GoogleDriveClient:
         self.drive_folder_data = {}
         self.local_filepath = local_filepath
         self.mime_type = ''
-        self.kinds = ["drive#fileLink", "drive#file", "drive#user", "drive#parentReference", "drive#permission"]
-        self.roles = ['reader', 'writer', 'owner']
+
         self.folder_title = folder_title
         self.folder_color_rgb = folder_color_rgb
+
+        ### Permissions
         self.fileid_permissions = ''
         self.user_permission = []
-        #if not role:
+        self.kinds = ["drive#file", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission"]
+        self.roles = ['reader', 'writer', 'owner']
+        self.acct_types = ['user', 'group', 'domain', 'anyone']
+        if not acct_type:
+            self.acct_type = self.acct_types[0]
+        if not kind:
+            self.kind = self.kinds[0]
+        if not role:
+            self.role = self.roles[0]
         if not share_email:
             self.share_email = 'john.bragato@gmail.com'
+
+        ## AdditionalData
         if not properties:
             self.properties = [{
                 'key': 'databaseId',
@@ -32,7 +43,7 @@ class GoogleDriveClient:
             }]
         if not title:
             try:
-                self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[1])
+                self.title = '{}'.format(self.local_filepath.split('/')[-1].split('.')[0])
             except IndexError:
                 self.title = ''
         if not description:
@@ -160,15 +171,18 @@ class GoogleDriveClient:
         except self.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
+
     def list_filesdata_current_dir(self):
         req = self.service.files().list()
         self.drive_folder_data = req.execute()
         return self.drive_folder_data
 
+
     def list_fileitems_current_dir(self):
-        items = self.drive_folder_data['items'][1].items()
+        items = self.drive_folder_data['items'][0].items()
         [ self.drive_folder_files.extend(i) for i in items if i ]
         return self.drive_folder_files
+
 
     def list_files_in_pardir(self):
         self.drive_folder_files = []
@@ -214,7 +228,7 @@ class GoogleDriveClient:
                 'value': self.share_email,
                 #'type': 'group',
                 'type': 'user',
-                'role': 'reader', ##self.role, 'writer', 'owner'
+                'role': 'reader', ##self.role
                 'fileId': self.file_id
             })
         self.fileid_permissions = permission_data.execute()
