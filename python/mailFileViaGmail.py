@@ -87,7 +87,6 @@ def send_attachment_gmail(to, attach, subject=' -- File Attached -- ', text='Ple
     msg['From']    = gmail_user
     msg['To']      = to
 
-
     msg.attach(MIMEText(text))
     part = MIMEBase('application', 'octet-stream')
     part.set_payload(open(attach, 'rb').read())
