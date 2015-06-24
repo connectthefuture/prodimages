@@ -10,7 +10,7 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
     import os, datetime, argparse, apiclient
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0' ##'Python2.7'
     BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
-    SERVERdeveloperKey='AIzaSyDe68JsIJK5O5Cqd-tAVGqaSeHqcFCNPh8'
+    SERVERdeveloperKey='AIzaSyDdDU5_fJWQpGKRJhTRDF9NtmAcvjuwasA'
     #####################
     #####################
     # The client_id and client_secret are copied from the API Access tab on
@@ -29,7 +29,7 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
     #py_dir = os.path.dirname(os.path.realpath(os.curdir))
     print py_dir, ' Pydir'
     os.chdir(py_dir)
-    
+
     # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
     storage_file = os.path.join(py_dir, serviceName + '.dat')
     STORAGE = Storage(storage_file)
@@ -93,10 +93,10 @@ if __name__ == '__main__':
 #    import sys
 #    instantiate_google_calendar_service()
 #    serviceName = sys.argv[1]
-    #    create_googleapi_service(serviceName=serviceName, 
-    #                         version=version, 
-    #                         client_id=client_id, 
-    #                         client_secret=client_secret, 
-    #                         redirect_uri=redirect_uri, 
+    #    create_googleapi_service(serviceName=serviceName,
+    #                         version=version,
+    #                         client_id=client_id,
+    #                         client_secret=client_secret,
+    #                         redirect_uri=redirect_uri,
     #                         scope=scope)
 
