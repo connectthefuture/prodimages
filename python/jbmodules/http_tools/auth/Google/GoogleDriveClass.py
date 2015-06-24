@@ -269,7 +269,7 @@ class GoogleDriveClient:
                 break
         return self.drive_folder_files
 
-
+    ## Shortcut to File
     def create_file_shortcut(self):
         body = {
             'title': self.title,
@@ -331,7 +331,6 @@ class GoogleDriveClient:
             })
         self.fileid_permissions = _permission_data.execute()
         return self.fileid_permissions
-
 
     def get_permission_id_for_email(self):
         try:
