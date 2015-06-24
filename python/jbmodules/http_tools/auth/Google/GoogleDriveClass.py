@@ -389,3 +389,25 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
+    def add_attachment(self, calendarService=None, calendarId=None, eventId=None):
+        _file = self.service.files().get(fileId=self.file_id).execute()
+        event = calendarService.events().get(calendarId=calendarId,
+                                             eventId=eventId).execute()
+
+        attachments = event.get('attachments', [])
+        attachments.append({
+            'fileUrl': _file['alternateLink'],
+            'mimeType': _file['mimeType'],
+            'title': _file['title']
+        })
+
+        changes = {
+        'attachments': attachments
+
+        }
+        calendarService.events().patch(calendarId=calendarId,
+                                       eventId=eventId,
+                                       body = changes,
+                                       supportsAttachments = True).execute()
+        return calendarId, eventId
+
