@@ -8,8 +8,6 @@ from googleapiclient import errors, http
 class GoogleDriveClient:
 
     def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', perm_value='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id='', prop_key='', prop_value= ''):
-        import googleapiclient
-        self.client = googleapiclient
         self.file_id = file_id
         self.pardir_fileid = ''
         self.drive_file_content = ''
@@ -92,9 +90,9 @@ class GoogleDriveClient:
         key = f.read()
         f.close()
         credentials = SignedJwtAssertionCredentials(client_email, key, scope=scope)
-        http = httplib2.Http()
-        http = credentials.authorize(http)
-        self.service = build(serviceName, version, http=http)
+        _http = httplib2.Http()
+        _http = credentials.authorize(_http)
+        self.service = build(serviceName, version, http=_http)
         return self.service
 
     ## File and Folder Ops
@@ -105,7 +103,7 @@ class GoogleDriveClient:
         while True:
             try:
                 download_progress, done = self.drive_file_content.next_chunk()
-            except self.client.errors.HttpError, error:
+            except errors.HttpError, error:
                 print 'An error occurred: %s' % error
                 return self.drive_file_content
             if download_progress:
@@ -133,7 +131,7 @@ class GoogleDriveClient:
             # Rename the file.
             _updated_file = self.service.files().patch(fileId=self.file_id, body=_file, fields='title').execute()
             return _updated_file
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
 
@@ -177,7 +175,7 @@ class GoogleDriveClient:
         try:
             self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
             return self.drive_file_data
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occured: %s' % error
             return None
 
@@ -196,7 +194,7 @@ class GoogleDriveClient:
                 page_token = _files.get('nextPageToken')
                 if not page_token:
                     break
-            except self.client.errors.HttpError, error:
+            except errors.HttpError, error:
                 print 'An error occurred: %s' % error
                 break
         return self.drive_folder_files
@@ -208,7 +206,7 @@ class GoogleDriveClient:
             print 'Title: %s' % _filedata['title']
             print 'MIME type: %s' % _filedata['mimeType']
             return _filedata
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
     def print_return_file_content(self):
@@ -216,7 +214,7 @@ class GoogleDriveClient:
             _content = self.service.files().get_media(fileId=self.file_id).execute()
             print(_content)
             return _content
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
     ## Add-Edit Additional Custom File Properties
@@ -225,7 +223,7 @@ class GoogleDriveClient:
         try:
             p = self.service.properties().insert(fileId=self.file_id, body=body).execute()
             return p
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
 
@@ -237,7 +235,7 @@ class GoogleDriveClient:
             _prop['value'] = self.prop_value
             return self.service.properties().update(fileId=self.file_id, propertyKey=self.prop_key,
                                                     visibility=self.visibility, body=_prop).execute()
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
 
@@ -267,7 +265,7 @@ class GoogleDriveClient:
                 page_token = listdir.get('nextPageToken')
                 if not page_token:
                     break
-            except self.client.errors.HttpError, error:
+            except errors.HttpError, error:
                 print 'An error occurred: %s' % error
                 break
         return self.drive_folder_files
@@ -309,7 +307,7 @@ class GoogleDriveClient:
         }
         try:
             return self.service.permissions().insert(fileId=self.file_id, body=_permission).execute()
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
 
@@ -319,7 +317,7 @@ class GoogleDriveClient:
             _permission_data = self.service.permissions().get(fileId=self.file_id, permissionId=self.permission_id).execute()
             _permission_data['role'] = self.role
             return self.service.permissions().update(fileId=self.file_id, permissionId=self.permission_id, body=_permission_data).execute()
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
 
@@ -341,7 +339,7 @@ class GoogleDriveClient:
             print _permission_data['id']
             self.permission_id = _permission_data['id']
             return self.permission_id
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occured: %s' % error
 
     ### Print User and Drive Info
@@ -353,7 +351,7 @@ class GoogleDriveClient:
             print 'Total quota (bytes): %s' % _about['quotaBytesTotal']
             print 'Used quota (bytes): %s' % _about['quotaBytesUsed']
             return _about
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
     def insert_file_comment(self, _content):
@@ -362,7 +360,7 @@ class GoogleDriveClient:
         }
         try:
             return self.service.comments().insert(fileId=self.file_id, body=_new_comment).execute()
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
 
@@ -375,7 +373,7 @@ class GoogleDriveClient:
             self.file_id = self.drive_file_data['id']
             self.title = self.drive_file_data['title']
             return self.file_id, self.title
-        except self.client.errors.HttpError, error:
+        except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
     def add_attachment(self, calendarService=None, calendarId=None, eventId=None):
@@ -410,11 +408,11 @@ class GooglePubSubClient:
         from oauth2client import client as oauth2client
         self.PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
         self.oauth2client = oauth2client
-        self.client = self.create_pubsub_client()
+        self.service = self.instantiate_pubsub_client()
         self.project_name = project_name
         self.topic_name = topic_name
 
-    def create_pubsub_client(self,httpobj=None):
+    def instantiate_pubsub_client(self,httpobj=None):
         import httplib2
         from apiclient import discovery
         credentials = self.oauth2client.GoogleCredentials.get_application_default()
@@ -439,7 +437,7 @@ class GooglePubSubClient:
             #     'pushEndpoint': push_endpoint
             # }
         }
-        _subscription = self.client.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name), body=body).execute()
+        _subscription = self.service.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name), body=body).execute()
         print 'Created: %s' % _subscription.get('name')
         return _subscription
 
@@ -447,7 +445,7 @@ class GooglePubSubClient:
         next_page_token = None
         _subscriptions = []
         while True:
-            resp = self.client.projects().subscriptions().list(
+            resp = self.service.projects().subscriptions().list(
                 project='projects/{}'.format(self.project_name),
                 pageToken=next_page_token).execute()
             # Process each subscription
@@ -475,7 +473,7 @@ class GooglePubSubClient:
 
         msg_data = []
         while True:
-            resp = self.client.projects().subscriptions().pull(subscription=_subscription,
+            resp = self.service.projects().subscriptions().pull(subscription=_subscription,
                                                                body=body).execute(num_retries=3)
             received_messages = resp.get('receivedMessages')
             if received_messages is not None:
@@ -492,7 +490,7 @@ class GooglePubSubClient:
                 ack_body = {'ackIds': ack_ids}
 
                 # Acknowledge the message.
-                self.client.projects().subscriptions().acknowledge( subscription=_subscription, body=ack_body).execute()
+                self.service.projects().subscriptions().acknowledge( subscription=_subscription, body=ack_body).execute()
                 return msg_data, ack_ids
 
 
