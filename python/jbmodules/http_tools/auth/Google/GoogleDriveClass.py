@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'johnb'
 
-from googleapiclient import errors
+from googleapiclient import errors, http, MediaFileUpload
 
 class GoogleDriveClient:
 
@@ -414,16 +414,16 @@ class GooglePubSubClient:
         self.project_name = project_name
         self.topic_name = topic_name
 
-    def create_pubsub_client(self,http=None):
+    def create_pubsub_client(self,httpobj=None):
         import httplib2
         from apiclient import discovery
         credentials = self.oauth2client.GoogleCredentials.get_application_default()
         if credentials.create_scoped_required():
             credentials = credentials.create_scoped(self.PUBSUB_SCOPES)
-        if not http:
-            http = httplib2.Http()
-        credentials.authorize(http)
-        return discovery.build('pubsub', 'v1beta2', http=http)
+        if not httpobj:
+            httpobj = httplib2.Http()
+        credentials.authorize(httpobj)
+        return discovery.build('pubsub', 'v1beta2', http=httpobj)
 
     def create_pubsub_subscription(self):
         # Only needed if you are using push delivery
@@ -463,7 +463,7 @@ class GooglePubSubClient:
         import base64
         # You can fetch multiple messages with a single API call.
         batch_size = 100
-        _subscription = 'projects/myproject/subscriptions/mysubscription'
+        _subscription = 'projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name)
         # Create a POST body for the Pub/Sub request
         body = {
             # Setting ReturnImmediately to false instructs the API to wait
@@ -474,11 +474,9 @@ class GooglePubSubClient:
         }
 
         msg_data = []
-
         while True:
-
-            resp = self.client.projects().subscriptions().pull(subscription=_subscription, body=body).execute()
-
+            resp = self.client.projects().subscriptions().pull(subscription = _subscription,
+                                                               body=body).execute(num_retries=3)
             received_messages = resp.get('receivedMessages')
             if received_messages is not None:
                 ack_ids = []
