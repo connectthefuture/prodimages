@@ -94,8 +94,6 @@ class GoogleDriveClient:
         self.service = build(serviceName, version, http=http)
         return self.service
 
-
-
     ## File and Folder Ops
     def download_file_drive(self):
         request = self.service.files().get_media(fileId=self.file_id)
@@ -113,7 +111,6 @@ class GoogleDriveClient:
                 print 'Download Complete', self.local_filepath
                 return self.local_filepath
 
-
     def upload_file_drive(self):
         import pprint
         media_body = self.client.MediaFileUpload(self.local_filepath, self.mimetype, resumable=True)
@@ -127,7 +124,6 @@ class GoogleDriveClient:
         pprint.pprint(self.drive_file_data)
         return self.drive_file_data
 
-
     def rename_drive_file(self):
         try:
             _file = {'title': self.title}
@@ -137,7 +133,6 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
-
 
     def create_drive_folder(self):
         folder_body = {
@@ -150,7 +145,6 @@ class GoogleDriveClient:
         }
         self.drive_folder_data = self.service.files().insert(media_body=folder_body).execute()
         return self.drive_folder_data
-
 
     def insert_file_drive_folder(self):
         import pprint
@@ -222,7 +216,6 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
-
     ## Add-Edit Additional Custom File Properties
     def insert_property(self):
         body = self.properties[0]
@@ -251,12 +244,10 @@ class GoogleDriveClient:
         self.drive_folder_data = req.execute()
         return self.drive_folder_data
 
-
     def list_fileitems_current_dir(self):
         items = self.drive_folder_data['items'][0].items()
         [ self.drive_folder_files.extend(i) for i in items if i ]
         return self.drive_folder_files
-
 
     def list_files_in_pardir(self):
         self.drive_folder_files = []
@@ -329,7 +320,6 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
-
     def change_permission_by_fileid(self):
         _permission_data = self.service.permissions().insert(
             body={
@@ -352,7 +342,6 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occured: %s' % error
 
-
     ### Print User and Drive Info
     def print_about(self):
         try:
@@ -365,7 +354,6 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
-
     def insert_file_comment(self, _content):
         _new_comment = {
             'content': _content
@@ -375,7 +363,6 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
-
 
     ## Utils
     def get_idtitle_by_fileid(self):
@@ -415,13 +402,15 @@ class GoogleDriveClient:
         return calendarId, eventId
 
 
+
+### PubSub Push Notifications Client
 class GooglePubSubClient:
-    def __init__(self):
+    def __init__(self, project_name=None, topic_name=None):
         from oauth2client import client as oauth2client
         self.PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
         self.oauth2client = oauth2client
         self.client = self.create_pubsub_client()
-
+        self.project_name = project_name
 
     def create_pubsub_client(self,http=None):
         import httplib2
@@ -432,25 +421,22 @@ class GooglePubSubClient:
         if not http:
             http = httplib2.Http()
         credentials.authorize(http)
-
         return discovery.build('pubsub', 'v1beta2', http=http)
 
-    def create_pubsub_subscription(topic_name,project_name=None):
-
+    def create_pubsub_subscription(self):
         # Only needed if you are using push delivery
         #push_endpoint = 'https://someproject.appspot.com/myhandler'
         # Create a POST body for the Pub/Sub request
-        if not project_name:
-            project_name = 'default'
+        if not self.project_name:
+            self.project_name = 'default'
         body = {
             # The name of the topic from which this subscription receives messages
-            'topic': 'projects/{0}/topics/{1}'.format(project_name,topic_name)
+            'topic': 'projects/{0}/topics/{1}'.format(self.project_name, self.topic_name)
             # Only needed if you are using push delivery
             # 'pushConfig': {
             #     'pushEndpoint': push_endpoint
             # }
         }
-
-        subscription = client.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(project_name,topic_name), body=body).execute()
+        subscription = self.client.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name), body=body).execute()
         print 'Created: %s' % subscription.get('name')
         return subscription
