@@ -439,3 +439,19 @@ class GooglePubSubClient:
         subscription = self.client.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name), body=body).execute()
         print 'Created: %s' % subscription.get('name')
         return subscription
+
+    def get_subscriptions_list(self):
+        next_page_token = None
+        _subscriptions = []
+        while True:
+            resp = self.client.projects().subscriptions().list(
+                project='projects/{}'.format(self.project_name),
+                pageToken=next_page_token).execute()
+            # Process each subscription
+            for subscription in resp['subscriptions']:
+                print subscription['name']
+                _subscriptions.append(subscription)
+            next_page_token = resp.get('nextPageToken')
+            if not next_page_token:
+                #break
+                return _subscriptions
