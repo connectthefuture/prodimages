@@ -8,6 +8,7 @@ from googleapiclient import errors, http
 class GoogleDriveClient:
 
     def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', perm_value='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id='', prop_key='', prop_value= ''):
+        self.root_folder_id = "0AA7omFHcbQaiUk9PVA"
         self.file_id = file_id
         self.pardir_fileid = ''
         self.drive_file_content = ''
@@ -16,6 +17,7 @@ class GoogleDriveClient:
         self.drive_folder_data = []
         self.local_filepath = local_filepath
         self.mime_type = ''
+        self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
         ### Permissions
         self.fileid_permissions = ''
@@ -60,6 +62,8 @@ class GoogleDriveClient:
         else:
             self.description = description
 
+        self.prop_key = ''  ##prop_key
+        self.prop_value = ''  ##prop_val
         ### Properties
         if not properties and not prop_key and not prop_value:
             self.properties = [{
@@ -69,10 +73,8 @@ class GoogleDriveClient:
             }]
         else:
             self.properties = properties
-            self.prop_key = prop_key
-            self.prop_value = prop_value
-
-        self.service = self.instantiate_google_drive_serviceAccount_bfly()
+            self.prop_key = '' ##prop_key
+            self.prop_value = ''##prop_value
 
 
     def instantiate_google_drive_serviceAccount_bfly(self):
@@ -188,7 +190,7 @@ class GoogleDriveClient:
                 param = {}
                 if page_token:
                     param['pageToken'] = page_token
-                param['q'] = "properties has {key={0} and value={1} and visibility={2}".format(self.prop_key ,self.prop_value, self.visibility)
+                param['q'] = "properties has \{key={0} and value={1} and visibility={2}\}".format(self.prop_key ,self.prop_value, self.visibility)
                 _files = self.service.files().list(**param).execute()
                 self.drive_folder_files.extend(_files['items'])
                 page_token = _files.get('nextPageToken')
