@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'johnb'
 
+
 from googleapiclient import errors, http, MediaFileUpload
 
 class GoogleDriveClient:
@@ -403,7 +404,6 @@ class GoogleDriveClient:
         return calendarId, eventId
 
 
-
 ### PubSub Push Notifications Client
 class GooglePubSubClient:
     def __init__(self, project_name=None, topic_name=None):
@@ -494,4 +494,17 @@ class GooglePubSubClient:
                 # Acknowledge the message.
                 self.client.projects().subscriptions().acknowledge( subscription=_subscription, body=ack_body).execute()
                 return msg_data, ack_ids
+
+
+
+
+
+def main():
+    pass
+
+
+
+
+if __name__ == '__main__':
+    main()
 
