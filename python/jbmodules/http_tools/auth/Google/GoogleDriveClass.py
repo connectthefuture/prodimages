@@ -389,3 +389,68 @@ class GoogleDriveClient:
         except self.client.errors.HttpError, error:
             print 'An error occurred: %s' % error
 
+    def add_attachment(self, calendarService=None, calendarId=None, eventId=None):
+        from googleapi_service import instantiate_google_calendar_service
+
+        calendarService = instantiate_google_calendar_service()
+        _file = self.service.files().get(fileId=self.file_id).execute()
+        event = calendarService.events().get(calendarId=calendarId,
+                                             eventId=eventId).execute()
+
+        attachments = event.get('attachments', [])
+        attachments.append({
+            'fileUrl': _file['alternateLink'],
+            'mimeType': _file['mimeType'],
+            'title': _file['title']
+        })
+
+        changes = {
+        'attachments': attachments
+
+        }
+        calendarService.events().patch(calendarId=calendarId,
+                                       eventId=eventId,
+                                       body = changes,
+                                       supportsAttachments = True).execute()
+        return calendarId, eventId
+
+
+class GooglePubSubClient:
+    def __init__(self):
+        from oauth2client import client as oauth2client
+        self.PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
+        self.oauth2client = oauth2client
+        self.client = self.create_pubsub_client()
+
+
+    def create_pubsub_client(self,http=None):
+        import httplib2
+        from apiclient import discovery
+        credentials = self.oauth2client.GoogleCredentials.get_application_default()
+        if credentials.create_scoped_required():
+            credentials = credentials.create_scoped(self.PUBSUB_SCOPES)
+        if not http:
+            http = httplib2.Http()
+        credentials.authorize(http)
+
+        return discovery.build('pubsub', 'v1beta2', http=http)
+
+    def create_pubsub_subscription(topic_name,project_name=None):
+
+        # Only needed if you are using push delivery
+        #push_endpoint = 'https://someproject.appspot.com/myhandler'
+        # Create a POST body for the Pub/Sub request
+        if not project_name:
+            project_name = 'default'
+        body = {
+            # The name of the topic from which this subscription receives messages
+            'topic': 'projects/{0}/topics/{1}'.format(project_name,topic_name)
+            # Only needed if you are using push delivery
+            # 'pushConfig': {
+            #     'pushEndpoint': push_endpoint
+            # }
+        }
+
+        subscription = client.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(project_name,topic_name), body=body).execute()
+        print 'Created: %s' % subscription.get('name')
+        return subscription
