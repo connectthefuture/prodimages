@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'johnb'
 
+from googleapiclient import errors
+
 class GoogleDriveClient:
 
     def __init__(self, file_id=None, local_filepath='', description='', title='', kind = '', perm_type='', perm_value='', properties='', role='', share_email='', folder_color_rgb='', folder_title='', database_id='', prop_key='', prop_value= ''):
@@ -410,6 +412,7 @@ class GooglePubSubClient:
         self.oauth2client = oauth2client
         self.client = self.create_pubsub_client()
         self.project_name = project_name
+        self.topic_name = topic_name
 
     def create_pubsub_client(self,http=None):
         import httplib2
@@ -455,3 +458,42 @@ class GooglePubSubClient:
             if not next_page_token:
                 #break
                 return _subscriptions
+
+    def pull_acknowledge_msg(self):
+        import base64
+        # You can fetch multiple messages with a single API call.
+        batch_size = 100
+        _subscription = 'projects/myproject/subscriptions/mysubscription'
+        # Create a POST body for the Pub/Sub request
+        body = {
+            # Setting ReturnImmediately to false instructs the API to wait
+            # to collect the message up to the size of MaxEvents, or until
+            # the timeout.
+            'returnImmediately': False,
+            'maxMessages': batch_size,
+        }
+
+        msg_data = []
+
+        while True:
+
+            resp = self.client.projects().subscriptions().pull(subscription=_subscription, body=body).execute()
+
+            received_messages = resp.get('receivedMessages')
+            if received_messages is not None:
+                ack_ids = []
+                for received_message in received_messages:
+                    pubsub_message = received_message.get('message')
+                    if pubsub_message:
+                        # Process messages
+                        msg_data.append(base64.b64decode(str(pubsub_message.get('data'))))
+                        # Get the message's ack ID
+                        ack_ids.append(received_message.get('ackId'))
+
+                # Create a POST body for the acknowledge request
+                ack_body = {'ackIds': ack_ids}
+
+                # Acknowledge the message.
+                self.client.projects().subscriptions().acknowledge( subscription=_subscription, body=ack_body).execute()
+                return msg_data, ack_ids
+
