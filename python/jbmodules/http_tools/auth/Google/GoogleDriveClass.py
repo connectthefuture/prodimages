@@ -3,7 +3,7 @@
 __author__ = 'johnb'
 
 
-from googleapiclient import errors, http, MediaFileUpload
+from googleapiclient import errors, http
 
 class GoogleDriveClient:
 
@@ -101,7 +101,7 @@ class GoogleDriveClient:
     def download_file_drive(self):
         request = self.service.files().get_media(fileId=self.file_id)
         fdest = open(self.local_filepath, 'w')
-        self.drive_file_content = self.client.http.MediaIoBaseDownload(fdest, request)
+        self.drive_file_content = http.MediaIoBaseDownload(fdest, request)
         while True:
             try:
                 download_progress, done = self.drive_file_content.next_chunk()
@@ -116,7 +116,7 @@ class GoogleDriveClient:
 
     def upload_file_drive(self):
         import pprint
-        media_body = self.client.MediaFileUpload(self.local_filepath, self.mimetype, resumable=True)
+        media_body = http.MediaFileUpload(self.local_filepath, self.mimetype, resumable=True)
         body = {
             'title': self.title,
             'description': self.description,
@@ -171,7 +171,7 @@ class GoogleDriveClient:
             self.mimetype = 'image/tiff'
         elif ext[:3].lower() == 'gif':
             self.mimetype = 'image/gif'
-        media_body = self.client.MediaFileUpload(self.local_filepath, mimetype=self.mimetype, resumable=True)
+        media_body = http.MediaFileUpload(self.local_filepath, mimetype=self.mimetype, resumable=True)
         self.drive_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
         pprint.pprint(self.drive_file_data)
         try:
@@ -439,9 +439,9 @@ class GooglePubSubClient:
             #     'pushEndpoint': push_endpoint
             # }
         }
-        subscription = self.client.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name), body=body).execute()
-        print 'Created: %s' % subscription.get('name')
-        return subscription
+        _subscription = self.client.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name), body=body).execute()
+        print 'Created: %s' % _subscription.get('name')
+        return _subscription
 
     def get_subscriptions_list(self):
         next_page_token = None
@@ -475,7 +475,7 @@ class GooglePubSubClient:
 
         msg_data = []
         while True:
-            resp = self.client.projects().subscriptions().pull(subscription = _subscription,
+            resp = self.client.projects().subscriptions().pull(subscription=_subscription,
                                                                body=body).execute(num_retries=3)
             received_messages = resp.get('receivedMessages')
             if received_messages is not None:
