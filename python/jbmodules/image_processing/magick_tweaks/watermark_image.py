@@ -32,9 +32,9 @@ def place_watermark_on_image(img, destdir=None, watermark_src=None):
     os.chdir(os.path.dirname(img))
 
     ## Define Watermark Image
-
     if not watermark_src:
-        watermark = '/home/johnb/'
+        watermark = 'img/Bluefly_Logo_Watermark.png'
+        ## 'img/Bluefly_Logo_WatermarkSmall.png'
     else:
         watermark = watermark_src
 
