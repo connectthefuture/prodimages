@@ -249,7 +249,7 @@ class GoogleDriveClient:
 
     def list_fileitems_current_dir(self):
         items = self.drive_folder_data['items'][0].items()
-        [ self.drive_folder_files.extend(i) for i in items if i ]
+        self.drive_folder_files = [ self.drive_folder_files.extend(i) for i in items if i ]
         return self.drive_folder_files
 
     def list_files_in_pardir(self):
