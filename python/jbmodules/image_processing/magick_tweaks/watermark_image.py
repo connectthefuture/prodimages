@@ -43,48 +43,52 @@ def place_watermark_on_image(img, destdir=None, watermark_src=None, dpi=None):
 
     ## Destination name
     if not destdir:
-        destdir = os.path.dirname(img)
+        destdir = os.path.join(os.path.dirname(img), 'WATERMARKED')
+        try:
+            os.makedirs(destdir)
+        except:
+            pass
     else:
         destdir = os.path.abspath(destdir)
 
-    outfile = os.path.join(destdir, filename + ext)
+    outfile = os.path.abspath(os.path.join(destdir, filename + ext))
 
     subprocess.call([
-    'convert',
-    '-format',
-    format,
-    img,
+        'convert',
+        '-format',
+        format,
+        img,
 
-    ## Adjust Image DPI and Depth of outfile
-    '-depth',
-    '8',
-    "-density",
-    dpi,
-    "-units",
-    "pixelsperinch",
+        ## Adjust Image DPI and Depth of outfile
+        '-depth',
+        '8',
+        "-density",
+        dpi,
+        "-units",
+        "pixelsperinch",
 
-    ## Format and apply Watermark setting to Sequence
-    '-fill',
-    'grey50',
-    '-colorize',
-    '40',
-    'miff:-',
-    '|',
-    'composite',
-    '-dissolve',
-    '15',
-    '-tile',
-    '-',
-    ## Set Colorspace for Web
-    "-colorspace",
-    "sRGB",
-    '-quality',
-    '95',
-    watermark,
-    outfile
+        ## Format and apply Watermark setting to Sequence
+        '-fill',
+        'grey50',
+        '-colorize',
+        '40',
+        'miff:-',
+        '|',
+        'composite',
+        '-dissolve',
+        '15',
+        '-tile',
+        '-',
+        ## Set Colorspace for Web
+        "-colorspace",
+        "sRGB",
+        '-quality',
+        '95',
+        watermark,
+        outfile
     ])
 
-    return os.path.abspath(outfile)
+    return outfile
 
 
 
