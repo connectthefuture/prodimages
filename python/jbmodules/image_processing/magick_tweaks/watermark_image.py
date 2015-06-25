@@ -24,7 +24,7 @@ def replace_alpha_withbg(img):
     return imgout
 
 
-def place_watermark_on_image(img, destdir=None, watermark_src=None):
+def place_watermark_on_image(img, destdir=None, watermark_src=None, dpi=None):
     import subprocess, os
 
     ext = img.split('.')[-1]
@@ -32,6 +32,9 @@ def place_watermark_on_image(img, destdir=None, watermark_src=None):
     os.chdir(os.path.dirname(img))
 
     ## Define Watermark Image
+    if not dpi:
+        dpi = '72'
+
     if not watermark_src:
         watermark = 'img/Bluefly_Logo_Watermark.png'
         ## 'img/Bluefly_Logo_WatermarkSmall.png'
@@ -51,86 +54,49 @@ def place_watermark_on_image(img, destdir=None, watermark_src=None):
     '-format',
     format,
     img,
+
+    ## Adjust Image DPI and Depth of outfile
     '-depth',
     '8',
-
-    ## Adjust Image DPI
     "-density",
     dpi,
     "-units",
     "pixelsperinch",
 
-
+    ## Format and apply Watermark setting to Sequence
+    '-fill',
+    'grey50',
+    '-colorize',
+    '40',
+    'miff:-',
+    '|',
+    'composite',
+    '-dissolve',
+    '15',
+    '-tile',
+    '-',
+    ## Set Colorspace for Web
     "-colorspace",
     "sRGB",
     '-quality',
     '95',
-    os.path.abspath(img)
+    watermark,
+    outfile
     ])
 
+    return os.path.abspath(outfile)
 
-
-def sharpen_image(img, destdir=None):
-    import subprocess,os
-
-    if not destdir:
-        destdir = os.path.dirname(img)
-    #imgdestpng_out = os.path.join(tmp_processing, os.path.basename(imgsrc_jpg))
-    os.chdir(os.path.dirname(img))
-
-    format = img.split('.')[-1]
-
-    os.chdir(os.path.dirname(img))
-
-    ## Destination name
-    if not destdir:
-        destdir = os.path.dirname(img)
-    else:
-        destdir = os.path.abspath(destdir)
-
-    outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
-
-    subprocess.call([
-            'convert',
-            '-format',
-            format,
-             "-colorspace",
-             "LAB",
-            img,
-            '-define',
-            'png:preserve-colormap',
-            '-define',
-            'png:format\=png24',
-            '-define',
-            'png:compression-level\=N',
-            '-define',
-            'png:compression-strategy\=N',
-            '-define',
-            'png:compression-filter\=N',
-            '-format',
-            'png',
-#            "-filter",
-#            "Spline",
-
-
-
-            '-unsharp',
-            "-1x1.2+0.50+0.0087",
-            "-colorspace",
-            "sRGB",
-            '-quality',
-            '95',
-            os.path.abspath(img)
-            ])
-    #os.rename(img,outfile)
-    print 'Done {}'.format(img)
-    return os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 
 if __name__ == '__main__':
     import sys
     img = sys.argv[1]
-    sharpen_image(img, destdir=None)
+    try:
+        destdir = sys.argv[2]
+    except IndexError:
+        destdir = ''
+
+    place_watermark_on_image(img, destdir=destdir)
 
 
 
