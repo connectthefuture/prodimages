@@ -89,6 +89,7 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
             unicode(watermark),
             unicode(outfileWmark)
         ])
+
     subprocess.call([
             "convert",
             "-format",
@@ -110,7 +111,7 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
             "-strip",
             unicode(outfileLres)
         ])
-    #
+
 #    cmd1 = ("convert", "-format", unicode(ext), unicode(img), "-depth", "8", "-density", unicode(dpi), "-units", "pixelsperinch", "-fill", "grey50", "-colorize", "40", "miff:-")
 #    cmd2 = ("composite", "-dissolve", unicode(opacity), unicode(wmarktype), "-", "-colorspace", "sRGB", "-quality", "95", unicode(watermark), unicode(outfile))
 #
@@ -128,13 +129,11 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
 
 
 if __name__ == '__main__':
-   import sys
-   img = sys.argv[1]
-   try:
-       destdir = sys.argv[2]
-   except IndexError:
+    import sys
+    img = sys.argv[1]
+    try:
+        destdir = sys.argv[2]
+    except IndexError:
         destdir = ''
-        place_watermark_on_image(img, destdir=destdir)
-
-
+    place_watermark_on_image(img, destdir=destdir)
 
