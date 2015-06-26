@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os, sys, re, csv,subprocess
 
 import re
 regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
