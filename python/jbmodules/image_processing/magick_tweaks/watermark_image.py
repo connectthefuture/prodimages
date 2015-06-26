@@ -63,8 +63,8 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
     else:
         destdir = os.path.abspath(destdir)
 
-    outfileWmark = os.path.abspath(os.path.join(destdir, filename + '_smple.' + ext))
-    outfileLres = os.path.abspath(os.path.join(destdir, filename + '_smpleth.' + ext))
+    outfileWmark = os.path.abspath(os.path.join(destdir, filename + '_smplemark.' + ext))
+    outfileLres = os.path.abspath(os.path.join(destdir, filename + '_smple.' + ext))
 
     subprocess.call([
             "composite",
@@ -123,9 +123,6 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
 #    ps.wait()
 
     return outfileWmark
-
-
-
 
 
 if __name__ == '__main__':
