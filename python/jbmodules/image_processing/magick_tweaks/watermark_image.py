@@ -24,22 +24,33 @@ def replace_alpha_withbg(img):
     return imgout
 
 
-def place_watermark_on_image(img, destdir=None, watermark_src=None, dpi=None):
+def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', wmarktype=''):
     import subprocess, os
-
+    #import pdb;pdb.set_trace()
     ext = img.split('.')[-1]
     filename = img.split('/')[-1].split('.')[0]
     os.chdir(os.path.dirname(img))
 
     ## Define Watermark Image
-    if not dpi:
-        dpi = '72'
-
-    if not watermark_src:
-        watermark = 'img/Bluefly_Logo_Watermark.png'
+    if not watermark:
+        # watermark = os.path.join(os.path.dirname(os.path.realpath(__file__)),'img/Bluefly_Logo_Watermark.png')
+        #watermark = os.path.join(os.path.dirname(os.path.realpath(__file__)),'img/Bluefly_Logo_Watermark.png')
+        watermark =  os.path.join('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks/img', 'Bluefly_Logo_Watermark.png' )
         ## 'img/Bluefly_Logo_WatermarkSmall.png'
     else:
-        watermark = watermark_src
+        pass
+
+    ## Opacity and type of Watermark
+    if not wmarktype:
+        wmarktype = "-tile"
+
+    if not opacity:
+        opacity = "15"
+
+    if not dpi:
+        dpi = str('40')
+    else:
+        dpi = str(dpi)
 
     ## Destination name
     if not destdir:
@@ -47,60 +58,83 @@ def place_watermark_on_image(img, destdir=None, watermark_src=None, dpi=None):
         try:
             os.makedirs(destdir)
         except:
+            print destdir
             pass
     else:
         destdir = os.path.abspath(destdir)
 
-    outfile = os.path.abspath(os.path.join(destdir, filename + ext))
+    outfileWmark = os.path.abspath(os.path.join(destdir, filename + '_smple.' + ext))
+    outfileLres = os.path.abspath(os.path.join(destdir, filename + '_smpleth.' + ext))
 
     subprocess.call([
-        'convert',
-        '-format',
-        format,
-        img,
+            "composite",
+            "-dissolve",
+            "55",
+            "-format",
+            ext,
+            img,
+            ## Set Colorspace for Web
+            "-depth",
+            "8",
+            "-density",
+            dpi,
+            "-units",
+            "pixelsperinch",
+            "-colorspace",
+            "sRGB",
+            "-quality",
+            "95",
+            "-tile",
+            "-strip",
+            unicode(watermark),
+            unicode(outfileWmark)
+        ])
+    subprocess.call([
+            "convert",
+            "-format",
+            ext,
+            img,
+            ## Set Colorspace for Web
+            "-depth",
+            "8",
+            "-density",
+            dpi,
+            "-units",
+            "pixelsperinch",
+            "-colorspace",
+            "sRGB",
+            "-quality",
+            "55",
+            "-resize",
+            "x600",
+            "-strip",
+            unicode(outfileLres)
+        ])
+    #
+#    cmd1 = ("convert", "-format", unicode(ext), unicode(img), "-depth", "8", "-density", unicode(dpi), "-units", "pixelsperinch", "-fill", "grey50", "-colorize", "40", "miff:-")
+#    cmd2 = ("composite", "-dissolve", unicode(opacity), unicode(wmarktype), "-", "-colorspace", "sRGB", "-quality", "95", unicode(watermark), unicode(outfile))
+#
+#    #args1 = shlex.split(cmd1)
+#    #args2 = shlex.split(cmd2)
+#    print ' '.join((cmd1 + cmd2))
+#    ps = subprocess.Popen(cmd1, stdout=subprocess.PIPE, bufsize=-1, shell=True)
+#    output = subprocess.check_output(cmd2, stdin=ps.stdout, bufsize=-1, shell=True)
+#    ps.wait()
 
-        ## Adjust Image DPI and Depth of outfile
-        '-depth',
-        '8',
-        "-density",
-        dpi,
-        "-units",
-        "pixelsperinch",
+    return outfileWmark
 
-        ## Format and apply Watermark setting to Sequence
-        '-fill',
-        'grey50',
-        '-colorize',
-        '40',
-        'miff:-',
-        '|',
-        'composite',
-        '-dissolve',
-        '15',
-        '-tile',
-        '-',
-        ## Set Colorspace for Web
-        "-colorspace",
-        "sRGB",
-        '-quality',
-        '95',
-        watermark,
-        outfile
-    ])
 
-    return outfile
 
 
 
 if __name__ == '__main__':
-    import sys
-    img = sys.argv[1]
-    try:
-        destdir = sys.argv[2]
-    except IndexError:
+   import sys
+   img = sys.argv[1]
+   try:
+       destdir = sys.argv[2]
+   except IndexError:
         destdir = ''
-
-    place_watermark_on_image(img, destdir=destdir)
+        place_watermark_on_image(img, destdir=destdir)
 
 
 
