@@ -19,11 +19,11 @@ def replace_alpha_withbg(img):
     'opaque',
     '-strip',
     imgout
-    ])
+    ]):
     return imgout
 
 
-def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', wmarktype=''):
+def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', wmarktype='')
     import subprocess, os
     #import pdb;pdb.set_trace()
     ext = img.split('.')[-1]
