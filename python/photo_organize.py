@@ -136,7 +136,7 @@ def make_thumbs(infile,outpath=None,size=None):
         size = 500, 600        
     if outpath is None:
         destdir = os.path.join('/mnt/Post_Ready/zImages_1', infile.split('/')[-1][:4])
-        if os.path.isdir(): 
+        if os.path.isdir(destdir): 
             pass
         else:
             os.makedirs(destdir)
