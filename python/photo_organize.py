@@ -1,4 +1,6 @@
-###
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 ## Walk Root Directory and Return List or all Files in all Subdirs too
 def recursive_dirlist(rootdir):
     import os
@@ -147,7 +149,7 @@ def organize_files_by_4digit(pathname,destdir=None):
         except OSError:
             pass
         
-        shutil.move(pathname,zimages_filepath)
+        shutil.copy2(pathname,zimages_filepath)
         
 
 if __name__ == '__main__':
