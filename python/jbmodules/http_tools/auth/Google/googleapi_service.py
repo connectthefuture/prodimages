@@ -3,7 +3,7 @@
 
 
 def create_googleapi_service(serviceName=None, version=None, client_id=None,client_secret=None,redirect_uri=None, scope=None):
-    import httplib2
+    import httplib2, apiclient
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
     from oauth2client import tools
@@ -55,10 +55,9 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
     http = httplib2.Http()
     http = credentials.authorize(http)
 
-    from apiclient import discovery
     #client = apiclient.APIClient()
     # Build a service object for interacting with the API.
-    service = discovery.build(serviceName=serviceName, version=version, http=http)
+    service = apiclient.discovery.build(serviceName=serviceName, version=version, http=http)
     return service
 
 
