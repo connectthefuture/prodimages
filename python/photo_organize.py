@@ -149,3 +149,11 @@ def organize_files_by_4digit(pathname,destdir=None):
         
         shutil.move(pathname,zimages_filepath)
         
+
+if __name__ == '__main__':
+    import sys
+    pathname = sys.argv[1]
+    destdir = sys.argv[2]
+    organize_files_by_4digit(pathname,destdir=destdir)
+
+        
