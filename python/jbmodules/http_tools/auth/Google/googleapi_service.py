@@ -3,11 +3,12 @@
 
 
 def create_googleapi_service(serviceName=None, version=None, client_id=None,client_secret=None,redirect_uri=None, scope=None):
-    import httplib2, apiclient
+    import httplib2
     from oauth2client.file import Storage
     from oauth2client.client import OAuth2WebServerFlow
     from oauth2client import tools
     import os, datetime, argparse, apiclient
+    from apiclient import discovery
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0' ##'Python2.7'
     BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
     SERVERdeveloperKey='AIzaSyDdDU5_fJWQpGKRJhTRDF9NtmAcvjuwasA'
@@ -57,7 +58,7 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
 
     #client = apiclient.APIClient()
     # Build a service object for interacting with the API.
-    service = apiclient.discovery.build(serviceName=serviceName, version=version, http=http)
+    service = discovery.build(serviceName=serviceName, version=version, http=http)
     return service
 
 
