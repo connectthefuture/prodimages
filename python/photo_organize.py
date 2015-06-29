@@ -143,8 +143,8 @@ def make_thumbs(infile,outpath=None,size=None):
         outpath = os.path.join(destdir, infile.split('/')[-1])
     im = Image.open(infile)
     im.thumbnail(size, Image.ANTIALIAS)
-    im.save(outfile, "JPEG")
-    return outfile
+    im.save(outpath, "JPEG")
+    return outpath
 
 
 def organize_files_by_4digit(pathname,destdir=None):
