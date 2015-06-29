@@ -126,7 +126,27 @@ def make_createdirs_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathnam
             except:
                 print "Error Creating Thumbnail for {0}".format(infile)
                 
-                
+        
+        
+        
+def make_thumbs(infile,outpath=None,size=None):
+    from pillow import Image
+    import os
+    if size is None:
+        size = 500, 600        
+    if outpath is None:
+        destdir = os.path.join('/mnt/Post_Ready/zImages_1', infile.split('/')[-1][:4])
+        if os.path.isdir(): 
+            pass
+        else:
+            os.makedirs(destdir)
+        outpath = os.path.join(destdir, infile.split('/')[-1])
+    im = Image.open(infile)
+    im.thumbnail(size, Image.ANTIALIAS)
+    im.save(outfile, "JPEG")
+    return outfile
+
+
 def organize_files_by_4digit(pathname,destdir=None):
     import os, sys, re, shutil
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
@@ -155,7 +175,10 @@ def organize_files_by_4digit(pathname,destdir=None):
 if __name__ == '__main__':
     import sys
     pathname = sys.argv[1]
-    destdir = sys.argv[2]
-    organize_files_by_4digit(pathname,destdir=destdir)
+    try:
+        destdir = sys.argv[2]
+    except IndexError:
+        pass
+    make_thumbs(pathname)
 
         
