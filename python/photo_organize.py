@@ -130,7 +130,7 @@ def make_createdirs_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathnam
         
         
 def make_thumbs(infile,outpath=None,size=None):
-    from pillow import Image
+    from PIL import Image
     import os
     if size is None:
         size = 500, 600        
