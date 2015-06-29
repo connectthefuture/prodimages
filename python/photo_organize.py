@@ -149,7 +149,7 @@ def organize_files_by_4digit(pathname,destdir=None):
         except OSError:
             pass
         
-        shutil.move(pathname,zimages_filepath)
+        shutil.copy2(pathname,zimages_filepath)
         
 
 if __name__ == '__main__':
