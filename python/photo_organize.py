@@ -1,4 +1,6 @@
-###
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 ## Walk Root Directory and Return List or all Files in all Subdirs too
 def recursive_dirlist(rootdir):
     import os
