@@ -435,7 +435,6 @@ class GoogleGmailClient:
                         'https://www.googleapis.com/auth/gmail.compose' ]
         self.message = ''
 
-
     def instantiate_gmail_serviceAccount_bfly(self):
         import httplib2
         from googleapiclient.discovery import build
@@ -527,7 +526,6 @@ class GoogleGmailClient:
         self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
 
-
     def send_message(self):
         """Send an email message.
 
@@ -546,6 +544,7 @@ class GoogleGmailClient:
             return _message
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
+
 
 
 def send_an_email(to,message):
