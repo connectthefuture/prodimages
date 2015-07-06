@@ -85,7 +85,7 @@ def send_attachment_gmail(toaddr, attach, subject=' -- File Attached -- ', text=
         gmail_user = 'john.bragato@gmail.com'
     else:
         gmail_user = str(input('Enter your Gmail or GoogleApps Address in single quotes: '))
-    gmail_pass = str(input('Enter your password in single quotes: '))
+    gmail_pass = open('/home/johnb/.gcreds.dat','rb').read() ##str(input('Enter your password in single quotes: '))
     msg = MIMEMultipart()
     msg['From']    = gmail_user
     msg['To']      = toaddr
