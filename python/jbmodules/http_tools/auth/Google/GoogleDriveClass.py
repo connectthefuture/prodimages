@@ -449,8 +449,8 @@ class GoogleGmailClient:
         from oauth2client.client import SignedJwtAssertionCredentials
         serviceName = 'gmail'
         version = 'v1'
-        client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
-        client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
+        client_email = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k@developer.gserviceaccount.com'
+        client_id = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k.apps.googleusercontent.com'
         scope = 'https://www.googleapis.com/auth/gmail.modify'
         f = file('/root/bfly-gmail-privatekey.p12', 'rb')
         key = f.read()
@@ -464,7 +464,6 @@ class GoogleGmailClient:
 
     def send_message(self):
         """Send an email message.
-
         Args:
         service: Authorized Gmail API service instance.
         user_id: User's email address. The special value "me"
@@ -484,7 +483,6 @@ class GoogleGmailClient:
 
     def create_draft(self):
         """Create and insert a draft email. Print the returned draft's message and id.
-
         Args:
         service: Authorized Gmail API service instance.
         user_id: User's email address. The special value "me"
@@ -509,7 +507,6 @@ class GoogleGmailClient:
 
     def create_message(self):
         """Create a message for an email.
-
         Args:
         user_id: Email address of the user_id.
         to: Email address of the receiver.
@@ -529,7 +526,6 @@ class GoogleGmailClient:
 
     def create_message_with_attachment(self):
         """Create a message for an email.
-
         Args:
         user_id: Email address of the user_id.
         to: Email address of the receiver.
