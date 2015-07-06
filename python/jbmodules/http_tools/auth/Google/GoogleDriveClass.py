@@ -425,7 +425,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import mimetypes
 class GoogleGmailClient:  
-    def __init__(self,user_id='john.bragato@bluefly.com', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
+    def __init__(self,user_id='me', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
         self.user_id = user_id
         if to:
             self.to = to
@@ -433,14 +433,14 @@ class GoogleGmailClient:
             self.to = ['john.bragato@gmail.com', 'john.bragato@bluefly.com']
         self.subject = subject
         self.message_text  = message_text
-        self.service = self.instantiate_gmail_serviceAccount_bfly()
         self.localdir = localdir
         self.filename = filename
         self.scopes = [ 'https://mail.google.com/',
                         'https://www.googleapis.com/auth/gmail.modify',
                         'https://www.googleapis.com/auth/gmail.readonly',
-                        'https://www.googleapis.com/auth/gmail.compose' ]
+                         'https://www.googleapis.com/auth/gmail.compose' ]
         self.message = {}
+        self.service = self.instantiate_gmail_serviceAccount_bfly()
 
 
     def instantiate_gmail_serviceAccount_bfly(self):
@@ -451,8 +451,8 @@ class GoogleGmailClient:
         version = 'v1'
         client_email = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k@developer.gserviceaccount.com'
         client_id = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k.apps.googleusercontent.com'
-        scope = 'https://www.googleapis.com/auth/gmail.modify'
-        f = file('/root/bfly-gmail-privatekey.p12', 'rb')
+        scope = self.scopes[0] #'https://www.googleapis.com/auth/gmail.modify'
+        f = file('/root/bfly-gmail-privatekey.p12','rb')
         key = f.read()
         f.close()
         credentials = SignedJwtAssertionCredentials(client_email, key, scope=scope)
