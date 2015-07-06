@@ -442,7 +442,7 @@ class GoogleGmailClient:
         version = 'v1'
         client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
         client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
-        if self.scopes > 1:
+        if len(self.scopes) > 1:
             scope = 'https://www.googleapis.com/auth/gmail.modify'
 
         # filescope='https://www.googleapis.com/auth/drive.file'
