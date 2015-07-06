@@ -417,8 +417,8 @@ class GooglePubSubClient:
 
 
 
-class GoogleGmailClient:
-    def __init__(self,sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
+class GoogleGmailClient:  
+    def __init__(self,sender='john.bragato@bluefly.com', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
         self.sender = sender
         if to:
             self.to = to
@@ -435,6 +435,7 @@ class GoogleGmailClient:
                         'https://www.googleapis.com/auth/gmail.compose' ]
         self.message = ''
 
+
     def instantiate_gmail_serviceAccount_bfly(self):
         import httplib2
         from googleapiclient.discovery import build
@@ -444,7 +445,7 @@ class GoogleGmailClient:
         client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
         client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
         scope = 'https://www.googleapis.com/auth/gmail.modify'
-        f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
+        f = file('/root/bfly-gmail-privatekey.p12', 'rb')
         key = f.read()
         f.close()
         credentials = SignedJwtAssertionCredentials(client_email, key, scope=scope)
@@ -526,6 +527,7 @@ class GoogleGmailClient:
         self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
 
+
     def send_message(self):
         """Send an email message.
 
@@ -557,7 +559,6 @@ def send_an_email(to,message):
 
 def main():
     pass
-
 
 
 
