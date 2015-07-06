@@ -430,7 +430,7 @@ class GoogleGmailClient:
         if to:
             self.to = to
         else:
-            self.to = ['john.bragato@gmail.com', 'john.bragato@bluefly.com']
+            self.to = 'john.bragato@gmail.com, john.bragato@bluefly.com'
         self.subject = subject
         self.message_text  = message_text
         self.localdir = localdir
