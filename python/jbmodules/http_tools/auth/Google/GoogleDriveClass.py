@@ -423,7 +423,7 @@ class GoogleGmailClient:
         self.to = to
         self.subject = subject
         self.message_text  = message_text
-        self.service = self.instantiate_pubsub_client()
+        self.service = self.instantiate_gmail_serviceAccount_bfly()
         self.localdir = localdir
         self.filename = filename
         self.scopes = [
