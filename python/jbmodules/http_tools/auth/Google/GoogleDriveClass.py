@@ -439,9 +439,8 @@ class GoogleGmailClient:
                         'https://www.googleapis.com/auth/gmail.modify',
                         'https://www.googleapis.com/auth/gmail.readonly',
                         'https://www.googleapis.com/auth/gmail.compose' ]
-        self.message = {}
         self.service = self.instantiate_gmail_serviceAccount_bfly()
-
+        self.message = self.create_message()
 
     def instantiate_gmail_serviceAccount_bfly(self):
         import httplib2
@@ -576,6 +575,7 @@ class GoogleGmailClient:
 
         self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
+
 
 
 
