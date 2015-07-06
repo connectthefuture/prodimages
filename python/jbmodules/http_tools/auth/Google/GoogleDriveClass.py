@@ -418,7 +418,7 @@ class GooglePubSubClient:
 
 
 class GoogleGmailClient:
-    def __init__(sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
+    def __init__(self, sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
         self.sender = sender
         self.to = to
         self.subject = subject
@@ -549,6 +549,14 @@ class GoogleGmailClient:
             print 'An error occurred: %s' % error
 
 
+def send_an_email(to,message):
+    c = GoogleGmailClient()
+    c.message_text = message
+    c.to = to
+    c.create_message()
+    ret = c.send_message()
+    print ret
+    return ret
 
 def main():
     pass
