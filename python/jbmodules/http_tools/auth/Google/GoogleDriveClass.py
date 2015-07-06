@@ -549,6 +549,14 @@ class GoogleGmailClient:
             print 'An error occurred: %s' % error
 
 
+def send_an_email(to,message):
+    c = GoogleGmailClient()
+    c.message_text = message
+    c.to = to
+    c.create_message()
+    ret = c.send_message()
+    print ret
+    return ret
 
 def main():
     pass
