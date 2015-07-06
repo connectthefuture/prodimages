@@ -418,7 +418,7 @@ class GooglePubSubClient:
 
 
 class GoogleGmailClient:
-    def __init__(sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
+    def __init__(self, sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
         self.sender = sender
         self.to = to
         self.subject = subject
