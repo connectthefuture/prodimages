@@ -418,20 +418,21 @@ class GooglePubSubClient:
 
 
 class GoogleGmailClient:
-    def __init__(self, sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
+    def __init__(self,sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
         self.sender = sender
-        self.to = to
+        if to:
+            self.to = to
+        else:
+            self.to = ['john.bragato@gmail.com', 'john.bragato@bluefly.com']
         self.subject = subject
         self.message_text  = message_text
         self.service = self.instantiate_gmail_serviceAccount_bfly()
         self.localdir = localdir
         self.filename = filename
-        self.scopes = [
-                        'https://mail.google.com/',  ##Full access to the account, including permanent deletion of threads and messages. This scope should only be requested if your application needs to immediately and permanently delete threads and messages. All other actions can be performed with less permissive scopes.
-                        'https://www.googleapis.com/auth/gmail.modify', ## All read/write operations except immediate, permanent deletion of threads and messages.
-                        'https://www.googleapis.com/auth/gmail.readonly', ## Read all resources and their metadata. No write operations.
-                        'https://www.googleapis.com/auth/gmail.compose'
-                        ]
+        self.scopes = [ 'https://mail.google.com/',
+                        'https://www.googleapis.com/auth/gmail.modify',
+                        'https://www.googleapis.com/auth/gmail.readonly',
+                        'https://www.googleapis.com/auth/gmail.compose' ]
         self.message = ''
 
     def instantiate_gmail_serviceAccount_bfly(self):
@@ -442,11 +443,7 @@ class GoogleGmailClient:
         version = 'v1'
         client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
         client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
-        if len(self.scopes) > 1:
-            scope = 'https://www.googleapis.com/auth/gmail.modify'
-
-        # filescope='https://www.googleapis.com/auth/drive.file'
-        # metadatascope='https://www.googleapis.com/auth/drive.metadata'
+        scope = 'https://www.googleapis.com/auth/gmail.modify'
         f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
         key = f.read()
         f.close()
