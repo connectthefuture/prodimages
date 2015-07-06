@@ -4,6 +4,13 @@ __author__ = 'johnb'
 
 
 from googleapiclient import errors, http
+ProductionRoot  = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
+MarketplaceRoot = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
+EditorialShare  = '0B0Z4BGpAAp5KfnRZaWl4cHMxUGg4MGI0LUFjUWFDdzQ4VWsyTi11OGJPQVlRakRKSXNScHM'
+VendorShare     = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
+LookletImages   = '0B0Z4BGpAAp5KfkpZeENQamp0UWpZaWtEWHJGd0xMa3dGV01acG1ESENqRzRfaW5od2JjV1U'
+StillImages     = '0B0Z4BGpAAp5KfmxtRktkUGhLckdLSXE0bzA2azhMUW1yVFd6R2VlUUxMN0lsY0NZUDdBaTg'
+VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
 
 class GoogleDriveClient:
 
@@ -22,7 +29,6 @@ class GoogleDriveClient:
         ### Permissions
         self.fileid_permissions = ''
         self.user_permission = []
-        self.visibility = 'Public'
         self.kinds = ["drive#file", "drive#fileList", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission", "drive#comment", "drive#commentReply"]
         self.roles = ['reader', 'writer', 'owner', 'commenter']
         self.perm_types = ['user', 'group', 'domain', 'anyone']
@@ -62,19 +68,25 @@ class GoogleDriveClient:
         else:
             self.description = description
 
-        self.prop_key = ''  ##prop_key
-        self.prop_value = ''  ##prop_val
+        self.prop_key = prop_key
+        self.prop_value = prop_value
+        self.visibility = 'Public'
         ### Properties
-        if not properties and not prop_key and not prop_value:
+        if not prop_key and not prop_value:
             self.properties = [{
                'key': 'databaseId',
                'value': database_id,
-               'visability': 'PRIVATE'
+               'visibility': self.visibility
             }]
-        else:
-            self.properties = properties
-            self.prop_key = '' ##prop_key
-            self.prop_value = ''##prop_value
+        elif prop_key and prop_value:
+            #self.properties = properties
+            self.prop_key = prop_key
+            self.prop_value = prop_value
+            self.properties = [{
+               'key': self.prop_key,
+               'value': self.prop_value,
+               'visibility': self.visibility
+            }]
 
 
     def instantiate_google_drive_serviceAccount_bfly(self):
@@ -496,6 +508,128 @@ class GooglePubSubClient:
                 return msg_data, ack_ids
 
 
+
+class GoogleGmailClient:
+    def __init__(sender='john.bragato@bluefly.com', to=None, subject=None, message_text=None, localdir=None, filename=None):
+        self.sender = sender
+        self.to = to
+        self.subject = subject
+        self.message_text  = message_text
+        self.service = self.instantiate_pubsub_client()
+        self.localdir = localdir
+        self.filename = filename
+
+     def instantiate_google_drive_serviceAccount_bfly(self):
+        import httplib2
+        from googleapiclient.discovery import build
+        from oauth2client.client import SignedJwtAssertionCredentials
+        serviceName = 'drive'
+        version = 'v2'
+        client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
+        client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
+        scope = 'https://www.googleapis.com/auth/drive'
+        # filescope='https://www.googleapis.com/auth/drive.file'
+        # metadatascope='https://www.googleapis.com/auth/drive.metadata'
+        f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
+        key = f.read()
+        f.close()
+        credentials = SignedJwtAssertionCredentials(client_email, key, scope=scope)
+        _http = httplib2.Http()
+        _http = credentials.authorize(_http)
+        self.service = build(serviceName, version, http=_http)
+        return self.service
+
+
+    def CreateMessage(self):
+        """Create a message for an email.
+
+        Args:
+        sender: Email address of the sender.
+        to: Email address of the receiver.
+        subject: The subject of the email message.
+        message_text: The text of the email message.
+
+        Returns:
+        An object containing a base64url encoded email object.
+        """
+        message = MIMEText(self.message_text)
+        message['to'] = self.to
+        message['from'] = self.sender
+        message['subject'] = self.subject
+        return {'raw': base64.urlsafe_b64encode(message.as_string())}
+
+
+    def CreateMessageWithAttachment(self):
+        """Create a message for an email.
+
+        Args:
+        sender: Email address of the sender.
+        to: Email address of the receiver.
+        subject: The subject of the email message.
+        message_text: The text of the email message.
+        localdir: The directory containing the file to be attached.
+        filename: The name of the file to be attached.
+
+        Returns:
+        An object containing a base64url encoded email object.
+        """
+        message = MIMEMultipart()
+        message['to'] = self.to
+        message['from'] = self.sender
+        message['subject'] = self.subject
+
+        msg = MIMEText(self.message_text)
+        message.attach(msg)
+
+        path = os.path.join(self.localdir, self.filename)
+    content_type, encoding = mimetypes.guess_type(path)
+
+    if content_type is None or encoding is not None:
+        content_type = 'application/octet-stream'
+        main_type, sub_type = content_type.split('/', 1)
+    if main_type == 'text':
+        fp = open(path, 'rb')
+        msg = MIMEText(fp.read(), _subtype=sub_type)
+        fp.close()
+    elif main_type == 'image':
+        fp = open(path, 'rb')
+        msg = MIMEImage(fp.read(), _subtype=sub_type)
+        fp.close()
+    elif main_type == 'audio':
+        fp = open(path, 'rb')
+        msg = MIMEAudio(fp.read(), _subtype=sub_type)
+        fp.close()
+    else:
+        fp = open(path, 'rb')
+        msg = MIMEBase(main_type, sub_type)
+        msg.set_payload(fp.read())
+        fp.close()
+
+    msg.add_header('Content-Disposition', 'attachment', filename=self.ilename)
+    message.attach(msg)
+
+    return {'raw': base64.urlsafe_b64encode(message.as_string())}
+
+
+    def SendMessage(self):
+        """Send an email message.
+
+        Args:
+        service: Authorized Gmail API service instance.
+        user_id: User's email address. The special value "me"
+        can be used to indicate the authenticated user.
+        message: Message to be sent.
+
+        Returns:
+        Sent Message.
+        """
+        try:
+            message = (self.service.users().messages().send(userId=self.user_id, body=message)
+                   .execute())
+            print 'Message Id: %s' % message['id']
+            return message
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
 
 
 
