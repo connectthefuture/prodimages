@@ -424,6 +424,10 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import mimetypes
+installed_clientid = '442933852469-iokl3lqr7pg6uv8gn63d71rf6luri7kp.apps.googleusercontent.com'
+installed_clientsecret = 'KqEszjWRIi_VJJeAcKMdkzvK'
+installed_redirect = 'urn:ietf:wg:oauth:2.0:oob'
+
 class GoogleGmailClient:  
     def __init__(self,user_id='me', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
         self.user_id = user_id
@@ -439,9 +443,8 @@ class GoogleGmailClient:
                         'https://www.googleapis.com/auth/gmail.modify',
                         'https://www.googleapis.com/auth/gmail.readonly',
                         'https://www.googleapis.com/auth/gmail.compose' ]
-        self.message = {}
         self.service = self.instantiate_gmail_serviceAccount_bfly()
-
+        self.message = self.create_message()
 
     def instantiate_gmail_serviceAccount_bfly(self):
         import httplib2
@@ -576,6 +579,7 @@ class GoogleGmailClient:
 
         self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
+
 
 
 

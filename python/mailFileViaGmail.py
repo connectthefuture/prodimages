@@ -75,7 +75,7 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
 
 
 def send_attachment_gmail(toaddr, attach, subject=' -- File Attached -- ', text='Please save the attachement and open file locally.'):
-    import smtplib, os.path, email, sys.argv
+    import smtplib, os.path, email, sys
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEBase import MIMEBase
     from email.MIMEText import MIMEText
