@@ -417,9 +417,16 @@ class GooglePubSubClient:
 
 
 
+import base64
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import mimetypes
 class GoogleGmailClient:  
-    def __init__(self,sender='john.bragato@bluefly.com', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
-        self.sender = sender
+    def __init__(self,user_id='john.bragato@bluefly.com', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
+        self.user_id = user_id
         if to:
             self.to = to
         else:
@@ -433,7 +440,8 @@ class GoogleGmailClient:
                         'https://www.googleapis.com/auth/gmail.modify',
                         'https://www.googleapis.com/auth/gmail.readonly',
                         'https://www.googleapis.com/auth/gmail.compose' ]
-        self.message = ''
+        self.message = {}
+
 
     def instantiate_gmail_serviceAccount_bfly(self):
         import httplib2
@@ -454,11 +462,56 @@ class GoogleGmailClient:
         return self.service
 
 
+    def send_message(self):
+        """Send an email message.
+
+        Args:
+        service: Authorized Gmail API service instance.
+        user_id: User's email address. The special value "me"
+        can be used to indicate the authenticated user.
+        message: Message to be sent.
+
+        Returns:
+        Sent Message.
+        """
+        try:
+            _message = (self.service.users().messages().send(userId=self.user_id, body=self.message).execute())
+            print 'Message Id: %s' % _message['id']
+            return _message
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
+    def create_draft(self):
+        """Create and insert a draft email. Print the returned draft's message and id.
+
+        Args:
+        service: Authorized Gmail API service instance.
+        user_id: User's email address. The special value "me"
+        can be used to indicate the authenticated user.
+        self.message: The body of the email message, including headers.
+
+        Returns:
+        Draft object, including draft id and message meta data.
+        """
+
+        try:
+            _message = {'message': self.message}
+            draft = service.users().drafts().create(userId=user_id, body=_message).execute()
+
+            print 'Draft id: %s\nDraft message: %s' % (draft['id'], draft['message'])
+
+            return draft
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+
     def create_message(self):
         """Create a message for an email.
 
         Args:
-        sender: Email address of the sender.
+        user_id: Email address of the user_id.
         to: Email address of the receiver.
         subject: The subject of the email message.
         message_text: The text of the email message.
@@ -468,7 +521,7 @@ class GoogleGmailClient:
         """
         _message = MIMEText(self.message_text)
         _message['to'] = self.to
-        _message['from'] = self.sender
+        _message['from'] = self.user_id
         _message['subject'] = self.subject
         self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
@@ -478,7 +531,7 @@ class GoogleGmailClient:
         """Create a message for an email.
 
         Args:
-        sender: Email address of the sender.
+        user_id: Email address of the user_id.
         to: Email address of the receiver.
         subject: The subject of the email message.
         message_text: The text of the email message.
@@ -488,9 +541,10 @@ class GoogleGmailClient:
         Returns:
         An object containing a base64url encoded email object.
         """
+        import os
         _message = MIMEMultipart()
         _message['to'] = self.to
-        _message['from'] = self.sender
+        _message['from'] = self.user_id
         _message['subject'] = self.subject
 
         msg = MIMEText(self.message_text)
@@ -525,25 +579,6 @@ class GoogleGmailClient:
 
         self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
-
-    def send_message(self):
-        """Send an email message.
-
-        Args:
-        service: Authorized Gmail API service instance.
-        user_id: User's email address. The special value "me"
-        can be used to indicate the authenticated user.
-        message: Message to be sent.
-
-        Returns:
-        Sent Message.
-        """
-        try:
-            _message = (self.service.users().messages().send(userId=self.sender, body=self.message).execute())
-            print 'Message Id: %s' % _message['id']
-            return _message
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
 
 
 
