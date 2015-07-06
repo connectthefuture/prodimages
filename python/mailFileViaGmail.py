@@ -30,13 +30,13 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     # me == my email address
     # you == recipient's email address
     from_addr = str(input('Enter your Gmail or GoogleApps Address: '))
-    to_addr = email_addr
+    toaddr = email_addr
 
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
     msg['Subject'] = "Failed Upload " + colorstyle
     msg['From']    = from_addr
-    msg['To']      = to_addr
+    msg['To']      = toaddr
 
     # Create the body of the message (a plain-text and an HTML version).
     text = "Failed Files:\n\vPlease Reload the Following Files:\n{0}".format(filepath.replace('/mnt/','/Volumes/'))
@@ -68,7 +68,7 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     mailServer.starttls()
     mailServer.ehlo()
     mailServer.login(gmail_user, gmail_pass)
-    mailServer.sendmail(from_addr, to_addr, msg.as_string())
+    mailServer.sendmail(from_addr, toaddr, msg.as_string())
     # sendmail function takes 3 arguments: sender's address, recipient's address
     # and message to send - here it is sent as one string.
     mailServer.close()
@@ -103,10 +103,10 @@ def send_attachment_gmail(toaddr, attach, subject=' -- File Attached -- ', text=
     mailServer.starttls()
     #mailServer.ehlo()
     mailServer.login(gmail_user, gmail_pass)
-    mailServer.sendmail(gmail_user, to, msg.as_string())
+    mailServer.sendmail(gmail_user, toaddr, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
     mailServer.quit()
-    print "Mail with attachment {} \nSent to: {}".format(attach, to)
+    print "Mail with attachment {} \nSent to: {}".format(attach, toaddr)
     return
 
 
