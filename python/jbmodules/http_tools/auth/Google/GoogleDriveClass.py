@@ -426,16 +426,25 @@ class GoogleGmailClient:
         self.service = self.instantiate_pubsub_client()
         self.localdir = localdir
         self.filename = filename
+        self.scopes = [
+                        'https://mail.google.com/',  ##Full access to the account, including permanent deletion of threads and messages. This scope should only be requested if your application needs to immediately and permanently delete threads and messages. All other actions can be performed with less permissive scopes.
+                        'https://www.googleapis.com/auth/gmail.modify', ## All read/write operations except immediate, permanent deletion of threads and messages.
+                        'https://www.googleapis.com/auth/gmail.readonly', ## Read all resources and their metadata. No write operations.
+                        'https://www.googleapis.com/auth/gmail.compose'
+                        ]
+        self.message = ''
 
-     def instantiate_google_drive_serviceAccount_bfly(self):
+    def instantiate_gmail_serviceAccount_bfly(self):
         import httplib2
         from googleapiclient.discovery import build
         from oauth2client.client import SignedJwtAssertionCredentials
-        serviceName = 'drive'
-        version = 'v2'
+        serviceName = 'gmail'
+        version = 'v1'
         client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
         client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
-        scope = 'https://www.googleapis.com/auth/drive'
+        if self.scopes > 1:
+            scope = 'https://www.googleapis.com/auth/gmail.modify'
+
         # filescope='https://www.googleapis.com/auth/drive.file'
         # metadatascope='https://www.googleapis.com/auth/drive.metadata'
         f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
@@ -448,7 +457,7 @@ class GoogleGmailClient:
         return self.service
 
 
-    def CreateMessage(self):
+    def create_message(self):
         """Create a message for an email.
 
         Args:
@@ -460,14 +469,15 @@ class GoogleGmailClient:
         Returns:
         An object containing a base64url encoded email object.
         """
-        message = MIMEText(self.message_text)
-        message['to'] = self.to
-        message['from'] = self.sender
-        message['subject'] = self.subject
-        return {'raw': base64.urlsafe_b64encode(message.as_string())}
+        _message = MIMEText(self.message_text)
+        _message['to'] = self.to
+        _message['from'] = self.sender
+        _message['subject'] = self.subject
+        self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
+        return self.message
 
 
-    def CreateMessageWithAttachment(self):
+    def create_message_with_attachment(self):
         """Create a message for an email.
 
         Args:
@@ -481,45 +491,45 @@ class GoogleGmailClient:
         Returns:
         An object containing a base64url encoded email object.
         """
-        message = MIMEMultipart()
-        message['to'] = self.to
-        message['from'] = self.sender
-        message['subject'] = self.subject
+        _message = MIMEMultipart()
+        _message['to'] = self.to
+        _message['from'] = self.sender
+        _message['subject'] = self.subject
 
         msg = MIMEText(self.message_text)
-        message.attach(msg)
+        _message.attach(msg)
 
         path = os.path.join(self.localdir, self.filename)
-    content_type, encoding = mimetypes.guess_type(path)
+        content_type, encoding = mimetypes.guess_type(path)
 
-    if content_type is None or encoding is not None:
-        content_type = 'application/octet-stream'
-        main_type, sub_type = content_type.split('/', 1)
-    if main_type == 'text':
-        fp = open(path, 'rb')
-        msg = MIMEText(fp.read(), _subtype=sub_type)
-        fp.close()
-    elif main_type == 'image':
-        fp = open(path, 'rb')
-        msg = MIMEImage(fp.read(), _subtype=sub_type)
-        fp.close()
-    elif main_type == 'audio':
-        fp = open(path, 'rb')
-        msg = MIMEAudio(fp.read(), _subtype=sub_type)
-        fp.close()
-    else:
-        fp = open(path, 'rb')
-        msg = MIMEBase(main_type, sub_type)
-        msg.set_payload(fp.read())
-        fp.close()
+        if content_type is None or encoding is not None:
+            content_type = 'application/octet-stream'
+            main_type, sub_type = content_type.split('/', 1)
+        if main_type == 'text':
+            fp = open(path, 'rb')
+            msg = MIMEText(fp.read(), _subtype=sub_type)
+            fp.close()
+        elif main_type == 'image':
+            fp = open(path, 'rb')
+            msg = MIMEImage(fp.read(), _subtype=sub_type)
+            fp.close()
+        elif main_type == 'audio':
+            fp = open(path, 'rb')
+            msg = MIMEAudio(fp.read(), _subtype=sub_type)
+            fp.close()
+        else:
+            fp = open(path, 'rb')
+            msg = MIMEBase(main_type, sub_type)
+            msg.set_payload(fp.read())
+            fp.close()
 
-    msg.add_header('Content-Disposition', 'attachment', filename=self.ilename)
-    message.attach(msg)
+        msg.add_header('Content-Disposition', 'attachment', filename=self.filename)
+        _message.attach(msg)
 
-    return {'raw': base64.urlsafe_b64encode(message.as_string())}
+        self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
+        return self.message
 
-
-    def SendMessage(self):
+    def send_message(self):
         """Send an email message.
 
         Args:
@@ -532,10 +542,9 @@ class GoogleGmailClient:
         Sent Message.
         """
         try:
-            message = (self.service.users().messages().send(userId=self.user_id, body=message)
-                   .execute())
-            print 'Message Id: %s' % message['id']
-            return message
+            _message = (self.service.users().messages().send(userId=self.sender, body=self.message).execute())
+            print 'Message Id: %s' % _message['id']
+            return _message
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
