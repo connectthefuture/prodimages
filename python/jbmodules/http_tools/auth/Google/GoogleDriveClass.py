@@ -427,10 +427,10 @@ import mimetypes
 class GoogleGmailClient:  
     def __init__(self,user_id='me', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
         self.user_id = user_id
-        if to:
+        if to is not None:
             self.to = to
         else:
-            self.to = ['john.bragato@gmail.com', 'john.bragato@bluefly.com']
+            self.to = 'john.bragato@gmail.com, john.bragato@bluefly.com'
         self.subject = subject
         self.message_text  = message_text
         self.localdir = localdir
@@ -438,7 +438,7 @@ class GoogleGmailClient:
         self.scopes = [ 'https://mail.google.com/',
                         'https://www.googleapis.com/auth/gmail.modify',
                         'https://www.googleapis.com/auth/gmail.readonly',
-                         'https://www.googleapis.com/auth/gmail.compose' ]
+                        'https://www.googleapis.com/auth/gmail.compose' ]
         self.message = {}
         self.service = self.instantiate_gmail_serviceAccount_bfly()
 
@@ -449,6 +449,7 @@ class GoogleGmailClient:
         from oauth2client.client import SignedJwtAssertionCredentials
         serviceName = 'gmail'
         version = 'v1'
+        api_key = 'AIzaSyD09iZ54he2CKlayiBmw9zvkVt7Z6HbSY4'
         client_email = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k@developer.gserviceaccount.com'
         client_id = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k.apps.googleusercontent.com'
         scope = self.scopes[0] #'https://www.googleapis.com/auth/gmail.modify'
