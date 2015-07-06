@@ -469,11 +469,11 @@ class GoogleGmailClient:
         Returns:
         An object containing a base64url encoded email object.
         """
-        message = MIMEText(self.message_text)
-        message['to'] = self.to
-        message['from'] = self.sender
-        message['subject'] = self.subject
-        self.message = {'raw': base64.urlsafe_b64encode(message.as_string())}
+        _message = MIMEText(self.message_text)
+        _message['to'] = self.to
+        _message['from'] = self.sender
+        _message['subject'] = self.subject
+        self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
 
 
@@ -491,13 +491,13 @@ class GoogleGmailClient:
         Returns:
         An object containing a base64url encoded email object.
         """
-        message = MIMEMultipart()
-        message['to'] = self.to
-        message['from'] = self.sender
-        message['subject'] = self.subject
+        _message = MIMEMultipart()
+        _message['to'] = self.to
+        _message['from'] = self.sender
+        _message['subject'] = self.subject
 
         msg = MIMEText(self.message_text)
-        message.attach(msg)
+        _message.attach(msg)
 
         path = os.path.join(self.localdir, self.filename)
         content_type, encoding = mimetypes.guess_type(path)
@@ -524,9 +524,9 @@ class GoogleGmailClient:
             fp.close()
 
         msg.add_header('Content-Disposition', 'attachment', filename=self.filename)
-        message.attach(msg)
+        _message.attach(msg)
 
-        self.message = {'raw': base64.urlsafe_b64encode(message.as_string())}
+        self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
         return self.message
 
     def send_message(self):
@@ -542,9 +542,9 @@ class GoogleGmailClient:
         Sent Message.
         """
         try:
-            message = (self.service.users().messages().send(userId=self.sender, body=message).execute())
-            print 'Message Id: %s' % message['id']
-            return message
+            _message = (self.service.users().messages().send(userId=self.sender, body=self.message).execute())
+            print 'Message Id: %s' % _message['id']
+            return _message
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
