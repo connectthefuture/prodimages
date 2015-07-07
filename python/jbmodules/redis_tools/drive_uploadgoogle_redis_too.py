@@ -69,6 +69,8 @@ class GoogleDriveClient:
         self.q = q
         ### Properties
         if not prop_key and not prop_value:
+            if not database_id:
+                database_id = self.file_id
             self.properties = [{
                'key': 'databaseId',
                'value': database_id,
@@ -83,6 +85,7 @@ class GoogleDriveClient:
                'value': self.prop_value,
                'visibility': self.visibility
             }]
+        self.indexable_text = ''
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
 
@@ -143,6 +146,41 @@ class GoogleDriveClient:
         pprint.pprint(_uploaded_file_data)
         return _uploaded_file_data
 
+
+    def update_file(self):
+        """service, file_id, new_title, new_description, new_mime_type, new_filename, new_revision):
+        Update an existing file's metadata and content.
+
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to update.
+          new_title: New title for the file.
+          new_description: New description for the file.
+          new_mime_type: New MIME type for the file.
+          new_filename: Filename of the new content to upload.
+          new_revision: Whether or not to create a new revision for this file.
+        Returns:
+          Updated file metadata if successful, None otherwise.
+        """
+        try:
+            # First retrieve the file from the API.
+            _file = self.service.files().get(fileId=self.file_id).execute()
+
+            # File's new metadata.
+            _file['title'] = self.title
+            _file['description'] = self.description
+            #_file['mimeType'] = self.mime_type
+            _properties = str(_file['properties'].values())
+            _imageMetadata = str(_file['imageMediaMetadata'].values())
+            _file['indexableText'] = ' '.join(str(_file['description'] + _file['title'] +  _properties + _imageMetadata))
+            # File's new content.
+            media_body = http.MediaFileUpload(self.title, resumable=True)
+            # Send the request to the API.
+            updated_file =  self.service.files().update(fileId=self.file_id, body=_file, newRevision=False, media_body=media_body).execute()
+            return updated_file
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
 
 
     def rename_drive_file(self):
