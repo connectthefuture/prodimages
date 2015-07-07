@@ -137,11 +137,19 @@ class GoogleDriveClient:
     def upload_file_drive(self):
         import pprint
         media_body = http.MediaFileUpload(self.local_filepath, mimetype=self.mime_type , resumable=True)
+        try:
+            if not self.indexable_text:
+                _indexableText = ' '.join(str(self.description + self.title + self.properties[0].values()[0] + self.properties[0].values()[1]))
+            else:
+                _indexableText = self.indexable_text
+        except TypeError:
+            _indexableText = self.indexable_text
         body = {
             'title': self.title,
             'description': self.description,
             'mimeType': self.mime_type,
-            'properties': self.properties
+            'properties': self.properties,
+            'indexableText': _indexableText
         }
         if self.parent_id:
             body['parents'] = [{'id': self.parent_id}]
@@ -474,8 +482,9 @@ class GooglePubSubClient:
 #        [user:*username*:fullname] – {string} – (“Adam Smith”, “Bob Barker”, “Carol Burnett”)
 #        [user:*username*:password] – {string} – (md5 hash password, no example)"""
 
-# In[6]:
+##########################
 ######### REDIS ##########
+##########################
 import redis
 redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
 redis_port = 17996

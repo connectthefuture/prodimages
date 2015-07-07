@@ -25,5 +25,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: System :: Filesystems',
         'Topic :: System :: Operating System',
-    ], requires=['sqlalchemy', 'httplib2', 'httplib2', 'googleapiclient', 'oauth2client', 'apiclient']
+    ], requires=['sqlalchemy', 'httplib2', 'httplib2', 'googleapiclient', 'oauth2client', 'apiclient', 'redis']
 )
