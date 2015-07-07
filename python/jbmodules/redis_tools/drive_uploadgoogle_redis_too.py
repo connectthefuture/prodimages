@@ -13,7 +13,7 @@ VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRz
 
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', q=''):
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', q=''):
         self.rootdirid = "0AA7omFHcbQaiUk9PVA"
         if not file_id:
             self.file_id = self.rootdirid
@@ -86,6 +86,10 @@ class GoogleDriveClient:
                'visibility': self.visibility
             }]
         self.indexable_text = ''
+        if not folder_color_rgb:
+            self.folder_color_rgb = '#6699CC'
+        else:
+            self.folder_color_rgb = folder_color_rgb
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
 
@@ -198,7 +202,7 @@ class GoogleDriveClient:
             'title': self.title,
             'description': self.description,
             'mimeType': 'application/vnd.google-apps.folder',
-            #'folderColorRgb': self.folder_color_rgb,
+            'folderColorRgb': self.folder_color_rgb
             #'userPermission': self.user_permission
         }
         if self.parent_id:
@@ -291,7 +295,8 @@ class GoogleDriveClient:
     def create_public_folder(self):
         body = {
             'title': self.title,
-            'mimeType': 'application/vnd.google-apps.folder'
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
         }
         if self.parent_id:
             body['parents'] = [{'id': self.parent_id}]
