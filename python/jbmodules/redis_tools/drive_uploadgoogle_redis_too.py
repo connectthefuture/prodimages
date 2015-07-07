@@ -262,6 +262,10 @@ class GoogleDriveClient:
                     baseinfo['md5Checksum'] = item['md5Checksum']
                 except KeyError:
                     baseinfo['md5Checksum'] = 'NA'
+                try:
+                    baseinfo['downloadUrl'] = item['downloadUrl']
+                except KeyError:
+                    baseinfo['downloadUrl'] = 'NA'
                 baseinfo['selfLink'] = item['selfLink']
                 baseinfo['alternateLink'] = item['alternateLink']
                 #baseinfo['thumbnailLink'] = item['thumbnailLink']
@@ -468,7 +472,7 @@ redis_port = 6379
 
 r = redis.Redis(host=redis_host, port=redis_port,  encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
 
-def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLink=None, local_filepath=None, filename=None, drive_version=None):
+def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLink=None, downloadUrl=None, local_filepath=None, filename=None, drive_version=None):
     if not filename:
         filename=local_filepath.split('/')[-1]
     if filename is not None and filename[:9].isdigit():
@@ -492,6 +496,8 @@ def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfL
         r.hset("file_id:%s" % file_id, "alternateLink", alternateLink)
         if selfLink is not None:
             r.hset("file_id:%s" % file_id, "selfLink", selfLink)
+        if downloadUrl is not None:
+            r.hset("file_id:%s" % file_id, "downloadUrl", downloadUrl)
         r.hset("file_id:%s" % file_id, "colorstyle", colorstyle)
         r.hset("file_id:%s" % file_id, "alt", alt)
         r.hset("file_id:%s" % file_id, "local_filepath", local_filepath)
@@ -533,8 +539,12 @@ def drive_uploading_folder_map2redis(dname=None, parent_id=None):
             selfLink = res['selfLink']
         except KeyError:
             selfLink = None
+        try:
+            downloadUrl = res['downloadUrl']
+        except KeyError:
+            downloadUrl = None
         title = res['title']
-        add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, local_filepath=client.local_filepath, filename=title)
+        add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
 
 
 def drive_downloading(destdir=None, file_id=None):
