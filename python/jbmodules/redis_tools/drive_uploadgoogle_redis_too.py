@@ -13,7 +13,7 @@ VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRz
 
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', q=''):
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q=''):
         self.rootdirid = "0AA7omFHcbQaiUk9PVA"
         if not file_id:
             self.file_id = self.rootdirid
@@ -85,6 +85,8 @@ class GoogleDriveClient:
                'value': self.prop_value,
                'visibility': self.visibility
             }]
+        self.new_comment = new_comment
+        self.comment_id = ''
         self.indexable_text = ''
         if not folder_color_rgb:
             self.folder_color_rgb = '#6699CC'
@@ -113,6 +115,7 @@ class GoogleDriveClient:
         _http = credentials.authorize(_http)
         self.service = build(serviceName, version, http=_http)
         return self.service
+
 
 ###### Files
     ## OK ##
@@ -338,6 +341,61 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
+
+
+###### Comments and Selects Methods/Properties
+    ## Add-Edit-List Comments/Selects for Files
+    @property
+    def comments_from_fileid(self):
+        """Retrieve a list of comments.
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to retrieve comments for.
+        Returns:
+        List of comments.
+        """
+        try:
+            _comments = self.service.comments().list(fileId=self.file_id).execute()
+            return _comments.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
+    def insert_comment(self):
+        """Insert a new document-level comment.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to insert comment for.
+        content: Text content of the comment.
+        Returns:
+        The inserted comment if successful, None otherwise.
+        """
+        _new_comment = {
+          'content': self.new_comment
+        }
+        try:
+            return self.service.comments().insert(fileId=self.file_id, body=_new_comment).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+    def print_single_comment(self):
+        """Print information about the specified comment.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to print comment for.
+        comment_id: ID of the comment to print.
+        """
+        try:
+            _comment = self.service.comments().get(fileId=self.file_id, commentId=self.comment_id).execute()
+            print 'Modified Date: %s' % _comment['modifiedDate']
+            print 'Author: %s' % _comment['author']['displayName']
+            print 'Content: %s' % _comment['content']
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
 
 ####### ###### ###### ###### ###### ###### ######
 ####### ## Print/Get File or Folder info # ######
