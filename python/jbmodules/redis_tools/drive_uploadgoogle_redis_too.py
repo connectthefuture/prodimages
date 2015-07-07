@@ -222,7 +222,6 @@ class GoogleDriveClient:
                 baseinfo['parents'] = item['parents'][0]
                 baseinfo['parent_id'] = item['parents'][0].get('id')
                 try:
-                    item['md5Checksum']:
                     baseinfo['md5Checksum'] = item['md5Checksum']
                 except KeyError:
                     baseinfo['md5Checksum'] = 'NA'
