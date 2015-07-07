@@ -65,7 +65,7 @@ class GoogleDriveClient:
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.prop_key = prop_key
         self.prop_value = prop_value
-        self.visibility = 'Public'
+        self.visibility = 'Private' ## 'Public'
         self.q = q
         ### Properties
         if not prop_key and not prop_value:
@@ -244,6 +244,24 @@ class GoogleDriveClient:
 
 
 ##### Folders
+    def getprint_parents_by_fileid(self):
+        """Print a file's parents.
+
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to print parents for.
+        """
+        parents_ids = []
+        try:
+            _parents = self.service.parents().list(fileId=self.file_id).execute()
+            for parent in _parents['items']:
+                print 'File Id: %s' % parent['id']
+                parents_ids.append(parent['id'])
+            return parents_ids
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
     ## OK ##
     def create_drive_folder(self):
         body = {
@@ -260,7 +278,7 @@ class GoogleDriveClient:
         return _new_folder_data
 
 
-####### Shared Folder
+####### Shared Public Folder
     ### OK ###
     def create_public_folder(self):
         body = {
