@@ -13,7 +13,7 @@ VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRz
 
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q=''):
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
         self.rootdirid = "0AA7omFHcbQaiUk9PVA"
         if not file_id:
             self.file_id = self.rootdirid
@@ -88,6 +88,7 @@ class GoogleDriveClient:
         self.new_comment = new_comment
         self.comment_id = ''
         self.indexable_text = ''
+        self.third_party_email = third_party_email
         if not folder_color_rgb:
             self.folder_color_rgb = '#6699CC'
         else:
@@ -342,6 +343,20 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
+    def print_permission_id_for_email(self):
+        """Prints the Permission ID for an email address.
+
+        Args:
+        service: Drive API service instance.
+        email: Email address to retrieve ID for.
+        """
+        try:
+            id_resp = self.service.permissions().getIdForEmail(email=self.third_party_email).execute()
+            print id_resp['id']
+            return id_resp['id']
+        except errors.HttpError, error:
+            print 'An error occured: %s' % error
+
 
 ###### Comments and Selects Methods/Properties
     ## Add-Edit-List Comments/Selects for Files
@@ -395,6 +410,27 @@ class GoogleDriveClient:
             print 'Content: %s' % _comment['content']
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
+
+
+###############################################
+################### Revisions #################
+###############################################
+    @property
+    def revisions_by_fileid(self):
+        """Retrieve a list of revisions.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to retrieve revisions for.
+        Returns:
+        List of revisions.
+        """
+        try:
+            _revisions = self.service.revisions().list(fileId=self.file_id).execute()
+            return _revisions.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
 
 
 ####### ###### ###### ###### ###### ###### ######
