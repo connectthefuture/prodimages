@@ -435,7 +435,7 @@ def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfL
         filename=local_filepath.split('/')[-1]
     if filename is not None and filename[:9].isdigit():
         colorstyle = filename[:9]
-        alt = filename.split('_')[1].split('.')[-1]
+        alt = filename.split('_')[1].split('.')[0][-1]
         if alt.isdigit():
             pass
         else:
