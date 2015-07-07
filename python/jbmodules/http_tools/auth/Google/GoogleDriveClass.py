@@ -478,6 +478,7 @@ class GoogleDriveClient:
                 infodict[item['id']] = baseinfo
             return infodict
 
+
     # def list_fileitems_current_dir(self):
     #     items = self.drive_folder_data['items'][0].items()
     #     [ self.drive_folder_files.extend(i) for i in items if i ]
@@ -501,6 +502,7 @@ class GoogleDriveClient:
                 print 'An error occurred: %s' % error
                 break
         return _drive_folder_files
+
 
     #.parents().get(fileId=file_id, parentId=folder_id).execute()
     ### OK ###
@@ -557,11 +559,118 @@ class GoogleDriveClient:
             return None
 
 
-def main():
-    pass
+##########################
+######### REDIS ##########
+##########################
+# ### Redis Client **K/V Store**
+# ** \<colorstyle\>, \<file_id\>=\<local_filepath\> **
+#
+# ****[key] : {‘field’ -> ‘value’, ‘field’ -> ‘value’, ‘field’ -> ‘value’}****
+#
+#     """[users] – {set} – (“adam”, “bob”, “carol”)
+#        [user:*username*:fullname] – {string} – (“Adam Smith”, “Bob Barker”, “Carol Burnett”)
+#        [user:*username*:password] – {string} – (md5 hash password, no example)"""
+##########################
+######### REDIS ##########
+##########################
+import redis
+#redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
+#redis_port = 17996
+redis_host = '127.0.0.1'
+redis_port = 6379
+
+r = redis.Redis(host=redis_host, port=redis_port,  encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
+
+def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLink=None, downloadUrl=None, local_filepath=None, filename=None, drive_version=None):
+    if not filename:
+        filename=local_filepath.split('/')[-1]
+    if filename is not None and filename[:9].isdigit():
+        colorstyle = filename[:9]
+        alt = filename.split('_')[1].split('.')[0][-1]
+        if alt.isdigit():
+            pass
+        else:
+            alt = 'NA'
+    else:
+        colorstyle='NA'
+        alt='NA'
+
+    if r.sadd("google_drive:ll_editorial", file_id):
+    #if r.mset("google_drive:ll_editorial", file_id):
+        ## Faking Hashes with Sets
+        ## r.set("file_id:%s:colorstyle" % file_id, colorstyle)
+        ## r.set("file_id:%s:local_filepath" % file_id, local_filepath)
+        r.hset("file_id:%s" % file_id, "parent_id", parent_id)
+        r.hset("file_id:%s" % file_id, "filename", filename)
+        r.hset("file_id:%s" % file_id, "alternateLink", alternateLink)
+        if selfLink is not None:
+            r.hset("file_id:%s" % file_id, "selfLink", selfLink)
+        if downloadUrl is not None:
+            r.hset("file_id:%s" % file_id, "downloadUrl", downloadUrl)
+        r.hset("file_id:%s" % file_id, "colorstyle", colorstyle)
+        r.hset("file_id:%s" % file_id, "alt", alt)
+        r.hset("file_id:%s" % file_id, "local_filepath", local_filepath)
+        r.hmset("file_id:%s" % file_id, {"drive_version": drive_version})
+        r.hsetnx("file_id:%s" % file_id, "ref_count", 0)
+        r.hincrby("file_id:%s" % file_id, "ref_count", 1)
+        print r.hvals("file_id:%s" % file_id)
+        return True
+    else:
+        return False
 
 
+def drive_uploading_folder_map2redis(dname=None, parent_id=None):
+    ## Uploading
+    #import GoogleDriveClient
+    client = GoogleDriveClient()
+    import os
+    dname = dname
+    client.title = dname.split('/')[-1]
+    if not parent_id:
+        client.parent_id = client.create_public_folder()
+    else:
+        client.parent_id = parent_id
+    os.chdir(dname)
+    localdirlist = os.listdir(dname)
+    print localdirlist
 
+    ##client.parent_id = parent_id
+    for f in localdirlist:
+        client.local_filepath = os.path.abspath(f)
+        client.title = os.path.basename(client.local_filepath)
+        client.description = dname
+        res = client.upload_file_drive()
+        file_id = res['id']
+        _parent_id = res['parents'][0].get('id')
+        alternateLink = res['alternateLink']
+        drive_version = res['version']
+        try:
+            selfLink = res['selfLink']
+        except KeyError:
+            selfLink = None
+        try:
+            downloadUrl = res['downloadUrl']
+        except KeyError:
+            downloadUrl = None
+        title = res['title']
+        add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+
+
+def drive_downloading(destdir=None, file_id=None):
+    ## Downloading
+    #import GoogleDriveClient
+    import os.path
+    client = GoogleDriveClient()
+    client.file_id = file_id
+    if not client.title:
+        client.title = client.file_id
+    client.local_filepath = os.path.join(destdir, client.title)
+    client.download_file_drive()
+
+
+#c = GoogleDriveClient()
+#print c.list_ret_IDs_indir()
 if __name__ == '__main__':
-    main()
+    import sys
+    drive_uploading_folder_map2redis(dname=sys.argv[1], parent_id=None)
 
