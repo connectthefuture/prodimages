@@ -528,6 +528,35 @@ class GoogleDriveClient:
                 break
 
 
+    def watch_file(self):
+        """Watch for all changes to a user's Drive.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to watch.
+        channel_id: Unique string that identifies this channel.
+        channel_type: Type of delivery mechanism used for this channel.
+        channel_address: Address where notifications are delivered.
+
+        Returns:
+        The created channel if successful, None otherwise.
+        """
+        channel_id = 'channel1'
+        channel_type = 'api#channel'
+        channel_address = 'Notification Address URI'
+        body = {
+        'id': channel_id,
+        'type': channel_type,
+        'address': channel_address
+        }
+        try:
+            new_channel = self.service.files().watch(fileId=self.file_id, body=body).execute()
+            return new_channel
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+
 def main():
     pass
 
