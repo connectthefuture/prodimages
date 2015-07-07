@@ -114,7 +114,7 @@ class GoogleDriveClient:
         self.service = build(serviceName, version, http=_http)
         return self.service
 
-
+###### Files
     ## OK ##
     ## File and Folder Ops
     def download_file_drive(self):
@@ -211,6 +211,22 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+    ## Create Shortcut to File
+    def create_file_shortcut(self):
+        body = {
+            'title': self.title,
+            'description': self.description,
+            'mimeType': 'application/vnd.google-apps.drive-sdk'
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+
+        _file = self.service.files().insert(body=body).execute()
+        print 'File ID: %s' % _file['id']
+        return _file
+
+
+####### Folders
     def create_drive_folder(self):
         body = {
             'title': self.title,
@@ -225,6 +241,30 @@ class GoogleDriveClient:
         _new_folder_data = self.service.files().insert(body=body).execute()['items'][0].items()
         return _new_folder_data
 
+
+####### Shared Folder
+    ### OK ###
+    def create_public_folder(self):
+        body = {
+            'title': self.title,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+        _public_folder = self.service.files().insert(body=body).execute()
+        permission = {
+            'value': '',
+            'type': 'anyone',
+            'role': 'reader'
+        }
+        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
+        # self.pardir_fileid = _public_folder['id']
+        #return self.pardir_fileid
+        return _public_folder['id']
+
+
+###### Properties
     ## Add-Edit Additional Custom File Properties
     def insert_property(self):
         body = self.properties[0]
@@ -247,6 +287,25 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
+    def retrieve_properties(self):
+        """Retrieve a list of custom file properties.
+
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to retrieve properties for.
+        Returns:
+          List of custom properties.
+        """
+        try:
+            props = self.service.properties().list(fileId=self.file_id).execute()
+            return props.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
+####### ###### ###### ###### ###### ###### ######
+####### ## Print/Get File or Folder info # ######
+####### ###### ###### ###### ###### ###### ######
     ### OK ###
     ## List Contents of Dirs
     def list_filesdata_current_dir(self):
@@ -289,43 +348,6 @@ class GoogleDriveClient:
                 #baseinfo['thumbnailLink'] = item['thumbnailLink']
                 infodict[item['id']] = baseinfo
             return infodict
-
-    ## Shortcut to File
-    def create_file_shortcut(self):
-        body = {
-            'title': self.title,
-            'description': self.description,
-            'mimeType': 'application/vnd.google-apps.drive-sdk'
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-
-        _file = self.service.files().insert(body=body).execute()
-        print 'File ID: %s' % _file['id']
-        return _file
-
-    ## Shared Folder
-    ### OK ###
-    def create_public_folder(self):
-        body = {
-            'title': self.title,
-            'mimeType': 'application/vnd.google-apps.folder',
-            'folderColorRgb': self.folder_color_rgb
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-        _public_folder = self.service.files().insert(body=body).execute()
-        permission = {
-            'value': '',
-            'type': 'anyone',
-            'role': 'reader'
-        }
-        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
-        #self.pardir_fileid = _public_folder['id']
-        #return self.pardir_fileid
-        return _public_folder['id']
-
-
 
     # def list_fileitems_current_dir(self):
     #     items = self.drive_folder_data['items'][0].items()
