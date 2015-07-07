@@ -176,7 +176,15 @@ class GoogleDriveClient:
             #_file['mimeType'] = self.mime_type
             _properties = str(_file['properties'].values())
             _imageMetadata = str(_file['imageMediaMetadata'].values())
-            _file['indexableText'] = ' '.join(str(_file['description'] + _file['title'] +  _properties + _imageMetadata))
+            try:
+                if not self.indexable_text:
+                    _file['indexableText'] = ' '.join(str(_file['description'] + _file['title'] +  _properties + _imageMetadata))
+                else:
+                    _file['indexableText'] = self.indexable_text
+                print _file['indexableText']
+            except TypeError:
+                print 'TYPE ERROR ON 186 WERE YOU EXPECTED'
+
             # File's new content.
             media_body = http.MediaFileUpload(self.title, resumable=True)
             # Send the request to the API.
