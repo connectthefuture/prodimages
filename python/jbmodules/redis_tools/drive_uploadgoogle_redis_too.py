@@ -244,7 +244,6 @@ class GoogleDriveClient:
         print 'File ID: %s' % _file['id']
         return _file
 
-
     ## Shared Folder
     ### OK ###
     def create_public_folder(self):
