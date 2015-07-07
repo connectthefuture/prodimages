@@ -572,9 +572,6 @@ def drive_downloading(destdir=None, file_id=None):
     client.download_file_drive()
 
 
-
-# In[8]:
-
 #c = GoogleDriveClient()
 #print c.list_ret_IDs_indir()
 if __name__ == '__main__':
