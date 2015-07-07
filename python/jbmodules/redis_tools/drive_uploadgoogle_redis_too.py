@@ -158,7 +158,6 @@ class GoogleDriveClient:
         pprint.pprint(_uploaded_file_data)
         return _uploaded_file_data
 
-
     def update_file(self):
         """service, file_id, new_title, new_description, new_mime_type, new_filename, new_revision):
         Update an existing file's metadata and content.
@@ -201,7 +200,6 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
-
 
     def rename_drive_file(self):
         try:
