@@ -225,8 +225,26 @@ class GoogleDriveClient:
         print 'File ID: %s' % _file['id']
         return _file
 
+    ## Change Files Parent Folder
+    def move_insert_file_into_folder(self):
+      """Insert a file into a folder.
+      Args:
+        service: Drive API service instance.
+        parent_id: ID of the folder to insert the file into.
+        file_id: ID of the file to insert.
+      Returns:
+        The inserted parent if successful, None otherwise.
+      """
+      _new_parent = {'id': self.parent_id}
+      try:
+        return self.service.parents().insert(fileId=self.file_id, body=_new_parent).execute()
+      except errors.HttpError, error:
+        print 'An error occurred: %s' % error
+      return None
 
-####### Folders
+
+##### Folders
+    ## OK ##
     def create_drive_folder(self):
         body = {
             'title': self.title,
