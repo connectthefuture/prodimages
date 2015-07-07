@@ -504,7 +504,7 @@ def drive_uploading_folder_map2redis(dname=None, parent_id=None):
         add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, local_filepath=client.local_filepath, filename=title)
 
 
-def drive_downloading(destdir=None, file_id='0Bw7omFHcbQaiSjZHaXRObFg2Vjg'): 
+def drive_downloading(destdir=None, file_id=None): 
     ## Downloading
     #import GoogleDriveClient
     client = GoogleDriveClient()
@@ -520,5 +520,7 @@ def drive_downloading(destdir=None, file_id='0Bw7omFHcbQaiSjZHaXRObFg2Vjg'):
 
 #c = GoogleDriveClient()
 #print c.list_ret_IDs_indir()
-drive_uploading_folder_map2redis(dname='/mnt/Design/LookletEditorial/Apr-Jun_2015', parent_id=None)
+if __name__ == '__main__':
+    import sys
+    drive_uploading_folder_map2redis(dname=sys.argv[1], parent_id=None)
 
