@@ -13,7 +13,7 @@ VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRz
 
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', q=''):
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
         self.rootdirid = "0AA7omFHcbQaiUk9PVA"
         if not file_id:
             self.file_id = self.rootdirid
@@ -65,7 +65,7 @@ class GoogleDriveClient:
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.prop_key = prop_key
         self.prop_value = prop_value
-        self.visibility = 'Public'
+        self.visibility = 'Private' ## 'Public'
         self.q = q
         ### Properties
         if not prop_key and not prop_value:
@@ -85,7 +85,10 @@ class GoogleDriveClient:
                'value': self.prop_value,
                'visibility': self.visibility
             }]
+        self.new_comment = new_comment
+        self.comment_id = ''
         self.indexable_text = ''
+        self.third_party_email = third_party_email
         if not folder_color_rgb:
             self.folder_color_rgb = '#6699CC'
         else:
@@ -115,6 +118,7 @@ class GoogleDriveClient:
         return self.service
 
 
+###### Files
     ## OK ##
     ## File and Folder Ops
     def download_file_drive(self):
@@ -157,7 +161,6 @@ class GoogleDriveClient:
         _uploaded_file_data = self.service.files().insert(body=body, media_body=media_body).execute()
         pprint.pprint(_uploaded_file_data)
         return _uploaded_file_data
-
 
     def update_file(self):
         """service, file_id, new_title, new_description, new_mime_type, new_filename, new_revision):
@@ -202,7 +205,6 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
-
     def rename_drive_file(self):
         try:
             _file = {'title': self.title}
@@ -213,6 +215,58 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+    ## Create Shortcut to File
+    def create_file_shortcut(self):
+        body = {
+            'title': self.title,
+            'description': self.description,
+            'mimeType': 'application/vnd.google-apps.drive-sdk'
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+
+        _file = self.service.files().insert(body=body).execute()
+        print 'File ID: %s' % _file['id']
+        return _file
+
+    ## Change Files Parent Folder
+    def move_insert_file_into_folder(self):
+      """Insert a file into a folder.
+      Args:
+        service: Drive API service instance.
+        parent_id: ID of the folder to insert the file into.
+        file_id: ID of the file to insert.
+      Returns:
+        The inserted parent if successful, None otherwise.
+      """
+      _new_parent = {'id': self.parent_id}
+      try:
+        return self.service.parents().insert(fileId=self.file_id, body=_new_parent).execute()
+      except errors.HttpError, error:
+        print 'An error occurred: %s' % error
+      return None
+
+
+##### Folders
+    def getprint_parents_by_fileid(self):
+        """Print a file's parents.
+
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to print parents for.
+        """
+        parents_ids = []
+        try:
+            _parents = self.service.parents().list(fileId=self.file_id).execute()
+            for parent in _parents['items']:
+                print 'File Id: %s' % parent['id']
+                parents_ids.append(parent['id'])
+            return parents_ids
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
+    ## OK ##
     def create_drive_folder(self):
         body = {
             'title': self.title,
@@ -227,6 +281,30 @@ class GoogleDriveClient:
         _new_folder_data = self.service.files().insert(body=body).execute()['items'][0].items()
         return _new_folder_data
 
+
+####### Shared Public Folder
+    ### OK ###
+    def create_public_folder(self):
+        body = {
+            'title': self.title,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+        _public_folder = self.service.files().insert(body=body).execute()
+        permission = {
+            'value': '',
+            'type': 'anyone',
+            'role': 'reader'
+        }
+        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
+        # self.pardir_fileid = _public_folder['id']
+        #return self.pardir_fileid
+        return _public_folder['id']
+
+
+###### Properties
     ## Add-Edit Additional Custom File Properties
     def insert_property(self):
         body = self.properties[0]
@@ -249,6 +327,115 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
+    def retrieve_properties(self):
+        """Retrieve a list of custom file properties.
+
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to retrieve properties for.
+        Returns:
+          List of custom properties.
+        """
+        try:
+            props = self.service.properties().list(fileId=self.file_id).execute()
+            return props.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
+    def print_permission_id_for_email(self):
+        """Prints the Permission ID for an email address.
+
+        Args:
+        service: Drive API service instance.
+        email: Email address to retrieve ID for.
+        """
+        try:
+            id_resp = self.service.permissions().getIdForEmail(email=self.third_party_email).execute()
+            print id_resp['id']
+            return id_resp['id']
+        except errors.HttpError, error:
+            print 'An error occured: %s' % error
+
+
+###### Comments and Selects Methods/Properties
+    ## Add-Edit-List Comments/Selects for Files
+    @property
+    def comments_from_fileid(self):
+        """Retrieve a list of comments.
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to retrieve comments for.
+        Returns:
+        List of comments.
+        """
+        try:
+            _comments = self.service.comments().list(fileId=self.file_id).execute()
+            return _comments.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
+    def insert_comment(self):
+        """Insert a new document-level comment.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to insert comment for.
+        content: Text content of the comment.
+        Returns:
+        The inserted comment if successful, None otherwise.
+        """
+        _new_comment = {
+          'content': self.new_comment
+        }
+        try:
+            return self.service.comments().insert(fileId=self.file_id, body=_new_comment).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+    def print_single_comment(self):
+        """Print information about the specified comment.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to print comment for.
+        comment_id: ID of the comment to print.
+        """
+        try:
+            _comment = self.service.comments().get(fileId=self.file_id, commentId=self.comment_id).execute()
+            print 'Modified Date: %s' % _comment['modifiedDate']
+            print 'Author: %s' % _comment['author']['displayName']
+            print 'Content: %s' % _comment['content']
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
+###############################################
+################### Revisions #################
+###############################################
+    @property
+    def revisions_by_fileid(self):
+        """Retrieve a list of revisions.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to retrieve revisions for.
+        Returns:
+        List of revisions.
+        """
+        try:
+            _revisions = self.service.revisions().list(fileId=self.file_id).execute()
+            return _revisions.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+
+####### ###### ###### ###### ###### ###### ######
+####### ## Print/Get File or Folder info # ######
+####### ###### ###### ###### ###### ###### ######
     ### OK ###
     ## List Contents of Dirs
     def list_filesdata_current_dir(self):
@@ -291,43 +478,6 @@ class GoogleDriveClient:
                 #baseinfo['thumbnailLink'] = item['thumbnailLink']
                 infodict[item['id']] = baseinfo
             return infodict
-
-    ## Shortcut to File
-    def create_file_shortcut(self):
-        body = {
-            'title': self.title,
-            'description': self.description,
-            'mimeType': 'application/vnd.google-apps.drive-sdk'
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-
-        _file = self.service.files().insert(body=body).execute()
-        print 'File ID: %s' % _file['id']
-        return _file
-
-    ## Shared Folder
-    ### OK ###
-    def create_public_folder(self):
-        body = {
-            'title': self.title,
-            'mimeType': 'application/vnd.google-apps.folder',
-            'folderColorRgb': self.folder_color_rgb
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-        _public_folder = self.service.files().insert(body=body).execute()
-        permission = {
-            'value': '',
-            'type': 'anyone',
-            'role': 'reader'
-        }
-        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
-        #self.pardir_fileid = _public_folder['id']
-        #return self.pardir_fileid
-        return _public_folder['id']
-
-
 
     # def list_fileitems_current_dir(self):
     #     items = self.drive_folder_data['items'][0].items()
