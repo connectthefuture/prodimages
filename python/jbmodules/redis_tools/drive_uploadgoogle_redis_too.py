@@ -226,7 +226,11 @@ class GoogleDriveClient:
                 baseinfo['mimeType'] = item['mimeType']
                 baseinfo['parents'] = item['parents'][0]
                 baseinfo['parent_id'] = item['parents'][0].get('id')
-                # baseinfo['ext'] = item['fileExtension']
+                try:
+                    item['md5Checksum']:
+                    baseinfo['md5Checksum'] = item['md5Checksum']
+                except KeyError:
+                    baseinfo['md5Checksum'] = 'NA'
                 baseinfo['selfLink'] = item['selfLink']
                 baseinfo['alternateLink'] = item['alternateLink']
                 #baseinfo['thumbnailLink'] = item['thumbnailLink']
