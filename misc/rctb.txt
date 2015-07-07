@@ -214,6 +214,8 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ## Updates Unique Shots based on dated Dir
 54 19 * * * /usr/local/batchRunScripts/python/pm_update_unique_photocompletion.py 2>&1 > /var/log/photoattrib_updatepm.log && date >> /var/log/photoattrib_updatepm.log
 ##
+## Then Copies new files to zImages
+27 22 * * * parallel --jobs 8 /usr/local/batchRunScripts/python/photo_organize.py {} /mnt/Post_Ready/zImages_1/ ::: $(find /mnt/Post_Ready/Retouch_Still/????15* -type f -mtime -7)
 ################################################################################
 ################################################################################
 ####                  END IMPORTS TO/FROM DBs                                  #
