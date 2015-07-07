@@ -3,7 +3,6 @@
 __author__ = 'johnb'
 
 
-from googleapiclient import errors, http
 ProductionRoot  = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
 MarketplaceRoot = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
 EditorialShare  = '0B0Z4BGpAAp5KfnRZaWl4cHMxUGg4MGI0LUFjUWFDdzQ4VWsyTi11OGJPQVlRakRKSXNScHM'
@@ -14,7 +13,7 @@ VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRz
 
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', q=''): 
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', q=''):
         self.rootdirid = "0AA7omFHcbQaiUk9PVA"
         if not file_id:
             self.file_id = self.rootdirid
@@ -47,8 +46,8 @@ class GoogleDriveClient:
             self.role = self.roles[0]
         else:
             self.role = role
-        
-        self.rest_scopes = [ 
+
+        self.rest_scopes = [
                             'https://www.googleapis.com/auth/drive',
                             'https://www.googleapis.com/auth/drive.readonly',
                             'https://www.googleapis.com/auth/drive.file',
@@ -62,7 +61,7 @@ class GoogleDriveClient:
             self.scope    = 'https://www.googleapis.com/auth/drive.file'
         else:
             self.scope = scope
-                
+
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.prop_key = prop_key
         self.prop_value = prop_value
@@ -222,7 +221,6 @@ class GoogleDriveClient:
                 baseinfo['parents'] = item['parents'][0]
                 baseinfo['parent_id'] = item['parents'][0].get('id')
                 try:
-                    item['md5Checksum']:
                     baseinfo['md5Checksum'] = item['md5Checksum']
                 except KeyError:
                     baseinfo['md5Checksum'] = 'NA'
@@ -231,7 +229,7 @@ class GoogleDriveClient:
                 #baseinfo['thumbnailLink'] = item['thumbnailLink']
                 infodict[item['id']] = baseinfo
             return infodict
-    
+
     ## Shortcut to File
     def create_file_shortcut(self):
         body = {
@@ -247,7 +245,7 @@ class GoogleDriveClient:
         return _file
 
 
-    ## Shared Folder    
+    ## Shared Folder
     ### OK ###
     def create_public_folder(self):
         body = {
@@ -273,7 +271,7 @@ class GoogleDriveClient:
     #     items = self.drive_folder_data['items'][0].items()
     #     [ self.drive_folder_files.extend(i) for i in items if i ]
     #     return self.drive_folder_files
-    
+
     def find_retrieve_all_files(self):
         _drive_folder_files = []
         page_token = None
@@ -295,7 +293,7 @@ class GoogleDriveClient:
 
     #.parents().get(fileId=file_id, parentId=folder_id).execute()
     ### OK ###
-    def print_ret_files_in_folder(self):            
+    def print_ret_files_in_folder(self):
         page_token = None
         while True:
             try:
@@ -313,7 +311,7 @@ class GoogleDriveClient:
                 page_token = children.get('nextPageToken')
                 if not page_token:
                     return childrens
-                    break
+                    #break
             except errors.HttpError, error:
                 print 'An error occurred: %s' % error
                 break
@@ -413,11 +411,11 @@ class GooglePubSubClient:
                 return msg_data, ack_ids
 
 
-# ### Redis Client **K/V Store** 
+# ### Redis Client **K/V Store**
 # ** \<colorstyle\>, \<file_id\>=\<local_filepath\> **
-# 
+#
 # ****[key] : {‘field’ -> ‘value’, ‘field’ -> ‘value’, ‘field’ -> ‘value’}****
-# 
+#
 #     """[users] – {set} – (“adam”, “bob”, “carol”)
 #        [user:*username*:fullname] – {string} – (“Adam Smith”, “Bob Barker”, “Carol Burnett”)
 #        [user:*username*:password] – {string} – (md5 hash password, no example)"""
@@ -434,7 +432,6 @@ redis_port = 6379
 r = redis.Redis(host=redis_host, port=redis_port,  encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
 
 def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLink=None, local_filepath=None, filename=None, drive_version=None):
-    import os.path
     if not filename:
         filename=local_filepath.split('/')[-1]
     if filename is not None and filename[:9].isdigit():
@@ -446,16 +443,16 @@ def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfL
             alt = 'NA'
     else:
         colorstyle='NA'
-        alt='NA' 
-    
+        alt='NA'
+
     if r.sadd("google_drive:ll_editorial", file_id):
     #if r.mset("google_drive:ll_editorial", file_id):
         ## Faking Hashes with Sets
         ## r.set("file_id:%s:colorstyle" % file_id, colorstyle)
         ## r.set("file_id:%s:local_filepath" % file_id, local_filepath)
         r.hset("file_id:%s" % file_id, "parent_id", parent_id)
-        r.hset("file_id:%s" % file_id, "filename", filename)        
-        r.hset("file_id:%s" % file_id, "alternateLink", alternateLink)  
+        r.hset("file_id:%s" % file_id, "filename", filename)
+        r.hset("file_id:%s" % file_id, "alternateLink", alternateLink)
         if selfLink is not None:
             r.hset("file_id:%s" % file_id, "selfLink", selfLink)
         r.hset("file_id:%s" % file_id, "colorstyle", colorstyle)
@@ -468,12 +465,12 @@ def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfL
         return True
     else:
         return False
-    
 
-def drive_uploading_folder_map2redis(dname=None, parent_id=None): 
+
+def drive_uploading_folder_map2redis(dname=None, parent_id=None):
     ## Uploading
     #import GoogleDriveClient
-    client = GoogleDriveClient() 
+    client = GoogleDriveClient()
     import os
     dname = dname
     client.title = dname.split('/')[-1]
@@ -503,9 +500,10 @@ def drive_uploading_folder_map2redis(dname=None, parent_id=None):
         add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, local_filepath=client.local_filepath, filename=title)
 
 
-def drive_downloading(destdir=None, file_id=None): 
+def drive_downloading(destdir=None, file_id=None):
     ## Downloading
     #import GoogleDriveClient
+    import os.path
     client = GoogleDriveClient()
     client.file_id = file_id
     if not client.title:
