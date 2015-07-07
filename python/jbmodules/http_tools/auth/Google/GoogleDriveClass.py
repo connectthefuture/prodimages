@@ -2,17 +2,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'johnb'
 
-
-from googleapiclient import errors, http
-ProductionRoot  = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
-MarketplaceRoot = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
-EditorialShare  = '0B0Z4BGpAAp5KfnRZaWl4cHMxUGg4MGI0LUFjUWFDdzQ4VWsyTi11OGJPQVlRakRKSXNScHM'
-VendorShare     = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
-LookletImages   = '0B0Z4BGpAAp5KfkpZeENQamp0UWpZaWtEWHJGd0xMa3dGV01acG1ESENqRzRfaW5od2JjV1U'
-StillImages     = '0B0Z4BGpAAp5KfmxtRktkUGhLckdLSXE0bzA2azhMUW1yVFd6R2VlUUxMN0lsY0NZUDdBaTg'
-VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
-
-from googleapiclient import errors, http
 ProductionRoot  = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
 MarketplaceRoot = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
 EditorialShare  = '0B0Z4BGpAAp5KfnRZaWl4cHMxUGg4MGI0LUFjUWFDdzQ4VWsyTi11OGJPQVlRakRKSXNScHM'
@@ -23,7 +12,7 @@ VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRz
 
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', q=''): 
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
         self.rootdirid = "0AA7omFHcbQaiUk9PVA"
         if not file_id:
             self.file_id = self.rootdirid
@@ -43,7 +32,7 @@ class GoogleDriveClient:
                 self.title = ''
         else:
             self.title = title
-        self.mime_type = 'image/jpeg'
+        self.mime_type = '' #'image/jpeg'
         self.description = description
         #self.pardir_fileid = ''
         self.kinds = ["drive#file", "drive#fileList", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission", "drive#comment", "drive#commentReply"]
@@ -56,8 +45,8 @@ class GoogleDriveClient:
             self.role = self.roles[0]
         else:
             self.role = role
-        
-        self.rest_scopes = [ 
+
+        self.rest_scopes = [
                             'https://www.googleapis.com/auth/drive',
                             'https://www.googleapis.com/auth/drive.readonly',
                             'https://www.googleapis.com/auth/drive.file',
@@ -71,14 +60,16 @@ class GoogleDriveClient:
             self.scope    = 'https://www.googleapis.com/auth/drive.file'
         else:
             self.scope = scope
-                
+
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.prop_key = prop_key
         self.prop_value = prop_value
-        self.visibility = 'Public'
+        self.visibility = 'Private' ## 'Public'
         self.q = q
         ### Properties
         if not prop_key and not prop_value:
+            if not database_id:
+                database_id = self.file_id
             self.properties = [{
                'key': 'databaseId',
                'value': database_id,
@@ -93,6 +84,14 @@ class GoogleDriveClient:
                'value': self.prop_value,
                'visibility': self.visibility
             }]
+        self.new_comment = new_comment
+        self.comment_id = ''
+        self.indexable_text = ''
+        self.third_party_email = third_party_email
+        if not folder_color_rgb:
+            self.folder_color_rgb = '#6699CC'
+        else:
+            self.folder_color_rgb = folder_color_rgb
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
 
@@ -118,6 +117,7 @@ class GoogleDriveClient:
         return self.service
 
 
+###### Files
     ## OK ##
     ## File and Folder Ops
     def download_file_drive(self):
@@ -140,11 +140,19 @@ class GoogleDriveClient:
     def upload_file_drive(self):
         import pprint
         media_body = http.MediaFileUpload(self.local_filepath, mimetype=self.mime_type , resumable=True)
+        try:
+            if not self.indexable_text:
+                _indexableText = ' '.join(str(self.description + self.title + self.properties[0].values()[0] + self.properties[0].values()[1]))
+            else:
+                _indexableText = self.indexable_text
+        except TypeError:
+            _indexableText = self.indexable_text
         body = {
             'title': self.title,
             'description': self.description,
             'mimeType': self.mime_type,
-            'properties': self.properties
+            'properties': self.properties,
+            'indexableText': _indexableText
         }
         if self.parent_id:
             body['parents'] = [{'id': self.parent_id}]
@@ -153,7 +161,48 @@ class GoogleDriveClient:
         pprint.pprint(_uploaded_file_data)
         return _uploaded_file_data
 
+    def update_file(self):
+        """service, file_id, new_title, new_description, new_mime_type, new_filename, new_revision):
+        Update an existing file's metadata and content.
 
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to update.
+          new_title: New title for the file.
+          new_description: New description for the file.
+          new_mime_type: New MIME type for the file.
+          new_filename: Filename of the new content to upload.
+          new_revision: Whether or not to create a new revision for this file.
+        Returns:
+          Updated file metadata if successful, None otherwise.
+        """
+        try:
+            # First retrieve the file from the API.
+            _file = self.service.files().get(fileId=self.file_id).execute()
+
+            # File's new metadata.
+            _file['title'] = self.title
+            _file['description'] = self.description
+            #_file['mimeType'] = self.mime_type
+            _properties = str(_file['properties'].values())
+            _imageMetadata = str(_file['imageMediaMetadata'].values())
+            try:
+                if not self.indexable_text:
+                    _file['indexableText'] = ' '.join(str(_file['description'] + _file['title'] +  _properties + _imageMetadata))
+                else:
+                    _file['indexableText'] = self.indexable_text
+                print _file['indexableText']
+            except TypeError:
+                print 'TYPE ERROR ON 186 WERE YOU EXPECTED'
+
+            # File's new content.
+            media_body = http.MediaFileUpload(self.title, resumable=True)
+            # Send the request to the API.
+            updated_file =  self.service.files().update(fileId=self.file_id, body=_file, newRevision=False, media_body=media_body).execute()
+            return updated_file
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
 
     def rename_drive_file(self):
         try:
@@ -165,12 +214,64 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+    ## Create Shortcut to File
+    def create_file_shortcut(self):
+        body = {
+            'title': self.title,
+            'description': self.description,
+            'mimeType': 'application/vnd.google-apps.drive-sdk'
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+
+        _file = self.service.files().insert(body=body).execute()
+        print 'File ID: %s' % _file['id']
+        return _file
+
+    ## Change Files Parent Folder
+    def move_insert_file_into_folder(self):
+      """Insert a file into a folder.
+      Args:
+        service: Drive API service instance.
+        parent_id: ID of the folder to insert the file into.
+        file_id: ID of the file to insert.
+      Returns:
+        The inserted parent if successful, None otherwise.
+      """
+      _new_parent = {'id': self.parent_id}
+      try:
+        return self.service.parents().insert(fileId=self.file_id, body=_new_parent).execute()
+      except errors.HttpError, error:
+        print 'An error occurred: %s' % error
+      return None
+
+
+##### Folders
+    def getprint_parents_by_fileid(self):
+        """Print a file's parents.
+
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to print parents for.
+        """
+        parents_ids = []
+        try:
+            _parents = self.service.parents().list(fileId=self.file_id).execute()
+            for parent in _parents['items']:
+                print 'File Id: %s' % parent['id']
+                parents_ids.append(parent['id'])
+            return parents_ids
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
+    ## OK ##
     def create_drive_folder(self):
         body = {
             'title': self.title,
             'description': self.description,
             'mimeType': 'application/vnd.google-apps.folder',
-            #'folderColorRgb': self.folder_color_rgb,
+            'folderColorRgb': self.folder_color_rgb
             #'userPermission': self.user_permission
         }
         if self.parent_id:
@@ -179,6 +280,30 @@ class GoogleDriveClient:
         _new_folder_data = self.service.files().insert(body=body).execute()['items'][0].items()
         return _new_folder_data
 
+
+####### Shared Public Folder
+    ### OK ###
+    def create_public_folder(self):
+        body = {
+            'title': self.title,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+        _public_folder = self.service.files().insert(body=body).execute()
+        permission = {
+            'value': '',
+            'type': 'anyone',
+            'role': 'reader'
+        }
+        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
+        # self.pardir_fileid = _public_folder['id']
+        #return self.pardir_fileid
+        return _public_folder['id']
+
+
+###### Properties
     ## Add-Edit Additional Custom File Properties
     def insert_property(self):
         body = self.properties[0]
@@ -201,6 +326,115 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
+    def retrieve_properties(self):
+        """Retrieve a list of custom file properties.
+
+        Args:
+          service: Drive API service instance.
+          file_id: ID of the file to retrieve properties for.
+        Returns:
+          List of custom properties.
+        """
+        try:
+            props = self.service.properties().list(fileId=self.file_id).execute()
+            return props.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
+    def print_permission_id_for_email(self):
+        """Prints the Permission ID for an email address.
+
+        Args:
+        service: Drive API service instance.
+        email: Email address to retrieve ID for.
+        """
+        try:
+            id_resp = self.service.permissions().getIdForEmail(email=self.third_party_email).execute()
+            print id_resp['id']
+            return id_resp['id']
+        except errors.HttpError, error:
+            print 'An error occured: %s' % error
+
+
+###### Comments and Selects Methods/Properties
+    ## Add-Edit-List Comments/Selects for Files
+    @property
+    def comments_for_fileid(self):
+        """Retrieve a list of comments.
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to retrieve comments for.
+        Returns:
+        List of comments.
+        """
+        try:
+            _comments = self.service.comments().list(fileId=self.file_id).execute()
+            return _comments.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+        return None
+
+    def insert_comment(self):
+        """Insert a new document-level comment.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to insert comment for.
+        content: Text content of the comment.
+        Returns:
+        The inserted comment if successful, None otherwise.
+        """
+        _new_comment = {
+          'content': self.new_comment
+        }
+        try:
+            return self.service.comments().insert(fileId=self.file_id, body=_new_comment).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+    def print_single_comment(self):
+        """Print information about the specified comment.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to print comment for.
+        comment_id: ID of the comment to print.
+        """
+        try:
+            _comment = self.service.comments().get(fileId=self.file_id, commentId=self.comment_id).execute()
+            print 'Modified Date: %s' % _comment['modifiedDate']
+            print 'Author: %s' % _comment['author']['displayName']
+            print 'Content: %s' % _comment['content']
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
+###############################################
+################### Revisions #################
+###############################################
+    @property
+    def revisions_for_fileid(self):
+        """Retrieve a list of revisions.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to retrieve revisions for.
+        Returns:
+        List of revisions.
+        """
+        try:
+            _revisions = self.service.revisions().list(fileId=self.file_id).execute()
+            return _revisions.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+
+####### ###### ###### ###### ###### ###### ######
+####### ## Print/Get File or Folder info # ######
+####### ###### ###### ###### ###### ###### ######
     ### OK ###
     ## List Contents of Dirs
     def list_filesdata_current_dir(self):
@@ -223,61 +457,32 @@ class GoogleDriveClient:
             infodict = {}
             for item in items:
                 baseinfo = {}
-                print '{0} --{1}-- ({2}) --{3}'.format(item['title'], item['mimeType'], item['id'], item['parents'])
+                print '{0} \t-- {1} --\tfile_id--> ({2})\tparent_id--> {3}'.format(item['title'], item['mimeType'], item['id'], item['parents'][0].get('id'))
                 baseinfo['id'] = item['id']
-                # baseinfo['title'] = item['fileId']
+                baseinfo['drive_version'] = item['version']
                 baseinfo['title'] = item['title']
                 baseinfo['mimeType'] = item['mimeType']
-                baseinfo['parents'] = item['parents']
-                # baseinfo['title'] = item['fileExtension']
+                baseinfo['parents'] = item['parents'][0]
+                baseinfo['parent_id'] = item['parents'][0].get('id')
+                try:
+                    baseinfo['md5Checksum'] = item['md5Checksum']
+                except KeyError:
+                    baseinfo['md5Checksum'] = 'NA'
+                try:
+                    baseinfo['downloadUrl'] = item['downloadUrl']
+                except KeyError:
+                    baseinfo['downloadUrl'] = 'NA'
                 baseinfo['selfLink'] = item['selfLink']
                 baseinfo['alternateLink'] = item['alternateLink']
                 #baseinfo['thumbnailLink'] = item['thumbnailLink']
                 infodict[item['id']] = baseinfo
             return infodict
-    
-    ## Shortcut to File
-    def create_file_shortcut(self):
-        body = {
-            'title': self.title,
-            'description': self.description,
-            'mimeType': 'application/vnd.google-apps.drive-sdk'
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-
-        _file = self.service.files().insert(body=body).execute()
-        print 'File ID: %s' % _file['id']
-        return _file
-
-
-    ## Shared Folder    
-    ### OK ###
-    def create_public_folder(self):
-        body = {
-            'title': self.title,
-            'mimeType': 'application/vnd.google-apps.folder'
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-        _public_folder = self.service.files().insert(body=body).execute()
-        permission = {
-            'value': '',
-            'type': 'anyone',
-            'role': 'reader'
-        }
-        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
-        #self.pardir_fileid = _public_folder['id']
-        #return self.pardir_fileid
-        return _public_folder['id']
-
-
 
     # def list_fileitems_current_dir(self):
     #     items = self.drive_folder_data['items'][0].items()
     #     [ self.drive_folder_files.extend(i) for i in items if i ]
     #     return self.drive_folder_files
-    
+
     def find_retrieve_all_files(self):
         _drive_folder_files = []
         page_token = None
@@ -299,7 +504,7 @@ class GoogleDriveClient:
 
     #.parents().get(fileId=file_id, parentId=folder_id).execute()
     ### OK ###
-    def print_ret_files_in_folder(self):            
+    def print_ret_files_in_folder(self):
         page_token = None
         while True:
             try:
@@ -317,280 +522,11 @@ class GoogleDriveClient:
                 page_token = children.get('nextPageToken')
                 if not page_token:
                     return childrens
-                    break
+                    #break
             except errors.HttpError, error:
                 print 'An error occurred: %s' % error
                 break
 
-
-
-### PubSub Push Notifications Client
-class GooglePubSubClient:
-    def __init__(self, project_name=None, topic_name=None):
-        from oauth2client import client as oauth2client
-        self.PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
-        self.oauth2client = oauth2client
-        self.service = self.instantiate_pubsub_client()
-        self.project_name = project_name
-        self.topic_name = topic_name
-
-    def instantiate_pubsub_client(self,httpobj=None):
-        import httplib2
-        from apiclient import discovery
-        credentials = self.oauth2client.GoogleCredentials.get_application_default()
-        if credentials.create_scoped_required():
-            credentials = credentials.create_scoped(self.PUBSUB_SCOPES)
-        if not httpobj:
-            httpobj = httplib2.Http()
-        credentials.authorize(httpobj)
-        return discovery.build('pubsub', 'v1beta2', http=httpobj)
-
-    def create_pubsub_subscription(self):
-        # Only needed if you are using push delivery
-        #push_endpoint = 'https://someproject.appspot.com/myhandler'
-        # Create a POST body for the Pub/Sub request
-        if not self.project_name:
-            self.project_name = 'default'
-        body = {
-            # The name of the topic from which this subscription receives messages
-            'topic': 'projects/{0}/topics/{1}'.format(self.project_name, self.topic_name)
-            # Only needed if you are using push delivery
-            # 'pushConfig': {
-            #     'pushEndpoint': push_endpoint
-            # }
-        }
-        _subscription = self.service.projects().subscriptions().create(name='projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name), body=body).execute()
-        print 'Created: %s' % _subscription.get('name')
-        return _subscription
-
-    def get_subscriptions_list(self):
-        next_page_token = None
-        _subscriptions = []
-        while True:
-            resp = self.service.projects().subscriptions().list(
-                project='projects/{}'.format(self.project_name),
-                pageToken=next_page_token).execute()
-            # Process each subscription
-            for subscription in resp['subscriptions']:
-                print subscription['name']
-                _subscriptions.append(subscription)
-            next_page_token = resp.get('nextPageToken')
-            if not next_page_token:
-                #break
-                return _subscriptions
-
-    def pull_acknowledge_msg(self):
-        import base64
-        # You can fetch multiple messages with a single API call.
-        batch_size = 100
-        _subscription = 'projects/{0}/subscriptions/{1}'.format(self.project_name, self.topic_name)
-        # Create a POST body for the Pub/Sub request
-        body = {
-            # Setting ReturnImmediately to false instructs the API to wait
-            # to collect the message up to the size of MaxEvents, or until
-            # the timeout.
-            'returnImmediately': False,
-            'maxMessages': batch_size,
-        }
-
-        msg_data = []
-        while True:
-            resp = self.service.projects().subscriptions().pull(subscription=_subscription,
-                                                               body=body).execute(num_retries=3)
-            received_messages = resp.get('receivedMessages')
-            if received_messages is not None:
-                ack_ids = []
-                for received_message in received_messages:
-                    pubsub_message = received_message.get('message')
-                    if pubsub_message:
-                        # Process messages
-                        msg_data.append(base64.b64decode(str(pubsub_message.get('data'))))
-                        # Get the message's ack ID
-                        ack_ids.append(received_message.get('ackId'))
-
-                # Create a POST body for the acknowledge request
-                ack_body = {'ackIds': ack_ids}
-
-                # Acknowledge the message.
-                self.service.projects().subscriptions().acknowledge( subscription=_subscription, body=ack_body).execute()
-                return msg_data, ack_ids
-
-
-
-import base64
-from email.mime.audio import MIMEAudio
-from email.mime.base import MIMEBase
-from email.mime.image import MIMEImage
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import mimetypes
-installed_clientid = '442933852469-iokl3lqr7pg6uv8gn63d71rf6luri7kp.apps.googleusercontent.com'
-installed_clientsecret = 'KqEszjWRIi_VJJeAcKMdkzvK'
-installed_redirect = 'urn:ietf:wg:oauth:2.0:oob'
-
-class GoogleGmailClient:  
-    def __init__(self,user_id='me', to=None, subject='Automated', message_text=None, localdir=None, filename=None):
-        self.user_id = user_id
-        if to is not None:
-            self.to = to
-        else:
-            self.to = 'john.bragato@gmail.com, john.bragato@bluefly.com'
-        self.subject = subject
-        self.message_text  = message_text
-        self.localdir = localdir
-        self.filename = filename
-        self.scopes = [ 'https://mail.google.com/',
-                        'https://www.googleapis.com/auth/gmail.modify',
-                        'https://www.googleapis.com/auth/gmail.readonly',
-                        'https://www.googleapis.com/auth/gmail.compose' ]
-        self.service = self.instantiate_gmail_serviceAccount_bfly()
-        self.message = self.create_message()
-
-    def instantiate_gmail_serviceAccount_bfly(self):
-        import httplib2
-        from googleapiclient.discovery import build
-        from oauth2client.client import SignedJwtAssertionCredentials
-        serviceName = 'gmail'
-        version = 'v1'
-        api_key = 'AIzaSyD09iZ54he2CKlayiBmw9zvkVt7Z6HbSY4'
-        client_email = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k@developer.gserviceaccount.com'
-        client_id = '442933852469-mibsk7qkepe62njis1rv6gi1em0v011k.apps.googleusercontent.com'
-        scope = self.scopes[0] #'https://www.googleapis.com/auth/gmail.modify'
-        f = file('/root/bfly-gmail-privatekey.p12','rb')
-        key = f.read()
-        f.close()
-        credentials = SignedJwtAssertionCredentials(client_email, key, scope=scope)
-        _http = httplib2.Http()
-        _http = credentials.authorize(_http)
-        self.service = build(serviceName, version, http=_http)
-        return self.service
-
-
-    def send_message(self):
-        """Send an email message.
-        Args:
-        service: Authorized Gmail API service instance.
-        user_id: User's email address. The special value "me"
-        can be used to indicate the authenticated user.
-        message: Message to be sent.
-
-        Returns:
-        Sent Message.
-        """
-        try:
-            _message = (self.service.users().messages().send(userId=self.user_id, body=self.message).execute())
-            print 'Message Id: %s' % _message['id']
-            return _message
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
-
-
-    def create_draft(self):
-        """Create and insert a draft email. Print the returned draft's message and id.
-        Args:
-        service: Authorized Gmail API service instance.
-        user_id: User's email address. The special value "me"
-        can be used to indicate the authenticated user.
-        self.message: The body of the email message, including headers.
-
-        Returns:
-        Draft object, including draft id and message meta data.
-        """
-
-        try:
-            _message = {'message': self.message}
-            draft = service.users().drafts().create(userId=user_id, body=_message).execute()
-
-            print 'Draft id: %s\nDraft message: %s' % (draft['id'], draft['message'])
-
-            return draft
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
-            return None
-
-
-    def create_message(self):
-        """Create a message for an email.
-        Args:
-        user_id: Email address of the user_id.
-        to: Email address of the receiver.
-        subject: The subject of the email message.
-        message_text: The text of the email message.
-
-        Returns:
-        An object containing a base64url encoded email object.
-        """
-        _message = MIMEText(self.message_text)
-        _message['to'] = self.to
-        _message['from'] = self.user_id
-        _message['subject'] = self.subject
-        self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
-        return self.message
-
-
-    def create_message_with_attachment(self):
-        """Create a message for an email.
-        Args:
-        user_id: Email address of the user_id.
-        to: Email address of the receiver.
-        subject: The subject of the email message.
-        message_text: The text of the email message.
-        localdir: The directory containing the file to be attached.
-        filename: The name of the file to be attached.
-
-        Returns:
-        An object containing a base64url encoded email object.
-        """
-        import os
-        _message = MIMEMultipart()
-        _message['to'] = self.to
-        _message['from'] = self.user_id
-        _message['subject'] = self.subject
-
-        msg = MIMEText(self.message_text)
-        _message.attach(msg)
-
-        path = os.path.join(self.localdir, self.filename)
-        content_type, encoding = mimetypes.guess_type(path)
-
-        if content_type is None or encoding is not None:
-            content_type = 'application/octet-stream'
-            main_type, sub_type = content_type.split('/', 1)
-        if main_type == 'text':
-            fp = open(path, 'rb')
-            msg = MIMEText(fp.read(), _subtype=sub_type)
-            fp.close()
-        elif main_type == 'image':
-            fp = open(path, 'rb')
-            msg = MIMEImage(fp.read(), _subtype=sub_type)
-            fp.close()
-        elif main_type == 'audio':
-            fp = open(path, 'rb')
-            msg = MIMEAudio(fp.read(), _subtype=sub_type)
-            fp.close()
-        else:
-            fp = open(path, 'rb')
-            msg = MIMEBase(main_type, sub_type)
-            msg.set_payload(fp.read())
-            fp.close()
-
-        msg.add_header('Content-Disposition', 'attachment', filename=self.filename)
-        _message.attach(msg)
-
-        self.message = {'raw': base64.urlsafe_b64encode(_message.as_string())}
-        return self.message
-
-
-
-
-def send_an_email(to,message):
-    c = GoogleGmailClient()
-    c.message_text = message
-    c.to = to
-    c.create_message()
-    ret = c.send_message()
-    print ret
-    return ret
 
 def main():
     pass
