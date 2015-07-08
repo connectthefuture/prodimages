@@ -159,7 +159,11 @@ class GoogleDriveClient:
         Returns:
           File's content if successful, None otherwise.
         """
+        #gdox
+        # _download_url = file['exportLinks']['application/pdf']
+        # _download_url = file['webContentLink']
         _download_url = self.service.files().get('downloadUrl')
+
         if _download_url:
             resp, content = self.service._http.request(_download_url)
             if resp.status == 200:
