@@ -652,7 +652,7 @@ class GoogleDriveClient:
                 print 'An error occurred: %s' % error
                 break
 
-
+####### AppDataDir
     def watch_file(self):
         """Watch for all changes to a user's Drive.
 
@@ -680,6 +680,93 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
+
+
+    def print_application_data_folder_metadata(self):
+        """Print metadata for the Application Data folder.
+
+        Args:
+        service: Drive API service instance.
+        """
+        try:
+            _file = self.service.files().get(fileId='appfolder').execute()
+            print 'Id: %s' % _file['id']
+            print 'Title: %s' % _file['title']
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
+
+    def insert_file_in_application_data_folder(self):
+        """Insert new file in the Application Data folder.
+
+        Args:
+        service: Drive API service instance.
+        title: Title of the file to insert, including the extension.
+        description: Description of the file to insert.
+        mime_type: MIME type of the file to insert.
+        filename: Filename of the file to insert.
+        Returns:
+        Inserted file metadata if successful, None otherwise.
+        """
+        _media_body = http.MediaFileUpload(self.title, mimetype=self.mime_type, resumable=True)
+        _body = {
+        'title': self.title,
+        'description': self.description,
+        'mimeType': self.mime_type,
+        'parents': [{'id': 'appfolder'}]
+        }
+
+        try:
+            _file = self.service.files().insert(body=_body,media_body=_media_body).execute()
+            return _file
+        except errors.HttpError, error:
+            print 'An error occured: %s' % error
+            return None
+
+    def list_files_in_application_data_folder(self):
+        """List all files contained in the Application Data folder.
+
+        Args:
+        service: Drive API service instance.
+        Returns:
+        List of File resources.
+        """
+        result = []
+        page_token = None
+        while True:
+            try:
+                param = {}
+                if page_token:
+                    param['pageToken'] = page_token
+                else:
+                    param['q'] = "'appfolder' in parents"
+                _files = self.service.files().list(**param).execute()
+
+                result.extend(_files['items'])
+                page_token = _files.get('nextPageToken')
+                if not page_token:
+                    break
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+        return result
+
+##########################
+##########################
+class DriveState(object):
+    """Store state provided by Drive."""
+    def __init__(self, state):
+        """Create a new instance of drive state.
+
+        Parse and load the JSON state parameter.
+
+        Args:
+          state: State query parameter as a string.
+        """
+        import json
+        state_data = json.loads(state)
+        self.action = state_data['action']
+        self.ids = map(str, state_data.get('ids', []))
 
 
 ##########################
