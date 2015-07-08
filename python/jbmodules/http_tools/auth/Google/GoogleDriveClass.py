@@ -34,13 +34,18 @@ class GoogleDriveClient:
             self.title = title
         self.mime_type = '' #'image/jpeg'
         self.description = description
+        self.q = q
         #self.pardir_fileid = ''
-        self.kinds = ["drive#file", "drive#fileList", "drive#fileLink", "drive#parentReference", "drive#user", "drive#permission", "drive#comment", "drive#commentReply"]
-        self.roles = ['reader', 'writer', 'owner', 'commenter']
+
+        ### Permissions - Scopes
+        self.kinds = ["drive#file", "drive#fileList", "drive#fileLink", "drive#parentReference", "drive#user",
+                      "drive#permission", "drive#comment", "drive#commentReply"]
+        self.roles = ['owner', 'reader', 'writer', 'commenter']
         if not kind:
             self.kind = self.kinds[0]
         else:
             self.kind = kind
+
         if not role:
             self.role = self.roles[0]
         else:
@@ -60,13 +65,15 @@ class GoogleDriveClient:
             self.scope    = 'https://www.googleapis.com/auth/drive.file'
         else:
             self.scope = scope
-
         self.perm_types = ['user', 'group', 'domain', 'anyone']
+        self.perm_type = self.perm_types[0]
+        self.perm_value = ''
+
+        ### Properties
         self.prop_key = prop_key
         self.prop_value = prop_value
-        self.visibility = 'Private' ## 'Public'
-        self.q = q
-        ### Properties
+        self.visibility = 'Public'  ## 'Private'
+
         if not prop_key and not prop_value:
             if not database_id:
                 database_id = self.file_id
@@ -84,6 +91,8 @@ class GoogleDriveClient:
                'value': self.prop_value,
                'visibility': self.visibility
             }]
+
+        ## Comments, Search, Misc
         self.new_comment = new_comment
         self.comment_id = ''
         self.indexable_text = ''
@@ -302,9 +311,52 @@ class GoogleDriveClient:
         #return self.pardir_fileid
         return _public_folder['id']
 
+####################################
+###### Permissions and FileSharing #
+####################################
+    def print_permission_id_for_email(self):
+        """Prints the Permission ID for an email address.
 
-###### Properties
-    ## Add-Edit Additional Custom File Properties
+        Args:
+        service: Drive API service instance.
+        email: Email address to retrieve ID for.
+        """
+        try:
+            id_resp = self.service.permissions().getIdForEmail(email=self.third_party_email).execute()
+            print id_resp['id']
+            return id_resp['id']
+        except errors.HttpError, error:
+            print 'An error occured: %s' % error
+
+
+    def insert_permission(self):
+        """Insert a new permission.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to insert permission for.
+        value: User or group e-mail address, domain name or None for 'default'
+           type.
+        perm_type: The value 'user', 'group', 'domain' or 'default'.
+        role: The value 'owner', 'writer' or 'reader'.
+        Returns:
+        The inserted permission if successful, None otherwise.
+        """
+        _new_permission = {
+        'value': self.perm_value,
+        'type': self.perm_type,
+        'role': self.role
+        }
+        try:
+            return self.service.permissions().insert(fileId=self.file_id, body=_new_permission).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+####################################
+###### Properties - Custom  ########
+####################################
+## Add-Edit Additional Custom File Properties
     def insert_property(self):
         body = self.properties[0]
         try:
@@ -341,20 +393,6 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
         return None
-
-    def print_permission_id_for_email(self):
-        """Prints the Permission ID for an email address.
-
-        Args:
-        service: Drive API service instance.
-        email: Email address to retrieve ID for.
-        """
-        try:
-            id_resp = self.service.permissions().getIdForEmail(email=self.third_party_email).execute()
-            print id_resp['id']
-            return id_resp['id']
-        except errors.HttpError, error:
-            print 'An error occured: %s' % error
 
 
 ###### Comments and Selects Methods/Properties
