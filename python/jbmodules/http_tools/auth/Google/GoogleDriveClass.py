@@ -65,9 +65,11 @@ class GoogleDriveClient:
             self.scope    = 'https://www.googleapis.com/auth/drive.file'
         else:
             self.scope = scope
+        self.perm_id = self.get_perm_id_from_email()
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.perm_type = self.perm_types[0]
         self.perm_value = ''
+
 
         ### Properties
         self.prop_key = prop_key
@@ -144,6 +146,36 @@ class GoogleDriveClient:
             if done:
                 print 'Download Complete', self.local_filepath
                 return self.local_filepath
+
+
+#######################
+    def download_file_content(self):
+        """Download a file's content.
+
+        Args:
+          service: Drive API service instance.
+          drive_file: Drive File instance.
+
+        Returns:
+          File's content if successful, None otherwise.
+        """
+        #gdox
+        # _download_url = file['exportLinks']['application/pdf']
+        # _download_url = file['webContentLink']
+        _download_url = self.service.files().get('downloadUrl')
+
+        if _download_url:
+            resp, content = self.service._http.request(_download_url)
+            if resp.status == 200:
+                print 'Status: %s' % resp
+                return content
+            else:
+                print 'An error occurred: %s' % resp
+                return None
+        else:
+            # The file doesn't have any content stored on Drive.
+            return None
+
 
     ## OK ##
     def upload_file_drive(self):
@@ -314,7 +346,8 @@ class GoogleDriveClient:
 ####################################
 ###### Permissions and FileSharing #
 ####################################
-    def print_permission_id_for_email(self):
+    ##@property
+    def get_perm_id_from_email(self):
         """Prints the Permission ID for an email address.
 
         Args:
@@ -322,9 +355,9 @@ class GoogleDriveClient:
         email: Email address to retrieve ID for.
         """
         try:
-            id_resp = self.service.permissions().getIdForEmail(email=self.third_party_email).execute()
-            print id_resp['id']
-            return id_resp['id']
+            _resp = self.service.permissions().getIdForEmail(email=self.third_party_email).execute()
+            print _resp['id']
+            return _resp['id']
         except errors.HttpError, error:
             print 'An error occured: %s' % error
 
@@ -353,6 +386,46 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+
+    def update_permission(self):
+        """Update a permission's role.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to update permission for.
+        perm_id: ID of the permission to update.
+        new_role: The value 'owner', 'writer' or 'reader'.
+
+        Returns:
+        The updated permission if successful, None otherwise.
+        """
+        try:
+            # First retrieve the permission from the API.
+            _permission = self.service.permissions().get(fileId=self.file_id, permissionId=self.perm_id).execute()
+            _permission['role'] = self.role
+            return self.service.permissions().update(fileId=self.file_id, permissionId=self.perm_id, body=_permission).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+
+    def retrieve_permissions(self):
+        """Retrieve a list of permissions.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to retrieve permissions for.
+        Returns:
+        List of permissions.
+        """
+        try:
+            _permissions = self.service.permissions().list(fileId=self.file_id).execute()
+            return _permissions.get('items', [])
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+
 ####################################
 ###### Properties - Custom  ########
 ####################################
@@ -360,11 +433,11 @@ class GoogleDriveClient:
     def insert_property(self):
         body = self.properties[0]
         try:
-            p = self.service.properties().insert(fileId=self.file_id, body=body).execute()
-            return p
+            _p = self.service.properties().insert(fileId=self.file_id, body=body).execute()
+            return _p
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
-        return None
+            return None
 
     def update_property(self):
         try:
@@ -394,6 +467,18 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
+    def remove_permission(self):
+        """Remove a permission.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to remove the permission for.
+        permission_id: ID of the permission to remove.
+        """
+        try:
+            self.service.permissions().delete(fileId=self.file_id, permissionId=self.perm_id).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
 
 ###### Comments and Selects Methods/Properties
     ## Add-Edit-List Comments/Selects for Files
