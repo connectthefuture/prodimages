@@ -49,20 +49,23 @@
 #############################################################################################################################
 #### First SET cron user env variables  ######################
 ##############################################################
-PATH=/usr/lib/oracle/11.2/client64/lib:/usr/lib/oracle/11.2/client64:/usr/lib/oracle/11.2/client64/sdk:/usr/lib/oracle/11.2/client64:/usr/lib/oracle/11.2/client64/bin:/usr/share/centrifydc/sbin:/usr/share/centrifydc/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin:/usr/local/batchRunScripts/bash:/usr/local/batchRunScripts/php:/usr/local/batchRunScripts/python:/usr/sbin:/usr/bin:/sbin:/bin
+PATH=/opt/sbin:/opt/bin:/usr/lib/oracle/11.2/client64/lib:/usr/lib/oracle/11.2/client64:/usr/lib/oracle/11.2/client64/sdk:/usr/lib/oracle/11.2/client64:/usr/lib/oracle/11.2/client64/bin:/usr/share/centrifydc/sbin:/usr/share/centrifydc/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin:/usr/local/batchRunScripts/bash:/usr/local/batchRunScripts/php:/usr/local/batchRunScripts/python:/usr/sbin:/usr/bin:/sbin:/bin
 POSTREADY=/mnt/Post_Ready
 POSTCOMPLETE=/mnt/Post_Complete
 PRODSRV=$POSTREADY/zProd_Server/imageServer7
 SHELL=/bin/bash
 TODAY=`date +%Y%b%d`
 TODAY_REG=`date +%Y-%m-%d`
-PYTHONPATH=/usr/local/batchRunScripts/python:/usr/local/lib/python2.7/dist-packages:"$PYTHONPATH"
+PYTHONPATH=/opt/sbin:/opt/bin:/opt/lib:/usr/local/batchRunScripts/python
+
+##/usr/local/lib/python2.7/dist-packages:"$PYTHONPATH"
+
 PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
 ORACLE_HOME=/usr/lib/oracle/11.2/client64
 ORACLE_SID=ORCL
 ## ORACLE_SID=ORCLE -- How foolish
-LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib:"$LD_LIBRARY_PATH"
-DYLD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib:/usr/lib/oracle/11.2/client64:"$DYLD_LIBRARY_PATH"
+LD_LIBRARY_PATH=/opt/lib:/usr/lib/oracle/11.2/client64/lib:$LD_LIBRARY_PATH
+DYLD_LIBRARY_PATH=/opt/lib:/usr/lib/oracle/11.2/client64/lib:/usr/lib/oracle/11.2/client64:$DYLD_LIBRARY_PATH
 TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 #
 ## Debugging Output Scripts in tmp dir
