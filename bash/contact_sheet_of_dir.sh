@@ -8,4 +8,4 @@
 
 #echo ${JOHJ/J/JPEG}
 
-montage -verbose -label '%f' -font Ubuntu -pointsize 10 -background '#000000' -frame 1 -fill 'white' -define jpeg:size=150x180 -geometry 150x180+2+4 -auto-orient $1\*.jpg $1/shotlist.jpg
+montage -verbose -label '%f' -font Ubuntu -pointsize 10 -background '#000000' -frame 1 -fill 'white' -define jpeg:size=150x180 -geometry 150x180+2+4 -auto-orient "$1"/\*.jpg "$1"/shotlist.jpg
