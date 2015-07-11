@@ -101,7 +101,7 @@ echo ""
 echo ""
 
 cp /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf /etc/apache2/sites-available/openphoto
-sed 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
+sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
 a2dissite default
 a2ensite openphoto
 
@@ -113,7 +113,7 @@ echo "===================================================="
 echo ""
 echo ""
 
-sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/upload_max_filesize.*/upload_max_filesize = 225M/g' -e 's/post_max_size.*/post_max_size = 225M/g' /etc/php5/apache2/php.ini > /etc/php5/apache2/php.ini.tmp
+sed -e 's/<VirtualHost *:80>/<VirtualHost *:8082>/g' -e 's/upload_max_filesize.*/upload_max_filesize = 225M/g' -e 's/post_max_size.*/post_max_size = 225M/g' /etc/php5/apache2/php.ini > /etc/php5/apache2/php.ini.tmp
 mv /etc/php5/apache2/php.ini.tmp /etc/php5/apache2/php.ini
 
 echo ""
