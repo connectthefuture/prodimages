@@ -102,6 +102,8 @@ echo ""
 
 cp /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf /etc/apache2/sites-available/openphoto
 sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
+# Add below to above or edit apache config after
+## -e 's/AliasMatch \.ini\$   /404/#AliasMatch \.ini$   /404/g' -e 's/#RewriteRule \.ini\$ - [F,NC]/RewriteRule \.ini$ - [F,NC]/g'
 a2dissite default
 a2ensite openphoto
 
