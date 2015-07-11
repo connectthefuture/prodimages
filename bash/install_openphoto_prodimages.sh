@@ -107,7 +107,7 @@ apt-get install nginx php5-fpm curl php5-curl php5-gd php5-mcrypt php-pear
 
 ### Nginx 
 
-sed -e 's:#fastcgi_pass fastcgi_pass unix:/var/run/php5-fpm.sock;:fastcgi_pass fastcgi_pass unix:/var/run/php5-fpm.sock;:g' -e 's/fastcgi_pass 127.0.0.1:9000;/#fastcgi_pass 127.0.0.1:9000;/g' -e 's/yourdomain.com/openphoto.prodimages.ny.bluefly.com/g'-e 's:/var/www/yourdomain.com/src/html/:/var/www/openphoto.prodimages.ny.bluefly.com/src/html/g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-nginx.conf > /etc/nginx/sites-enabled/openphoto
+sed  -e 's:#fastcgi_pass fastcgi_pass unix:/var/run/php5-fpm.sock;:fastcgi_pass fastcgi_pass unix:/var/run/php5-fpm.sock;:g' -e 's/fastcgi_pass 127.0.0.1:9000;/#fastcgi_pass 127.0.0.1:9000;/g' -e 's/yourdomain.com/openphoto.prodimages.ny.bluefly.com/g' -e 's:/var/www/yourdomain.com/src/html/:/var/www/openphoto.prodimages.ny.bluefly.com/src/html/g' -e 's:/var/www/openphoto:/var/www/openphoto.prodimages.ny.bluefly.com' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-nginx.conf > /etc/nginx/sites-enabled/openphoto
 
 echo ""
 echo ""
@@ -119,7 +119,7 @@ echo ""
 
 ### Apache
 cp /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf /etc/apache2/sites-available/openphoto
-sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
+sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' -e 's:/var/www/openphoto:/var/www/openphoto.prodimages.ny.bluefly.com' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
 # Add below to above or edit apache config after
 ## -e 's/AliasMatch \.ini\$   /404/#AliasMatch \.ini$   /404/g' -e 's/#RewriteRule \.ini\$ - [F,NC]/RewriteRule \.ini$ - [F,NC]/g'
 a2dissite default
@@ -133,7 +133,7 @@ echo "===================================================="
 echo ""
 echo ""
 
-sed -e 's/<VirtualHost *:80>/<VirtualHost *:8082>/g' -e 's/upload_max_filesize.*/upload_max_filesize = 225M/g' -e 's/post_max_size.*/post_max_size = 225M/g' /etc/php5/apache2/php.ini > /etc/php5/apache2/php.ini.tmp
+sed -e 's/<VirtualHost *:80>/<VirtualHost *:8082>/g' -e 's/upload_max_filesize.*/upload_max_filesize = 225M/g' -e 's/post_max_size.*/post_max_size = 225M/g' -e 's:/var/www/openphoto:/var/www/openphoto.prodimages.ny.bluefly.com' /etc/php5/apache2/php.ini > /etc/php5/apache2/php.ini.tmp
 mv /etc/php5/apache2/php.ini.tmp /etc/php5/apache2/php.ini
 
 echo ""
