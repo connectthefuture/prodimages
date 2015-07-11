@@ -28,7 +28,10 @@ echo "===================================================="
 echo ""
 echo ""
 
-apt-get install --assume-yes --quiet apache2 mysql-server mysql-client php5 libapache2-mod-php5 php5-curl curl php5-gd php5-mcrypt php5-mysql php-pear php-apc build-essential libpcre3-dev
+# Apache
+apt-get install --assume-yes --quiet apache2 php5 libapache2-mod-php5 php5-curl curl php5-gd php5-mcrypt php5-mysql php-pear php-apc build-essential libpcre3-dev
+## Mysql if not Maria install
+# apt-get install mysql-server mysql-client 
 a2enmod rewrite
 
 echo ""
@@ -95,11 +98,26 @@ chmod 775 /var/www/openphoto.prodimages.ny.bluefly.com/src/html/assets/cache
 echo ""
 echo ""
 echo "===================================================="
+echo "Setting up Nginx for PHP"
+echo "===================================================="
+echo ""
+echo ""
+# Nginx
+apt-get install nginx php5-fpm curl php5-curl php5-gd php5-mcrypt php-pear
+
+### Nginx 
+
+sed -e 's:#fastcgi_pass fastcgi_pass unix:/var/run/php5-fpm.sock;:fastcgi_pass fastcgi_pass unix:/var/run/php5-fpm.sock;:g' -e 's/fastcgi_pass 127.0.0.1:9000;/#fastcgi_pass 127.0.0.1:9000;/g' -e 's/yourdomain.com/openphoto.prodimages.ny.bluefly.com/g'-e 's:/var/www/yourdomain.com/src/html/:/var/www/openphoto.prodimages.ny.bluefly.com/src/html/g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-nginx.conf > /etc/nginx/sites-enabled/openphoto
+
+echo ""
+echo ""
+echo "===================================================="
 echo "Setting up Apache"
 echo "===================================================="
 echo ""
 echo ""
 
+### Apache
 cp /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf /etc/apache2/sites-available/openphoto
 sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
 # Add below to above or edit apache config after
