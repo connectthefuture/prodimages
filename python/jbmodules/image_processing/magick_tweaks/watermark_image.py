@@ -44,7 +44,7 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
         wmarktype = "-tile"
 
     if not opacity:
-        opacity = "15"
+        opacity = "5"
 
     if not dpi:
         dpi = str('40')
@@ -65,7 +65,8 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
     outfileWmark = os.path.abspath(os.path.join(destdir, filename + '_smplmark.' + ext))
     outfileLres = os.path.abspath(os.path.join(destdir, filename + '_smpl.' + ext))
 
-    subprocess.call([
+    if len(sys.argv) >= 3:
+        subprocess.call([
             "composite",
             "-dissolve",
             "55",
@@ -103,12 +104,14 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
             "pixelsperinch",
             "-colorspace",
             "sRGB",
+            "-format",
+            "jpeg",
             "-quality",
             "55",
             "-resize",
             "x600",
             "-strip",
-            unicode(outfileLres)
+            unicode(outfileLres.replace('.png','.jpg'))
         ])
 
 #    cmd1 = ("convert", "-format", unicode(ext), unicode(img), "-depth", "8", "-density", unicode(dpi), "-units", "pixelsperinch", "-fill", "grey50", "-colorize", "40", "miff:-")
