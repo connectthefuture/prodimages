@@ -77,6 +77,13 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###* * * * * ps aux | grep python >> /tmp/python_cron.output && date >> /tmp/python_cron.output
 #
 #
+## TEMP FIX FOR HANGING x-vend and walkers
+###
+13 4,18 * * * ps aux | grep x-vendorget-module-cronjobDloader | awk '{print $2}' | xargs kill
+15 4,18 * * * ps aux | grep walkdir_fix_exiv2_csv | awk '{print $2}' | xargs kill
+###
+##
+#
 ##################################################################
 ##################################################################
 ############################# ------------ #######################
