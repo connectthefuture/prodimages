@@ -31,7 +31,7 @@ echo ""
 # Apache
 apt-get install --assume-yes --quiet apache2 php5 libapache2-mod-php5 php5-curl curl php5-gd php5-mcrypt php5-mysql php-pear php-apc build-essential libpcre3-dev
 ## Mysql if not Maria install
-# apt-get install mysql-server mysql-client 
+# apt-get install mysql-server mysql-client
 a2enmod rewrite
 
 echo ""
@@ -69,7 +69,7 @@ echo ""
 
 wget https://github.com/photo/frontend/tarball/master -O openphoto.tar.gz
 tar -zxvf openphoto.tar.gz > /dev/null 2>&1
-mv photo-frontend-* /var/www/openphoto.prodimages.ny.bluefly.com
+mv photo-frontend-* /var/www/openphoto
 sudo rm openphoto.tar.gz
 
 echo ""
@@ -80,19 +80,19 @@ echo "===================================================="
 echo ""
 echo ""
 
-mkdir /var/www/openphoto.prodimages.ny.bluefly.com/src/userdata
-chown www-data:www-data /var/www/openphoto.prodimages.ny.bluefly.com/src/userdata
+mkdir /var/www/openphoto/src/userdata
+chown www-data:www-data /var/www/openphoto/src/userdata
 
-mkdir /var/www/openphoto.prodimages.ny.bluefly.com/src/html/assets/cache
-chown www-data:www-data /var/www/openphoto.prodimages.ny.bluefly.com/src/html/assets/cache
+mkdir /var/www/openphoto/src/html/assets/cache
+chown www-data:www-data /var/www/openphoto/src/html/assets/cache
 
-mkdir /var/www/openphoto.prodimages.ny.bluefly.com/src/html/photos
-chown www-data:www-data /var/www/openphoto.prodimages.ny.bluefly.com/src/html/photos
+mkdir /var/www/openphoto/src/html/photos
+chown www-data:www-data /var/www/openphoto/src/html/photos
 
 
-chmod 775 /var/www/openphoto.prodimages.ny.bluefly.com/src/userdata
-chmod 775 /var/www/openphoto.prodimages.ny.bluefly.com/src/html/photos
-chmod 775 /var/www/openphoto.prodimages.ny.bluefly.com/src/html/assets/cache
+chmod 775 /var/www/openphoto/src/userdata
+chmod 775 /var/www/openphoto/src/html/photos
+chmod 775 /var/www/openphoto/src/html/assets/cache
 
 
 echo ""
@@ -105,7 +105,7 @@ echo ""
 # Nginx
 apt-get install nginx php5-fpm curl php5-curl php5-gd php5-mcrypt php-pear
 
-### Nginx 
+### Nginx
 
 sed  -e 's:#fastcgi_pass fastcgi_pass unix\:fastcgi_pass unix\:/var/run/php5-fpm.sock;:g' -e 's/fastcgi_pass 127.0.0.1:9000;/#fastcgi_pass 127.0.0.1:9000;/g' -e 's/yourdomain.com/openphoto.prodimages.ny.bluefly.com/g' -e 's:/var/www/yourdomain.com/src/html/:/var/www/openphoto.prodimages.ny.bluefly.com/src/html/:g' -e 's:/var/www/openphoto:/var/www/openphoto.prodimages.ny.bluefly.com:g' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-nginx.conf > /etc/nginx/sites-enabled/openphoto
 
@@ -118,8 +118,8 @@ echo ""
 echo ""
 
 ### Apache
-cp /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf /etc/apache2/sites-available/openphoto
-sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' -e 's:/var/www/openphoto:/var/www/openphoto.prodimages.ny.bluefly.com' /var/www/openphoto.prodimages.ny.bluefly.com/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
+cp /var/www/openphoto/src/configs/openphoto-vhost.conf /etc/apache2/sites-available/openphoto
+sed -e 's/file_uploads.*/file_uploads = On/g' -e 's/\/path\/to\/openphoto\/html\/directory/\/var\/www\/openphoto\/src\/html/g' /var/www/openphoto/src/configs/openphoto-vhost.conf > /etc/apache2/sites-available/openphoto
 # Add below to above or edit apache config after
 ## -e 's/AliasMatch \.ini\$   /404/#AliasMatch \.ini$   /404/g' -e 's/#RewriteRule \.ini\$ - [F,NC]/RewriteRule \.ini$ - [F,NC]/g'
 a2dissite default
@@ -133,7 +133,7 @@ echo "===================================================="
 echo ""
 echo ""
 
-sed -e 's/<VirtualHost *:80>/<VirtualHost *:8082>/g' -e 's/upload_max_filesize.*/upload_max_filesize = 225M/g' -e 's/post_max_size.*/post_max_size = 225M/g' -e 's:/var/www/openphoto:/var/www/openphoto.prodimages.ny.bluefly.com' /etc/php5/apache2/php.ini > /etc/php5/apache2/php.ini.tmp
+sed -e 's/<VirtualHost *:80>/<VirtualHost *:8082>/g' -e 's/upload_max_filesize.*/upload_max_filesize = 225M/g' -e 's/post_max_size.*/post_max_size = 225M/g' /etc/php5/apache2/php.ini > /etc/php5/apache2/php.ini.tmp
 mv /etc/php5/apache2/php.ini.tmp /etc/php5/apache2/php.ini
 
 echo ""
