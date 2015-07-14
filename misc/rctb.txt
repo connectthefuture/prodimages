@@ -363,7 +363,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 24 7,15,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
 ###########
 ## Delete previous 12 hours Marketplace files
-39 11,23 * * * parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/* -type f`
+9 11,23 * * * parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/* -type f`
 ###########
 ##################################################################
 ##################################################################
