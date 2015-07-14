@@ -108,13 +108,13 @@ if args:
     #globstilldir = os.path.abspath(sys.argv[1])#'.' 
     flagged = 'SET'# glob.glob(os.path.join(basedirstill, "*/*.jpg"))
 else:
-    globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
-    globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
+    #globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
+    #globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
 
     globstilldir = glob.glob(os.path.join(basedirstill, "*/*.jpg"))
     #curl -d sample_image=Y -d photographed_date=now -X PUT http://dmzimage01.l3.bluefly.com:8080/photo/"$outName"
 
-    globalldirs = globrawdir + globstilldir
+    globalldirs = globstilldir
 
 
 colorstyles_unique = []
