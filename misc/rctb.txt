@@ -143,7 +143,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 4 2 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null
 ##############
 ## --> Daily #
-10 3,9,10,11,12,13,14,15,16,17,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
+10 3,8,10,12,14,16,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 ## --> Weekend Runs much less
 10 3,10,13,16,22    * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null  ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 #
@@ -363,7 +363,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 24 7,15,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
 ###########
 ## Delete previous 12 hours Marketplace files
-9 11,23 * * * parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/* -type f`
+39 11,23 * * * parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/* -type f`
 ###########
 ##################################################################
 ##################################################################
