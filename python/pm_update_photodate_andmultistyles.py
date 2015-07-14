@@ -98,19 +98,21 @@ basedirstill = os.path.join(aPhoto_root, todaysfolder + '*')
 
 flagged = ''
 try:
-    args = sys.argv[1]
+    args = sys.argv
 except:
     args = ''
 
-if args:
+if args and len(args) == 1:
     globalldirs = os.path.abspath(sys.argv[1])
     #globexportdir = os.path.abspath(sys.argv[1])#glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
     #globstilldir = os.path.abspath(sys.argv[1])#'.' 
     flagged = 'SET'# glob.glob(os.path.join(basedirstill, "*/*.jpg"))
+elif args and len(args) > 1: 
+    globalldirs = args[1:]
+    flagged = 'SET'
 else:
     #globrawdir = glob.glob(os.path.join(basedir, "*/*/*.CR2"))
     #globexportdir = glob.glob(os.path.join(basedir, "EXPORT/*/*.jpg"))
-
     globstilldir = glob.glob(os.path.join(basedirstill, "*/*.jpg"))
     #curl -d sample_image=Y -d photographed_date=now -X PUT http://dmzimage01.l3.bluefly.com:8080/photo/"$outName"
 
@@ -162,6 +164,12 @@ for line in globalldirs:
             except AttributeError:
                 print "AttributeError on {0}".format(line)
         ## If file_path doesnt match the Regular 9digit_# format, checks for 2 styles in 1 shot             
+        elif len(line) == 9 and line.isdigit():
+            colorstyle = line
+            colorstyles_unique.append(colorstyle)
+            colorstyles_unique = sorted(colorstyles_unique)
+        
+
         else:
             try:
                 file_path = line
