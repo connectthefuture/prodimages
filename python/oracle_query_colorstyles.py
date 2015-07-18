@@ -82,13 +82,13 @@ def run_query_outdict(q):
     import sqlalchemy,sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     #orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
-    try:
-        import sys
-        date_range = str(sys.argv[3])
-        if date_range.isdigit() == True:
-            kwargs.update(date_range_int=date_range)
-    except IndexError:
-        pass
+    # try:
+    #     import sys
+    #     date_range = str(sys.argv[3])
+    #     if date_range.isdigit() == True:
+    #         kwargs.update(date_range_int=date_range)
+    # except IndexError:
+    #     pass
     #print vendor_brand, "Vendorbrand"
     connection = orcl_engine.connect()
 
