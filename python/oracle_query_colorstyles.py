@@ -71,10 +71,10 @@ def make_q(args):
           ON
             POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID
           WHERE
-            Pomgr.Product_Color.ID in ({0})
+            Pomgr.Product_Color.ID in ('{0}')
           ORDER BY
             prodclr_create_dt DESC,
-            1 DESC Nulls Last""".format(str(args.split()))
+            1 DESC Nulls Last""".format(str("','".join(args)))
     return query_oracle
 
 
