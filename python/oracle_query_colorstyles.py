@@ -129,7 +129,9 @@ def main():
         q = make_q(args)
         result = run_query_outdict(q)
         incompletes = []
+        print q
         for row in result:
+            print row
             if row['production_complete_dt']:
                 print row['colorstyle']
             else:
