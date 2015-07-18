@@ -122,7 +122,7 @@ def run_query_outdict(q):
 
 
 
-def main()
+def main():
     import sys
     args = sys.argv
     if len(args) > 1:
