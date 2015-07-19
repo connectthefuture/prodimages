@@ -126,7 +126,7 @@ def main():
     import sys
     args = sys.argv
     if len(args) > 1:
-        q = make_q(args[2:])
+        q = make_q(args[3:])
         result = run_query_outdict(q)
         incompletes = []
         print q
