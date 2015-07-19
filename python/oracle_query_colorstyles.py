@@ -130,6 +130,7 @@ def main():
         result = run_query_outdict(q)
         incompletes = []
         print q
+        count_total = len(result.items())
         for k,v in result.iteritems():
             if v['production_complete_dt']:
                 k, v['production_complete_dt']
@@ -138,10 +139,14 @@ def main():
                 incompletes.append((k,v['url'],)) 
                 print v['colorstyle'], v['url']
         if incompletes:
+            count_incomplete = len(incompletes)
+            count_complete   = len(incompletes)
+            res="Total Styles: {}\tIncomplete: {}\tComplete: {}\t".format(count_total,count_incomplete,(count_total-count_incomplete))
+            print res
             return incompletes
         else:
-            print 'No Matches Found' ##result
-            return None		
+            print 'Total complete: {}\nNo Matches Found'.format(count_total) ##result
+            return None
     else:
         pass
 
