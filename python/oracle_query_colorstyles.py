@@ -121,12 +121,9 @@ def run_query_outdict(q):
     return styledata
 
 
-
-def main():
-    import sys
-    argsraw = sys.argv
-    if len(argsraw) > 1:
-        args = [x for x in argsraw if x.isdigit() and len(x) == 9]
+def main(styles_list):
+    if len(styles_list) > 1:
+        args = [x for x in styles_list if x.isdigit() and len(x) == 9]
         q = make_q(args)
         result = run_query_outdict(q)
         incompletes = []
@@ -157,4 +154,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    main(sys.argv)
