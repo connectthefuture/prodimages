@@ -130,7 +130,7 @@ def main():
         q = make_q(args)
         result = run_query_outdict(q)
         incompletes = []
-        print q
+        #print q
         count_total = len(result.items())
         count_marketplace = 0
         for k,v in result.iteritems():
@@ -150,7 +150,7 @@ def main():
             print res
             return incompletes
         else:
-            print 'Total complete: {}\nNo Matches Found'.format(count_total) ##result
+            print 'Total Styles: {}\n\tNo Matches Found'.format(count_total) ##result
             return None
     else:
         pass
