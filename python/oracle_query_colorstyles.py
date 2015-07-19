@@ -122,7 +122,7 @@ def run_query_outdict(q):
 
 
 def main(styles_list):
-    if len(styles_list) > 1:
+    if len(styles_list) > 0:
         args = [x for x in styles_list if x.isdigit() and len(x) == 9]
         q = make_q(args)
         result = run_query_outdict(q)
@@ -150,6 +150,7 @@ def main(styles_list):
             print 'Total Styles: {}\n\tNo Matches Found'.format(count_total) ##result
             return None
     else:
+        print 'You Need to Enter Some Styles ...'
         pass
 
 
