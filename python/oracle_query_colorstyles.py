@@ -120,7 +120,6 @@ def run_query_outdict(q):
     connection.close()
     return styledata
 
-
 def main(styles_list):
     if len(styles_list) > 1:
         args = [x for x in styles_list if x.isdigit() and len(x) == 9]
