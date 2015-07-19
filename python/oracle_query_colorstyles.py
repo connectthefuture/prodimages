@@ -130,13 +130,13 @@ def main():
         result = run_query_outdict(q)
         incompletes = []
         print q
-        for row in result:
-            print row
-            if row[0]['production_complete_dt']:
-                print row[0]['colorstyle']
+        for k,v in result.iteritems():
+            if v['production_complete_dt']:
+                k, v['production_complete_dt']
             else:
-                incompletes.append(row[0]['colorstyle'])
-                print row[0]['colorstyle']
+                k, v['production_complete_dt']
+                incompletes.append((k,v['url'],)) 
+                print v['colorstyle'], v['url']
         if incompletes:
             return incompletes
         else:
