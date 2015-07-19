@@ -132,7 +132,7 @@ def main():
         incompletes = []
         #print q
         count_total = len(result.items())
-        count_marketplace = 0
+        count_marketplace_inc = 0
         for k,v in result.iteritems():
             if v['production_complete_dt']:
                 k, v['production_complete_dt']
