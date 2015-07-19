@@ -74,7 +74,7 @@ def make_q(args):
             Pomgr.Product_Color.ID in ('{0}')
           ORDER BY
             prodclr_create_dt DESC,
-            1 DESC Nulls Last""".format(str("','".join(args)))
+            1 DESC Nulls Last""".format(unicode("','".join(args)))
     return query_oracle
 
 
@@ -126,7 +126,7 @@ def main():
     import sys
     args = sys.argv
     if len(args) > 1:
-        q = make_q(args)
+        q = make_q(args[2:])
         result = run_query_outdict(q)
         incompletes = []
         print q
