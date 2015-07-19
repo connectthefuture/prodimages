@@ -462,7 +462,7 @@ function find_styles (){
 
 function find_styles_recurse (){
         {
-        echo $(find "$1" -maxdepth 1 -type f -exec basename {} \;| cut -c 1-9 | sort -nru | xargs) ;
+        echo $(find "$1" -type f -exec basename {} \;| cut -c 1-9 | sort -nru | xargs) ;
     };
 }
 
