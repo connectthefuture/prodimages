@@ -447,6 +447,25 @@ function env_parallel() {
     `which parallel` "$@"
     unset parallel_bash_environment
 }
+
+######### NExt 3 basically the same, last one recursive
+function listyles (){
+        {
+        echo $(find "$1" -maxdepth 1 -type f -exec basename {} \;| cut -c 1-9 | sort -nru) ;
+    };
+}
+function find_styles (){
+        {
+        echo $(find "$1" -maxdepth 1 -type f -exec basename {} \;| cut -c 1-9 | sort -nru) ;
+    };
+}
+
+function find_styles_recurse (){
+        {
+        echo $(find "$1" -maxdepth 1 -type f -exec basename {} \;| cut -c 1-9 | sort -nru | xargs) ;
+    };
+}
+
 # Local Variables:
 # mode:shell-script
 # sh-shell:bash
