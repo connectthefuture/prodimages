@@ -132,17 +132,21 @@ def main():
         incompletes = []
         print q
         count_total = len(result.items())
+        count_marketplace = 0
         for k,v in result.iteritems():
             if v['production_complete_dt']:
                 k, v['production_complete_dt']
             else:
                 k, v['production_complete_dt']
-                incompletes.append((k,v['url'],)) 
-                print v['colorstyle'], v['url']
+                incompletes.append((k,v['url'],))
+                if v['url']:
+                    count_marketplace_inc += 1
+                    print v['colorstyle'], v['url']
         if incompletes:
             count_incomplete = len(incompletes)
-            count_complete   = len(incompletes)
-            res="\n\nTotal Styles: {}\vIncomplete: {}Complete: {}".format(count_total,count_incomplete,(count_total-count_incomplete))
+            count_complete   = count_total - count_incomplete
+            count_asset_inc  = count_incomplete - count_marketplace_inc
+            res="\n\nTotal Styles: {}\vComplete: {}\nIncomplete: {}".format(count_total, count_complete, count_incomplete, count_marketplace_inc, count_asset_inc)
             print res
             return incompletes
         else:
