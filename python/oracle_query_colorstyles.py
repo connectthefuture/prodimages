@@ -142,7 +142,7 @@ def main():
         if incompletes:
             count_incomplete = len(incompletes)
             count_complete   = len(incompletes)
-            res="\n\n\tTotal Styles: {}\vIncomplete: {}\vComplete: {}".format(count_total,count_incomplete,(count_total-count_incomplete))
+            res="\n\nTotal Styles: {}\vIncomplete: {}Complete: {}".format(count_total,count_incomplete,(count_total-count_incomplete))
             print res
             return incompletes
         else:
