@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-## Pass 9 digit style numbers
+## Pass 9 digit style numbers as sys.argv or main(styles_list)
 def make_q(args):
     query_oracle= """
             SELECT DISTINCT
