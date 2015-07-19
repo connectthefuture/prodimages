@@ -131,14 +131,17 @@ def main():
         incompletes = []
         print q
         for row in result:
-            print row
-            if row['production_complete_dt']:
-                print row['colorstyle']
-            else:
-                incompletes.append(row['colorstyle'])
-                print row['colorstyle']
-        return incompletes ##result
-
+                print row
+                if row['production_complete_dt']:
+                    print row['colorstyle']
+                else:
+                    incompletes.append(row['colorstyle'])
+                    print row['colorstyle']
+        if incompletes:
+            return incompletes
+        else:
+            print 'No Matches Found' ##result
+            return None		
     else:
         pass
 
