@@ -125,7 +125,7 @@ def run_query_outdict(q):
 def main():
     import sys
     argsraw = sys.argv
-    if len(args) > 1:
+    if len(argsraw) > 1:
         args = [x for x in argsraw if x.isdigit() and len(x) == 9]
         q = make_q(args)
         result = run_query_outdict(q)
