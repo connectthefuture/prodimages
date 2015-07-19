@@ -143,7 +143,7 @@ def main(styles_list):
             count_incomplete = len(incompletes)
             count_complete   = count_total - count_incomplete
             count_asset_inc  = count_incomplete - count_marketplace_inc
-            res="\n\nTotal Styles: {}\n\t\tComplete: {}\n\t\tIncomplete: {}\vAsset: {}\n\t\t\t\tMarketplace: {}".format(count_total, count_complete, count_incomplete, count_asset_inc, count_marketplace_inc)
+            res="\n\nTotal Styles: {}\n\n\t\tComplete: {}\n\t\tIncomplete: {}\n\t\t\tAsset: {}\n\t\t\tMarketplace: {}".format(count_total, count_complete, count_incomplete, count_asset_inc, count_marketplace_inc)
             print res
             return incompletes
         else:
