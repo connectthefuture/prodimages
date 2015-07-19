@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+## Pass 9 digit style numbers
 def make_q(args):
     query_oracle= """
             SELECT DISTINCT
@@ -124,9 +124,10 @@ def run_query_outdict(q):
 
 def main():
     import sys
-    args = sys.argv
+    argsraw = sys.argv
     if len(args) > 1:
-        q = make_q(args[3:-1])
+        args = [x for x in argsraw if x.isdigit() and len(x) == 9]
+        q = make_q(args)
         result = run_query_outdict(q)
         incompletes = []
         print q
