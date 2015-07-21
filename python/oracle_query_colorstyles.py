@@ -158,9 +158,9 @@ def main(styles_list):
                 incompletes.append((k,v['url'],))
                 if v['url']:
                     count_marketplace_inc += 1
-                    if v['url_status_code'] > 300:
+                    if v['url_status_code'] >= 300:
                         count_marketplace_inc_404 += 1
-                    print v['colorstyle'], v['url'], v['url_status_code']
+                    print v['colorstyle'], v['url_status_code'], v['url'] 
         if incompletes:
             count_incomplete = len(incompletes)
             count_complete   = count_total - count_incomplete
