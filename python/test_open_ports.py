@@ -15,15 +15,18 @@ def port_tester(port, host=None):
        print "Port {} is not open on {}".format(port,host)
 
 
-def main(args):
+def main():
     import sys
     args = sys.argv
-    try:
-        host = args[2]
-        port = sys.argv[1]
-    except IndexError:
-        host = None
-        port = sys.argv[1]
+    if args:
+        try:
+            host = args[2]
+            port = sys.argv[1]
+        except IndexError:
+            host = None
+            port = sys.argv[1]
+    else:
+        port = '80'
     if len(port.split()) == 1:
         port_tester(port, host=None)
     else:
