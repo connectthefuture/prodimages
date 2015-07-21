@@ -78,6 +78,13 @@ def make_q(args):
     return query_oracle
 
 
+def url_tester(url):
+    import requests
+    res = requests.get(url)
+    http_code = res.status_code
+    return http_code
+
+
 def run_query_outdict(q):
     import sqlalchemy,sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
@@ -113,6 +120,7 @@ def run_query_outdict(q):
         style['category']  = row['category']
         style['image_number']  = row['image_number']
         style['url']  = row['url']
+        style['url_status_code'] = url_tester(row['url'])
         style['image_create_dt'] = row['image_create_dt']
         style['vendor_create_dt'] = row['vendor_create_dt']
         style['vendor_mod_dt'] = row['vendor_mod_dt']
@@ -133,6 +141,7 @@ def main(styles_list):
         #print q
         count_total = len(result.items())
         count_marketplace_inc = 0
+        count_marketplace_inc_404 = 0
         for k,v in result.iteritems():
             if v['production_complete_dt']:
                 k, v['production_complete_dt']
@@ -141,12 +150,15 @@ def main(styles_list):
                 incompletes.append((k,v['url'],))
                 if v['url']:
                     count_marketplace_inc += 1
-                    print v['colorstyle'], v['url']
+                    if v['url_status_code'] > 300:
+                        count_marketplace_inc_404 += 1
+                    print v['colorstyle'], v['url'], v['url_status_code']
         if incompletes:
             count_incomplete = len(incompletes)
             count_complete   = count_total - count_incomplete
             count_asset_inc  = count_incomplete - count_marketplace_inc
-            res="\nTotal Styles: {}\n\n\t\tComplete: {}\n\t\tIncomplete: {}\n\t\t\tAsset: {}\n\t\t\tMarketplace: {}\n".format(count_total, count_complete, count_incomplete, count_asset_inc, count_marketplace_inc)
+            res="\nTotal Styles: {0}\n\t\tComplete: {1}\n\t\tIncomplete: {2}\n\t\t\tAsset: {3}\n\t\t\tMarketplace: {4}\vAmt_404: {5}".format(count_total, count_complete, count_incomplete, count_asset_inc, count_marketplace_inc, count_marketplace_inc_404)
+
             print res
             return incompletes
         else:

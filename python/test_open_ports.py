@@ -11,8 +11,17 @@ def port_tester(port, host=None):
     result = sock.connect_ex((host,port))
     if result == 0:
        print "Port {} is open on {}".format(port,host)
+       return True
     else:
        print "Port {} is not open on {}".format(port,host)
+       return False
+
+
+def url_tester(url):
+    import requests
+    res = requests.get(url)
+    http_code = res.status_code
+    return http_code
 
 
 def main():
