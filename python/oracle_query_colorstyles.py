@@ -80,9 +80,17 @@ def make_q(args):
 
 def url_tester(url):
     import requests
-    res = requests.get(url)
+    #res = requests.get(url)
+    res = requests.request('GET', url)
     http_code = res.status_code
     return http_code
+
+def url_tester_headers(url):
+    import requests
+    #res = requests.get(url)
+    res = requests.request('HEADERS', url)
+    headers = res.headers
+    return headers
 
 
 def run_query_outdict(q):
@@ -120,7 +128,7 @@ def run_query_outdict(q):
         style['category']  = row['category']
         style['image_number']  = row['image_number']
         style['url']  = row['url']
-        style['url_status_code'] = url_tester(row['url'])
+        style['url_status_code'] = url_tester_headers(row['url'])
         style['image_create_dt'] = row['image_create_dt']
         style['vendor_create_dt'] = row['vendor_create_dt']
         style['vendor_mod_dt'] = row['vendor_mod_dt']
