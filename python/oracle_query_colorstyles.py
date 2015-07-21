@@ -122,7 +122,10 @@ def run_query_outdict(q):
 
 
 def main(styles_list):
-    if len(styles_list) > 0:
+    if len(styles_list) > 1000:
+        styles_list = styles_list[-999:]
+    
+    if len(styles_list) > 0 and len(styles_list) < 1000:
         args = [x for x in styles_list if x.isdigit() and len(x) == 9]
         q = make_q(args)
         result = run_query_outdict(q)
