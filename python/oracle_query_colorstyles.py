@@ -174,7 +174,7 @@ def main(styles_list):
             count_asset_inc  = count_incomplete - count_marketplace_inc
             res="\nTotal Styles: {0}\n\t\tComplete: {1}\n\t\tIncomplete: {2}\n\t\t\tAsset: {3}\n\t\t\tMarketplace: {4}\v404 Errors: {5}".format(count_total, count_complete, count_incomplete, count_asset_inc, count_marketplace_inc, count_marketplace_inc_404)
             if count_error:
-                res = "{0}\n\tMargin of Error: {1}".format(res, round((float(count_error) / float(count_total)), 3))
+                res = "{0}\n\tMargin of Error: {1}\n{2}".format(res, round((float(count_error) / float(count_total)), 3), count_error)
             print res
             return incompletes
         else:
