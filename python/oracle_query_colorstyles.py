@@ -128,7 +128,7 @@ def run_query_outdict(q):
         style['category']  = row['category']
         style['image_number']  = row['image_number']
         style['url']  = row['url']
-        style['url_status_code'] = url_tester_headers(row['url'])
+        style['url_status_code'] = url_tester(row['url'])
         style['image_create_dt'] = row['image_create_dt']
         style['vendor_create_dt'] = row['vendor_create_dt']
         style['vendor_mod_dt'] = row['vendor_mod_dt']
