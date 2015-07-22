@@ -132,7 +132,7 @@ def run_query_outdict(q):
         try:
             style['url_status_code'] = url_tester(row['url'])
         except:
-            style['url_status_code'] = 405
+            style['url_status_code'] = 666
         style['image_create_dt'] = row['image_create_dt']
         style['vendor_create_dt'] = row['vendor_create_dt']
         style['vendor_mod_dt'] = row['vendor_mod_dt']
@@ -154,6 +154,7 @@ def main(styles_list):
         count_total = len(result.items())
         count_marketplace_inc = 0
         count_marketplace_inc_404 = 0
+        count_error = 0
         for k,v in result.iteritems():
             if v['production_complete_dt']:
                 k, v['production_complete_dt']
@@ -162,15 +163,18 @@ def main(styles_list):
                 incompletes.append((k,v['url'],))
                 if v['url']:
                     count_marketplace_inc += 1
-                    if v['url_status_code'] >= 300:
+                    if v['url_status_code'] >= 300 and v['url_status_code'] != 666:
                         count_marketplace_inc_404 += 1
+                    else:
+                        count_error += 1
                     print v['colorstyle'], v['url_status_code'], v['url'] 
         if incompletes:
             count_incomplete = len(incompletes)
             count_complete   = count_total - count_incomplete
             count_asset_inc  = count_incomplete - count_marketplace_inc
             res="\nTotal Styles: {0}\n\t\tComplete: {1}\n\t\tIncomplete: {2}\n\t\t\tAsset: {3}\n\t\t\tMarketplace: {4}\vAmt_404: {5}".format(count_total, count_complete, count_incomplete, count_asset_inc, count_marketplace_inc, count_marketplace_inc_404)
-
+            if count_error:
+                res = "{0}\n\tCalculation Errors: {1}".format(res, count_error)
             print res
             return incompletes
         else:
