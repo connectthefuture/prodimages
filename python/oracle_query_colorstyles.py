@@ -80,10 +80,11 @@ def make_q(args):
 
 def url_tester(url):
     import requests
-    #res = requests.get(url)
-    res = requests.request('HEADERS', url)
+    res = requests.get(url)
+    #res = requests.request('HEADERS', url)
     http_code = res.status_code
     return http_code
+
 
 def url_tester_headers(url):
     import requests
