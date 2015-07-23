@@ -110,7 +110,7 @@ def run_query_outdict(q):
 
     result = connection.execute(q)
     styledata = {}
-    resct = len(result)
+    resct = len(result.items())
     for row in result:
         style = {}
         style['colorstyle'] = row['colorstyle']
