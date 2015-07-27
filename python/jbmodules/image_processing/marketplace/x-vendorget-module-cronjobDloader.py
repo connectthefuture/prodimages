@@ -614,7 +614,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
     #  Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
     res = ''
-    res = mongo_upsert_threaded(argslist=urlsdload_list)
+    #res = mongo_upsert_threaded(argslist=urlsdload_list)
     print ' Done With 2B Mongo Upsert Threads'
     ##########################
     ########
