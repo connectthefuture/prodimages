@@ -467,7 +467,11 @@ function find_styles_recurse (){
 }
 
 
-## Color dunc
+## Split arg $1 by delimiter $2, and return last delimited field, ie. -1/$NF
+function splitdelimit() { echo $1 | awk -F"$2" '{print $NF}' ; }
+
+
+## Color text/prompt func
 function elite 
 {
 
