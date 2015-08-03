@@ -181,7 +181,7 @@ def run_threaded_mysql_insert(import_dict=None):
             print count, '\n\t Insert Threade'#, imgdata
             q.task_done()
 
-    jobcount = multiprocessing.cpu_count() - 6  # --> detects number of cores on host manchine
+    jobcount = 2 # multiprocessing.cpu_count() - 6  # --> detects number of cores on host manchine
     print("Creating %d threads" % jobcount)
     for i in xrange(jobcount):
         t = threading.Thread(target=worker)
