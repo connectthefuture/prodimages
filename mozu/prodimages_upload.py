@@ -22,8 +22,11 @@ def upload_productimgs_mozu(src_filepath):
                                   verify=False
                                 )
 
-    filename = path.basename(src_filepath)
+    filename = path.basename(src_filepath).split('.')[0]
     ext      = filename.split('.')[-1]
+    mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
+
+
     print "Auth Response: %s" % auth_response.status_code
     auth_response.raise_for_status() 
     auth = auth_response.json()
@@ -32,15 +35,15 @@ def upload_productimgs_mozu(src_filepath):
     documentApi = tenant_url + "/api/content/documentlists/files@mozu/documents"
     documentPayload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : filename, 'extension' : ext}
 
-    headers = {'Content-type': 'application/json', 
+    document_headers = {'Content-type': 'application/json', 
                'x-vol-app-claims' : auth["accessToken"], 
                'x-vol-tenant' : '11146', 
                'x-vol-master-catalog' : '1'
                }
-     
+
     document_response = requests.post(documentApi, 
                                       data=json.dumps(documentPayload), 
-                                      headers=headers, 
+                                      headers=document_headers, 
                                       verify=False
                                       )
 
@@ -55,11 +58,12 @@ def upload_productimgs_mozu(src_filepath):
     documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + documentId + "/content"
     #files = {'media': open(src_filepath, 'rb')}
     fileData = open(src_filepath, 'rb').read()
-    headers["Content-type"] = "image/{}".format(ext.lower().replace('jpg','jpeg'))
-     
+    
+    content_headers["Content-type"] = mimetype
+    
     content_response = requests.put(documentUploadApi, 
                                     data=fileData, 
-                                    headers=headers,
+                                    headers=content_headers,
                                     verify=False
                                     )
     # TODO: store response fileID(blob) in db? [and/or] POST id to mozu as product attribute
