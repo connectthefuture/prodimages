@@ -49,8 +49,9 @@ def upload_productimgs_mozu(src_filepath):
     document = document_response.json()
     documentId = document["id"]
      
-    print "document Id: %s" %documentId
-
+    print "document Id: %s" % documentId
+    print "documentPayLoad: %s" % documentPayLoad
+    
     documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + documentId + "/content"
     #files = {'media': open(src_filepath, 'rb')}
     fileData = open(src_filepath, 'rb').read()
