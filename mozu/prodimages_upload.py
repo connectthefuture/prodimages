@@ -21,11 +21,13 @@ def upload_productimgs_mozu(src_filepath):
                                   headers=headers,
                                   verify=False
                                 )
+    # parse params from filepath
+    # TODO add Validation(regex) to prevent unwanted updates
 
-    colorstyle = path.basename(src_filepath).split('.')[0]
-    filename  =  path.basename(src_filepath)
-    ext      = src_filepath.split('.')[-1]
-    mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
+    filename   =  path.basename(src_filepath)
+    ext        = src_filepath.split('.')[-1]
+    mimetype   = "image/{}".format(ext.lower().replace('jpg','jpeg'))
+    colorstyle = path.basename(src_filepath).split('.')[0][:9]
 
 
     print "Auth Response: %s" % auth_response.status_code
@@ -51,7 +53,12 @@ def upload_productimgs_mozu(src_filepath):
     #document_response.raise_for_status()
 
     document = document_response.json()
-    document_id = document["id"]
+
+    try:
+        document_id = document["id"]
+        # insert_docid_db(db_name,document_id=document_id, filename=)
+    except KeyError:
+        document_response.raise_for_status()
 
     print "document Id: %s" % document_id
     print "document_payload: %s" % document_payload
@@ -61,7 +68,7 @@ def upload_productimgs_mozu(src_filepath):
     file_data = open(src_filepath, 'rb').read()
 
     headers["Content-type"] = mimetype
-    print "locals", locals()
+    #print "locals", locals()
     content_response = requests.put(document_content_api,
                                     data=file_data,
                                     headers=headers,
@@ -70,7 +77,7 @@ def upload_productimgs_mozu(src_filepath):
     # TODO: store response fileID(blob) in db? [and/or] POST id to mozu as product attribute
     print "Document content upload Response: %s" % content_response.status_code
     #document_response.raise_for_status()
-    return content_response
+    return content_response.url
 
 
 if __name__ == '__main__':
