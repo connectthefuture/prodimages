@@ -5,7 +5,7 @@
 def upload_productimgs_mozu(src_filepath):
     import requests
     import json
-    import os.path
+    import os.path as path
 
     auth_url = "http://requestb.in/q66719q6" #"https://home.staging.mozu.com/api/platform/applications/authtickets"
     tenant_url = "https://t11146.staging-sb.mozu.com/"
