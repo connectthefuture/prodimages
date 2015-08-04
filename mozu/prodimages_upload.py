@@ -13,14 +13,9 @@ def upload_productimgs_mozu(src_filepath):
     headers = {'Content-type': 'application/json',
                'Accept-Encoding': 'gzip, deflate'}
 
-    auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release',
-                    'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
+    auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
 
-    auth_response = requests.post(auth_url,
-                                  data=json.dumps(auth_request),
-                                  headers=headers,
-                                  verify=False
-                                )
+    auth_response = requests.post(auth_url, data=json.dumps(auth_request), headers=headers, verify=False)
     # parse params from filepath
     # TODO add Validation(regex) to prevent unwanted updates
 
@@ -41,7 +36,9 @@ def upload_productimgs_mozu(src_filepath):
     headers = {'Content-type': 'application/json',
                'x-vol-app-claims' : auth["accessToken"],
                'x-vol-tenant' : '11146',
-               'x-vol-master-catalog' : '1'
+               'x-vol-master-catalog' : '1',
+               # 'x-vol-dataview-mode': 'Pending',
+               # ??'x-vol-site' : '1',
                }
 
     document_response = requests.post(document_data_api,
@@ -50,22 +47,28 @@ def upload_productimgs_mozu(src_filepath):
                                       verify=False
                                       )
 
+
+    document = ''#document_response.json()
+    document_id = ''#document["id"]
+
     #document_response.raise_for_status()
-
-    document = document_response.json()
-
-    try:
-        document_id = document["id"]
-        # insert_docid_db(db_name,document_id=document_id, filename=filename, colorstyle=colorstyle)
-    except KeyError:
-        document_response = requests.put(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False)
+    if document_response.status_code < 400:
         document = document_response.json()
-        document_id = document["id"]
-        document_response.raise_for_status()
+        try:
+            document_id = document["id"]
+            # insert_docid_db(db_name,document_id=document_id, filename=filename, colorstyle=colorstyle, img_number=sequence)
+        except KeyError:
+            document_response = requests.put(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False)
+            #document = ''#document_response.json()
+            #document_id = ''#document["id"]
+            #document_response.raise_for_status()
 
-    print "document Id: %s" % document_id
+
+    print "document ID: %s" % document_id
+
     print "document_payload: %s" % document_payload
 
+    ## create rest url with doc id from resp
     document_content_api = tenant_url + "/api/content/documentlists/files@mozu/documents/" + document_id + "/content"
     #files = {'media': open(src_filepath, 'rb')}
     file_data = open(src_filepath, 'rb').read()
@@ -77,14 +80,15 @@ def upload_productimgs_mozu(src_filepath):
                                     headers=headers,
                                     verify=False
                                     )
-    # TODO: store response fileID(blob) in db? [and/or] POST id to mozu as product attribute
-    print "Document content upload Response: %s" % content_response.status_code
+
+    print "Document content upload Response: %s" % content_response.text
     #document_response.raise_for_status()
     return content_response.url
 
 
 if __name__ == '__main__':
     import sys
-    src_filepath = '/Users/johnb/Desktop/misc_tests/croppedtest/out/362203805.png'  ## sys.argv[1]
+    src_filepath = '/Users/johnb/Desktop/misc_tests/orig/354394801_5.jpg'
+    #src_filepath = '/Users/johnb/Desktop/misc_tests/croppedtest/out/362203805.png'  ## sys.argv[1]
     upload_productimgs_mozu(src_filepath)
 
