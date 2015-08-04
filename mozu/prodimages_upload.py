@@ -22,8 +22,9 @@ def upload_productimgs_mozu(src_filepath):
                                   verify=False
                                 )
 
-    filename = path.basename(src_filepath).split('.')[0]
-    ext      = filename.split('.')[-1]
+    colorstyle = path.basename(src_filepath).split('.')[0]
+    filename  =  path.basename(src_filepath)
+    ext      = src_filepath.split('.')[-1]
     mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
 
 
@@ -47,7 +48,7 @@ def upload_productimgs_mozu(src_filepath):
                                       verify=False
                                       )
 
-    document_response.raise_for_status()
+    #document_response.raise_for_status()
 
     document = document_response.json()
     document_id = document["id"]
@@ -68,12 +69,12 @@ def upload_productimgs_mozu(src_filepath):
                                     )
     # TODO: store response fileID(blob) in db? [and/or] POST id to mozu as product attribute
     print "Document content upload Response: %s" % content_response.status_code
-    document_response.raise_for_status()
+    #document_response.raise_for_status()
     return content_response
 
 
 if __name__ == '__main__':
     import sys
-    src_filepath = sys.argv[1]
+    src_filepath = '/Users/johnb/Desktop/misc_tests/croppedtest/out/362203805.png'  ## sys.argv[1]
     upload_productimgs_mozu(src_filepath)
 
