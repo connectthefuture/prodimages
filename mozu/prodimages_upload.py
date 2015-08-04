@@ -16,7 +16,7 @@ auth = auth_response.json();
 print "Auth Ticket: %s" %auth["accessToken"];
  
 documentApi = tenant_url+"/api/content/documentlists/files@mozu/documents";
-documentPayload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : '{PRODUCT_ID}.JPG, 'extension' : 'jpg'};
+documentPayload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : '{PRODUCT_ID}.JPG', 'extension' : 'jpg'};
  
 headers = {'Content-type': 'application/json',  'x-vol-app-claims' : auth["accessToken"], 'x-vol-tenant' : '11146', 'x-vol-master-catalog' : '1'};
  
