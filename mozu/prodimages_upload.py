@@ -56,8 +56,11 @@ def upload_productimgs_mozu(src_filepath):
 
     try:
         document_id = document["id"]
-        # insert_docid_db(db_name,document_id=document_id, filename=)
+        # insert_docid_db(db_name,document_id=document_id, filename=filename, colorstyle=colorstyle)
     except KeyError:
+        document_response = requests.put(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False)
+        document = document_response.json()
+        document_id = document["id"]
         document_response.raise_for_status()
 
     print "document Id: %s" % document_id
