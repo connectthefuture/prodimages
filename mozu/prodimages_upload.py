@@ -60,7 +60,7 @@ def upload_productimgs_mozu(src_filepath):
     file_data = open(src_filepath, 'rb').read()
 
     headers["Content-type"] = mimetype
-
+    print "locals", locals()
     content_response = requests.put(document_content_api,
                                     data=file_data,
                                     headers=headers,
