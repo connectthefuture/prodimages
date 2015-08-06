@@ -281,6 +281,12 @@ def download_mplce_url(urldest_tuple):
     ########################
     #### DRIVE API AUTH ####
     #if regex_drive2.findall(image_url):
+
+    import urllib3
+
+    print ' 404 Trying Urllib3 ', image_url
+    hostname = urllib3.get_host(image_url)[1]
+
     if regex_drive3.findall(image_url):
         image_url = drive_match_fileid(image_url)
         print image_url, ' DRIVE3 --ID--> '
@@ -353,9 +359,9 @@ def download_mplce_url(urldest_tuple):
             elif urlcode_value < 400:
                 print urlcode_value
                 try:
-                    print 'TRY'
+                    print 'TRYsub400'
                     print image_url, destpath
-                    res = requests.get(image_url, timeout=5, verify=False, headers=headers)
+                    res = requests.get(image_url, timeout=5, stream=True, headers=headers)
                     with open(destpath, 'w+') as f:
                         f.write(res.content)
                         f.close()
@@ -367,9 +373,9 @@ def download_mplce_url(urldest_tuple):
 
             elif urlcode_value == 404:
                 ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
-                import urllib3
+                #import urllib3
                 print ' 404 Trying Urllib3 ', image_url
-                hostname = urllib3.get_host(image_url)[1]
+                #hostname = urllib3.get_host(image_url)[1]
                 if hostname == 'marketplace.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
                 elif hostname == 'pim1.merchantry.com':
@@ -381,7 +387,7 @@ def download_mplce_url(urldest_tuple):
                 #######################################################################################
 
                 try:
-                    print 'TRY'
+                    print 'TRY404'
                     res = requests.get(image_url, timeout=1,headers=headers)
                     with open(destpath, 'w+') as f:
                         f.write(res.content)
