@@ -226,10 +226,15 @@ def download_mplce_url(urldest_tuple):
     image_url = image_url.replace('?dl=0', '?dl=1')
     if regex_dbx.findall(image_url):
         if regex_dbxprev.findall(image_url):
+            print 'REGEX DBXPRE'
             pass
         else:
             image_url.replace('.jpg', '.jpg?dl=1')
             image_url.replace('.png', '.png?dl=1')
+            print 'REGEX DBX dl=1'
+
+            #'https://photos-6.dropbox.com/t/2/AADkUx0q03UJL6_oslHK4jFEEWXVlA-UXlnFZQ0m29rbAw/12/298595423/jpeg/32x32/1/1438902000/0/2/1506VVS-M000000822741-1.jpg/CN_osI4BIAEgAiAHKAEoAigH/NM6UG20gDHgCAWrhfdRbiKrlya21NErHsMMa58Tir8s?size_mode=5'
+            #'https://www.dropbox.com/sh/d2yu7a3bc0tmant/AACaVMWcCVR2ClsPfKSb7zq8a?preview=1506VVS-M000000822741-1.jpg'
 
     ########################################################
     ####### URL ENCODED % ESCAPES Fix ######################
