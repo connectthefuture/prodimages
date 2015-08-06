@@ -222,10 +222,14 @@ def download_mplce_url(urldest_tuple):
     ########################################################
     ####### Dropbox Fix for View vs DL value ###############
     regex_dbx = re.compile(r'^https://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
+    regex_dbxprev = re.compile(r'^https://www.dropbox.com/.+?preview.*\.[jpngJPNG]{3}$')
     image_url = image_url.replace('?dl=0', '?dl=1')
     if regex_dbx.findall(image_url):
-        image_url.replace('.jpg', '.jpg?dl=1')
-        image_url.replace('.png', '.png?dl=1')
+        if regex_dbxprev.findall(image_url):
+            pass
+        else:
+            image_url.replace('.jpg', '.jpg?dl=1')
+            image_url.replace('.png', '.png?dl=1')
     ########################################################
     ####### URL ENCODED % ESCAPES Fix ######################
     ## Strip error causing Line Feed ascii char
