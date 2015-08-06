@@ -230,6 +230,7 @@ def download_mplce_url(urldest_tuple):
         else:
             image_url.replace('.jpg', '.jpg?dl=1')
             image_url.replace('.png', '.png?dl=1')
+
     ########################################################
     ####### URL ENCODED % ESCAPES Fix ######################
     ## Strip error causing Line Feed ascii char
