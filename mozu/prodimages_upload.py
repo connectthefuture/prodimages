@@ -18,12 +18,11 @@ def upload_productimgs_mozu(src_filepath):
     auth_response = requests.post(auth_url, data=json.dumps(auth_request), headers=headers, verify=False)
     # parse params from filepath
     # TODO add Validation(regex) to prevent unwanted updates
-
+    ##
     filename   =  path.basename(src_filepath)
     ext        = src_filepath.split('.')[-1]
     mimetype   = "image/{}".format(ext.lower().replace('jpg','jpeg'))
     colorstyle = path.basename(src_filepath).split('.')[0][:9]
-
 
     print "Auth Response: %s" % auth_response.status_code
     auth_response.raise_for_status()
@@ -46,7 +45,6 @@ def upload_productimgs_mozu(src_filepath):
                                       headers=headers,
                                       verify=False
                                       )
-
 
     document = ''#document_response.json()
     document_id = ''#document["id"]
@@ -80,7 +78,7 @@ def upload_productimgs_mozu(src_filepath):
                                     headers=headers,
                                     verify=False
                                     )
-
+    print "locals", locals()
     print "Document content upload Response: %s" % content_response.text
     #document_response.raise_for_status()
     return content_response.url

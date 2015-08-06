@@ -128,11 +128,21 @@ def place_watermark_on_image(img, destdir='', watermark='', dpi='', opacity='', 
 
 
 if __name__ == '__main__':
-    import sys
-    img = sys.argv[1]
+    import sys, os
+    arg1 = os.path.abspath(sys.argv[1])
+    
     try:
         destdir = sys.argv[2]
     except IndexError:
-        destdir = ''
-    place_watermark_on_image(img, destdir=destdir)
-
+        if os.path.isdir(arg1):
+            destdir = arg1
+        else:
+            destdir = os.path.dirname(arg1)
+    
+    if os.path.isdir(arg1):
+        import glob
+        for i in glob.glob(os.path.join(arg1,'*.??g')):
+            place_watermark_on_image(i, destdir=destdir)
+    else:
+        place_watermark_on_image(arg1, destdir=destdir)
+    
