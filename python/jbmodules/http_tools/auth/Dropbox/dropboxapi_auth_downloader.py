@@ -33,16 +33,17 @@ def dropbox_client(access_token=None):
 
 
 def download_auth_file(client=None, access_token=None, image_url=None, destpath=None):
+    import os.path as path
     if not client:
         access_token='Do3NA68T2qgAAAAAAACjyFme5rJ5hzhE2izh3JPA-d-Mmi7foHhrV_DH1jg3xVoL'
         client = dropbox_client(access_token=access_token)
     folder_metadata = client.metadata(image_url)
     print 'metadata: ', folder_metadata
-    
+
     for url in folder_metadata:
         print url
         f, metadata = client.get_file_and_metadata(url)
-        outfile = open(os.path.join(destpath,metadata['name']), 'wb')
+        outfile = open(path.join(destpath,metadata['name']), 'wb')
         outfile.write(f.read())
         outfile.close()
         print metadata
