@@ -358,7 +358,7 @@ def download_mplce_url(urldest_tuple):
                 print urlcode_value
                 #res = urllib.urlretrieve(image_url, destpath)
                 res = requests.get(image_url, timeout=1, headers=headers)
-                with open(destpath, 'w+') as f:
+                with open(destpath, 'wb+') as f:
                     f.write(res.content)
                     f.close()
                     countimage += 1
@@ -371,8 +371,8 @@ def download_mplce_url(urldest_tuple):
                 print urlcode_value
                 try:
                     print 'TRYsub400', image_url, destpath, '367'
-                    res = requests.get(image_url, timeout=5, stream=True, headers=headers)
-                    with open(destpath, 'w+') as f:
+                    res = requests.get(image_url, timeout=5, headers=headers)
+                    with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
                     print res
