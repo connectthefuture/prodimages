@@ -398,8 +398,8 @@ def download_mplce_url(urldest_tuple):
 
                 try:
                     print 'TRY404'
-                    res = requests.get(image_url, timeout=1,headers=headers)
-                    with open(destpath, 'w+') as f:
+                    res = requests.get(image_url, timeout=7,headers=headers)
+                    with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
                     print res, ' 2nd Attempt using Merchantry Replaced URL OK'
@@ -417,7 +417,7 @@ def download_mplce_url(urldest_tuple):
                         except:
                             pass
                     try:
-                        with open(os.path.join(os.path.abspath(badurldir), image_url + '_error404.txt'), 'a+') as f:
+                        with open(os.path.join(os.path.abspath(badurldir), image_url + '_error404.txt'), 'ab+') as f:
                             f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
                             return destpath
                     except:
@@ -530,6 +530,58 @@ def mongo_update_url_dest_info(urldest_tuple):
         return updateCheck, destpath
 
 
+##########################
+######### REDIS ##########
+##########################
+
+def check_updated_image_by_md5checksum(filename,
+                              md5checksum=None,
+                              image_url=None,
+                              colorstyle=None,
+                              alt=None,
+                              local_filepath=None,
+                              version=None):
+    import redis
+    # redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
+    #redis_port = 17996
+    redis_host = '127.0.0.1'
+    redis_port = 6379
+
+    r = redis.Redis(host=redis_host, port=redis_port, encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
+
+    if not filename:
+        filename=local_filepath.split('/')[-1]
+    if filename is not None and filename[:9].isdigit():
+        colorstyle = filename[:9]
+        alt = filename.split('_')[1].split('.')[0][-1]
+        if alt.isdigit():
+            pass
+        else:
+            alt = 'NA'
+    else:
+        colorstyle='NA'
+        alt='NA'
+
+    if r.sadd("marketplace:currentsite", filename):
+    #if r.mset("google_drive:ll_editorial", filename):
+        ## Faking Hashes with Sets
+        ## r.set("filename:%s:colorstyle" % filename, colorstyle)
+        ## r.set("filename:%s:local_filepath" % filename, local_filepath)
+        r.hset("filename:%s" % filename, "md5checksum", md5checksum)
+        r.hset("filename:%s" % filename, "image_url", image_url)
+        r.hset("filename:%s" % filename, "colorstyle", colorstyle)
+        r.hset("filename:%s" % filename, "alt", alt)
+        r.hset("filename:%s" % filename, "local_filepath", local_filepath)
+        r.hmset("filename:%s" % filename, {"media_version": version})
+        r.hsetnx("filename:%s" % filename, "ref_count", 0)
+        r.hincrby("filename:%s" % filename, "ref_count", 1)
+        print r.hvals("filename:%s" % filename)
+        return True
+    else:
+        return False
+
+
+
 def mongo_upsert_threaded(argslist=None):
     import Queue
     import threading
@@ -596,6 +648,8 @@ def mongo_upsert_threaded(argslist=None):
         return restest
     else:
         return
+
+
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
