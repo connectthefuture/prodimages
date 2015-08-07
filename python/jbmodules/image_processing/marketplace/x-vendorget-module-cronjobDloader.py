@@ -428,7 +428,7 @@ def download_mplce_url(urldest_tuple):
         # except requests.exceptions.ConnectionError:
         #     print 'ConnectionError'
         #     pass
-        except IOError:
+        except OSError:
             print 'Hidden IO Error'
             pass
 
