@@ -364,8 +364,7 @@ def download_mplce_url(urldest_tuple):
             elif urlcode_value < 400:
                 print urlcode_value
                 try:
-                    print 'TRYsub400'
-                    print image_url, destpath
+                    print 'TRYsub400', image_url, destpath, '367'
                     res = requests.get(image_url, timeout=5, stream=True, headers=headers)
                     with open(destpath, 'w+') as f:
                         f.write(res.content)
