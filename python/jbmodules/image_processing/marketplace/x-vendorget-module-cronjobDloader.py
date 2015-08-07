@@ -246,7 +246,7 @@ def download_mplce_url(urldest_tuple):
     ########################################################
     ####### URL ENCODED % ESCAPES Fix ######################
     ## Strip error causing Line Feed ascii char
-    image_url = ''.join(image_url.split('%0A'))
+    # image_url = ''.join(image_url.split('%0A'))
     ########################################################
     ############       Finally     #########################
     #####     Replace ALL url encoding % escapes    ########
