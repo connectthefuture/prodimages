@@ -227,7 +227,13 @@ def download_mplce_url(urldest_tuple):
     if regex_dbx.findall(image_url):
         if regex_dbxprev.findall(image_url):
             print 'REGEX DBXPRE'
-            pass
+            import http_tools.auth.Dropbox.dropboxapi_service as dropboxapi_service
+            final_path = dropboxapi_service.download_auth_file(image_url=image_url, destpath=destpath)
+            if final_path:
+                print final_path, 'Final DBX Path'
+                image_url = final_path
+            else:
+                pass
         else:
             image_url.replace('.jpg', '.jpg?dl=1')
             image_url.replace('.png', '.png?dl=1')
