@@ -330,7 +330,7 @@ def download_mplce_url(urldest_tuple):
     ## No Auth ##
     elif regex_validurl.findall(image_url):
         import httplib2
-        image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
+        # image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
         #print 'RRR final', image_url
         headers = {'Content-Accept': 'gzip'} ##{'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
         ########################################################
@@ -346,18 +346,18 @@ def download_mplce_url(urldest_tuple):
         try:
             print image_url, destpath
             if not image_url[:5] == 'https':
-                res = requests.get(image_url, timeout=5, headers=headers)
-                #print ' HTTP Yippie ', res
+                res = requests.get(image_url, timeout=5, verify=False, headers=headers)
+                print ' HTTP Yippie ', res
             else:
                 res = requests.get(image_url, timeout=10, verify=False, headers=headers)
-                #print ' HTTPS Oh Yes ', res
+                print ' HTTPS Oh Yes ', res
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value
             if urlcode_value == 209:
                 print urlcode_value
                 #res = urllib.urlretrieve(image_url, destpath)
-                res = requests.get(image_url, timeout=1, headers=headers)
+                res = requests.get(image_url, timeout=1, verify=False, headers=headers)
                 with open(destpath, 'wb+') as f:
                     f.write(res.content)
                     f.close()
@@ -371,7 +371,7 @@ def download_mplce_url(urldest_tuple):
                 print urlcode_value
                 try:
                     print 'TRYsub400', image_url, destpath, '367'
-                    res = requests.get(image_url, timeout=5, headers=headers)
+                    res = requests.get(image_url, timeout=5, verify=False, headers=headers)
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
@@ -398,7 +398,7 @@ def download_mplce_url(urldest_tuple):
 
                 try:
                     print 'TRY404'
-                    res = requests.get(image_url, timeout=7,headers=headers)
+                    res = requests.get(image_url, timeout=7, verify=False, headers=headers)
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
