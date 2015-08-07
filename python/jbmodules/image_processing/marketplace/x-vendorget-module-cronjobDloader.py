@@ -240,12 +240,13 @@ def download_mplce_url(urldest_tuple):
             image_url.replace('.png', '.png?dl=1')
             print 'REGEX DBX dl=1'
 
-            #'https://photos-6.dropbox.com/t/2/AADkUx0q03UJL6_oslHK4jFEEWXVlA-UXlnFZQ0m29rbAw/12/298595423/jpeg/32x32/1/1438902000/0/2/1506VVS-M000000822741-1.jpg/CN_osI4BIAEgAiAHKAEoAigH/NM6UG20gDHgCAWrhfdRbiKrlya21NErHsMMa58Tir8s?size_mode=5'
-            #'https://www.dropbox.com/sh/d2yu7a3bc0tmant/AACaVMWcCVR2ClsPfKSb7zq8a?preview=1506VVS-M000000822741-1.jpg'
 
+    ########################################################
+    ###########---- BEGIN UGLY Tmp Fix ---##################
     ########################################################
     ####### URL ENCODED % ESCAPES Fix ######################
     ## Strip error causing Line Feed ascii char
+    #  -- Should be commented usually, only for temp fixing single uploads
     # image_url = ''.join(image_url.split('%0A'))
     ########################################################
     ############       Finally     #########################
@@ -253,6 +254,10 @@ def download_mplce_url(urldest_tuple):
     ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
     # image_url  = image_url.replace('/Flat%2520Images/', '/Flat%20Images/')
     # print image_url, ' URL'
+    ##############-------------------------#################
+    ##############---- END UGLY Tmp Fix ---#################
+    ########################################################
+
     regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
     regex_drive2 = re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(?P<fileId>.+?)\&?.*?$', re.U)
     regex_drive3 = re.compile(r'^(https://d(.+?)\.google\.com/file/d/)(?P<fileId>.+?)/(edit|view)\?usp\=.*?$', re.U)
@@ -428,7 +433,7 @@ def download_mplce_url(urldest_tuple):
         # except requests.exceptions.ConnectionError:
         #     print 'ConnectionError'
         #     pass
-        except OSError:
+        except IOError:
             print 'Hidden IO Error'
             pass
 
