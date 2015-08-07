@@ -332,7 +332,7 @@ def download_mplce_url(urldest_tuple):
         import httplib2
         image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
         #print 'RRR final', image_url
-        headers = {'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
+        headers = {'Content-Accept': 'gzip'} ##{'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
         ########################################################
         ####### Google Drive Fix ###############################
         ########################################################
@@ -428,6 +428,7 @@ def download_mplce_url(urldest_tuple):
         #     print 'ConnectionError'
         #     pass
         except IOError:
+            print 'Hidden IO Error'
             pass
 
 
