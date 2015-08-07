@@ -446,15 +446,20 @@ def multi_url_downloader(argslist=None):
             ## Delete Non Images before the whole shebang continues
             try:
                 metadata = get_exif_all_data(downloaded_file)
-
                 if metadata['File:MIMEType'] is not None and metadata['File:MIMEType'].split('/')[0] != 'image':
                     import os
+
+                    with open('/mnt/Post_Complete/Complete_Archive/badfiles_200code_removed.txt','ab+') as f:
+                        for k,v in metadata.items():
+                            f.write("{}, '{}': '{}',".format(downloaded_file, k,v))
                     os.remove(downloaded_file)
-                    print metadata['File:MIMEType'], ' <--BadImage - Removed --> ', downloaded_file
+
+
+                    #print metadata['File:MIMEType'], ' <--BadImage - Removed --> ', downloaded_file
                     q.task_done()
                 else:
                     count += 1
-                    print count, ' NotRemoved --> ', downloaded_file, metadata['File:MIMEType']
+                    #print count, ' NotRemoved --> ', downloaded_file, metadata['File:MIMEType']
                     q.task_done()
             except AttributeError:
                 #print 'AttributeError --> ', downloaded_file
