@@ -244,7 +244,7 @@ def download_mplce_url(urldest_tuple):
             image_url.replace('.JPG', '.jpg')
             image_url.replace('.PNG', '.png')
             print 'REGEX DBX dl=1'
-        if not regex_dl(image_url):
+        if not regex_dl.findall(image_url):
             image_url = image_url + '&dl=1'
 
     ########################################################
