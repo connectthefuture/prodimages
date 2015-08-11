@@ -227,7 +227,8 @@ def download_mplce_url(urldest_tuple):
     ####### Dropbox Fix for View vs DL value ###############
     regex_dbx = re.compile(r'^https://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
     regex_dbxprev = re.compile(r'^https://www.dropbox.com/.+?preview.*\.[jpngJPNG]{3}$')
-    image_url = image_url.replace('?dl=0', '?dl=1').replace('?dl=2', '?dl=1').replace('?dl=3', '?dl=1').replace('?dl=4', '?dl=1').replace('?dl=5', '?dl=1').replace('?dl=6', '?dl=1').replace('?dl=7', '?dl=1').replace('?dl=8', '?dl=1').replace('?dl=9', '?dl=1')
+    image_url = image_url.replace('dl=9','dl=1').replace('dl=0', 'dl=1').replace('dl=2', 'dl=1').replace('dl=3', 'dl=1').replace('dl=4', 'dl=1').replace('dl=5', 'dl=1').replace('dl=6', 'dl=1').replace('dl=7', 'dl=1').replace('dl=8', 'dl=1')
+    regex_dl = re.compile(r'^.+\?dl=1.*?$')
     if regex_dbx.findall(image_url):
         if regex_dbxprev.findall(image_url):
             print 'REGEX DBXPRE'
@@ -240,10 +241,11 @@ def download_mplce_url(urldest_tuple):
             else:
                 pass
         else:
-            image_url.replace('.jpg', '.jpg?dl=1')
-            image_url.replace('.png', '.png?dl=1')
+            image_url.replace('.JPG', '.jpg')
+            image_url.replace('.PNG', '.png')
             print 'REGEX DBX dl=1'
-
+        if not regex_dl(image_url):
+            image_url = image_url + '&dl=1'
 
     ########################################################
     ###########---- BEGIN UGLY Tmp Fix ---##################
