@@ -476,7 +476,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         vert_horiz = '{0}x{1}'.format(width, height)
         dimensions = '{0}x{1}'.format(int(width), int(height))
         print '1'
-    
     elif int(height) > int(width): #float(str(aspect_ratio)) > float(1.2):
         vert_horiz = 'x{0}'.format(height)
         w = float(0.833) * float(height)
