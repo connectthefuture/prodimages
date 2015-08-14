@@ -436,10 +436,10 @@ def download_mplce_url(urldest_tuple):
                         print 'Print Failed write 404 file'
                         pass
 
-        # except requests.exceptions.ConnectionError:
-        #     print 'ConnectionError'
-        #     pass
-        except AttributeError:
+        except requests.exceptions.ConnectionError:
+            print 'ConnectionError'
+            pass
+        except IOError:
             print 'Hidden IO Error Related to timeout value in get'
             pass
 
