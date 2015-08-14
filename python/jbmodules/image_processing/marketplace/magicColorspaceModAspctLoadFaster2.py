@@ -451,6 +451,8 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 
     outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
+    h=''
+    w=''
     dimensions = ''
     ## Get variable values for processing
     aspect_ratio = get_aspect_ratio(img)
@@ -740,7 +742,7 @@ def main(root_img_dir=None):
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
                 ## TODO: pngout will be the image to POST to mozu returned from mozu
                 #  ie. response = send_to_mozu(pngout)  then save response in postgres --> and push the id to mozu again
-                
+
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
             except AttributeError:
