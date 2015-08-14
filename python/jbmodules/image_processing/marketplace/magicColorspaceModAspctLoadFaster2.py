@@ -477,7 +477,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         dimensions = '{0}x{1}'.format(int(width), int(height))
         print '1'
     
-        elif int(height) > int(width): #float(str(aspect_ratio)) > float(1.2):
+    elif int(height) > int(width): #float(str(aspect_ratio)) > float(1.2):
         vert_horiz = 'x{0}'.format(height)
         w = float(0.833) * float(height)
         # w = float(round(w,2)*float(aspect_ratio))
@@ -507,7 +507,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                 pass
             h = int(dimensions.split('x')[-1])
             w = int(dimensions.split('x')[0])
-            print '========================================>\t=====================>=======> ', img #wXh ==', w, 'x', h, 'with then height', width, height
             print 'width={}\nheight={}\nw={}\th={}\naspect={}\ndimension={}'.format(width,height,w,h,aspect_ratio,dimensions)
             if w > 2000 or h > 2400:
                 print 'xxxxxxxxxxx', h, w
@@ -515,7 +514,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                     if int(height) > int(width):
                         vert_horiz = 'x2400'
                         dimensions = '2000x2400'
-                        print 'AUX2',  height, 'hite<---->witth', width
+                        print 'AUX2',  #height, 'hite<---->witth', width
                     elif h > 2400:
                         vert_horiz = 'x{0}'.format(h)
                         w = float(0.833) * float(h)
@@ -525,15 +524,15 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                     if w > 2000:
                         vert_horiz = '2000x'
                         dimensions = '2000x2400'
-                        print 'AUX4',  height, 'hite<---->witth', width
+                        print 'AUX4',  #height, 'hite<---->witth', width
                     else:
                         vert_horiz = '{0}x'.format(w)
                         h = float(1.2) * float(width)
                         dimensions = '{0}x{1}'.format(int(w), int(h))
-                        print 'AUX5',  height, 'hite<---->witth', width
+                        print 'AUX5',  #height, 'hite<---->witth', width
 
 
-    print dimensions, ' VERT PNG Fin ', vert_horiz, aspect_ratio
+    #print dimensions, ' VERT PNG Fin ', vert_horiz, aspect_ratio
 
 
     # Create a safe png then copy it and reuse tmp in following procs
