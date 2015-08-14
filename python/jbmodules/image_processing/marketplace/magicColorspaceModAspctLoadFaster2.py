@@ -474,55 +474,61 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         vert_horiz = '{0}x{1}'.format(width, height)
         dimensions = '{0}x{1}'.format(int(width), int(height))
         print '1'
-
-    elif float(str(aspect_ratio)) > float(1.2):
+    
+        elif int(height) > int(width): #float(str(aspect_ratio)) > float(1.2):
         vert_horiz = 'x{0}'.format(height)
-        w = float(0.8) * float(height)
+        w = float(0.833) * float(height)
         # w = float(round(w,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(w), int(height))
-        print "W", w, aspect_ratio
-        print '3'
-    elif float(str(aspect_ratio)) < float(1.2):
+        print '3', w, dimensions, vert_horiz
+    elif int(height) < int(width): #float(str(aspect_ratio)) < float(1.2):
         vert_horiz = '{0}x'.format(width)
         h = float(1.2) * float(width)
         # h = float(round(h,2)*float(aspect_ratio))
         dimensions = '{0}x{1}'.format(int(width), int(h))
-        print "H", h, width, aspect_ratio
-        print '4'
+        print '4', h, dimensions, vert_horiz
+
+    print '\nwidth={}\nheight={}\nw={}\th={}\naspect={}\ndimension={}'.format(width,height,w,h,aspect_ratio,dimensions)
 
     if not dimensions:
         dimensions = '100%'
         vert_horiz = '100%'
         print ' Not Dimensions PNG faster2-->', img
-    print dimensions, ' VERT PNG ', vert_horiz
 
     if dimensions and dimensions != '100%' or not vert_horiz:
+        
         if not dimensions == '2000x2400':
+            try:
+                del h
+                del w
+            except:
+                pass
             h = int(dimensions.split('x')[-1])
             w = int(dimensions.split('x')[0])
-            print '==> widXheight ==', w, 'x', h
-
+            print '========================================>\t=====================>=======> ', img #wXh ==', w, 'x', h, 'with then height', width, height
+            print 'width={}\nheight={}\nw={}\th={}\naspect={}\ndimension={}'.format(width,height,w,h,aspect_ratio,dimensions)
             if w > 2000 or h > 2400:
                 print 'xxxxxxxxxxx', h, w
-                if height > width:
-                    if height > width:
+                if int(height) >= int(width):
+                    if int(height) > int(width):
                         vert_horiz = 'x2400'
                         dimensions = '2000x2400'
-                        print 'AUX2'
+                        print 'AUX2',  height, 'hite<---->witth', width
                     elif h > 2400:
                         vert_horiz = 'x{0}'.format(h)
-                        w = float(0.8) * float(h)
+                        w = float(0.833) * float(h)
                         dimensions = '{0}x{1}'.format(int(w), int(h))
-                        print 'AUX3'
-                elif width > height:
+                        print 'AUX3',  height, 'hite<---->witth', width
+                elif int(width) > int(height):
                     if w > 2000:
                         vert_horiz = '2000x'
                         dimensions = '2000x2400'
+                        print 'AUX4',  height, 'hite<---->witth', width
                     else:
                         vert_horiz = '{0}x'.format(w)
                         h = float(1.2) * float(width)
                         dimensions = '{0}x{1}'.format(int(w), int(h))
-
+                        print 'AUX5',  height, 'hite<---->witth', width
     
 
     print dimensions, ' VERT PNG Fin ', vert_horiz, aspect_ratio
