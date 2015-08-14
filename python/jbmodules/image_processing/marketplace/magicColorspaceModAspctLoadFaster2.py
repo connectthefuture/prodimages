@@ -529,9 +529,10 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                         h = float(1.2) * float(width)
                         dimensions = '{0}x{1}'.format(int(w), int(h))
                         print 'AUX5',  height, 'hite<---->witth', width
-    
+
 
     print dimensions, ' VERT PNG Fin ', vert_horiz, aspect_ratio
+
 
     # Create a safe png then copy it and reuse tmp in following procs
     #import tempfile, shutil
