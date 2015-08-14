@@ -449,6 +449,7 @@ def multi_url_downloader(argslist=None):
     import threading
     import multiprocessing
     import subprocess
+    import requests
     q = Queue.Queue()
     for i in argslist: #put 30 tasks in the queue
         if i:
