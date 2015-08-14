@@ -358,10 +358,10 @@ def download_mplce_url(urldest_tuple):
         try:
             print image_url, destpath
             if not image_url[:5] == 'https':
-                res = requests.get(image_url, timeout=9, verify=False, headers=headers)
+                res = requests.get(image_url, timeout=17, verify=False, headers=headers)
                 print ' HTTP Yippie ', res
             else:
-                res = requests.get(image_url, timeout=10, verify=False, headers=headers)
+                res = requests.get(image_url, timeout=12, verify=False, headers=headers)
                 print ' HTTPS Oh Yes ', res
             print 'ALMOST'
             urlcode_value = res.status_code
@@ -383,7 +383,7 @@ def download_mplce_url(urldest_tuple):
                 print urlcode_value
                 try:
                     print 'TRYsub400', image_url, destpath, '367'
-                    res = requests.get(image_url, timeout=8, verify=False, headers=headers)
+                    res = requests.get(image_url, timeout=11, verify=False, headers=headers)
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
@@ -410,7 +410,7 @@ def download_mplce_url(urldest_tuple):
 
                 try:
                     print 'TRY404'
-                    res = requests.get(image_url, timeout=7, verify=False, headers=headers)
+                    res = requests.get(image_url, timeout=10, verify=False, headers=headers)
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
