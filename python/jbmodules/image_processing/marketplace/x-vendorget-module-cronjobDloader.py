@@ -547,13 +547,7 @@ def mongo_update_url_dest_info(urldest_tuple):
 ######### REDIS ##########
 ##########################
 
-def check_updated_image_by_md5checksum(filename,
-                              md5checksum=None,
-                              image_url=None,
-                              colorstyle=None,
-                              alt=None,
-                              local_filepath=None,
-                              version=None):
+def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=None, colorstyle=None, alt=None, local_filepath=None, version=None):
     import redis
     # redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
     #redis_port = 17996
