@@ -485,6 +485,9 @@ def multi_url_downloader(argslist=None):
                     count += 1
                     #print count, ' NotRemoved --> ', downloaded_file, metadata['File:MIMEType']
                     q.task_done()
+            except requests.exceptions.ConnectionError:
+                #print 'AttributeError --> ', downloaded_file
+                q.task_done()
             except AttributeError:
                 #print 'AttributeError --> ', downloaded_file
                 q.task_done()
