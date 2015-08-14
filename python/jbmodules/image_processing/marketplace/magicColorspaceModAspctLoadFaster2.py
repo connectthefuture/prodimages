@@ -736,7 +736,11 @@ def main(root_img_dir=None):
                 ## Get color pixel values from source img
                 rgbmean     = v.items()
                 ## Generate png from source then jpgs from png
+                
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
+                ## TODO: pngout will be the image to POST to mozu returned from mozu
+                #  ie. response = send_to_mozu(pngout)  then save response in postgres --> and push the id to mozu again
+                
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
             except AttributeError:
