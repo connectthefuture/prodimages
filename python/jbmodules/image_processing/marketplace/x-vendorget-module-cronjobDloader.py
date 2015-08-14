@@ -487,7 +487,7 @@ def multi_url_downloader(argslist=None):
                     #print count, ' NotRemoved --> ', downloaded_file, metadata['File:MIMEType']
                     q.task_done()
             except requests.exceptions.ConnectionError:
-                #print 'AttributeError --> ', downloaded_file
+                print 'ConnectionError Probably a timeout issue with download func--> ', downloaded_file
                 q.task_done()
             except AttributeError:
                 #print 'AttributeError --> ', downloaded_file
