@@ -470,7 +470,12 @@ def multi_url_downloader(argslist=None):
 
                     with open('/mnt/Post_Complete/Complete_Archive/badfiles_200code_removed.txt','ab+') as f:
                         for k,v in metadata.items():
-                            f.write("{}, '{}': '{}',".format(downloaded_file, k,v))
+                            try:
+                                f.write("{}, '{}': '{}',".format(downloaded_file, k,v))
+                            except UnicodeEncodeError:
+                                print 'UnicodeEncodeError Passing ---'
+                                pass
+
                     os.remove(downloaded_file)
 
 
