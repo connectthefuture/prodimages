@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 def upload_productimgs_mozu(src_filepath):
     import requests
     import json
@@ -82,11 +81,83 @@ def upload_productimgs_mozu(src_filepath):
     print "Document content upload Response: %s" % content_response.text
     #document_response.raise_for_status()
     return content_response.url
+    # return bflyfileid, mozuimageid
+
+def get_psycopg_cursor():
+    import os, psycopg2, urlparse
+    connurl = 'postgres://cojkwmymqgbslk:0y3KViCM5vkAkiYXvvdcdHfVrT@ec2-54-204-0-120.compute-1.amazonaws.com:5432/dco1s4iscdv2as'
+    os.environ["DATABASE_URL"] = connurl
+    urlparse.uses_netloc.append("postgres")
+    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    conn = psycopg2.connect( database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+    cur = conn.cursor()
+    return cur
+
+
+def insert_bflyid_mozuid_pgsql(bflyfileid, mozuimageid):
+    cur = get_psycopg_cursor
+    try:
+        cur.execute("CREATE TABLE images_bfly_mozu (id serial PRIMARY KEY, bflyid varchar, mozuid varchar);"
+    except:
+        pass
+
+    try:
+        cur.execute("INSERT INTO images_bfly_mozu (bflyid, mozuid) VALUES (%s, %s)", (bflyfileid, mozuimageid))
+    except:
+        pass
+
+
+def retrieve_mozuimageid_bflyfileid(bflyfileid):
+    import requests
+    cur = get_psycopg_cursor
+    mozuimageid = cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyid = '%s'", (bflyfileid))
+    if mozuimageid:
+        return mozuimageid
+    else:
+        return False
+
+def retrieve_mozuimageurl_bflyfileid(bflyfileid, destpath=None):
+    import requests
+    mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
+    mozuimageid = retrieve_mozuimageid_bflyfileid(bflyfileid)
+    mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
+    res = requests.get(mozuimageurl)
+    if res.status_code >= 400:
+        return False
+    elif not destpath:
+        return res
+    else:
+        with open(destpath) as f:
+            f.write(res.content)
+        return destpath
+
+
+def main_load_post(src_filepath):
+    bflyfileid, mozuimageid = upload_productimgs_mozu(src_filepath)
+    print 'bflyfileid={}\nmozuimageid={}'.format(bflyfileid, mozuimageid)
+    result = insert_bflyid_mozuid_pgsql(bflyfileid, mozuimageid)
+    print result
+    return
 
 
 if __name__ == '__main__':
     import sys
+    import os.path as path
     src_filepath = '/Users/johnb/Desktop/misc_tests/orig/354394801_5.jpg'
-    #src_filepath = '/Users/johnb/Desktop/misc_tests/croppedtest/out/362203805.png'  ## sys.argv[1]
-    upload_productimgs_mozu(src_filepath)
+    ext = '.jpg'
+    #src_filepath = '/Users/johnb/Desktop/misc_tests/croppedtest/out/362203805.png'
+    if path.isfile(sys.argv[1]):
+        src_filepath = sys.argv[1]
+        main_load_post(src_filepath)
+        print src_filepath
 
+    elif sys.argv[1][:9].isdigit():
+        bflyfileid = sys.argv[1]
+        try:
+            destpath = sys.argv[2]
+            if path.isfile(destpath):
+                retrieve_mozuimageurl_bflyfileid(bflyfileid, destpath=destpath)
+            elif path.isdir(destpath):
+                retrieve_mozuimageurl_bflyfileid(bflyfileid, destpath=path.join(destpath, bflyfileid + ext))
+        except IndexError:
+            destpath = ''
