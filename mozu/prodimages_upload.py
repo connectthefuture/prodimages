@@ -95,6 +95,8 @@ def get_psycopg_cursor():
 
 
 def insert_bflyid_mozuid_pgsql(bflyfileid, mozuimageid):
+    #import datetime
+    #dt = datetime.datetime.now()
     cur = get_psycopg_cursor
     try:
         cur.execute("CREATE TABLE images_bfly_mozu (id serial PRIMARY KEY, bflyid varchar, mozuid varchar);"
