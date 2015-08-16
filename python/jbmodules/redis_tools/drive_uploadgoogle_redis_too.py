@@ -637,6 +637,20 @@ def drive_downloading(destdir=None, file_id=None):
     client.download_file_drive()
 
 
+def md5_check(fpath):
+    import hashlib, re
+    import os.path as path
+    if path.isfile(fpath):
+        filepath = path.abspath(fpath)
+        try:
+            _file = open(filepath, "rb")
+            content = _file.read()
+            _file.close()
+            md5 = hashlib.md5(content)
+            _hash = md5.hexdigest()
+        except:
+            return False
+
 #c = GoogleDriveClient()
 #print c.list_ret_IDs_indir()
 if __name__ == '__main__':
