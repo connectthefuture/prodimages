@@ -153,7 +153,7 @@ def main_retrieve_get(**kwargs):
     mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
     mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
-    return mozuimageurl, bflyimageid
+    return (mozuimageurl, bflyimageid,)
 
 if __name__ == '__main__':
     import sys
@@ -164,8 +164,8 @@ if __name__ == '__main__':
     if path.isfile(sys.argv[1]):
         src_filepath = sys.argv[1]
         ext = src_filepath.split('.')[-1]
-        main_upload_post(src_filepath)
-        print src_filepath
+        result = main_upload_post(src_filepath)
+        print "Result --> ", result, src_filepath
     elif sys.argv[1][:9].isdigit() and len(sys.argv[1]) < 20:
         bflyimageid = sys.argv[1]
         try:
