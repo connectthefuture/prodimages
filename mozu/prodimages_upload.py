@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def upload_productimgs_mozu(src_filepath):
-    import requests
-    import json
-    import os.path as path
+def get_mozu_authtoken(tenant_url):
+    import requests, json
     #  "http://requestb.in/q66719q6" #
     auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
-    tenant_url = "https://t11146.staging-sb.mozu.com/"
-
+    tenant_url = tenant_url
     headers = {'Content-type': 'application/json',
                'Accept-Encoding': 'gzip, deflate'}
-
     auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
 
     auth_response = requests.post(auth_url, data=json.dumps(auth_request), headers=headers, verify=False)
@@ -22,57 +18,7 @@ def upload_productimgs_mozu(src_filepath):
     auth_response.raise_for_status()
     auth = auth_response.json()
     print "Auth Ticket: %s" % auth["accessToken"]
-
-    document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
-    
-    headers = {'Content-type': 'application/json',
-               'x-vol-app-claims' : auth["accessToken"],
-               'x-vol-tenant' : '11146',
-               'x-vol-master-catalog' : '1',
-               # 'x-vol-dataview-mode': 'Pending',
-               # ??'x-vol-site' : '1',
-               }
-
-    bflyimageid   =  path.basename(src_filepath).split('.')[0]  #[:-1]
-    ext        = src_filepath.split('.')[-1]
-    mimetype   = "image/{}".format(ext.lower().replace('jpg','jpeg'))
-    colorstyle = path.basename(src_filepath).split('.')[0][:9]
-
-    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid + '.' + ext, 'extension' : ext}
-    document_response = requests.post(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False )
-
-    document = ''#document_response.json()
-    document_id = ''#document["id"]
-
-    #document_response.raise_for_status()
-    if document_response.status_code < 400:
-        document = document_response.json()
-        try:
-            document_id = document["id"]
-            # insert_docid_db(db_name,document_id=document_id, bflyimageid=bflyimageid, colorstyle=colorstyle, img_number=sequence)
-
-        except KeyError:
-            document_response = requests.put(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False)
-            document = document_response.json()
-            document_id = document["id"]
-            document_response.raise_for_status()
-
-    print "document ID: %s" % document_id
-
-    print "document_payload: %s" % document_payload
-
-    ## create rest url with doc id from resp
-    document_content_api = tenant_url + "/api/content/documentlists/files@mozu/documents/" + document_id + "/content"
-    #files = {'media': open(src_filepath, 'rb')}
-    file_data = open(src_filepath, 'rb').read()
-    headers["Content-type"] = mimetype
-    #print "locals", locals()
-    content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False )
-    print "locals", locals()
-    print "Document content upload Response: %s" % content_response.text
-    #document_response.raise_for_status()
-    return document_id, content_response.json()
-    # return bflyimageid, mozuimageid
+    return auth["accessToken"]
 
 def get_psycopg_cursor():
     import os, psycopg2, urlparse
@@ -98,6 +44,60 @@ def md5_checksumer(src_filepath):
             return _hash
         except:
             return False
+
+def upload_productimgs_mozu(src_filepath):
+    import requests, json
+    import os.path as path
+
+    tenant_url = "https://t11146.staging-sb.mozu.com/"
+    headers = {'Content-type': 'application/json',
+               'x-vol-app-claims' : get_mozu_authtoken(tenant_url),
+               'x-vol-tenant' : '11146',
+               'x-vol-master-catalog' : '1',
+               # 'x-vol-dataview-mode': 'Pending',
+               # ??'x-vol-site' : '1',
+               }
+    
+    document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
+    
+    bflyimageid   =  path.basename(src_filepath).split('.')[0]  #[:-1]
+    ext        = src_filepath.split('.')[-1]
+    mimetype   = "image/{}".format(ext.lower().replace('jpg','jpeg'))
+    colorstyle = path.basename(src_filepath).split('.')[0][:9]
+    document = ''       #document_response.json()
+    document_id = ''    #document["id"]
+
+    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid + '.' + ext, 'extension' : ext}
+    document_response = requests.post(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False )
+   
+    #document_response.raise_for_status()
+    if document_response.status_code < 400:
+        document = document_response.json()
+        try:
+            document_id = document["id"]
+            # insert_docid_db(db_name,document_id=document_id, bflyimageid=bflyimageid, colorstyle=colorstyle, img_number=sequence)
+
+        except KeyError:
+            document_response = requests.put(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False)
+            document = document_response.json()
+            document_id = document["id"]
+            document_response.raise_for_status()
+
+    print "document ID: %s" % document_id
+    print "document_payload: %s" % document_payload
+
+    ## create rest url with doc id from resp
+    document_content_api = tenant_url + "/api/content/documentlists/files@mozu/documents/" + document_id + "/content"
+    #files = {'media': open(src_filepath, 'rb')}
+    file_data = open(src_filepath, 'rb').read()
+    headers["Content-type"] = mimetype
+    #print "locals", locals()
+    content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False )
+    print "locals", locals()
+    print "Document content upload Response: %s" % content_response.text
+    #document_response.raise_for_status()
+    return document_id, content_response.json()
+    # return bflyimageid, mozuimageid
 
 def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
@@ -142,7 +142,10 @@ def pgsql_get_validate_md5checksum(md5checksum):
     cur = get_psycopg_cursor
     bflyimageid = cur.execute("SELECT bflyimageid, mozuimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
     if bflyimageid:
-        return (bflyimageid, mozuimageid,)
+        mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
+        mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
+        mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
+        return (bflyimageid, mozuimageurl,)
     else:
         return False
 
