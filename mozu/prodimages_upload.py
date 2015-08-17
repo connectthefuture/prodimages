@@ -51,8 +51,8 @@ def upload_productimgs_mozu(src_filepath):
 
     tenant_url = "https://t11146.staging-sb.mozu.com/"
     headers = {'Content-type': 'application/json', 'x-vol-app-claims' : get_mozu_authtoken(tenant_url), 'x-vol-tenant' : '11146', 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
-    
-    document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents" 
+
+    document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
 
     bflyimageid   = path.basename(src_filepath) #[:-1]
     ext = bflyimageid.split('.')[-1]
@@ -61,7 +61,7 @@ def upload_productimgs_mozu(src_filepath):
 
     document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid, 'extension' : ext}
     document_response = requests.post(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False )
-   
+
     #document_response.raise_for_status()
     if document_response.status_code < 400:
         document = document_response.json()
@@ -77,7 +77,7 @@ def upload_productimgs_mozu(src_filepath):
 
     print "document ID: %s" % document_id
     print "document_payload: %s" % document_payload
-    
+
     ## create rest url with doc id from resp
     document_content_api = tenant_url + "/api/content/documentlists/files@mozu/documents/" + document_id + "/content"
     #files = {'media': open(src_filepath, 'rb')}
@@ -144,7 +144,7 @@ def pgsql_get_validate_md5checksum(md5checksum):
 
 def main_load_post(src_filepath):
     mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
-    bflyimageid   =  path.basename(src_filepath)  #.split('.')[0] 
+    bflyimageid   =  path.basename(src_filepath)  #.split('.')[0]
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
     result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid)
     print result
@@ -152,6 +152,7 @@ def main_load_post(src_filepath):
 
 def main_ret_get(bflyimageid, *args):
     args_ct=len(args)
+    mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
     mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
     mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
