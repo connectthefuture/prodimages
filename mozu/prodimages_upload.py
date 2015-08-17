@@ -38,7 +38,7 @@ def upload_productimgs_mozu(src_filepath):
     mimetype   = "image/{}".format(ext.lower().replace('jpg','jpeg'))
     colorstyle = path.basename(src_filepath).split('.')[0][:9]
 
-    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid, 'extension' : ext}
+    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid + '.' + ext, 'extension' : ext}
     document_response = requests.post(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False )
 
     document = ''#document_response.json()
@@ -113,7 +113,7 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     except:
         pass
 
-def pgsql_retrieve_mozuimageid_bflyimageid(bflyimageid):
+def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     import requests
     cur = get_psycopg_cursor
     mozuimageid = cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
@@ -122,10 +122,10 @@ def pgsql_retrieve_mozuimageid_bflyimageid(bflyimageid):
     else:
         return False
 
-def pgsql_retrieve_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
+def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
     import requests
     mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
-    mozuimageid = pgsql_retrieve_mozuimageid_bflyimageid(bflyimageid)
+    mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
     mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
     res = requests.get(mozuimageurl)
     if res.status_code >= 400:
@@ -137,7 +137,7 @@ def pgsql_retrieve_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
             f.write(res.content)
         return destpath
 
-def pgsql_retrieve_validate_md5checksum(md5checksum):
+def pgsql_get_validate_md5checksum(md5checksum):
     import requests
     cur = get_psycopg_cursor
     bflyimageid = cur.execute("SELECT bflyimageid, mozuimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
@@ -156,7 +156,7 @@ def main_load_post(src_filepath):
 
 def main_ret_get(bflyimageid, *args):
     args_ct=len(args)
-    mozuimageid = pgsql_retrieve_mozuimageid_bflyimageid(bflyimageid)
+    mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
     mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
     return mozuimageurl, bflyimageid
@@ -178,8 +178,8 @@ if __name__ == '__main__':
         try:
             destpath = sys.argv[2]
             if path.isfile(destpath):
-                retrieve_mozuimageurl_bflyimageid(bflyimageid, destpath=destpath)
+                pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=destpath)
             elif path.isdir(destpath):
-                retrieve_mozuimageurl_bflyimageid(bflyimageid, destpath=path.join(destpath, bflyimageid + ext))
+                pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=path.join(destpath, bflyimageid + ext))
         except IndexError:
             destpath = ''
