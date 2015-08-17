@@ -71,21 +71,24 @@ def upload_productimgs_mozu(src_filepath):
             document = document_response.json()
             document_id = document["id"]
             document_response.raise_for_status()
-    ## create rest url with doc id from resp
-    document_content_api = tenant_url + "/api/content/documentlists/files@mozu/documents/" + document_id + "/content"
-    #files = {'media': open(src_filepath, 'rb')}
-    mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
-    headers["Content-type"] = mimetype
-    #print "locals", locals()
-    file_data = open(src_filepath, 'rb').read()
-    content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False )
-    #print "locals", locals()
-    print "document ID: %s" % document_id
-    print "document_payload: %s" % document_payload
-    print "Document content upload Response: %s" % content_response.text
-    #document_response.raise_for_status()
-    return document_id, content_response.json()
-    #return bflyimageid, mozuimageid
+        ## create rest url with doc id from resp
+        document_content_api = tenant_url + "/api/content/documentlists/files@mozu/documents/" + document_id + "/content"
+        #files = {'media': open(src_filepath, 'rb')}
+        mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
+        headers["Content-type"] = mimetype
+        #print "locals", locals()
+        file_data = open(src_filepath, 'rb').read()
+        content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False )
+        #print "locals", locals()
+        print "document ID: %s" % document_id
+        print "document_payload: %s" % document_payload
+        print "Document content upload Response: %s" % content_response.text
+        #document_response.raise_for_status()
+        return document_id, content_response.json()
+        #return bflyimageid, mozuimageid
+    else:
+        print 'Failed with code --> ', document_response.status_code
+
 
 def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
