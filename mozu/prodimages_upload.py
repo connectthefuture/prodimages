@@ -84,7 +84,7 @@ def upload_productimgs_mozu(src_filepath):
         print "document_payload: %s" % document_payload
         print "Document content upload Response: %s" % content_response.text
         #document_response.raise_for_status()
-        return document_id, content_response.json()
+        return document_id, content_response
         #return bflyimageid, mozuimageid
     else:
         print 'Failed with code --> ', document_response.status_code
