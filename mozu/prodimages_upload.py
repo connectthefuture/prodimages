@@ -89,7 +89,6 @@ def upload_productimgs_mozu(src_filepath):
     else:
         print 'Failed with code --> ', document_response.status_code
 
-
 def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
