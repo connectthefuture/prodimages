@@ -93,23 +93,36 @@ def get_psycopg_cursor():
     cur = conn.cursor()
     return cur
 
+def md5_checksumer(src_filepath):
+    import hashlib
+    import os.path as path
+    if path.isfile(src_filepath):
+        filepath = path.abspath(src_filepath)
+        try:
+            _file = open(filepath, "rb")
+            content = _file.read()
+            _file.close()
+            md5 = hashlib.md5(content)
+            _hash = md5.hexdigest()
+            return _hash
+        except:
+            return False
 
-def insert_bflyid_mozuid_pgsql(bflyfileid, mozuimageid):
-    #import datetime
-    #dt = datetime.datetime.now()
-    cur = get_psycopg_cursor
+def pgsql_insert_bflyfileid_mozuimageid(bflyfileid, mozuimageid, md5checksum=''):
+    # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
+    # psycopg2 creates a server-side cursor, which prevents all of the
+    # records from being downloaded at once from the server
+    cur = get_psycopg_cursor()
     try:
-        cur.execute("CREATE TABLE images_bfly_mozu (id serial PRIMARY KEY, bflyid varchar, mozuid varchar);"
+        cur.execute("CREATE TABLE images_bfly_mozu (id serial PRIMARY KEY, bflyid varchar, mozuid varchar, md5checksum varchar);")
     except:
         pass
-
     try:
         cur.execute("INSERT INTO images_bfly_mozu (bflyid, mozuid) VALUES (%s, %s)", (bflyfileid, mozuimageid))
     except:
         pass
 
-
-def retrieve_mozuimageid_bflyfileid(bflyfileid):
+def pgsql_retrieve_mozuimageid_bflyfileid(bflyfileid):
     import requests
     cur = get_psycopg_cursor
     mozuimageid = cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyid = '%s'", (bflyfileid))
@@ -118,10 +131,10 @@ def retrieve_mozuimageid_bflyfileid(bflyfileid):
     else:
         return False
 
-def retrieve_mozuimageurl_bflyfileid(bflyfileid, destpath=None):
+def pgsql_retrieve_mozuimageurl_bflyfileid(bflyfileid, destpath=None):
     import requests
     mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
-    mozuimageid = retrieve_mozuimageid_bflyfileid(bflyfileid)
+    mozuimageid = pgsql_retrieve_mozuimageid_bflyfileid(bflyfileid)
     mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
     res = requests.get(mozuimageurl)
     if res.status_code >= 400:
@@ -145,15 +158,16 @@ def main_load_post(src_filepath):
 if __name__ == '__main__':
     import sys
     import os.path as path
-    src_filepath = '/Users/johnb/Desktop/misc_tests/orig/354394801_5.jpg'
+    #src_filepath = '/Users/johnb/Desktop/misc_tests/orig/354394801_5.jpg'
     ext = '.jpg'
     #src_filepath = '/Users/johnb/Desktop/misc_tests/croppedtest/out/362203805.png'
     if path.isfile(sys.argv[1]):
         src_filepath = sys.argv[1]
+        ext = src_filepath.split('.')[-1]
         main_load_post(src_filepath)
         print src_filepath
 
-    elif sys.argv[1][:9].isdigit():
+    elif sys.argv[1][:9].isdigit() and len(sys.argv[1]) < 20:
         bflyfileid = sys.argv[1]
         try:
             destpath = sys.argv[2]
