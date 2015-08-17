@@ -142,16 +142,18 @@ def pgsql_get_validate_md5checksum(md5checksum):
     else:
         return False
 
-def main_load_post(src_filepath):
+def main_upload_post(src_filepath):
     mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
-    bflyimageid   =  path.basename(src_filepath)  #.split('.')[0]
+    bflyimageid = path.basename(src_filepath)  #.split('.')[0]
+    md5checksum = md5_checksumer(src_filepath)
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
     result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid)
     print result
     return mozuimageid, bflyimageid
 
-def main_ret_get(bflyimageid, *args):
-    args_ct=len(args)
+def main_retrieve_get(**kwargs):
+    args_ct=len(kwargs.items())
+    bflyimageid = kwargs.get('bflyimageid')
     mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
     mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
     mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
@@ -167,9 +169,8 @@ if __name__ == '__main__':
     if path.isfile(sys.argv[1]):
         src_filepath = sys.argv[1]
         ext = src_filepath.split('.')[-1]
-        main_load_post(src_filepath)
+        main_upload_post(src_filepath)
         print src_filepath
-
     elif sys.argv[1][:9].isdigit() and len(sys.argv[1]) < 20:
         bflyimageid = sys.argv[1]
         try:
@@ -180,3 +181,5 @@ if __name__ == '__main__':
                 pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=path.join(destpath, bflyimageid))
         except IndexError:
             destpath = ''
+
+
