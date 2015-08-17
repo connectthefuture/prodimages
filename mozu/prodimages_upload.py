@@ -50,24 +50,16 @@ def upload_productimgs_mozu(src_filepath):
     import os.path as path
 
     tenant_url = "https://t11146.staging-sb.mozu.com/"
-    headers = {'Content-type': 'application/json',
-               'x-vol-app-claims' : get_mozu_authtoken(tenant_url),
-               'x-vol-tenant' : '11146',
-               'x-vol-master-catalog' : '1',
-               # 'x-vol-dataview-mode': 'Pending',
-               # ??'x-vol-site' : '1',
-               }
+    headers = {'Content-type': 'application/json', 'x-vol-app-claims' : get_mozu_authtoken(tenant_url), 'x-vol-tenant' : '11146', 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
     
-    document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
-    
-    bflyimageid   =  path.basename(src_filepath).split('.')[0]  #[:-1]
-    ext        = src_filepath.split('.')[-1]
-    mimetype   = "image/{}".format(ext.lower().replace('jpg','jpeg'))
-    colorstyle = path.basename(src_filepath).split('.')[0][:9]
-    document = ''       #document_response.json()
+    document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents" 
+
+    bflyimageid   = path.basename(src_filepath) #[:-1]
+    ext = bflyimageid.split('.')[-1]
+    document    = ''       #document_response.json()
     document_id = ''    #document["id"]
 
-    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid + '.' + ext, 'extension' : ext}
+    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid, 'extension' : ext}
     document_response = requests.post(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False )
    
     #document_response.raise_for_status()
@@ -75,8 +67,8 @@ def upload_productimgs_mozu(src_filepath):
         document = document_response.json()
         try:
             document_id = document["id"]
+            # colorstyle    = bflyimageid[:9]
             # insert_docid_db(db_name,document_id=document_id, bflyimageid=bflyimageid, colorstyle=colorstyle, img_number=sequence)
-
         except KeyError:
             document_response = requests.put(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False)
             document = document_response.json()
@@ -85,13 +77,14 @@ def upload_productimgs_mozu(src_filepath):
 
     print "document ID: %s" % document_id
     print "document_payload: %s" % document_payload
-
+    
     ## create rest url with doc id from resp
     document_content_api = tenant_url + "/api/content/documentlists/files@mozu/documents/" + document_id + "/content"
     #files = {'media': open(src_filepath, 'rb')}
-    file_data = open(src_filepath, 'rb').read()
+    mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
     headers["Content-type"] = mimetype
     #print "locals", locals()
+    file_data = open(src_filepath, 'rb').read()
     content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False )
     print "locals", locals()
     print "Document content upload Response: %s" % content_response.text
@@ -151,9 +144,9 @@ def pgsql_get_validate_md5checksum(md5checksum):
 
 def main_load_post(src_filepath):
     mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
-    bflyimageid   =  path.basename(src_filepath).split('.')[0] 
+    bflyimageid   =  path.basename(src_filepath)  #.split('.')[0] 
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
-    result = insert_bflyimageid_mozuid_pgsql(bflyimageid, mozuimageid)
+    result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid)
     print result
     return mozuimageid, bflyimageid
 
@@ -183,6 +176,6 @@ if __name__ == '__main__':
             if path.isfile(destpath):
                 pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=destpath)
             elif path.isdir(destpath):
-                pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=path.join(destpath, bflyimageid + ext))
+                pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=path.join(destpath, bflyimageid))
         except IndexError:
             destpath = ''
