@@ -48,15 +48,14 @@ def md5_checksumer(src_filepath):
 def upload_productimgs_mozu(src_filepath):
     import requests, json
     import os.path as path
-
     tenant_url = "https://t11146.staging-sb.mozu.com/"
-    headers = {'Content-type': 'application/json', 'x-vol-app-claims' : get_mozu_authtoken(tenant_url), 'x-vol-tenant' : '11146', 'x-vol-master-catalog' : '1' } 
+    headers = {'Content-type': 'application/json', 'x-vol-app-claims' : get_mozu_authtoken(tenant_url), 'x-vol-tenant' : '11146', 'x-vol-master-catalog' : '1' }
     #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
     document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
     bflyimageid   = path.basename(src_filepath) #[:-1]
     ext = bflyimageid.split('.')[-1]
-    document    = ''    #document_response.json()
-    document_id = ''    #document["id"]
+    document    = ''
+    document_id = ''
     document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bflyimageid, 'extension' : ext}
     document_response = requests.post(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False )
     #document_response.raise_for_status()
@@ -76,10 +75,8 @@ def upload_productimgs_mozu(src_filepath):
         #files = {'media': open(src_filepath, 'rb')}
         mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
         headers["Content-type"] = mimetype
-        #print "locals", locals()
         file_data = open(src_filepath, 'rb').read()
         content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False )
-        #print "locals", locals()
         print "document ID: %s" % document_id
         print "document_payload: %s" % document_payload
         print "Document content upload Response: %s" % content_response.text
@@ -94,12 +91,9 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     cur = get_psycopg_cursor()
+    cur.execute("CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar, mozuimageid varchar, md5checksum varchar, md5timestamp timestamp DEFAULT current_timestamp, UNIQUE(bflyimageid, md5checksum));")
     try:
-        cur.execute("CREATE TABLE images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar, mozuimageid varchar, md5checksum varchar);")
-    except:
-        pass
-    try:
-        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s)", (bflyimageid, mozuimageid, md5checksum))
+        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid), md5checksum = VALUES(md5checksum);", (bflyimageid, mozuimageid, md5checksum))
     except:
         pass
 
