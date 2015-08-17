@@ -152,13 +152,14 @@ def main_load_post(src_filepath):
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
     result = insert_bflyimageid_mozuid_pgsql(bflyimageid, mozuimageid)
     print result
-    return
+    return mozuimageid, bflyimageid
 
 def main_ret_get(bflyimageid, *args):
     args_ct=len(args)
     mozuimageid = pgsql_retrieve_mozuimageid_bflyimageid(bflyimageid)
+    mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
-    return
+    return mozuimageurl, bflyimageid
 
 if __name__ == '__main__':
     import sys
