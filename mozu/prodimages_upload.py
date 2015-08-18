@@ -92,8 +92,11 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     # records from being downloaded at once from the server
     cur = get_psycopg_cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar, mozuimageid varchar, md5checksum varchar, md5timestamp timestamp DEFAULT current_timestamp, UNIQUE(bflyimageid, md5checksum));")
+    cur.close()
     try:
+        cur = get_psycopg_cursor()
         cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
+        cur.close()
     except:
         pass
 
@@ -144,7 +147,7 @@ def main_upload_post(src_filepath):
         print result
         return mozuimageid, bflyimageid
     except TypeError:
-        print '\n...', src_filepath, ' None TypeError...'
+        print '\n\t...', src_filepath, ' None TypeError'
         pass
 
 
