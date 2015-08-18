@@ -142,9 +142,8 @@ def main_upload_post(src_filepath):
         mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
         bflyimageid = path.basename(src_filepath)  #.split('.')[0]
         md5checksum = md5_checksumer(src_filepath)
+        pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=md5checksum)
         print 'bflyimageid={}\nmozuimageid={}\nmd5checksum={}'.format(bflyimageid, mozuimageid, md5checksum)
-        result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=md5checksum)
-        print result
         return mozuimageid, bflyimageid
     except TypeError:
         print '\n\t...', src_filepath, ' None TypeError'
