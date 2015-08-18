@@ -93,7 +93,7 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     cur = get_psycopg_cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar, mozuimageid varchar, md5checksum varchar, md5timestamp timestamp DEFAULT current_timestamp, UNIQUE(bflyimageid, md5checksum));")
     try:
-        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid), md5checksum = VALUES(md5checksum);", (bflyimageid, mozuimageid, md5checksum))
+        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
     except:
         pass
 
@@ -138,8 +138,8 @@ def main_upload_post(src_filepath):
     mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
     bflyimageid = path.basename(src_filepath)  #.split('.')[0]
     md5checksum = md5_checksumer(src_filepath)
-    print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
-    result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid)
+    print 'bflyimageid={}\nmozuimageid={}\nmd5checksum={}'.format(bflyimageid, mozuimageid, md5checksum)
+    result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=md5checksum)
     print result
     return mozuimageid, bflyimageid
 
