@@ -135,13 +135,17 @@ def pgsql_get_validate_md5checksum(md5checksum):
 
 def main_upload_post(src_filepath):
     import os.path as path
-    mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
-    bflyimageid = path.basename(src_filepath)  #.split('.')[0]
-    md5checksum = md5_checksumer(src_filepath)
-    print 'bflyimageid={}\nmozuimageid={}\nmd5checksum={}'.format(bflyimageid, mozuimageid, md5checksum)
-    result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=md5checksum)
-    print result
-    return mozuimageid, bflyimageid
+    try:
+        mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
+        bflyimageid = path.basename(src_filepath)  #.split('.')[0]
+        md5checksum = md5_checksumer(src_filepath)
+        print 'bflyimageid={}\nmozuimageid={}\nmd5checksum={}'.format(bflyimageid, mozuimageid, md5checksum)
+        result = pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=md5checksum)
+        print result
+        return mozuimageid, bflyimageid
+    except TypeError:
+        pass
+
 
 def main_retrieve_get(**kwargs):
     args_ct=len(kwargs.items())
