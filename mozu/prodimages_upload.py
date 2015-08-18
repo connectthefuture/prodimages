@@ -144,6 +144,7 @@ def main_upload_post(src_filepath):
         print result
         return mozuimageid, bflyimageid
     except TypeError:
+        print '\n...', src_filepath, ' None TypeError...'
         pass
 
 
