@@ -11,15 +11,16 @@ def get_psycopg_cursor():
     cur = conn.cursor()
     return cur
 
+
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 def init_pg_mktble_fnc_trig():
+    createtbl = "CREATE TABLE IF NOT EXISTS public.images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP DEFAULT 'now'::timestamp, UNIQUE(bflyimageid, md5checksum));"
+    createfunc = "CREATE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
+    createtrig = "CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
+    initpgtbl = createtbl + createfunc + createtrig
     cur = get_psycopg_cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP DEFAULT 'now'::timestamp, UNIQUE(bflyimageid, md5checksum));")
-    cur.close()
-    cur.execute("CREATE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;")
-    cur.close
-    cur.execute("CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();")
-    cur.close
+    cur.execute(initpgtbl)
+
 
 def md5_checksumer(src_filepath):
     import hashlib
@@ -99,26 +100,41 @@ def upload_productimgs_mozu(src_filepath):
         print 'Failed with code --> ', document_response.status_code
 
 
+# Store Key in pgsql
 def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     try:
         cur = get_psycopg_cursor()
-        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
+        cur.execute("INSERT INTO public.images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
         cur.close()
     except:
         pass
 
+# UPdate
+def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
+    # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
+    # psycopg2 creates a server-side cursor, which prevents all of the
+    # records from being downloaded at once from the server
+    try:
+        cur = get_psycopg_cursor()
+        cur.execute("UPDATE public.images_bfly_mozu SET md5checksum=%s,mozuimageid=%s WHERE bflyimageid=%s ;", (md5checksum, bflyimageid, mozuimageid,))
+        cur.close()
+    except:
+        pass
+
+# Get mozu img ID from bfly file id
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     import requests
     cur = get_psycopg_cursor()
-    mozuimageid = cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
+    mozuimageid = cur.execute("SELECT mozuimageid FROM public.images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
     if mozuimageid:
         return mozuimageid
     else:
         return False
 
+# Get mozu img url
 def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
     import requests
     mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
@@ -134,6 +150,7 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
             f.write(res.content)
         return destpath
 
+# Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
 def pgsql_get_validate_md5checksum(md5checksum):
     import requests
     cur = get_psycopg_cursor()
@@ -146,6 +163,7 @@ def pgsql_get_validate_md5checksum(md5checksum):
     else:
         return False
 
+# full uploading cmdline shell script, file as sys argv
 def main_upload_post(src_filepath):
     import os.path as path
     try:
@@ -159,7 +177,7 @@ def main_upload_post(src_filepath):
         print '\n\t...', src_filepath, ' None TypeError'
         pass
 
-
+# Query/Display previous/current DB info
 def main_retrieve_get(**kwargs):
     args_ct=len(kwargs.items())
     bflyimageid = kwargs.get('bflyimageid')
