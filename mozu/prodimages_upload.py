@@ -40,6 +40,7 @@ def init_pg_mktble_fnc_trig():
         #conn.commit()
         cur.execute(createfuncalter_incronupdate)
     except psycopg2.ProgrammingError:
+        print 'Passing Psycopg2 ProgErr...'
         pass
 
     conn.commit()
