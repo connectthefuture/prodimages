@@ -36,14 +36,15 @@ def init_pg_mktble_fnc_trig():
         #conn.commit()
         cur.execute(createtrig_incronupdate)
         cur.execute(createfunc_incronupdate)
-        #conn.commit()
-    except psycopg2.ProgrammingError:
-        print 'Passing Psycopg2 ProgErr...'
+        cur.execute(createfuncalter_incronupdate)
+        conn.commit()
+    except psycopg2.ProgrammingError, e:
+        print 'Passing Psycopg2 ProgErr...%s' % e
         pass
-
-    cur.execute(createfuncalter_incronupdate)
-    conn.commit()
-    conn.close()
+    finally:
+        if conn:
+            conn.commit()
+            conn.close()
 
 ## util func calcs md5 of file
 def md5_checksumer(src_filepath):
@@ -165,7 +166,8 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     conn = get_psycopg_cursor()
     cur = conn.cursor()
-    mozuimageid = cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
+    cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
+    mozuimageid = cur.fetchone()
     if mozuimageid:
         return mozuimageid
     else:
@@ -193,10 +195,10 @@ def pgsql_get_validate_md5checksum(md5checksum, bflyimageid=None):
     cur, conn = get_psycopg_cursor()
     if bflyimageid is not None:
         cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s' AND bflyimageid = '%s'", (md5checksum, bflyimageid))
-        bflyimageid = cur.fetchall()
+        bflyimageid = cur.fetchone()
     else:
         cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
-        bflyimageid = cur.fetchall()
+        bflyimageid = cur.fetchone()
         ## If Value >1
     conn.commit()
     conn.close()
