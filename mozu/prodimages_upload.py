@@ -9,18 +9,19 @@ def get_psycopg_cursor():
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect( database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
     cur = conn.cursor()
-    return cur
+    return cur, conn
 
 
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 def init_pg_mktble_fnc_trig():
-    createtbl = "CREATE TABLE IF NOT EXISTS public.images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP DEFAULT 'now'::timestamp, UNIQUE(bflyimageid, md5checksum));"
-    createfunc = "CREATE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
+    createtbl = "CREATE TABLE IF NOT EXISTS public.images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP DEFAULT 'now'::timestamp, updated_ct int DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
+    createfunc = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
     createtrig = "CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
     initpgtbl = createtbl + createfunc + createtrig
-    cur = get_psycopg_cursor()
+    cur, conn = get_psycopg_cursor()
     cur.execute(initpgtbl)
-
+    conn.commit()
+    conn.close()
 
 def md5_checksumer(src_filepath):
     import hashlib
@@ -106,9 +107,10 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     try:
-        cur = get_psycopg_cursor()
+        cur, conn = get_psycopg_cursor()
         cur.execute("INSERT INTO public.images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
-        cur.close()
+        conn.commit()
+        conn.close()
     except:
         pass
 
@@ -118,16 +120,17 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     try:
-        cur = get_psycopg_cursor()
+        cur, conn = get_psycopg_cursor()
         cur.execute("UPDATE public.images_bfly_mozu SET md5checksum=%s,mozuimageid=%s WHERE bflyimageid=%s ;", (md5checksum, bflyimageid, mozuimageid,))
-        cur.close()
+        conn.commit()
+        conn.close()
     except:
         pass
 
 # Get mozu img ID from bfly file id
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     import requests
-    cur = get_psycopg_cursor()
+    cur, conn = get_psycopg_cursor()
     mozuimageid = cur.execute("SELECT mozuimageid FROM public.images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
     if mozuimageid:
         return mozuimageid
@@ -153,8 +156,10 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
 def pgsql_get_validate_md5checksum(md5checksum):
     import requests
-    cur = get_psycopg_cursor()
+    cur, conn = get_psycopg_cursor()
     bflyimageid = cur.execute("SELECT bflyimageid, mozuimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
+    conn.commit()
+    conn.close()
     if bflyimageid:
         mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
         mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
@@ -177,7 +182,7 @@ def main_upload_post(src_filepath):
         print '\n\t...', src_filepath, ' None TypeError'
         pass
 
-# Query/Display previous/current DB info
+# Query/Display previous/currentDB info
 def main_retrieve_get(**kwargs):
     args_ct=len(kwargs.items())
     bflyimageid = kwargs.get('bflyimageid')
