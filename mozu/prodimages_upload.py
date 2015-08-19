@@ -154,7 +154,7 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     try:
         conn = get_psycopg_cursor()
         cur = conn.cursor()
-        cur.execute("UPDATE images_bfly_mozu SET md5checksum=%s,mozuimageid=%s WHERE bflyimageid=%s ;", (md5checksum, mozuimageid, bflyimageid))
+        cur.execute("UPDATE images_bfly_mozu SET mozuimageid=%s, SET md5checksum=%s WHERE bflyimageid=%s;", (mozuimageid, md5checksum, bflyimageid))
         conn.commit()
         conn.close()
     except IndexError:
