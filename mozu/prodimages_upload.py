@@ -30,6 +30,16 @@ def get_psycopg_cursor():
     cur = conn.cursor()
     return cur
 
+# make initial table and update timestamp on modify as function and trigger of the function on the table
+def init_pg_mktble_fnc_trig():
+    cur = get_psycopg_cursor()
+    cur.execute("CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP DEFAULT 'now'::timestamp, UNIQUE(bflyimageid, md5checksum));")
+    cur.close()
+    cur.execute("CREATE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;")
+    cur.close
+    cur.execute("CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();")
+    cur.close
+
 def md5_checksumer(src_filepath):
     import hashlib
     import os.path as path
@@ -44,6 +54,7 @@ def md5_checksumer(src_filepath):
             return _hash
         except:
             return False
+
 
 def upload_productimgs_mozu(src_filepath):
     import requests, json
@@ -86,13 +97,11 @@ def upload_productimgs_mozu(src_filepath):
     else:
         print 'Failed with code --> ', document_response.status_code
 
+
 def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
-    cur = get_psycopg_cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar, mozuimageid varchar, md5checksum varchar, md5timestamp timestamp DEFAULT current_timestamp, UNIQUE(bflyimageid, md5checksum));")
-    cur.close()
     try:
         cur = get_psycopg_cursor()
         cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
