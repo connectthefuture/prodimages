@@ -16,25 +16,25 @@ def init_pg_mktble_fnc_trig():
     createtbl = "CREATE TABLE IF NOT EXISTS public.images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, updated_ct int NOT NULL DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
-    createtrig_nowonupdate = "CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
+    createtrig_nowonupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
     # Auto incr after modify
-    #createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE OR REPLACE FUNCTION incr_updated_ct() RETURNS trigger AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$ LANGUAGE 'plpgsql';"
+    #createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1;
+    createfunc_incronupdate = "CREATE OR REPLACE FUNCTION incr_updated_ct() RETURNS trigger AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$ LANGUAGE 'plpgsql';"
     createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_updated_ct BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_updated_ct();"
 
-    createfuncalter_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; ALTER TABLE images_bfly_mozu_updated_at_modtime ALTER seq_update_ct SET DEFAULT nextval('seq_update_ct'); "
+    createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu_updated_at_modtime ALTER seq_update_ct SET DEFAULT nextval('seq_update_ct'); "
 
     conn = get_psycopg_cursor()
     cur = conn.cursor()
     cur.execute(createtbl)
     conn.commit()
     cur.execute(createfunc_nowonupdate)
-    conn.commit()
     cur.execute(createtrig_nowonupdate)
-    conn.commit()
-    #cur.execute(createfunc_incronupdate)
     #conn.commit()
     cur.execute(createtrig_incronupdate)
-    conn.commit()
+    cur.execute(createfunc_incronupdate)
+
+    #conn.commit()
     cur.execute(createfuncalter_incronupdate)
     conn.commit()
     conn.close()
