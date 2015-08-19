@@ -177,7 +177,7 @@ def main_upload_post(src_filepath):
         print '\n\t...', src_filepath, ' None TypeError'
         pass
 
-# Query/Display previous/current DB info
+# Query/Display previous/curreDB info
 def main_retrieve_get(**kwargs):
     args_ct=len(kwargs.items())
     bflyimageid = kwargs.get('bflyimageid')
