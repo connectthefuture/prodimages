@@ -127,6 +127,7 @@ def upload_productimgs_mozu(src_filepath):
         ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
         ## TODO: 3)  Update PGSQL MOZUID + MD5
         ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
+        pass
     else:
         print 'Failed with code --> ', document_response.status_code
 
