@@ -1,25 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def get_mozu_authtoken(tenant_url):
-    import requests, json
-    #  "http://requestb.in/q66719q6" #
-    auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
-    tenant_url = tenant_url
-    headers = {'Content-type': 'application/json',
-               'Accept-Encoding': 'gzip, deflate'}
-    auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
-
-    auth_response = requests.post(auth_url, data=json.dumps(auth_request), headers=headers, verify=False)
-    # parse params from filepath
-    # TODO add Validation(regex) to prevent unwanted updates
-    ##
-    print "Auth Response: %s" % auth_response.status_code
-    auth_response.raise_for_status()
-    auth = auth_response.json()
-    print "Auth Ticket: %s" % auth["accessToken"]
-    return auth["accessToken"]
-
 def get_psycopg_cursor():
     import os, psycopg2, urlparse
     connurl = 'postgres://cojkwmymqgbslk:0y3KViCM5vkAkiYXvvdcdHfVrT@ec2-54-204-0-120.compute-1.amazonaws.com:5432/dco1s4iscdv2as'
@@ -55,7 +36,27 @@ def md5_checksumer(src_filepath):
         except:
             return False
 
+#### Mozu Auth - Upload - GetKey ####
+def get_mozu_authtoken(tenant_url):
+    import requests, json
+    #  "http://requestb.in/q66719q6" #
+    auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
+    tenant_url = tenant_url
+    headers = {'Content-type': 'application/json',
+               'Accept-Encoding': 'gzip, deflate'}
+    auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
 
+    auth_response = requests.post(auth_url, data=json.dumps(auth_request), headers=headers, verify=False)
+    # parse params from filepath
+    # TODO add Validation(regex) to prevent unwanted updates
+    ##
+    print "Auth Response: %s" % auth_response.status_code
+    auth_response.raise_for_status()
+    auth = auth_response.json()
+    print "Auth Ticket: %s" % auth["accessToken"]
+    return auth["accessToken"]
+
+# Upload
 def upload_productimgs_mozu(src_filepath):
     import requests, json
     import os.path as path
@@ -87,7 +88,7 @@ def upload_productimgs_mozu(src_filepath):
         mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
         headers["Content-type"] = mimetype
         file_data = open(src_filepath, 'rb').read()
-        content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False )
+        content_response = requests.put(document_content_api, data=file_data, headers=headers, verify=False)
         print "document ID: %s" % document_id
         print "document_payload: %s" % document_payload
         print "Document content upload Response: %s" % content_response.text
@@ -111,7 +112,7 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
 
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     import requests
-    cur = get_psycopg_cursor
+    cur = get_psycopg_cursor()
     mozuimageid = cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
     if mozuimageid:
         return mozuimageid
@@ -135,7 +136,7 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
 
 def pgsql_get_validate_md5checksum(md5checksum):
     import requests
-    cur = get_psycopg_cursor
+    cur = get_psycopg_cursor()
     bflyimageid = cur.execute("SELECT bflyimageid, mozuimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
     if bflyimageid:
         mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
