@@ -10,19 +10,18 @@ def get_psycopg_cursor():
     conn = psycopg2.connect( database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
     return conn
 
-
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 def init_pg_mktble_fnc_trig():
     import psycopg2
-    createtbl = "CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, seq_update_ct int NOT NULL DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
+    createtbl = "CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar NOT NULL, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, seq_update_ct int NOT NULL DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
-    createtrig_nowonupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
+    createtrig_nowonupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
     # Auto incr after modify
     # createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1;"
     createfunc_incronupdate = "CREATE OR REPLACE FUNCTION incr_updated_ct() RETURNS trigger AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$ LANGUAGE 'plpgsql';"
-    createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_updated_ct BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_updated_ct();"
-
+    createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_updated_ct BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_updated_ct();"
+    ## Below used if Table exists -- which it obviously should since I just called the mktble above
     createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu ALTER seq_update_ct SET DEFAULT nextval('seq_update_ct'); "
 
     conn = get_psycopg_cursor()
@@ -46,6 +45,7 @@ def init_pg_mktble_fnc_trig():
     conn.commit()
     conn.close()
 
+## util func calcs md5 of file
 def md5_checksumer(src_filepath):
     import hashlib
     import os.path as path
@@ -120,10 +120,19 @@ def upload_productimgs_mozu(src_filepath):
         #document_response.raise_for_status()
         return document_id, content_response
         #return bflyimageid, mozuimageid
+    elif document_response.status_code == 409:
+        print 'Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.'
+        ## TODO: 1)  On duplicate file in mozu, check PGSQL by Filename and compare stored MD5 with current MD5.
+        ## TODO: 1A) If same MD5 skip and return MOZUID, else if different.....
+        ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
+        ## TODO: 3)  Update PGSQL MOZUID + MD5
+        ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
+        pass
     else:
         print 'Failed with code --> ', document_response.status_code
 
-
+####################
+### postgres Funcs
 # Store Key in pgsql
 def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
@@ -146,7 +155,7 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     try:
         conn = get_psycopg_cursor()
         cur = conn.cursor()
-        cur.execute("UPDATE images_bfly_mozu SET md5checksum=%s,mozuimageid=%s WHERE bflyimageid=%s ;", (md5checksum, bflyimageid, mozuimageid,))
+        cur.execute("UPDATE images_bfly_mozu SET mozuimageid=%s, SET md5checksum=%s WHERE bflyimageid=%s;", (mozuimageid, md5checksum, bflyimageid))
         conn.commit()
         conn.close()
     except IndexError:
@@ -156,7 +165,7 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     conn = get_psycopg_cursor()
     cur = conn.cursor()
-    mozuimageid = cur.execute("SELECT mozuimageid FROM public.images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
+    mozuimageid = cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
     if mozuimageid:
         return mozuimageid
     else:
@@ -179,10 +188,16 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
         return destpath
 
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
-def pgsql_get_validate_md5checksum(md5checksum):
+def pgsql_get_validate_md5checksum(md5checksum, bflyimageid=None):
     import requests
     cur, conn = get_psycopg_cursor()
-    bflyimageid = cur.execute("SELECT bflyimageid, mozuimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
+    if bflyimageid is not None:
+        cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s' AND bflyimageid = '%s'", (md5checksum, bflyimageid))
+        bflyimageid = cur.fetchall()
+    else:
+        cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
+        bflyimageid = cur.fetchall()
+        ## If Value >1
     conn.commit()
     conn.close()
     if bflyimageid:
@@ -193,6 +208,7 @@ def pgsql_get_validate_md5checksum(md5checksum):
     else:
         return False
 
+### Main Combined Post or Get -- TODO: --> main_update_put(src_filepath)
 # full uploading cmdline shell script, file as sys argv
 def main_upload_post(src_filepath):
     import os.path as path
@@ -217,6 +233,7 @@ def main_retrieve_get(**kwargs):
     mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
     print 'bflyimageid={}\nmozuimageid={}'.format(bflyimageid, mozuimageid)
     return (mozuimageurl, bflyimageid,)
+
 
 if __name__ == '__main__':
     import sys
