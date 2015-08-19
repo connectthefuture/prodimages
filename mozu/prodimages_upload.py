@@ -16,7 +16,7 @@ def init_pg_mktble_fnc_trig():
     createtbl = "CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, seq_update_ct int NOT NULL DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
-    createtrig_nowonupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
+    createtrig_nowonupdate = "CREATE or replace SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
     # Auto incr after modify
     #createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1;"
     createfunc_incronupdate = "CREATE OR REPLACE FUNCTION incr_updated_ct() RETURNS trigger AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$ LANGUAGE 'plpgsql';"
@@ -125,10 +125,10 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     try:
         conn = get_psycopg_cursor()
         cur = conn.cursor()
-        cur.execute("INSERT INTO public.images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
+        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ;", (bflyimageid, mozuimageid, md5checksum))
         conn.commit()
         conn.close()
-    except:
+    except IndexError:
         pass
 
 # UPdate
@@ -139,10 +139,10 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     try:
         conn = get_psycopg_cursor()
         cur = conn.cursor()
-        cur.execute("UPDATE public.images_bfly_mozu SET md5checksum=%s,mozuimageid=%s WHERE bflyimageid=%s ;", (md5checksum, bflyimageid, mozuimageid,))
+        cur.execute("UPDATE images_bfly_mozu SET md5checksum=%s,mozuimageid=%s WHERE bflyimageid=%s ;", (md5checksum, bflyimageid, mozuimageid,))
         conn.commit()
         conn.close()
-    except:
+    except IndexError:
         pass
 
 # Get mozu img ID from bfly file id
@@ -194,7 +194,7 @@ def main_upload_post(src_filepath):
         bflyimageid = path.basename(src_filepath)  #.split('.')[0]
         md5checksum = md5_checksumer(src_filepath)
         init_pg_mktble_fnc_trig()
-        pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=md5checksum)
+        pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum)
         print 'bflyimageid={}\nmozuimageid={}\nmd5checksum={}'.format(bflyimageid, mozuimageid, md5checksum)
         return mozuimageid, bflyimageid
     except TypeError:
