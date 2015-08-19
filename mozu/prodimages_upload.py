@@ -8,18 +8,30 @@ def get_psycopg_cursor():
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect( database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
-    cur = conn.cursor()
-    return cur, conn
+    return conn
 
 
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 def init_pg_mktble_fnc_trig():
-    createtbl = "CREATE TABLE IF NOT EXISTS public.images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP DEFAULT 'now'::timestamp, updated_ct int DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
-    createfunc = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
-    createtrig = "CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
-    initpgtbl = createtbl + createfunc + createtrig
-    cur, conn = get_psycopg_cursor()
-    cur.execute(initpgtbl)
+    createtbl = "CREATE TABLE IF NOT EXISTS public.images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, updated_ct int NOT NULL DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
+    # Auto Mod time Now Func and trig
+    createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;"
+    createtrig_nowonupdate = "CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
+    # Auto incr after modify
+    createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE OR REPLACE FUNCTION incr_updated_ct() RETURNS trigger AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$ LANGUAGE 'plpgsql';"
+    createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_updated_ct BEFORE UPDATE ON public.images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_updated_ct();"
+
+    conn = get_psycopg_cursor()
+    cur = conn.cursor()
+    cur.execute(createtbl)
+    conn.commit()
+    cur.execute(createfunc_nowonupdate)
+    conn.commit()
+    cur.execute(createtrig_nowonupdate)
+    conn.commit()
+    cur.execute(createfunc_incronupdate)
+    conn.commit()
+    cur.execute(createtrig_incronupdate)
     conn.commit()
     conn.close()
 
@@ -107,7 +119,8 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     try:
-        cur, conn = get_psycopg_cursor()
+        conn = get_psycopg_cursor()
+        cur = conn.cursor()
         cur.execute("INSERT INTO public.images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE mozuimageid = VALUES(mozuimageid);", (bflyimageid, mozuimageid, md5checksum))
         conn.commit()
         conn.close()
@@ -120,7 +133,8 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     try:
-        cur, conn = get_psycopg_cursor()
+        conn = get_psycopg_cursor()
+        cur = conn.cursor()
         cur.execute("UPDATE public.images_bfly_mozu SET md5checksum=%s,mozuimageid=%s WHERE bflyimageid=%s ;", (md5checksum, bflyimageid, mozuimageid,))
         conn.commit()
         conn.close()
@@ -129,8 +143,8 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
 
 # Get mozu img ID from bfly file id
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
-    import requests
-    cur, conn = get_psycopg_cursor()
+    conn = get_psycopg_cursor()
+    cur = conn.cursor()
     mozuimageid = cur.execute("SELECT mozuimageid FROM public.images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
     if mozuimageid:
         return mozuimageid
