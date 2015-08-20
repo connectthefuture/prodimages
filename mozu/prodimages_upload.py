@@ -34,10 +34,8 @@ def init_pg_mktble_fnc_trig():
     conn.commit()
 
     try:
-
         cur.execute(createfunc_nowonupdate)
         cur.execute(createtrig_nowonupdate)
-        #conn.commit()
         cur.execute(createtrig_incronupdate)
         cur.execute(createfunc_incronupdate)
         cur.execute(createfuncalter_incronupdate)
@@ -182,7 +180,7 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
     import requests
     mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
     mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
-    mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
+    mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
     res = requests.get(mozuimageurl)
     if res.status_code >= 400:
         return False
@@ -194,13 +192,14 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
         return destpath
 
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
-def pgsql_get_validate_md5checksum(md5checksum, bflyimageid=None):
+def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
     import requests
     cur, conn = get_psycopg_cursor()
-    if bflyimageid is not None:
+    if bflyimageid is not None and len(bflyimageid) == 9:
         cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s' AND bflyimageid = '%s'", (md5checksum, bflyimageid))
+        del bflyimageid
         bflyimageid = cur.fetchone()
-    else:
+    elif bflyimageid is None:
         cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
         bflyimageid = cur.fetchone()
         ## If Value >1
@@ -209,8 +208,8 @@ def pgsql_get_validate_md5checksum(md5checksum, bflyimageid=None):
     if bflyimageid:
         mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
         mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
-        mozuimageurl = "{}{}".format(mozu_files_prefix,mozuimageid)
-        return (bflyimageid, mozuimageurl,)
+        mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
+        return bflyimageid, mozuimageurl,
     else:
         return False
 
@@ -219,17 +218,34 @@ def pgsql_get_validate_md5checksum(md5checksum, bflyimageid=None):
 # full uploading cmdline shell script, file as sys argv
 def main_upload_post(src_filepath):
     import os.path as path
+    ##############################
+    # remove db setup funcs after init release into prod
     try:
-        mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
-        bflyimageid = path.basename(src_filepath)  #.split('.')[0]
-        md5checksum = md5_checksumer(src_filepath)
         init_pg_mktble_fnc_trig()
-        pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum)
-        print 'bflyimageid={}\nmozuimageid={}\nmd5checksum={}'.format(bflyimageid, mozuimageid, md5checksum)
-        return mozuimageid, bflyimageid
-    except TypeError:
-        print '\n\t...', src_filepath, ' None TypeError'
+    except:
         pass
+    ##############################
+    if path.basename(src_filepath)[:9].isdigit():
+        bflyimageid = path.basename(src_filepath)  # .split('.')[0]
+    else:
+        bflyimageid = None
+
+    md5checksum = md5_checksumer(src_filepath)
+    md5result = pgsql_validate_md5checksum(md5checksum, bflyimageid=bflyimageid)
+    if md5result == False:
+        try:
+            mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
+            pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum)
+            print 'bflyimageid={}\nmozuimageid={}\nmd5checksum={}'.format(bflyimageid, mozuimageid, md5checksum)
+            return mozuimageid, bflyimageid
+        except TypeError, e:
+            print '\n\t...', src_filepath, ' None TypeError --> ', e
+            pass
+        finally:
+            print('Completed ', bflyimageid, md5checksum)
+    else:
+        print md5result, ' <-- Duplicated - Passing'
+
 
 # Query/Display previous/currentDB info
 def main_retrieve_get(**kwargs):
