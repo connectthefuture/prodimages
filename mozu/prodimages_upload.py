@@ -92,8 +92,8 @@ def init_pg_mktble_fnc_trig():
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at := NOW(); RETURN NEW; END; $$;"
     createtrig_nowonupdate = "CREATE TRIGGER images_bfly_mozu_updated_at_column BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
-    
-    create_timefunc1 = "CREATE OR REPLACE FUNCTION trig_time_stamper() RETURNS trigger AS $$ BEGIN NEW.upd_ts := CURRENT_TIMESTAMP; RETURN NEW; END; $$ LANGUAGE plpgsql VOLATILE;" 
+
+    create_timefunc1 = "CREATE OR REPLACE FUNCTION trig_time_stamper() RETURNS trigger AS $$ BEGIN NEW.upd_ts := CURRENT_TIMESTAMP; RETURN NEW; END; $$ LANGUAGE plpgsql VOLATILE;"
     create_timetrig1 = "CREATE TRIGGER trig_1 BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE trig_time_stamper(); OF updated_at"
 
     # Auto incr after modify
@@ -235,16 +235,71 @@ def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
 # else:
 #     return ''
 
-#####################
-#####################
-def convert_to_fullsize_72dpi_jpeg(src_filepath):
+#######################
+##########################################################
+########################
+# Converts image to jpeg
+def magick_convert_to_jpeg(img, destdir=None):
+    import subprocess
+    ext = img.split('.')[-1]
+    outfile = img.split('/')[-1].split('.')[0] + ".jpg"
+    if not destdir:
+        pass
+    else:
+        import os.path as path
+        outfile = path.join(destdir, outfile)
+    subprocess.call([
+        'convert',
+        '-colorspace',
+        'RGB',
+        "-format",
+        ext,
+        img,
+        "-depth",
+        "16",
+        "-density",
+        "72x72",
+        # "-profile",
+        # "/usr/local/color_profiles/AdobeRGB1998.icc",
+        # "-colorspace",
+        # "RGB",
+        "-define",
+        "jpeg:dct-method\=float",
+        "-filter",
+        "LanczosSharp",
+        # "-compress",
+        # "JPEG",
+        # "-profile",
+        # '/usr/local/color_profiles/sRGB.icm',
+        "-colorspace",
+        'sRGB',
+        "-depth",
+        "8",
+        "-format",
+        "jpeg",
+        "-strip",
+        '-quality',
+        '95%',
+        outfile
+        ])
+    return outfile
 
-
-    return
-
-#####################
-#####################
-### Main Combined Post or Get -- TODO: --> main_update_put(src_filepath)
+########################
+##########################################################
+## --> cache bursting to incr the media_version ID# -- ###
+def update_pm_photodate_incr_version_hack(src_filepath):
+    import requests
+    if len(src_filepath) == 9 and src_filepath.isdigit():
+        colorstyle = src_filepath
+    else:
+        colorstyle = path.basename(src_filepath)[:9]
+    update_url = 'http://dmzimage01.l3.bluefly.com:8080/photo/{0}'.format(colorstyle)
+    data = {"sample_image": "Y", "photographed_date": "now"}
+    res = requests.put(update_url, data=data)
+    return res
+##########################################################
+##########################################################
+# ### Main Combined Post or Get -- TODO: --> main_update_put(src_filepath)
 # full uploading cmdline shell script, file as sys argv
 def main_upload_post(src_filepath):
     import os.path as path
@@ -255,13 +310,21 @@ def main_upload_post(src_filepath):
     # except:
     #     pass
     ##############################
-    if path.basename(src_filepath)[:9].isdigit():
+    ## Convert it to jpg if not one (ie png, tiff, gif)
+    ext = src_filepath.split('.')[-1].lower().replace('jpeg','jpg')
+    src_basename = path.basename(src_filepath)
+    if ext == 'jpg':
+        pass
+    else:
+        src_filepath = magick_convert_to_jpeg(src_filepath, destdir=None)
+    if src_basename[:9].isdigit() and ext:
         bflyimageid = path.basename(src_filepath)  # .split('.')[0]
     else:
         bflyimageid = None
-
     md5checksum = md5_checksumer(src_filepath)
     md5result = pgsql_validate_md5checksum(md5checksum, bflyimageid=bflyimageid)
+
+    ## Finished collecting k/v data to send now send if md5result returns False (meaning we dont have an image for this yet)
     if not md5result:
         try:
             mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
@@ -274,8 +337,7 @@ def main_upload_post(src_filepath):
         finally:
             print('Completed ', bflyimageid, md5checksum)
     else:
-        print md5result[0], ' <-- Duplicated - Passing'
-
+        print md5result[0], ' \n\t<-- Duplicated - Passing -- Exists -- with --> ', bflyimageid
 
 # Query/Display previous/currentDB info
 def main_retrieve_get(**kwargs):
@@ -291,9 +353,7 @@ def main_retrieve_get(**kwargs):
 if __name__ == '__main__':
     import sys
     import os.path as path
-    #src_filepath = '/Users/johnb/Desktop/misc_tests/orig/354394801_5.jpg'
     ext = '.jpg'
-    #src_filepath = '/Users/johnb/Desktop/misc_tests/croppedtest/out/362203805.png'
     if path.isfile(sys.argv[1]):
         src_filepath = sys.argv[1]
         ext = src_filepath.split('.')[-1]
