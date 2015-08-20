@@ -216,7 +216,8 @@ def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
     print bflyimageid, result,  '--- bflyImageID -- result'
     conn.commit()
     conn.close()
-    return result
+    if result:
+        return result
 
 
 # if result:
@@ -261,7 +262,7 @@ def main_upload_post(src_filepath):
         finally:
             print('Completed ', bflyimageid, md5checksum)
     else:
-        print md5result, ' <-- Duplicated - Passing'
+        print md5result[0], ' <-- Duplicated - Passing'
 
 
 # Query/Display previous/currentDB info
