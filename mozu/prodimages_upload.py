@@ -10,8 +10,8 @@ def get_psycopg_cursor():
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
     conn.autocommit = True
-    #if len(sys.argv) > 1 and sys.argv[1][:3].lower() == 'dic':
-    #    conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if len(sys.argv) > 1 and sys.argv[1][:3].lower() == 'dic':
+        conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn
 
 # make initial table and update timestamp on modify as function and trigger of the function on the table
@@ -195,7 +195,8 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
 def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
     import requests
-    cur, conn = get_psycopg_cursor()
+    conn = get_psycopg_cursor()
+    cur = conn.cursor()
     if bflyimageid is not None and len(bflyimageid) == 9:
         cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s' AND bflyimageid = '%s'", (md5checksum, bflyimageid))
         del bflyimageid
