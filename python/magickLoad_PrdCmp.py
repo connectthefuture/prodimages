@@ -760,11 +760,12 @@ if os.path.isdir(tmp_processing):
         import os
         if os.path.isfile(pngout):
             print ' Is file PNGOUT', pngout, img
-            jpgout = magickConvert_to_jpeg(pngout,destdir=destdir)
+            #--->jpgout = magickConvert_to_jpeg(pngout,destdir=destdir)
         else:
-            jpgout = magickConvert_to_jpeg(img,destdir=destdir)
+            pass
+            #--->jpgout = magickConvert_to_jpeg(img,destdir=destdir)
         
-        prodimages_upload.main_upload_post(jpgout)
+        #--->prodimages_upload.main_upload_post(jpgout)
         ############################
         
         #os.rename(pngout,os.path.join())
