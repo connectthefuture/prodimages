@@ -124,7 +124,7 @@ def upload_productimgs_mozu(src_filepath):
         return document_id, content_response
         #return bflyimageid, mozuimageid
     elif document_response.status_code == 409:
-        print 'Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.%s' % src_filepath
+        print '409 Err --> Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.%s' % src_filepath
         ## TODO: 1)  On duplicate file in mozu, check PGSQL by Filename and compare stored MD5 with current MD5.
         ## TODO: 1A) If same MD5 skip and return MOZUID, else if different.....
         ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
@@ -158,6 +158,7 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     try:
         conn = get_psycopg_cursor()
         cur = conn.cursor()
+        #  SET seq_update_ct = seq_update_ct + 1
         cur.execute("UPDATE images_bfly_mozu SET mozuimageid=%s, SET md5checksum=%s WHERE bflyimageid=%s;", (mozuimageid, md5checksum, bflyimageid))
         conn.commit()
         conn.close()
