@@ -37,8 +37,7 @@ def magickConvert_to_jpeg(img,destdir=None):
         "jpeg",
         "-strip",
         '-quality',
-        '95',
-        destdir
+        '95'
         ])
     return outfile
 
