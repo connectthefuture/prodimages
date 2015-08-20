@@ -248,8 +248,6 @@ def update_filerecord_pymongo(database_name=None, collection_name=None, md5check
 ############ RUN ###########################
 ############################################
 
-import os,sys
-
 
 def main(files_list=None, database_name='images', collection_name='md5checksums'):
     import sys, os, re, sqlalchemy, json, pymongo

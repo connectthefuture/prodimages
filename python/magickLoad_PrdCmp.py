@@ -748,7 +748,7 @@ if os.path.isdir(tmp_processing):
         
         ############################
         import sys
-        import os.chdir as chdir
+        from os import chdir as chdir
         chdir('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
         import convert_format_to_jpg
         from convert_format_to_jpg import magickConvert_to_jpeg
