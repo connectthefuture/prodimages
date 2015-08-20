@@ -208,7 +208,7 @@ def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
         ## If Value >1
     conn.commit()
     conn.close()
-    if bflyimageid:
+    if bflyimageid and bflyimageid is not None:
         mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
         mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
         mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
