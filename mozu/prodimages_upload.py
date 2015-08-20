@@ -10,8 +10,8 @@ def get_psycopg_cursor():
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
     conn.autocommit = True
-    if len(sys.argv) > 1 and sys.argv[1][:3].lower() == 'dic':
-        conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    #if len(sys.argv) > 1 and sys.argv[1][:3].lower() == 'dic':
+    #    conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn
 
 # make initial table and update timestamp on modify as function and trigger of the function on the table
