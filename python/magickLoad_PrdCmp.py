@@ -762,7 +762,7 @@ if os.path.isdir(tmp_processing):
         else:
             jpgout = magickConvert_to_jpeg(img,destdir=destdir)
         
-        prodimages_upload(jpgout)
+        prodimages_upload.main_upload_post(jpgout)
         ############################
         
         #os.rename(pngout,os.path.join())
