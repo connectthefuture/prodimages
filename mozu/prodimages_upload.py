@@ -170,11 +170,14 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     conn = get_psycopg_cursor()
     cur = conn.cursor()
-    cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
-    mozuimageid = cur.fetchone()
-    if mozuimageid:
-        return mozuimageid
-    else:
+    try:
+        cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
+        mozuimageid = cur.fetchone()
+        if mozuimageid:
+            return mozuimageid
+        else:
+            return False
+    except TypeError:
         return False
 
 # Get mozu img url
@@ -199,20 +202,26 @@ def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
     conn = get_psycopg_cursor()
     cur = conn.cursor()
     if bflyimageid is not None and len(bflyimageid) == 9:
+        print 'Not NONE --'
         cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s' AND bflyimageid = '%s'", (md5checksum, bflyimageid))
         del bflyimageid
         bflyimageid = cur.fetchone()
     elif bflyimageid is None:
+        print 'NONE --'
         cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
         bflyimageid = cur.fetchone()
         ## If Value >1
+    print bflyimageid, '--- bflyImageID'
     conn.commit()
     conn.close()
     if bflyimageid and bflyimageid is not None:
-        mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
-        mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
-        mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
-        return bflyimageid, mozuimageurl,
+        try:
+            mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
+            mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
+            mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
+            return bflyimageid, mozuimageurl,
+        except TypeError:
+            return False
     else:
         return False
 
