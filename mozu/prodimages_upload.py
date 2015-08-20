@@ -3,11 +3,15 @@
 
 def get_psycopg_cursor():
     import os, psycopg2, urlparse
+    from psycopg2 import extras
     connurl = 'postgres://cojkwmymqgbslk:0y3KViCM5vkAkiYXvvdcdHfVrT@ec2-54-204-0-120.compute-1.amazonaws.com:5432/dco1s4iscdv2as'
     os.environ["DATABASE_URL"] = connurl
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
-    conn = psycopg2.connect( database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+    conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+    conn.autocommit = True
+    if len(sys.argv) > 1 and sys.argv[1][:3].lower() == 'dic':
+        conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn
 
 # make initial table and update timestamp on modify as function and trigger of the function on the table
@@ -122,7 +126,7 @@ def upload_productimgs_mozu(src_filepath):
         return document_id, content_response
         #return bflyimageid, mozuimageid
     elif document_response.status_code == 409:
-        print 'Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.'
+        print 'Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.%s' % src_filepath
         ## TODO: 1)  On duplicate file in mozu, check PGSQL by Filename and compare stored MD5 with current MD5.
         ## TODO: 1A) If same MD5 skip and return MOZUID, else if different.....
         ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
@@ -210,6 +214,7 @@ def pgsql_get_validate_md5checksum(md5checksum, bflyimageid=None):
     else:
         return False
 
+#####################
 ### Main Combined Post or Get -- TODO: --> main_update_put(src_filepath)
 # full uploading cmdline shell script, file as sys argv
 def main_upload_post(src_filepath):
