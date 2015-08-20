@@ -61,7 +61,7 @@ def upload_productimgs_mozu(src_filepath):
         return document_id, content_response
         #return bflyimageid, mozuimageid
     elif document_response.status_code == 409:
-        print '409 Err --> Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.%s' % src_filepath
+        print '409 Err --> Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.\n\t%s' % src_filepath
         ## TODO: 1)  On duplicate file in mozu, check PGSQL by Filename and compare stored MD5 with current MD5.
         ## TODO: 1A) If same MD5 skip and return MOZUID, else if different.....
         ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
@@ -91,13 +91,13 @@ def init_pg_mktble_fnc_trig():
     createtbl = "CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar NOT NULL, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, seq_update_ct int NOT NULL DEFAULT 1, UNIQUE(bflyimageid, md5checksum));"
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at := NOW(); RETURN NEW; END; $$;"
-    createtrig_nowonupdate = "CREATE TRIGGER images_bfly_mozu_updated_at_column BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
+    createtrig_nowonupdate = "CREATE TRIGGER images_bfly_mozu_updated_at_column BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
     # Auto incr after modify
     # createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1;"
-    createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE OR REPLACE FUNCTION incr_update_ct() RETURNS trigger LANGUAGE plpgsql AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$;"
-    createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_update_ct BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_update_ct();"
+    # createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE OR REPLACE FUNCTION incr_update_ct() RETURNS trigger LANGUAGE plpgsql AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$;"
+    # createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_update_ct BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_update_ct();"
     ## Below used if Table exists -- which it obviously should since I just called the mktble above
-    createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu ALTER seq_update_ct SET DEFAULT nextval('seq_update_ct'); "
+    #createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu ALTER seq_update_ct SET DEFAULT nextval('seq_update_ct'); "
 
     conn = get_psycopg_cursor()
     cur = conn.cursor()
@@ -108,11 +108,11 @@ def init_pg_mktble_fnc_trig():
         cur.execute(createfunc_nowonupdate)
         cur.execute(createtrig_nowonupdate)
         conn.commit()
-        cur.execute(createfunc_incronupdate)
-        cur.execute(createtrig_incronupdate)
-        conn.commit()
-        cur.execute(createfuncalter_incronupdate)
-        conn.commit()
+        #cur.execute(createfunc_incronupdate)
+        #cur.execute(createtrig_incronupdate)
+        #conn.commit()
+        #cur.execute(createfuncalter_incronupdate)
+        #conn.commit()
     except psycopg2.ProgrammingError, e:
         print 'Passing Psycopg2 ProgErr...%s' % e
         pass
