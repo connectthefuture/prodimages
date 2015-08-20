@@ -8,7 +8,8 @@ def magickConvert_to_jpeg(img,destdir=None):
     if not destdir:
         outfile = img.split('/')[-1].split('.')[0] + ".jpg"
     else:
-        outfile = destdir
+        import os.path as path
+        outfile = path.join(destdir, img.split('/')[-1].split('.')[0] + ".jpg")
     subprocess.call([
         'convert',
         '-colorspace',

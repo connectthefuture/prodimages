@@ -759,6 +759,7 @@ if os.path.isdir(tmp_processing):
         from prodimages_upload import main_upload_post as main_upload_post
         import os
         if os.path.isfile(pngout):
+            print ' Is file PNGOUT', pngout, img
             jpgout = magickConvert_to_jpeg(pngout,destdir=destdir)
         else:
             jpgout = magickConvert_to_jpeg(img,destdir=destdir)
