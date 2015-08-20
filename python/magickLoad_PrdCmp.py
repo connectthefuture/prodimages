@@ -4,6 +4,8 @@
 import sys
 
 sys.path.append('python/jbmodules/image_processing/magick_tweaks')
+sys.path.append('mozu/')
+sys.path.append('/usr/local/batchRunScripts/mozu')
 sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
 
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
@@ -745,7 +747,7 @@ if os.path.isdir(tmp_processing):
         subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
         
         ############################
-        import convert_format_to_jpg
+        import mozu.convert_format_to_jpg.magickConvert_to_jpeg
         import mozu.prodimages_upload
         jpgout = convert_format_to_jpg.magickConvert_to_jpeg(pngout)
         prodimages_upload(jpgout)
