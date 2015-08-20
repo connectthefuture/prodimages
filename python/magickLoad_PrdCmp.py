@@ -751,10 +751,10 @@ if os.path.isdir(tmp_processing):
         from os import chdir as chdir
         chdir('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
         import convert_format_to_jpeg
-        from convert_format_to_jpeg import magickConvert_to_jpeg
+        from convert_format_to_jpeg import magickConvert_to_jpeg as magickConvert_to_jpeg
         chdir('/usr/local/batchRunScripts/mozu')
         import prodimages_upload
-        jpgout = convert_format_to_jpeg.magickConvert_to_jpeg(pngout)
+        jpgout = magickConvert_to_jpeg(pngout)
         prodimages_upload(jpgout)
         ############################
         
