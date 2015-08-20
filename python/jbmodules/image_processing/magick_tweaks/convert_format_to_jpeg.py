@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-def magickConvert_to_jpeg(img):
+def magickConvert_to_jpeg(img,destdir=None):
     import subprocess
     ext = img.split('.')[-1]
-    outfile = img.split('/')[-1].split('.')[0] + ".jpg"
+    if not destdir:
+        outfile = img.split('/')[-1].split('.')[0] + ".jpg"
+    else:
+        outfile = destdir
     subprocess.call([
         '-colorspace',
         'RGB',
