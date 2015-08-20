@@ -74,7 +74,7 @@ def upload_productimgs_mozu(src_filepath):
 
 def get_psycopg_cursor():
     import os, psycopg2, urlparse
-    from psycopg2 import extras
+    import psycopg2.extras
     connurl = 'postgres://cojkwmymqgbslk:0y3KViCM5vkAkiYXvvdcdHfVrT@ec2-54-204-0-120.compute-1.amazonaws.com:5432/dco1s4iscdv2as'
     os.environ["DATABASE_URL"] = connurl
     urlparse.uses_netloc.append("postgres")
@@ -94,8 +94,8 @@ def init_pg_mktble_fnc_trig():
     createtrig_nowonupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE TRIGGER images_bfly_mozu_updated_at_modtime BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
     # Auto incr after modify
     # createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1;"
-    createfunc_incronupdate = "CREATE OR REPLACE FUNCTION incr_updated_ct() RETURNS trigger AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$ LANGUAGE 'plpgsql';"
-    createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_updated_ct BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_updated_ct();"
+    createfunc_incronupdate = "CREATE OR REPLACE FUNCTION incr_update_ct() RETURNS trigger AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$ LANGUAGE 'plpgsql';"
+    createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_update_ct BEFORE UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_update_ct();"
     ## Below used if Table exists -- which it obviously should since I just called the mktble above
     createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu ALTER seq_update_ct SET DEFAULT nextval('seq_update_ct'); "
 
@@ -233,10 +233,10 @@ def main_upload_post(src_filepath):
     import os.path as path
     ##############################
     # remove db setup funcs after init release into prod
-    try:
-        init_pg_mktble_fnc_trig()
-    except:
-        pass
+    # try:
+    #     init_pg_mktble_fnc_trig()
+    # except:
+    #     pass
     ##############################
     if path.basename(src_filepath)[:9].isdigit():
         bflyimageid = path.basename(src_filepath)  # .split('.')[0]
