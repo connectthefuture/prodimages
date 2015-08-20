@@ -73,7 +73,7 @@ def upload_productimgs_mozu(src_filepath):
 
 
 def get_psycopg_cursor():
-    import os, psycopg2, urlparse
+    import os, psycopg2, urlparse, sys
     import psycopg2.extras
     connurl = 'postgres://cojkwmymqgbslk:0y3KViCM5vkAkiYXvvdcdHfVrT@ec2-54-204-0-120.compute-1.amazonaws.com:5432/dco1s4iscdv2as'
     os.environ["DATABASE_URL"] = connurl
@@ -171,7 +171,7 @@ def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
     conn = get_psycopg_cursor()
     cur = conn.cursor()
     try:
-        cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '%s'", (bflyimageid))
+        cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '{}'".format(bflyimageid))
         mozuimageid = cur.fetchone()
         if mozuimageid:
             return mozuimageid
@@ -188,7 +188,7 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
     mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
     res = requests.get(mozuimageurl)
     if res.status_code >= 400:
-        return False
+        return ''
     elif not destpath:
         return res
     else:
@@ -201,30 +201,32 @@ def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
     import requests
     conn = get_psycopg_cursor()
     cur = conn.cursor()
-    if bflyimageid is not None and len(bflyimageid) == 9:
-        print 'Not NONE --'
-        cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s' AND bflyimageid = '%s'", (md5checksum, bflyimageid))
-        del bflyimageid
-        bflyimageid = cur.fetchone()
-    elif bflyimageid is None:
-        print 'NONE --'
-        cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '%s'", (md5checksum))
-        bflyimageid = cur.fetchone()
+    result = ''
+    if bflyimageid:
+        print 'Not NONE --', bflyimageid
+        cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = %s AND bflyimageid = %s", (md5checksum, bflyimageid))
+        result = cur.fetchone()[0]
+    else:
+        print 'NONE --', bflyimageid
+        cur.execute("SELECT bflyimageid FROM images_bfly_mozu WHERE md5checksum = '{}'".format(md5checksum))
+        result = cur.fetchone()[0]
         ## If Value >1
-    print bflyimageid, '--- bflyImageID'
+    print bflyimageid, result,  '--- bflyImageID -- result'
     conn.commit()
     conn.close()
-    if bflyimageid and bflyimageid is not None:
-        try:
-            mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
-            mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
-            mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
-            return bflyimageid, mozuimageurl,
-        except TypeError:
-            return False
-    else:
-        return False
+    return result
 
+
+# if result:
+# try:
+#         mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
+#         mozuimageid = pgsql_get_mozuimageid_bflyimageid(bflyimageid)
+#         mozuimageurl = "{}{}".format(mozu_files_prefix, mozuimageid)
+#         return bflyimageid, mozuimageurl,
+#     except TypeError:
+#         return ''
+# else:
+#     return ''
 
 #####################
 ### Main Combined Post or Get -- TODO: --> main_update_put(src_filepath)
@@ -245,7 +247,7 @@ def main_upload_post(src_filepath):
 
     md5checksum = md5_checksumer(src_filepath)
     md5result = pgsql_validate_md5checksum(md5checksum, bflyimageid=bflyimageid)
-    if md5result == False:
+    if not md5result:
         try:
             mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
             pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum)
