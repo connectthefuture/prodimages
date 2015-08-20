@@ -92,6 +92,10 @@ def init_pg_mktble_fnc_trig():
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at := NOW(); RETURN NEW; END; $$;"
     createtrig_nowonupdate = "CREATE TRIGGER images_bfly_mozu_updated_at_column BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
+    
+    create_timefunc1 = "CREATE OR REPLACE FUNCTION trig_time_stamper() RETURNS trigger AS $$ BEGIN NEW.upd_ts := CURRENT_TIMESTAMP; RETURN NEW; END; $$ LANGUAGE plpgsql VOLATILE;" 
+    create_timetrig1 = "CREATE TRIGGER trig_1 BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE trig_time_stamper(); OF updated_at"
+
     # Auto incr after modify
     # createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1;"
     # createfunc_incronupdate = "CREATE SEQUENCE seq_update_ct INCREMENT BY 1 MINVALUE 1; CREATE OR REPLACE FUNCTION incr_update_ct() RETURNS trigger LANGUAGE plpgsql AS $BODY$ BEGIN NEW.updated_ct := nextval('seq_update_ct'); RETURN NEW; END; $BODY$;"
