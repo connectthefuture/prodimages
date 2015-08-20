@@ -10,6 +10,7 @@ def magickConvert_to_jpeg(img,destdir=None):
     else:
         outfile = destdir
     subprocess.call([
+        'convert',
         '-colorspace',
         'RGB',
         "-format",
@@ -37,7 +38,8 @@ def magickConvert_to_jpeg(img,destdir=None):
         "jpeg",
         "-strip",
         '-quality',
-        '95'
+        '95',
+        outfile
         ])
     return outfile
 
