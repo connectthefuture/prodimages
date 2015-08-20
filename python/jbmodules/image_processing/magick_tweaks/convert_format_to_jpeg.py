@@ -5,7 +5,7 @@
 def magickConvert_to_jpeg(img):
     import subprocess
     ext = img.split('.')[-1]
-    outfile = img.split('/')[-1].split('.')[:-1] + ".jpg"
+    outfile = img.split('/')[-1].split('.')[0] + ".jpg"
     subprocess.call([
         '-colorspace',
         'RGB',
