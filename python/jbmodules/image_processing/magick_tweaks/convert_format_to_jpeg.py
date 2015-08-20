@@ -1,8 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
 def magickConvert_to_jpeg(img):
+    import subprocess
     ext = img.split('.')[-1]
     outfile = img.split('/')[-1].split('.')[:-1] + ".jpg"
     subprocess.call([
@@ -11,11 +12,11 @@ def magickConvert_to_jpeg(img):
         "-format",
         ext,
         img,
-        "-depth", 
+        "-depth",
         "16",
         "-density",
         "72x72",
-        # "-profile", 
+        # "-profile",
         # "/usr/local/color_profiles/AdobeRGB1998.icc",
         # "-colorspace",
         # "RGB",
@@ -24,12 +25,12 @@ def magickConvert_to_jpeg(img):
         "-compress",
         "JPEG",
         # "-profile",
-        # '/usr/local/color_profiles/sRGB.icm', 
+        # '/usr/local/color_profiles/sRGB.icm',
         "-colorspace",
         'sRGB',
-        "-depth", 
+        "-depth",
         "8",
-        "-format", 
+        "-format",
         "jpeg",
         "-strip",
         '-quality',
