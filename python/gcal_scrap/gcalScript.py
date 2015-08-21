@@ -96,7 +96,7 @@ for key,value in future_events.iteritems():
 
 ########################################################### Alt Script Below
 
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # #!/bin/bash
 #
