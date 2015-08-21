@@ -152,6 +152,7 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
         conn = get_psycopg_cursor()
         cur = conn.cursor()
         cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ;", (bflyimageid, mozuimageid, md5checksum))
+        ###cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON CONFLICT bflyimageid UPDATE SET mozuimageid = ;", (bflyimageid, mozuimageid, md5checksum))
         conn.commit()
         conn.close()
     except IndexError:
