@@ -21,7 +21,7 @@ def get_mozu_authtoken(tenant_url):
     print "Auth Ticket: %s" % auth["accessToken"]
     return auth["accessToken"]
 
-# Upload
+# Upload and Return MozuID
 def upload_productimgs_mozu(src_filepath):
     import requests, json
     import os.path as path
