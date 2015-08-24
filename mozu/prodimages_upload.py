@@ -149,6 +149,20 @@ def get_exif_all_data(src_filepath):
         metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
     return metadata
 
+### Generic Logger
+def mr_logger(filepath,*args):
+    import datetime
+    current_dt = datetime.datetime.strptime(datetime.datetime.now(), '%Y-%m-%d')
+    logged_items = []
+    if len(args) > 0:
+        for arg in args:
+            logit = "{}\t{}\n".format(current_dt,arg)
+            logged_items.append(logit)
+    for i in logged_items:
+        with open(filepath, 'ab+') as f:
+            f.write(i)
+    return filepath
+
 ####################
 ### postgres Funcs
 # Store Key in pgsql
