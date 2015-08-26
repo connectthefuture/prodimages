@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, sys, re, csv
-
+## TODO: Replace below copy_to_imagedrop_upload with the Mozu Load/Update process
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
-    import pycurl, os, shutil, re
+    import os, shutil, re
     regex_colorstyle = re.compile(r'^.*?/[0-9]{9}[_altm0-6]{,6}?\.[jpngJPNG]{3}$')
     if not regex_colorstyle.findall(src_filepath):
         print src_filepath.split('/')[-1], ' Is Not a valid Bluefly Colorstyle File or Alt Out of Range'
@@ -97,19 +96,22 @@ def get_dimensions(img):
 
 
 def get_exif_metadata_value(img, exiftag=None):
-    import pyexiv2
-    image_metadata = pyexiv2.ImageMetadata(img)
-    metadata = image_metadata.read()
-    if exiftag:
-        exifvalue = metadata[exiftag]
-        return (exiftag, exifvalue)
+    try:
+        import pyexiv2
+        image_metadata = pyexiv2.ImageMetadata(img)
+        metadata = image_metadata.read()
+        if exiftag:
+            exifvalue = metadata[exiftag]
+            return (exiftag, exifvalue)
 
-    else:
-        metadict = {}
-        for mtag, mvalue in metadata.iteritems():
-            metadict[mtag] = mvalue
-        return metadict
-
+        else:
+            metadict = {}
+            for mtag, mvalue in metadata.iteritems():
+                metadict[mtag] = mvalue
+            return metadict
+    except ImportError:
+        print 'Missing pyexiv2 package. Try and find in apt-get, then pip or easy install or ignore this func'
+        pass
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
@@ -497,7 +499,7 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         print ' Not Dimensions PNG faster2-->', img
 
     if dimensions and dimensions != '100%' or not vert_horiz:
-        
+
         if not dimensions == '2000x2400':
             try:
                 del h
@@ -736,7 +738,7 @@ def main(root_img_dir=None):
                 ## Get color pixel values from source img
                 rgbmean     = v.items()
                 ## Generate png from source then jpgs from png
-                
+
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
                 ## TODO: pngout will be the image to POST to mozu returned from mozu
                 #  ie. response = send_to_mozu(pngout)  then save response in postgres --> and push the id to mozu again
