@@ -61,7 +61,7 @@ class GoogleDriveClient:
                             'https://www.googleapis.com/auth/drive.metadata.readonly',
                             'https://www.googleapis.com/auth/drive.scripts'
                             'https://www.googleapis.com/drive/v2/files',
-                            'https://www.googleapis.com/upload/drive/v2/files'                           
+                            'https://www.googleapis.com/upload/drive/v2/files'
                             ]
         if not scope:
             self.scope    = self.rest_scopes # 'https://www.googleapis.com/auth/drive.file'
@@ -872,7 +872,7 @@ def drive_upload_folder_map2redis(dname=None, parent_id=None):
         except KeyError:
             downloadUrl = None
         title = res['title']
-        res = upsert_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+        res = add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
         if res == True:
             print title, ' Res True'
         elif res == False:
@@ -880,12 +880,12 @@ def drive_upload_folder_map2redis(dname=None, parent_id=None):
         else:
             print title, ' Res Got Nothing Back'
 
-def drive_upload_fileslist(fileslist=None, parent_id=None): 
+def drive_upload_fileslist(fileslist=None, parent_id=None):
     ## Uploading
     #import GoogleDriveClient
-    client = GoogleDriveClient() 
+    client = GoogleDriveClient()
     import os
-    
+
     folder_ids = []
     ##client.parent_id = parent_id
     for f in fileslist:
@@ -896,7 +896,7 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
             print client.parent_id, ' Created Folder--parent_id'
         else:
             client.parent_id = parent_id
-       
+
         client.local_filepath = os.path.abspath(f)
         client.title = os.path.basename(client.local_filepath)
         client.description = dname
@@ -905,7 +905,7 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         client.perm_id = 'Bluefly'
         client.role = client.roles[2]
         client.insert_permission()
-        
+
         # Load it
         res = client.upload_file_drive()
         file_id = res['id']
@@ -921,16 +921,16 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         except KeyError:
             downloadUrl = None
         title = res['title']
-        res_redis = upsert_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+        res_redis = add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
         folder_ids.append(client.parent_id)
-    
+
         if res_redis == True:
             print title, ' Res True'
         elif res_redis == False:
             print title, ' Res False'
         else:
             print title, ' res_redis Got Nothing Back except this ---> ', res_redis
-    
+
     print folder_ids, ' FolderIDs'
     return folder_ids
 
