@@ -10,6 +10,7 @@ LookletImages   = '0B0Z4BGpAAp5KfkpZeENQamp0UWpZaWtEWHJGd0xMa3dGV01acG1ESENqRzRf
 StillImages     = '0B0Z4BGpAAp5KfmxtRktkUGhLckdLSXE0bzA2azhMUW1yVFd6R2VlUUxMN0lsY0NZUDdBaTg'
 VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
 
+
 from googleapiclient import http,errors
 class GoogleDriveClient:
     def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
@@ -66,10 +67,10 @@ class GoogleDriveClient:
             self.scope    = self.rest_scopes # 'https://www.googleapis.com/auth/drive.file'
         else:
             self.scope = scope
-        self.perm_id = self.get_perm_id_from_email()
+        self.perm_id = ''
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.perm_type = self.perm_types[0]
-        self.perm_value = ''
+        # Confusing...self.perm_value = ''
 
         ### Properties
         self.prop_key = prop_key
@@ -374,8 +375,12 @@ class GoogleDriveClient:
         Returns:
         The inserted permission if successful, None otherwise.
         """
+        if not self.perm_id:
+            _perm_id = self.get_perm_id_from_email()
+        else:
+            _perm_id = self.perm_id
         _new_permission = {
-        'value': self.perm_value,
+        'value': _perm_id,
         'type': self.perm_type,
         'role': self.role
         }
@@ -750,6 +755,7 @@ class GoogleDriveClient:
                 break
         return result
 
+
 ##########################
 ##########################
 class DriveState(object):
@@ -831,7 +837,8 @@ def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfL
 #############################
 ### Download with Client ####
 #############################
-def drive_uploading_folder_map2redis(dname=None, parent_id=None):
+###### Compiled functions/processes and client instances to Run on Files or Dirs ###
+def drive_upload_folder_map2redis(dname=None, parent_id=None):
     ## Uploading
     #import GoogleDriveClient
     client = GoogleDriveClient()
@@ -851,7 +858,6 @@ def drive_uploading_folder_map2redis(dname=None, parent_id=None):
         client.local_filepath = os.path.abspath(f)
         client.title = os.path.basename(client.local_filepath)
         client.description = dname
-        client.
         res = client.upload_file_drive()
         file_id = res['id']
         _parent_id = res['parents'][0].get('id')
@@ -866,10 +872,70 @@ def drive_uploading_folder_map2redis(dname=None, parent_id=None):
         except KeyError:
             downloadUrl = None
         title = res['title']
-        add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+        res = upsert_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+        if res == True:
+            print title, ' Res True'
+        elif res == False:
+            print title, ' Res False'
+        else:
+            print title, ' Res Got Nothing Back'
+
+def drive_upload_fileslist(fileslist=None, parent_id=None): 
+    ## Uploading
+    #import GoogleDriveClient
+    client = GoogleDriveClient() 
+    import os
+    
+    folder_ids = []
+    ##client.parent_id = parent_id
+    for f in fileslist:
+        dname = os.path.dirname(f)
+        if parent_id is None:
+            client.title = dname.split('/')[-1]
+            client.parent_id = client.create_public_folder()
+            print client.parent_id, ' Created Folder--parent_id'
+        else:
+            client.parent_id = parent_id
+       
+        client.local_filepath = os.path.abspath(f)
+        client.title = os.path.basename(client.local_filepath)
+        client.description = dname
+        ## Make Writable then upload
+        client.perm_type = client.perm_types[2]
+        client.perm_id = 'Bluefly'
+        client.role = client.roles[2]
+        client.insert_permission()
+        
+        # Load it
+        res = client.upload_file_drive()
+        file_id = res['id']
+        _parent_id = res['parents'][0].get('id')
+        alternateLink = res['alternateLink']
+        drive_version = res['version']
+        try:
+            selfLink = res['selfLink']
+        except KeyError:
+            selfLink = None
+        try:
+            downloadUrl = res['downloadUrl']
+        except KeyError:
+            downloadUrl = None
+        title = res['title']
+        res_redis = upsert_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+        folder_ids.append(client.parent_id)
+    
+        if res_redis == True:
+            print title, ' Res True'
+        elif res_redis == False:
+            print title, ' Res False'
+        else:
+            print title, ' res_redis Got Nothing Back except this ---> ', res_redis
+    
+    print folder_ids, ' FolderIDs'
+    return folder_ids
 
 
-def drive_downloading(destdir=None, file_id=None):
+def drive_download_fileid(destdir=None, file_id=None):
     ## Downloading
     #import GoogleDriveClient
     import os.path
@@ -883,7 +949,7 @@ def drive_downloading(destdir=None, file_id=None):
 
 #c = GoogleDriveClient()
 #print c.list_ret_IDs_indir()
-if __name__ == '__main__':
-    import sys
-    drive_uploading_folder_map2redis(dname=sys.argv[1], parent_id=None)
+#if __name__ == '__main__':
+    #import sys
+    #drive_upload_folder_map2redis(dname=sys.argv[1], parent_id=None)
 
