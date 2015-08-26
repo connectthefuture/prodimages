@@ -20,11 +20,10 @@ SCOPES = [
 ]
 serviceName = 'drive'
 version = 'v2'
-client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
-client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
+client_id = '153570890903-6iih709gmjeeagung4d1ntq2uqqtd36p.apps.googleusercontent.com'
+client_secret = 'G0EZYg4UkvX96PapsSTIr6E7'
 # filescope='https://www.googleapis.com/auth/drive.file'
 # metadatascope='https://www.googleapis.com/auth/drive.metadata'
-f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
 
 class GetCredentialsException(Exception):
   """Error raised when an error occurred while retrieving credentials.
