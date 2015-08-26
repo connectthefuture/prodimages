@@ -94,7 +94,7 @@ def get_dimensions(img):
     except IOError:
         pass
 
-
+## Used only for embedding metadata
 def get_exif_metadata_value(img, exiftag=None):
     try:
         import pyexiv2
