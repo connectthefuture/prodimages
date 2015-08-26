@@ -9,36 +9,7 @@ def create_googleapi_service(serviceName=None, version=None, client_id=None,clie
     from oauth2client import tools
     import os, datetime, argparse, apiclient
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; en-US; rv:33.0) Gecko/20100101 Firefox/33.0' ##'Python2.7'
-    BROWSERdeveloperKey='AIzaSyBHozNPRDnVkdPo_JlP_4TLbNrJIsd3bQ4'
-    SERVERdeveloperKey='AIzaSyDdDU5_fJWQpGKRJhTRDF9NtmAcvjuwasA'
-    #####################
-    #####################
-    # The client_id and client_secret are copied from the API Access tab on
-    # the Google APIs Console
-    FLOW = OAuth2WebServerFlow(
-        client_id=client_id,
-        client_secret=client_secret,
-        scope=scope,
-        redirect_uri=redirect_uri,
-        user_agent=user_agent)
-
-    # If the Credentials don't exist or are invalid, run through the native client
-    # flow. The Storage object will ensure that if successful the good
-    # Credentials will get written back to a file.
-    py_dir = os.path.dirname(os.path.realpath(__file__))
-    #py_dir = os.path.dirname(os.path.realpath(os.curdir))
-    print py_dir, ' Pydir'
-    os.chdir(py_dir)
-
-    # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
-    storage_file = os.path.join(py_dir, serviceName + '.dat')
-    STORAGE = Storage(storage_file)
-
-    # To disable the local server feature, replace with '' in the following line:
-    # args = '' #'--noauth_local_webserver'
-    # parser = argparse.ArgumentParser(parents=[tools.argparser])
-    # FLAGS = parser.parse_args()
-    ##
+    BROWSERdeveloperKey='
     #
     credentials = STORAGE.get()
     if credentials is None or credentials.invalid == True:
