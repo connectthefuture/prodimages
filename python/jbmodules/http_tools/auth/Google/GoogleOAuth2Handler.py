@@ -7,17 +7,22 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
 from googleapiclient.discovery import build
-from googleapiclient import errors
-# ...
-
 CLIENTSECRET_LOCATION = '/root/bluefly-photos-client_secrets.json'
 REDIRECT_URI = 'http://127.0.0.1/oauth2callback'
 SCOPES = [
-    'https://www.googleapis.com/auth/drive.file',
-    'email',
-    'profile',
-    # Add other requested scopes.
-]
+        'email',
+        'profile',
+        'https://www.googleapis.com/auth/drive',
+        'https://www.googleapis.com/auth/drive.readonly',
+        'https://www.googleapis.com/auth/drive.file',
+        'https://www.googleapis.com/auth/drive.apps.readonly',
+        'https://www.googleapis.com/auth/drive.appdata',
+        'https://www.googleapis.com/auth/drive.metadata',
+        'https://www.googleapis.com/auth/drive.metadata.readonly',
+        'https://www.googleapis.com/auth/drive.scripts'
+        'https://www.googleapis.com/drive/v2/files',
+        'https://www.googleapis.com/upload/drive/v2/files'
+    ]
 serviceName = 'drive'
 version = 'v2'
 client_id = '153570890903-6iih709gmjeeagung4d1ntq2uqqtd36p.apps.googleusercontent.com'
@@ -117,7 +122,7 @@ def get_user_info(credentials):
   """
   import httplib2
   user_info_service = build(
-      serviceName='oauth2', version='v2',
+      serviceName=serviceName, version=version,
       http=credentials.authorize(httplib2.Http()))
   user_info = None
   try:
@@ -195,3 +200,6 @@ def get_credentials(authorization_code, state):
   authorization_url = get_authorization_url(email_address, state)
   raise NoRefreshTokenException(authorization_url)
 
+
+
+print locals()

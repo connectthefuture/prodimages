@@ -70,7 +70,7 @@ class GoogleDriveClient:
         self.perm_id = ''
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.perm_type = self.perm_types[0]
-        # Confusing...self.perm_value = ''
+
 
         ### Properties
         self.prop_key = prop_key
