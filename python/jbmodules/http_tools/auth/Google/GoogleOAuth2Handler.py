@@ -5,6 +5,7 @@ __author__ = 'johnb'
 import logging
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+#from oauth2client import errors
 
 from googleapiclient.discovery import build
 CLIENTSECRET_LOCATION = '/root/bluefly-photos-client_secrets.json'
