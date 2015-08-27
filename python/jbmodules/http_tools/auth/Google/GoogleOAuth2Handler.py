@@ -5,8 +5,8 @@ __author__ = 'johnb'
 import logging
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-#from oauth2client import errors
-
+from oauth2client.client import GoogleCredentials
+#GoogleCredentials.
 from googleapiclient.discovery import build
 CLIENTSECRET_LOCATION = '/root/bluefly-photos-client_secrets.json'
 REDIRECT_URI = 'http://127.0.0.1/oauth2callback'
