@@ -51,18 +51,7 @@ class GoogleDriveClient:
         else:
             self.role = role
 
-        self.rest_scopes = [
-                            'https://www.googleapis.com/auth/drive',
-                            'https://www.googleapis.com/auth/drive.readonly',
-                            'https://www.googleapis.com/auth/drive.file',
-                            'https://www.googleapis.com/auth/drive.apps.readonly',
-                            'https://www.googleapis.com/auth/drive.appdata',
-                            'https://www.googleapis.com/auth/drive.metadata',
-                            'https://www.googleapis.com/auth/drive.metadata.readonly',
-                            'https://www.googleapis.com/auth/drive.scripts'
-                            'https://www.googleapis.com/drive/v2/files',
-                            'https://www.googleapis.com/upload/drive/v2/files'
-                            ]
+        self.rest_scopes = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.apps.readonly https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.scripts https://www.googleapis.com/drive/v2/files https://www.googleapis.com/upload/drive/v2/files'
         if not scope:
             self.scope    = self.rest_scopes # 'https://www.googleapis.com/auth/drive.file'
         else:
@@ -159,7 +148,7 @@ class GoogleDriveClient:
         Returns:
           File's content if successful, None otherwise.
         """
-        #gdox
+        # gdox
         # _download_url = file['exportLinks']['application/pdf']
         # _download_url = file['webContentLink']
         _download_url = self.service.files().get('downloadUrl')
@@ -204,6 +193,7 @@ class GoogleDriveClient:
 
     def update_file(self):
         """service, file_id, new_title, new_description, new_mime_type, new_filename, new_revision):
+
         Update an existing file's metadata and content.
 
         Args:
@@ -489,6 +479,7 @@ class GoogleDriveClient:
     @property
     def comments_for_fileid(self):
         """Retrieve a list of comments.
+
         Args:
         service: Drive API service instance.
         file_id: ID of the file to retrieve comments for.
