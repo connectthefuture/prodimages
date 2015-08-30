@@ -95,7 +95,6 @@ class GoogleDriveClient:
             self.folder_color_rgb = folder_color_rgb
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
 
-
     ### OK ###
     def instantiate_google_drive_serviceAccount_bfly(self):
         import httplib2
@@ -115,7 +114,6 @@ class GoogleDriveClient:
         _http = credentials.authorize(_http)
         self.service = build(serviceName, version, http=_http)
         return self.service
-
 
 ###### Files
     ## OK ##
@@ -138,6 +136,7 @@ class GoogleDriveClient:
 
 
 #######################
+
     def download_file_content(self):
         """Download a file's content.
 
@@ -164,7 +163,6 @@ class GoogleDriveClient:
         else:
             # The file doesn't have any content stored on Drive.
             return None
-
 
     ## OK ##
     def upload_file_drive(self):
@@ -351,7 +349,6 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occured: %s' % error
 
-
     def insert_permission(self):
         """Insert a new permission.
 
@@ -380,7 +377,6 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
-
     def update_permission(self):
         """Update a permission's role.
 
@@ -401,7 +397,6 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
-
 
     def retrieve_permissions(self):
         """Retrieve a list of permissions.
@@ -424,6 +419,7 @@ class GoogleDriveClient:
 ###### Properties - Custom  ########
 ####################################
 ## Add-Edit Additional Custom File Properties
+
     def insert_property(self):
         body = self.properties[0]
         try:
@@ -475,6 +471,7 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
 
 ###### Comments and Selects Methods/Properties
+
     ## Add-Edit-List Comments/Selects for Files
     @property
     def comments_for_fileid(self):
@@ -532,6 +529,7 @@ class GoogleDriveClient:
 ###############################################
 ################### Revisions #################
 ###############################################
+
     @property
     def revisions_for_fileid(self):
         """Retrieve a list of revisions.
@@ -621,7 +619,6 @@ class GoogleDriveClient:
                 break
         return _drive_folder_files
 
-
     #.parents().get(fileId=file_id, parentId=folder_id).execute()
     ### OK ###
     def print_ret_files_in_folder(self):
@@ -648,6 +645,7 @@ class GoogleDriveClient:
                 break
 
 ####### AppDataDir
+
     def watch_file(self):
         """Watch for all changes to a user's Drive.
 
@@ -676,7 +674,6 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
-
     def print_application_data_folder_metadata(self):
         """Print metadata for the Application Data folder.
 
@@ -689,7 +686,6 @@ class GoogleDriveClient:
             print 'Title: %s' % _file['title']
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
-
 
     def insert_file_in_application_data_folder(self):
         """Insert new file in the Application Data folder.
@@ -764,7 +760,6 @@ class DriveState(object):
         self.action = state_data['action']
         self.ids = map(str, state_data.get('ids', []))
 
-
 ##########################
 ######### REDIS ##########
 ##########################
@@ -823,7 +818,6 @@ def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfL
         return True
     else:
         return False
-
 
 #############################
 ### Download with Client ####
@@ -925,7 +919,6 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
     print folder_ids, ' FolderIDs'
     return folder_ids
 
-
 def drive_download_fileid(destdir=None, file_id=None):
     ## Downloading
     #import GoogleDriveClient
@@ -936,7 +929,6 @@ def drive_download_fileid(destdir=None, file_id=None):
         client.title = client.file_id
     client.local_filepath = os.path.join(destdir, client.title)
     client.download_file_drive()
-
 
 #c = GoogleDriveClient()
 #print c.list_ret_IDs_indir()
