@@ -134,7 +134,6 @@ class GoogleDriveClient:
                 print 'Download Complete', self.local_filepath
                 return self.local_filepath
 
-
 #######################
 
     def download_file_content(self):
@@ -175,6 +174,7 @@ class GoogleDriveClient:
                 _indexableText = self.indexable_text
         except TypeError:
             _indexableText = self.indexable_text
+
         body = {
             'title': self.title,
             'description': self.description,
@@ -243,21 +243,23 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
-    ## Create Shortcut to File
-    def create_file_shortcut(self):
+##### Folders
+    ## OK ## Create ##
+    def create_drive_folder(self):
         body = {
             'title': self.title,
             'description': self.description,
-            'mimeType': 'application/vnd.google-apps.drive-sdk'
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
+            #'userPermission': self.user_permission
         }
         if self.parent_id:
             body['parents'] = [{'id': self.parent_id}]
 
-        _file = self.service.files().insert(body=body).execute()
-        print 'File ID: %s' % _file['id']
-        return _file
+        _new_folder_data = self.service.files().insert(body=body).execute()['items'][0].items()
+        return _new_folder_data
 
-    ## Change Files Parent Folder
+    ## Change Files Parent Folder # Update
     def move_insert_file_into_folder(self):
       """Insert a file into a folder.
       Args:
@@ -274,8 +276,77 @@ class GoogleDriveClient:
         print 'An error occurred: %s' % error
       return None
 
+######################
+####### # File/Folder Info #######
+####### ###### ####### ##### ###### ###### ######
+    ### OK ###
+    ## List Contents of Dirs
+    def list_filesdata_current_dir(self):
+        req = self.service.files().list()
+        _folder_data = req.execute()
+        return _folder_data
 
-##### Folders
+    ### OK ###
+    def list_ret_IDs_indir(self):
+        body = {}
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+
+        results = self.service.files().list(maxResults=20).execute()
+        items = results.get('items', [])
+        if not items:
+            print 'No files found.'
+        else:
+            print 'Files:'
+            infodict = {}
+            for item in items:
+                baseinfo = {}
+                print '{0} \t-- {1} --\tfile_id--> ({2})\tparent_id--> {3}'.format(item['title'], item['mimeType'], item['id'], item['parents'][0].get('id'))
+                baseinfo['id'] = item['id']
+                baseinfo['drive_version'] = item['version']
+                baseinfo['title'] = item['title']
+                baseinfo['mimeType'] = item['mimeType']
+                baseinfo['parents'] = item['parents'][0]
+                baseinfo['parent_id'] = item['parents'][0].get('id')
+                try:
+                    baseinfo['md5Checksum'] = item['md5Checksum']
+                except KeyError:
+                    baseinfo['md5Checksum'] = 'NA'
+                try:
+                    baseinfo['downloadUrl'] = item['downloadUrl']
+                except KeyError:
+                    baseinfo['downloadUrl'] = 'NA'
+                baseinfo['selfLink'] = item['selfLink']
+                baseinfo['alternateLink'] = item['alternateLink']
+                #baseinfo['thumbnailLink'] = item['thumbnailLink']
+                infodict[item['id']] = baseinfo
+            return infodict
+
+    #.parents().get(fileId=file_id, parentId=folder_id).execute()
+    ### OK ###
+    def print_ret_files_in_folder(self):
+        page_token = None
+        while True:
+            try:
+                params = {}
+                if page_token:
+                    params['pageToken'] = page_token
+                children = self.service.children().list(folderId=self.parent_id, **params).execute()
+                childrens = {}
+                for child in children.get('items', []):
+                    try:
+                        childrens[child['id']] = child['title']
+                        print 'File Id: %s' % child['id']
+                    except KeyError:
+                        pass
+                page_token = children.get('nextPageToken')
+                if not page_token:
+                    return childrens
+                    #break
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+
     def getprint_parents_by_fileid(self):
         """Print a file's parents.
 
@@ -293,46 +364,8 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
-
-    ## OK ##
-    def create_drive_folder(self):
-        body = {
-            'title': self.title,
-            'description': self.description,
-            'mimeType': 'application/vnd.google-apps.folder',
-            'folderColorRgb': self.folder_color_rgb
-            #'userPermission': self.user_permission
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-
-        _new_folder_data = self.service.files().insert(body=body).execute()['items'][0].items()
-        return _new_folder_data
-
-
-####### Shared Public Folder
-    ### OK ###
-    def create_public_folder(self):
-        body = {
-            'title': self.title,
-            'mimeType': 'application/vnd.google-apps.folder',
-            'folderColorRgb': self.folder_color_rgb
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-        _public_folder = self.service.files().insert(body=body).execute()
-        permission = {
-            'value': '',
-            'type': 'anyone',
-            'role': 'reader'
-        }
-        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
-        # self.pardir_fileid = _public_folder['id']
-        #return self.pardir_fileid
-        return _public_folder['id']
-
 ####################################
-###### Permissions and FileSharing #
+###### Permissions  #
 ####################################
     ##@property
     def get_perm_id_from_email(self):
@@ -414,12 +447,23 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+    def remove_permission(self):
+        """Remove a permission.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to remove the permission for.
+        permission_id: ID of the permission to remove.
+        """
+        try:
+            self.service.permissions().delete(fileId=self.file_id, permissionId=self.perm_id).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
 
 ####################################
 ###### Properties - Custom  ########
 ####################################
 ## Add-Edit Additional Custom File Properties
-
     def insert_property(self):
         body = self.properties[0]
         try:
@@ -457,21 +501,8 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
-    def remove_permission(self):
-        """Remove a permission.
-
-        Args:
-        service: Drive API service instance.
-        file_id: ID of the file to remove the permission for.
-        permission_id: ID of the permission to remove.
-        """
-        try:
-            self.service.permissions().delete(fileId=self.file_id, permissionId=self.perm_id).execute()
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
-
+##############################################
 ###### Comments and Selects Methods/Properties
-
     ## Add-Edit-List Comments/Selects for Files
     @property
     def comments_for_fileid(self):
@@ -525,11 +556,49 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
+###############################################
+###################
+###  FileSharing ##
+###############################################
+###############################################
+## Create Shortcut to File
+    def create_file_shortcut(self):
+        body = {
+            'title': self.title,
+            'description': self.description,
+            'mimeType': 'application/vnd.google-apps.drive-sdk'
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+
+        _file = self.service.files().insert(body=body).execute()
+        print 'File ID: %s' % _file['id']
+        return _file
+
+####### Shared Public Folder
+    ### OK ###
+    def create_public_folder(self):
+        body = {
+            'title': self.title,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+        _public_folder = self.service.files().insert(body=body).execute()
+        permission = {
+            'value': '',
+            'type': 'anyone',
+            'role': 'reader'
+        }
+        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
+        # self.pardir_fileid = _public_folder['id']
+        #return self.pardir_fileid
+        return _public_folder['id']
 
 ###############################################
 ################### Revisions #################
 ###############################################
-
     @property
     def revisions_for_fileid(self):
         """Retrieve a list of revisions.
@@ -547,53 +616,7 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
-
 ####### ###### ###### ###### ###### ###### ######
-####### ## Print/Get File or Folder info # ######
-####### ###### ###### ###### ###### ###### ######
-    ### OK ###
-    ## List Contents of Dirs
-    def list_filesdata_current_dir(self):
-        req = self.service.files().list()
-        _folder_data = req.execute()
-        return _folder_data
-
-    ### OK ###
-    def list_ret_IDs_indir(self):
-        body = {}
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-
-        results = self.service.files().list(maxResults=20).execute()
-        items = results.get('items', [])
-        if not items:
-            print 'No files found.'
-        else:
-            print 'Files:'
-            infodict = {}
-            for item in items:
-                baseinfo = {}
-                print '{0} \t-- {1} --\tfile_id--> ({2})\tparent_id--> {3}'.format(item['title'], item['mimeType'], item['id'], item['parents'][0].get('id'))
-                baseinfo['id'] = item['id']
-                baseinfo['drive_version'] = item['version']
-                baseinfo['title'] = item['title']
-                baseinfo['mimeType'] = item['mimeType']
-                baseinfo['parents'] = item['parents'][0]
-                baseinfo['parent_id'] = item['parents'][0].get('id')
-                try:
-                    baseinfo['md5Checksum'] = item['md5Checksum']
-                except KeyError:
-                    baseinfo['md5Checksum'] = 'NA'
-                try:
-                    baseinfo['downloadUrl'] = item['downloadUrl']
-                except KeyError:
-                    baseinfo['downloadUrl'] = 'NA'
-                baseinfo['selfLink'] = item['selfLink']
-                baseinfo['alternateLink'] = item['alternateLink']
-                #baseinfo['thumbnailLink'] = item['thumbnailLink']
-                infodict[item['id']] = baseinfo
-            return infodict
-
 
     # def list_fileitems_current_dir(self):
     #     items = self.drive_folder_data['items'][0].items()
@@ -618,32 +641,7 @@ class GoogleDriveClient:
                 print 'An error occurred: %s' % error
                 break
         return _drive_folder_files
-
-    #.parents().get(fileId=file_id, parentId=folder_id).execute()
-    ### OK ###
-    def print_ret_files_in_folder(self):
-        page_token = None
-        while True:
-            try:
-                params = {}
-                if page_token:
-                    params['pageToken'] = page_token
-                children = self.service.children().list(folderId=self.parent_id, **params).execute()
-                childrens = {}
-                for child in children.get('items', []):
-                    try:
-                        childrens[child['id']] = child['title']
-                        print 'File Id: %s' % child['id']
-                    except KeyError:
-                        pass
-                page_token = children.get('nextPageToken')
-                if not page_token:
-                    return childrens
-                    #break
-            except errors.HttpError, error:
-                print 'An error occurred: %s' % error
-                break
-
+    
 ####### AppDataDir
 
     def watch_file(self):
