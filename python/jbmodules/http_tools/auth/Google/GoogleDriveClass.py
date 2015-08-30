@@ -51,7 +51,7 @@ class GoogleDriveClient:
         else:
             self.role = role
 
-        self.rest_scopes = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.apps.readonly https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.scripts https://www.googleapis.com/drive/v2/files https://www.googleapis.com/upload/drive/v2/files'
+        self.rest_scopes = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.apps.readonly https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.scripts https://www.googleapis.com/drive/v2/files https://www.googleapis.com/upload/drive/v2/files'
         if not scope:
             self.scope    = self.rest_scopes # 'https://www.googleapis.com/auth/drive.file'
         else:
