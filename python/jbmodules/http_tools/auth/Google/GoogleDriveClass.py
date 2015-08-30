@@ -55,7 +55,7 @@ class GoogleDriveClient:
         if not scope:
             self.scope    = self.rest_scopes # 'https://www.googleapis.com/auth/drive.file'
         else:
-            self.scope = scope
+            self.scope = 'https://www.googleapis.com/auth/' + scope
         self.perm_id = ''
         self.perm_types = ['user', 'group', 'domain', 'anyone']
         self.perm_type = self.perm_types[0]
