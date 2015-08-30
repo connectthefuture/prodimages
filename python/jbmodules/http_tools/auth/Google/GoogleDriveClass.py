@@ -13,8 +13,8 @@ VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRz
 
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
-        self.rootdirid = "0AA7omFHcbQaiUk9PVA"
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind='', database_id='', prop_key='', prop_value='', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
+        self.rootdirid = ""
         if not file_id:
             self.file_id = self.rootdirid
         else:
