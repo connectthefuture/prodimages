@@ -883,12 +883,6 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         client.local_filepath = os.path.abspath(f)
         client.title = os.path.basename(client.local_filepath)
         client.description = dname
-        ## Make Writable then upload
-        client.perm_type = client.perm_types[2]
-        client.perm_id = 'bluefly.com'
-        client.role = client.roles[2]
-        client.insert_permission()
-
         # Load it
         res = client.upload_file_drive()
         file_id = res['id']
@@ -904,6 +898,14 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         except KeyError:
             downloadUrl = None
         title = res['title']
+
+        ## Now Make Writable after Load
+        client.file_id = file_id
+        client.perm_type = 'domain' #client.perm_types[2]
+        client.perm_id = 'bluefly.com'
+        client.role = 'writer' #client.roles[2]
+        client.insert_permission()
+        
         res_redis = add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
         folder_ids.append(client.parent_id)
 
