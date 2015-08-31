@@ -780,7 +780,7 @@ redis_port = 6379
 
 r = redis.Redis(host=redis_host, port=redis_port,  encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
 
-def add_new_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLink=None, downloadUrl=None, local_filepath=None, filename=None, drive_version=None):
+def upsert_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLink=None, downloadUrl=None, local_filepath=None, filename=None, drive_version=None):
     if not filename:
         filename=local_filepath.split('/')[-1]
     if filename is not None and filename[:9].isdigit():
@@ -855,7 +855,7 @@ def drive_upload_folder_map2redis(dname=None, parent_id=None):
         except KeyError:
             downloadUrl = None
         title = res['title']
-        res = add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+        res = upsert_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
         if res == True:
             print title, ' Res True'
         elif res == False:
@@ -906,7 +906,7 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         client.role = 'writer' #client.roles[2]
         client.insert_permission()
         
-        res_redis = add_new_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
+        res_redis = upsert_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
         folder_ids.append(client.parent_id)
 
         if res_redis == True:
