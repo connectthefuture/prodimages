@@ -885,7 +885,7 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         client.description = dname
         ## Make Writable then upload
         client.perm_type = client.perm_types[2]
-        client.perm_id = 'Bluefly'
+        client.perm_id = 'bluefly.com'
         client.role = client.roles[2]
         client.insert_permission()
 
