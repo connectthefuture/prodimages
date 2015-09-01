@@ -168,6 +168,7 @@ def get_box_access_token():
     # reg
     #initdir = os.path.abspath(__file__)
     #os.chdir(os.path.join(os.path.abspath(__file__), '../../http_tools/auth/Box'))
+    os.chdir('/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box')
     from http_tools.auth.Box.boxapi_full_auth_dload import exchange_tokens
     access_token, refresh_token = exchange_tokens()
     #--# Return the valid access and fresh return token
@@ -277,7 +278,7 @@ def download_mplce_url(urldest_tuple):
         m = regex_boxapi.match(image_url)
         m.groupdict()
         try:
-            image_url = image_url.replace('app.box.com/shared/static/','https://app.box.com/s/').rstrip('.jpg')
+            image_url = image_url.replace('://app.box.com/shared/static/','://app.box.com/s/').rstrip('.jpg')
             image_url = get_real_box_download_url(image_url)
             print 'boxingapi -->', image_url
         except TypeError:
