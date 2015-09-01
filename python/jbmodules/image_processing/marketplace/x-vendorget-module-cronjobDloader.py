@@ -195,6 +195,7 @@ def get_real_box_download_url(shared_link, access_token=None):
         file_id = res.json()['id']
         file_name = res.json()['name']
         download_url = res.json()['shared_link']['download_url']
+        print 'downloadUrl', '<--->', download_url
         return download_url
     except ValueError:
         print shared_link, ' Value3 Error '
@@ -277,6 +278,7 @@ def download_mplce_url(urldest_tuple):
         m.groupdict()
         try:
             image_url = get_real_box_download_url(image_url)
+            print 'boxingapi -->', image_url
         except TypeError:
             pass
     else:
