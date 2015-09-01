@@ -84,7 +84,7 @@ def exchange_tokens(refresh_token=None):
     initdir = path.abspath(curdir)
     #chdir(path.dirname(path.realpath(__file__)))    
     #tokens_file = 'tokens.pkl'
-    tokens_file = '/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/tokens_priv.pkl'
+    tokens_file = '/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box/tokens_priv.pkl'
     if path.isfile(tokens_file):
         import requests, json
         #with open(tokens_file,'rb') as fr:
