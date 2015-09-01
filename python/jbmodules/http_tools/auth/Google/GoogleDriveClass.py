@@ -106,7 +106,7 @@ class GoogleDriveClient:
         client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
         # filescope='https://www.googleapis.com/auth/drive.file'
         # metadatascope='https://www.googleapis.com/auth/drive.metadata'
-        f = file('/root/drive-photo-bfly-privatekey.p12', 'rb')
+        f = file('/root/drive-photo-bfly-privatekey-02.p12', 'rb')
         key = f.read()
         f.close()
         credentials = SignedJwtAssertionCredentials(client_email, key, scope=self.scope)
