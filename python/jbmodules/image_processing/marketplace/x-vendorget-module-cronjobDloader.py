@@ -168,7 +168,6 @@ def get_box_access_token():
     # reg
     #initdir = os.path.abspath(__file__)
     #os.chdir(os.path.join(os.path.abspath(__file__), '../../http_tools/auth/Box'))
-    os.chdir('/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box')
     from http_tools.auth.Box.boxapi_full_auth_dload import exchange_tokens
     access_token, refresh_token = exchange_tokens()
     #--# Return the valid access and fresh return token
@@ -278,11 +277,9 @@ def download_mplce_url(urldest_tuple):
         m = regex_boxapi.match(image_url)
         m.groupdict()
         try:
-            image_url = image_url.replace('://app.box.com/shared/static/','://app.box.com/s/').rstrip('.jpg')
-            os.chdir('/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box')
             image_url = get_real_box_download_url(image_url)
             print 'boxingapi -->', image_url
-        except OSError:
+        except TypeError:
             pass
     else:
         pass
@@ -364,10 +361,10 @@ def download_mplce_url(urldest_tuple):
             print image_url, destpath
             if not image_url[:5] == 'https':
                 res = requests.get(image_url, timeout=17, verify=False, headers=headers)
-                print ' HTTP Yippie ', res, image_url, headers
+                print ' HTTP Yippie ', res
             else:
                 res = requests.get(image_url, timeout=12, verify=False, headers=headers)
-                print ' HTTPS Oh Yes ', res, image_url, headers
+                print ' HTTPS Oh Yes ', res
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value
@@ -384,7 +381,7 @@ def download_mplce_url(urldest_tuple):
                     countstyle += 1
                 print "Total New Styles Downloaded: {}".format(countstyle)
                 return destpath
-            elif urlcode_value < 404:
+            elif urlcode_value < 400:
                 print urlcode_value
                 try:
                     print 'TRYsub400', image_url, destpath, '367'
@@ -398,18 +395,15 @@ def download_mplce_url(urldest_tuple):
                     #subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                     print 'Failed Downloading HTTPS file {}'.format(image_url)
 
-            elif urlcode_value >= 404:
+            elif urlcode_value == 404:
                 ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
                 #import urllib3
-                print ' 404 -500++ Trying Urllib3 ', image_url
+                print ' 404 Trying Urllib3 ', image_url
                 #hostname = urllib3.get_host(image_url)[1]
                 if hostname == 'marketplace.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
                 elif hostname == 'pim1.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
-                elif hostname == 'app.box.com':
-                    image_url = image_url.replace('://app.box.com/shared/static/', '://app.box.com/s/').rstrip('.jpg')
-                    'BOOOXXX'
                 else:
                     print hostname, ' MERCHANTRY URLs Respond with 404 Errors '
                 #######################################################################################
