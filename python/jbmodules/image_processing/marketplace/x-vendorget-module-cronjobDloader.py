@@ -601,7 +601,6 @@ def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=Non
         return False
 
 
-
 def mongo_upsert_threaded(argslist=None):
     import Queue
     import threading
@@ -668,8 +667,6 @@ def mongo_upsert_threaded(argslist=None):
         return restest
     else:
         return
-
-
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
