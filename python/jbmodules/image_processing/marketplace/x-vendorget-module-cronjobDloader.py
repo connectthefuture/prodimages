@@ -282,7 +282,7 @@ def download_mplce_url(urldest_tuple):
             os.chdir('/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box')
             image_url = get_real_box_download_url(image_url)
             print 'boxingapi -->', image_url
-        except TypeError:
+        except OSError:
             pass
     else:
         pass
