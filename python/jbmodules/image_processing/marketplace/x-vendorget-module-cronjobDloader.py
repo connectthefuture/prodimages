@@ -279,6 +279,7 @@ def download_mplce_url(urldest_tuple):
         m.groupdict()
         try:
             image_url = image_url.replace('://app.box.com/shared/static/','://app.box.com/s/').rstrip('.jpg')
+            os.chdir('/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box')
             image_url = get_real_box_download_url(image_url)
             print 'boxingapi -->', image_url
         except TypeError:
