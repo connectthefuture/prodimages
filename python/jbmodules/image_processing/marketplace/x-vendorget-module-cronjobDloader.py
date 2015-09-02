@@ -384,7 +384,7 @@ def download_mplce_url(urldest_tuple):
                     countstyle += 1
                 print "Total New Styles Downloaded: {}".format(countstyle)
                 return destpath
-            elif urlcode_value < 400:
+            elif urlcode_value < 404:
                 print urlcode_value
                 try:
                     print 'TRYsub400', image_url, destpath, '367'
@@ -398,15 +398,18 @@ def download_mplce_url(urldest_tuple):
                     #subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                     print 'Failed Downloading HTTPS file {}'.format(image_url)
 
-            elif urlcode_value == 404:
+            elif urlcode_value >= 404:
                 ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
                 #import urllib3
-                print ' 404 Trying Urllib3 ', image_url
+                print ' 404 -500++ Trying Urllib3 ', image_url
                 #hostname = urllib3.get_host(image_url)[1]
                 if hostname == 'marketplace.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
                 elif hostname == 'pim1.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
+                elif hostname == 'app.box.com':
+                    image_url = image_url.replace('://app.box.com/shared/static/', '://app.box.com/s/').rstrip('.jpg')
+                    'BOOOXXX'
                 else:
                     print hostname, ' MERCHANTRY URLs Respond with 404 Errors '
                 #######################################################################################
