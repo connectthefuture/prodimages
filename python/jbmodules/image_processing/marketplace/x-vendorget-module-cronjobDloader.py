@@ -274,12 +274,14 @@ def download_mplce_url(urldest_tuple):
     #### BOX API AUTH ####
     regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box\.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
     if regex_boxapi.findall(image_url):
+        'REGEX BOXEd'
         m = regex_boxapi.match(image_url)
         m.groupdict()
         try:
+            image_url = image_url.replace('://app.box.com/shared/static/', '://app.box.com/s/').rstrip('.jpg')
             image_url = get_real_box_download_url(image_url)
             print 'boxingapi -->', image_url
-        except TypeError:
+        except OSError:
             pass
     else:
         pass
