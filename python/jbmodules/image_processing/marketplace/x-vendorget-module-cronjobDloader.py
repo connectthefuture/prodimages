@@ -364,10 +364,10 @@ def download_mplce_url(urldest_tuple):
             print image_url, destpath
             if not image_url[:5] == 'https':
                 res = requests.get(image_url, timeout=17, verify=False, headers=headers)
-                print ' HTTP Yippie ', res
+                print ' HTTP Yippie ', res, image_url, headers
             else:
                 res = requests.get(image_url, timeout=12, verify=False, headers=headers)
-                print ' HTTPS Oh Yes ', res
+                print ' HTTPS Oh Yes ', res, image_url, headers
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value
