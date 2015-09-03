@@ -14,7 +14,8 @@ def recursive_dirlist(rootdir):
     #if '.git' in dirnames:
     # don't go into any .git directories.
     #    dirnames.remove('.git')
-    return walkedlist
+    walkedset = list(set(sorted(walkedlist)))
+    return walkedset
 
 
 def make_createdirs_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):

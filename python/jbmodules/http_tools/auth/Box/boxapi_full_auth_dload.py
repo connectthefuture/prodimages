@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -15,7 +14,7 @@ from boxsdk import OAuth2
 
 CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
 CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
-
+TOKENS_FILE = '/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box/tokens_priv.pkl'
 
 def authenticate(refresh_token=None):
 
@@ -83,13 +82,13 @@ def exchange_tokens(refresh_token=None):
     import cPickle as pickle
     initdir = path.abspath(curdir)
     #chdir(path.dirname(path.realpath(__file__)))    
-    #tokens_file = 'tokens.pkl'
-    tokens_file = 'tokens_priv.pkl'
-    if path.isfile(tokens_file):
+    #TOKENS_FILE = 'tokens.pkl'
+
+    if path.isfile(TOKENS_FILE):
         import requests, json
-        #with open(tokens_file,'rb') as fr:
+        #with open(TOKENS_FILE,'rb') as fr:
         #    oldaccess_token, valid_refresh_token = pickle.load(fr)
-        with open(tokens_file,'rb') as fr:
+        with open(TOKENS_FILE,'rb') as fr:
             try:
                 oldaccess_token, valid_refresh_token = pickle.load(fr)
             except:
@@ -127,8 +126,9 @@ def exchange_tokens(refresh_token=None):
             ##---NOTE---## refresh token is valid for 60 days, 
             ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
            
-            with open(tokens_file,'wb') as fw:
+            with open(TOKENS_FILE,'wb') as fw:
                 pickle.dump((access_token, refresh_token,),  fw)
+                print('BoxSuccess')
                 return access_token, refresh_token
         except KeyError:
             return
@@ -136,7 +136,7 @@ def exchange_tokens(refresh_token=None):
     else:
         import __builtin__
         access_token, refresh_token = authenticate()
-        pickle.dump((access_token, refresh_token,),  __builtin__.open(tokens_file,'wb'))
+        pickle.dump((access_token, refresh_token,),  __builtin__.open(TOKENS_FILE,'wb'))
         #chdir(initdir)
         return access_token, refresh_token
 
@@ -145,15 +145,15 @@ def exchange_tokens(refresh_token=None):
 def store_tokens(access_token, refresh_token):
     from oauth2client.file import Storage
     import os    
-    py_dir = os.path.dirname(os.path.realpath(__file__))
+    py_dir = os.path.dirname(TOKENS_FILE)  #os.path.realpath(__file__))
     os.chdir(py_dir)
     # storage_file = os.path.join(os.path.dirname(py_dir), 'calendar.dat')
     storage_file = os.path.join(py_dir, 'boxapi' + '.dat')
-    STORAGE = Storage(storage_file)
-    credentials = STORAGE.get()
+    store = Storage(storage_file)
+    credentials = store.get()
     if credentials is None or credentials.invalid == True:
-        STORAGE.put(access_token, refresh_token)
-        credentials = STORAGE.get()   
+        store.put((access_token, refresh_token,))
+        credentials = store.get()
     else:
         access_token, refresh_token = credentials
     return credentials
@@ -180,22 +180,22 @@ def instantiate_boxapi_client():
     client = Client(oauth)
     return client
 
-
-def download_boxapi_auth_file(client=None, image_url=None, destpath=None):
-    try:
-        file_id = qstring2kvpairs(image_url)['id'][0]
-    except IndexError:
-        file_id = regex_boxapi_ret_fileid(image_url)       
-        pass
-    
-    content = client.file(file_id=file_id).content()
-    if not destpath:
-        return content
-    else:
-        with open(destpath,'w') as f:
-            f.write(content)
-            f.close()
-        return destpath
+#
+# def download_boxapi_auth_file(client=None, image_url=None, destpath=None):
+#     try:
+#         file_id = qstring2kvpairs(image_url)['id'][0]
+#     except IndexError:
+#         file_id = regex_boxapi_ret_fileid(image_url)
+#         pass
+#
+#     content = client.file(file_id=file_id).content()
+#     if not destpath:
+#         return content
+#     else:
+#         with open(destpath,'w') as f:
+#             f.write(content)
+#             f.close()
+#         return destpath
 
 
 

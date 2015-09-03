@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 def csv_write_datedOutfile(lines):
     import csv,datetime,os
     dt = str(datetime.datetime.now())

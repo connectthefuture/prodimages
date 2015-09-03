@@ -129,7 +129,8 @@ pythonpath = ['',
 #     #if '.git' in dirnames:
 #     # don't go into any .git directories.
 #     #    dirnames.remove('.git')
-#     return walkedlist
+#     walkedset = list(set(sorted(walkedlist)))
+#     return walkedset
 
 
 
@@ -182,7 +183,7 @@ pythonpath = ['',
 # #         except pycurl.error, error:
 # #             errno, errstr = error
 # #             print 'An error occurred: ', errstr
-            
+
 
 # #END###### FTP FUNX
 
@@ -841,5 +842,6 @@ Query Mysql DB using 2 attribs. Filed(ie. 'colorstyle', param(ie.'302332901'))
 #     #if '.git' in dirnames:
 #     # don't go into any .git directories.
 #     #    dirnames.remove('.git')
-#     return walkedlist
+#     walkedset = list(set(sorted(walkedlist)))
+#     return walkedset
 

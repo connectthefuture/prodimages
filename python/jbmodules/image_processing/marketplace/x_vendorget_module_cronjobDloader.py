@@ -195,6 +195,7 @@ def get_real_box_download_url(shared_link, access_token=None):
         file_id = res.json()['id']
         file_name = res.json()['name']
         download_url = res.json()['shared_link']['download_url']
+        print 'downloadUrl', '<--->', download_url
         return download_url
     except ValueError:
         print shared_link, ' Value3 Error '
@@ -273,11 +274,14 @@ def download_mplce_url(urldest_tuple):
     #### BOX API AUTH ####
     regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box\.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
     if regex_boxapi.findall(image_url):
+        'REGEX BOXEd'
         m = regex_boxapi.match(image_url)
         m.groupdict()
         try:
+            image_url = image_url.replace('://app.box.com/shared/static/', '://app.box.com/s/').rstrip('.jpg')
             image_url = get_real_box_download_url(image_url)
-        except TypeError:
+            print 'boxingapi -->', image_url
+        except OSError:
             pass
     else:
         pass
@@ -597,7 +601,6 @@ def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=Non
         return False
 
 
-
 def mongo_upsert_threaded(argslist=None):
     import Queue
     import threading
@@ -664,8 +667,6 @@ def mongo_upsert_threaded(argslist=None):
         return restest
     else:
         return
-
-
 
 
 def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):

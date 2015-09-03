@@ -17,7 +17,8 @@ def recursive_dirlist(rootdir):
     #if '.git' in dirnames:
     # don't go into any .git directories.
     #    dirnames.remove('.git')
-    return walkedlist
+    walkedset = list(set(sorted(walkedlist)))
+    return walkedset
 
 
 def get_exif_all_data(image_filepath):

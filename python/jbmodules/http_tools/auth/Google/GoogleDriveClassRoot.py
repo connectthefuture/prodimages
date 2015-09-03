@@ -1,22 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-__author__ = 'johnb'
-
-ProductionRoot  = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
-MarketplaceRoot = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
-EditorialShare  = '0B0Z4BGpAAp5KfnRZaWl4cHMxUGg4MGI0LUFjUWFDdzQ4VWsyTi11OGJPQVlRakRKSXNScHM'
-VendorShare     = '0B0Z4BGpAAp5KfmJQUjFlSjlPVTFUcGo1eWpVRDhmekdzLVVsWUYyM1BBZGhHUGRTTVpUU1E'
-LookletImages   = '0B0Z4BGpAAp5KfkpZeENQamp0UWpZaWtEWHJGd0xMa3dGV01acG1ESENqRzRfaW5od2JjV1U'
-StillImages     = '0B0Z4BGpAAp5KfmxtRktkUGhLckdLSXE0bzA2azhMUW1yVFd6R2VlUUxMN0lsY0NZUDdBaTg'
-VendorImages    = '0B0Z4BGpAAp5Kfm5UOWk3WFd2b1ZIVzNMbDliUVNsS2tHOVJXc0loRERDMDRzQmkzV0JRaHM'
-
-
 from googleapiclient import http,errors
 class GoogleDriveClient:
-    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind='', database_id='', prop_key='', prop_value='', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
-        self.rootdirid = "0B0Z4BGpAAp5KfkdSZWw5MGtDUEV5dFNPYXdXcHVhdVFGenplMTRXRVgwRnBvM0NFWllGdU0"
+    def __init__(self, file_id='', local_filepath='', description='', title='', scope='', role='', kind = '', database_id='', prop_key='', prop_value= '', parent_id='', folder_color_rgb='', new_comment='', q='', third_party_email=''):
+        self.rootdirid = '0Bxhu4C7P9nnMV3RKb0x6SFZ5cm8' #"0B0Z4BGpAAp5KfkdSZWw5MGtDUEV5dFNPYXdXcHVhdVFGenplMTRXRVgwRnBvM0NFWllGdU0"
         if not file_id:
-            self.file_id = '' # self.rootdirid
+            self.file_id = self.rootdirid
         else:
             self.file_id = file_id
         if not parent_id:
@@ -51,15 +38,16 @@ class GoogleDriveClient:
         else:
             self.role = role
 
-        self.rest_scopes = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.apps.readonly https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.scripts https://www.googleapis.com/drive/v2/files https://www.googleapis.com/upload/drive/v2/files'
+        self.rest_scopes = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata' ## https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.apps.readonly https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.scripts https://www.googleapis.com/drive/v2/files https://www.googleapis.com/upload/drive/v2/files'
+
         if not scope:
             self.scope    = self.rest_scopes # 'https://www.googleapis.com/auth/drive.file'
         else:
-            self.scope = 'https://www.googleapis.com/auth/' + scope
-        self.perm_id = ''
+            self.scope = scope
+        self.perm_id = 'bluefly.com'
         self.perm_types = ['user', 'group', 'domain', 'anyone']
-        self.perm_type = self.perm_types[0]
-
+        self.perm_type = self.perm_types[2]
+        # Confusing...self.perm_value = ''
 
         ### Properties
         self.prop_key = prop_key
@@ -87,13 +75,14 @@ class GoogleDriveClient:
         ## Comments, Search, Misc
         self.new_comment = new_comment
         self.comment_id = ''
-        self.indexable_text = ''
+        self.indexable_text = 'bluefly flim flam dam'
         self.third_party_email = third_party_email
         if not folder_color_rgb:
             self.folder_color_rgb = '#6699CC'
         else:
             self.folder_color_rgb = folder_color_rgb
         self.service = self.instantiate_google_drive_serviceAccount_bfly()
+
 
     ### OK ###
     def instantiate_google_drive_serviceAccount_bfly(self):
@@ -102,10 +91,12 @@ class GoogleDriveClient:
         from oauth2client.client import SignedJwtAssertionCredentials
         serviceName = 'drive'
         version = 'v2'
-        client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
-        client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
+        #client_email = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6@developer.gserviceaccount.com'
+        #client_id = '153570890903-3tl6bkluun2r32smkpgtqdultfrctvg6.apps.googleusercontent.com'
         # filescope='https://www.googleapis.com/auth/drive.file'
         # metadatascope='https://www.googleapis.com/auth/drive.metadata'
+        client_email = '153570890903-740e97hb8mdpm40pvontqkmp22drti6q@developer.gserviceaccount.com'
+        client_id ='153570890903-740e97hb8mdpm40pvontqkmp22drti6q@developer.gserviceaccount.com'
         f = file('/root/drive-photo-bfly-privatekey-02.p12', 'rb')
         key = f.read()
         f.close()
@@ -114,6 +105,55 @@ class GoogleDriveClient:
         _http = credentials.authorize(_http)
         self.service = build(serviceName, version, http=_http)
         return self.service
+
+    def instantiate_google_drive_serviceAccount_bfly2(self):
+        """Gets valid user credentials from storage.
+        If nothing has been stored, or if the stored credentials are invalid,
+        the OAuth2 flow is completed to obtain the new credentials.
+        Returns:
+            Credentials, the obtained credential.
+        """
+
+        import httplib2
+        from os import path as path
+        from os import makedirs as makedirs
+        from googleapiclient import discovery
+        import oauth2client
+        from oauth2client import client
+        from oauth2client import tools
+        from oauth2client import file
+        
+        flags = None
+
+        SCOPES = self.rest_scopes
+        CLIENT_SECRETS_FILE = '/root/bluefly-photo-client_secrets.json'
+        APPLICATION_NAME = 'bluefly-photos'
+
+        home_dir = path.expanduser('~')
+        credential_dir = path.join(home_dir, '.credentials')
+        if not path.exists(credential_dir):
+            makedirs(credential_dir)
+        credential_path = path.join(credential_dir,
+                                       'bluefly-photo-creds.json')
+
+        store = oauth2client.file.Storage(credential_path)
+        credentials = store.get()
+        if not credentials or credentials.invalid:
+            import json
+            
+            #print json.loads(CLIENT_SECRETS_FILE)
+            with open(CLIENT_SECRETS_FILE, 'rb') as f:
+                flow = client.flow_from_clientsecrets(json.dumps(f), SCOPES)
+                flow.user_agent = APPLICATION_NAME
+                if flags:
+                    credentials = tools.run_flow(flow, store, flags)
+                else: # Needed only for compatability with Python 2.6
+                    credentials = tools.run(flow, store)
+                print 'Storing credentials to ' + credential_path
+
+        http = credentials.authorize(httplib2.Http())
+        service = discovery.build('drive', 'v2', http=http)
+        return service
 
 ###### Files
     ## OK ##
@@ -134,8 +174,8 @@ class GoogleDriveClient:
                 print 'Download Complete', self.local_filepath
                 return self.local_filepath
 
-#######################
 
+#######################
     def download_file_content(self):
         """Download a file's content.
 
@@ -146,7 +186,7 @@ class GoogleDriveClient:
         Returns:
           File's content if successful, None otherwise.
         """
-        # gdox
+        #gdox
         # _download_url = file['exportLinks']['application/pdf']
         # _download_url = file['webContentLink']
         _download_url = self.service.files().get('downloadUrl')
@@ -163,6 +203,7 @@ class GoogleDriveClient:
             # The file doesn't have any content stored on Drive.
             return None
 
+
     ## OK ##
     def upload_file_drive(self):
         import pprint
@@ -174,7 +215,6 @@ class GoogleDriveClient:
                 _indexableText = self.indexable_text
         except TypeError:
             _indexableText = self.indexable_text
-
         body = {
             'title': self.title,
             'description': self.description,
@@ -191,7 +231,6 @@ class GoogleDriveClient:
 
     def update_file(self):
         """service, file_id, new_title, new_description, new_mime_type, new_filename, new_revision):
-
         Update an existing file's metadata and content.
 
         Args:
@@ -243,23 +282,21 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
-##### Folders
-    ## OK ## Create ##
-    def create_drive_folder(self):
+    ## Create Shortcut to File
+    def create_file_shortcut(self):
         body = {
             'title': self.title,
             'description': self.description,
-            'mimeType': 'application/vnd.google-apps.folder',
-            'folderColorRgb': self.folder_color_rgb
-            #'userPermission': self.user_permission
+            'mimeType': 'application/vnd.google-apps.drive-sdk'
         }
         if self.parent_id:
             body['parents'] = [{'id': self.parent_id}]
 
-        _new_folder_data = self.service.files().insert(body=body).execute()['items'][0].items()
-        return _new_folder_data
+        _file = self.service.files().insert(body=body).execute()
+        print 'File ID: %s' % _file['id']
+        return _file
 
-    ## Change Files Parent Folder # Update
+    ## Change Files Parent Folder
     def move_insert_file_into_folder(self):
       """Insert a file into a folder.
       Args:
@@ -276,77 +313,8 @@ class GoogleDriveClient:
         print 'An error occurred: %s' % error
       return None
 
-######################
-####### # File/Folder Info #######
-####### ###### ####### ##### ###### ###### ######
-    ### OK ###
-    ## List Contents of Dirs
-    def list_filesdata_current_dir(self):
-        req = self.service.files().list()
-        _folder_data = req.execute()
-        return _folder_data
 
-    ### OK ###
-    def list_ret_IDs_indir(self):
-        body = {}
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-
-        results = self.service.files().list(maxResults=20).execute()
-        items = results.get('items', [])
-        if not items:
-            print 'No files found.'
-        else:
-            print 'Files:'
-            infodict = {}
-            for item in items:
-                baseinfo = {}
-                print '{0} \t-- {1} --\tfile_id--> ({2})\tparent_id--> {3}'.format(item['title'], item['mimeType'], item['id'], item['parents'][0].get('id'))
-                baseinfo['id'] = item['id']
-                baseinfo['drive_version'] = item['version']
-                baseinfo['title'] = item['title']
-                baseinfo['mimeType'] = item['mimeType']
-                baseinfo['parents'] = item['parents'][0]
-                baseinfo['parent_id'] = item['parents'][0].get('id')
-                try:
-                    baseinfo['md5Checksum'] = item['md5Checksum']
-                except KeyError:
-                    baseinfo['md5Checksum'] = 'NA'
-                try:
-                    baseinfo['downloadUrl'] = item['downloadUrl']
-                except KeyError:
-                    baseinfo['downloadUrl'] = 'NA'
-                baseinfo['selfLink'] = item['selfLink']
-                baseinfo['alternateLink'] = item['alternateLink']
-                #baseinfo['thumbnailLink'] = item['thumbnailLink']
-                infodict[item['id']] = baseinfo
-            return infodict
-
-    #.parents().get(fileId=file_id, parentId=folder_id).execute()
-    ### OK ###
-    def print_ret_files_in_folder(self):
-        page_token = None
-        while True:
-            try:
-                params = {}
-                if page_token:
-                    params['pageToken'] = page_token
-                children = self.service.children().list(folderId=self.parent_id, **params).execute()
-                childrens = {}
-                for child in children.get('items', []):
-                    try:
-                        childrens[child['id']] = child['title']
-                        print 'File Id: %s' % child['id']
-                    except KeyError:
-                        pass
-                page_token = children.get('nextPageToken')
-                if not page_token:
-                    return childrens
-                    #break
-            except errors.HttpError, error:
-                print 'An error occurred: %s' % error
-                break
-
+##### Folders
     def getprint_parents_by_fileid(self):
         """Print a file's parents.
 
@@ -364,8 +332,46 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
+
+    ## OK ##
+    def create_drive_folder(self):
+        body = {
+            'title': self.title,
+            'description': self.description,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
+            #'userPermission': self.user_permission
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+
+        _new_folder_data = self.service.files().insert(body=body).execute()['items'][0].items()
+        return _new_folder_data
+
+
+####### Shared Public Folder
+    ### OK ###
+    def create_public_folder(self):
+        body = {
+            'title': self.title,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'folderColorRgb': self.folder_color_rgb
+        }
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+        _public_folder = self.service.files().insert(body=body).execute()
+        permission = {
+            'value': '',
+            'type': 'anyone',
+            'role': 'reader'
+        }
+        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
+        # self.pardir_fileid = _public_folder['id']
+        #return self.pardir_fileid
+        return _public_folder['id']
+
 ####################################
-###### Permissions  #
+###### Permissions and FileSharing #
 ####################################
     ##@property
     def get_perm_id_from_email(self):
@@ -382,6 +388,7 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occured: %s' % error
 
+
     def insert_permission(self):
         """Insert a new permission.
 
@@ -390,7 +397,7 @@ class GoogleDriveClient:
         file_id: ID of the file to insert permission for.
         value: User or group e-mail address, domain name or None for 'default'
            type.
-        type: The value 'user', 'group', 'domain' or 'default'.
+        perm_type: The value 'user', 'group', 'domain' or 'default'.
         role: The value 'owner', 'writer' or 'reader'.
         Returns:
         The inserted permission if successful, None otherwise.
@@ -409,6 +416,7 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
+
 
     def update_permission(self):
         """Update a permission's role.
@@ -431,6 +439,7 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+
     def retrieve_permissions(self):
         """Retrieve a list of permissions.
 
@@ -447,18 +456,6 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
-    def remove_permission(self):
-        """Remove a permission.
-
-        Args:
-        service: Drive API service instance.
-        file_id: ID of the file to remove the permission for.
-        permission_id: ID of the permission to remove.
-        """
-        try:
-            self.service.permissions().delete(fileId=self.file_id, permissionId=self.perm_id).execute()
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
 
 ####################################
 ###### Properties - Custom  ########
@@ -501,13 +498,24 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
         return None
 
-##############################################
+    def remove_permission(self):
+        """Remove a permission.
+
+        Args:
+        service: Drive API service instance.
+        file_id: ID of the file to remove the permission for.
+        permission_id: ID of the permission to remove.
+        """
+        try:
+            self.service.permissions().delete(fileId=self.file_id, permissionId=self.perm_id).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+
 ###### Comments and Selects Methods/Properties
     ## Add-Edit-List Comments/Selects for Files
     @property
     def comments_for_fileid(self):
         """Retrieve a list of comments.
-
         Args:
         service: Drive API service instance.
         file_id: ID of the file to retrieve comments for.
@@ -556,45 +564,6 @@ class GoogleDriveClient:
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
 
-###############################################
-###################
-###  FileSharing ##
-###############################################
-###############################################
-## Create Shortcut to File
-    def create_file_shortcut(self):
-        body = {
-            'title': self.title,
-            'description': self.description,
-            'mimeType': 'application/vnd.google-apps.drive-sdk'
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-
-        _file = self.service.files().insert(body=body).execute()
-        print 'File ID: %s' % _file['id']
-        return _file
-
-####### Shared Public Folder
-    ### OK ###
-    def create_public_folder(self):
-        body = {
-            'title': self.title,
-            'mimeType': 'application/vnd.google-apps.folder',
-            'folderColorRgb': self.folder_color_rgb
-        }
-        if self.parent_id:
-            body['parents'] = [{'id': self.parent_id}]
-        _public_folder = self.service.files().insert(body=body).execute()
-        permission = {
-            'value': '',
-            'type': 'anyone',
-            'role': 'reader'
-        }
-        self.service.permissions().insert(fileId=_public_folder['id'], body=permission).execute()
-        # self.pardir_fileid = _public_folder['id']
-        #return self.pardir_fileid
-        return _public_folder['id']
 
 ###############################################
 ################### Revisions #################
@@ -616,7 +585,53 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+
 ####### ###### ###### ###### ###### ###### ######
+####### ## Print/Get File or Folder info # ######
+####### ###### ###### ###### ###### ###### ######
+    ### OK ###
+    ## List Contents of Dirs
+    def list_filesdata_current_dir(self):
+        req = self.service.files().list()
+        _folder_data = req.execute()
+        return _folder_data
+
+    ### OK ###
+    def list_ret_IDs_indir(self):
+        body = {}
+        if self.parent_id:
+            body['parents'] = [{'id': self.parent_id}]
+
+        results = self.service.files().list(maxResults=20).execute()
+        items = results.get('items', [])
+        if not items:
+            print 'No files found.'
+        else:
+            print 'Files:'
+            infodict = {}
+            for item in items:
+                baseinfo = {}
+                print '{0} \t-- {1} --\tfile_id--> ({2})\tparent_id--> {3}'.format(item['title'], item['mimeType'], item['id'], item['parents'][0].get('id'))
+                baseinfo['id'] = item['id']
+                baseinfo['drive_version'] = item['version']
+                baseinfo['title'] = item['title']
+                baseinfo['mimeType'] = item['mimeType']
+                baseinfo['parents'] = item['parents'][0]
+                baseinfo['parent_id'] = item['parents'][0].get('id')
+                try:
+                    baseinfo['md5Checksum'] = item['md5Checksum']
+                except KeyError:
+                    baseinfo['md5Checksum'] = 'NA'
+                try:
+                    baseinfo['downloadUrl'] = item['downloadUrl']
+                except KeyError:
+                    baseinfo['downloadUrl'] = 'NA'
+                baseinfo['selfLink'] = item['selfLink']
+                baseinfo['alternateLink'] = item['alternateLink']
+                #baseinfo['thumbnailLink'] = item['thumbnailLink']
+                infodict[item['id']] = baseinfo
+            return infodict
+
 
     # def list_fileitems_current_dir(self):
     #     items = self.drive_folder_data['items'][0].items()
@@ -641,9 +656,34 @@ class GoogleDriveClient:
                 print 'An error occurred: %s' % error
                 break
         return _drive_folder_files
-    
-####### AppDataDir
 
+
+    #.parents().get(fileId=file_id, parentId=folder_id).execute()
+    ### OK ###
+    def print_ret_files_in_folder(self):
+        page_token = None
+        while True:
+            try:
+                params = {}
+                if page_token:
+                    params['pageToken'] = page_token
+                children = self.service.children().list(folderId=self.parent_id, **params).execute()
+                childrens = {}
+                for child in children.get('items', []):
+                    try:
+                        childrens[child['id']] = child['title']
+                        print 'File Id: %s' % child['id']
+                    except KeyError:
+                        pass
+                page_token = children.get('nextPageToken')
+                if not page_token:
+                    return childrens
+                    #break
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+
+####### AppDataDir
     def watch_file(self):
         """Watch for all changes to a user's Drive.
 
@@ -672,6 +712,7 @@ class GoogleDriveClient:
             print 'An error occurred: %s' % error
             return None
 
+
     def print_application_data_folder_metadata(self):
         """Print metadata for the Application Data folder.
 
@@ -684,6 +725,7 @@ class GoogleDriveClient:
             print 'Title: %s' % _file['title']
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
+
 
     def insert_file_in_application_data_folder(self):
         """Insert new file in the Application Data folder.
@@ -741,44 +783,15 @@ class GoogleDriveClient:
         return result
 
 
-##########################
-##########################
-class DriveState(object):
-    """Store state provided by Drive."""
-    def __init__(self, state):
-        """Create a new instance of drive state.
 
-        Parse and load the JSON state parameter.
-
-        Args:
-          state: State query parameter as a string.
-        """
-        import json
-        state_data = json.loads(state)
-        self.action = state_data['action']
-        self.ids = map(str, state_data.get('ids', []))
-
-##########################
-######### REDIS ##########
-##########################
-# ### Redis Client **K/V Store**
-# ** \<colorstyle\>, \<file_id\>=\<local_filepath\> **
-#
-# ****[key] : {‘field’ -> ‘value’, ‘field’ -> ‘value’, ‘field’ -> ‘value’}****
-#
-#     """[users] – {set} – (“adam”, “bob”, “carol”)
-#        [user:*username*:fullname] – {string} – (“Adam Smith”, “Bob Barker”, “Carol Burnett”)
-#        [user:*username*:password] – {string} – (md5 hash password, no example)"""
-##########################
-######### REDIS ##########
-##########################
+######### REDIS COMPLICATED ## Yet Better ########
 import redis
 #redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
 #redis_port = 17996
 redis_host = '127.0.0.1'
 redis_port = 6379
 
-r = redis.Redis(host=redis_host, port=redis_port,  encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
+r = redis.Redis(host=redis_host, port=redis_port,  db=0, encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
 
 def upsert_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLink=None, downloadUrl=None, local_filepath=None, filename=None, drive_version=None):
     if not filename:
@@ -817,10 +830,9 @@ def upsert_drive2local_dbmap(file_id, parent_id=None, alternateLink=None, selfLi
     else:
         return False
 
-#############################
-### Download with Client ####
-#############################
+
 ###### Compiled functions/processes and client instances to Run on Files or Dirs ###
+
 def drive_upload_folder_map2redis(dname=None, parent_id=None):
     ## Uploading
     #import GoogleDriveClient
@@ -886,7 +898,7 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         # Load it
         res = client.upload_file_drive()
         file_id = res['id']
-        _parent_id = res['parents'][0].get('id')
+        _parent_id =res['parents'][0].get('id')
         alternateLink = res['alternateLink']
         drive_version = res['version']
         try:
@@ -898,14 +910,14 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
         except KeyError:
             downloadUrl = None
         title = res['title']
-
+        
         ## Now Make Writable after Load
         client.file_id = file_id
         client.perm_type = 'domain' #client.perm_types[2]
         client.perm_id = 'bluefly.com'
         client.role = 'writer' #client.roles[2]
         client.insert_permission()
-        
+        print 'Inserted Permission', client.file_id
         res_redis = upsert_drive2local_dbmap(file_id, parent_id=_parent_id, alternateLink=alternateLink, selfLink=selfLink, downloadUrl=downloadUrl, local_filepath=client.local_filepath, filename=title, drive_version=drive_version)
         folder_ids.append(client.parent_id)
 
@@ -919,6 +931,8 @@ def drive_upload_fileslist(fileslist=None, parent_id=None):
     print folder_ids, ' FolderIDs'
     return folder_ids
 
+
+
 def drive_download_fileid(destdir=None, file_id=None):
     ## Downloading
     #import GoogleDriveClient
@@ -930,9 +944,12 @@ def drive_download_fileid(destdir=None, file_id=None):
     client.local_filepath = os.path.join(destdir, client.title)
     client.download_file_drive()
 
+
 #c = GoogleDriveClient()
 #print c.list_ret_IDs_indir()
-#if __name__ == '__main__':
-    #import sys
-    #drive_upload_folder_map2redis(dname=sys.argv[1], parent_id=None)
+if __name__ == '__main__':
+    import sys
+    drive_upload_folder_map2redis(dname=sys.argv[1], parent_id=None)
 
+
+ 

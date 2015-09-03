@@ -35,7 +35,8 @@ def recursive_dirlist_GET_COS(rootdir):
             filepath = os.path.abspath(os.path.join(dirname, filename))
             if os.path.isfile(filepath) and regex.findall(filepath):
                 walkedlistCOS.append(filepath)
-    return walkedlistCOS
+    walkedset = list(set(sorted(walkedlist)))
+    return walkedsetCOS
 
 
 def recursive_dirlist_CR2(rootdir):
@@ -47,7 +48,8 @@ def recursive_dirlist_CR2(rootdir):
             filepath = os.path.abspath(os.path.join(dirname, filename))
             if os.path.isfile(filepath) and regex.findall(filepath):
                 walkedlistCR2.append(filepath)
-    return walkedlistCR2
+    walkedset = list(set(sorted(walkedlist)))
+    return walkedsetCR2
         
 #var="exiftool -if '$jpgfromraw' -b -jpgfromraw -w %d%f_%ue.jpg -execute -if '$previewimage' -b -previewimage -w %d%f_%ue.jpg -execute -tagsfromfile @ -srcfile %d%f_%ue.jpg -overwrite_original -common_args --ext jpg DIR"
 

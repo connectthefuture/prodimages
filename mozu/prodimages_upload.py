@@ -21,7 +21,7 @@ def get_mozu_authtoken(tenant_url):
     print "Auth Ticket: %s" % auth["accessToken"]
     return auth["accessToken"]
 
-# Upload
+# Upload and Return MozuID
 def upload_productimgs_mozu(src_filepath):
     import requests, json
     import os.path as path
@@ -71,8 +71,8 @@ def upload_productimgs_mozu(src_filepath):
     else:
         print 'Failed with code --> ', document_response.status_code
 
-
-def get_psycopg_cursor():
+#
+def get_psycopg_connection():
     import os, psycopg2, urlparse, sys
     import psycopg2.extras
     connurl = 'postgres://cojkwmymqgbslk:0y3KViCM5vkAkiYXvvdcdHfVrT@ec2-54-204-0-120.compute-1.amazonaws.com:5432/dco1s4iscdv2as'
@@ -103,7 +103,7 @@ def init_pg_mktble_fnc_trig():
     ## Below used if Table exists -- which it obviously should since I just called the mktble above
     #createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu ALTER seq_update_ct SET DEFAULT nextval('seq_update_ct'); "
 
-    conn = get_psycopg_cursor()
+    conn = get_psycopg_connection()
     cur = conn.cursor()
     cur.execute(createtbl)
     conn.commit()
@@ -125,6 +125,7 @@ def init_pg_mktble_fnc_trig():
             conn.commit()
             conn.close()
 
+### Utility Funx - Get File Data
 ## util func calcs md5 of file
 def md5_checksumer(src_filepath):
     import hashlib
@@ -141,6 +142,27 @@ def md5_checksumer(src_filepath):
         except:
             return False
 
+## Extracts the image metadata from file
+def get_exif_all_data(src_filepath):
+    import exiftool
+    with exiftool.ExifTool() as et:
+        metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
+    return metadata
+
+### Generic Logger
+def mr_logger(filepath,*args):
+    import datetime
+    current_dt = datetime.datetime.strptime(datetime.datetime.now(), '%Y-%m-%d')
+    logged_items = []
+    if len(args) > 0:
+        for arg in args:
+            logit = "{}\t{}\n".format(current_dt,arg)
+            logged_items.append(logit)
+    for i in logged_items:
+        with open(filepath, 'ab+') as f:
+            f.write(i)
+    return filepath
+
 ####################
 ### postgres Funcs
 # Store Key in pgsql
@@ -149,7 +171,7 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     try:
-        conn = get_psycopg_cursor()
+        conn = get_psycopg_connection()
         cur = conn.cursor()
         cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ;", (bflyimageid, mozuimageid, md5checksum))
         ###cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON CONFLICT bflyimageid UPDATE SET mozuimageid = ;", (bflyimageid, mozuimageid, md5checksum))
@@ -158,13 +180,14 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     except IndexError:
         pass
 
-# UPdate
+#########
+# Update
 def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
     try:
-        conn = get_psycopg_cursor()
+        conn = get_psycopg_connection()
         cur = conn.cursor()
         #  SET seq_update_ct = seq_update_ct + 1
         cur.execute("UPDATE images_bfly_mozu SET mozuimageid=%s, SET md5checksum=%s WHERE bflyimageid=%s;", (mozuimageid, md5checksum, bflyimageid))
@@ -175,7 +198,7 @@ def pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
 
 # Get mozu img ID from bfly file id
 def pgsql_get_mozuimageid_bflyimageid(bflyimageid):
-    conn = get_psycopg_cursor()
+    conn = get_psycopg_connection()
     cur = conn.cursor()
     try:
         cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '{}'".format(bflyimageid))
@@ -206,7 +229,7 @@ def pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=None):
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
 def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
     import requests
-    conn = get_psycopg_cursor()
+    conn = get_psycopg_connection()
     cur = conn.cursor()
     result = ''
     if bflyimageid:
@@ -219,6 +242,7 @@ def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
         result = cur.fetchone()
         ## If Value >1
     print bflyimageid, result,  '--- bflyImageID -- result'
+
     conn.commit()
     conn.close()
     if result:
@@ -328,7 +352,6 @@ def main_upload_post(src_filepath):
         bflyimageid = None
     md5checksum = md5_checksumer(src_filepath)
     md5result = pgsql_validate_md5checksum(md5checksum, bflyimageid=bflyimageid)
-
     ## Finished collecting k/v data to send now send if md5result returns False (meaning we dont have an image for this yet)
     if not md5result:
         try:
