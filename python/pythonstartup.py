@@ -3,13 +3,8 @@
 """
 Created on Sat Feb 23 22:38:40 2013
 
-@author: JCut
+@author: Johnb
 
-@name: FUNCTION DEFINITIONS
-"""
-
-#import os
-#import sys
 import re
 import readline
 import rlcompleter
@@ -24,9 +19,6 @@ readline.parse_and_bind("tab: complete")
 # import scrapy
 #import MySQLdb
 #os.chdir(os.path.dirname(__file__))
-"""
-Initial Directory Variables to Set at Start
-"""
 # dir_homedir 	        = os.path.expanduser('~')
 # dir_homedir             = os.path.abspath(dir_homedir)
 # dir_studioraw 	        = os.path.abspath("/mnt/Production_Raw/PHOTO_STUDIO_OUTPUT/ON_FIGURE")
@@ -85,33 +77,21 @@ regex_exif = re.compile(pattern_exiftag + "=" + pattern_exifval)
 
 
 #startDateFrom=&startDateTo=&colorGroup=&searchBrand=&eventId=&productStatus=&merchantStatus=&inventory=&active=&store=&styleNumbers=324162301&vendorStyleNumbers=&shortName=&poHdrs=&searchCategory=&jdaCategory=&Submit=Search&exportToExcel=false&exportImages=false&solrQuery=&currentPage=0
-pythonpath = ['',
-             '/usr/local/bin',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/pip-1.5.4-py2.7.egg',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/mechanize-0.2.6.dev_20140516-py2.7.egg',
-             # '/usr/local/lib/python2.7/site-packages/pip-1.5.4-py2.7.egg',
-             # '/usr/local/lib/python2.7/site-packages/mechanize-0.2.6.dev_20140516-py2.7.egg',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python27.zip',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old',
-             # '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload',
-             # '/Users/johnb/Library/Python/2.7/lib/python/site-packages',
-             '/usr/local/Cellar/python/2.7.6_1/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/Orange/orng',
-             # '/Library/Python/2.7/site-packages',
-             '/usr/local/lib/python2.7/site-packages',
-             '/usr/local/sbin',
-             '/usr/bin',
-             '/usr/sbin',
+#pythonpath = ['',
+#             '/usr/local/lib/python2.7/site-packages',
+             #'/usr/local/lib/python/site-packages',
+#             '/usr/local/bin',
+#             '/usr/local/sbin',
+#             '/usr/bin',
+#             '/usr/sbin',
              #'/usr/local/lib/python2.7/site-packages/Orange/orng',
              #'/usr/local/lib/python2.7/site-packages/IPython/extensions',
              #'/home/johnb/virtualenvs/DJDAM/lib/python2.7/site-packages',
              #'/home/johnb/virtualenvs/DJDAM/src/djdam',
              #'/home/johnb/virtualenvs/DJDAM/src',
-             '~/.ipython']
+#             '/usr/local/batchRunScripts/python',
+#             '/usr/local/batchRunScripts/python/jbmodules',
+#             '~/.ipython']
 # #### REGEX PATTERN DEFINITIONS
 # ###
 # ## Walk Root Directory and Return List or all Files in all Subdirs too
@@ -631,9 +611,9 @@ pythonpath = ['',
 # # #         d = d.strftime("%Y-%m-%d")
 # # #     return ret
 
-"""
-Query Mysql DB using 2 attribs. Filed(ie. 'colorstyle', param(ie.'302332901'))
-"""
+
+# Query Mysql DB using 2 attribs. Filed(ie. 'colorstyle', param(ie.'302332901'))
+
 # def sqlQueryStyles(searchField,searchParam):
 #     import sqlalchemy
 #     #import os
