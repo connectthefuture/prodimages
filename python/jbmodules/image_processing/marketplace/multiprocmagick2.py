@@ -193,7 +193,8 @@ def funkRunner3(root_img_dir=None, single_flag=None):
         for img in imagesGlob:
             os.remove(img)
             print 'Deleted {0} after uploading'.format(img)
-
+    else:
+        print 'multproc2', single_flag, len(imagesGlob), '<-- LENGlob'
     ########## Five ##########
     # Delete em all
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
