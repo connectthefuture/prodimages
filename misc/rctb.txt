@@ -79,7 +79,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 #
 ## TEMP FIX FOR HANGING x-vend and walkers
 ###
-13 6,15 * * * ps aux | grep x-vendorget-module-cronjobDloader | awk '{print $2}' | xargs kill
+13 6,15 * * * ps aux | grep x_vendorget_module_cronjobDloader | awk '{print $2}' | xargs kill
 15 4,18 * * * ps aux | grep walkdir_fix_exiv2_csv | awk '{print $2}' | xargs kill
 ###
 ##
@@ -195,7 +195,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 55 6,19 * * * /usr/local/batchRunScripts/bash/sampleAgingImportpma.sh
 #
 ## Once a day update snapshot instead of Truncating
-## 1 3 * * * 
+## 1 3 * * *
 38 1,6,8,10,11,12,13,14,15,16,17,18 * * * /usr/local/batchRunScripts/python/import_livesnapshot.py
 ## 38 1,6,8,10,11,12,13,14,15,16,17,18,19,20 * * * /usr/local/batchRunScripts/bash/import_prodsnapshot_livedata_bfyprd1.sh
 48 1,6,8,10,12,14,16,18,20 * * * /usr/local/batchRunScripts/python/import_quicksnapshot.py
@@ -360,7 +360,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##################################################################
 ##################################################################
 # 17 6,13,20 * * * /usr/local/batchRunScripts/python/cronjob_marketplace_nightly_improcloadFile7.py run '/mnt/Post_Complete/ImageDrop'  2>&1 > /var/log/marketplace_images.log
-24 7,15,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x-vendorget-module-cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
+24 7,15,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x_vendorget_module_cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
 ###########
 ## Delete previous 12 hours Marketplace files
 49 14,4 * * * parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/* -type f`
