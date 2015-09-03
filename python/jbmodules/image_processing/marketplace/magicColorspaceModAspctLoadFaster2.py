@@ -27,7 +27,7 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
                     #shutil.copyfile(src_filepath, imagedropFilePath
             else:
                 ##os.rename(src_filepath, imagedropFilePath)
-                shutil.copyfile(src_file path, imagedropFilePath)
+                shutil.copyfile(src_filepath, imagedropFilePath)
                 return True
         except:
             return False
