@@ -27,7 +27,7 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
                     #shutil.copyfile(src_filepath, imagedropFilePath
             else:
                 ##os.rename(src_filepath, imagedropFilePath)
-                shutil.copyfile(src_filepath, imagedropFilePath)
+                shutil.copyfile(src_file path, imagedropFilePath)
                 return True
         except:
             return False
@@ -81,6 +81,7 @@ def get_aspect_ratio(img):
         aspect_ratio = str(round(float(int(h))/float(int(w)),2))
         return aspect_ratio
     except IOError:
+        print 'Missing ratio'
         pass
 
 
@@ -92,6 +93,7 @@ def get_dimensions(img):
         dimensions = "{0}x{1}".format(int(w),int(h))
         return dimensions
     except IOError:
+        print 'Missing dimensions'
         pass
 
 ## Used only for embedding metadata
@@ -217,7 +219,7 @@ def sort_files_by_values(fileslist):
             try:
                 filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
                 count -= 1
-                #print "{0} Files Remaining-TypeError".format(count)
+                print "{0} Files Remaining-TypeError".format(count)
                 pass
             except TypeError:
                 #print ' PAssing ', f
@@ -225,7 +227,7 @@ def sort_files_by_values(fileslist):
         except ZeroDivisionError:
             filevalue_dict[f] = {'ratio_range': 'OutOfRange'}
             count -= 1
-            #print "{0} Files Remaining-ZeroDivision".format(count)
+            print "{0} Files Remaining-ZeroDivision".format(count)
             pass
     return filevalue_dict
 
