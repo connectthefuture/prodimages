@@ -174,7 +174,7 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     print type(img_list), '\tLen ImageList preThreaded', destdir
     img_dict = run_threaded_imgdict(argslist=(img_list,))
     print type(img_dict), '\tLen ImageDict postThreaded', destdir
-
+    
     ########## Three ##########
     #
     # 3A
