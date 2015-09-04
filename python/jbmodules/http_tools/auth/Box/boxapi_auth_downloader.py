@@ -47,7 +47,7 @@ def download_boxapi_drive_file(service=None, image_url=None, destpath=None):
     from os import chdir, path
     from apiclient import http, errors
     import StringIO
-    pdir = path.dirname(path.realpath('__file__'))
+    pdir = path.abspath('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace') #path.dirname(path.realpath('__file__'))
     ## TODO: Fix this conditional workaround to python dir for import
     if not service:
         chdir(pdir)

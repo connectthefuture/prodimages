@@ -658,13 +658,15 @@ def upload_imagedrop(root_dir):
                     shutil.move(upload_file, archive_uploaded)
                     time.sleep(float(.1))
                     print "1stTryOK", upload_file
-                except:
+                except OSError:
                     dst_file = upload_file.replace(root_dir, archive_uploaded)
+                    print 'OSError I think...dst_file'
                     try:
                         if os.path.exists(dst_file):
                             os.remove(dst_file)
                         shutil.move(upload_file, archive_uploaded)
-                    except:
+                    except AttributeError:
+                        print 'AttributeError I think.../'
                         pass
             else:
                 print "Uploaded {}".format(upload_file)
