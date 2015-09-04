@@ -674,6 +674,7 @@ def upload_imagedrop(root_dir):
                 try:
                     shutil.move(upload_file, archive_uploaded)
                 except shutil.Error:
+                    print 'shutil line 677 Error I think.../'
                     pass
         except OSError:
             print "Error moving Finals to Arch {}".format(file)
