@@ -528,7 +528,7 @@ def mongo_update_url_dest_info(urldest_tuple):
     colorstyle           = str(tmpfilename[:9])
     image_number         = str(tmpfilename.split('.')[-2][-1])
     content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
-    hostname            = None # '127.0.0.1' # 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs_mrktplce' # None
+    hostname             = None # '127.0.0.1' # 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs_mrktplce' # None
     #hostname             = 'ds031591.mongolab.com:31591' ###'mongodb://mongo:mongo@prodimages.ny.bluefly.com:27017/gridfs_mrktplce' #
     db_name              = 'gridfs_mrktplce' # hostname.split('/')[-1]
 
