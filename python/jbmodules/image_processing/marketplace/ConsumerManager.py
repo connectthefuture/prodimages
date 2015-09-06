@@ -51,7 +51,7 @@ class Task(object):
         print self.img, ' <-- self.img ', self.rgbmean
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
         ## TODO: Possible insertion of Mozu and/or GoogleDrive upload and key exchange
-        # magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
+        magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
         #try:
         return ##'%s -- %s' % (ret, self.img, self.destdir)
