@@ -190,6 +190,7 @@ def exchange_tokens(refresh_token=None):
             if valid_refresh_token is not None:
                 pass
             else:
+                print 'Valid Refresh is None'
                 return
 
             #else:
