@@ -14,7 +14,7 @@ from boxsdk import OAuth2
 
 CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
 CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
-TOKENS_FILE = '/usr/local/batchRunScripts/python/jbmodules/http_tools/auth/Box/tokens_priv.pkl'
+TOKENS_FILE = '/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/tokens_priv.pkl'
 
 def authenticate(refresh_token=None):
 
