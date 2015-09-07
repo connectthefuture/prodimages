@@ -349,10 +349,11 @@ def download_mplce_url(urldest_tuple):
         m = regex_boxapi.match(image_url)
         m.groupdict()
         try:
-            image_url = image_url.replace('://app.box.com/shared/static/', '://app.box.com/s/').rstrip('.jpg')
-            image_url = get_real_box_download_url(image_url)
-            print 'boxingapi -->', image_url
+            image_url_temp = image_url.rstrip('.jpg')
+            image_url = get_real_box_download_url(image_url_temp)
+            print 'boxingapi -->', image_url_temp, image_url
         except OSError:
+            print "OSError LINE 356;"
             pass
     else:
         pass
