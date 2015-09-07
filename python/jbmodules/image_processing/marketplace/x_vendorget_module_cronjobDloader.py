@@ -163,75 +163,75 @@ def get_exif_all_data(image_filepath):
     return metadata
 
 
-def exchange_tokens(refresh_token=None):
-    from boxsdk import OAuth2
-    TOKENS_FILE = 'tokens_priv.pkl'
-    CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
-    CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
+# def exchange_tokens(refresh_token=None):
+#     from boxsdk import OAuth2
+#     TOKENS_FILE = 'tokens_priv.pkl'
+#     CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
+#     CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
 
-    from os import chdir, path, curdir
-    ## Check for stored tokens
-    import cPickle as pickle
-    initdir = path.abspath(curdir)
-    #chdir(path.dirname(path.realpath(__file__)))    
-    #TOKENS_FILE = 'tokens.pkl'
+#     from os import chdir, path, curdir
+#     ## Check for stored tokens
+#     import cPickle as pickle
+#     initdir = path.abspath(curdir)
+#     #chdir(path.dirname(path.realpath(__file__)))    
+#     #TOKENS_FILE = 'tokens.pkl'
 
-    if path.isfile(TOKENS_FILE):
-        import requests, json
-        #with open(TOKENS_FILE,'rb') as fr:
-        #    oldaccess_token, valid_refresh_token = pickle.load(fr)
-        with open(TOKENS_FILE,'rb') as fr:
-            try:
-                oldaccess_token, valid_refresh_token = pickle.load(fr)
-            except:
-                valid_refresh_token = None
-                pass
+#     if path.isfile(TOKENS_FILE):
+#         import requests, json
+#         #with open(TOKENS_FILE,'rb') as fr:
+#         #    oldaccess_token, valid_refresh_token = pickle.load(fr)
+#         with open(TOKENS_FILE,'rb') as fr:
+#             try:
+#                 oldaccess_token, valid_refresh_token = pickle.load(fr)
+#             except:
+#                 valid_refresh_token = None
+#                 pass
 
-            if valid_refresh_token is not None:
-                pass
-            else:
-                print 'Valid Refresh is None'
-                return
+#             if valid_refresh_token is not None:
+#                 pass
+#             else:
+#                 print 'Valid Refresh is None'
+#                 return
 
-            #else:
-            #    oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
+#             #else:
+#             #    oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
         
-        box_api_token_root = "https://app.box.com/api/oauth2/token"
-        data = {
-             ##'Authorization': "Bearer " + access_token,
-             ##'BoxApi': "shared_link=" + shared_link,
-             'grant_type': 'refresh_token',
-             'refresh_token': valid_refresh_token,
-             'client_id': CLIENT_ID,
-             'client_secret': CLIENT_SECRET
-             }
-        headers = {
-                'Content-Type': 'application/json; charset=UTF-8'
-        }
-        res = requests.post(box_api_token_root, data=data, headers=headers)
-        newcreds = json.loads(res.content)
-        print(newcreds)
-        try:
-            access_token = newcreds['access_token']
-            refresh_token = newcreds['refresh_token']
+#         box_api_token_root = "https://app.box.com/api/oauth2/token"
+#         data = {
+#              ##'Authorization': "Bearer " + access_token,
+#              ##'BoxApi': "shared_link=" + shared_link,
+#              'grant_type': 'refresh_token',
+#              'refresh_token': valid_refresh_token,
+#              'client_id': CLIENT_ID,
+#              'client_secret': CLIENT_SECRET
+#              }
+#         headers = {
+#                 'Content-Type': 'application/json; charset=UTF-8'
+#         }
+#         res = requests.post(box_api_token_root, data=data, headers=headers)
+#         newcreds = json.loads(res.content)
+#         print(newcreds)
+#         try:
+#             access_token = newcreds['access_token']
+#             refresh_token = newcreds['refresh_token']
             
-            ## Replace old cred dumping new creds to tokens.pkl
-            ##---NOTE---## refresh token is valid for 60 days, 
-            ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
+#             ## Replace old cred dumping new creds to tokens.pkl
+#             ##---NOTE---## refresh token is valid for 60 days, 
+#             ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
            
-            with open(TOKENS_FILE,'wb') as fw:
-                pickle.dump((access_token, refresh_token,),  fw)
-                print('BoxSuccess')
-                return access_token, refresh_token
-        except KeyError:
-            return
-    ###################
-    else:
-        import __builtin__
-        access_token, refresh_token = authenticate()
-        pickle.dump((access_token, refresh_token,),  __builtin__.open(TOKENS_FILE,'wb'))
-        #chdir(initdir)
-        return access_token, refresh_token
+#             with open(TOKENS_FILE,'wb') as fw:
+#                 pickle.dump((access_token, refresh_token,),  fw)
+#                 print('BoxSuccess')
+#                 return access_token, refresh_token
+#         except KeyError:
+#             return
+#     ###################
+#     else:
+#         import __builtin__
+#         access_token, refresh_token = authenticate()
+#         pickle.dump((access_token, refresh_token,),  __builtin__.open(TOKENS_FILE,'wb'))
+#         #chdir(initdir)
+#         return access_token, refresh_token
 
 
 def get_box_access_token():
@@ -239,7 +239,7 @@ def get_box_access_token():
     # reg
     #initdir = os.path.abspath(__file__)
     #os.chdir(os.path.join(os.path.abspath(__file__), '../../http_tools/auth/Box'))
-    #from http_tools.auth.Box.boxapi_full_auth_dload import exchange_tokens
+    from http_tools.auth.Box.boxapi_full_auth_dload import exchange_tokens
     access_token, refresh_token = exchange_tokens()
     #--# Return the valid access and fresh return token
     ##---NOTE---## refresh token is valid for 60 days, afterwhich the pickle file should be manually synced
@@ -255,7 +255,8 @@ def get_real_box_download_url(shared_link, access_token=None):
     #     pass
 
     if not access_token:
-        access_token = get_box_access_token() #access_token='sHHScQfe4HK90dTlEtnWreaNd6xJpT59'
+        # GET TEMP DEVELOPER TOKEN TO PUSH THROUGH IF EXCHANGING FOR REFRESH KEY FAILS
+        access_token = '420ovyrdxCShLxroHTPjNYZCtktUOU3p' # get_box_access_token()
     box_api_shared_root = "https://api.box.com/2.0/shared_items"
     headers = {
          'Authorization': "Bearer " + access_token,
