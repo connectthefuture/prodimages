@@ -22,7 +22,7 @@ def get_mozu_authtoken(tenant_url):
     return auth["accessToken"]
 
 # Upload and Return MozuID
-def upload_productimgs_mozu(src_filepath):
+def upload_productimgs_mozu(src_filepath, mozuimageid=None):
     import requests, json
     import os.path as path
     tenant_url = "https://t11146.staging-sb.mozu.com/"
@@ -61,6 +61,17 @@ def upload_productimgs_mozu(src_filepath):
         return document_id, content_response
         #return bflyimageid, mozuimageid
     elif document_response.status_code == 409:
+        mimetype = "image/{}".format(ext.lower().replace('jpg', 'jpeg'))
+        headers["Content-type"] = mimetype
+
+        documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + mozuimageid + "/content"
+        # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
+        file_data = open(src_filepath, 'rb').read()
+        headers["Content-type"] = "image/png";
+        content_response = requests.put(documentUploadApi, data=file_data, headers=headers, verify=False);
+        document = content_response.json()
+        document_id = document["id"]
+        print document_id, ' <-- DocId 409 Code'
         print '409 Err --> Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.\n\t%s' % src_filepath
         ## TODO: 1)  On duplicate file in mozu, check PGSQL by Filename and compare stored MD5 with current MD5.
         ## TODO: 1A) If same MD5 skip and return MOZUID, else if different.....
@@ -247,7 +258,23 @@ def pgsql_validate_md5checksum(md5checksum, bflyimageid=None):
     conn.close()
     if result:
         return result
+    else: return ''
 
+## Validate file name only
+def pgsql_validate_bflyimageid(bflyimageid=None):
+    import requests
+    conn = get_psycopg_connection()
+    cur = conn.cursor()
+    result = ''
+    if bflyimageid:
+        print 'Not NONE --', bflyimageid
+        cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = %s", (bflyimageid))
+        result = cur.fetchone()
+    conn.commit()
+    conn.close()
+    if result:
+        return result
+    else: return ''
 
 # if result:
 # try:
@@ -327,6 +354,12 @@ def update_pm_photodate_incr_version_hack(src_filepath):
     res = requests.put(update_url, data=data)
     return res
 ##########################################################
+def main_update_put(bflyimageid, mozuimageid,md5checksum):
+
+
+    ## Finally Store New mozuiD and md5checksum
+    pgsql_update_bflyimageid_mozuimageid(bflyimageid, mozuimageid,md5checksum)
+    return
 ##########################################################
 # ### Main Combined Post or Get -- TODO: --> main_update_put(src_filepath)
 # full uploading cmdline shell script, file as sys argv
@@ -352,8 +385,9 @@ def main_upload_post(src_filepath):
         bflyimageid = None
     md5checksum = md5_checksumer(src_filepath)
     md5result = pgsql_validate_md5checksum(md5checksum, bflyimageid=bflyimageid)
+    mozuimageid = pgsql_validate_bflyimageid(bflyimageid=bflyimageid)
     ## Finished collecting k/v data to send now send if md5result returns False (meaning we dont have an image for this yet)
-    if not md5result:
+    if not md5result and not mozuimageid:
         try:
             mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
             pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum)
@@ -364,6 +398,9 @@ def main_upload_post(src_filepath):
             pass
         finally:
             print('Completed ', bflyimageid, md5checksum)
+    elif mozuimageid:
+        updated_mozuimageid, content_response = upload_productimgs_mozu(src_filepath)
+        pgsql_update_bflyimageid_mozuimageid(bflyimageid, updated_mozuimageid, md5checksum)
     else:
         print md5result[0], ' \n\t<-- Duplicated - Passing -- Exists -- with --> ', bflyimageid
 
