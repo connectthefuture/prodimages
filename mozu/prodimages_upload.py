@@ -266,9 +266,9 @@ def pgsql_validate_bflyimageid(bflyimageid=None):
     conn = get_psycopg_connection()
     cur = conn.cursor()
     result = ''
-    if bflyimageid:
+    if bflyimageid is not None:
         print 'Not NONE --', bflyimageid
-        cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = %s", (bflyimageid))
+        cur.execute("SELECT mozuimageid FROM images_bfly_mozu WHERE bflyimageid = '{}'".format(bflyimageid))
         result = cur.fetchone()
     conn.commit()
     conn.close()
@@ -384,6 +384,7 @@ def main_upload_post(src_filepath):
     else:
         bflyimageid = None
     md5checksum = md5_checksumer(src_filepath)
+    mozuimageid = ''
     md5result = pgsql_validate_md5checksum(md5checksum, bflyimageid=bflyimageid)
     mozuimageid = pgsql_validate_bflyimageid(bflyimageid=bflyimageid)
     ## Finished collecting k/v data to send now send if md5result returns False (meaning we dont have an image for this yet)
