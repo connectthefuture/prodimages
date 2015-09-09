@@ -499,7 +499,7 @@ def subproc_magick_png(img, destdir=None):
         print ' Not Dimensions PNG faster2-->', img
 
     if dimensions and dimensions != '100%' or not vert_horiz:
-        
+
         if not dimensions == '2000x2400':
             try:
                 del h
@@ -745,7 +745,7 @@ if os.path.isdir(tmp_processing):
         pngout = subproc_magick_png(img, destdir=tmp_processing)
         subproc_magick_large_jpg(pngout, destdir=tmp_loading)
         subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
-        
+
         ############################
         ###### mozu
         ############################
@@ -764,10 +764,13 @@ if os.path.isdir(tmp_processing):
         else:
             #pass
             jpgout = magickConvert_to_jpeg(img,destdir=destdir)
-        
-        prodimages_upload.main_upload_post(jpgout)
+
+        ## --> Uncomment to run the mozu piece fully
+
+        #prodimages_upload.main_upload_post(jpgout)
+
         ############################
-        
+
         #os.rename(pngout,os.path.join())
         #subproc_magick_large_jpg(img, destdir=destdir)
         #subproc_magick_medium_jpg(img, destdir=destdir)
@@ -847,7 +850,7 @@ shutil.rmtree(tmp_processing)
 #     upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
 #     upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
 #     if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
-       
+
 # except:
 #     pass
 
