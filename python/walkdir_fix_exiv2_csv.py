@@ -3,6 +3,19 @@
 
 ###
 ## Walk Root Directory and Return List or all Files in all Subdirs too
+def directory_modtime_filter(rootdir):
+    import os
+    from datetime import date
+    old_dirs = []
+    today = date.today()
+    for root, dirs, files in os.walk(start_path):
+        for name in dirs:
+            filedate = date.fromtimestamp(os.path.getmtime(os.path.join(root, name)))
+            if (today - filedate).days > 7:
+                old_dirs.append(name)
+    return old_dirs
+
+
 def recursive_dirlist(rootdir):
     import os
     walkedlist = []
