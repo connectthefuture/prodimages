@@ -308,7 +308,6 @@ def csv_write_datedOutfile(lines):
 def main():
     from PIL import Image
     import os,sys,re
-
     rootdir = sys.argv[1]
     # walkedout = recursive_dirlist(rootdir)
     # New Filter Version of Resursive walker
