@@ -40,7 +40,6 @@ def get_PNG_datecreate(image_filepath):
         datecreated = et.get_metadata(image_filepath)['PNG:datecreate'][:10]
     return datecreated
 
-
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
@@ -120,22 +119,22 @@ def resize_image(infile, dest_file, size):
     from PIL import Image
     import pyexiv2
     zimages_filepath = dest_file
-## Extract Originals Metadata prior to Resizing
+    ## Extract Originals Metadata prior to Resizing
     source_metadata = pyexiv2.ImageMetadata(infile)
     source_metadata.read()
-# Resize and Save Thumb copy to Zimages
+    # Resize and Save Thumb copy to Zimages
     im = Image.open(infile)
     im.thumbnail(size, Image.ANTIALIAS)
     im.save(zimages_filepath , "JPEG")
     print infile, zimages_filepath
-# Copy EXIF data from Source to Resized Image
+    # Copy EXIF data from Source to Resized Image
     dest_metadata = pyexiv2.ImageMetadata(zimages_filepath)
     dest_metadata.read()
     source_metadata.copy(dest_metadata, exif=True, iptc=True, xmp=True, comment=True)
-# set EXIF image size info to resized size
-#    dest_metadata.read()
-#    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
-#    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
+    # set EXIF image size info to resized size
+    #    dest_metadata.read()
+    #    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
+    #    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
     dest_metadata.write()
     return zimages_filepath
 
@@ -293,7 +292,7 @@ def main():
     tm = datetime.datetime.now().time()
     char1 = int(str(tm)[0])
     if char1 > 0: pass
-    else: 
+    else:
         for k,v in stylestringsdict.iteritems():
             import os,sys,shutil, re
             pathname = k
