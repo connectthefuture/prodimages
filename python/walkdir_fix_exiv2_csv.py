@@ -138,16 +138,17 @@ def walkeddir_parse_stylestrings_out(walkeddir_list):
 
 ###
 ## Write Single Metadata Tag/Value to Imagefile using pyexiv2
-def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
-    from PIL import Image
-    import pyexiv2
-    # Read EXIF data to initialize
-    image_metadata = pyexiv2.ImageMetadata(image_filepath)
-    image_metadata.read()
-    # Add and Write new Tag to File
-    image_metadata[exiftag] = exifvalue
-    image_metadata.write()
-    return image_filepath
+## Works but need pyexiv2 installed
+# def embed_exif_metadata(image_filepath, exiftag=None, exifvalue=None):
+#     from PIL import Image
+#     import pyexiv2
+#     # Read EXIF data to initialize
+#     image_metadata = pyexiv2.ImageMetadata(image_filepath)
+#     image_metadata.read()
+#     # Add and Write new Tag to File
+#     image_metadata[exiftag] = exifvalue
+#     image_metadata.write()
+#     return image_filepath
 
 
 ###
@@ -182,7 +183,7 @@ def resize_image(infile, dest_file, size):
 def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
     import os, sys, re, csv
     from PIL import Image
-    import pyexiv2
+    # import pyexiv2
     import glob, os, re
     size = 600, 720
     regex_jpeg = re.compile(r'.+?\.[jpgJPG]{3}$')
@@ -215,22 +216,22 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
                 os.remove(zimages_filepath)
             try:
             ## Extract Originals Metadata prior to Resizing
-                source_metadata = pyexiv2.ImageMetadata(infile)
-                source_metadata.read()
+                # --> source_metadata = pyexiv2.ImageMetadata(infile)
+                # --> source_metadata.read()
             # Resize and Save Thumb copy to Zimages
                 im = Image.open(infile)
                 im.thumbnail(size, Image.ANTIALIAS)
                 im.save(zimages_filepath , "JPEG")
                 print infile, zimages_filepath
             # Copy EXIF data from Source to Resized Image
-                dest_metadata = pyexiv2.ImageMetadata(zimages_filepath)
-                dest_metadata.read()
-                source_metadata.copy(dest_metadata, exif=True, iptc=True, xmp=True, comment=True)
+                # --> dest_metadata = pyexiv2.ImageMetadata(zimages_filepath)
+                # --> dest_metadata.read()
+                # --> source_metadata.copy(dest_metadata, exif=True, iptc=True, xmp=True, comment=True)
             # set EXIF image size info to resized size
-            #    dest_metadata.read()
-            #    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
-            #    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
-                dest_metadata.write()
+                #    dest_metadata.read()
+                #    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
+                #    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
+                # --> dest_metadata.write()
             except IOError:
                 print "Bad Image File {}".format(zimages_filepath)
                 pass
@@ -267,22 +268,22 @@ def make_and_move_zimages_lowres_thumbnails_dir_or_singlefile(pathname):
                         pass
 
                     ## Extract Originals Metadata prior to Resizing
-                    source_metadata = pyexiv2.ImageMetadata(infile)
-                    source_metadata.read()
+                    # --> source_metadata = pyexiv2.ImageMetadata(infile)
+                    # --> source_metadata.read()
                     # Resize and Save Thumb copy to Zimages
                     im = Image.open(infile)
                     im.thumbnail(size, Image.ANTIALIAS)
                     im.save(zimages_filepath , "JPEG")
                     print infile, zimages_filepath
                     # Copy EXIF data from Source to Resized Image
-                    dest_metadata = pyexiv2.ImageMetadata(zimages_filepath)
-                    dest_metadata.read()
-                    source_metadata.copy(dest_metadata, exif=True, iptc=True, xmp=True, comment=True)
+                    # --> dest_metadata = pyexiv2.ImageMetadata(zimages_filepath)
+                    # --> dest_metadata.read()
+                    # --> source_metadata.copy(dest_metadata, exif=True, iptc=True, xmp=True, comment=True)
                     # set EXIF image size info to resized size
                     #    dest_metadata.read()
                     #    dest_metadata["Exif.Photo.PixelXDimension"] = im.size[0]
                     #    dest_metadata["Exif.Photo.PixelYDimension"] = im.size[1]
-                    dest_metadata.write()
+                    # --> dest_metadata.write()
                     return zimages_filepath
                 except:
                     print "Error Creating Thumbnail for {0}".format(infile)
