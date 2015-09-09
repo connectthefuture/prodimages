@@ -329,7 +329,7 @@ def main():
     import datetime
     tm = datetime.datetime.now().time()
     char1 = int(str(tm)[0])
-    if char1 > 0: pass
+    if char1 == 1: pass
     else:
         for k,v in stylestringsdict.iteritems():
             import os,sys,shutil, re
