@@ -19,7 +19,7 @@ def files_modrange_filter(rootdir,days_ago=10):
 
 
 ## Walk & Filter Directories based on modify date
-def directories_modrange_filter(rootdir,days_ago=7):
+def directories_modrange_filter(rootdir,days_ago=10):
     import os
     from datetime import date
     modified_dirs = []
@@ -311,7 +311,7 @@ def main():
     rootdir = sys.argv[1]
     # walkedout = recursive_dirlist(rootdir)
     # New Filter Version of Resursive walker
-    walkedout = files_modrange_filter(rootdir,days_ago=10)
+    walkedout = files_modrange_filter(rootdir,days_ago=75)
     regex = re.compile(r'.*?[0-9]{9}_[1-6x]\.[jpgJPG]{3}$')
     #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 
