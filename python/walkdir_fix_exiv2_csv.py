@@ -312,7 +312,7 @@ def main():
     rootdir = sys.argv[1]
     # walkedout = recursive_dirlist(rootdir)
     # New Filter Version of Resursive walker
-    walkedout = files_modrange_filter(rootdir,days_ago=75)
+    walkedout = files_modrange_filter(rootdir)
     regex = re.compile(r'.*?[0-9]{9}_[1-6x]\.[jpgJPG]{3}$')
     #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 
