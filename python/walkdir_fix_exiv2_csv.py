@@ -8,7 +8,7 @@ def directory_modtime_filter(rootdir):
     from datetime import date
     old_dirs = []
     today = date.today()
-    for root, dirs, files in os.walk(start_path):
+    for root, dirs, files in os.walk(rootdir):
         for name in dirs:
             filedate = date.fromtimestamp(os.path.getmtime(os.path.join(root, name)))
             if (today - filedate).days > 7:
