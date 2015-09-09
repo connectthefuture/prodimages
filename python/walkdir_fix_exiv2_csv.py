@@ -1,21 +1,45 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-###
-## Walk Root Directory and Return List or all Files in all Subdirs too
-def directory_modtime_filter(rootdir):
+
+### Walk & Filter files based on modify date
+def files_modrange_filter(rootdir,days_ago=10):
     import os
     from datetime import date
-    old_dirs = []
+    modified_files = []
     today = date.today()
-    for root, dirs, files in os.walk(rootdir):
+    for root, dirs, files in os.walk(rootdir, topdown=True):
+        for name in files:
+            filepath = os.path.join(root, name)
+            filedate = date.fromtimestamp(os.path.getmtime(filepath))
+            # parentdirdate = date.fromtimestamp(os.path.getmtime(os.path.dirname(filepath)))
+            if (today - filedate).days < days_ago:
+                modified_files.append(filepath)
+    return  list(set(sorted(modified_files)))
+
+
+## Walk & Filter Directories based on modify date
+def directories_modrange_filter(rootdir,days_ago=7):
+    import os
+    from datetime import date
+    modified_dirs = []
+    today = date.today()
+    for root, dirs, files in os.walk(rootdir, topdown=True):
         for name in dirs:
-            filedate = date.fromtimestamp(os.path.getmtime(os.path.join(root, name)))
-            if (today - filedate).days > 7:
-                old_dirs.append(name)
-    return old_dirs
+            subdirpath = os.path.join(root, name)
+            dirmodify_date = date.fromtimestamp(os.path.getmtime(subdirpath))
+            if (today - dirmodify_date).days < days_ago:
+                modified_dirs.append(subdirpath)
+                if os.path.dirname(subdirpath) in modified_dirs:
+                    print subdirpath
+                    modified_dirs.remove(os.path.dirname(subdirpath))
+                    modified_dirs.append(subdirpath)
+                else:
+                    pass # print  'NO-', os.path.dirname(subdirpath)
+    return list(set(sorted(modified_dirs)))
 
 
+## Basic Recursive Dir Lising no Filters
 def recursive_dirlist(rootdir):
     import os
     walkedlist = []
@@ -286,8 +310,9 @@ def main():
     import os,sys,re
 
     rootdir = sys.argv[1]
-    walkedout = recursive_dirlist(rootdir)
-
+    # walkedout = recursive_dirlist(rootdir)
+    # New Filter Version of Resursive walker
+    walkedout = files_modrange_filter(rootdir,days_ago=10)
     regex = re.compile(r'.*?[0-9]{9}_[1-6x]\.[jpgJPG]{3}$')
     #regex = re.compile(r'.+?\.[jpgJPG]{3}$')
 
