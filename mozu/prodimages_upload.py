@@ -99,26 +99,26 @@ def get_psycopg_connection():
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 def init_pg_mktble_fnc_trig():
     import psycopg2
-    droptable = 'DROP TABLE images_bfly_mozu;'
+    droptable = 'DROP TABLE IF EXISTS images_bfly_mozu;'
     createtbl = "CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar NOT NULL, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, update_ct bigint NOT NULL DEFAULT 1, UNIQUE(bflyimageid));"
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at := NOW(); RETURN NEW; END; $$;"
     createtrig_nowonupdate = "CREATE TRIGGER images_bfly_mozu_updated_at_column BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
 
-    create_timefunc1 = "CREATE OR REPLACE FUNCTION trig_time_stamper() RETURNS trigger AS $$ BEGIN NEW.updated_at := CURRENT_TIMESTAMP; RETURN NEW; END; $$ LANGUAGE plpgsql VOLATILE;"
-    create_timetrig1 = "CREATE TRIGGER trig_1 BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE trig_time_stamper(); OF updated_at"
+    create_timestamperfunc = "CREATE OR REPLACE FUNCTION trig_time_stamper() RETURNS trigger AS $$ BEGIN NEW.updated_at := CURRENT_TIMESTAMP; RETURN NEW; END; $$ LANGUAGE plpgsql VOLATILE;"
+    create_timestampertrig = "CREATE TRIGGER trig_1 BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE trig_time_stamper(); OF updated_at"
 
     # Auto incr after modify
-    # createfunc_tablehits = "CREATE SEQUENCE tablehits INCREMENT BY 1 MINVALUE 1;"
-    # createfunc_incronupdate = "CREATE SEQUENCE update_ct INCREMENT BY 1 MINVALUE 1; 
+    createfunc_tablehits = "CREATE SEQUENCE tablehits INCREMENT BY 1 MINVALUE 1;"
+    # createfunc_incronupdate = "CREATE SEQUENCE update_ct INCREMENT BY 1 MINVALUE 1;
     createfunc_incronupdate = "CREATE OR REPLACE FUNCTION incr_update_ct() RETURNS trigger LANGUAGE plpgsql AS $BODY$ BEGIN NEW.updated_ct := nextval('update_ct'); RETURN NEW; END; $BODY$;"
     createtrig_incronupdate = "CREATE TRIGGER images_bfly_mozu_incr_update_ct BEFORE INSERT OR UPDATE ON images_bfly_mozu FOR EACH ROW EXECUTE PROCEDURE incr_update_ct();"
     ## Below used if Table exists -- which it obviously should since I just called the mktble above
-    #createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu ALTER update_ct SET DEFAULT nextval('update_ct'); "
+    # createfuncalter_incronupdate = "ALTER TABLE images_bfly_mozu ALTER update_ct SET DEFAULT nextval('update_ct'); "
 
     conn = get_psycopg_connection()
     cur = conn.cursor()
-    
+
     # drop if exists to create a new one
     cur.execute(droptable)
     conn.commit()
@@ -130,8 +130,8 @@ def init_pg_mktble_fnc_trig():
         #cur.execute(createfunc_nowonupdate)
         #cur.execute(createtrig_nowonupdate)
         #conn.commit()
-        cur.execute(create_timefunc1)
-        cur.execute(create_timetrig1)
+        cur.execute(create_timestamperfunc)
+        cur.execute(create_timestampertrig)
         conn.commit()
         cur.execute(createfunc_incronupdate)
         cur.execute(createtrig_incronupdate)
@@ -445,4 +445,3 @@ if __name__ == '__main__':
                 pgsql_get_mozuimageurl_bflyimageid(bflyimageid, destpath=path.join(destpath, bflyimageid))
         except IndexError:
             destpath = ''
-
