@@ -99,7 +99,7 @@ def get_psycopg_connection():
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 def init_pg_mktble_fnc_trig():
     import psycopg2
-    droptable = 'DROP TABLE IF EXISTS images_bfly_mozu;'
+    droptable = "DROP TABLE IF EXISTS images_bfly_mozu;"
     createtbl = "CREATE TABLE IF NOT EXISTS images_bfly_mozu (id serial PRIMARY KEY, bflyimageid varchar NOT NULL, mozuimageid varchar NOT NULL, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, update_ct bigint NOT NULL DEFAULT 1, UNIQUE(bflyimageid));"
     # Auto Mod time Now Func and trig
     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at := NOW(); RETURN NEW; END; $$;"
@@ -120,8 +120,8 @@ def init_pg_mktble_fnc_trig():
     cur = conn.cursor()
 
     # drop if exists to create a new one
-    cur.execute(droptable)
-    conn.commit()
+    #cur.execute(droptable)
+    #conn.commit()
 
     cur.execute(createtbl)
     conn.commit()
@@ -194,8 +194,8 @@ def pgsql_insert_bflyimageid_mozuimageid(bflyimageid, mozuimageid, md5checksum='
     try:
         conn = get_psycopg_connection()
         cur = conn.cursor()
-        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ;", (bflyimageid, mozuimageid, md5checksum))
-        ###cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON CONFLICT bflyimageid UPDATE SET mozuimageid = ;", (bflyimageid, mozuimageid, md5checksum))
+        ##cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ;", (bflyimageid, mozuimageid, md5checksum))
+        cur.execute("INSERT INTO images_bfly_mozu (bflyimageid, mozuimageid, md5checksum) VALUES (%s, %s, %s) ON CONFLICT bflyimageid UPDATE SET mozuimageid = mozuimageid;", (bflyimageid, mozuimageid, md5checksum))
         conn.commit()
         conn.close()
     except IndexError:
