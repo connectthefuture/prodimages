@@ -64,6 +64,7 @@ def upload_productimgs_mozu(src_filepath, mozuimageid=None):
         mimetype = "image/{}".format(ext.lower().replace('jpg', 'jpeg'))
         headers["Content-type"] = mimetype
         print document_id, ' <-- DocId 409 Code Numero 1'
+        print 'LOCOS -->', locals()
         documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + mozuimageid + "/content"
         # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
         file_data = open(src_filepath, 'rb').read()
