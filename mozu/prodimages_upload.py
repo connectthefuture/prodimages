@@ -63,11 +63,11 @@ def upload_productimgs_mozu(src_filepath, mozuimageid=None):
     elif document_response.status_code == 409:
         mimetype = "image/{}".format(ext.lower().replace('jpg', 'jpeg'))
         headers["Content-type"] = mimetype
-
+        print document_id, ' <-- DocId 409 Code Numero 1'
         documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + mozuimageid + "/content"
         # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
         file_data = open(src_filepath, 'rb').read()
-        headers["Content-type"] = "image/png";
+        headers["Content-type"] = mimetype #"image/png";
         content_response = requests.put(documentUploadApi, data=file_data, headers=headers, verify=False);
         document = content_response.json()
         document_id = document["id"]
