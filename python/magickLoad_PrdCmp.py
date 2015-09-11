@@ -767,7 +767,7 @@ if os.path.isdir(tmp_processing):
 
         ## --> Uncomment to run the mozu piece fully
 
-        #prodimages_upload.main_upload_post(jpgout)
+        prodimages_upload.main_upload_post(jpgout)
 
         ############################
 
