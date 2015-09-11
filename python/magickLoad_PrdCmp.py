@@ -766,8 +766,7 @@ if os.path.isdir(tmp_processing):
             jpgout = magickConvert_to_jpeg(img,destdir=destdir)
 
         ## --> Uncomment to run the mozu piece fully
-
-        prodimages_upload.main_upload_post(jpgout)
+        # prodimages_upload.main_upload_post(jpgout)
 
         ############################
 
