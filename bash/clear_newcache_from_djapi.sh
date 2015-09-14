@@ -18,7 +18,6 @@ function recent_styles_uploaded ()
 #logdate=echo "$TODAY $f" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
 #`mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;` | parallel -X -N1 --jobs 16 --progress "/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {}; $logdate"
 
-
 export -f recent_styles_uploaded ;
 STYLES=`recent_styles_uploaded() | xargs -n1 | sort -nru`
 STCOUNT=`echo $STYLES | xargs -n1 | wc -l`
