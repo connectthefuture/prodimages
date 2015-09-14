@@ -415,7 +415,7 @@ def main(colorstyle_list=None):
     #print versioned_links
     count = 0
     if not versioned_links:
-        print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
+        print "NOT VERSIONED LINK NO ARGS SUPPLIED -->NOT_A_TOTAL_FAILURE\nyet"
         for colorstyle in colorstyle_list:
             try:
                 version =  query_version_number(colorstyle)[colorstyle]['version']
@@ -423,6 +423,7 @@ def main(colorstyle_list=None):
                 version = 'NA'
             if version == 'NA':
                 pass
+                print 'NO VESION IN THE DB -- PROBABLY NOT ACTIVE'
             else:
                 POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
@@ -438,41 +439,49 @@ def main(colorstyle_list=None):
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
             try:
-                colorstyle = re.findall(regex, url_purge_local[0])
-                colorstyle = colorstyle.pop()[1]
+                version  = re.findall(regex, url_purge_local[0])
+                version = version.pop()[-1].split('=')[-1]
+            except:
+                version = 'NA'
+                print 'NA VERSION'
+            if version != 'NA':
                 try:
-                    version  = re.findall(regex, url_purge_local[0])
-                    version = version.pop()[-1].split('=')[-1]
-                except:
-                    version = 'NA'
-                #poprint "{0} and version num {1}".format(colorstyle,version)
-                #try:
-                POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
-                POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-                POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-                POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+                    colorstyle = re.findall(regex, url_purge_local[0])
+                    colorstyle = colorstyle.pop()[1]
 
-                if version == 'NA':
-                    pass
-                else:
+                    #poprint "{0} and version num {1}".format(colorstyle,version)
+                    #try:
+                    POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
+                    POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+                    POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+                    POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+
+                    # if version == 'NA':
+                    #     pass
+                    # else:
+                    
                     send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
-                #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-                #send_purge_request_localis(colorstyle,version,POSTURL_BC)
-                #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+                    #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+                    #send_purge_request_localis(colorstyle,version,POSTURL_BC)
+                    #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
-                #except:
-                #    print sys.stderr().read()
-            except IndexError:
-                print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
-    #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-    #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-    #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-    #            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-    #            send_purge_request_localis(colorstyle,version,POSTURL_BC)
-    #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+                    #except:
+                    #    print sys.stderr().read()
+                except IndexError:
+                    print "INDEX ERROR 468 -- Product is not Live."
+        #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+        #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+        #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+        #            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+        #            send_purge_request_localis(colorstyle,version,POSTURL_BC)
+        #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+                    pass
+            else:
                 pass
         for url_purge in versioned_links:
-            send_purge_request_edgecast(url_purge[0])
+            if url_purge[0] is not null:
+                send_purge_request_edgecast(url_purge[0])
+                print 'YAY DONE ', url_purge[0]
             #csv_write_datedOutfile(url_purge)
 
     else:
