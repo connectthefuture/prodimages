@@ -273,7 +273,10 @@ def main(colorstyle_list=None):
                     if vertest[:4] == 'ver=':
                         version = vertest[-1]
                     else:
-                        version =  query_version_number(colorstyle)[colorstyle]['version']
+                        try:
+                            version =  query_version_number(colorstyle)[colorstyle]['version']
+                        except KeyError:
+                            version = 'NA'
                     ## Create and append to edgecast list page urls for Edgecast
                     if alturl not in link:
                         ## static standard urls
@@ -414,15 +417,21 @@ def main(colorstyle_list=None):
     if not versioned_links:
         print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
-            version =  query_version_number(colorstyle)[colorstyle]['version']
-            POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
-            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
-            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
-            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
-            #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
-            #send_purge_request_localis(colorstyle,version,POSTURL_BC)
-            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+            try:
+                version =  query_version_number(colorstyle)[colorstyle]['version']
+            except KeyError:
+                version = 'NA'
+            if version == 'NA':
+                pass
+            else:
+                POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
+                POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
+                POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
+                POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+                send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
+                #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+                #send_purge_request_localis(colorstyle,version,POSTURL_BC)
+                send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
 
     elif len(versioned_links) <= 11550:
 
@@ -431,16 +440,20 @@ def main(colorstyle_list=None):
             try:
                 colorstyle = re.findall(regex, url_purge_local[0])
                 colorstyle = colorstyle.pop()[1]
-                version  = re.findall(regex, url_purge_local[0])
-                version = version.pop()[-1].split('=')[-1]
-                #print "{0} and version num {1}".format(colorstyle,version)
+                try:
+                    version  = re.findall(regex, url_purge_local[0])
+                    version = version.pop()[-1].split('=')[-1]
+                except:
+                    version = 'NA'
+                #poprint "{0} and version num {1}".format(colorstyle,version)
                 #try:
                 POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
                 POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
 
-                send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
+                if version != 'NA:
+                    send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
                 #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
                 #send_purge_request_localis(colorstyle,version,POSTURL_BC)
                 #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
