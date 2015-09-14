@@ -7,6 +7,6 @@ QUERY="select distinct t1.colorstyle from image_update t1 join product_snapshot_
 
 for f in $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e $QUERY -D www_django); do 
 	/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py $f ; 
-	echo "`date` $f"
+	echo "`date` $f" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
 done 
 
