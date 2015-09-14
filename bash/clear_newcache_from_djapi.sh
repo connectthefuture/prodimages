@@ -12,4 +12,4 @@ QUERY="select distinct t1.colorstyle from www_django.image_update t1 join produc
 # done 
 
 #logdate=echo "$TODAY $f" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
-echo `mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;` | parallel -X -N1 --jobs 16 --progress "/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {}; $logdate"
+/bin/bash `mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;` | parallel -X -N1 --jobs 16 --progress "/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {}; $logdate"
