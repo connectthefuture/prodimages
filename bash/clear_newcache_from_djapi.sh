@@ -6,10 +6,10 @@ MINUTESAGO=$1
 TODAY=`date`
 QUERY="select distinct t1.colorstyle from www_django.image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where create_dt < date_sub(now(), interval $MINUTESAGO minute) and (t2.image_ready_dt is not null and t2.image_ready_dt != \"0000-00-00\");"
 
-# for f in `mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;`; do 
-# 	/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py $f ; 
-# 	echo "`date` $f" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
-# done 
+for f in `mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;`; do 
+ 	/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py $f ; 
+ 	echo "`date` $f" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
+done 
 
 #logdate=echo "$TODAY $f" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
-/bin/bash `mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;` | parallel -X -N1 --jobs 16 --progress "/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {}; $logdate"
+#`mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;` | parallel -X -N1 --jobs 16 --progress "/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {}; $logdate"
