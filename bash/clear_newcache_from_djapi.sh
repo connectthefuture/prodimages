@@ -23,7 +23,7 @@ STYLES=`recent_styles_uploaded() | xargs -n1 | sort -nru`
 STCOUNT=`echo $STYLES | xargs -n1 | wc -l`
 echo -e "${TODAY}\v${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
 
-parallel -P2 --memfree 2G --jobs 800% -q /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {} ::: echo $STYLES
+parallel -q -P2 --jobs 800% /usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {} ::: echo $STYLES
 
 
 
