@@ -452,7 +452,9 @@ def main(colorstyle_list=None):
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
                 POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
 
-                if version != 'NA:
+                if version == 'NA:
+                    pass
+                else:
                     send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
                 #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
                 #send_purge_request_localis(colorstyle,version,POSTURL_BC)
