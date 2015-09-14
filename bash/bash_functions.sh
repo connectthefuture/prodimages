@@ -329,7 +329,7 @@ function img_trim_set_aspectratio ()
     export IFS="\n"
     convert ${f} -format jpg -crop `convert ${f} -virtual-pixel edge -blur "0x15" -fuzz "1%" -trim -format "%wx%h%O" info:` -background white +repage -gravity center -resize "1800x2160" -background white +repage -extent "2000x2400" -density 72x72 +repage -strip -quality 100 ${f}_new.jpg ;
         ## echo "${f}"_new.jpg ;
-        IFS="$IFSD";
+    export IFS="$IFSD";
 }
 
 
