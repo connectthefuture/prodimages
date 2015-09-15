@@ -11,3 +11,4 @@ for f in $STYLES; do
 	echo -e "${TODAY}\tStyle: ${f}\tTotal:${STCOUNT}\n" 2>&1 >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
 	/usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py "$f" 2>&1 > /dev/null && echo -e "${TODAY}\tStyle:${f}\tTotal:${STCOUNT}\n"
 done;
+echo -e "Completed:${TODAY}\tTotal:${STCOUNT}\n"
