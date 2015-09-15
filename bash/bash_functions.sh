@@ -46,8 +46,7 @@ function fstr()
 {
     OPTIND=1
     local mycase=""
-    local usage="fstr: find string in files.
-Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
+    local usage="fstr: find string in files. Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
     while getopts :it opt
     do
         case "$opt" in
@@ -502,7 +501,7 @@ function recent_styles_uploaded ()
     else MINUTESAGO=60 
     fi;
     QUERY=`echo -e "select distinct t1.colorstyle from www_django.image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where create_dt < date_sub(now(), interval $MINUTESAGO minute) and (t2.image_ready_dt is not null and t2.image_ready_dt != \"0000-00-00\");"` ; 
-    $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;) ;
+    $(mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;) | xargs -n1;
 }
 
 # Local Variables: 
