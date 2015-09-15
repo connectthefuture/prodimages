@@ -5,7 +5,6 @@ TODAY=`date`
 
 function recent_styles_uploaded () 
 		{
-		
 		if [[ "$#" > 0 ]]; then
 	    	MINUTESAGO=$1
 	    else
@@ -20,12 +19,9 @@ function recent_styles_uploaded ()
 
 export -f recent_styles_uploaded;
 STYLES=$(echo recent_styles_uploaded | xargs -n1 | sort -nru)
-STCOUNT=`echo $STYLES | xargs -n1 | wc -l`
-echo -e "${TODAY}\v${STCOUNT}\n"
+STCOUNT=`echo $STYLES | xargs | wc -l`
+echo -e "${TODAY}\v--> Processing ${STCOUNT} Styles\n"
 echo -e "${TODAY}\v${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
 
 parallel -q -P1 /usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py {} ::: $STYLES
-
-
-
 
