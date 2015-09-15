@@ -22,5 +22,6 @@ STCOUNT=`echo $STYLES | xargs | wc -l`
 
 for f in "$STYLES"; do
 	/usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py "$f" ;
+	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT}\n";
 	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log ;
 done;
