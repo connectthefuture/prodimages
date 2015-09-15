@@ -20,9 +20,9 @@ TODAY=`date`
 #`mysql --host=127.0.0.1 --port=3301 --column-names=False --user=root --password=mysql -e "$QUERY" -D www_django;` | parallel -X -N1 --jobs 16 --progress "/usr/local/batchRunScripts/python/newAll_Sites_CacheClear.py {}; $logdate"
 export -f recent_styles_uploaded;
 STYLES=$(recent_styles_uploaded | xargs -n1 | sort -nru)
-STCOUNT=$(echo $STYLES | xargs -n1 | wc -l)
-for f in $STYLES; do
+STCOUNT=$(echo "${STYLES[@]}" | xargs -n1 | wc -l)
+for f in "${STYLES[@]}"; do
+	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT[@]}\n";
 	/usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py "$f" ;
-	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT}\n";
 	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log ;
 done;
