@@ -214,14 +214,14 @@ def main(colorstyle_list=None):
         bnclistpg    = "http://cdn.is.belleandclive.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=320&height=430&ver={1}".format(colorstyle,version)
         bncpdpmain   = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=340&outputy=408&level=1&ver={1}".format(colorstyle,version)
         bncpdppopup  = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
+        bncZoom      = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
         bncZoomthumb = "http://cdn.is.belleandclive.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=59&h=78&ver={1}".format(colorstyle,version)
-        #bncZoom      = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
 
         
         if not found_links:
             if str(sys.argv[-1]).lower() == 'listpage':
                 edgecast_listurls.append(newlistpg)
-            if version == 'NA': 
+            elif version == 'NA': 
                 edgecast_listurls.append(newlistpg) ## or us a pass \
             else:
                 ## version urls using db query not scraped
@@ -236,12 +236,13 @@ def main(colorstyle_list=None):
                 edgecast_listurls.append(bnclistpg)
                 edgecast_listurls.append(bncpdpmain)
                 edgecast_listurls.append(bncpdppopup)
+                edgecast_listurls.append(bncZoom)
                 edgecast_listurls.append(bncZoomthumb)
 
             # remote cdn to clear
             ## Bluefly
             edgecast_listurls.append(oldlistpg)
-            edgecast_listurls.append(newlistpg)
+            # edgecast_listurls.append(newlistpg)
             edgecast_listurls.append(pdpg)
             edgecast_listurls.append(pmlistpg)
             edgecast_listurls.append(pmeventimg)
@@ -298,8 +299,8 @@ def main(colorstyle_list=None):
                         bnclistpg    = "http://cdn.is.belleandclive.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=320&height=430&ver={1}".format(colorstyle,version)
                         bncpdpmain   = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=340&outputy=408&level=1&ver={1}".format(colorstyle,version)
                         bncpdppopup  = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
+                        bncZoom      = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
                         bncZoomthumb = "http://cdn.is.belleandclive.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=59&h=78&ver={1}".format(colorstyle,version)
-                        #bncZoom      = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
 
 
                         mobile_list  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=226&height=271'.format(colorstyle)
@@ -322,6 +323,7 @@ def main(colorstyle_list=None):
                         edgecast_listurls.append(bnclistpg)
                         edgecast_listurls.append(bncpdpmain)
                         edgecast_listurls.append(bncpdppopup)
+                        edgecast_listurls.append(bncZoom)
                         edgecast_listurls.append(bncZoomthumb)
 
 
