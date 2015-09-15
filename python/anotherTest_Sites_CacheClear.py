@@ -479,7 +479,7 @@ def main(colorstyle_list=None):
             else:
                 pass
         for url_purge in versioned_links:
-            if url_purge[0] is not null:
+            if url_purge[0]:
                 send_purge_request_edgecast(url_purge[0])
                 print 'YAY DONE ', url_purge[0]
             #csv_write_datedOutfile(url_purge)
