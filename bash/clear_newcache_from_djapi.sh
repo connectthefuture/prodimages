@@ -24,7 +24,7 @@ STCOUNT=`echo $STYLES | xargs -n1 | wc -l`
 echo -e "${TODAY}\v${STCOUNT}\n"
 echo -e "${TODAY}\v${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
 
-parallel -q -P2 --jobs 800% /usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py {} ::: $STYLES
+parallel -q -P1 /usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py {} ::: $STYLES
 
 
 
