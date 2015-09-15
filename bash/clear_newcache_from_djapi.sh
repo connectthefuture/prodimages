@@ -20,8 +20,8 @@ function recent_styles_uploaded ()
 export -f recent_styles_uploaded;
 STYLES=$(echo recent_styles_uploaded | xargs -n1 | sort -nru)
 STCOUNT=`echo $STYLES | xargs | wc -l`
-echo -e "${TODAY}\v--> Processing ${STCOUNT} Styles\n"
-echo -e "${TODAY}\v${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log
 
-parallel -q -P1 /usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py {} ::: $STYLES
-
+for f in ; do
+	/usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py "$f" ;
+	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log ;
+done;
