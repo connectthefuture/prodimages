@@ -24,5 +24,5 @@ STCOUNT=$(echo "${STYLES[@]}" | xargs -n1 | wc -l)
 for f in "${STYLES[@]}"; do
 	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT[@]}\n";
 	/usr/local/batchRunScripts/python/anotherTest_Sites_CacheClear.py "$f" ;
-	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT}\n" >> /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log ;
+	echo -e "${TODAY}\tStyle-${f}\tTotal-${STCOUNT}\n" 2>&1 > /mnt/Post_Complete/Complete_Archive/AUTOCCLEARLOG.log ;
 done;
