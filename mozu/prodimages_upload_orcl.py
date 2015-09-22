@@ -375,7 +375,6 @@ def update_pm_photodate_incr_version_hack(src_filepath):
 ##########################################################
 def main_update_put(BF_IMAGEID, MZ_IMAGEID,MD5CHECKSUM):
 
-
     ## Finally Store New mozuiD and md5checksum
     orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID,MD5CHECKSUM)
     return
@@ -411,7 +410,9 @@ def main_upload_post(src_filepath):
         try:
             MZ_IMAGEID, content_response = upload_productimgs_mozu(src_filepath)
             orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
-            print 'BF_IMAGEID={}\nMZ_IMAGEID={}\nMD5CHECKSUM={}'.format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
+            RESULT = 'BF_IMAGEID={}\tMZ_IMAGEID={}\tMD5CHECKSUM={}\n'.format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM).split()
+            mr_logger(src_filepath, RESULT)
+            print RESULT
             return MZ_IMAGEID, BF_IMAGEID
         except TypeError, e:
             print '\n\t...', src_filepath, ' None TypeError --> ', e

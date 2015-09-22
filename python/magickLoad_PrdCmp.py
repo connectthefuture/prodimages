@@ -766,24 +766,28 @@ if os.path.isdir(tmp_processing):
             jpgout = magickConvert_to_jpeg(img,destdir=destdir)
 
         ## --> Uncomment to run the mozu piece fully
-        # prodimages_upload.main_upload_post(jpgout)
-
+        try:
+            prodimages_upload.main_upload_post(jpgout)
+        except IOError:
+            print 'IOERROR - 772'
+            pass
         ############################
-
-        #os.rename(pngout,os.path.join())
-        #subproc_magick_large_jpg(img, destdir=destdir)
-        #subproc_magick_medium_jpg(img, destdir=destdir)
-
 
     #metadict = metadata_info_dict(img)
     #dimens = get_imagesize_variables(img)
     #test_img = get_image_color_minmax(img)
 
+## Clean up the jpegs sent to mozu
+tmp_jpg = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+[ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
+
 
 ### Glob created PNGs and copy to Load Dir then Store in Arch dir
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
+
 [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
 [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
+
 
 ## ARCHIVED Backup
 ## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
