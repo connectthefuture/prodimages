@@ -168,7 +168,7 @@ def get_exif_all_data(src_filepath):
 ### Generic Logger
 def mr_logger(filepath,*args):
     import datetime
-    current_dt = datetime.datetime.strptime(datetime.datetime.now(), '%Y-%m-%d')
+    current_dt = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
     logged_items = []
     if len(args) > 0:
         for arg in args:
@@ -188,8 +188,8 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     # records from being downloaded at once from the server
     import datetime
     dt = datetime.datetime.now()
-    upsert_timestamp = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-    upsert_date = datetime.datetime.strptime(dt, "%m%d%Y")
+    upsert_timestamp =  datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
+    upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn.cursor()
@@ -208,17 +208,17 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     # records from being downloaded at once from the server
     import datetime
     dt = datetime.datetime.now()
-    upsert_timestamp = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-    upsert_date = datetime.datetime.strptime(dt, "%m%d%Y")
+    upsert_timestamp = datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
+    upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn.cursor()
         #  SET update_ct = update_ct + 1
         cur.execute("""UPDATE MOZU_IMAGE
                         SET MZ_IMAGEID=%s,
-                        SET MD5CHECKSUM=%s,
-                        SET MODIFIED_DATE=TO_DATE('%s','MMDDYY'),
-                        SET UPDATED_COUNT=(UPDATED_COUNT + 1)
+                        MD5CHECKSUM=%s,
+                        MODIFIED_DATE=TO_DATE('%s','MMDDYY'),
+                        UPDATED_COUNT=(UPDATED_COUNT + 1)
                         WHERE BF_IMAGEID=%s;""",
                         (MZ_IMAGEID, MD5CHECKSUM, upsert_date, BF_IMAGEID))
         conn.commit()
