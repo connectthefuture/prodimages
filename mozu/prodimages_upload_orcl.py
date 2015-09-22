@@ -231,11 +231,11 @@ def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     conn = get_mzimg_oracle_connection()
     cur = conn
     try:
-        cur.execute("""SELECT MZ_IMAGEID
+        res = cur.execute("""SELECT MZ_IMAGEID
                         FROM MOZU_IMAGE
                         WHERE BF_IMAGEID='{0}';""".format(BF_IMAGEID))
-        MZ_IMAGEID = cur.fetchone()
-        if MZ_IMAGEID:
+        MZ_IMAGEID = [ r for r in res ]
+        if len(MZ_IMAGEID) > 1:
             return MZ_IMAGEID
         else:
             return False
