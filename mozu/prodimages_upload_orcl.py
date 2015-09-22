@@ -189,11 +189,12 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     import datetime
     dt = datetime.datetime.now()
     upsert_timestamp = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+    upsert_date = datetime.datetime.strptime(dt, "%m%d%Y")
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn.cursor()
         ##cur.execute("INSERT INTO MOZU_IMAGE (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES (%s, %s, %s) ;", (BF_IMAGEID, MZ_IMAGEID, md5checksum))
-        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, %s);", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp))
+        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
         conn.commit()
         conn.close()
     except IndexError:
@@ -208,6 +209,7 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     import datetime
     dt = datetime.datetime.now()
     upsert_timestamp = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+    upsert_date = datetime.datetime.strptime(dt, "%m%d%Y")
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn.cursor()
@@ -215,10 +217,10 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
         cur.execute("""UPDATE MOZU_IMAGE
                         SET MZ_IMAGEID=%s,
                         SET MD5CHECKSUM=%s,
-                        SET MODIFIED_DATE=%s,
+                        SET MODIFIED_DATE=TO_DATE('%s','MMDDYY'),
                         SET UPDATED_COUNT=(UPDATED_COUNT + 1)
                         WHERE BF_IMAGEID=%s;""",
-                        (MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp, BF_IMAGEID))
+                        (MZ_IMAGEID, MD5CHECKSUM, upsert_date, BF_IMAGEID))
         conn.commit()
         conn.close()
     except IndexError:
