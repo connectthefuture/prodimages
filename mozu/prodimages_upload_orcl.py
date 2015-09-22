@@ -86,7 +86,7 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
 #
 def get_mzimg_oracle_connection():
     import sqlalchemy,sys
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201')
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201')
     conn = orcl_engine.connect()
     return conn
 
