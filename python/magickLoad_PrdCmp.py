@@ -758,19 +758,19 @@ if os.path.isdir(tmp_processing):
         import prodimages_upload_orcl
         from prodimages_upload_orcl import main_upload_post as main_upload_post
         import os
-        #if os.path.isfile(pngout):
-        #    print ' Is file PNGOUT', pngout, img
-        #    jpgout = magickConvert_to_jpeg(pngout,destdir=destdir)
-        #else:
+        if os.path.isfile(pngout):
+            print ' Is file PNGOUT', pngout, img
+            jpgout = magickConvert_to_jpeg(pngout,destdir=destdir)
+        else:
             #pass
-            #jpgout = magickConvert_to_jpeg(img,destdir=destdir)
+            jpgout = magickConvert_to_jpeg(img,destdir=destdir)
 
         ## --> Uncomment to run the MOZU piece fully
-        #try:
-        #    prodimages_upload_orcl.main_upload_post(jpgout)
-        #except IOError:
-        #    print 'IOERROR - 772'
-        #    pass
+        try:
+            prodimages_upload_orcl.main_upload_post(jpgout)
+        except IOError:
+            print 'IOERROR - 772'
+            pass
         ############################
 
     #metadict = metadata_info_dict(img)
