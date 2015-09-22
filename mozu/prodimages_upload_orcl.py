@@ -186,11 +186,14 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
+    import datetime
+    dt = datetime.datetime.now()
+    upsert_timestamp = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn.cursor()
         ##cur.execute("INSERT INTO MOZU_IMAGE (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES (%s, %s, %s) ;", (BF_IMAGEID, MZ_IMAGEID, md5checksum))
-        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES(%s, %s, %s) ON CONFLICT UPDATE SET MZ_IMAGEID = 'MZ_IMAGEIDVals';", (BF_IMAGEID, MZ_IMAGEID, md5checksum))
+        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, %s);", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp))
         conn.commit()
         conn.close()
     except IndexError:
@@ -198,15 +201,24 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
 
 #########
 # Update
-def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, md5checksum=''):
+def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
+    import datetime
+    dt = datetime.datetime.now()
+    upsert_timestamp = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn.cursor()
         #  SET update_ct = update_ct + 1
-        cur.execute("UPDATE MOZU_IMAGE SET MZ_IMAGEID=%s, SET md5checksum=%s, SET UPDATED_COUNT = (UPDATED_COUNT + 1) WHERE BF_IMAGEID=%s;", (MZ_IMAGEID, md5checksum, BF_IMAGEID))
+        cur.execute("""UPDATE MOZU_IMAGE
+                        SET MZ_IMAGEID=%s,
+                        SET MD5CHECKSUM=%s,
+                        SET MODIFIED_DATE=%s,
+                        SET UPDATED_COUNT=(UPDATED_COUNT + 1)
+                        WHERE BF_IMAGEID=%s;""",
+                        (MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp, BF_IMAGEID))
         conn.commit()
         conn.close()
     except IndexError:
@@ -217,7 +229,9 @@ def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     conn = get_mzimg_oracle_connection()
     cur = conn.cursor()
     try:
-        cur.execute("SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID = '{}'".format(BF_IMAGEID))
+        cur.execute(""" SELECT MZ_IMAGEID
+                        FROM MOZU_IMAGE
+                        WHERE BF_IMAGEID=%s;""".format(BF_IMAGEID))
         MZ_IMAGEID = cur.fetchone()
         if MZ_IMAGEID:
             return MZ_IMAGEID
@@ -243,7 +257,7 @@ def orcl_get_mozuimageurl_BF_IMAGEID(BF_IMAGEID, destpath=None):
         return destpath
 
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
-def orcl_validate_md5checksum(md5checksum, BF_IMAGEID=None):
+def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
     import requests
     conn = get_mzimg_oracle_connection()
     cur = conn.cursor()
@@ -388,7 +402,7 @@ def main_upload_post(src_filepath):
         BF_IMAGEID = path.basename(src_filepath)  # .split('.')[0]
     else:
         BF_IMAGEID = None
-    md5checksum = md5_checksumer(src_filepath)
+    MD5CHECKSUM = md5_checksumer(src_filepath)
     MZ_IMAGEID = ''
     md5result = orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=BF_IMAGEID)
     MZ_IMAGEID = orcl_validate_BF_IMAGEID(BF_IMAGEID=BF_IMAGEID)
@@ -403,7 +417,7 @@ def main_upload_post(src_filepath):
             print '\n\t...', src_filepath, ' None TypeError --> ', e
             pass
         finally:
-            print('Completed ', BF_IMAGEID, md5checksum)
+            print('Completed ', BF_IMAGEID, MD5CHECKSUM)
     elif MZ_IMAGEID and not md5result:
         updated_MZ_IMAGEID, content_response = upload_productimgs_mozu(src_filepath,MZ_IMAGEID=MZ_IMAGEID)
         orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, updated_MZ_IMAGEID, MD5CHECKSUM=MD5CHECKSUM)
