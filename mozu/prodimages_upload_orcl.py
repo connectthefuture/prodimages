@@ -229,7 +229,7 @@ def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     conn = get_mzimg_oracle_connection()
     cur = conn.cursor()
     try:
-        cur.execute(""" SELECT MZ_IMAGEID
+        cur.execute("""SELECT MZ_IMAGEID
                         FROM MOZU_IMAGE
                         WHERE BF_IMAGEID=%s;""".format(BF_IMAGEID))
         MZ_IMAGEID = cur.fetchone()
