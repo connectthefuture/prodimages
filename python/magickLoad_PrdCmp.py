@@ -755,8 +755,8 @@ if os.path.isdir(tmp_processing):
         import convert_format_to_jpeg
         from convert_format_to_jpeg import magickConvert_to_jpeg as magickConvert_to_jpeg
         chdir('/usr/local/batchRunScripts/mozu')
-        import prodimages_upload
-        from prodimages_upload import main_upload_post as main_upload_post
+        import prodimages_upload_orcl
+        from prodimages_upload_orcl import main_upload_post as main_upload_post
         import os
         if os.path.isfile(pngout):
             print ' Is file PNGOUT', pngout, img
