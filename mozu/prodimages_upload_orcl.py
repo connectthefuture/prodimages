@@ -194,7 +194,7 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn
-        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES (%s, %s, %s) ;", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM))
+        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM))
         #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
         conn.commit()
         conn.close()
@@ -216,12 +216,11 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
         cur = conn
         #  SET update_ct = update_ct + 1
         cur.execute("""UPDATE MOZU_IMAGE
-                        SET MZ_IMAGEID=%s,
-                        MD5CHECKSUM=%s,
-                        MODIFIED_DATE=TO_DATE('%s','MMDDYY'),
+                        SET MZ_IMAGEID='{0}',
+                        MD5CHECKSUM='{1}',
+                        MODIFIED_DATE=TO_DATE('{2}','MMDDYY'),
                         UPDATED_COUNT=(UPDATED_COUNT + 1)
-                        WHERE BF_IMAGEID=%s;""",
-                        (MZ_IMAGEID, MD5CHECKSUM, upsert_date, BF_IMAGEID))
+                        WHERE BF_IMAGEID='{3}';""".format(MZ_IMAGEID, MD5CHECKSUM, upsert_date, BF_IMAGEID))
         conn.commit()
         conn.close()
     except IndexError:
@@ -234,7 +233,7 @@ def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     try:
         cur.execute("""SELECT MZ_IMAGEID
                         FROM MOZU_IMAGE
-                        WHERE BF_IMAGEID=%s;""".format(BF_IMAGEID))
+                        WHERE BF_IMAGEID='{0}';""".format(BF_IMAGEID))
         MZ_IMAGEID = cur.fetchone()
         if MZ_IMAGEID:
             return MZ_IMAGEID
@@ -267,11 +266,11 @@ def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
     result = ''
     if BF_IMAGEID:
         print 'Not NONE --', BF_IMAGEID
-        cur.execute("SELECT BF_IMAGEID FROM MOZU_IMAGE WHERE MD5CHECKSUM = %s AND BF_IMAGEID = %s", (MD5CHECKSUM, BF_IMAGEID))
+        cur.execute("SELECT BF_IMAGEID FROM MOZU_IMAGE WHERE MD5CHECKSUM = '{0}' AND BF_IMAGEID = '{1}'".format(MD5CHECKSUM, BF_IMAGEID))
         result = cur.fetchone()
     else:
         print 'NONE --', BF_IMAGEID
-        cur.execute("SELECT BF_IMAGEID FROM MOZU_IMAGE WHERE MD5CHECKSUM = '{}'".format(MD5CHECKSUM))
+        cur.execute("SELECT BF_IMAGEID FROM MOZU_IMAGE WHERE MD5CHECKSUM = '{0}'".format(MD5CHECKSUM))
         result = cur.fetchone()
         ## If Value >1
     print BF_IMAGEID, result,  '--- BF_IMAGEID -- result'
@@ -290,7 +289,7 @@ def orcl_validate_BF_IMAGEID(BF_IMAGEID=None):
     result = ''
     if BF_IMAGEID is not None:
         print 'Not NONE --', BF_IMAGEID
-        cur.execute("SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID = '{}'".format(BF_IMAGEID))
+        cur.execute("SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID = '{0}'".format(BF_IMAGEID))
         result = cur.fetchone()
     conn.commit()
     conn.close()
