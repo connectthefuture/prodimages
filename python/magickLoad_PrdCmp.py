@@ -767,7 +767,7 @@ if os.path.isdir(tmp_processing):
 
         ## --> Uncomment to run the MOZU piece fully
         try:
-            prodimages_upload.main_upload_post(jpgout)
+            prodimages_upload_orcl.main_upload_post(jpgout)
         except IOError:
             print 'IOERROR - 772'
             pass

@@ -193,8 +193,8 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     try:
         conn = get_mzimg_oracle_connection()
         cur = conn.cursor()
-        ##cur.execute("INSERT INTO MOZU_IMAGE (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES (%s, %s, %s) ;", (BF_IMAGEID, MZ_IMAGEID, md5checksum))
-        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
+        cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES (%s, %s, %s) ;", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM))
+        #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
         conn.commit()
         conn.close()
     except IndexError:
