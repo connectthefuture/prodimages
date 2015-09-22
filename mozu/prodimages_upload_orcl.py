@@ -113,7 +113,7 @@ def get_mzimg_oracle_connection():
 #     # createfuncalter_incronupdate = "ALTER TABLE MOZU_IMAGE ALTER update_ct SET DEFAULT nextval('update_ct'); "
 #
 #     conn = get_mzimg_oracle_connection()
-#     cur = conn.cursor()
+#     cur = conn
 #
 #     # drop if exists to create a new one
 #     #cur.execute(droptable)
@@ -193,7 +193,7 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
         conn = get_mzimg_oracle_connection()
-        cur = conn.cursor()
+        cur = conn
         cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES (%s, %s, %s) ;", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM))
         #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
         conn.commit()
@@ -213,7 +213,7 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
         conn = get_mzimg_oracle_connection()
-        cur = conn.cursor()
+        cur = conn
         #  SET update_ct = update_ct + 1
         cur.execute("""UPDATE MOZU_IMAGE
                         SET MZ_IMAGEID=%s,
@@ -230,7 +230,7 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
 # Get mozu img ID from bfly file id
 def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     conn = get_mzimg_oracle_connection()
-    cur = conn.cursor()
+    cur = conn
     try:
         cur.execute("""SELECT MZ_IMAGEID
                         FROM MOZU_IMAGE
@@ -263,7 +263,7 @@ def orcl_get_mozuimageurl_BF_IMAGEID(BF_IMAGEID, destpath=None):
 def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
     import requests
     conn = get_mzimg_oracle_connection()
-    cur = conn.cursor()
+    cur = conn
     result = ''
     if BF_IMAGEID:
         print 'Not NONE --', BF_IMAGEID
@@ -286,7 +286,7 @@ def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
 def orcl_validate_BF_IMAGEID(BF_IMAGEID=None):
     import requests
     conn = get_mzimg_oracle_connection()
-    cur = conn.cursor()
+    cur = conn
     result = ''
     if BF_IMAGEID is not None:
         print 'Not NONE --', BF_IMAGEID
