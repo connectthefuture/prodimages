@@ -236,6 +236,7 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
 def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     conn, cur = get_mzimg_oracle_connection()
     #cur = conn
+    print BF_IMAGEID,' BFIMGID'
     try:
         res = cur.execute("""SELECT MZ_IMAGEID
                         FROM MOZU_IMAGE
