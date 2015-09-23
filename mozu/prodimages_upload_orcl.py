@@ -30,6 +30,7 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
     #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
     document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
     BF_IMAGEID   = path.basename(src_filepath) #[:-1]
+    print BF_IMAGEID, src_filepath
     ext = BF_IMAGEID.split('.')[-1]
     document    = ''
     document_id = ''
