@@ -191,14 +191,14 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     import datetime, sqlalchemy, cx_oracle
     dt = datetime.datetime.now()
     upsert_timestamp =  datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
-    upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
+    upsert_timestamp = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
         conn, cur = get_mzimg_oracle_connection()
         #cur = conn
         query = "INSERT INTO MOZU_IMAGE (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
         print query, 'QUERY'
         cur.execute(query)
-        #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
+        #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp))
         ## conn.commit()
         conn.close()
     except cx_oracle.DatabaseError:
@@ -213,7 +213,7 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     import datetime
     dt = datetime.datetime.now()
     upsert_timestamp = datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
-    upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
+    upsert_timestamp = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
         conn, cur = get_mzimg_oracle_connection()
         #cur = conn
@@ -223,7 +223,7 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
                         MD5CHECKSUM='{1}',
                         MODIFIED_DATE=TO_DATE('{2}','MMDDYY'),
                         UPDATED_COUNT=(UPDATED_COUNT + 1)
-                        WHERE BF_IMAGEID='{3}';""".format(MZ_IMAGEID, MD5CHECKSUM, upsert_date, BF_IMAGEID))
+                        WHERE BF_IMAGEID='{3}';""".format(MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp, BF_IMAGEID))
         ## conn.commit()
         conn.close()
     except IndexError:
