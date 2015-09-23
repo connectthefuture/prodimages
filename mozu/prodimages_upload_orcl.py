@@ -188,7 +188,7 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
-    import datetime, sqlalchemy, cx_oracle
+    import datetime, sqlalchemy
     dt = datetime.datetime.now()
     upsert_timestamp =  datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
     upsert_timestamp = datetime.datetime.strftime(dt, "%m%d%Y")
@@ -201,7 +201,7 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
         #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp))
         ## conn.commit()
         conn.close()
-    except cx_oracle.DatabaseError:
+    except IndexError:
         pass
 
 #########
