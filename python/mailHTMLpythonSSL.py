@@ -91,7 +91,7 @@ if __name__ == '__main__':
                 pass
         else:
             content = toaddr
-            toaddr  = 'james.hoetker@bluefly.com stephen.parker@bluefly.com john.bragato@bluefly.com' #, sparker@udcny.com'
+            toaddr  = 'john.bragato@bluefly.com james.hoetker@bluefly.com stephen.parker@bluefly.com' #, sparker@udcny.com'
             try:
                 subject = sys.argv[2]
             except IndexError:
