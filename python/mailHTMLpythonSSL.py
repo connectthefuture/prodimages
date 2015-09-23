@@ -11,7 +11,7 @@ def send_html_via_gmail(toaddr=None, subject=None, html_body=None, text_body=Non
     gmail_pass = open('/home/johnb/.gcreds.dat', 'rb').read()  #str(input('Enter your password in single quotes: '))
 
     toaddr = toaddr #"john.bragato@gmail.com,john.bragato@bluefly.com"
-
+    print toaddr
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
     msg['From'] = gmail_user
@@ -91,7 +91,7 @@ if __name__ == '__main__':
                 pass
         else:
             content = toaddr
-            toaddr  = 'james.hoetker@bluefly.com stephen.parker@bluefly.com james.hoetker@gmail.com john.bragato@bluefly.com' #, sparker@udcny.com'
+            toaddr  = 'james.hoetker@bluefly.com, stephen.parker@bluefly.com, john.bragato@bluefly.com' #, sparker@udcny.com'
             try:
                 subject = sys.argv[2]
             except IndexError:
