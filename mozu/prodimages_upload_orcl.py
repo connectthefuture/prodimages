@@ -188,20 +188,20 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
-    import datetime, sqlalchemy
+    import datetime, sqlalchemy, cx_oracle
     dt = datetime.datetime.now()
     upsert_timestamp =  datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
     upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
         conn, cur = get_mzimg_oracle_connection()
         #cur = conn
-        query = "INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
-        print(query)
+        query = "INSERT INTO MOZU_IMAGE (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
+        print(query), 'QUERY'
         cur.execute(query)
         #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
         ## conn.commit()
         conn.close()
-    except sqlalchemy.DatabaseError:
+    except cx_oracle.DatabaseError:
         pass
 
 #########
