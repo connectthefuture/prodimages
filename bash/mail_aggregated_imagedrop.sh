@@ -40,6 +40,6 @@ subject=$(echo -e "Last Hours Total Styles: ${primaryonly} -- Alts Only ${altonl
 content=$(echo -e "${main_results}")
 
 
-/usr/local/batchRunScripts/python/mailHTMLpythonSSL.py ${content} "${subject}"
+/usr/local/batchRunScripts/python/mailHTMLpythonSSL.py "${content}" "${subject}"
 
 echo -e "${content}"
