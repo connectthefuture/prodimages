@@ -69,7 +69,7 @@ def send_html_via_gmail(toaddr=None, subject=None, html_body=None, text_body=Non
     server_ssl.sendmail(gmail_user, toaddr, msg.as_string())
     #server_ssl.quit()
     server_ssl.close()
-    print 'successfully sent the mail: {0}'.format(subject)
+    print 'successfully sent the mail: {0} \nto{1}'.format(subject,toaddr)
 
 
     #s = smtplib.SMTP('localhost')
