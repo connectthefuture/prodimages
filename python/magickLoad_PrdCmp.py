@@ -778,9 +778,11 @@ if os.path.isdir(tmp_processing):
     #test_img = get_image_color_minmax(img)
 
 ## Clean up the jpegs sent to mozu
-tmp_jpg = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-[ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
 
+# tmp_jpg = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+# [ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
+############################
+############################
 
 ### Glob created PNGs and copy to Load Dir then Store in Arch dir
 tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
