@@ -768,7 +768,7 @@ if os.path.isdir(tmp_processing):
         ## --> Uncomment to run the MOZU piece fully
         try:
             prodimages_upload_orcl.main_upload_post(os.path.join(destdir,os.path.basename(img.split('.')[0] + '.jpg')))
-        except IOError:
+        except KeyError:
             print 'IOERROR - 772'
             pass
         ############################
