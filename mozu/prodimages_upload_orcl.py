@@ -109,29 +109,29 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
 #
 #     # drop if exists to create a new one
 #     #cur.execute(droptable)
-#     #conn.commit()
+    #conn.commit()
 #
 #     cur.execute(createtbl)
-#     conn.commit()
+    ## conn.commit()
 #
 #     try:
 #         #cur.execute(createfunc_nowonupdate)
 #         #cur.execute(createtrig_nowonupdate)
-#         #conn.commit()
+        #conn.commit()
 #         cur.execute(create_timestamperfunc)
 #         cur.execute(create_timestampertrig)
-        conn.commit()
+        #conn.commit()
 #         cur.execute(createfunc_incronupdate)
 #         cur.execute(createtrig_incronupdate)
-        conn.commit()
+        #conn.commit()
 #         #cur.execute(createfuncalter_incronupdate)
-#         #conn.commit()
+        #conn.commit()
 #     except psycopg2.ProgrammingError, e:
 #         print 'Passing Psycopg2 ProgErr...%s' % e
 #         pass
 #     finally:
 #         if conn:
-            conn.commit()
+            #conn.commit()
 #             conn.close()
 
 ### Utility Funx - Get File Data
@@ -197,7 +197,7 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
         #cur = conn
         cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM))
         #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
-        # conn.commit()
+        ## conn.commit()
         conn.close()
     except IndexError:
         pass
@@ -222,7 +222,7 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
                         MODIFIED_DATE=TO_DATE('{2}','MMDDYY'),
                         UPDATED_COUNT=(UPDATED_COUNT + 1)
                         WHERE BF_IMAGEID='{3}';""".format(MZ_IMAGEID, MD5CHECKSUM, upsert_date, BF_IMAGEID))
-        # conn.commit()
+        ## conn.commit()
         conn.close()
     except IndexError:
         pass
@@ -276,7 +276,7 @@ def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
         ## If Value >1
     print BF_IMAGEID, result,  '--- BF_IMAGEID -- result'
 
-    conn.commit()
+    #conn.commit()
     conn.close()
     if result:
         return result
@@ -292,7 +292,7 @@ def orcl_validate_BF_IMAGEID(BF_IMAGEID=None):
         print 'Not NONE --', BF_IMAGEID
         cur.execute("SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID = '{0}'".format(BF_IMAGEID))
         result = cur.fetchone()
-    conn.commit()
+    #conn.commit()
     conn.close()
     if result:
         return result
