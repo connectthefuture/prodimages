@@ -196,7 +196,7 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
         conn, cur = get_mzimg_oracle_connection()
         #cur = conn
         query = "INSERT INTO MOZU_IMAGE (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
-        print(query), 'QUERY'
+        print query, 'QUERY'
         cur.execute(query)
         #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
         ## conn.commit()
