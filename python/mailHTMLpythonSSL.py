@@ -12,10 +12,12 @@ def send_html_via_gmail(toaddr=None, subject=None, html_body=None, text_body=Non
 
     toaddr = toaddr.split() #"john.bragato@gmail.com,john.bragato@bluefly.com"
     print toaddr
+    COMMASPACE = ', '
+
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
     msg['From'] = gmail_user
-    msg['To'] = toaddr
+    msg['To'] = COMMASPACE.join(toaddr)
     if not subject:
         msg['Subject'] = str(len(text_body.splitlines())) + ' Lines Included'
     else:
@@ -85,11 +87,13 @@ if __name__ == '__main__':
         print toaddr, ' <--- toaddr'
         if len(toaddr.split('@')) == 2:
             content = str(sys.argv[2])
+            print len(toaddr.split('@')), '<-- len'
             try:
                 subject = sys.argv[3]
             except IndexError:
                 pass
         else:
+            print len(toaddr.split('@')), '<-- lenElseOne'
             content = toaddr
             toaddr  = 'john.bragato@bluefly.com james.hoetker@bluefly.com stephen.parker@bluefly.com' #, sparker@udcny.com'
             try:
