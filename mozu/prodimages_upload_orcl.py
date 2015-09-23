@@ -67,6 +67,7 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
         print 'LOCOS -->', locals()
         MZ_IMAGEID = orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID)
         if MZ_IMAGEID is not None:
+            print 'Old MozuID Retrieved from ORCL', MZ_IMAGEID
             documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + MZ_IMAGEID + "/content"
             # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
             file_data = open(src_filepath, 'rb').read()
