@@ -65,21 +65,23 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
         headers["Content-type"] = mimetype
         print document_id, ' <-- DocId 409 Code Numero 1'
         print 'LOCOS -->', locals()
-        documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + MZ_IMAGEID + "/content"
-        # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
-        file_data = open(src_filepath, 'rb').read()
-        headers["Content-type"] = mimetype #"image/png";
-        content_response = requests.put(documentUploadApi, data=file_data, headers=headers, verify=False);
-        document = content_response.json()
-        document_id = document["id"]
-        print document_id, ' <-- DocId 409 Code'
-        print '409 Err --> Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.\n\t%s' % src_filepath
-        ## TODO: 1)  On duplicate file in mozu, check PGSQL by Filename and compare stored MD5 with current MD5.
-        ## TODO: 1A) If same MD5 skip and return MOZUID, else if different.....
-        ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
-        ## TODO: 3)  Update PGSQL MOZUID + MD5
-        ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
-        pass
+        MZ_IMAGEID = orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID)
+        if MZ_IMAGEID is not None:
+            documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + MZ_IMAGEID + "/content"
+            # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
+            file_data = open(src_filepath, 'rb').read()
+            headers["Content-type"] = mimetype #"image/png";
+            content_response = requests.put(documentUploadApi, data=file_data, headers=headers, verify=False);
+            document = content_response.json()
+            document_id = document["id"]
+            print document_id, ' <-- DocId 409 Code'
+            print '409 Err --> Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.\n\t%s' % src_filepath
+            ## TODO: 1)  On duplicate file in mozu, check PGSQL by Filename and compare stored MD5 with current MD5.
+            ## TODO: 1A) If same MD5 skip and return MOZUID, else if different.....
+            ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
+            ## TODO: 3)  Update PGSQL MOZUID + MD5
+            ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
+            pass
     else:
         print 'Failed with code --> ', document_response.status_code
 
@@ -416,14 +418,14 @@ def main_upload_post(src_filepath):
             MZ_IMAGEID, content_response = upload_productimgs_mozu(src_filepath)
             orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
             RESULT = 'BF_IMAGEID={}\tMZ_IMAGEID={}\tMD5CHECKSUM={}\n'.format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM).split()
-            mr_logger(src_filepath, RESULT)
+            mr_logger('/mnt/mozu_upload.txt', RESULT)
             print RESULT, 'Line-420RESULT'
             return MZ_IMAGEID, BF_IMAGEID
         except TypeError, e:
             print '\n\t...', src_filepath, ' None TypeError --> ', e
             pass
-        finally:
-            print('Completed ', BF_IMAGEID, MD5CHECKSUM)
+        #finally:
+        #    print('Completed ', BF_IMAGEID, MD5CHECKSUM)
     elif MZ_IMAGEID and not md5result:
         updated_MZ_IMAGEID, content_response = upload_productimgs_mozu(src_filepath,MZ_IMAGEID=MZ_IMAGEID)
         orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, updated_MZ_IMAGEID, MD5CHECKSUM=MD5CHECKSUM)
