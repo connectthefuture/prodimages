@@ -93,7 +93,7 @@ if __name__ == '__main__':
             except IndexError:
                 pass
         else:
-            print len(toaddr.split('@')), '<-- lenElseOne'
+            print len(toaddr.split('@')), '<-- lenElseOne--->Split ', toaddr.split('@')
             content = toaddr
             toaddr  = 'james.hoetker@bluefly.com stephen.parker@bluefly.com john.bragato@bluefly.com john.bragato@gmail.com' #, sparker@udcny.com'
             try:
