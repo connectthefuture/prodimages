@@ -115,23 +115,23 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
     ## conn.commit()
 #
 #     try:
-#         #cur.execute(createfunc_nowonupdate)
-#         #cur.execute(createtrig_nowonupdate)
-        #conn.commit()
+#         cur.execute(createfunc_nowonupdate)
+#         cur.execute(createtrig_nowonupdate)
+#         conn.commit()
 #         cur.execute(create_timestamperfunc)
 #         cur.execute(create_timestampertrig)
-        #conn.commit()
+#         conn.commit()
 #         cur.execute(createfunc_incronupdate)
 #         cur.execute(createtrig_incronupdate)
-        #conn.commit()
-#         #cur.execute(createfuncalter_incronupdate)
-        #conn.commit()
+#         conn.commit()
+#         cur.execute(createfuncalter_incronupdate)
+#         conn.commit()
 #     except psycopg2.ProgrammingError, e:
 #         print 'Passing Psycopg2 ProgErr...%s' % e
 #         pass
 #     finally:
 #         if conn:
-            #conn.commit()
+#             conn.commit()
 #             conn.close()
 
 ### Utility Funx - Get File Data
