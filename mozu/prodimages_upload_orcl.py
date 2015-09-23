@@ -417,7 +417,7 @@ def main_upload_post(src_filepath):
             orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
             RESULT = 'BF_IMAGEID={}\tMZ_IMAGEID={}\tMD5CHECKSUM={}\n'.format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM).split()
             mr_logger(src_filepath, RESULT)
-            print RESULT
+            print RESULT, 'Line-420RESULT'
             return MZ_IMAGEID, BF_IMAGEID
         except TypeError, e:
             print '\n\t...', src_filepath, ' None TypeError --> ', e
