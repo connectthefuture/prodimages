@@ -239,6 +239,7 @@ def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     print BF_IMAGEID,' BFIMGID'
     try:
         query = """SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID='{0}';""".format(BF_IMAGEID)
+        print query
         res = cur.execute(query)
         MZ_IMAGEID = [ r for r in res ]
         if len(MZ_IMAGEID) > 1:
