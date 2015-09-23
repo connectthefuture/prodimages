@@ -238,7 +238,7 @@ def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
     #cur = conn
     print BF_IMAGEID,' BFIMGID'
     try:
-        res = cur.execute("""SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID={0};""".format(BF_IMAGEID))
+        res = cur.execute("""SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID='{0}';""".format(BF_IMAGEID))
         MZ_IMAGEID = [ r for r in res ]
         if len(MZ_IMAGEID) > 1:
             return MZ_IMAGEID
