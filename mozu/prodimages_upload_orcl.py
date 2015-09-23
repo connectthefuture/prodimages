@@ -84,6 +84,8 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
             ## TODO: 3)  Update PGSQL MOZUID + MD5
             ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
             pass
+        else:
+            print 'MZID is None'
     else:
         print 'Failed with code --> ', document_response.status_code
 
