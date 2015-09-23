@@ -419,7 +419,7 @@ def main_upload_post(src_filepath):
             mr_logger(src_filepath, RESULT)
             print RESULT, 'Line-420RESULT'
             return MZ_IMAGEID, BF_IMAGEID
-        except TypeError, e:
+        except KeyError, e:
             print '\n\t...', src_filepath, ' None TypeError --> ', e
             pass
         finally:
