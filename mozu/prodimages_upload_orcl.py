@@ -83,14 +83,6 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
     else:
         print 'Failed with code --> ', document_response.status_code
 
-#
-def get_mzimg_oracle_connection():
-    import sqlalchemy,sys
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201')
-    conn = orcl_engine.connect()
-    print(dir(conn))
-    return conn
-
 
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 # def init_pg_mktble_fnc_trig():
@@ -181,7 +173,16 @@ def mr_logger(filepath,*args):
     return filepath
 
 ####################
-### postgres Funcs
+### oracle Funcs
+##
+def get_mzimg_oracle_connection():
+    import sqlalchemy,sys
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201')
+    cur = orcl_engine.raw_connection().cursor()
+    conn = orcl_engine.connect()
+    print(dir(conn))
+    return conn, cur
+
 # Store Key in pgsql
 def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
@@ -192,8 +193,8 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     upsert_timestamp =  datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
     upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
-        conn = get_mzimg_oracle_connection()
-        cur = conn
+        conn, cur = get_mzimg_oracle_connection()
+        #cur = conn
         cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM))
         #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_date))
         conn.commit()
@@ -212,8 +213,8 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     upsert_timestamp = datetime.datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
     upsert_date = datetime.datetime.strftime(dt, "%m%d%Y")
     try:
-        conn = get_mzimg_oracle_connection()
-        cur = conn
+        conn, cur = get_mzimg_oracle_connection()
+        #cur = conn
         #  SET update_ct = update_ct + 1
         cur.execute("""UPDATE MOZU_IMAGE
                         SET MZ_IMAGEID='{0}',
@@ -228,8 +229,8 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
 
 # Get mozu img ID from bfly file id
 def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
-    conn = get_mzimg_oracle_connection()
-    cur = conn
+    conn, cur = get_mzimg_oracle_connection()
+    #cur = conn
     try:
         res = cur.execute("""SELECT MZ_IMAGEID
                         FROM MOZU_IMAGE
@@ -261,8 +262,8 @@ def orcl_get_mozuimageurl_BF_IMAGEID(BF_IMAGEID, destpath=None):
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
 def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
     import requests
-    conn = get_mzimg_oracle_connection()
-    cur = conn
+    conn, cur = get_mzimg_oracle_connection()
+    #cur = conn
     result = ''
     if BF_IMAGEID:
         print 'Not NONE --', BF_IMAGEID
@@ -284,8 +285,8 @@ def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
 ## Validate file name only
 def orcl_validate_BF_IMAGEID(BF_IMAGEID=None):
     import requests
-    conn = get_mzimg_oracle_connection()
-    cur = conn
+    conn, cur = get_mzimg_oracle_connection()
+    #cur = conn
     result = ''
     if BF_IMAGEID is not None:
         print 'Not NONE --', BF_IMAGEID
