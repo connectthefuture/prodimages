@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def send_html_via_gmail(toaddr, subject=None, html_body=None, text_body=None):
+def send_html_via_gmail(toaddr=None, subject=None, html_body=None, text_body=None):
     import smtplib, os.path
 
     from email.mime.multipart import MIMEMultipart
@@ -82,6 +82,7 @@ if __name__ == '__main__':
     subject = ''
     try:
         toaddr = str(sys.argv[1])
+        print toaddr, ' <--- toaddr'
         if len(toaddr.split('@')) == 2:
             content = str(sys.argv[2])
             try:
@@ -90,11 +91,11 @@ if __name__ == '__main__':
                 pass
         else:
             content = toaddr
-            toaddr  = 'james.hoetker@bluefly.com, stephen.parker@bluefly.com, james.hoetker@gmail.com, john.bragato@bluefly.com, sparker@udcny.com'
+            toaddr  = 'james.hoetker@bluefly.com stephen.parker@bluefly.com james.hoetker@gmail.com john.bragato@bluefly.com' #, sparker@udcny.com'
             try:
                 subject = sys.argv[2]
             except IndexError:
                 pass
-        send_html_via_gmail(toaddr, subject=subject, html_body=content, text_body=subject)
+        send_html_via_gmail(toaddr=toaddr, subject=subject, html_body=content, text_body=subject)
     except IndexError:
         print('Please supply at least the to address and email content as arg 1 and 2, respectively.')
