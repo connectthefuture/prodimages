@@ -412,11 +412,18 @@ def main_upload_post(src_filepath):
     if src_basename[:9].isdigit() and ext:
         BF_IMAGEID = path.basename(src_filepath)  # .split('.')[0]
     else:
-        BF_IMAGEID = None
+        BF_IMAGEID = ''
     MD5CHECKSUM = md5_checksumer(src_filepath)
     MZ_IMAGEID = ''
     md5result = orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=BF_IMAGEID)
     MZ_IMAGEID = orcl_validate_BF_IMAGEID(BF_IMAGEID=BF_IMAGEID)
+    import json
+    full_json_insert = [
+                {'BF_IMAGEID': BF_IMAGEID },
+                {'MZ_IMAGEID': MZ_IMAGEID },
+                {'MD5CHECKSUM': MD5CHECKSUM }
+                ]
+    json_insert = json.dumps(full_json_insert)
     ## Finished collecting k/v data to send now send if md5result returns False (meaning we dont have an image for this yet)
     if not md5result and not MZ_IMAGEID:
         try:
