@@ -9,7 +9,9 @@ import datetime
 
 
 ##### Table and Metadata Create Obj
-metadata = MetaData() 
+db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+engine = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False)
+metadata = MetaData(bind=engine, quote_schema=True, schema='mz_image')
 mozu_image = Table( 'mozu_image', metadata,
     #Column('id', Integer, Sequence('mozu_image_id_seq'), primary_key=True),
     Column('id', Integer, server_default=FetchedValue(), primary_key=True),
@@ -24,20 +26,41 @@ mozu_image = Table( 'mozu_image', metadata,
 ##############
 ### Bind params to Select Statement to pass as kwargs at execution time
 from sqlalchemy.sql import bindparam
-s_bfid = mozu_image.select(mozu_image.c.bf_imageid == bindparam('bfid')), 
-s_mzid = mozu_image.select(mozu_image.c.mz_imageid == bindparam('mzid')), 
+s_bfid = mozu_image.select(mozu_image.c.bf_imageid == bindparam('bfid'))
+s_mzid = mozu_image.select(mozu_image.c.mz_imageid == bindparam('mzid'))
 s_md5  = mozu_image.select(mozu_image.c.md5checksum == bindparam('md5'))
+
+
+
+## classic mapping style
+class MozuImage(object):
+    def __init__(self,*args,**kwargs):
+        self.bf_imageid = args.get('bf_imageid')
+        self.fullname = args.get('mz_imageid')
+        self.md5checksum = args.get('md5checksum')
+        self.created_date = args.get('created_date')
+        self.modified_date = args.get('modified_date')
+        self.upload_count = args.get('upload_count')
+
+from sqlalchemy.orm import mapper
+mapper(MozuImage, mozu_image)
+
+from sqlalchemy.orm import sessionmaker
+Session = sessionmaker(bind=engine)
+
+#(s, bfid=varbfid, md5=varmd5)
+##############################
+
+class BaseTableClass(Table):
+    def __init__(self, *args, **kwargs):
+        super(Table, self).__init__(*args, **kwargs)
+
+
 
 
 ##########
 ## Inserts
 ##########
-class MozuImage(obj):
-    def __init__(self, *args, **kwargs):
-        super(mozu_image, self).__init__(*args, **kwargs)
-
-
-
 def insert_mozu_image(**kwargs): 
     mozu_image.insert()
 
