@@ -81,12 +81,16 @@ insert_list.append(dict(zip(k1,v2)))
 
 instance_list = []
 for i in insert_list:
-    inst = insert_mozu_image(MozuImage(**i))
-    instance_list.append(inst)
+    mozu_image_table = mozu_image
+    insert_records = mozu_image_table.insert(i)
+    update_records = mozu_image_table.update(values=dict(**i),whereclause=mozu_image.c.mz_imageid==varmzid)
+    engine.execute()
+    if i['bf_imageid']:
+        instance_list.append(mozu_image_table.insert(**i))
 
 
 
-session_multi_add_commit(Session, instance_list)
+#session_multi_add_commit(Session, [i])
 #(s, bfid=varbfid, md5=varmd5)
 ##############################
 

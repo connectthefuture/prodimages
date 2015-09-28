@@ -22,27 +22,27 @@ def get_mozu_authtoken(tenant_url):
     return auth["accessToken"]
 
 # Upload and Return MozuID
-def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
+def upload_productimgs_mozu(src_filepath, mz_imageid=None):
     import requests, json
     import os.path as path
     tenant_url = "https://t11146.staging-sb.mozu.com/"
     headers = {'Content-type': 'application/json', 'x-vol-app-claims' : get_mozu_authtoken(tenant_url), 'x-vol-tenant' : '11146', 'x-vol-master-catalog' : '1' }
     #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
     document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
-    BF_IMAGEID   = path.basename(src_filepath) #[:-1]
-    print BF_IMAGEID, src_filepath
-    ext = BF_IMAGEID.split('.')[-1]
+    bf_imageid   = path.basename(src_filepath) #[:-1]
+    print bf_imageid, src_filepath
+    ext = bf_imageid.split('.')[-1]
     document    = ''
     document_id = ''
-    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : BF_IMAGEID, 'extension' : ext}
+    document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bf_imageid, 'extension' : ext}
     document_response = requests.post(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False )
     #document_response.raise_for_status()
     if document_response.status_code < 400:
         document = document_response.json()
         try:
             document_id = document["id"]
-            # colorstyle    = BF_IMAGEID[:9]
-            # insert_docid_db(db_name,document_id=document_id, BF_IMAGEID=BF_IMAGEID, colorstyle=colorstyle, img_number=sequence)
+            # colorstyle    = bf_imageid[:9]
+            # insert_docid_db(db_name,document_id=document_id, bf_imageid=bf_imageid, colorstyle=colorstyle, img_number=sequence)
         except KeyError:
             document_response = requests.put(document_data_api, data=json.dumps(document_payload), headers=headers, verify=False)
             document = document_response.json()
@@ -60,16 +60,16 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
         print "Document content upload Response: %s" % content_response.text
         #document_response.raise_for_status()
         return document_id, content_response
-        #return BF_IMAGEID, MZ_IMAGEID
+        #return bf_imageid, mz_imageid
     elif document_response.status_code == 409:
         mimetype = "image/{}".format(ext.lower().replace('jpg', 'jpeg'))
         headers["Content-type"] = mimetype
         print document_id, ' <-- DocId 409 Code Numero 1'
         print 'LOCOS -->', locals()
-        MZ_IMAGEID = orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID)
-        if MZ_IMAGEID is not None:
-            print 'Old MozuID Retrieved from ORCL', MZ_IMAGEID
-            documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + MZ_IMAGEID + "/content"
+        mz_imageid = orcl_get_mz_imageid_bf_imageid(bf_imageid)
+        if mz_imageid is not None:
+            print 'Old MozuID Retrieved from ORCL', mz_imageid
+            documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + mz_imageid + "/content"
             # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
             file_data = open(src_filepath, 'rb').read()
             headers["Content-type"] = mimetype #"image/png";
@@ -89,12 +89,11 @@ def upload_productimgs_mozu(src_filepath, MZ_IMAGEID=None):
     else:
         print 'Failed with code --> ', document_response.status_code
 
-
 # make initial table and update timestamp on modify as function and trigger of the function on the table
 # def init_pg_mktble_fnc_trig():
 #     import psycopg2
 #     droptable = "DROP TABLE IF EXISTS MOZU_IMAGE;"
-#     createtbl = "CREATE TABLE IF NOT EXISTS MOZU_IMAGE (id serial PRIMARY KEY, BF_IMAGEID varchar NOT NULL, MZ_IMAGEID varchar NOT NULL, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, update_ct bigint NOT NULL DEFAULT 1, UNIQUE(BF_IMAGEID));"
+#     createtbl = "CREATE TABLE IF NOT EXISTS MOZU_IMAGE (id serial PRIMARY KEY, bf_imageid varchar NOT NULL, mz_imageid varchar NOT NULL, md5checksum varchar, updated_at TIMESTAMP NOT NULL DEFAULT 'now'::timestamp, update_ct bigint NOT NULL DEFAULT 1, UNIQUE(bf_imageid));"
 #     # Auto Mod time Now Func and trig
 #     createfunc_nowonupdate = "CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS trigger BEGIN NEW.updated_at := SYSDATE; RETURN NEW; END;"
 #     createtrig_nowonupdate = "CREATE TRIGGER MOZU_IMAGE_updated_at_column BEFORE INSERT OR UPDATE ON MOZU_IMAGE FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();"
@@ -181,6 +180,7 @@ def mr_logger(filepath,*args):
 ####################
 ### oracle Funcs
 ##
+########################### Replaced By Alchemy ############################
 def get_mzimg_oracle_connection():
     import sqlalchemy,sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201')
@@ -190,7 +190,7 @@ def get_mzimg_oracle_connection():
     return conn, cur
 
 # Store Key in pgsql
-def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
+def orcl_insert_bf_imageid_mz_imageid(bf_imageid, mz_imageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
@@ -201,10 +201,10 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
     try:
         conn, cur = get_mzimg_oracle_connection()
         #cur = conn
-        query = "INSERT INTO MOZU_IMAGE (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM) VALUES ('{0}', '{1}', '{2}');".format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
+        query = "INSERT INTO MOZU_IMAGE (bf_imageid, mz_imageid, md5checksum) VALUES ('{0}', '{1}', '{2}');".format(bf_imageid, mz_imageid, md5checksum)
         print query, 'QUERY'
         cur.execute(query)
-        #cur.execute("INSERT INTO MOZU_IMAGE(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp))
+        #cur.execute("INSERT INTO MOZU_IMAGE(bf_imageid, mz_imageid, md5checksum, CREATED_DATE) VALUES(%s, %s, %s, TO_DATE('%s','MMDDYY'));", (bf_imageid, mz_imageid, md5checksum, upsert_timestamp))
         ## conn.commit()
         conn.close()
     except IndexError:
@@ -212,7 +212,7 @@ def orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
 
 #########
 # Update
-def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
+def orcl_update_bf_imageid_mz_imageid(bf_imageid, mz_imageid, md5checksum=''):
     # HERE IS THE IMPORTANT PART, by specifying a name for the cursor
     # psycopg2 creates a server-side cursor, which prevents all of the
     # records from being downloaded at once from the server
@@ -225,39 +225,39 @@ def orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM=''):
         #cur = conn
         #  SET update_ct = update_ct + 1
         cur.execute("""UPDATE MOZU_IMAGE
-                        SET MZ_IMAGEID='{0}',
-                        MD5CHECKSUM='{1}',
+                        SET mz_imageid='{0}',
+                        md5checksum='{1}',
                         MODIFIED_DATE=TO_DATE('{2}','MMDDYY'),
                         UPDATED_COUNT=(UPDATED_COUNT + 1)
-                        WHERE BF_IMAGEID='{3}';""".format(MZ_IMAGEID, MD5CHECKSUM, upsert_timestamp, BF_IMAGEID))
+                        WHERE bf_imageid='{3}';""".format(mz_imageid, md5checksum, upsert_timestamp, bf_imageid))
         ## conn.commit()
         conn.close()
     except IndexError:
         pass
 
 # Get mozu img ID from bfly file id
-def orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID):
+def orcl_get_mz_imageid_bf_imageid(bf_imageid):
     conn, cur = get_mzimg_oracle_connection()
     #cur = conn
-    print BF_IMAGEID,' BFIMGID'
+    print bf_imageid,' BFIMGID'
     try:
-        query = """SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID='{0}';""".format(BF_IMAGEID)
+        query = """SELECT mz_imageid FROM MOZU_IMAGE WHERE bf_imageid='{0}';""".format(bf_imageid)
         print query
         res = cur.execute(query)
-        MZ_IMAGEID = [ r for r in res ]
-        if len(MZ_IMAGEID) > 1:
-            return MZ_IMAGEID
+        mz_imageid = [ r for r in res ]
+        if len(mz_imageid) > 1:
+            return mz_imageid
         else:
             return False
     except TypeError:
         return False
 
 # Get mozu img url
-def orcl_get_mozuimageurl_BF_IMAGEID(BF_IMAGEID, destpath=None):
+def orcl_get_mozuimageurl_bf_imageid(bf_imageid, destpath=None):
     import requests
     mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
-    MZ_IMAGEID = orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID)
-    mozuimageurl = "{}{}".format(mozu_files_prefix, MZ_IMAGEID)
+    mz_imageid = orcl_get_mz_imageid_bf_imageid(bf_imageid)
+    mozuimageurl = "{}{}".format(mozu_files_prefix, mz_imageid)
     res = requests.get(mozuimageurl)
     if res.status_code >= 400:
         return ''
@@ -269,21 +269,21 @@ def orcl_get_mozuimageurl_BF_IMAGEID(BF_IMAGEID, destpath=None):
         return destpath
 
 # Validate new file before insert or perform update function on failed validation, due to duplicate key in DB
-def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
+def orcl_validate_md5checksum(md5checksum, bf_imageid=None):
     import requests
     conn, cur = get_mzimg_oracle_connection()
     #cur = conn
     result = ''
-    if BF_IMAGEID:
-        print 'Not NONE --', BF_IMAGEID
-        cur.execute("SELECT BF_IMAGEID FROM MOZU_IMAGE WHERE MD5CHECKSUM = '{0}' AND BF_IMAGEID = '{1}'".format(MD5CHECKSUM, BF_IMAGEID))
+    if bf_imageid:
+        print 'Not NONE --', bf_imageid
+        cur.execute("SELECT bf_imageid FROM MOZU_IMAGE WHERE md5checksum = '{0}' AND bf_imageid = '{1}'".format(md5checksum, bf_imageid))
         result = cur.fetchone()
     else:
-        print 'NONE --', BF_IMAGEID
-        cur.execute("SELECT BF_IMAGEID FROM MOZU_IMAGE WHERE MD5CHECKSUM = '{0}'".format(MD5CHECKSUM))
+        print 'NONE --', bf_imageid
+        cur.execute("SELECT bf_imageid FROM MOZU_IMAGE WHERE md5checksum = '{0}'".format(md5checksum))
         result = cur.fetchone()
         ## If Value >1
-    print BF_IMAGEID, result,  '--- BF_IMAGEID -- result'
+    print bf_imageid, result,  '--- bf_imageid -- result'
 
     #conn.commit()
     conn.close()
@@ -292,14 +292,14 @@ def orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=None):
     else: return ''
 
 ## Validate file name only
-def orcl_validate_BF_IMAGEID(BF_IMAGEID=None):
+def orcl_validate_bf_imageid(bf_imageid=None):
     import requests
     conn, cur = get_mzimg_oracle_connection()
     #cur = conn
     result = ''
-    if BF_IMAGEID is not None:
-        print 'Not NONE --', BF_IMAGEID
-        cur.execute("SELECT MZ_IMAGEID FROM MOZU_IMAGE WHERE BF_IMAGEID = '{0}'".format(BF_IMAGEID))
+    if bf_imageid is not None:
+        print 'Not NONE --', bf_imageid
+        cur.execute("SELECT mz_imageid FROM MOZU_IMAGE WHERE bf_imageid = '{0}'".format(bf_imageid))
         result = cur.fetchone()
     #conn.commit()
     conn.close()
@@ -310,13 +310,17 @@ def orcl_validate_BF_IMAGEID(BF_IMAGEID=None):
 # if result:
 # try:
 #         mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
-#         MZ_IMAGEID = orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID)
-#         mozuimageurl = "{}{}".format(mozu_files_prefix, MZ_IMAGEID)
-#         return BF_IMAGEID, mozuimageurl,
+#         mz_imageid = orcl_get_mz_imageid_bf_imageid(bf_imageid)
+#         mozuimageurl = "{}{}".format(mozu_files_prefix, mz_imageid)
+#         return bf_imageid, mozuimageurl,
 #     except TypeError:
 #         return ''
 # else:
 #     return ''
+
+###################### Now The Alchemy Way ####################
+
+
 
 #######################
 ##########################################################
@@ -385,10 +389,10 @@ def update_pm_photodate_incr_version_hack(src_filepath):
     res = requests.put(update_url, data=data)
     return res
 ##########################################################
-def main_update_put(BF_IMAGEID, MZ_IMAGEID,MD5CHECKSUM):
+def main_update_put(bf_imageid, mz_imageid,md5checksum):
 
     ## Finally Store New mozuiD and md5checksum
-    orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID,MD5CHECKSUM)
+    orcl_update_bf_imageid_mz_imageid(bf_imageid, mz_imageid,md5checksum)
     return
 ##########################################################
 # ### Main Combined Post or Get -- TODO: --> main_update_put(src_filepath)
@@ -410,49 +414,71 @@ def main_upload_post(src_filepath):
     else:
         src_filepath = magick_convert_to_jpeg(src_filepath, destdir=None)
     if src_basename[:9].isdigit() and ext:
-        BF_IMAGEID = path.basename(src_filepath)  # .split('.')[0]
+        bf_imageid = path.basename(src_filepath)  # .split('.')[0]
     else:
-        BF_IMAGEID = ''
-    MD5CHECKSUM = md5_checksumer(src_filepath)
-    MZ_IMAGEID = ''
-    md5result = orcl_validate_md5checksum(MD5CHECKSUM, BF_IMAGEID=BF_IMAGEID)
-    MZ_IMAGEID = orcl_validate_BF_IMAGEID(BF_IMAGEID=BF_IMAGEID)
+        bf_imageid = ''
+    md5checksum = md5_checksumer(src_filepath)
+    mz_imageid = ''
+
+    args = [
+        {'bf_imageid': bf_imageid },
+        {'mz_imageid': mz_imageid },
+        {'md5checksum': md5checksum }
+        ]
+
+    #md5colorstyle_exists = orcl_validate_md5checksum(md5checksum, bf_imageid=bf_imageid)
+    # 1A Validate md5 # TODO: NEW # sqlalchemy 
+    if bf_imageid: 
+        OLDbf_imageid = select('bf_imageid').where('md5checksum'=md5checksum)
+        if bf_imageid == OLDbf_imageid:  
+            md5colorstyle_exists = md5checksum
+        else: 
+            md5colorstyle_exists = ''
+
+
+    #md5colorstyle_exists = orcl_validate_bf_imageid(bf_imageid=bf_imageid).execute()
+    # 1B Validate bf_imageid_exists # TODO: NEW # sqlalchemy 
+    bf_imageid_exists = select('mz_imageid').where('bf_imageid'=bf_imageid).execute()    
+    if bf_imageid_exists:
+        if bf_imageid_exists.where('md5checksum'!=md5checksum).execute():
+            mz_imageid = select('mz_imageid').where('bf_imageid'=bf_imageid)
+
+
     import json
-    full_json_insert = [
-                {'BF_IMAGEID': BF_IMAGEID },
-                {'MZ_IMAGEID': MZ_IMAGEID },
-                {'MD5CHECKSUM': MD5CHECKSUM }
-                ]
-    json_insert = json.dumps(full_json_insert)
-    ## Finished collecting k/v data to send now send if md5result returns False (meaning we dont have an image for this yet)
-    if not md5result and not MZ_IMAGEID:
+    json_insert = json.dumps(args)
+
+    ## Finished collecting k/v data to send now send if md5colorstyle_exists returns False (meaning we dont have an image for this yet)
+    if not md5colorstyle_exists and not bf_imageid_exists:
         try:
-            MZ_IMAGEID, content_response = upload_productimgs_mozu(src_filepath)
-            orcl_insert_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM)
-            RESULT = 'BF_IMAGEID={}\tMZ_IMAGEID={}\tMD5CHECKSUM={}\n'.format(BF_IMAGEID, MZ_IMAGEID, MD5CHECKSUM).split()
-            mr_logger('/mnt/mozu_upload.txt', RESULT)
-            print RESULT, 'Line-420RESULT'
-            return MZ_IMAGEID, BF_IMAGEID
+            mz_imageid, content_response = upload_productimgs_mozu(src_filepath)
+            orcl_insert_bf_imageid_mz_imageid(bf_imageid, mz_imageid, md5checksum)
+            # 2 Insert # TODO: NEW # sqlalchemy table.insert()
+            printoutput = 'bf_imageid={}\tmz_imageid={}\tmd5checksum={}\n'.format(bf_imageid, mz_imageid, md5checksum).split()
+            mr_logger('/mnt/mozu_upload.txt', printoutput)
+            print printoutput, ' Line-420RESULT'
+            return mz_imageid, bf_imageid
         except TypeError, e:
             print '\n\t...', src_filepath, ' None TypeError --> ', e
             pass
         #finally:
-        #    print('Completed ', BF_IMAGEID, MD5CHECKSUM)
-    elif MZ_IMAGEID and not md5result:
-        updated_MZ_IMAGEID, content_response = upload_productimgs_mozu(src_filepath,MZ_IMAGEID=MZ_IMAGEID)
-        orcl_update_BF_IMAGEID_MZ_IMAGEID(BF_IMAGEID, updated_MZ_IMAGEID, MD5CHECKSUM=MD5CHECKSUM)
+        #    print('Completed ', bf_imageid, md5checksum)
+    elif bf_imageid_exists and not md5colorstyle_exists:
+        updated_mz_imageid, content_response = upload_productimgs_mozu(src_filepath, mz_imageid=mz_imageid)
+        orcl_update_bf_imageid_mz_imageid(bf_imageid, updated_mz_imageid, md5checksum=md5checksum)
+        # 3 Update # TODO: NEW # sqlalchemy table.update()
     else:
-        print md5result, ' \n\t<-- Duplicated - Passing -- Exists -- with --> ', BF_IMAGEID
+        print md5colorstyle_exists, ' \n\t<-- Duplicated - Passing -- Exists -- with --> ', bf_imageid
+
 
 # Query/Display previous/currentDB info
 def main_retrieve_get(**kwargs):
     args_ct=len(kwargs.items())
-    BF_IMAGEID = kwargs.get('BF_IMAGEID')
+    bf_imageid = kwargs.get('bf_imageid')
     mozu_files_prefix = 'http://cdn-stg-sb.mozu.com/11146-m1/cms/files/'
-    MZ_IMAGEID = orcl_get_MZ_IMAGEID_BF_IMAGEID(BF_IMAGEID)
-    mozuimageurl = "{}{}".format(mozu_files_prefix,MZ_IMAGEID)
-    print 'BF_IMAGEID={}\nMZ_IMAGEID={}'.format(BF_IMAGEID, MZ_IMAGEID)
-    return (mozuimageurl, BF_IMAGEID,)
+    mz_imageid = orcl_get_mz_imageid_bf_imageid(bf_imageid)
+    mozuimageurl = "{}{}".format(mozu_files_prefix,mz_imageid)
+    print 'bf_imageid={}\nmz_imageid={}'.format(bf_imageid, mz_imageid)
+    return (mozuimageurl, bf_imageid,)
 
 
 if __name__ == '__main__':
@@ -465,12 +491,12 @@ if __name__ == '__main__':
         result = main_upload_post(src_filepath)
         print "Result --> ", result, src_filepath
     elif sys.argv[1][:9].isdigit() and len(sys.argv[1]) < 20:
-        BF_IMAGEID = sys.argv[1]
+        bf_imageid = sys.argv[1]
         try:
             destpath = sys.argv[2]
             if path.isfile(destpath):
-                orcl_get_mozuimageurl_BF_IMAGEID(BF_IMAGEID, destpath=destpath)
+                orcl_get_mozuimageurl_bf_imageid(bf_imageid, destpath=destpath)
             elif path.isdir(destpath):
-                orcl_get_mozuimageurl_BF_IMAGEID(BF_IMAGEID, destpath=path.join(destpath, BF_IMAGEID))
+                orcl_get_mozuimageurl_bf_imageid(bf_imageid, destpath=path.join(destpath, bf_imageid))
         except IndexError:
             destpath = ''

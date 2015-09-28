@@ -12,6 +12,13 @@ engine = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_de
 mdata = MetaData(bind=engine, quote_schema=True, schema='mz_image')
 Base = declarative_base(bind=engine, metadata=mdata, name='BaseBfyqa1201')
 
+engine = None
+def setup_database(dburl, echo, num):
+    global engine
+    engine = create_engine(dburl, echo=echo)
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+
 class MozuImage(Base):
     __table__     = 'mozu_image'
     # id              = (Integer, Sequence('mozu_image_id_seq'), primary_key=True)
