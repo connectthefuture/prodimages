@@ -109,20 +109,26 @@ def main_upload_post(src_filepath, **kwargs):
     else:
         print md5colorstyle_exists, ' \n\t<-- Duplicated - Passing -- Exists -- with --> ', bf_imageid, bf_imageid_exists
 
-if NEWBFLY_INSERT and not md5colorstyle_exists:
-        try:
-            mz_imageid, content_response = upload_productimgs_mozu(src_filepath)
-            orcl_insert_bf_imageid_mz_imageid(bf_imageid, mz_imageid, md5checksum)
-            # 2 Insert # TODO: NEW # sqlalchemy 
-            insert_update_mozu_image(**args)
-            printoutput = 'bf_imageid={}\tmz_imageid={}\tmd5checksum={}\n'.format(bf_imageid, mz_imageid, md5checksum).split()
-            mr_logger('/mnt/mozu_upload.txt', printoutput)
-            print printoutput, ' Line-420RESULT'
-            return mz_imageid, bf_imageid
-        except TypeError, e:
-            print '\n\t...', src_filepath, ' None TypeError --> ', e
-            pass
+# if NEWBFLY_INSERT and not md5colorstyle_exists:
+#         try:
+#             mz_imageid, content_response = upload_productimgs_mozu(src_filepath)
+#             orcl_insert_bf_imageid_mz_imageid(bf_imageid, mz_imageid, md5checksum)
+#             # 2 Insert # TODO: NEW # sqlalchemy 
+#             insert_update_mozu_image(**args)
+#             printoutput = 'bf_imageid={}\tmz_imageid={}\tmd5checksum={}\n'.format(bf_imageid, mz_imageid, md5checksum).split()
+#             mr_logger('/mnt/mozu_upload.txt', printoutput)
+#             print printoutput, ' Line-420RESULT'
+#             return mz_imageid, bf_imageid
+#         except TypeError, e:
+#             print '\n\t...', src_filepath, ' None TypeError --> ', e
+#             pass
 
+    if bf_imageid_exists and not md5colorstyle_exists:
+        updated_mz_imageid, content_response = upload_productimgs_mozu(src_filepath, mz_imageid=mz_imageid)
+        orcl_update_bf_imageid_mz_imageid(bf_imageid, updated_mz_imageid, md5checksum=md5checksum)
+        # 3 Update # TODO: NEW # sqlalchemy table.update()
+    else:
+        print md5colorstyle_exists, ' \n\t<-- Duplicated - Passing -- Exists -- with --> ', bf_imageid, bf_imageid_exists
 
 def main(**kwargs):
     insert_list = []
@@ -141,9 +147,6 @@ def main(**kwargs):
         insert_records.execute()
         print 'Inserted --> ', args, ' <-- ', insert_records
     # Update
-    
-    
-    
     except:
         print 'IntegrityError ', args
         update_records = mozu_image_table.update(values=dict(**args),whereclause=mozu_image_table.c.bf_imageid==bf_imageid)
