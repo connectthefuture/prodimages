@@ -221,6 +221,7 @@ def main(**kwargs):
                 image_metadata = get_exif_all_data(src_filepath))
 
     # Insert
+    
     try:
         mz_imageid, content_response = upload_productimgs_mozu(src_filepath)
         args['mz_imageid'] == mz_imageid
@@ -230,10 +231,11 @@ def main(**kwargs):
     # Update
     except:
         print 'IntegrityError ', args
+        mz_imageid = mozu_image_table.select('mz_imageid', whereclause=mozu_image_table.c.bf_imageid==bf_imageid)
         updated_mz_imageid, content_response = upload_productimgs_mozu(src_filepath, mz_imageid=mz_imageid)
         update_records = mozu_image_table.update(values=dict(**args),whereclause=mozu_image_table.c.bf_imageid==bf_imageid)
         res = update_records.execute()
-        print 'Updated--> ', args, ' <-- ', update_records
+        print res, 'Updated--> ', args, ' <-- ', update_records
         pass
 
 
