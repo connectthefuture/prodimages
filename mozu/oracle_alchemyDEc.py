@@ -70,8 +70,10 @@ class MozuImagePipeline(object):
         engine = db_engine_create()
         create_mozu_image_table(engine)
         self.Session = sessionmaker(bind=engine)
-        if kwargs.get('list_of_instances'):
-            self.list_of_instances = kwargs.get('list_of_instances')
+        self.list_of_instances = kwargs.get('list_of_instances')
+        if self.list_of_instances:
+            if len(self.list_of_instances) > 1:
+                self.list_of_instances = self.list_of_instances
         else:
             self.list_of_instances = []
 
@@ -93,8 +95,8 @@ class MozuImagePipeline(object):
         return item
 
 
-    def process_multiple_items(Session, list_of_instances):
-        sess = Session()
-        sess.add_all(list_of_instances)
+    def process_multiple_items(self):
+        sess = self.Session()
+        sess.add_all(self.list_of_instances)
         sess.commit()
 
