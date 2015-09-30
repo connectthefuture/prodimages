@@ -14,6 +14,7 @@ DATABASE = {
     'database': 'bfyqa1201'
 }
 
+engine = ''
 def db_engine_create():
     """
     Performs database connection using database settings from DATABASE dict above
