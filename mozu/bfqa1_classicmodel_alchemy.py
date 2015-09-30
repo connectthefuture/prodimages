@@ -218,13 +218,15 @@ def main(**kwargs):
 
     if not md5checksum:
         md5checksum = md5_checksumer(src_filepath)
+    else: 
+        pass
+
     args = dict(bf_imageid  = kwargs.get(bf_imageid), 
                 mz_imageid  = kwargs.get(mz_imageid), 
                 md5checksum = kwargs.get(md5checksum),
                 image_metadata = get_exif_all_data(src_filepath))
 
     # Insert
-    
     try:
         mz_imageid, content_response = upload_productimgs_mozu(src_filepath)
         args['mz_imageid'] == mz_imageid
