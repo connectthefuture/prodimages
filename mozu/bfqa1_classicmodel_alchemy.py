@@ -160,9 +160,10 @@ def magick_convert_to_jpeg(img, destdir=None):
 ## Extracts the image metadata from file
 def get_exif_all_data(src_filepath):
     import exiftool
-    with exiftool.ExifTool() as et:
-        metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
-    return metadata
+    if src_filepath.split('.')[-1].lower() == 'jpg' or 'png':
+        with exiftool.ExifTool() as et:
+            metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
+        return metadata
 
 ### Generic Logger
 def mr_logger(filepath,*args):
@@ -182,12 +183,14 @@ def mr_logger(filepath,*args):
 ### oracle Funcs
 ##
 ########################### Replaced By Alchemy ############################
-
+### DB - oracle Alchemy Funcs and Table Defs
+##
+########################### Replaced By Alchemy ############################
 def mozu_image_table_instance(**kwargs):
     import sqlalchemy, datetime
     from sqlalchemy import Table, Column, Integer, String, DateTime, MetaData, create_engine
     from sqlalchemy import Sequence, FetchedValue, Text
-    #from sqlalchemy.dialects import oracle as oracle_dialect
+    from sqlalchemy.dialects import oracle as oracle_dialect
 
     db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
     engine = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False)
@@ -198,8 +201,8 @@ def mozu_image_table_instance(**kwargs):
         Column('bf_imageid', String(19), unique=True, nullable=False),
         Column('mz_imageid', String(37)), 
         Column('md5checksum', String(32)),
-        Column('created_date', DateTime, server_default=FetchedValue()), 
-        Column('modified_date', DateTime, onupdate=datetime.datetime.now), 
+        Column('created_date', oracle_dialect.DATE, server_default=FetchedValue()), 
+        Column('modified_date', oracle_dialect.DATE, onupdate=datetime.datetime.now), 
         Column('updated_count', Integer, default=0)    
         )
     return mozu_image_table
