@@ -212,7 +212,7 @@ def main(**kwargs):
     #insert_list = []
     # for f in sys.argv:
     #     insert_list.append(f)
-    src_filepath = kwargs.get(src_filepath)
+    src_filepath = kwargs.get('src_filepath')
     image_metadata = get_exif_all_data(src_filepath)
     mozu_image_table = mozu_image_table_instance()
 
@@ -221,9 +221,9 @@ def main(**kwargs):
     else: 
         pass
 
-    args = dict(bf_imageid  = kwargs.get(bf_imageid), 
-                mz_imageid  = kwargs.get(mz_imageid), 
-                md5checksum = kwargs.get(md5checksum),
+    args = dict(bf_imageid  = kwargs.get('bf_imageid'), 
+                mz_imageid  = kwargs.get('mz_imageid'), 
+                md5checksum = kwargs.get('md5checksum'),
                 image_metadata = get_exif_all_data(src_filepath))
 
     # Insert
