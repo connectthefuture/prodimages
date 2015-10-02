@@ -20,9 +20,9 @@ class ImageMetadata(object):
 
 
 def bfyqa1201_engine_creator():
-	db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+    db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
     engine = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False)
-	return engine
+    return engine
 
 #----------------------------------------------------------------------
 def mozu_image_table_instance(**kwargs):
@@ -49,16 +49,17 @@ def image_metadata_table_instance(**kwargs):
     from sqlalchemy import Table, Column, Integer, String, DateTime, MetaData, create_engine, Sequence
     from sqlalchemy import Sequence, FetchedValue, Text
     from sqlalchemy.dialects import oracle as oracle_dialect
-	
-	metadata = MetaData(bind=bfyqa1201_engine_creator()) 
-	image_metadata_table = Table( 'image_metadata', metadata,
+    
+    metadata = MetaData(bind=bfyqa1201_engine_creator()) 
+    image_metadata_table = Table( 'image_metadata', metadata,
         Column('id', Integer, Sequence('image_metadata_seq'), primary_key=True),
         #Column('id', Integer, server_default=FetchedValue(), primary_key=True),
         Column('bf_imageid', String(19), ForeignKey("mozu_image.bf_imageid"),
-		Column('metadata_array', Array, nullable=False)
+        Column('metadata_array', Array, nullable=False)
+    return image_metadata_table
 
 #----------------------------------------------------------------------
-def loadSession(TableClassName,table_instance):
+def loadSession(TableClass,table_instance):
     """"""
     mapper(TableClassName, table_instance)
     Session = sessionmaker(bind=table_instance.metadata.engine)
