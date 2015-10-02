@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os, sys, re, csv
 
 def update_pm_photodate_purepy(colorstyle):
     import requests
