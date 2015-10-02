@@ -1,23 +1,6 @@
 #!/usr/bin/env python
 import os, sys, re, csv
 
-def update_pm_photodate(colorstyle):
-    import subprocess
-    update_url = 'http://dmzimage01.l3.bluefly.com:8080/photo/{0}'.format(colorstyle)
-
-    subprocess.call([
-    "curl",
-    '-d',
-    "sample_image=Y",
-    '-d',
-    "photographed_date=now",
-    "-X",
-    "PUT",
-    "-format",
-    update_url,
-    ])
-
-
 def update_pm_photodate_purepy(colorstyle):
     import requests
     update_url = 'http://dmzimage01.l3.bluefly.com:8080/photo/{0}'.format(colorstyle)
@@ -27,8 +10,14 @@ def update_pm_photodate_purepy(colorstyle):
 
 
 if __name__ == '__main__':
-    import sys
-    r = update_pm_photodate(sys.argv[1])
-
-
+    import sys, re
+    try:
+        valid_colorstyle = sys.argv[1]
+        if len(valid_colorstyle) == 9 and valid_colorstyle.isdigit():
+            r = update_pm_photodate_purepy(valid_colorstyle)
+            print 'Results... ', r
+        else:
+            raise IndexError()
+    except IndexError:
+        print('You need to provide a valid 9-digit Colorstyle,\vbut you didnt.')
 
