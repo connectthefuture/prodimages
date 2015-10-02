@@ -15,7 +15,10 @@ if __name__ == '__main__':
         valid_colorstyle = sys.argv[1]
         if len(valid_colorstyle) == 9 and valid_colorstyle.isdigit():
             r = update_pm_photodate_purepy(valid_colorstyle)
-            print 'Results... ', r
+            if r.status_code == 200:
+                print 'Successfully Sent... ', valid_colorstyle
+            else:
+                print 'Backend Issue Prevented Sending Data... ', r
         else:
             raise IndexError()
     except IndexError:
