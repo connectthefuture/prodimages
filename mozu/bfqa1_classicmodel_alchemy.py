@@ -160,7 +160,7 @@ def magick_convert_to_jpeg(img, destdir=None):
 ## Extracts the image metadata from file
 def get_exif_all_data(src_filepath):
     import exiftool
-    if src_filepath.split('.')[-1].lower() == 'jpg' or 'png':
+    if type(src_filepath) is not None and src_filepath.split('.')[-1].lower() == 'jpg' or 'png':
         with exiftool.ExifTool() as et:
             metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
         return metadata
@@ -222,8 +222,8 @@ def main(**kwargs):
         pass
 
     args = dict(bf_imageid  = kwargs.get('bf_imageid'), 
-                mz_imageid  = kwargs.get('mz_imageid'), 
-                md5checksum = kwargs.get('md5checksum'),
+                mz_imageid  = kwargs.get('mz_imageid', 'NA'), 
+                md5checksum = kwargs.get('md5checksum', 'NA'),
                 image_metadata = get_exif_all_data(src_filepath))
 
     # Insert
