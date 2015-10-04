@@ -28,6 +28,10 @@ def get_mozu_authtoken(tenant_url):
     return auth["accessToken"]
 
 # Upload and Return MozuID
+#### Mozu Connection + Upload New Images
+# db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+# conn = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False
+# Upload and Return MozuID
 def upload_productimgs_mozu(src_filepath):
     import requests, json
     import os.path as path
@@ -72,17 +76,27 @@ def upload_productimgs_mozu(src_filepath):
         headers["Content-type"] = mimetype
         print document_id, ' <-- DocId 409 Code Numero 1'
         print 'LOCOS -->', locals()
+        
         db_query = mozu_image_table_instance().select().where(bf_imageid==bf_imageid).execute()
-        mz_imageid = db_query.fetchone()['mz_imageid'] #['mz_imageid'], ' <-- mz_imageid'
-        print mz_imageid, ' <--- R1'
-        if mz_imageid is not None:
-            print 'Old MozuID Retrieved from ORCL -> Dir ', dir(mz_imageid)
-            documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + mz_imageid + "/content"
+        r1 = db_query.fetchone() #['mz_imageid'], ' <-- mz_imageid'
+        old_mz_imageid = r1['mz_imageid']
+        old_md5checksum = r1['md5checksum']
+        print old_mz_imageid, ' <--- R1'
+        if old_mz_imageid is not None:
+            print 'Old MozuID Retrieved from ORCL', dir(old_mz_imageid)
+            documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + old_mz_imageid + "/content"
             # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
             file_data = open(src_filepath, 'rb').read()
             headers["Content-type"] = mimetype #"image/png";
-            content_response = requests.put(documentUploadApi, data=file_data, headers=headers, verify=False);
-            document = content_response.json()
+            print old_mz_imageid , 'MZID then docid itercontent stuff'
+            #print dir(document_response)
+            update_content_response = requests.put(documentUploadApi, data=file_data, headers=headers, verify=False);
+            print update_content_response.status_code, update_content_response.headers
+#             ext = bf_imageid.split('.')[-1]
+#             document    = ''
+#             document_id = ''
+#             document_payload = {'listFQN' : 'files@mozu', 'documentTypeFQN' : 'image@mozu', 'name' : bf_imageid, 'extension' : ext}
+            document = update_content_response.json()
             document_id = document["id"]
             print document_id, ' <-- DocId 409 Code'
             print '409 Err --> Bluefly Filename Already in Mozu, if you are trying to update the image, this is not the way.\n\t%s' % src_filepath
@@ -93,9 +107,9 @@ def upload_productimgs_mozu(src_filepath):
             ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
             return document_id, content_response
         else:
-            print 'MZID is None', bf_imageid
+            print 'MZID is None'
     else:
-        print 'Failed with code --> ', document_response.status_code
+        print 'No Mozuid in DB, Failed with code --> ', document_response.status_code
         
 
 
@@ -249,19 +263,13 @@ def mozu_image_table_instance(**kwargs):
 ###########################
 ######################################################
 ###########################
-### Main - Conditions
-
+### Main - Conditions ##
 def main(insert_list_filepaths):
     #insert_list = []
     # for f in sys.argv:
     #     insert_list.append(f)
-    images_insert_list = []
-    if len(insert_list_filepaths):
-        images_insert_list = kwargs.get('insert_list_filepaths')
-    else:
-        images_insert_list.append(kwargs.get('src_filepath'))
-
-    images_insert_dict = compile_data_db_import(images_insert_list)
+    import sqlalchemy
+    images_insert_dict = compile_data_db_import(insert_list_filepaths)
     # Insert
     for k,v in images_insert_dict.iteritems():
         bf_imageid = v['bf_imageid']
@@ -272,13 +280,13 @@ def main(insert_list_filepaths):
         try:
             mz_imageid, content_response = upload_productimgs_mozu(k)
             v['mz_imageid'] = mz_imageid
-            insert_records = mozu_image_table.insert(**v)
+            insert_records = mozu_image_table.insert(values=dict(**v))
             insert_records.execute()
-            print 'Inserted --> ', args, ' <-- ', insert_records
+            print 'Inserted --> ', v.items(), ' <-- ', insert_records
         # Update
-        except IndexError:
+        except sqlalchemy.exc.IntegrityError:
             print 'IntegrityError ', v
-            old_mz_imageid = mozu_image_table.select('mz_imageid', whereclause=(
+            old_mz_imageid = mozu_image_table.select(whereclause=(
                                                                 (mozu_image_table.c.bf_imageid == v['bf_imageid']) 
                                                                 &
                                                                 (mozu_image_table.c.md5checksum <> v['md5checksum'])
@@ -291,6 +299,7 @@ def main(insert_list_filepaths):
             res = update_records.execute()
             print res, 'Updated--> ', v.items(), ' <-- ', update_records
             pass
+
 
 
 
