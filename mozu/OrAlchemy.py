@@ -93,7 +93,7 @@ def upload_productimgs_mozu(src_filepath):
             ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
             return document_id, content_response
         else:
-            print 'MZID is None'
+            print 'MZID is None', bf_imageid
     else:
         print 'Failed with code --> ', document_response.status_code
         
@@ -276,7 +276,7 @@ def main(insert_list_filepaths):
             insert_records.execute()
             print 'Inserted --> ', args, ' <-- ', insert_records
         # Update
-        except:
+        except IndexError:
             print 'IntegrityError ', v
             old_mz_imageid = mozu_image_table.select('mz_imageid', whereclause=(
                                                                 (mozu_image_table.c.bf_imageid == v['bf_imageid']) 
