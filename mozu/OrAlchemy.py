@@ -76,7 +76,7 @@ def upload_productimgs_mozu(src_filepath):
         mz_imageid = db_query.fetchone()['mz_imageid'] #['mz_imageid'], ' <-- mz_imageid'
         print mz_imageid, ' <--- R1'
         if mz_imageid is not None:
-            print 'Old MozuID Retrieved from ORCL', dir(mz_imageid)
+            print 'Old MozuID Retrieved from ORCL -> Dir ', dir(mz_imageid)
             documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + mz_imageid + "/content"
             # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
             file_data = open(src_filepath, 'rb').read()
