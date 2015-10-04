@@ -7,9 +7,6 @@
 #### Mozu Connection + Upload New Images
 # db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
 # conn = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False)
-###########################
-######################################################
-###########################
 #### Mozu Auth - Upload - GetKey ####
 def get_mozu_authtoken(tenant_url):
     import requests, json
@@ -19,6 +16,7 @@ def get_mozu_authtoken(tenant_url):
     headers = {'Content-type': 'application/json',
                'Accept-Encoding': 'gzip, deflate'}
     auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
+
     auth_response = requests.post(auth_url, data=json.dumps(auth_request), headers=headers, verify=False)
     # parse params from filepath
     # TODO: 5) add Validation(regex) to prevent unwanted updates
@@ -30,7 +28,7 @@ def get_mozu_authtoken(tenant_url):
     return auth["accessToken"]
 
 # Upload and Return MozuID
-def upload_productimgs_mozu(src_filepath, mz_imageid=None):
+def upload_productimgs_mozu(src_filepath):
     import requests, json
     import os.path as path
     tenant_url = "https://t11146.staging-sb.mozu.com/"
@@ -74,9 +72,11 @@ def upload_productimgs_mozu(src_filepath, mz_imageid=None):
         headers["Content-type"] = mimetype
         print document_id, ' <-- DocId 409 Code Numero 1'
         print 'LOCOS -->', locals()
-        mz_imageid = mozu_image_table_instance(bf_imageid)
+        db_query = mozu_image_table_instance().select().where(bf_imageid==bf_imageid).execute()
+        mz_imageid = db_query.fetchone()['mz_imageid'] #['mz_imageid'], ' <-- mz_imageid'
+        print mz_imageid, ' <--- R1'
         if mz_imageid is not None:
-            print 'Old MozuID Retrieved from ORCL', mz_imageid
+            print 'Old MozuID Retrieved from ORCL', dir(mz_imageid)
             documentUploadApi = tenant_url + "/api/content/documentlists/files@mozu/documents/" + mz_imageid + "/content"
             # files = {'media': open("c:\mozu-dc-logo.png", "rb")};
             file_data = open(src_filepath, 'rb').read()
@@ -91,11 +91,13 @@ def upload_productimgs_mozu(src_filepath, mz_imageid=None):
             ## TODO  2)  Update Mozu stored image using main_update_put(src_filepath), sending to an "update" endpoint(need to get uri)
             ## TODO: 3)  Update PGSQL MOZUID + MD5
             ## TODO: 4)  Bust image cache on updates in MOZU by forcing MEDIA_VERSION to increment -- Need API endpoint to PM or its going to be super hackey.
-            pass
+            return document_id, content_response
         else:
             print 'MZID is None'
     else:
         print 'Failed with code --> ', document_response.status_code
+        
+
 
 ###########################
 ######################################################
