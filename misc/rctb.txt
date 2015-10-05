@@ -84,7 +84,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###
 ##########
 ## Remote Dropbox RSync prodimages.ny.bluefly.com <--> ProdJohn8.bluefly.corp ##
-* * * * * rsync -avzru /root/DropboxSync/bflyProdimagesSync/ johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ &&  rsync -avzru johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ /root/DropboxSync/bflyProdimagesSync/ 2>&1 >  /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log
+* * * * * rsync -avzru /root/DropboxSync/bflyProdimagesSync/ johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ &&  rsync -avzru johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ /root/DropboxSync/bflyProdimagesSync/ 2>&1 >>  /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log && echo "Sync Completed at `date`"  >>  /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log
 ##########
 ##
 #
