@@ -82,6 +82,10 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 13 6,15 * * * ps aux | grep x_vendorget_module_cronjobDloader | awk '{print $2}' | xargs kill
 15 4,18 * * * ps aux | grep walkdir_fix_exiv2_csv | awk '{print $2}' | xargs kill
 ###
+##########
+## Remote DropboxSync prodimages.ny.bluefly.com <--> ProdJohn8.bluefly.corp ##
+* * * * * rsync -avzru /root/DropboxSync/bflyProdimagesSync/ johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ &&  rsync -avzru johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ /root/DropboxSync/bflyProdimagesSync/ 2>&1 >  /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log
+##########
 ##
 #
 ##################################################################
