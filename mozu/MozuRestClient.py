@@ -23,14 +23,16 @@ class MozuRestClient:
         import os.path as path
         import requests, json
         #super(MozuRestClient, self).__init__()
-        # Auth / Connect / HTTP Status
         
+        # Auth / Connect / HTTP Status - Globalized
         global http_status_code
         http_status_code = 0
         self.http_status_code = http_status_code
         #self.accessToken, self.http_status_code = get_mozu_client_authtoken()
         self.accessToken = get_mozu_client_authtoken()
-        self.mz_imageid = kwargs.get('mz_imageid', '')
+        global mz_imageid
+        mz_imageid = kwargs.get('mz_imageid', '')
+        self.mz_imageid = mz_imageid
         
         ### Mozu Defaults and Creds
         self.listFQN = 'files@mozu'
@@ -39,7 +41,9 @@ class MozuRestClient:
 
         self.tenant_url = "https://t{0}.staging-sb.mozu.com/".format(self.tenant_name)
         self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
-        self.document_content_api = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+        global document_content_api
+        self.document_content_api = '' # self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+        self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
         
         ## FileContent
         self.src_filepath = kwargs.get('src_filepath', '')        
@@ -79,7 +83,10 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = self.mimetype
         stream = open(self.src_filepath, 'rb').read()
-        content_response = requests.put(self.document_content_api, stream=stream, headers=self.headers, verify=False)
+        _document_content_api = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+        self.document_content_api = _document_content_api
+        print _document_content_api, self.document_content_api
+        content_response = requests.put(self.document_content_api, data=stream, headers=self.headers, verify=False)
         self.http_status_code = content_response.status_code
         print "ContentPutResponse: %s" % content_response.status_code
         return content_response
@@ -121,4 +128,3 @@ class MozuRestClient:
             return _document_response
         
         #files = {'media': open(src_filepath, 'rb')}
-
