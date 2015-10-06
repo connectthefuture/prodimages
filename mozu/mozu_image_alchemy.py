@@ -44,6 +44,7 @@ def mozu_image_table_instance(**kwargs):
         )
     return mozu_image_table
 
+
 def image_metadata_table_instance(**kwargs):
     import sqlalchemy, datetime
     from sqlalchemy import Table, Column, Integer, String, DateTime, MetaData, create_engine, Sequence
@@ -58,7 +59,27 @@ def image_metadata_table_instance(**kwargs):
         Column('metadata_array', Array, nullable=False)
     return image_metadata_table
 
+
+
 #----------------------------------------------------------------------
+'x-vol-catalog'         = ''    ##  request and     response
+'x-vol-master-catalog'  = ''    ##  request and     response
+'x-vol-site'         = ''       ##  request and     response
+'x-vol-tenant'       = ''       ##  request and     response
+'x-vol-site-domain'  = ''       ##  request and     response
+'x-vol-tenant-domain'= ''       ##  request and     response
+'x-vol-has-error'    = ''       ##  --  --  --      response
+'x-vol-user-claims'  = ''       ##  request
+'x-vol-app-claims'   = ''       ##  request
+'x-vol-correlation'  = ''       ##  request
+'x-vol-dataview-mode'= ''       ##  request
+'x-vol-accept'       = ''       ##  request
+'x-vol-Content-Type' = ''       ##  request and     response
+#----------------------------------------------------------------------
+
+
+
+
 def loadSession(TableClass,table_instance):
     """"""
     mapper(TableClassName, table_instance)
