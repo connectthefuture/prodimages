@@ -15,14 +15,14 @@ def get_mozu_client_authtoken():
         _auth = _auth_response.json()
         print "Auth Ticket: %s" % _auth["accessToken"]
         return _auth["accessToken"] #, _auth_response.status_code
-    
+ 
 class MozuRestClient:
     """docstring for MozuRestClient"""
     
     def __init__(self, **kwargs):
         import os.path as path
         import requests, json
-        #super(MozuRestClient, self).__init__()
+        
         
         # Auth / Connect / HTTP Status - Globalized
         global http_status_code
@@ -57,7 +57,8 @@ class MozuRestClient:
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext}        
         self.document_response = ''
-
+        super(MozuRestClient, self).__init__(**kwargs)
+        
 
     def __repr__(self):
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
@@ -101,7 +102,6 @@ class MozuRestClient:
             return _document_response.json()['id']
         except KeyError:
             return _document_response
-        
         
     ## GET - Document
     def get_mz_image(self):
