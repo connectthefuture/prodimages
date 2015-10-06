@@ -71,7 +71,7 @@ class MozuRestClient:
             return _document_response.json()['id']
         except KeyError:
             return _document_response
-        
+
     ## PUT - Content stream - Send file 
     def send_content(self):
         import requests, json
@@ -81,7 +81,7 @@ class MozuRestClient:
         self.http_status_code = content_response.status_code
         print "ContentPutResponse: %s" % content_response.status_code
         return content_response
-    
+
     ## UPDATE - PUT Document
     def update_mz_image(self):
         import requests, json
@@ -92,8 +92,7 @@ class MozuRestClient:
             return _document_response.json()['id']
         except KeyError:
             return _document_response
-        
-        
+
     ## GET - Document
     def get_mz_image(self):
         import requests, json
@@ -105,7 +104,7 @@ class MozuRestClient:
             return _document_response.json()
         except KeyError:
             return _document_response
-        
+
     ## DELETE - Document
     def delete_mz_image(self):
         import requests, json
