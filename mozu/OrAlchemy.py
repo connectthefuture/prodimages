@@ -303,3 +303,94 @@ def main(insert_list_filepaths):
 
 
 
+
+
+
+
+
+
+
+class MozuRestClient:
+    """docstring for MozuRestClient"""
+    import os.path as path
+    import requests, json
+    def __init__(self, **kwargs):
+        #super(MozuRestClient, self).__init__()
+        self.accessToken = self.get_mozu_authtoken()
+        #
+        self.src_filepath = kwargs.get('src_filepath', '')        
+        self.mz_imageid = kwargs.get('mz_imageid', '')
+        # self.new_mz_imageid = ''
+        self.bf_imageid   = path.basename(self.src_filepath) #[:-1]
+        self.ext = self.bf_imageid.split('.')[-1]
+        self.mimetype = "image/{}".format(ext.lower().replace('jpg','jpeg'))
+        
+        self.listFQN = 'files@mozu'
+        self.documentTypeFQN = 'image@mozu'
+        self.tenant_name = '11146'
+
+        self.tenant_url = "https://t{0}.staging-sb.mozu.com/".format(self.tenant_name)
+        self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
+        self.document_content_api = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+        self.qstring_filter = kwargs.get('qstring_filter', '')
+
+        self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
+
+        self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext}        
+        self.document_response = ''
+
+    def __repr__(self):
+        print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
+        return self.mz_imageid, self.bf_imageid
+
+    def get_mozu_authtoken(self):
+        #  "http://requestb.in/q66719q6" #
+        _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
+        _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
+        _auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
+        _auth_response = requests.post(_auth_url, data=json.dumps(_auth_request), headers=_auth_headers, verify=False)
+        # TODO: 5) add Validation(regex) to prevent unwanted updates
+        print "Auth Response: %s" % _auth_response.status_code
+        _auth_response.raise_for_status()
+        _auth = _auth_response.json()
+        print "Auth Ticket: %s" % _auth["accessToken"]
+        return _auth["accessToken"]
+
+    ## POST
+    def create_new_mz_image(self):
+        self.headers["Content-type"] = 'application/json'
+        _document_response = requests.post(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        print "DocumentPostResponse: " % _document_response.status_code
+        return _document_response.json()['id']
+    ## PUT
+    def send_content(self):
+        self.headers["Content-type"] = self.mimetype
+        _file_data = open(self.src_filepath, 'rb').read()
+        content_response = requests.put(self.document_content_api, data=_file_data, headers=self.headers, verify=False)
+        print "ContentPutResponse: " % content_response.status_code
+        return content_response
+    ## GET
+    def get_mz_image(self):
+        self.headers["Content-type"] = 'application/json'
+        _document_response = requests.get(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        print "DocumentGetResponse: " % _document_response.status_code
+        return _document_response.json()
+    ## UPDATE
+    def update_mz_image(self):
+        self.headers["Content-type"] = 'application/json'
+
+        _document_response = requests.put(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        return _document_response.json()['id']
+    ## DELETE
+    def delete_mz_image(self):
+        self.headers["Content-type"] = 'application/json'
+        _document_response = requests.delete(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        print "DocumentDeleteResponse: " % _document_response.status_code
+        return _document_response.json()
+
+        #files = {'media': open(src_filepath, 'rb')}
+        
+        
+
+
+

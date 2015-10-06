@@ -1,4 +1,4 @@
-#!/usr/bin/env python[]
+#!/usr/bin/env python
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.url import URL
