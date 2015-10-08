@@ -15,15 +15,19 @@ def get_mozu_client_authtoken():
         _auth = _auth_response.json()
         print "Auth Ticket: %s" % _auth["accessToken"]
         return _auth["accessToken"] #, _auth_response.status_code
- 
+
+class MozuBflyImage:
+    pass
+
+class MozuAlchemyClient
+    pass
+
 class MozuRestClient:
     """docstring for MozuRestClient"""
-    
+
     def __init__(self, **kwargs):
         import os.path as path
-        import requests, json
-        
-        
+        import requests, json        
         # Auth / Connect / HTTP Status - Globalized
         global http_status_code
         http_status_code = 0
@@ -128,3 +132,7 @@ class MozuRestClient:
             return _document_response
         
         #files = {'media': open(src_filepath, 'rb')}
+
+
+
+
