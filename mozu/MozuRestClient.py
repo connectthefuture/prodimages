@@ -47,7 +47,8 @@ class MozuRestClient:
         self.tenant_url = "https://t{0}.staging-sb.mozu.com/".format(self.tenant_name)
         self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
         global document_content_api
-        self.document_content_api = '' # self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+        document_content_api = ''
+        self.document_content_api = document_content_api # self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
         self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
         
         ## FileContent
