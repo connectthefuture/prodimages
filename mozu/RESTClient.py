@@ -150,11 +150,6 @@ class MozuRestClient:
 
 
 ## Use Classes - Could be in separate file
-# Functions using Class
-#snd.mz_imageid
-#snd.send_content()
-#print snd.http_status_code
-#restclient().get_mz_image()
 
 
 def count_total__files_documents(MozuRestClient,mz_imageid):
@@ -177,10 +172,18 @@ def list_files_documents(MozuRestClient,mz_imageid):
 #     return image_data
 
 
-def update_tags_mz_image(MozuRestClient,mz_imageid):
-    mzclient = MozuRestClient(mz_imageid=mz_imageid,tags=kwargs.get('tags',''))
+def update_tags_mz_image(MozuRestClient,mz_imageid,**kwargs):
+    tags = kwargs.get('tags','')
+    mzclient = MozuRestClient(mz_imageid=mz_imageid,tags=tags)
     update_resp = update_tags_mz_image(MozuRestClient, mz_imageid)
     return update_resp
+
+
+def update_content_mz_image(MozuRestClient,src_filepath=None,mz_imageid=None,**kwargs):
+    tags = kwargs.get('tags','')
+    mzclient = MozuRestClient(mz_imageid=mz_imageid,src_filepath=src_filepath,tags=tags)
+    update_resp = update_tags_mz_image(MozuRestClient, mz_imageid)
+    return update_res
 
 
 def delete_document(MozuRestClient,mz_imageid):
@@ -190,8 +193,9 @@ def delete_document(MozuRestClient,mz_imageid):
     return delete_resp.headers
 
 
-def upload_new(MozuRestClient,src_filepath,tags=kwargs.get('tags','')):
-    mzclient = MozuRestClient(src_filepath=src_filepath)
+def upload_new(MozuRestClient,src_filepath,**kwargs):
+    tags=kwargs.get('tags','')
+    mzclient = MozuRestClient(src_filepath=src_filepath,tags=tags)
     doc_resp = mzclient.create_new_mz_image()
     return doc_resp
 
