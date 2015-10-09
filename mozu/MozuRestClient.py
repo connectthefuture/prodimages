@@ -19,7 +19,7 @@ def get_mozu_client_authtoken():
 class MozuBflyImage:
     pass
 
-class MozuAlchemyClient
+class MozuAlchemyClient:
     pass
 
 class MozuRestClient:
