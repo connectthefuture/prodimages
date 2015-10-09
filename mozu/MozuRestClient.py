@@ -28,6 +28,7 @@ class MozuRestClient:
     def __init__(self, **kwargs):
         import os.path as path
         import requests, json        
+        
         # Auth / Connect / HTTP Status - Globalized
         global http_status_code
         http_status_code = 0
@@ -61,7 +62,7 @@ class MozuRestClient:
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext}        
         self.document_response = ''
-        super(MozuRestClient, self).__init__(**kwargs)
+        #super(MozuRestClient, self).__init__(**kwargs)
         
 
     def __repr__(self):
@@ -132,6 +133,7 @@ class MozuRestClient:
             return _document_response
         
         #files = {'media': open(src_filepath, 'rb')}
+
 
 
 
