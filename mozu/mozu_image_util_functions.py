@@ -128,8 +128,9 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
         except TypeError: 
             print 'TYPE Error'
             pass
-
+        print type(img)
         instance_properties[img] = { "bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', 'NA'), "md5checksum": md5checksum, "tags": list(set(sorted(tags))) }
+
         return instance_properties
 
 ###########################
