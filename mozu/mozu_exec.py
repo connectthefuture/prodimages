@@ -23,14 +23,13 @@ def download_document_content(MozuRestClient,mz_imageid,outfile=None):
     if not mzclient.bf_imageid:
         # Get bflyid from Oracle using mz_id
         from db import mozu_image_table_instance
-        bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == mzclient.mz_imageid) ) )[0]['bf_imageid']
+        bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == mzclient.mz_imageid) ) )[0]['bf_imageid']
         mzclient.bf_imageid = bf_imageid
     if not outfile:
         outfile = path.join('/tmp', mzclient.bf_imageid)
     else: pass
     with open(outfile,'w') as f:
         f.write(image_content)
-    
     return path.abspath(outfile)
 
 def read_document_content_headers(MozuRestClient,mz_imageid):
@@ -51,7 +50,7 @@ def upsert_content_mz_image(MozuRestClient,src_filepath=None,mz_imageid=None,**k
     tags = kwargs.get('tags','')
     mzclient = MozuRestClient(mz_imageid=mz_imageid,src_filepath=src_filepath,tags=tags)
     update_resp = update_tags_mz_image(MozuRestClient, mz_imageid)
-    return update_res
+    return update_resp
 
 # DELETE - Delete Image/DocumentContent
 def delete_document_content(MozuRestClient,mz_imageid):
@@ -90,7 +89,7 @@ def main(insert_list_filepaths):
 
         try:
             mozu_client = MozuRestClient(dict(**v))
-            mz_imageid = upload_new(client,src_filepath)
+            mz_imageid = upload_new(mozu_client,src_filepath)
             load_content_resp = upsert_content_mz_image(mozu_client, src_filepath=src_filepath,tags=tags) 
             if load_content_resp.http_status_code < 400:
                 v['mz_imageid'] = mz_imageid
@@ -99,7 +98,7 @@ def main(insert_list_filepaths):
                 print 'Inserted --> ', v.items(), ' <-- ', insert_db
             elif load_content_resp.http_status_code == 409:
                 mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-                upsert_content_resp = upsert_content_mz_image(mozu_client,dict(**v)):
+                upsert_content_resp = upsert_content_mz_image(mozu_client,dict(**v))
                 if upsert_content_resp.http_status_code < 300:
                     update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                 res = update_db.execute()

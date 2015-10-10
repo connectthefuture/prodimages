@@ -3,7 +3,7 @@
 
 def get_mozu_client_authtoken():
         #  "http://requestb.in/q66719q6" #
-        import os.path as path
+        # import os.path as path
         import requests, json
         _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
         _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
