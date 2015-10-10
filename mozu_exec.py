@@ -116,7 +116,7 @@ def main(insert_list_filepaths):
                 update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                 res = update_db.execute()
             print res, 'Updated with Integrity Errors --> ', v.items(), ' <-- ', update_db
-            pass
+            #pass
 
 ## Run in shell as mozu_exec.py *args
 if __name__ == '__main__':
