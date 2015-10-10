@@ -1,17 +1,38 @@
+#!/usr/bin/env python
 # coding: utf-8
+
 from sqlalchemy import create_engine, Column, MetaData, Table
 from sqlalchemy import Integer, String, Text
 from sqlalchemy import Sequence, FetchedValue
 from sqlalchemy.dialects import oracle as oracle_dialect
 from sqlalchemy.orm import mapper, sessionmaker
-from bfqa1_classicmodel_alchemy import mozu_image_table_instance
+from sqlalchemy.engine.url import URL
+
+
+#----------------------------------------------------------------------
+DATABASE = {
+    'drivername': 'cx_oracle',
+    'host': 'qarac201-vip.qa.bluefly.com',
+    'port': '1521',
+    'username': 'MZIMG',
+    'password': 'p1zza4me',
+    'database': 'bfyqa1201'
+}
+
+#----------------------------------
+
+def bfyqa1201_engine_creator():
+    db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+    engine = sqlalchemy.create_engine(URL(**settings.DATABASE), implicit_returning=False, coerce_to_decimal=False)
+    return engine
+
 #----------------------------------------------------------------------
 
 class ProductColor(object):
     pass
 
 
-class MozuImage_(object):
+class MozuImage(object):
     pass
 
 
@@ -19,10 +40,6 @@ class ImageMetadata(object):
     pass
 
 
-def bfyqa1201_engine_creator():
-    db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
-    engine = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False)
-    return engine
 
 #----------------------------------------------------------------------
 def mozu_image_table_instance(**kwargs):
@@ -76,8 +93,6 @@ def image_metadata_table_instance(**kwargs):
 'x-vol-accept'       = ''       ##  request
 'x-vol-Content-Type' = ''       ##  request and     response
 #----------------------------------------------------------------------
-
-
 
 
 def loadSession(TableClass,table_instance):
