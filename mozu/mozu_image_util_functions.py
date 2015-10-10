@@ -111,6 +111,7 @@ def get_exif_all_data(src_filepath):
 
 ## Compile Inserts as dict with key == bluefly file name
 def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
+    import json
     instance_properties = {}
     for img in list_of_images:
         bf_imageid = img.split('/')[-1]
@@ -130,7 +131,7 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
             print 'TYPE Error'
             pass
         print type(img)
-        instance_properties[img] = { "bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', 'NA'), "md5checksum": md5checksum, "tags": tags }
+        instance_properties[img] = json.dumps({ "bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', 'NA'), "md5checksum": md5checksum, "tags": json.dumps(tags) })
 
         return instance_properties
 
