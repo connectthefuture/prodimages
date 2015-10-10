@@ -109,7 +109,7 @@ def main(insert_list_filepaths):
         # Update
         except sqlalchemy.exc.IntegrityError:
             print 'IntegrityError ', v
-            mozu_client = MozuRestClient(dict(**v))
+            mozu_client = MozuRestClient(**v)
             mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
             upsert_content_resp = upsert_content_mz_image(mozu_client,dict(**v))
             if upsert_content_resp.http_status_code < 300:
