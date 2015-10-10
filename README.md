@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/2cab839e85084141bc628b3b39276ead)](https://www.codacy.com/app/relic7/mozu_img)
+
 # README #
 
 This README would normally document whatever steps are necessary to get your application up and running.
