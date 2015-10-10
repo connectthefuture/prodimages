@@ -78,20 +78,22 @@ def mozu_image_table_instance(**kwargs):
 ###########################
 ### Main - Conditions ##
 def main(insert_list_filepaths):
-    #insert_list = []
-    # for f in sys.argv:
-    #     insert_list.append(f)
     import sqlalchemy
-    images_insert_dict = compile_data_db_import(insert_list_filepaths)
-    # Insert
-    for k,v in images_insert_dict.iteritems():
+    from mozu_image_util_functions import *
+    from RESTClient import MozuRestClient
+    compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
+    
+    for k,v in compiled_instance_vars.iteritems():
+        src_filepath = k 
         bf_imageid = v['bf_imageid']
         mz_imageid = v['mz_imageid']
         md5checksum = v['md5checksum']
+        tags        = v['tags']
         #image_metadata = v['image_metadata']
         mozu_image_table = mozu_image_table_instance()
         try:
-            mz_imageid, content_response = upload_productimgs_mozu(k)
+            mz_imageid = upload_new(MozuRestClient,src_filepath)
+            load_content_resp = upsert_content_mz_image(src_filepath=src_filepath,tags=tags) 
             v['mz_imageid'] = mz_imageid
             insert_records = mozu_image_table.insert(values=dict(**v))
             insert_records.execute()
@@ -99,15 +101,9 @@ def main(insert_list_filepaths):
         # Update
         except sqlalchemy.exc.IntegrityError:
             print 'IntegrityError ', v
-            old_mz_imageid = mozu_image_table.select(whereclause=(
-                                                                (mozu_image_table.c.bf_imageid == v['bf_imageid']) 
-                                                                &
-                                                                (mozu_image_table.c.md5checksum <> v['md5checksum'])
-                                                                )
-                                                    )
-            #updated_mz_imageid, content_response = upload_productimgs_mozu(k, mz_imageid=old_mz_imageid)
-            updated_mz_imageid =  v['mz_imageid'].replace('-','_')
-            v['mz_imageid'] = updated_mz_imageid
+            old_mz_imageid = mozu_image_table.select(
+                whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid'])  & (mozu_image_table.c.md5checksum <> v['md5checksum']) )
+                )
             update_records = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
             res = update_records.execute()
             print res, 'Updated--> ', v.items(), ' <-- ', update_records
@@ -117,7 +113,7 @@ if __name__ == '__main__':
     import sys
     import os.path as path
     if path.isfile(sys.argv[1]):
-        src_filepath = '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
-
+        insert_list_filepaths =  sys.argv[1] ##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
+        main([insert_list_filepaths])
 
 
