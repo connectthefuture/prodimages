@@ -21,6 +21,7 @@ def download_document_content(MozuRestClient,mz_imageid,outfile=None):
     mzclient = MozuRestClient(mz_imageid=mz_imageid)
     image_content = mzclient().get_mz_image()
     if not mzclient.bf_imageid:
+        # Get bflyid from Oracle using mz_id
         from db import mozu_image_table_instance
         bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == mzclient.mz_imageid) ) )[0]['bf_imageid']
         mzclient.bf_imageid = bf_imageid
