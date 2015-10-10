@@ -128,6 +128,7 @@ if __name__ == '__main__':
             for arg in sys.argv:
                 insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'    
         insert_list_filepaths = list(set(sorted(insert_list)))
+        print(insert_list_filepaths)
         main(insert_list_filepaths)
     except IndexError:
         print("To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args")
