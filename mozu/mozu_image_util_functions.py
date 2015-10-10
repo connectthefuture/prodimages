@@ -111,7 +111,6 @@ def get_exif_all_data(src_filepath):
 
 ## Compile Inserts as dict with key == bluefly file name
 def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
-    import json
     instance_properties = {}
     for img in list_of_images:
         bf_imageid = img.split('/')[-1]
