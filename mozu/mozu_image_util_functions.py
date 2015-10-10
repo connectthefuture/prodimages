@@ -118,6 +118,7 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
         try:
             #mozu_image_table = mozu_image_table_instance()
             md5checksum = md5_checksumer(img)
+            print(type(md5checksum))
             if not kwargs.get('tags'):
                 image_metadata = get_exif_all_data(img)
                 print(str(type(image_metadata.values())))
