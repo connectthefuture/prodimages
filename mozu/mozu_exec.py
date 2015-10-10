@@ -73,7 +73,7 @@ def main(insert_list_filepaths):
     import sqlalchemy
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
-    from mozu_image_util_functions import *
+    from mozu_image_util_functions import compile_todict_for_class_instance_variables
 
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
     
