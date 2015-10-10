@@ -59,8 +59,8 @@ class MozuRestClient:
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
 
         ## Tags - Keywords - Metadata
-        _tags_list =  list(set(sorted(kwargs.get('tags',''))))
-        self.properties = {u'tags': _tags_list}
+        _tags_list =  kwargs.get('tags','')
+        self.properties = {"tags": _tags_list}
 
         # Headers / Data-Payload and Filters
         self.qstring_filter = kwargs.get('qstring_filter', '')

@@ -114,23 +114,24 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
     instance_properties = {}
     for img in list_of_images:
         bf_imageid = img.split('/')[-1]
-        
+        print locals(), "localSSY"
         try:
             #mozu_image_table = mozu_image_table_instance()
             md5checksum = md5_checksumer(img)
+            print(type(md5checksum))
+
             if not kwargs.get('tags'):
                 image_metadata = get_exif_all_data(img)
-                tags = image_metadata.values()
+                print str(type(image_metadata.values()))
+                tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
             else:
                 tags = kwargs.get('tags')
         except TypeError: 
             print 'TYPE Error'
             pass
+        print type(img)
+        instance_properties[img] = { "bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', 'NA'), "md5checksum": md5checksum, "tags": [tags] }
 
-        instance_properties[img] = dict(bf_imageid  = bf_imageid, 
-                                        mz_imageid = kwargs.get('mz_imageid', 'NA'), 
-                                        md5checksum = md5checksum,
-                                        tags = (list(set(sorted(tags)))))
         return instance_properties
 
 ###########################

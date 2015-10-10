@@ -73,7 +73,7 @@ def main(insert_list_filepaths):
     import sqlalchemy
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
-    from mozu_image_util_functions import *
+    from mozu_image_util_functions import compile_todict_for_class_instance_variables
 
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
     
@@ -88,7 +88,7 @@ def main(insert_list_filepaths):
         mozu_image_table = mozu_image_table_instance()
 
         try:
-            mozu_client = MozuRestClient(dict(**v))
+            mozu_client = MozuRestClient(**v)
             mz_imageid = upload_new(mozu_client,src_filepath)
             load_content_resp = upsert_content_mz_image(mozu_client, src_filepath=src_filepath,tags=tags) 
             if load_content_resp.http_status_code < 400:
@@ -128,6 +128,7 @@ if __name__ == '__main__':
             for arg in sys.argv:
                 insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'    
         insert_list_filepaths = list(set(sorted(insert_list)))
+        print(insert_list_filepaths)
         main(insert_list_filepaths)
     except IndexError:
         print("To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args")
