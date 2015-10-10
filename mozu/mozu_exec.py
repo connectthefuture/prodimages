@@ -88,7 +88,7 @@ def main(insert_list_filepaths):
         mozu_image_table = mozu_image_table_instance()
 
         try:
-            mozu_client = MozuRestClient(dict(**v))
+            mozu_client = MozuRestClient(**v)
             mz_imageid = upload_new(mozu_client,src_filepath)
             load_content_resp = upsert_content_mz_image(mozu_client, src_filepath=src_filepath,tags=tags) 
             if load_content_resp.http_status_code < 400:
