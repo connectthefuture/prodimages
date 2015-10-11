@@ -1,0 +1,5 @@
+# this is a comment line
+#[HEAD](
+	POMGR_SNP.PRODUCT_SNAPSHOT.COLORSTYLE = '${Basename}'
+)
+#[TAIL]OR

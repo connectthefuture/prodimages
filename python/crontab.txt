@@ -1,0 +1,250 @@
+# Edit this file to introduce tasks to be run by cron.
+#
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+#
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').#
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+#
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+#
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+# m h  dom mon dow   command
+##############################################################  Taken from OSX 10.6.8 RSYNC ONLY ##############################################################
+# 7	*	*	*	*	rsync --archive --compress --update /Users/johnb/Dropbox/Dropbox_sites/Apps/PythonistaAppOnly/ /Users/johnb/Dropbox/Dropbox_sites/SpyderMac/py_iphone
+# 56	9	*	*	1,2,3,4,5,6	rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still & rsync --archive --compress --update /mnt/Post_Ready/eFashionPush/ /mnt/Post_Ready/Retouch_Fashion
+# 56	18	*	*	1,2,3,4,5,6	rsync --archive --compress --update /usr/local/batchRunScripts/ /Users/johnb/Dropbox/Dropbox_sites/imageServertmp/batchRunScripts
+##############################################################       END       ##############################################################
+##########################################################################################################################################################################################
+################################################################# Below UBUNTU 12.04 ROOT Crontab on NFS-AFP-SMB etc. #################################################################
+### SET cron user env variables
+PATH=/usr/lib/oracle/11.2/client64/lib:/usr/lib/oracle/11.2/client64:/usr/lib/oracle/11.2/client64/sdk:/usr/lib/oracle/11.2/client64:/usr/lib/oracle/11.2/client64/bin:/usr/share/centrifydc/sbin:/usr/share/centrifydc/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin:/usr/local/batchRunScripts/bash:/usr/local/batchRunScripts/php:/usr/local/batchRunScripts/python:/usr/sbin:/usr/bin:/sbin:/bin
+POSTREADY=/mnt/Post_Ready
+POSTCOMPLETE=/mnt/Post_Complete
+PRODSRV=$POSTREADY/zProd_Server/imageServer7
+SHELL=/bin/bash
+TODAY=`date +%Y%b%d`
+TODAY_REG=`date +%Y-%m-%d`
+PYTHONPATH=/usr/local/batchRunScripts/python:/usr/local/lib/python2.7/dist-packages
+PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
+#
+## Debugging Output Scripts in tmp dir
+# * * * * * env > /tmp/env.output
+* * * * * ps aux | grep php >> /tmp/php.output && date >> /tmp/php.output
+* * * * * ps aux | grep bash >> /tmp/bash.output && date >> /tmp/bash.output
+* * * * * ps aux | grep python >> /tmp/python.output && date >> /tmp/python.output
+* * * * * ps aux | grep python >> /tmp/python_cron.output && date >> /tmp/python_cron.output
+#
+#
+### Sync Push folders to Archive folders ###
+# 47  9,19    *   *   *   rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still & rsync --archive --compress --update /mnt/Post_Ready/eFashionPush/ /mnt/Post_Ready/Retouch_Fashion
+###
+#
+#
+##### Fix 3 digit file ext not Renamed by Photographers
+52      0,12,18    *       *       *       /usr/local/batchRunScripts/python/python3digitext_incr_photorename.py 2>&1 >> /var/log/3digitFileRename.log && date >> /var/log/3digitFileRename.log
+#
+#
+######## Get FileSystem Info For Import MYSQL 3301 ########  Now using New Python SqlAlchemy Version with copy to zimages
+## ampm ## Get CSV list of all files on Post_Ready for import to PhpmyAdmin DB FIXED AWK output. Output was omitting columns based on the OFS and RS. Fixed 5/15/13
+###### Retouch_Fashion/Still Archives
+## 22      0,12    *       *       *       /usr/local/batchRunScripts/bash/nightly_PhotoServerSelectArchList.sh 2>&1 >> /var/log/photopaths_archivedselectshrezimport.log
+40      2,12,18    *       *       *       walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /var/log/photopaths_RetouchStillselectshrezimport.log && date >> /var/log/photopaths_RetouchStillselectshrezimport.log ;
+42      2,12,18    *       *       *       walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Fashion 2>&1 >> /var/log/photopaths_RetouchFashionselectshrezimport.log && date >> /var/log/photopaths_RetouchFashionselectshrezimport.log ;
+#
+#
+## am ## NEEDED for GETTER SCRIPT StyleStringTestMAker equals Catalog of all Files on file7 from e&a push folders
+##### Push Folders
+## 14      3,12,14 *       *       *       /usr/local/batchRunScripts/bash/styleStringTestMakerPushed.sh 2>&1 >> /var/log/photopaths_pushselects_import.log
+10      3,9,10,11,12,13,14,15,16,17,18,22    *       *       *       walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
+12      3,9,10,11,12,13,14,15,16,17,18,22    *       *       *       walkdir_fix_exiv2_csv.py /mnt/Post_Ready/eFashionPush 2>&1 >> /var/log/photopaths_Fashionpushselects_import.log && date >> /var/log/photopaths_Fashionpushselects_import.log ;
+#
+##### Zimages_1
+## 10      5,22    *       *       *       /usr/local/batchRunScripts/bash/styleStringZimagesPro.sh 2>&1 >> /var/log/photopaths_zimagesimport.log
+17         5,13,23    *       *       *       walkdir_fix_exiv2_csv.py /mnt/Post_Ready/zImages_1 2>&1 >> /var/log/photopaths_Zimages_selectslowrezimport.log && date >> /var/log/photopaths_Zimages_selectslowrezimport.log ;
+#
+###### ProdRaw .zImages_1
+29         5,12,23    *       *       *       /usr/local/batchRunScripts/python/walkdir_zimages_raw_mysqldb.py /mnt/Production_Raw/.zImages_1 2>&1 >> /var/log/photopaths_RAW_Zimages_selectslowrezimport.log && date >> /var/log/photopaths_RAW_Zimages_selectslowrezimport.log ;
+#
+#
+##############################################################
+###########      MySQL Database Updates From PM/Oracle   #####
+#######  Import Prod Info From DSSPRD1 to MySQL 3301  ########
+5       5       *       *       *                               /usr/local/batchRunScripts/bash/importSKUToPhpMyAdmin.sh
+17      6,19    *       *       *                               /usr/local/batchRunScripts/bash/import_prodsnapshot.sh
+42      5       *       *       *                               /usr/local/batchRunScripts/bash/importSampleVendorStyle_pma.sh
+55      6,19    *       *       *                               /usr/local/batchRunScripts/bash/sampleAgingImportpma.sh
+#
+## Once a day update snapshot instead of Truncating
+18      3      *        *       *                                                   /usr/local/batchRunScripts/python/import_livesnapshot.py
+38      1,6,8,10,11,12,13,14,15,16,17,18,19,20      *       *       *               /usr/local/batchRunScripts/bash/import_prodsnapshot_livedata_bfyprd1.sh
+# 38      1,6,8,10,11,12,13,14,15,16,17,18,19,20      *       *       *               /usr/local/batchRunScripts/python/import_livesnapshot.py
+#######
+#
+47      7,10,11.12,13,14,15,16,17,21                *       *       *               /usr/local/batchRunScripts/bash/importEventStyleInfoPMA_live.sh
+48      7,10,11,12,13,14,15,16,18,21                *       *       *               /usr/local/batchRunScripts/bash/importEventStyleStatus_live.sh
+49      6,10,11,12,13,14,15,16,17,21                *       *       *               /usr/local/batchRunScripts/bash/importEventStyleStatusImgCpy_live.sh
+10      7,21                        *       *       *                               /usr/local/batchRunScripts/bash/importPoUpcomingStatuses.sh
+####
+############################################################
+#
+#
+## PM-DB-SEND Update Photographed Date in PM db find 1.jpg past 18h
+## Get All Files updated in PM and make low-res for Z Image Dir lowrez for PM
+## Updates Shot Attrib based of date range
+# 12     19       *       *       *           /usr/local/batchRunScripts/bash/pmUpdate_photoDate.sh 2>&1 >> /var/log/photoattrib_updatepm.log && date >> /var/log/photoattrib_updatepm.log
+## Updates Unique Shots based on dated Dir
+54     19         *       *       *           /usr/local/batchRunScripts/python/pm_update_unique_photocompletion.py 2>&1 >> /var/log/photoattrib_updatepm.log && date >> /var/log/photoattrib_updatepm.log
+#
+#
+##### Below Replaced by all in one import using walkdir_csv.py
+## 33      13,20       *       *       *           /usr/local/batchRunScripts/bash/FindJpgs_1_makeLowRes_gatherAll.sh 2>&1 >> /var/log/photocopysort_zimages_1.log
+## 17      22          *       *       *           /usr/local/batchRunScripts/bash/FindJpgs_ALL_makeLowRes_gatherAll.sh 2>&1 >> /var/log/photocopysort_zimages_All.log
+#####
+#
+#
+## AM-FILE-GET The Better Getter Gets Incomplete Files In the AM To Retouch
+20      7           *       *       *       /usr/local/batchRunScripts/python/theBestPythonGetter.py 2>&1 >> /var/log/daily_getter_python.log  && date >> /var/log/daily_getter_python.log
+40      7           *       *       *       /usr/local/batchRunScripts/python/Getter_copyready_noimg.py 2>&1 >> /var/log/daily_copy_getter_python.log  && date >> /var/log/daily_copy_getter_python.log
+## 44      5           *       *       *       /usr/local/batchRunScripts/python/testBest.py
+#
+#
+###############################
+###    Permissions Fixes    ###
+### Fix Permissions on Root user created folders and files
+20,50      *        *       *       *       chmod 777 -R /mnt/Post_Ready/Daily 2>&1 >> /var/log/daily_folder_chmodfix.log
+### Fix Permissions on Still and Fashion Archives Nightly
+30         1        *       *       *       find /mnt/Post_Ready/Retouch_Fashion -type d -exec chmod -R 777 {} \;
+31         1        *       *       *       find /mnt/Post_Ready/Retouch_Still -type d -exec chmod -R 777 {} \;
+32         *        *       *       *       find /mnt/Post_Ready/eFashionPush -type d -exec chmod -R 777 {} \;
+33         1,14     *       *       *       find /mnt/Post_Ready/aPhotoPush -type d -exec chmod -R 777 {} \;
+34         1,14     *       *       *       find /mnt/Post_Ready/zImages_1 -type d -maxdepth 1 -exec chmod -R 755 {} \;
+### Fix Permissions on Complete and upload dirs and Raw dirs on File6 & File7
+1,5,11,16,21,25,31,36,41,46,51,56   *        *       *       *       chmod -R 777 /mnt/Production_Raw/.zImages_1/bridge_jpgs ;
+25         *        *       *       *       find /mnt/Post_Complete/Complete_to_Load -type d -exec chmod -R 777 {} \;
+28         *        *       *       *       find /mnt/Post_Complete/Complete_to_Load/.tmp_processing -type f -exec chmod -R 777 {} \;
+### Fix Permissions India Folders ###
+17         5        *       *       *       chmod 755 -R /mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval 2>&1 >> /var/log/india_folder_chmodfix.log
+#
+#
+##########################################################################
+### Organize Raw Outakes for Web Access If Available in BridgeJpegs Dir ##
+###     Use With Watcher.py /etc/watcher_MOVE...    ######################
+4,28    *        *       *       *      organize_zimages_4digit.py /mnt/Production_Raw/.zImages_1/bridge_jpgs 2>&1 >> /var/log/bridge_jpgs_zimages.log && date >> /var/log/bridge_jpgs_zimages.log
+#
+###
+#
+###
+#######################
+####    MAIL    #######
+## AM-MAIL-SEND  Sends Retouching Files ToDo To Retouch Team
+## 58      7       *       *       *       /usr/local/batchRunScripts/bash/numbersDailyMailFullReport.sh
+50      7       *       *       *                               /usr/local/batchRunScripts/bash/numbersDailyMailFullReport.sh >> /tmp/dailymail_log.txt 2>&1 >> /var/log/mail_dailyfileget.log
+## 56      7       *       *       *                               . /home/johnb/.bash_profile && /usr/local/batchRunScripts/bash/view_morningpush_progress.sh > /mnt/Post_Ready/zImages_1/dag/sites/queries_PHP-test1/Reports/retouching_daily_breakdown.html && php -f /usr/local/batchRunScripts/php/morningmail.php ;
+##  Below will update reports for Generic Search Page script at 8:08AM sends Lavender Report
+59      7,8,10,11,12,13,14,15,16,17,18,19       *       *       *       /usr/local/batchRunScripts/bash/morningEventMail.sh
+## 59      7,8,10,11,12,13,14,15,16,17,18,19       *       *       *       /usr/local/batchRunScripts/bash/morningEventMail.sh
+8       8       *       *       *                               /usr/local/batchRunScripts/bash/morningEventMailIncompletes.sh 2>&1 >> /var/log/mail_lavenderreport.log
+#######################
+#
+#
+### Send Trailing 10 days Production Complete Report to Conrad and Myself
+## 28   19,8       *       *       *           echo '<html>' > /tmp/prodoutputview.html ;  view_production_output_All_10days.sh >> /tmp/prodoutputview.html ; echo '</html>' >> /tmp/prodoutputview.html ; mailFileViaGmail.py /tmp/prodoutputview.html "john.bragato@bluefly.com" ; mailFileViaGmail.py /tmp/prodoutputview.html "conrad.sanderson@bluefly.com" ;
+#
+#
+############ FEED SWI UPDATES -  IMAP Daily Download & Make Delta File ### Runs Every Weekday #####
+9       15       *       *       1,2,3,4,5      /usr/local/batchRunScripts/python/imap_get_attachments_gmail_UNSEENDiffed.py 2>&1 >> /var/log/feed_swi_imap.log && date >> /var/log/feed_swi_imap.log
+#
+###
+#
+###############################
+####    GCalendar Funx ########
+### Delete Events then Fully Update to GCalendar
+#
+#
+##################################
+###### THE Image Magickian #######
+1,11,21,32,41,51  *    *    *    *   /usr/local/batchRunScripts/python/magickLoad_PrdCmp.py 2>&1 >> /var/log/magickupload_daily.log
+#
+#################################
+###### RAW FILE6 ################
+#
+### TAG RAW #################################
+48  11,18,23    *    *    *   /usr/local/batchRunScripts/bash/exiftool_tag_daily_raw.sh 2>&1 >> /var/log/extractTAG_RAWOUTTAKES.log && date >> /var/log/extractTAG_RAWOUTTAKES.log
+#
+### THEN Extract JPG and Embed RAW info
+59  13,1    *    *    *   /usr/local/batchRunScripts/bash/exiftool_rawpy_extract.sh 2>&1 >> /var/log/extractRAWOUTTAKES.log && date >> /var/log/extract_RAWOUTTAKES.log
+#
+### Extract and import Capture1 data from Daily Raw files and send to mysql db
+59  21    *    *    *   /usr/local/batchRunScripts/python/import_raw_cp1_mdata.py 2>&1 >> /var/log/cp1_mdata.log && date >> /var/log/cp1_mdata.log
+#
+####### Move All Jpegs extracted from Raw to .zimages hierarchy
+4,24  *    *    *    *    /usr/local/batchRunScripts/python/organize_zimages_4digit.py GLOBOUT  2>&1 >> /var/log/orgfilesOUTPUT.log && `date` >> /var/log/orgfilesOUTPUT.log
+#
+#################################
+#################################
+#
+#
+#################################################################
+###  OFFSHORE RETOUCHING TRANSACTIONS   #########################
+#################################################################
+#########################################
+##  Updates Primary DB with PM Data  ####
+43  19,6    *    *    *   /usr/local/batchRunScripts/offshore-processes/import_offshore_tosend.py 
+## 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
+#
+#
+## WALK SEND AND RECEIVE DIRS --> Get and INSERT or try UPDATE Send-Receive Folders File Paths
+# 16 6,20    *    *    *   /usr/local/batchRunScripts/offshore-processes/walkupdate_offshore_filepaths.py 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
+#
+#
+## Query DB for Days Images Ready and Zip -- Update offshore_zip with zip path and prelocation path
+## --> Then move the prelocation file to the sent folder
+## TODO: Query db for a list of retouched styles to download from netsrv101.l3.bluefly.com and send
+#
+#
+#### Scan 1_Sending dir/Query db for new png image ready to zip and upload to Drop folder
+## -> SEND
+## TODO:Update offshore_status send_dt accordingly
+57  21    *    *    *   /usr/local/batchRunScripts/offshore-processes/full_process_SEND.py /mnt/Post_Complete/Complete_Archive/SendReceive_BGRemoval/1_Sending 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
+#
+#
+#### Scan Pick(up) folder for Completed bg rm and dload unzip process and archive
+## --> RETURN
+## TODO:Update offshore_status return_dt accordingly
+12  0    *    *    *   /usr/local/batchRunScripts/offshore-processes/full_process_RETURN-multi_revcommit.py 
+#
+## 2>&1 >> /var/log/indiaUpdates.log && date >> /var/log/indiaUpdates.log
+#
+### Clear New Images via Edgecast
+42  3    *    *    *   /usr/local/batchRunScripts/bash/cronjob_nightly_india_cache_clear.sh 2>&1 /var/log/edgecast_indiaclr.log && date >> /var/log/edgecast_indiaclr.log
+#
+###
+###################################################################################
+###################################################################################
+#
+## TODO: Need a Watcher to watch the send dir and updat the send date in the offshore_status table
+###################################################################################
+##### Excel Tool Import Data to tables for REST api
+41 5,20		*	*	*	/usr/local/batchRunScripts/python/import_excel_tool_data.py 2>&1 >> /var/log/tool_copy_data.log
+#
+##################################################################
+#### Marketplace Import Process and Load Vendor Images
+40 2 	*		* 		*	/usr/local/batchRunScripts/python/cronjob_marketplace_nightly_improcload.py 2>&1 /var/log/marketplaceupload.log && date >> /var/log/marketplaceupload.log
+#
+#
+###################################################################################
+###################################################################################
+#################################
+#################################
+#

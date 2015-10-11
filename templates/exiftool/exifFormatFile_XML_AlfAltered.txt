@@ -1,0 +1,37 @@
+# this is a comment line
+#[HEAD] <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+ <?xml version="1.0" encoding="UTF-8"?>
+ <properties>
+    <entry key="type">cm:content</entry>
+    <entry key="aspects">cm:titled,cm:dublincore,cm:classifiable,cm:versionable,cm:replaceable,cm:author,cm:countable,audio:audio,exif:exif</entry>
+    <entry key="cm:title">$Keywords</entry>
+    <entry key="cm:description">$XMP:Album</entry>
+    <entry key="cm:created">${IPTC:DateCreated}</entry>
+    <entry key="cm:versionLabel">1</entry>
+    <!-- cm:dublincore properties -->
+    <entry key="cm:author">$IPTC:By-line</entry>
+    <entry key="cm:publisher">$RetoucherName</entry>
+    <entry key="cm:contributor">$IPTC:SpecialInstructions</entry>
+    <entry key="cm:type">${Format}</entry>
+    <entry key="cm:identifier">$FileName</entry>
+    <entry key="cm:dcsource">${XMP:SerialNumber}</entry>
+    <entry key="cm:coverage">$IPTC:Source</entry>
+    <entry key="cm:rights">$IPTC:CopyrightNotice</entry>
+    <entry key="cm:subject">$IPTC:Credit</entry>
+    <!-- audio:audio properties -->
+    <entry key="audio:genre">$XMP:Genre</entry>
+    <entry key="audio:album">$XMP:Album</entry>
+    <entry key="audio:artist">$XMP:Artist</entry>
+    <entry key="audio:composer">$IPTC:RetoucherName</entry>
+    <entry key="audio:engineer">$IPTC:PhotographerName</entry>
+    <!-- exif:exif properties -->
+    <entry key="exif:dateTimeOriginal">${EXIF:DateTimeOriginal}</entry>
+    <entry key="exif:manufacturer">${EXIF:Make}</entry>
+    <entry key="exif:model">${CameraModelName}</entry>
+    <entry key="exif:pixelXDimension">${ExifImageWidth}</entry>
+    <entry key="exif:pixelYDimension">${ExifImageHeight}</entry>
+    <entry key="exif:xResolution">${XResolution}</entry>
+    <entry key="exif:yResolution">${YResolution}</entry>
+    <entry key="exif:resolutionUnit">${ResolutionUnit}</entry>
+ </properties>
+#[TAIL]

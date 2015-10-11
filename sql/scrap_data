@@ -1,0 +1,31 @@
+select date_format(photo_date,'%Y-%b') as "Date", count(distinct colorstyle) as "style_count"
+from `post_ready_consignment` 
+where file_path like '%/_________.png'
+group by date_format(photo_date,'%Y-%m')
+order by date_format(photo_date,'%Y-%m')
+
+[l.split('-')[-1] for l in lsa.split(' ')]
+
+
+2013-Feb-356
+2013-Mar-1044
+2013-Apr-1061
+2013-May-1491
+2013-Jun-939
+2013-Jul-1034
+2013-Aug-1029
+2013-Sep-2846
+2013-Oct-1176
+2013-Nov-2364
+2013-Dec-976
+356
+1400
+2461
+3952
+4891
+5925
+6954
+9800
+10976
+13340
+14316

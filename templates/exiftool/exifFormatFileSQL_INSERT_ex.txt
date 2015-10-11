@@ -1,0 +1,3 @@
+# this is a comment line
+#[HEAD]Insert into relation_Exiftool_PM_conv (SourceFile,Keywords,XMP_Album,IPTC_SpecialInstructions,XMP_Genre,IPTC_CopyrightNotice,IPTC_Credit,IPTC_Source,IPTC_SimilarityIndex,COLORSTYLE) values ('$Directory/$FileName','$Keywords','$XMP:Album','$IPTC:SpecialInstructions','$XMP:Genre','$IPTC:CopyrightNotice','$IPTC:Credit','$IPTC:Source','$IPTC:SimilarityIndex','$BaseName');
+#[TAIL]

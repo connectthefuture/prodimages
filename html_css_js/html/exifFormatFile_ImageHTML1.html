@@ -1,0 +1,106 @@
+# this is a comment line -- Photo META Records --
+#[HEAD]                          
+<html>
+<head></head>
+<style type="text/css">
+table
+  {
+	margin: 2px;
+	border: 1px solid #6699cc;
+	height: auto;
+	width: auto;
+	float: left;
+	text-align: left;
+	font-size: 12 px;
+	table-layout: auto;
+  }
+body
+  {
+  	background: grid-columns: inherit;
+	transition-property: all;
+	background-color: rgb(215,215,215);
+	background-clip: padding-box;
+  }
+div.img
+  {
+  	margin:3px;
+  	border:3px solid #6699cc;
+  	height:auto;
+  	width:auto;
+  	float:left;
+  	text-align:center;
+  }
+div.img img
+  {
+  	display:inline;
+  	margin:3px;
+  	border:1px solid #ffffff;
+  }
+div.img a:hover img
+  {
+	border: 1px solid #0000ff;
+	appearance: tooltip;
+  }
+div.desc
+  {
+  	text-align:center;
+  	font-weight:normal;
+  	width:120px;
+  	margin:2px;
+  }
+</style>       
+<body>
+  <div class="img">
+  	 <a target="_blank" title="${XMP:Creator}" rel="pic" href="192.168.20.242/zImages/${FileName}">
+  	  	<img src="${Directory}/${FileName}" alt="${IPTC:Title}" width="157" height="188" />
+  	 </a>
+  <div class="desc"><b>${FileName}</b></div>
+  </div>
+<table>
+ <tbody align="left" valign="middle" dir="ltr">
+  <tr>
+    <td>Photo Date </td>
+    <td>${EXIF:DateTimeOriginal}</td>
+  </tr>
+  <tr>
+    <td>Photograph by </td>
+    <td>${XMP:Creator}</td>
+  </tr>
+  <tr>
+    <td>Retouched by </td>
+    <td>${IPTC:RetoucherName}</td>
+  </tr>
+  <tr>
+    <td>MetaData Date </td>
+    <td>${XMP:MetadataDate}</td>
+  </tr>
+  <tr>
+    <td>Retouched Date </td>
+    <td>${XMP:CreateDate}</td>
+  </tr>     
+  <tr>
+    <td>Product Type </td>
+    <td>${XMP:Genre}</td>
+  </tr>
+  <tr>
+  	<td>Upload Date </td>
+  	<td>${DateLoaded}</td>
+  </tr>
+  <tr>
+    <td>History Date(s) </td>
+    <td>${XMP:HistoryWhen}</td>
+  </tr>
+  <tr>
+    <td>Merchant Contact </td>
+    <td>${IPTC:MerchantName}</td>
+  </tr>
+  <tr>
+    <td>File Original </td>
+    <td>${DateOriginalRetouchProcessed}</td>
+  </tr>
+ </tbody>
+</table><br>
+
+</body>
+</html>
+#[TAIL]-- end --

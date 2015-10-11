@@ -1,0 +1,4 @@
+# this is a comment line
+#[HEAD]PhotoMETARecords
+'$FileName','${EXIF:DateTimeOriginal}','$XMP:Genre','$Keywords','$XMP:Album','$IPTC:Source','$IPTC:CopyrightNotice','$IPTC:SpecialInstructions','$IPTC:SimilarityIndex'
+#[TAIL]

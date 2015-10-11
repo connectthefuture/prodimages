@@ -1,0 +1,76 @@
+*.pyc
+*.pyd
+benchtree
+build
+
+=======
+.gitattributes
+
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+## bin
+## var
+sdist
+develop-eggs
+.installed.cfg
+## lib
+## lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+### Prevent Private Key push to git
+*.p12
+
+### Aptana, Spyder and Code Runner Autobackup Remove
+*.*\~
+*.\ \(Autosaved\).py
+.spyderworkspace
+.DS_Store
+
+## Aptana
+.settings
+.project
+.pydevproject
+.metadata
+
+*.db
+$IPYTHONDIR/.ipython/README
+.ipynb_checkpoints/Untitled0-checkpoint.ipynb
+Untitled0.ipynb
+bash/prodimages_bfly.sublime-project
+bash/prodimages_bfly.sublime-workspace
+ipython_config_stilv.py
+ipython_notebook_config_stilv.py
+php/.BridgeLabelsAndRatings
+python/.ipynb_checkpoints/Devbook-checkpoint.ipynb
+calendar.dat
+pycallgraph.png
+html_css_js/html/genericQuery_client.rtf
+python/Amazon.json
+python/drive.dat
+python/identifynonwhitebg.sublime-project
+python/identifynonwhitebg.sublime-workspace
+python/marketplace_multi_dloadMODIFIEDDT.py
+python/marketplace_multi_dloadMODIFIEDDT2.py
+python/ray rice.json
+python/ray+rice.json

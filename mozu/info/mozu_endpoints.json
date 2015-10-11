@@ -1,0 +1,172 @@
+
+////////////////////////////////////////////////////////////////
+/*
+################################################################
+###########		Mozu REST Api Objects 	  ######################
+################################################################
+*/
+////////////////////////////////////////////////////////////////
+
+/// GET    -- Retrieve the details of a document - by document['id']
+/// POST   -- Create New Document - Response contains mz_imageid, as document['id'] on success
+/// 	   	  --> load content to newly created document (ie. mz_imageid) using below PUT call
+/// PUT    -- Update the details or replace content of a document -- update image for mz_imageid/bf_imageid
+/// DELETE -- Delete the Document within the documentList - deletes mz_imageid from Mozu
+
+//  - api/content/documentlists/{documentListName}?responseFields={responseFields}
+
+/*
+#######################
+---------------->		api/content/documentlists
+#######################
+*/
+
+document_data_api = tenant_url + "/api/content/documentlists/files@mozu/documents"
+
+"documentBase": {
+   "activeDateRange": {
+      "endDate": "DateTime",
+      "startDate": "DateTime"
+   },
+   "contentLength": "long",
+   "contentMimeType": "string",
+   "contentUpdateDate": "DateTime",
+   "documentTypeFQN": "string",
+   "extension": "string",
+   "id": "string",
+   "insertDate": "DateTime",
+   "listFQN": "string",
+   "name": "string",
+   "properties": "string",
+   "publishSetCode": "string",
+   "publishState": "string",
+   "updateDate": "DateTime"
+}
+
+
+////////////////////////////////////////////////////////////////
+
+/// GetDocumentList -- Retrieve the details of a document list by providing the list name.
+//  - api/content/documentlists/{documentListName}?responseFields={responseFields}
+
+/*
+#######################
+---------------->		api/content/documentlists/{documentListName}?responseFields={responseFields}
+#######################
+*/
+
+"documentListName": {
+   "documentListType": "string",
+   "documentTypes": "string",
+   "enableActiveDateRanges": "bool",
+   "enablePublishing": "bool",
+   "listFQN": "string",
+   "metadata": "string",
+   "name": "string",
+   "namespace": "string",
+   "scopeId": "int",
+   "scopeType": "string",
+   "security": "string",
+   "supportsActiveDateRanges": "bool",
+   "supportsPublishing": "bool",
+   "usages": "string",
+   "views": [
+      {
+         "fields": [
+            {
+               "name": "string",
+               "target": "string"
+            }
+         ],
+         "filter": "string",
+         "isVisibleInStorefront": "bool",
+         "metadata": "string",
+         "name": "string",
+         "usages": "string"
+      }
+   ]
+}
+
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+// Other Mozu Endpoints
+/*
+#######################
+---------------->	api/content/documentpublishing
+#######################
+*/
+
+"documentPublishing": {
+   "activeUpdateDate": "DateTime",
+   "activeUpdatedBy": "string",
+   "catalogId": "int",
+   "documentTypeFQN": "string",
+   "draftUpdateDate": "DateTime",
+   "id": "string",
+   "listFQN": "string",
+   "masterCatalogId": "int",
+   "name": "string",
+   "publishSetCode": "string",
+   "publishType": "string",
+   "siteId": "int",
+   "updatedBy": "string"
+}
+
+/*
+#######################
+---------------->	api/content/documentlistTypes/{documentListTypeFQN}?responseFields={responseFields}
+GetDocumentListType
+#######################
+*/
+
+"documentListTypeFQN": {
+   "defaultDocuments": [
+      {
+         "documentTypeFQN": "string",
+         "locale": "string",
+         "name": "string",
+         "properties": "string"
+      }
+   ],
+   "documentListTypeFQN": "string",
+   "documentTypeFQNs": "string",
+   "enableActiveDateRanges": "bool",
+   "enablePublishing": "bool",
+   "installationPackage": "string",
+   "metadata": "string",
+   "name": "string",
+   "namespace": "string",
+   "scopeType": "string",
+   "supportsActiveDateRanges": "bool",
+   "supportsPublishing": "bool",
+   "usages": "string",
+   "version": "string",
+   "views": [
+      {
+         "fields": [
+            {
+               "name": "string",
+               "target": "string"
+            }
+         ],
+         "filter": "string",
+         "isVisibleInStorefront": "bool",
+         "metadata": "string",
+         "name": "string",
+         "usages": "string"
+      }
+   ]
+}
+
+
+

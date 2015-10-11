@@ -1,0 +1,64 @@
+# this is a comment line
+#[HEAD]   
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>-- Photo META Records --</title>
+</head>
+<body>
+<table border="1" align="left" width="350" cols="2"> 
+  <tr>
+    <th width="150" align="left" scope="col">${FileName}</th>
+    <th width="190" scope="col">&nbsp;</th>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Style Number</th>
+    <td>${FileName}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Brand </th>
+    <td>${Keywords}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Photo Date</th>
+    <td>${EXIF:DateTimeOriginal}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Sample Location </th>
+    <td>${IPTC:Source}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Prod Status </th>
+    <td>${IPTC:CopyrightNotice}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Merchant Contact</th>
+    <td>${IPTC:MerchantName}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Event  IDs</th>
+    <td>${IPTC:Credit} </td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Event Groups </th>
+    <td>${XMP:Album}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Product Type</th>
+    <td>${XMP:Genre}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Copy Date </th>
+    <td>${IPTC:SpecialInstructions}</td>
+  </tr>
+  <tr>
+    <th align="left" scope="row">Upload Date </th>
+    <td>${XMP:MetadataDate}</td>
+  </tr>
+</table>
+</body>
+</html>
+           
+            

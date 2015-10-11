@@ -1,0 +1,14 @@
+# this is a comment line
+#[HEAD]                            -- Photo META Records --
+File: $FileName
+            Photo Date           ${EXIF:DateTimeOriginal}
+            Photograph by        $XMP:Creator
+            Retouched by         $IPTC:RetoucherName
+            Retouched Date       $XMP:CreateDate
+            MetaData Date        $XMP:MetadataDate
+            Upload Date          $DateLoaded
+            History Date(s)      $XMP:HistoryWhen
+            File Original        $DateOriginalRetouchProcessed
+                ['"-"'=Reprocessed or Date=Original]
+                $/
+#[TAIL]-- end --

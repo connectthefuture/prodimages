@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>PhotoReport</title>
+
+<style type="text/css">
+		table
+		  	{
+			margin: 2px;
+			border: 1px solid #6699cc;
+			height: auto;
+			width: auto;
+			float: none;
+			text-align: left;
+			table-layout: inherit;
+			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+		  	}
+		form 
+		  	{
+			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+			font-size: medium;
+			font-style: normal;
+			line-height: normal;
+			font-weight: normal;
+			color: rgb(0,0,102);
+			background-attachment: fixed;
+			background-color: rgb(215,215,215);
+			background-repeat: no-repeat;
+			background-position: center center;
+			letter-spacing: normal;
+			text-align: justify;
+			vertical-align: sub;
+			word-spacing: normal;
+			display: inline-table;
+			margin: auto;
+			padding: 2px;
+			clear: both;
+			float: none;
+			border: thin solid rgb(0,0,51);
+			overflow: auto;
+			position: relative;
+			cursor: context-menu;
+			page-break-before: auto;
+			page-break-after: auto;
+			-webkit-transition: all ease-in-out;
+			-moz-transition: all ease-in-out;
+			-ms-transition: all ease-in-out;
+			-o-transition: all ease-in-out;
+			transition: all ease-in-out;
+		  	}
+		body
+		  	{
+			background: grid-columns: scroll;
+			transition-property: all;
+			background-color: rgb(215,215,215);
+			background-clip: border-box
+        }
+</style>
+</head>
+<body>
