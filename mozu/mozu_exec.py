@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-def count_total__files_documents(mz_imageid):
+def count_total__files_documents(mzclient):
     total_count = mzclient.get_mz_image()['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
@@ -81,6 +81,8 @@ def main(insert_list_filepaths):
 
         try:
             mozu_client = MozuRestClient(**v)
+            print mozu_client.src_filepath
+            print locals(), 'LOCAL85'
             mz_imageid = upload_new(mozu_client)
             load_content_resp = upsert_content_mz_image(mozu_client) 
             if load_content_resp.http_status_code < 400:
