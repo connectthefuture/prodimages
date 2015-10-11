@@ -43,7 +43,7 @@ def update_tags_mz_image(mzclient):
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
 def upsert_content_mz_image(mzclient):   # src_filepath=None,mz_imageid=None):
-    print locals(), 'LOCAL46-S22e'
+    print locals(), globals(), 'GLOB-LOCAL46-S22e'
     update_resp = mzclient.send_content()
     print locals(), "UpsertContent"
     return update_resp
