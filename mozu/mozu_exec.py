@@ -32,6 +32,7 @@ def download_document_content(mz_imageid,outfile=None):
         f.write(image_content)
     return path.abspath(outfile)
 
+
 def read_document_content_headers(mz_imageid):
     mzclient = MozuRestClient(mz_imageid=mz_imageid)
     image_data = mzclient().get_mz_image_headers()
@@ -66,7 +67,6 @@ def upload_new(src_filepath,**kwargs):
     mzclient = MozuRestClient(src_filepath=src_filepath,tags=tags)
     doc_resp = mzclient.create_new_mz_image()
     return doc_resp
-
 
 ###########################
 ### Main - Conditions ##
