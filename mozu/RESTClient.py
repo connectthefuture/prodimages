@@ -52,8 +52,9 @@ class MozuRestClient:
         self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
 
         ## FileContent
-        self.src_filepath = kwargs.get('src_filepath', '')
-        # self.new_mz_imageid = ''
+        global src_filepath
+        src_filepath = kwargs.get('src_filepath', '')
+        self.src_filepath = src_filepath
         self.bf_imageid   = path.basename(self.src_filepath) #[:-1]
         self.ext = self.bf_imageid.split('.')[-1]
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))

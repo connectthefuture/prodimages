@@ -43,7 +43,7 @@ def update_tags_mz_image(mzclient):
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
 def upsert_content_mz_image(mzclient):   # src_filepath=None,mz_imageid=None):
-    print locals(), globals(), 'GLOB-LOCAL46-S22e'
+    print locals(), 'LOCAL46-S22e'
     update_resp = mzclient.send_content()
     print locals(), "UpsertContent"
     return update_resp
@@ -83,7 +83,7 @@ def main(insert_list_filepaths):
         try:
             mozu_client = MozuRestClient(**v)
             print mozu_client.src_filepath
-            print locals(), 'LOCAL85'
+            print locals(), k, v, 'LOCAL85'
             mz_imageid = upload_new(mozu_client)
             load_content_resp = upsert_content_mz_image(mozu_client) 
             if load_content_resp.http_status_code < 400:
