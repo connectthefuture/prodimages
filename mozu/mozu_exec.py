@@ -3,22 +3,19 @@
 
 from RESTClient import MozuRestClient
 def count_total__files_documents(mz_imageid):
-    mzclient = MozuRestClient(mz_imageid=mz_imageid)
     total_count = mzclient.get_mz_image()['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
 
 
-def list_files_documents(mz_imageid):
-    mzclient = MozuRestClient(mz_imageid=mz_imageid)
+def list_files_documents(mzclient):
     image_data = mzclient.get_mz_image()['items']
-    #print image_data
+    print image_data
     return image_data
 
 
-def download_document_content(mz_imageid,outfile=None):
+def download_document_content(mzclient,outfile=None):
     from os import path as path
-    mzclient = MozuRestClient(mz_imageid=mz_imageid)
     image_content = mzclient().get_mz_image()
     if not mzclient.bf_imageid:
         # Get bflyid from Oracle using mz_id
@@ -30,41 +27,37 @@ def download_document_content(mz_imageid,outfile=None):
     else: pass
     with open(outfile,'w') as f:
         f.write(image_content)
+    print locals(), "Downloaded Content"
     return path.abspath(outfile)
 
 
-def read_document_content_headers(mz_imageid):
-    mzclient = MozuRestClient(mz_imageid=mz_imageid)
+def read_document_content_headers(mzclient):
     image_data = mzclient().get_mz_image_headers()
     print image_data
     return image_data
 
-# PUT - Upload NEW Image/DocumentContent
-def update_tags_mz_image(mz_imageid,**kwargs):
-    tags = kwargs.get('tags','')
-    if not mzclient:
-        mzclient = MozuRestClient(mz_imageid=mz_imageid,tags=tags)
+# PUT - Update Document Data
+def update_tags_mz_image(mzclient,**kwargs):
     update_resp = mzclient.update_mz_image()
+    print locals(), "Update Data"
     return update_resp
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
-def upsert_content_mz_image(src_filepath=None,mz_imageid=None,**kwargs):
-    tags = kwargs.get('tags','')
-    mzclient = MozuRestClient(mz_imageid=mz_imageid,src_filepath=src_filepath,tags=tags)
+def upsert_content_mz_image():   # src_filepath=None,mz_imageid=None,**kwargs):
     update_resp = mzclient.send_content()
+    print locals(), "UpsertContent"
     return update_resp
 
 # DELETE - Delete Image/DocumentContent
 def delete_document_content(mzclient):
     delete_resp = mzclient.delete_mz_image()
-    print locals()
+    print locals(), "Delete"
     return delete_resp.headers
 
-
-def upload_new(mzclient, src_filepath,**kwargs):
-    tags=kwargs.get('tags','')
-    mzclient['tags'] = tags
+# Post New Image, Creates Document
+def upload_new(mzclient,**kwargs):
     doc_resp = mzclient.create_new_mz_image()
+    print locals(), "NEW"
     return doc_resp
 
 ###########################
