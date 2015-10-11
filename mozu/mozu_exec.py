@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from RESTClient import MozuRestClient
+MozuRestClient = MozuRestClient()
 def count_total__files_documents(MozuRestClient,mz_imageid):
     mzclient = MozuRestClient(mz_imageid=mz_imageid)
     total_count = mzclient.get_mz_image()['totalCount']
