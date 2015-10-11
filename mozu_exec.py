@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from RESTClient import MozuRestClient
 def count_total__files_documents(mz_imageid):
     total_count = mzclient.get_mz_image()['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
@@ -43,7 +42,7 @@ def update_tags_mz_image(mzclient,**kwargs):
     return update_resp
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
-def upsert_content_mz_image():   # src_filepath=None,mz_imageid=None,**kwargs):
+def upsert_content_mz_image(mzclient):   # src_filepath=None,mz_imageid=None,**kwargs):
     update_resp = mzclient.send_content()
     print locals(), "UpsertContent"
     return update_resp
