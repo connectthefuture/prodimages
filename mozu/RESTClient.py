@@ -94,6 +94,7 @@ class MozuRestClient:
     def send_content(self):
         import requests, json
         self.headers["Content-type"] = self.mimetype
+        print locals(), self
         stream = open(self.src_filepath, 'rb').read()
         _document_content_api = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
         self.document_content_api = _document_content_api
