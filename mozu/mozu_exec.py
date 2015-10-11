@@ -55,16 +55,15 @@ def upsert_content_mz_image(src_filepath=None,mz_imageid=None,**kwargs):
     return update_resp
 
 # DELETE - Delete Image/DocumentContent
-def delete_document_content(mz_imageid):
-    mzclient = MozuRestClient(mz_imageid=mz_imageid)
+def delete_document_content(mzclient):
     delete_resp = mzclient.delete_mz_image()
     print locals()
     return delete_resp.headers
 
 
-def upload_new(src_filepath,**kwargs):
+def upload_new(mzclient, src_filepath,**kwargs):
     tags=kwargs.get('tags','')
-    mzclient = MozuRestClient(src_filepath=src_filepath,tags=tags)
+    mzclient['tags'] = tags
     doc_resp = mzclient.create_new_mz_image()
     return doc_resp
 
@@ -90,8 +89,8 @@ def main(insert_list_filepaths):
 
         try:
             mozu_client = MozuRestClient(**v)
-            mz_imageid = upload_new(mozu_client,src_filepath)
-            load_content_resp = upsert_content_mz_image(mozu_client, src_filepath=src_filepath,tags=tags) 
+            mz_imageid = upload_new(mozu_client)
+            load_content_resp = upsert_content_mz_image(mozu_client) 
             if load_content_resp.http_status_code < 400:
                 v['mz_imageid'] = mz_imageid
                 insert_db = mozu_image_table.insert(values=dict(**v))
@@ -102,17 +101,17 @@ def main(insert_list_filepaths):
                 upsert_content_resp = upsert_content_mz_image(mozu_client,dict(**v))
                 if upsert_content_resp.http_status_code < 300:
                     update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
-                res = update_db.execute()
-                print res, 'Updated--> ', v.items(), ' <-- ', update_db
+                    res = update_db.execute()
+                    print res, 'Updated--> ', v.items(), ' <-- ', update_db
             else:
                 print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                 raise sqlalchemy.exc.IntegrityError()
         # Update
         except sqlalchemy.exc.IntegrityError:
-            print 'IntegrityError ', v
+            print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
             mozu_client = MozuRestClient(**v)
             mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-            upsert_content_resp = upsert_content_mz_image(mozu_client,dict(**v))
+            upsert_content_resp = upsert_content_mz_image(mozu_client)
             if upsert_content_resp.http_status_code < 300:
                 update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                 res = update_db.execute()
