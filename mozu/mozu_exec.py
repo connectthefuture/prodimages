@@ -36,13 +36,13 @@ def read_document_content_headers(mzclient):
     return image_data
 
 # PUT - Update Document Data
-def update_tags_mz_image(mzclient,**kwargs):
+def update_tags_mz_image(mzclient):
     update_resp = mzclient.update_mz_image()
     print locals(), "Update Data"
     return update_resp
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
-def upsert_content_mz_image(mzclient):   # src_filepath=None,mz_imageid=None,**kwargs):
+def upsert_content_mz_image(mzclient):   # src_filepath=None,mz_imageid=None):
     update_resp = mzclient.send_content()
     print locals(), "UpsertContent"
     return update_resp
@@ -54,7 +54,7 @@ def delete_document_content(mzclient):
     return delete_resp.headers
 
 # Post New Image, Creates Document
-def upload_new(mzclient,**kwargs):
+def upload_new(mzclient):
     doc_resp = mzclient.create_new_mz_image()
     print locals(), "NEW"
     return doc_resp
@@ -91,8 +91,10 @@ def main(insert_list_filepaths):
                 insert_db.execute()
                 print 'Inserted --> ', v.items(), ' <-- ', insert_db
             elif load_content_resp.http_status_code == 409:
-                mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-                upsert_content_resp = upsert_content_mz_image(mozu_client,dict(**v))
+                orcl_res = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
+                v['mz_imageid'] = orcl_res['mz_imageid']
+                mozu_client['mz_imageid'] = v['mz_imageid']
+                upsert_content_resp = upsert_content_mz_image(mozu_client) #,dict(**v))
                 if upsert_content_resp.http_status_code < 300:
                     update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                     res = update_db.execute()
