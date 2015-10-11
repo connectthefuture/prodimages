@@ -44,14 +44,14 @@ def update_tags_mz_image(mz_imageid,**kwargs):
     tags = kwargs.get('tags','')
     if not mzclient:
         mzclient = MozuRestClient(mz_imageid=mz_imageid,tags=tags)
-    update_resp = mzclient.update_mz_image(mz_imageid)
+    update_resp = mzclient.update_mz_image()
     return update_resp
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
 def upsert_content_mz_image(src_filepath=None,mz_imageid=None,**kwargs):
     tags = kwargs.get('tags','')
     mzclient = MozuRestClient(mz_imageid=mz_imageid,src_filepath=src_filepath,tags=tags)
-    update_resp = mzclient.send_content(mz_imageid,mzclient=mzclient)
+    update_resp = mzclient.send_content()
     return update_resp
 
 # DELETE - Delete Image/DocumentContent
