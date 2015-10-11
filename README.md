@@ -33,3 +33,6 @@ This README would normally document whatever steps are necessary to get your app
 * Repo owner or admin
 * Other community or team contact
 =======
+
+### Mozu Img Proj on BB
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/8bc86accb4af418fb94a9d9f7d7a48f8/badge.svg)](https://www.quantifiedcode.com/app/project/8bc86accb4af418fb94a9d9f7d7a48f8)
