@@ -77,7 +77,7 @@ def main(insert_list_filepaths):
         mz_imageid = v['mz_imageid']
         md5checksum = v['md5checksum']
         tags        = v['tags']
-        print locals(), , 'LOCAL80', k, v
+        print locals(), 'LOCAL80', k, v
         #image_metadata = v['image_metadata']
         mozu_image_table = mozu_image_table_instance()
 
