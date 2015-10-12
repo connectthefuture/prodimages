@@ -77,14 +77,14 @@ def main(insert_list_filepaths):
         mz_imageid = v['mz_imageid']
         md5checksum = v['md5checksum']
         tags        = v['tags']
-
+        print locals(), , 'LOCAL80', k, v
         #image_metadata = v['image_metadata']
         mozu_image_table = mozu_image_table_instance()
 
         try:
             mozu_client = MozuRestClient(**v)
             print mozu_client.src_filepath
-            print locals(), k, v, 'LOCAL85'
+            print locals(), k, v, 'LOCAL87'
             mz_imageid = upload_new(mozu_client)
             load_content_resp = upsert_content_mz_image(mozu_client) 
             if load_content_resp.http_status_code < 400:
