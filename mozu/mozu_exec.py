@@ -4,25 +4,25 @@ import pdb;pdb.set_trace()
 
 def count_total__files_documents(**kwargs):
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient
-    total_count = _mzclient.get_mz_image(**kwargs)['totalCount']
+    _mzclient = MozuRestClient(**kwargs)
+    total_count = _mzclient.get_mz_image()['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
 
 
 def list_files_documents():
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient
-    image_data = _mzclient.get_mz_image(**kwargs)['items']
+    _mzclient = MozuRestClient(**kwargs)
+    image_data = _mzclient.get_mz_image()['items']
     print image_data
     return image_data
 
 
 def download_document_content(outfile=None, **kwargs):
-    from RESTClient import MozuRestClient
+    from RESTClient import MozuRestClient(**kwargs)
     _mzclient = MozuRestClient
     from os import path as path
-    image_content = _mzclient.get_mz_image(**kwargs)
+    image_content = _mzclient.get_mz_image()
     if not _mzclient.bf_imageid:
         # Get bflyid from Oracle using mz_id
         from db import mozu_image_table_instance
@@ -39,41 +39,41 @@ def download_document_content(outfile=None, **kwargs):
 
 def read_document_content_headers(**kwargs):
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient
-    image_data = _mzclient.get_mz_image_headers(**kwargs)
+    _mzclient = MozuRestClient(**kwargs)
+    image_data = _mzclient.get_mz_image_headers()
     print image_data
     return image_data
 
 # PUT - Update Document Data
 def update_tags_mz_image(**kwargs):
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient
-    update_resp = _mzclient.update_mz_image(**kwargs)
+    _mzclient = MozuRestClient(**kwargs)
+    update_resp = _mzclient.update_mz_image()
     print locals(), "Update Data"
     return update_resp
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
 def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
     print locals(), 'LOCAL46-S22e'
-    update_resp = _mzclient.send_content(**kwargs)
+    update_resp = _mzclient.send_content()
     print locals(), "UpsertContent"
     return update_resp
 
 # DELETE - Delete Image/DocumentContent
 def delete_document_content(**kwargs):
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient
-    delete_resp = _mzclient.delete_mz_image(**kwargs)
+    _mzclient = MozuRestClient(**kwargs)
+    delete_resp = _mzclient.delete_mz_image()
     print locals(), "Delete"
     return delete_resp.headers
 
 # Post New Image, Creates Document
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient
-    doc_resp = _mzclient.create_new_mz_image(**kwargs)
+    _mzclient = MozuRestClient(**kwargs)
+    doc_resp = _mzclient.create_new_mz_image()
     print locals(), "NEW"
     return doc_resp
 
