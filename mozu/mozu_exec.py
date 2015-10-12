@@ -2,28 +2,34 @@
 # coding: utf-8
 import pdb;pdb.set_trace()
 
-def count_total__files_documents(mzclient):
-    total_count = mzclient.get_mz_image()['totalCount']
+def count_total__files_documents(**kwargs):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
+    total_count = _mzclient.get_mz_image()['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
 
 
-def list_files_documents(mzclient):
-    image_data = mzclient.get_mz_image()['items']
+def list_files_documents(**kwargs):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
+    image_data = _mzclient.get_mz_image()['items']
     print image_data
     return image_data
 
 
-def download_document_content(mzclient,outfile=None):
+def download_document_content(outfile=None, **kwargs):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
     from os import path as path
-    image_content = mzclient().get_mz_image()
-    if not mzclient.bf_imageid:
+    image_content = _mzclient.get_mz_image()
+    if not _mzclient.bf_imageid:
         # Get bflyid from Oracle using mz_id
         from db import mozu_image_table_instance
-        bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == mzclient.mz_imageid) ) )[0]['bf_imageid']
-        mzclient.bf_imageid = bf_imageid
+        bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == _mzclient.mz_imageid) ) )[0]['bf_imageid']
+        _mzclient.bf_imageid = bf_imageid
     if not outfile:
-        outfile = path.join('/tmp', mzclient.bf_imageid)
+        outfile = path.join('/tmp', _mzclient.bf_imageid)
     else: pass
     with open(outfile,'w') as f:
         f.write(image_content)
@@ -31,33 +37,43 @@ def download_document_content(mzclient,outfile=None):
     return path.abspath(outfile)
 
 
-def read_document_content_headers(mzclient):
-    image_data = mzclient().get_mz_image_headers()
+def read_document_content_headers(**kwargs):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
+    image_data = _mzclient.get_mz_image_headers()
     print image_data
     return image_data
 
 # PUT - Update Document Data
-def update_tags_mz_image(mzclient):
-    update_resp = mzclient.update_mz_image()
+def update_tags_mz_image(**kwargs):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
+    update_resp = _mzclient.update_mz_image()
     print locals(), "Update Data"
     return update_resp
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
-def upsert_content_mz_image(mzclient):   # src_filepath=None,mz_imageid=None):
+def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
     print locals(), 'LOCAL46-S22e'
-    update_resp = mzclient.send_content()
+    update_resp = _mzclient.send_content()
     print locals(), "UpsertContent"
     return update_resp
 
 # DELETE - Delete Image/DocumentContent
-def delete_document_content(mzclient):
-    delete_resp = mzclient.delete_mz_image()
+def delete_document_content(**kwargs):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
+    delete_resp = _mzclient.delete_mz_image()
     print locals(), "Delete"
     return delete_resp.headers
 
 # Post New Image, Creates Document
-def upload_new(mzclient):
-    doc_resp = mzclient.create_new_mz_image()
+def upload_new(**kwargs):
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
+    doc_resp = _mzclient.create_new_mz_image()
     print locals(), "NEW"
     return doc_resp
 
@@ -82,21 +98,17 @@ def main(insert_list_filepaths):
         mozu_image_table = mozu_image_table_instance()
 
         try:
-            mozu_client = MozuRestClient(**v)
-            print mozu_client.src_filepath
             print locals(), k, v, 'LOCAL87'
-            mz_imageid = upload_new(mozu_client)
-            load_content_resp = upsert_content_mz_image(mozu_client) 
+            v['mz_imageid'] = upload_new(**v)
+            load_content_resp = upsert_content_mz_image(**v)
             if load_content_resp.http_status_code < 400:
-                v['mz_imageid'] = mz_imageid
                 insert_db = mozu_image_table.insert(values=dict(**v))
                 insert_db.execute()
                 print 'Inserted --> ', v.items(), ' <-- ', insert_db
             elif load_content_resp.http_status_code == 409:
                 orcl_res = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
                 v['mz_imageid'] = orcl_res['mz_imageid']
-                mozu_client['mz_imageid'] = v['mz_imageid']
-                upsert_content_resp = upsert_content_mz_image(mozu_client) #,dict(**v))
+                upsert_content_resp = upsert_content_mz_image(**v) #,dict(**v))
                 if upsert_content_resp.http_status_code < 300:
                     update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                     res = update_db.execute()
@@ -107,13 +119,12 @@ def main(insert_list_filepaths):
         # Update
         except sqlalchemy.exc.IntegrityError:
             print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
-            mozu_client = MozuRestClient(**v)
             mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-            upsert_content_resp = upsert_content_mz_image(mozu_client)
+            upsert_content_resp = upsert_content_mz_image(**v)
             if upsert_content_resp.http_status_code < 300:
                 update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                 res = update_db.execute()
-            print res, 'Updated with Integrity Errors --> ', v.items(), ' <-- ', update_db
+                print res, 'Updated with Integrity Errors --> ', v.items(), ' <-- ', update_db
             #pass
 
 ## Run in shell as mozu_exec.py *args
