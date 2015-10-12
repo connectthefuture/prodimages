@@ -2,10 +2,12 @@
 # coding: utf-8
 import pdb;pdb.set_trace()
 
-def count_total__files_documents(**kwargs):
+def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
     _mzclient = MozuRestClient(**kwargs)
-    total_count = _mzclient.get_mz_image()['totalCount']
+
+    total_count = _mzclient.get_mz_image() #['totalCount']
+    print total_count
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
 
