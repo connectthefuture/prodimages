@@ -6,4 +6,4 @@ PWD=/usr/local/batchRunScripts
 
 echo `date` >> ~/.prodimagesgit.log
 
-cd /usr/local/batchRunScripts && git pull origin master >> ~/.prodimagesgit.log
+cd /usr/local/batchRunScripts && git pull origin revert_ready >> ~/.prodimagesgit.log
