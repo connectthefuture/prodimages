@@ -35,7 +35,7 @@ class MozuRestClient:
         self.http_status_code = http_status_code
         #self.accessToken, self.http_status_code = get_mozu_client_authtoken()
         self.accessToken = get_mozu_client_authtoken()
-        # global mz_imageid
+        global mz_imageid
         mz_imageid = kwargs.get('mz_imageid', '')
         self.mz_imageid = mz_imageid
 
@@ -48,9 +48,9 @@ class MozuRestClient:
         self.tenant_url = "https://t{0}.staging-sb.mozu.com/".format(self.tenant_name)
         self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
         global document_content_api
-        global document_resource
-        document_content_api, document_resource = "", "" # self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
-        self.document_content_api, self.document_resource = document_content_api, document_resource
+        self.document_content_api = '' # self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+        self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+
         ## FileContent
         global src_filepath
         src_filepath = kwargs.get('src_filepath', '')
@@ -73,8 +73,11 @@ class MozuRestClient:
 
     def __repr__(self):
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
-        return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid ,self.http_status_code)
+        return "MZID: {0} - BFID: {1} - Status: {2} -- \n --Payload: {3}".format(self.mz_imageid, self.bf_imageid ,self.http_status_code, self.document_payload)
 
+    def __str__(self):
+        print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
+        return "Str__-Status: {2} -- \n --Payload: {3}".format(self.mz_imageid, self.bf_imageid, self.http_status_code, self.document_payload)
 
     ## POST - Document
     def create_new_mz_image(self):
@@ -92,20 +95,19 @@ class MozuRestClient:
 
 
     ## PUT - Content stream - Send file
-    def send_content(self,xmz_imageid=None,xsrc_filepath=None):
-        self.mz_imageid = xmz_imageid
-        self.src_filepath = xsrc_filepath
+    def send_content(self):
         import requests, json
         self.headers["Content-type"] = self.mimetype
         print locals(), self
         stream = open(self.src_filepath, 'rb').read()
         _document_content_api = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
         self.document_content_api = _document_content_api
-        print _document_content_api, self.document_content_api
+        print _document_content_api, self.document_content_api, "Document Content and selfDocCont"
         content_response = requests.put(self.document_resource, data=stream, headers=self.headers, verify=False)
         self.http_status_code = content_response.status_code
-        print "ContentPutResponse: %s" % content_response.status_code
+        print "ContentPutResponse: {}".format(content_response.status_code)
         return content_response
+
 
     ## UPDATE - PUT Document
     def update_mz_image(self):
@@ -118,12 +120,12 @@ class MozuRestClient:
             print _document_response
             if self.properties.items()['tags'].values():
                 _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-
         self.http_status_code = _document_response.status_code
         try:
             return _document_response.json()['id']
         except KeyError:
             return _document_response
+
 
     ## GET - Document
     def get_mz_image(self):
@@ -131,7 +133,7 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _document_response = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         self.http_status_code = _document_response.status_code
-        print "DocumentGetResponse: %s" % _document_response.status_code
+        print "DocumentGetResponse: {}".format(_document_response.status_code)
         try:
             return _document_response.json()
         except KeyError:
