@@ -96,7 +96,7 @@ class MozuRestClient:
 
     ## PUT - Content stream - Send file
     def send_content(self):
-        import requests, json
+        import requests
         self.headers["Content-type"] = self.mimetype
         print locals(), self
         stream = open(self.src_filepath, 'rb').read()
@@ -118,7 +118,8 @@ class MozuRestClient:
         else:
             _document_response = requests.put(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
             print _document_response
-            if self.properties.items()['tags'].values():
+            if self.properties.get('tags'):
+                #self.properties.get('tags').values()
                 _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         self.http_status_code = _document_response.status_code
         try:
