@@ -22,33 +22,33 @@ def list_files_documents():
     return image_data
 
 
-def download_document_content(outfile=None, **kwargs):
-    from RESTClient import MozuRestClient
-    print kwargs, 'KWARGS-26'
-    _mzclient = MozuRestClient(**kwargs)
-    from os import path as path
-    image_content = _mzclient.get_mz_image()
-    if not _mzclient.bf_imageid:
-        # Get bflyid from Oracle using mz_id
-        from db import mozu_image_table_instance
-        bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == _mzclient.mz_imageid) ) )[0]['bf_imageid']
-        _mzclient.bf_imageid = bf_imageid
-    if not outfile:
-        outfile = path.join('/tmp', _mzclient.bf_imageid)
-    else: pass
-    with open(outfile,'w') as f:
-        f.write(image_content)
-    print locals(), "Downloaded Content"
-    return path.abspath(outfile)
-
-
-def read_document_content_headers(**kwargs):
-    from RESTClient import MozuRestClient
-    print kwargs, 'KWARGS-47'
-    _mzclient = MozuRestClient(**kwargs)
-    image_data = _mzclient.get_mz_image_headers()
-    print image_data
-    return image_data
+# def download_document_content(outfile=None, **kwargs):
+#     from RESTClient import MozuRestClient
+#     print kwargs, 'KWARGS-26'
+#     _mzclient = MozuRestClient(**kwargs)
+#     from os import path as path
+#     image_content = _mzclient.get_mz_image()
+#     if not _mzclient.bf_imageid:
+#         # Get bflyid from Oracle using mz_id
+#         from db import mozu_image_table_instance
+#         bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == _mzclient.mz_imageid) ) )[0]['bf_imageid']
+#         _mzclient.bf_imageid = bf_imageid
+#     if not outfile:
+#         outfile = path.join('/tmp', _mzclient.bf_imageid)
+#     else: pass
+#     with open(outfile,'w') as f:
+#         f.write(image_content)
+#     print locals(), "Downloaded Content"
+#     return path.abspath(outfile)
+#
+#
+# def read_document_content_headers(**kwargs):
+#     from RESTClient import MozuRestClient
+#     print kwargs, 'KWARGS-47'
+#     _mzclient = MozuRestClient(**kwargs)
+#     image_data = _mzclient.get_mz_image_headers()
+#     print image_data
+#     return image_data
 
 # PUT - Update Document Data
 def update_tags_mz_image(**kwargs):
@@ -98,7 +98,7 @@ def main(insert_list_filepaths):
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
 
     for k,v in compiled_instance_vars.iteritems():
-        src_filepath = k 
+        src_filepath = k
         bf_imageid = v['bf_imageid']
         mz_imageid = v['mz_imageid']
         md5checksum = v['md5checksum']
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     try:
         if path.isfile(sys.argv[1]):
             for arg in sys.argv:
-                insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'    
+                insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
         print insert_list_filepaths
         main(insert_list_filepaths)
