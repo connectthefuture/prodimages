@@ -12,7 +12,7 @@ def count_total_files_documents(**kwargs):
     return total_count
 
 
-def list_files_documents(**kwargs):
+def list_files_documents():
     from RESTClient import MozuRestClient
     _mzclient = MozuRestClient(**kwargs)
     image_data = _mzclient.get_mz_image()['items']
