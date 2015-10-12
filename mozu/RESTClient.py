@@ -3,7 +3,6 @@
 
 def get_mozu_client_authtoken():
         #  "http://requestb.in/q66719q6" #
-        import os.path as path
         import requests, json
         _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
         _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
@@ -27,8 +26,6 @@ class MozuRestClient:
     """docstring for MozuRestClient"""
 
     def __init__(self, **kwargs):
-        import os.path as path
-        import requests, json
 
         ### Mozu Defaults - Tenant --> FQN
         self.listFQN = 'files@mozu'
@@ -40,7 +37,7 @@ class MozuRestClient:
         self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
         self.qstring_filter = kwargs.get('qstring_filter', '')
         self.mz_imageid = kwargs.get('mz_imageid', '')
-        if mz_imageid:
+        if self.mz_imageid:
             self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
         self.document_response = ''
 
@@ -54,7 +51,7 @@ class MozuRestClient:
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         if kwargs.get('bf_imageid', None):
             self.bf_imageid = kwargs.get('bf_imageid')
-            self.ext = _bf_imageid.split('.')[-1].lower()
+            self.ext = self.bf_imageid.split('.')[-1].lower()
             ## Tags - Keywords - Metadata
             self.properties = {'tags': kwargs.get('tags','')}
             self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
@@ -64,7 +61,7 @@ class MozuRestClient:
         #super(MozuRestClient, self).__init__(**kwargs)
 
 
-    def __repr__(self):
+    def __str__(self):
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
         return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid ,self.http_status_code)
 
@@ -79,7 +76,7 @@ class MozuRestClient:
         if self.http_status_code < 400:
             try:
                 self.mz_imageid = _document_response.json()['id']
-                self.document_resource = self.document_data_api + _mz_imageid + "/content"
+                self.document_resource = self.document_data_api + self.mz_imageid + "/content"
                 return (self.mz_imageid, self.document_resource,)
             except KeyError:
                 return (_document_response, None,)
@@ -88,8 +85,9 @@ class MozuRestClient:
 
 
     ## Update or New PUT - Content stream - Send file
-    def send_content(self, _src_filepath):
-        import requests, json
+    def send_content(self, _src_filepath, **kwargs):
+        import requests
+        from os import path
         ## FileContent
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.bf_imageid   = path.basename(_src_filepath) #[:-1]
@@ -105,17 +103,18 @@ class MozuRestClient:
         return _content_response
 
     ## UPDATE - PUT Document
-    def update_mz_image(self):
+    def update_mz_image(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.document_resource = self.document_data_api + _mz_imageid + "/content"
-        if self.src_filepath:
+        if kwargs.get("src_filepath"):
             _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         else:
             _document_response = requests.put(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
             print _document_response
-            if self.properties.items()['tags'].values():
+            if kwargs.get("properties", self.properties.items()['tags'].values()):
+                self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
                 _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
 
         self.http_status_code = _document_response.status_code
@@ -125,7 +124,7 @@ class MozuRestClient:
             return _document_response
 
     ## GET - Document
-    def get_mz_image_document(self):
+    def get_mz_image_document(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
@@ -140,7 +139,7 @@ class MozuRestClient:
 
 
     ## GET - Document
-    def download_mz_image_content(self, outfile=None):
+    def download_mz_image_content(self, outfile=None, **kwargs):
         import requests, json
         from os import path as path
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
@@ -148,19 +147,19 @@ class MozuRestClient:
         if not self.bf_imageid:
             # Get bflyid from Oracle using mz_id
             from db import mozu_image_table_instance
-            self.bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == self.mz_imageid) ) )[0]['bf_imageid']
+            self.bf_imageid = mozu_image_table_instance.select( whereclause=(mozu_image_table_instance.c.mz_imageid == self.mz_imageid) )[0]['bf_imageid']
 
         self.headers["Content-type"] = 'application/json'
         self.document_resource = self.document_data_api + self.mz_imageid + "/content"
-        stream = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        self.http_status_code = stream.status_code
+        resp = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        self.http_status_code = resp.status_code
         if self.http_status_code < 400 and self.http_status_code != 0:
             if not outfile:
                 outfile = path.join('/tmp', self.bf_imageid)
             else: pass
             with open(outfile,'w') as f:
-                f.write(stream)
-        return stream.headers()
+                f.write(resp.content)
+        return resp.content.headers()
 
 
     ## DELETE - Document
