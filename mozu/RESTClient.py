@@ -35,7 +35,7 @@ class MozuRestClient:
         self.http_status_code = http_status_code
         #self.accessToken, self.http_status_code = get_mozu_client_authtoken()
         self.accessToken = get_mozu_client_authtoken()
-        global mz_imageid
+        # global mz_imageid
         mz_imageid = kwargs.get('mz_imageid', '')
         self.mz_imageid = mz_imageid
 
@@ -92,7 +92,9 @@ class MozuRestClient:
 
 
     ## PUT - Content stream - Send file
-    def send_content(self):
+    def send_content(self,xmz_imageid=None,xsrc_filepath=None):
+        self.mz_imageid = xmz_imageid
+        self.src_filepath = xsrc_filepath
         import requests, json
         self.headers["Content-type"] = self.mimetype
         print locals(), self
