@@ -4,6 +4,7 @@ import pdb;pdb.set_trace()
 
 def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
+    print kwargs, 'KWARGS-84'
     _mzclient = MozuRestClient(**kwargs)
 
     total_count = _mzclient.get_mz_image() #['totalCount']
@@ -14,7 +15,8 @@ def count_total_files_documents(**kwargs):
 
 def list_files_documents():
     from RESTClient import MozuRestClient
-    _mzclient = MozuRestClient(**kwargs)
+    print 'KWARGS-18-Not Used'
+    _mzclient = MozuRestClient()
     image_data = _mzclient.get_mz_image()['items']
     print image_data
     return image_data
@@ -22,6 +24,7 @@ def list_files_documents():
 
 def download_document_content(outfile=None, **kwargs):
     from RESTClient import MozuRestClient
+    print kwargs, 'KWARGS-26'
     _mzclient = MozuRestClient(**kwargs)
     from os import path as path
     image_content = _mzclient.get_mz_image()
@@ -41,6 +44,7 @@ def download_document_content(outfile=None, **kwargs):
 
 def read_document_content_headers(**kwargs):
     from RESTClient import MozuRestClient
+    print kwargs, 'KWARGS-47'
     _mzclient = MozuRestClient(**kwargs)
     image_data = _mzclient.get_mz_image_headers()
     print image_data
@@ -49,6 +53,7 @@ def read_document_content_headers(**kwargs):
 # PUT - Update Document Data
 def update_tags_mz_image(**kwargs):
     from RESTClient import MozuRestClient
+    print kwargs, 'KWARGS-56'
     _mzclient = MozuRestClient(**kwargs)
     update_resp = _mzclient.update_mz_image()
     print locals(), "Update Data"
@@ -57,6 +62,7 @@ def update_tags_mz_image(**kwargs):
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
 def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
     from RESTClient import MozuRestClient
+    print kwargs, 'KWARGS-65'
     _mzclient = MozuRestClient(**kwargs)
     print locals(), 'LOCAL46-S22e'
     update_resp = _mzclient.send_content()
@@ -66,6 +72,7 @@ def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
 # DELETE - Delete Image/DocumentContent
 def delete_document_content(**kwargs):
     from RESTClient import MozuRestClient
+    print kwargs, 'KWARGS-75'
     _mzclient = MozuRestClient(**kwargs)
     delete_resp = _mzclient.delete_mz_image()
     print locals(), "Delete"
@@ -74,6 +81,7 @@ def delete_document_content(**kwargs):
 # Post New Image, Creates Document
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
+    print kwargs, 'KWARGS-84'
     _mzclient = MozuRestClient(**kwargs)
     doc_resp = _mzclient.create_new_mz_image()
     print locals(), "NEW"
@@ -88,7 +96,7 @@ def main(insert_list_filepaths):
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
 
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
-    
+
     for k,v in compiled_instance_vars.iteritems():
         src_filepath = k 
         bf_imageid = v['bf_imageid']
