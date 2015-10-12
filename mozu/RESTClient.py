@@ -10,10 +10,10 @@ def get_mozu_client_authtoken():
         _auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
         _auth_response = requests.post(_auth_url, data=json.dumps(_auth_request), headers=_auth_headers, verify=False)
         # TODO: 5) add Validation(regex) to prevent unwanted updates
-        print "Auth Response: %s" % _auth_response.status_code
+        print "Auth Response: {0}".format(_auth_response.status_code)
         _auth_response.raise_for_status()
         _auth = _auth_response.json()
-        print "Auth Ticket: %s" % _auth["accessToken"]
+        print "Auth Ticket: {0}".format(_auth["accessToken)"]
         return _auth["accessToken"] #, _auth_response.status_code
 
 class MozuBflyImage:
@@ -59,7 +59,7 @@ class MozuRestClient:
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
 
         ## Tags - Keywords - Metadata
-        _tags_list =  list(set(sorted(kwargs.get('tags',''))))
+        _tags_list =  kwargs.get('tags','')
         self.properties = {u'tags': _tags_list}
 
         # Headers / Data-Payload and Filters
@@ -80,7 +80,7 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _document_response = requests.post(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        print "DocumentPostResponse: %s" % _document_response.status_code
+        print "DocumentPostResponse: {0}".format(_document_response.status_code)
         self.http_status_code = _document_response.status_code
         if self.http_status_code < 400:
             try:
@@ -100,7 +100,7 @@ class MozuRestClient:
         print _document_content_api, self.document_content_api
         content_response = requests.put(self.document_resource, data=stream, headers=self.headers, verify=False)
         self.http_status_code = content_response.status_code
-        print "ContentPutResponse: %s" % content_response.status_code
+        print "ContentPutResponse: {0}".format(content_response.status_code)
         return content_response
 
     ## UPDATE - PUT Document
@@ -127,7 +127,7 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _document_response = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         self.http_status_code = _document_response.status_code
-        print "DocumentGetResponse: %s" % _document_response.status_code
+        print "DocumentGetResponse: {0}".format(_document_response.status_code)
         try:
             return _document_response.json()
         except KeyError:
@@ -139,7 +139,7 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _document_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         self.http_status_code = _document_response.status_code
-        print "DocumentDeleteResponse: %s -- %s -- %s" % (_document_response.status_code, _document_response.url, self.document_data_api)
+        print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, self.document_data_api)
         try:
             return _document_response
         except KeyError:
