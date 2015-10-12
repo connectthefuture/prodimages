@@ -19,8 +19,8 @@ def list_files_documents():
 
 
 def download_document_content(outfile=None, **kwargs):
-    from RESTClient import MozuRestClient(**kwargs)
-    _mzclient = MozuRestClient
+    from RESTClient import MozuRestClient
+    _mzclient = MozuRestClient(**kwargs)
     from os import path as path
     image_content = _mzclient.get_mz_image()
     if not _mzclient.bf_imageid:
