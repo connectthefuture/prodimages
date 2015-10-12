@@ -126,13 +126,11 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
                 tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
             else:
                 tags = kwargs.get('tags')
-        except TypeError: 
-            print 'TYPE Error'
-
-        print type(img)
-        instance_properties[img] = { "bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', 'NA'), "md5checksum": md5checksum, "tags": [tags] }
-
-        return instance_properties
+            print type(img), 'Compiler129'
+            instance_properties[img] = {"bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', 'NA'), "md5checksum": md5checksum, "tags": tags}
+        except TypeError:
+            print 'TYPE Error, Compiler132'
+    return instance_properties
 
 ###########################
 
