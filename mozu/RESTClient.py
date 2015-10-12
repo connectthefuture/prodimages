@@ -47,9 +47,8 @@ class MozuRestClient:
         ### build Mozu API Url String
         self.tenant_url = "https://t{0}.staging-sb.mozu.com/".format(self.tenant_name)
         self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
-        global document_content_api
-        self.document_content_api = '' # self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
-        self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+        #global document_content_api
+        self.document_resource  = '' #self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
 
         ## FileContent
         self.src_filepath = kwargs.get('src_filepath', '')
@@ -96,9 +95,8 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = self.mimetype
         stream = open(self.src_filepath, 'rb').read()
-        _document_content_api = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
-        self.document_content_api = _document_content_api
-        print _document_content_api, self.document_content_api
+        self.document_resource = self.document_data_api + self.mz_imageid + "/content"
+        print self.document_resource
         content_response = requests.put(self.document_resource, data=stream, headers=self.headers, verify=False)
         self.http_status_code = content_response.status_code
         print "ContentPutResponse: {0}".format(content_response.status_code)
@@ -108,6 +106,7 @@ class MozuRestClient:
     def update_mz_image(self):
         import requests, json
         self.headers["Content-type"] = 'application/json'
+        self.document_resource = self.document_data_api + self.mz_imageid + "/content"
         if self.src_filepath:
             _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         else:
@@ -126,6 +125,7 @@ class MozuRestClient:
     def get_mz_image(self):
         import requests, json
         self.headers["Content-type"] = 'application/json'
+        self.document_resource = self.document_data_api + self.mz_imageid + "/content"
         _document_response = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         self.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.status_code)
@@ -138,6 +138,7 @@ class MozuRestClient:
     def delete_mz_image(self):
         import requests, json
         self.headers["Content-type"] = 'application/json'
+        self.document_resource = self.document_data_api + self.mz_imageid + "/content"
         _document_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         self.http_status_code = _document_response.status_code
         print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, self.document_data_api)
