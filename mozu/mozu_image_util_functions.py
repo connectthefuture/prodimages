@@ -103,9 +103,13 @@ def get_exif_all_data(src_filepath):
     import exiftool
     print type(src_filepath), src_filepath
     if src_filepath is not None:
-        if src_filepath.split('.')[-1].lower() == 'jpg' or 'png':
-            with exiftool.ExifTool() as et:
-                metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
+        try:
+            if src_filepath.split('.')[-1].lower() == 'jpg' or 'png':
+                with exiftool.ExifTool() as et:
+                    metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
+                return metadata
+        except ValueError:
+            metadata = {}
             return metadata
     else: pass
 
