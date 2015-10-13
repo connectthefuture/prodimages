@@ -65,9 +65,9 @@ class MozuRestClient:
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
         return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid ,self.http_status_code)
 
-    def __repr__(self):
-        dictrepr = dict.__repr__(self)
-        return '%s(%s)' % (type(self).__name__, dictrepr)
+    #def __repr__(self):
+        #dictrepr = dict.__repr__(self)
+        #return '%s(%s)' % (type(self).__name__, dictrepr)
 
     def __setitem__(self, key, value):
         dict.__setitem__(self, key, value)
