@@ -49,13 +49,16 @@ class MozuRestClient:
 
         # Headers / Data-Payload and Filters
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
-        if kwargs.get('bf_imageid', None) or kwargs.get('src_filepath', None):
-            self.bf_imageid = kwargs.get('bf_imageid', kwargs.get('src_filepath').split('/')[-1])
-            self.ext = self.bf_imageid.split('.')[-1].lower()
-            ## Tags - Keywords - Metadata
-            self.properties = {'tags': kwargs.get('tags','')}
-            self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
-            print 'Document Payload Set'
+        if kwargs.get('bf_imageid', ''):
+            self.bf_imageid = kwargs.get('bf_imageid', '')
+        elif kwargs.get('src_filepath', ''):
+            self.bf_imageid = kwargs.get('src_filepath').split('/')[-1]
+        
+        self.ext = self.bf_imageid.split('.')[-1].lower()
+        ## Tags - Keywords - Metadata
+        self.properties = {'tags': kwargs.get('tags','')}
+        self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
+        print 'Document Payload Set'
 
         print kwargs, "End Init -- kwargs"
         #super(MozuRestClient, self).__init__(**kwargs)
