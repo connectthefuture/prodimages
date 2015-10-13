@@ -74,11 +74,13 @@ class MozuRestClient:
 
     def __setitem__(self, key, value):
         #dict.__setitem__(self, key, value)
-        self.__dict__()[key] = value
+        self.__dict__[key] = value
+        #self[key] = value
 
     def __getitem__(self, key):
         #return dict.__getitem__(self, key)
-        return self.__dict__()[key]
+        #return self[key]
+        return self.__dict__[key]
 
     def __delitem__(self, key):
         del self.__getitem__(dict)[key]
