@@ -65,15 +65,26 @@ class MozuRestClient:
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
         return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid ,self.http_status_code)
 
-    def __setitem__(self, key, item):
-        self.__dict__()[key] = item
+    def __repr__(self):
+        dictrepr = dict.__repr__(self)
+        return '%s(%s)' % (type(self).__name__, dictrepr)
+
+    def __setitem__(self, key, value):
+        dict.__setitem__(self, key, value)
+        #self.__dict__()[key] = value
 
     def __getitem__(self, key):
-        return self.__dict__()[key]
+        return dict.__getitem__(self, key)
+        #return self.__dict__()[key]
 
-    def __delitem__(self, key, item):
+    def __delitem__(self, key, value):
         del self.__dict__()[key]
 
+
+    def update(self, *args, **kwargs):
+        print 'update', args, kwargs
+        for k, v in dict(*args, **kwargs).iteritems():
+            self[k] = v
 
     ## POST - Document
     def create_new_mz_image(self):
