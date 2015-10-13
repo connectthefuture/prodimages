@@ -53,7 +53,7 @@ class MozuRestClient:
             self.bf_imageid = kwargs.get('bf_imageid', '')
         elif kwargs.get('src_filepath', ''):
             self.bf_imageid = kwargs.get('src_filepath').split('/')[-1]
-        
+
         self.ext = self.bf_imageid.split('.')[-1].lower()
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
@@ -73,12 +73,12 @@ class MozuRestClient:
         #return '%s(%s)' % (type(self).__name__, dictrepr)
 
     def __setitem__(self, key, value):
-        dict.__setitem__(self, key, value)
-        #self.__dict__()[key] = value
+        #dict.__setitem__(self, key, value)
+        self.__dict__()[key] = value
 
     def __getitem__(self, key):
-        return dict.__getitem__(self, key)
-        #return self.__dict__()[key]
+        #return dict.__getitem__(self, key)
+        return self.__dict__()[key]
 
     def __delitem__(self, key, value):
         del self.__dict__()[key]
