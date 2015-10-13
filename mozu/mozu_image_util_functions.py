@@ -136,7 +136,7 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
     return instance_properties
 
 ###########################
-def mergeProperties(obj1, obj2):
+def merge_properties(obj1, obj2):
     for property in obj1.__dict__:
         if (not callable(obj1.__dict__[property])):
             value = getattr(obj1,property);

@@ -42,7 +42,7 @@ class MozuRestClient:
         self.document_response = ''
 
         # Auth / Connect / HTTP Status - Globalized
-        global http_status_code
+        # global http_status_code
         http_status_code = 777
         self.http_status_code = http_status_code
         self.accessToken = get_mozu_client_authtoken()
