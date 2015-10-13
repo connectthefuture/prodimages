@@ -112,11 +112,11 @@ class MozuRestClient:
         from os import path
         ## FileContent
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.bf_imageid   = path.basename(_src_filepath) #[:-1]
+        self.bf_imageid   = _src_filepath.split('/')[:-1]
         self.ext = self.bf_imageid.split('.')[-1]
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
-        stream = open(_src_filepath, 'rb').read()
+        stream = open(path.abspath(_src_filepath), 'rb').read()
 
         self.document_resource = self.document_data_api + _mz_imageid + "/content"
         _content_response = requests.put(self.document_resource, data=stream, headers=self.headers, verify=False)
@@ -135,7 +135,7 @@ class MozuRestClient:
         else:
             _document_response = requests.put(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
             print _document_response
-            if kwargs.get("properties", self.properties.items()['tags'].values()):
+            if kwargs.get("properties", dict(self.properties.items()['tags']).values()):
                 self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
                 _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
 
