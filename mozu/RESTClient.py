@@ -105,7 +105,6 @@ class MozuRestClient:
         else:
             return ("Failed-POST", self.http_status_code,)
 
-
     ## Update or New PUT - Content stream - Send file
     def send_content(self, _src_filepath, **kwargs):
         import requests
