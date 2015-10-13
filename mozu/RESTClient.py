@@ -45,8 +45,6 @@ class MozuRestClient:
 
         # Auth / Connect / HTTP Status - Globalized
         # global http_status_code
-        i
-        self.http_status_code = MozuRestClient.http_status_code
         self.accessToken = get_mozu_client_authtoken()
 
         # Headers / Data-Payload and Filters
@@ -68,7 +66,7 @@ class MozuRestClient:
 
     def __str__(self):
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
-        return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid ,self.http_status_code)
+        return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid , MozuRestClient.http_status_code)
 
     #def __repr__(self):
         #dictrepr = dict.__repr__(self)
@@ -99,8 +97,8 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _document_response = requests.post(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         print "DocumentPostResponse: {0}".format(_document_response.status_code)
-        self.http_status_code = _document_response.status_code
-        if self.http_status_code < 400:
+        MozuRestClient.http_status_code = _document_response.status_code
+        if MozuRestClient.http_status_code < 400:
             try:
                 self.mz_imageid = _document_response.json()['id']
                 self.document_resource = self.document_data_api + self.mz_imageid + "/content"
@@ -108,7 +106,7 @@ class MozuRestClient:
             except KeyError:
                 return (_document_response, None,)
         else:
-            return ("Failed-POST", self.http_status_code,)
+            return ("Failed-POST", MozuRestClient.http_status_code,)
 
     ## Update or New PUT - Content stream - Send file
     def send_content(self, _src_filepath, **kwargs):
@@ -124,7 +122,7 @@ class MozuRestClient:
 
         self.document_resource = self.document_data_api + _mz_imageid + "/content"
         _content_response = requests.put(self.document_resource, data=stream, headers=self.headers, verify=False)
-        self.http_status_code = _content_response.status_code
+        MozuRestClient.http_status_code = _content_response.status_code
         print "ContentPutResponse: {0}".format(_content_response.status_code)
         return _content_response
 
@@ -143,7 +141,7 @@ class MozuRestClient:
                 self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
                 _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
 
-        self.http_status_code = _document_response.status_code
+        MozuRestClient.http_status_code = _document_response.status_code
         try:
             return _document_response.json()['id']
         except KeyError:
@@ -156,7 +154,7 @@ class MozuRestClient:
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.document_resource = self.document_data_api + _mz_imageid + "/content"
         _document_response = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        self.http_status_code = _document_response.status_code
+        MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.status_code)
         try:
             return _document_response.json()
@@ -178,8 +176,8 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         self.document_resource = self.document_data_api + self.mz_imageid + "/content"
         resp = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        self.http_status_code = resp.status_code
-        if self.http_status_code < 400 and self.http_status_code != 0:
+        MozuRestClient.http_status_code = resp.status_code
+        if MozuRestClient.http_status_code < 400 and MozuRestClient.http_status_code != 0:
             if not outfile:
                 outfile = path.join('/tmp', self.bf_imageid)
             else: pass
@@ -195,7 +193,7 @@ class MozuRestClient:
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.document_resource = self.document_data_api + _mz_imageid + "/content"
         _document_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        self.http_status_code = _document_response.status_code
+        MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, self.document_data_api)
         try:
             return _document_response
