@@ -28,8 +28,10 @@ def get_mozu_client_authtoken():
 
 
 
+def main():
+    auth = get_mozu_client_authtoken()
+	return auth
 
 
 if __name__ == '__main__':
-	auth = get_mozu_client_authtoken()
-	return auth
+	main()
