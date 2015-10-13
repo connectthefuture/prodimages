@@ -109,16 +109,16 @@ class MozuRestClient:
             return ("Failed-POST", MozuRestClient.http_status_code,)
 
     ## Update or New PUT - Content stream - Send file
-    def send_content(self, _src_filepath, **kwargs):
+    def send_content(self, src_filepath, **kwargs):
         import requests
         from os import path
         ## FileContent
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.bf_imageid   = _src_filepath.split('/')[:-1]
+        self.bf_imageid   = src_filepath.split('/')[:-1]
         self.ext = self.bf_imageid.split('.')[-1]
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
-        stream = open(path.abspath(_src_filepath), 'rb').read()
+        stream = open(path.abspath(src_filepath), 'rb').read()
 
         self.document_resource = self.document_data_api + _mz_imageid + "/content"
         _content_response = requests.put(self.document_resource, data=stream, headers=self.headers, verify=False)

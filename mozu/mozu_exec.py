@@ -59,10 +59,10 @@ def update_tags_mz_image(**kwargs):
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
 def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
     from RESTClient import MozuRestClient
-    print kwargs, 'KWARGS-65'
+    print kwargs, 'KWARGS-62'
     _mzclient = MozuRestClient(**kwargs)
-    print locals(), 'LOCAL46-S22e'
-    update_resp = _mzclient.send_content(src_filepath=kwargs.get("src_filepath"))
+    src_filepath = kwargs.get("src_filepath")
+    update_resp = _mzclient.send_content(src_filepath)
     print locals(), "UpsertContent"
     return update_resp
 
