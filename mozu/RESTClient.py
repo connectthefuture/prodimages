@@ -25,6 +25,8 @@ class MozuAlchemyClient:
 class MozuRestClient:
     """docstring for MozuRestClient"""
 
+    http_status_code = 777
+
     def __init__(self, **kwargs):
 
         ### Mozu Defaults - Tenant --> FQN
@@ -43,8 +45,8 @@ class MozuRestClient:
 
         # Auth / Connect / HTTP Status - Globalized
         # global http_status_code
-        http_status_code = 777
-        self.http_status_code = http_status_code
+        i
+        self.http_status_code = MozuRestClient.http_status_code
         self.accessToken = get_mozu_client_authtoken()
 
         # Headers / Data-Payload and Filters
