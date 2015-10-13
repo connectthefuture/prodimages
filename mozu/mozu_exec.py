@@ -6,20 +6,18 @@ def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
     print kwargs, 'KWARGS-84'
     _mzclient = MozuRestClient(**kwargs)
-
-    total_count = _mzclient.get_mz_image() #['totalCount']
-    print total_count
+    total_count = _mzclient['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
 
 
-def list_files_documents():
+def list_documents():
     from RESTClient import MozuRestClient
     print 'KWARGS-18-Not Used'
     _mzclient = MozuRestClient()
-    image_data = _mzclient.get_mz_image()['items']
-    print image_data
-    return image_data
+    documents = _mzclient['items']
+    print documents
+    return documents
 
 
 # def download_document_content(outfile=None, **kwargs):
@@ -27,8 +25,7 @@ def list_files_documents():
 #     print kwargs, 'KWARGS-26'
 #     _mzclient = MozuRestClient(**kwargs)
 #     from os import path as path
-#     image_content = _mzclient.get_mz_image()
-#     if not _mzclient.bf_imageid:
+#     image_content = _mzclient[     if not _mzclient.bf_imageid:
 #         # Get bflyid from Oracle using mz_id
 #         from db import mozu_image_table_instance
 #         bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == _mzclient.mz_imageid) ) )[0]['bf_imageid']
@@ -46,7 +43,7 @@ def list_files_documents():
 #     from RESTClient import MozuRestClient
 #     print kwargs, 'KWARGS-47'
 #     _mzclient = MozuRestClient(**kwargs)
-#     image_data = _mzclient.get_mz_image_headers()
+#     image_data = _mzclient_h[ders()
 #     print image_data
 #     return image_data
 
@@ -65,7 +62,7 @@ def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
     print kwargs, 'KWARGS-65'
     _mzclient = MozuRestClient(**kwargs)
     print locals(), 'LOCAL46-S22e'
-    update_resp = _mzclient.send_content()
+    update_resp = _mzclient.send_content(src_filepath=kwargs.get("src_filepath"))
     print locals(), "UpsertContent"
     return update_resp
 
