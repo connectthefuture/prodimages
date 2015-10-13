@@ -84,7 +84,7 @@ class MozuRestClient:
         del self.__dict__()[key]
 
     def __contains__(self, key):
-        return dict.__contains__(self,key)
+        return self.__dict__().__contains__(self,key)
 
     def update(self, *args, **kwargs):
         print 'update', args, kwargs
