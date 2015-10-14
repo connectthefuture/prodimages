@@ -39,7 +39,7 @@ class MozuRestClient:
         self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
         self.qstring_filter = kwargs.get('qstring_filter', '')
         self.mz_imageid = kwargs.get('mz_imageid', '')
-        if self.mz_imageid:
+        if type(self.mz_imageid) == str:
             self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
         self.document_response = ''
 
