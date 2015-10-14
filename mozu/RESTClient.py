@@ -2,7 +2,7 @@
 # coding: utf-8
 
 def get_mozu_client_authtoken():
-        #  "http://requestb.in/q66719q6" #
+        #  "http://requestb.in/q66719q6" # http://private-227f3-relic7.apiary-mock.com
         import requests, json
         _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
         _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
@@ -50,7 +50,7 @@ class MozuRestClient:
         # Headers / Data-Payload and Filters
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         if kwargs.get('bf_imageid', ''):
-            self.bf_imageid = kwargs.get('bf_imageid', '')
+            self.bf_imageid = kwargs.get('bf_imageid')
         elif kwargs.get('src_filepath', ''):
             self.bf_imageid = kwargs.get('src_filepath').split('/')[-1]
 
