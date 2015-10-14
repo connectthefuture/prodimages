@@ -25,6 +25,7 @@ class MozuAlchemyClient:
 class MozuRestClient:
     """docstring for MozuRestClient"""
 
+    # global http_status_code
     http_status_code = 777
 
     def __init__(self, **kwargs):
@@ -41,10 +42,9 @@ class MozuRestClient:
         self.mz_imageid = kwargs.get('mz_imageid', '')
         if type(self.mz_imageid) == str:
             self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
-        self.document_response = ''
 
-        # Auth / Connect / HTTP Status - Globalized
-        # global http_status_code
+
+        # Auth / Connect
         self.accessToken = get_mozu_client_authtoken()
 
         # Headers / Data-Payload and Filters
@@ -57,8 +57,10 @@ class MozuRestClient:
         self.ext = self.bf_imageid.split('.')[-1].lower()
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
+
         self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
-        print 'Document Payload Set'
+        self.document_response = ''
+        print 'Document Payload Set, Response Initialized'
 
         print kwargs, "End Init -- kwargs"
         #super(MozuRestClient, self).__init__(**kwargs)
