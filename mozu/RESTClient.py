@@ -43,13 +43,12 @@ class MozuRestClient:
         if type(self.mz_imageid) == str:
             self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
 
-
         # Auth / Connect
         self.accessToken = get_mozu_client_authtoken()
 
         # Headers / Data-Payload and Filters
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
-        if kwargs.get('bf_imageid', ''):
+        if kwargs.get('bf_imageid'):
             self.bf_imageid = kwargs.get('bf_imageid')
             self.ext = self.bf_imageid.split('.')[-1].lower()
         elif kwargs.get('src_filepath'):
