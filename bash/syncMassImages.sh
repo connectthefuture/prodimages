@@ -28,7 +28,7 @@ syncdnameLL="/mnt/Post_Ready/aPhotoPush/${DATE}_LL/999999999/"
 mkdir -p $syncdnameLL
 
 ## Below line automates posting Looklet to site immediately
-# find $orignameLL -type f -maxdepth 1 -iname \*_[1-6x].jpg -exec cp {} /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JamesHoetker/ \;
+find $orignameLL -type f -maxdepth 1 -iname \*_[1-6x].jpg -exec cp {} /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JamesHoetker/ \;
 
 find $orignameLL -type f -maxdepth 1 -iname \*_[1-6x].jpg -exec mv {} $syncdnameLL \;
 chmod -R ugo+rx $syncpardnameLL ;
