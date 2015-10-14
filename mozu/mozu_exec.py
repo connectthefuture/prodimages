@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-import pdb;pdb.set_trace()
+# import pdb;pdb.set_trace()
 
 def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
@@ -14,6 +14,14 @@ def list_documents(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     documents = mzclient.get_mz_image_documents()['items']
+    print documents
+    return documents
+
+
+def resource_documents_list(**kwargs):
+    from RESTClient import MozuRestClient
+    mzclient = MozuRestClient(**kwargs)
+    documents = mzclient.get_mz_image_documents()
     print documents
     return documents
 
@@ -48,7 +56,7 @@ def list_documents(**kwargs):
 # PUT - Update Document Data
 def update_tags_mz_image(**kwargs):
     from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)   
+    mzclient = MozuRestClient(**kwargs)
     update_resp = _mzclient.update_mz_image()
     print locals(), "Update Data"
     return update_resp
