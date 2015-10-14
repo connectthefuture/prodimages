@@ -153,7 +153,7 @@ class MozuRestClient:
         document_list_uri = "/".join(self.document_data_api.split('/')[:-1])
         _document_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
-        print "DocumentGetResponse: {0}".format(_document_response.status_code)
+        print "DocumentGetResponse: {0}".format(_document_response.json())
         try:
             return _document_response.json()
         except KeyError:
