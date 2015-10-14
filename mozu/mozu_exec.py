@@ -4,18 +4,16 @@ import pdb;pdb.set_trace()
 
 def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
-    print kwargs, 'KWARGS-84'
-    _mzclient = MozuRestClient(**kwargs)
-    total_count = _mzclient['totalCount']
+    mzclient = MozuRestClient(**kwargs)
+    total_count = mzclient.get_mz_image_documents()['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
 
 
 def list_documents():
     from RESTClient import MozuRestClient
-    print 'KWARGS-18-Not Used'
-    _mzclient = MozuRestClient()
-    documents = _mzclient['items']
+    mzclient = MozuRestClient(**kwargs)
+    documents = mzclient.get_mz_image_documents()['items']
     print documents
     return documents
 
@@ -59,30 +57,27 @@ def update_tags_mz_image(**kwargs):
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
 def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
     from RESTClient import MozuRestClient
-    print kwargs, 'KWARGS-62'
-    _mzclient = MozuRestClient(**kwargs)
+    mzclient = MozuRestClient(**kwargs)   
     src_filepath = kwargs.get("src_filepath")
-    update_resp = _mzclient.send_content(src_filepath)
-    print locals(), "UpsertContent"
+    update_resp = total_count = mzclient.send_content(src_filepath)
+    print update_resp.headers, "UpsertContent"
     return update_resp
 
 # DELETE - Delete Image/DocumentContent
 def delete_document_content(**kwargs):
     from RESTClient import MozuRestClient
-    print kwargs, 'KWARGS-75'
-    _mzclient = MozuRestClient(**kwargs)
-    delete_resp = _mzclient.delete_mz_image()
-    print locals(), "Delete"
-    return delete_resp.headers
+    mzclient = MozuRestClient(**kwargs) 
+    delete_resp = mzclient.delete_mz_image()
+    print delete_resp.headers, "Delete"
+    return delete_resp
 
 # Post New Image, Creates Document
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
-    print kwargs, 'KWARGS-84'
-    _mzclient = MozuRestClient(**kwargs)
+    mzclient = MozuRestClient(**kwargs)
     doc_resp = _mzclient.create_new_mz_image()
-    print locals(), "NEW"
     return doc_resp
+
 
 ###########################
 ### Main - Conditions ##
