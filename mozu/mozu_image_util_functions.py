@@ -44,7 +44,8 @@ def md5_checksumer(src_filepath):
             md5 = hashlib.md5(content)
             _hash = md5.hexdigest()
             return _hash
-        except:
+        except IndexError:
+            print "Not Index Error Checksummer"
             return False
 
 # Converts image to jpeg
