@@ -51,7 +51,7 @@ class MozuRestClient:
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         if kwargs.get('bf_imageid', ''):
             self.bf_imageid = kwargs.get('bf_imageid')
-        elif kwargs.get('src_filepath', ''):
+        elif kwargs.get('src_filepath'):
             self.bf_imageid = kwargs.get('src_filepath').split('/')[-1]
 
         self.ext = self.bf_imageid.split('.')[-1].lower()
