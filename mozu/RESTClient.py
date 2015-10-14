@@ -158,7 +158,7 @@ class MozuRestClient:
         response_fields = kwargs.get("response_fields", "")
         if response_fields:
             self.qstring_filter = "?responseFields\={{response_fields}}".format(response_fields=response_fields)
-        document_list_uri = "".join(self.document_data_api.split('/')[:-1])
+        document_list_uri = "/".join(self.document_data_api.split('/')[:-1])
         _document_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.status_code)
