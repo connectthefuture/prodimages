@@ -10,7 +10,7 @@ def count_total_files_documents(**kwargs):
     return total_count
 
 
-def list_documents():
+def list_documents(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     documents = mzclient.get_mz_image_documents()['items']
@@ -54,7 +54,7 @@ def update_tags_mz_image(**kwargs):
     return update_resp
 
 # PUT - Upload UPDATE Image/DocumentContent - InsertNew/Update ie. upsert
-def upsert_content_mz_image(**kwargs):   # src_filepath=None,mz_imageid=None):
+def upsert_content_mz_image(src_file , **kwargs):   # src_filepath=None,mz_imageid=None):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     src_filepath = kwargs.get("src_filepath")
