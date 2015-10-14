@@ -86,7 +86,7 @@ class MozuRestClient:
         del self.__getitem__(dict)[key]
 
     def __contains__(self, key):
-        return self.__getitem__(key) #.__contains__(self)
+        return self.__getitem__(key).__contains__()
 
     def update(self, *args, **kwargs):
         print 'update', args, kwargs
@@ -148,6 +148,23 @@ class MozuRestClient:
             return _document_response.json()['id']
         except KeyError:
             return _document_response
+
+    ## GET - List of Documents on FileManager
+    def get_mz_image_document_list(self, **kwargs):
+        import requests, json
+        self.headers["Content-type"] = 'application/json'
+        response_fields = kwargs.get("response_fields", "")
+        if response_fields:
+            self.qstring_filter = "?responseFields\={{response_fields}}".format(response_fields=response_fields)
+        document_list_uri = "".join(self.document_data_api.split('/')[:-1])
+        _document_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        MozuRestClient.http_status_code = _document_response.status_code
+        print "DocumentGetResponse: {0}".format(_document_response.status_code)
+        try:
+            return _document_response.json()
+        except KeyError:
+            return _document_response
+
 
     ## GET - Document
     def get_mz_image_document(self, **kwargs):
