@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-__base_protocol__               = "https"
-__base_url__                    = "staging-sb.mozu.com"
-__listFQN__                     = 'files@mozu'
-__documentTypeFQN__             = 'image@mozu'
-__tenant_name__                 = '11146'
-__tenant_url__                  = "{0}\:\/\/t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
-### build Mozu API Url String
-__document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
+# __base_protocol__               = "https"
+# __base_url__                    = "staging-sb.mozu.com"
+# __listFQN__                     = 'files@mozu'
+# __documentTypeFQN__             = 'image@mozu'
+# __tenant_name__                 = '11146'
+# __tenant_url__                  = "{0}\:\/\/t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
+# ### build Mozu API Url String
+# __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
 
 
 def get_mozu_client_authtoken():
