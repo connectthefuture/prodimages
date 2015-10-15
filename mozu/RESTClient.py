@@ -156,7 +156,7 @@ class MozuRestClient:
             return _document_data_response
 
     ## GET - Single Document Obj by documentId .ie mz_imageid
-    ## -- The Document properties that define the content used by the content management system (CMS). 
+    ## -- The Document properties that define the content used by the content management system (CMS).
     def get_mz_image_document(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -194,7 +194,7 @@ class MozuRestClient:
     # Combined Methods using above base Methods
     ###
 
-    ##  List Files - GET - List of Documents on FileManager - ie. a Single documentList
+    ##  List Files - GET - List of Document PROPERTIES on FileManager - ie. a Single documentList
     def get_mz_image_document_list(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -207,6 +207,7 @@ class MozuRestClient:
         print "DocumentGetResponse: {0}".format(_document_response.json())
         print document_list_uri
         try:
+            ## returns Properties of each Document
             return _document_response.json()
         except KeyError:
             return _document_response.headers
