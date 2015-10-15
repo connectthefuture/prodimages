@@ -2,8 +2,17 @@
 # coding: utf-8
 
 # Import initial static vars and Auth func
-from . import base_config
-from base_config import *
+__base_protocol__               = "https"
+__base_url__                    = "staging-sb.mozu.com"
+__listFQN__                     = 'files@mozu'
+__documentTypeFQN__             = 'image@mozu'
+__tenant_name__                 = '11146'
+__tenant_url__                  = "{0}\:\/\/t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
+### build Mozu API Url String
+__document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
+
+
+from base_config import authenticate
 
 
 class MozuBflyDocument:
@@ -11,7 +20,7 @@ class MozuBflyDocument:
 
 class MozuAlchemyClient:
     pass
-    
+
 
 class MozuRestClient:
     """Class to interact with Mozus REST API interface -- MozuRestClient"""
@@ -19,12 +28,12 @@ class MozuRestClient:
     # Class http_status_code
     http_status_code = 777
     __endpoints         = {}
-    __listFQN           = base_config.__listFQN__
-    __documentTypeFQN   = base_config.__documentTypeFQN__
-    __tenant_name       = base_config.__tenant_name__
+    __listFQN           = __listFQN__
+    __documentTypeFQN   = __documentTypeFQN__
+    __tenant_name       = __tenant_name__
     ### build Mozu API Url String
-    __tenant_url        = base_config.__tenant_url__
-    __document_data_api = base_config.__document_data_api__
+    __tenant_url        = __tenant_url__
+    __document_data_api = __document_data_api__
 
 
     def __init__(self, **kwargs):
@@ -38,7 +47,7 @@ class MozuRestClient:
             MozuRestClient.__endpoints["endpoint_resource_doc_metadata"] = self.document_metadata_resource
 
         # Auth / Connect
-        self.accessToken = get_mozu_client_authtoken()
+        self.accessToken = authenticate()
 
         # Headers / Data-Payload and Filters
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : MozuRestClient.__tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
