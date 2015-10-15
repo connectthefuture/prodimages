@@ -177,12 +177,13 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
+        print "Initial MZID URL: {}".format(self.document_resource)
         # Delete Content
         _document_content_response = requests.delete(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
         _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_data_response.status_code
-        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\t-->URL: {2}".format(_document_data_response.status_code, _document_content_response.status_code, self.document_resource)
+        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tMozuID: {2}\n\t-->URL: {3}".format(_document_data_response.status_code, _document_content_response.status_code, self.mz_imageid, self.document_resource)
         try:
             return _document_data_response
         except KeyError:
