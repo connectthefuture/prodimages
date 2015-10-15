@@ -156,6 +156,7 @@ class MozuRestClient:
             return _document_data_response
 
     ## GET - Single Document Obj by documentId .ie mz_imageid
+    ## -- The Document properties that define the content used by the content management system (CMS). 
     def get_mz_image_document(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
