@@ -143,6 +143,7 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
+        if kwargs.get("src_filepath"):
             _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         else:
             _document_response = requests.put(MozuRestClient.__document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
@@ -150,7 +151,6 @@ class MozuRestClient:
             if kwargs.get("properties", dict(self.properties.items()['tags']).values()):
                 self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
                 _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-
         MozuRestClient.http_status_code = _document_response.status_code
         try:
             return _document_response.json()['id']
