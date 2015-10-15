@@ -208,7 +208,7 @@ class MozuRestClient:
         print document_list_uri
         try:
             ## returns Properties of each Document
-            return _document_response.json()
+            return _document_response.json()['items']
         except KeyError:
             return _document_response.headers
 
