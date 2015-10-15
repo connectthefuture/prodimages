@@ -7,7 +7,7 @@ __base_url__                    = "staging-sb.mozu.com"
 __listFQN__                     = 'files@mozu'
 __documentTypeFQN__             = 'image@mozu'
 __tenant_name__                 = '11146'
-__tenant_url__                  = "{0}\:\/\/t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
+__tenant_url__                  = "{0}://t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
 ### build Mozu API Url String
 __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
 
@@ -164,8 +164,8 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         response_fields = kwargs.get("response_fields", "")
         if response_fields:
-            self.qstring_filter = "?responseFields\={{response_fields}}".format(response_fields=response_fields)
-        document_list_uri = "/".join(MozuRestClient.__document_data_api.split('/')[:-1])
+            self.qstring_filter = "?responseFields={{response_fields}}".format(response_fields=response_fields)
+        document_list_uri = MozuRestClient.__document_data_api
         _document_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.json())
