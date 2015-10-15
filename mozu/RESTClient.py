@@ -2,7 +2,9 @@
 # coding: utf-8
 
 # Import initial static vars and Auth func
-from base_config import *
+#import base_config
+from .base_config import *
+
 
 class MozuBflyDocument:
     pass
