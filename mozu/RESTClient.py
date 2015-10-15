@@ -14,29 +14,36 @@ class MozuAlchemyClient:
 class MozuRestClient:
     """docstring for MozuRestClient"""
 
-    # global http_status_code
+    # Class http_status_code
     http_status_code = 777
+    __endpoints         = {}
+    __listFQN           = __listFQN__
+    __documentTypeFQN   = __documentTypeFQN__
+    __tenant_name       = __tenant_name__
+    ### build Mozu API Url String
+    __tenant_url        = __tenant_url__
+    __document_data_api = __document_data_api__
 
+    
     def __init__(self, **kwargs):
 
         ### Mozu Defaults - Tenant --> FQN
-        self.listFQN = 'files@mozu'
-        self.documentTypeFQN = 'image@mozu'
-        self.tenant_name = '11146'
 
-        ### build Mozu API Url String
-        self.tenant_url = "https://t{0}.staging-sb.mozu.com/".format(self.tenant_name)
-        self.document_data_api    = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents"
+
+        MozuRestClient.__endpoints["endpoint_resource_doclist"] = MozuRestClient.__document_data_api
         self.qstring_filter = kwargs.get('qstring_filter', '')
         self.mz_imageid = kwargs.get('mz_imageid', '')
         if type(self.mz_imageid) == str:
-            self.document_resource  = self.tenant_url + "/api/content/documentlists/" + self.listFQN + "/documents/" + self.mz_imageid + "/content"
+            self.document_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid + "/content"
+            self.document_metadata_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid
+            MozuRestClient.__endpoints["endpoint_resource_doc_content"] = self.document_resource
+            MozuRestClient.__endpoints["endpoint_resource_doc_metadata"] = self.document_metadata_resource
 
         # Auth / Connect
         self.accessToken = get_mozu_client_authtoken()
 
         # Headers / Data-Payload and Filters
-        self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : self.tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
+        self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : MozuRestClient.__tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         if kwargs.get('bf_imageid'):
             self.bf_imageid = kwargs.get('bf_imageid')
             self.ext = self.bf_imageid.split('.')[-1].lower()
@@ -50,7 +57,7 @@ class MozuRestClient:
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
 
-        self.document_payload = {'listFQN' : self.listFQN, 'documentTypeFQN' : self.documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
+        self.document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
         self.document_response = ''
         print 'Document Payload Set, Response Initialized'
 
@@ -92,13 +99,13 @@ class MozuRestClient:
     def create_new_mz_image(self):
         import requests, json
         self.headers["Content-type"] = 'application/json'
-        _document_response = requests.post(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        _document_response = requests.post(MozuRestClient.__document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         print "DocumentPostResponse: {0}".format(_document_response.status_code)
         MozuRestClient.http_status_code = _document_response.status_code
         if MozuRestClient.http_status_code < 400:
             try:
                 self.mz_imageid = _document_response.json()['id']
-                self.document_resource = self.document_data_api + self.mz_imageid + "/content"
+                self.document_resource = MozuRestClient.__document_data_api + self.mz_imageid + "/content"
                 return (self.mz_imageid, self.document_resource,)
             except KeyError:
                 return (_document_response, None,)
@@ -117,7 +124,7 @@ class MozuRestClient:
         self.headers["Content-type"] = self.mimetype
         stream = open(path.abspath(src_filepath), 'rb').read()
 
-        self.document_resource = self.document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
         _content_response = requests.put(self.document_resource, data=stream, headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _content_response.status_code
         print "ContentPutResponse: {0}".format(_content_response.status_code)
@@ -128,11 +135,11 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = self.document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
         if kwargs.get("src_filepath"):
             _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         else:
-            _document_response = requests.put(self.document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+            _document_response = requests.put(MozuRestClient.__document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
             print _document_response
             if kwargs.get("properties", dict(self.properties.items()['tags']).values()):
                 self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
@@ -151,7 +158,7 @@ class MozuRestClient:
         response_fields = kwargs.get("response_fields", "")
         if response_fields:
             self.qstring_filter = "?responseFields\={{response_fields}}".format(response_fields=response_fields)
-        document_list_uri = "/".join(self.document_data_api.split('/')[:-1])
+        document_list_uri = "/".join(MozuRestClient.__document_data_api.split('/')[:-1])
         _document_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.json())
@@ -167,7 +174,7 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = self.document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
         _document_response = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.status_code)
@@ -182,14 +189,14 @@ class MozuRestClient:
         import requests, json
         from os import path as path
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = self.document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
         if not self.bf_imageid:
             # Get bflyid from Oracle using mz_id
             from db import mozu_image_table_instance
             self.bf_imageid = mozu_image_table_instance.select( whereclause=(mozu_image_table_instance.c.mz_imageid == self.mz_imageid) )[0]['bf_imageid']
 
         self.headers["Content-type"] = 'application/json'
-        self.document_resource = self.document_data_api + self.mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + self.mz_imageid + "/content"
         resp = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = resp.status_code
         if MozuRestClient.http_status_code < 400 and MozuRestClient.http_status_code != 0:
@@ -206,10 +213,10 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = self.document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
         _document_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
-        print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, self.document_data_api)
+        print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, MozuRestClient.__document_data_api)
         try:
             return _document_response
         except KeyError:
