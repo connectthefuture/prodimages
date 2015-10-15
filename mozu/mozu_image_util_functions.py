@@ -127,7 +127,8 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
             if not kwargs.get('tags'):
                 image_metadata = get_exif_all_data(img)
                 print str(type(image_metadata.values()))
-                tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
+                #tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
+                tags = [ "{}:::{}".format(k,v.items()) for k,v in image_metadata.iteritems() ] #image_metadata.values()
             else:
                 tags = kwargs.get('tags')
             print type(img), 'Compiler129'
