@@ -171,9 +171,9 @@ class MozuRestClient:
         print "DocumentGetResponse: {0}".format(_document_response.json())
         print document_list_uri
         try:
-            return _document_response.json()
-        except KeyError:
             return _document_response
+        except KeyError:
+            return _document_response.headers
 
 
     ## GET - Document
@@ -186,9 +186,9 @@ class MozuRestClient:
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.status_code)
         try:
-            return _document_response.json()
-        except KeyError:
             return _document_response
+        except KeyError:
+            return _document_response.headers
 
 
     ## GET - Document
