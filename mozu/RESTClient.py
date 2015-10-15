@@ -181,7 +181,7 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
         _document_response = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.status_code)
