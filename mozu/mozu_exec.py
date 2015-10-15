@@ -15,7 +15,7 @@ def list_documents(**kwargs):
     mzclient = MozuRestClient(**kwargs)
     documents = mzclient.get_mz_image_document_list()
 
-    return documents[2][1][1].items()
+    return documents
 
 
 def resource_documents_list(**kwargs):
