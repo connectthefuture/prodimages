@@ -145,6 +145,7 @@ class MozuRestClient:
             self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
         _document_data_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        #_document_data_response = requests.patch(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         if kwargs.get("src_filepath"):
             _document_content_response = self.send_content(kwargs.get("src_filepath"), **kwargs) #requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
             print _document_content_response.headers
