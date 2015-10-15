@@ -203,7 +203,6 @@ class MozuRestClient:
             self.bf_imageid = mozu_image_table_instance.select( whereclause=(mozu_image_table_instance.c.mz_imageid == self.mz_imageid) )[0]['bf_imageid']
 
         self.headers["Content-type"] = 'application/json'
-        self.document_resource = MozuRestClient.__document_data_api + self.mz_imageid + "/content"
         resp = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = resp.status_code
         if MozuRestClient.http_status_code < 400 and MozuRestClient.http_status_code != 0:

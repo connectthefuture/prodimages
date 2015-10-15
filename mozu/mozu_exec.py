@@ -5,7 +5,7 @@
 def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
-    total_count = mzclient.get_mz_image_documents()['totalCount']
+    total_count = mzclient.get_mz_image_document_list()['totalCount']
     print "Total Files in DocumentList: {}".format(total_count)
     return total_count
 
@@ -13,17 +13,15 @@ def count_total_files_documents(**kwargs):
 def list_documents(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
-    documents = mzclient.get_mz_image_documents()['items']
-    print documents
+    documents = mzclient.get_mz_image_document_list()['items']
     return documents
 
 
 def resource_documents_list(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
-    documents = mzclient.get_mz_image_document_list()
-    print documents
-    return documents
+    documents_list = mzclient.get_mz_image_document_list()
+    return documents_list
 
 
 # def download_document_content(outfile=None, **kwargs):
@@ -92,10 +90,10 @@ def main(insert_list_filepaths):
     import sqlalchemy
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
-    
+
     ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
-    
+
     for k,v in compiled_instance_vars.iteritems():
         # src_filepath = k # will need in order to perfom any image manipulation before loading(would actually need to redo the md5checksum from compiler)
         # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
@@ -122,7 +120,7 @@ def main(insert_list_filepaths):
         # Update
         except sqlalchemy.exc.IntegrityError:
             print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
-            mozu_image_table = mozu_image_table_instance()            
+            mozu_image_table = mozu_image_table_instance()
             v['mz_imageid'] = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
             upsert_content_resp = upsert_content_mz_image(**v)
             if upsert_content_resp.http_status_code < 300:
