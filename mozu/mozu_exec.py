@@ -36,15 +36,16 @@ def upload_new(**kwargs):
     return {mz_imageid: document_resource}
 
 # PUT - Upload/Update Image/DocumentContent
-def upsert_content_mz_image(src_filepath, mz_imageid=None, **kwargs):
+def upsert_content_mz_image(*args, **kwargs):
     from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
+    if not args:
+        mzclient = MozuRestClient(**kwargs)
     update_resp = mzclient.send_content(src_filepath)
     print update_resp.headers, "UpsertContent"
     return update_resp
 
 # PUT - Update Document Data - Properties/Metadata
-def update_data_mz_image(mz_imageid=None, **kwargs):
+def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     update_resp = mzclient.update_mz_image()
@@ -52,7 +53,7 @@ def update_data_mz_image(mz_imageid=None, **kwargs):
     return update_resp
 
 # DELETE - Delete Image/DocumentContent - Everything
-def delete_document_data_content(mz_imageid=None, **kwargs):
+def delete_document_data_content(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
