@@ -112,7 +112,7 @@ class MozuRestClient:
         if MozuRestClient.http_status_code < 400:
             try:
                 self.mz_imageid = _document_response.json()['id']
-                self.document_resource = MozuRestClient.__document_data_api + self.mz_imageid + "/content"
+                self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid + "/content"
                 return (self.mz_imageid, self.document_resource,)
             except KeyError:
                 return (_document_response, None,)
@@ -142,8 +142,7 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
-        if kwargs.get("src_filepath"):
+        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
             _document_response = requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         else:
             _document_response = requests.put(MozuRestClient.__document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
@@ -196,7 +195,7 @@ class MozuRestClient:
         import requests, json
         from os import path as path
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
         if not self.bf_imageid:
             # Get bflyid from Oracle using mz_id
             from db import mozu_image_table_instance
@@ -219,7 +218,7 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = MozuRestClient.__document_data_api + _mz_imageid + "/content"
+        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
         _document_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, MozuRestClient.__document_data_api)
