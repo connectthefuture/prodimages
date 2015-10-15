@@ -176,9 +176,9 @@ class MozuRestClient:
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
         # Delete Content
-        _document_content_response = requests.delete(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        _document_content_response = requests.delete(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
-        _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, MozuRestClient.__document_data_api)
         try:
@@ -200,7 +200,7 @@ class MozuRestClient:
         if response_fields:
             self.qstring_filter = "?responseFields={{response_fields}}".format(response_fields=response_fields)
         document_list_uri = MozuRestClient.__document_data_api
-        _document_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        _document_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentGetResponse: {0}".format(_document_response.json())
         print document_list_uri
@@ -210,13 +210,13 @@ class MozuRestClient:
             return _document_response.headers
 
     ## HEAD - Single Documents Content Headers
-    def get_mz_image_document_headers(self, **kwargs):
+    def get_mz_image_document_content_headers(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
         # Get Content
-        _document_content_response = requests.get(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        _document_content_response = requests.head(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_content_response.status_code
         print "DocumentGetResponse: {0}".format(_document_content_response.status_code)
         try:
@@ -235,7 +235,7 @@ class MozuRestClient:
             from db import mozu_image_table_instance
             self.bf_imageid = mozu_image_table_instance.select( whereclause=(mozu_image_table_instance.c.mz_imageid == self.mz_imageid) )[0]['bf_imageid']
         self.headers["Content-type"] = 'application/json'
-        resp = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        resp = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = resp.status_code
         if MozuRestClient.http_status_code < 400 and MozuRestClient.http_status_code != 0:
             if not outfile:
