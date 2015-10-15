@@ -57,7 +57,7 @@ def resource_documents_list(**kwargs):
 def update_tags_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
-    update_resp = _mzclient.update_mz_image()
+    update_resp = mzclient.update_mz_image()
     print locals(), "Update Data"
     return update_resp
 
@@ -66,7 +66,7 @@ def upsert_content_mz_image(src_file , **kwargs):   # src_filepath=None,mz_image
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     src_filepath = kwargs.get("src_filepath")
-    update_resp = total_count = mzclient.send_content(src_filepath)
+    update_resp = mzclient.send_content(src_filepath)
     print update_resp.headers, "UpsertContent"
     return update_resp
 
@@ -82,39 +82,33 @@ def delete_document_content(**kwargs):
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
-    doc_resp = _mzclient.create_new_mz_image()
-    return doc_resp
+    mz_imageid, document_resource = mzclient.create_new_mz_image()
+    return mz_imageid, document_resource
 
 
 ###########################
 ### Main - Conditions ##
 def main(insert_list_filepaths):
     import sqlalchemy
-    from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
-
+    
+    ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
-
+    
     for k,v in compiled_instance_vars.iteritems():
-        src_filepath = k
-        bf_imageid = v['bf_imageid']
-        mz_imageid = v['mz_imageid']
-        md5checksum = v['md5checksum']
-        tags        = v['tags']
-        print locals(), 'LOCAL80', k, v
-        #image_metadata = v['image_metadata']
-        mozu_image_table = mozu_image_table_instance()
-
+        # src_filepath = k # will need in order to perfom any image manipulation before loading(would actually need to redo the md5checksum from compiler)
+        # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
         try:
-            print locals(), k, v, 'LOCAL87'
-            v['mz_imageid'] = upload_new(**v)
+            v['mz_imageid'], response = upload_new(**v)[0]
             load_content_resp = upsert_content_mz_image(**v)
             if load_content_resp.http_status_code < 400:
+                mozu_image_table = mozu_image_table_instance()
                 insert_db = mozu_image_table.insert(values=dict(**v))
                 insert_db.execute()
                 print 'Inserted --> ', v.items(), ' <-- ', insert_db
             elif load_content_resp.http_status_code == 409:
+                mozu_image_table = mozu_image_table_instance()
                 orcl_res = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
                 v['mz_imageid'] = orcl_res['mz_imageid']
                 upsert_content_resp = upsert_content_mz_image(**v) #,dict(**v))
@@ -128,13 +122,13 @@ def main(insert_list_filepaths):
         # Update
         except sqlalchemy.exc.IntegrityError:
             print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
-            mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
+            mozu_image_table = mozu_image_table_instance()            
+            v['mz_imageid'] = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
             upsert_content_resp = upsert_content_mz_image(**v)
             if upsert_content_resp.http_status_code < 300:
                 update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                 res = update_db.execute()
                 print res, 'Updated with Integrity Errors --> ', v.items(), ' <-- ', update_db
-            #pass
 
 ## Run in shell as mozu_exec.py *args
 if __name__ == '__main__':
@@ -142,7 +136,7 @@ if __name__ == '__main__':
     import os.path as path
     insert_list = []
     try:
-        if path.isfile(sys.argv[1]):
+        if path.isfile(path.abspath(sys.argv[1])):
             for arg in sys.argv:
                 insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
