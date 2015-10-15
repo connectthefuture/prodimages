@@ -24,7 +24,7 @@ class MozuRestClient:
     __tenant_url        = __tenant_url__
     __document_data_api = __document_data_api__
 
-    
+
     def __init__(self, **kwargs):
 
         ### Mozu Defaults - Tenant --> FQN
@@ -56,7 +56,7 @@ class MozuRestClient:
 
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
-
+        # Build Data Payload
         self.document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
         self.document_response = ''
         print 'Document Payload Set, Response Initialized'
