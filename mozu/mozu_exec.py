@@ -57,7 +57,7 @@ def delete_document_data_content(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
-    print delete_resp.headers, "Delete"
+    print delete_resp.headers, "Delete", "MZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
 
 ### GET Images - Content
