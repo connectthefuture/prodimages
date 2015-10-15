@@ -218,12 +218,13 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
-        _document_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
+        _document_content_response = requests.delete(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_response.status_code
         print "DocumentDeleteResponse: {0} -- {1} -- {2}".format(_document_response.status_code, _document_response.url, MozuRestClient.__document_data_api)
         try:
-            return _document_response
+            return _document_data_response
         except KeyError:
             return _document_response.headers()
 
