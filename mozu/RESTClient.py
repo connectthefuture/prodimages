@@ -2,8 +2,8 @@
 # coding: utf-8
 
 # Import initial static vars and Auth func
-#import base_config
-from .base_config import *
+from . import base_config
+from base_config import *
 
 
 class MozuBflyDocument:
@@ -11,27 +11,23 @@ class MozuBflyDocument:
 
 class MozuAlchemyClient:
     pass
-
+    
 
 class MozuRestClient:
-    """docstring for MozuRestClient"""
+    """Class to interact with Mozus REST API interface -- MozuRestClient"""
 
     # Class http_status_code
     http_status_code = 777
     __endpoints         = {}
-    __listFQN           = __listFQN__
-    __documentTypeFQN   = __documentTypeFQN__
-    __tenant_name       = __tenant_name__
+    __listFQN           = base_config.__listFQN__
+    __documentTypeFQN   = base_config.__documentTypeFQN__
+    __tenant_name       = base_config.__tenant_name__
     ### build Mozu API Url String
-    __tenant_url        = __tenant_url__
-    __document_data_api = __document_data_api__
+    __tenant_url        = base_config.__tenant_url__
+    __document_data_api = base_config.__document_data_api__
 
 
     def __init__(self, **kwargs):
-
-        ### Mozu Defaults - Tenant --> FQN
-
-
         MozuRestClient.__endpoints["endpoint_resource_doclist"] = MozuRestClient.__document_data_api
         self.qstring_filter = kwargs.get('qstring_filter', '')
         self.mz_imageid = kwargs.get('mz_imageid', '')
@@ -71,9 +67,9 @@ class MozuRestClient:
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
         return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid , MozuRestClient.http_status_code)
 
-    #def __repr__(self):
-        #dictrepr = dict.__repr__(self)
-        #return '%s(%s)' % (type(self).__name__, dictrepr)
+    def __repr__(self):
+        dictrepr = dict.__repr__(self)
+        return '{0}({1})'.format(type(self).__name__, dictrepr)
 
     def __setitem__(self, key, value):
         #dict.__setitem__(self, key, value)
@@ -92,10 +88,10 @@ class MozuRestClient:
         return self.__getitem__(dict(self)).__contains__(key)
         #return dict.__getitem__(self).__contains__(value)
 
-    def update(self, *args, **kwargs):
-        print 'update', args, kwargs
-        for k, v in dict(*args, **kwargs).iteritems():
-            self[k] = v
+    # def update(self, *args, **kwargs):
+    #     print 'update', args, kwargs
+    #     for k, v in dict(*args, **kwargs).iteritems():
+    #         self[k] = v
 
     ## POST - Document
     def create_new_mz_image(self):
