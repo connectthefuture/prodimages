@@ -213,7 +213,7 @@ class MozuRestClient:
         return resp.content.headers()
 
 
-    ## DELETE - Document
+    ## DELETE - Document Content - TODO: DELETE the Document Data Object with mzid
     def delete_mz_image(self,**kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
