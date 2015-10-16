@@ -67,7 +67,7 @@ def update_data_mz_image(**kwargs):
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
-    kwargs['mz_imageid'] = select_db.execute()['mz_imageid']
+    kwargs['mz_imageid'] = select_db.execute().items()['mz_imageid']
     md5checksum = []
     kwargs['md5checksum'] = md5checksum
     mzclient = MozuRestClient(**kwargs)
@@ -84,6 +84,8 @@ def delete_document_data_content(**kwargs):
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
     mozu_image_table = mozu_image_table_instance()
+    delete_db = mozu_image_table.delete( whereclause=( (mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) ) )
+    #res = delete_db.execute()
     # TODO: Need to delete from db or alter insome way
     print delete_resp.headers, "Delete", "MZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
