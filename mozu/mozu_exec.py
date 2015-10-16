@@ -5,6 +5,10 @@
 #######################################
 ## Listing and Info about Document List
 #######################################
+import sqlalchemy
+from db import mozu_image_table_instance
+from mozu_image_util_functions import compile_todict_for_class_instance_variables
+
 def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
