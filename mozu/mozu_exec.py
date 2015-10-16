@@ -31,27 +31,43 @@ def resource_documents_list(**kwargs):
 ##### Single File / Single Document Obj
 #######################################
 # Post - New Image, Creates Document
+import sqlalchemy
+from db import mozu_image_table_instance
+from mozu_image_util_functions import compile_todict_for_class_instance_variables
+
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
+    kwargs['mz_imageid'] = mz_imageid
+    insert_db = mozu_image_table.insert(values=dict(**kwargs))
+    insert_db.execute()
+    print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
     ## Insert to mz_imageid + **kwargs to Oracle
     return {mz_imageid: document_resource}
 
 # PUT - Upload/Update Image/DocumentContent
-def upsert_content_mz_image(*args, **kwargs):
+def upsert_content_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     if not args:
         mzclient = MozuRestClient(**kwargs)
-    update_resp = mzclient.send_content(src_filepath)
+    update_resp = mzclient.send_content(**kwargs)
     print update_resp.headers, "UpsertContent"
     return update_resp
 
 # PUT - Update Document Data - Properties/Metadata
 def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
+    md5checksum = []
+    kwargs['md5checksum'] = md5checksum
     mzclient = MozuRestClient(**kwargs)
-    update_resp = mzclient.update_mz_image()
+    kwargs['mz_imageid'] = mz_imageid
+
+    update_resp = mzclient.update_mz_image(**kwargs)
+
+    update_db = mozu_image_table.update(values=dict(**kwargs),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+    res = update_db.execute()
+    print res, 'Updated--> ', kwargs.items(), ' <-- ', update_db
     print locals(), "Update Data"
     return update_resp
 
@@ -104,7 +120,7 @@ def main(list_of_filepaths):
     ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
     for k,v in compiled_instance_vars.iteritems():
-        if not v.get('mz_imageid'):
+        if not kwargs.get('mz_imageid'):
             #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
