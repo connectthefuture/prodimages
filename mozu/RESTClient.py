@@ -200,26 +200,27 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         document_list_uri = MozuRestClient.__document_data_api
-        ### build query string filter
-
+        
+        ### build query string filter  make this a method eventually
         _qstring_fields = []
         if kwargs.get("filter", ""):
-            _qstring.append("filter={{filter}}".format(dict(**kwargs)))
+            _qstring_fields.append("filter={{filter}}".format(dict(**kwargs)))
         ## "sortBy=productCode+asc"
         if kwargs.get("sort_by", "name+desc"):
-            _qstring.append("sortBy={{sort_by}}".format(dict(**kwargs)))
+            _qstring_fields.append("sortBy={{sort_by}}".format(dict(**kwargs)))
         if kwargs.get("response_fields", ""):
-            _qstring.append("responseFields={{response_fields}}".format(dict(**kwargs)))
+            _qstring_fields.append("responseFields={{response_fields}}".format(dict(**kwargs)))
         if kwargs.get("page_size", "40"):
-            _qstring.append("pageSize={{page_size}}".format(dict(**kwargs)))
+            _qstring_fields.append("pageSize={{page_size}}".format(dict(**kwargs)))
             if kwargs.get("start_index", ""):
-                _qstring.append("startIndex={{start_index}}".format(dict(**kwargs)))
+                _qstring_fields.append("startIndex={{start_index}}".format(dict(**kwargs)))
         if kwargs.get("include_inactive", "True"):
-            _qstring.append("includeInactive={{include_inactive}}".format(dict(**kwargs)))
+            _qstring_fields.append("includeInactive={{include_inactive}}".format(dict(**kwargs)))
 
         if _qstring_fields:
             _qstring = "&".join(_qstring_filter)
             document_list_uri = document_list_uri + "?" + _qstring
+
         _document_list_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_list_response.status_code
         print "DocumentGetResponse: {0}".format(_document_list_response.json())
