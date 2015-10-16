@@ -55,7 +55,7 @@ def upsert_content_mz_image(**kwargs):
     print update_resp.headers, "UpsertContent"
     return update_resp
 
-# PUT - Update Document Data - Properties/Metadata
+# PUT - Update Document Data and Content- Properties/Metadata
 def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
