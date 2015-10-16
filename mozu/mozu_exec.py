@@ -58,17 +58,16 @@ def upsert_content_mz_image(**kwargs):
 # PUT - Update Document Data - Properties/Metadata
 def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
+    select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
+    kwargs['mz_imageid'] = select_db.execute()['mz_imageid']
     md5checksum = []
     kwargs['md5checksum'] = md5checksum
     mzclient = MozuRestClient(**kwargs)
-    kwargs['mz_imageid'] = mz_imageid
-
     update_resp = mzclient.update_mz_image(**kwargs)
-
     update_db = mozu_image_table.update(values=dict(**kwargs),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+
     res = update_db.execute()
     print res, 'Updated--> ', kwargs.items(), ' <-- ', update_db
-    print locals(), "Update Data"
     return update_resp
 
 # DELETE - Delete Image/DocumentContent - Everything
@@ -79,6 +78,15 @@ def delete_document_data_content(**kwargs):
     print delete_resp.headers, "Delete", "MZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
 
+
+
+select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
+v['mz_imageid'] = select_db['mz_imageid']
+upsert_content_resp = upsert_content_mz_image(**v) #,dict(**v))
+if upsert_content_resp.http_status_code < 300:
+    update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
+    res = update_db.execute()
+    print res, 'Updated--> ', v.items(), ' <-- ', update_db
 ### GET Images - Content
 #
 # def download_document_content(outfile=None, **kwargs):
