@@ -207,7 +207,7 @@ class MozuRestClient:
         if kwargs.get("filter"):
             _qstring_fields.append("filter={filter}".format(**kwargs))
         ## "sortBy=productCode+desc"
-        if kwargs.get("sort_by"):
+        if kwargs.get("sort_by", "name+desc"):
             _qstring_fields.append("sortBy={0}".format(kwargs.get("sort_by", "name+desc")))
         if kwargs.get("response_fields"):
             _qstring_fields.append("responseFields={response_fields}".format(**kwargs))
@@ -220,10 +220,10 @@ class MozuRestClient:
             _qstring_fields.append("includeInactive={0}".format(kwargs.get("include_inactive", "True")))
 
         if _qstring_fields:
-            from urllib import urlencode, quote_plus
+            from urllib import urlencode, quote
             #_qstring = urlencode(_qstring_fields)
             _qstring = "&".join(_qstring_fields)
-            _qstring = quote_plus(_qstring)
+            _qstring = quote(_qstring)
             document_list_uri = document_list_uri + "?" + _qstring
 
         print  "QFields 227:\t", _qstring_fields, "\nDoclisturi with QString:\t", document_list_uri
