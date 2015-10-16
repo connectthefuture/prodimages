@@ -204,18 +204,18 @@ class MozuRestClient:
         ### build query string filter  make this a method eventually
         _qstring_fields = []
         if kwargs.get("filter", ""):
-            _qstring_fields.append("filter={{filter}}".format(dict(**kwargs)))
+            _qstring_fields.append("filter={{filter}}".format(**kwargs)))
         ## "sortBy=productCode+asc"
         if kwargs.get("sort_by", "name+desc"):
-            _qstring_fields.append("sortBy={{sort_by}}".format(dict(**kwargs)))
-        if kwargs.get("response_fields", ""):
-            _qstring_fields.append("responseFields={{response_fields}}".format(dict(**kwargs)))
+            _qstring_fields.append("sortBy={{sort_by}}".format(**kwargs)))
+        if kwargs.get("response_fields"):
+            _qstring_fields.append("responseFields={{response_fields}}".format(**kwargs)))
         if kwargs.get("page_size", "40"):
-            _qstring_fields.append("pageSize={{page_size}}".format(dict(**kwargs)))
-            if kwargs.get("start_index", ""):
-                _qstring_fields.append("startIndex={{start_index}}".format(dict(**kwargs)))
+            _qstring_fields.append("pageSize={{page_size}}".format(**kwargs)))
+            if kwargs.get("start_index"):
+                _qstring_fields.append("startIndex={{start_index}}".format(**kwargs)))
         if kwargs.get("include_inactive", "True"):
-            _qstring_fields.append("includeInactive={{include_inactive}}".format(dict(**kwargs)))
+            _qstring_fields.append("includeInactive={{include_inactive}}".format(**kwargs)))
 
         if _qstring_fields:
             _qstring = "&".join(_qstring_fields)
