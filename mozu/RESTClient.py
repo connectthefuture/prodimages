@@ -200,7 +200,7 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         document_list_uri = MozuRestClient.__document_data_api
-        
+
         ### build query string filter  make this a method eventually
         _qstring_fields = []
         if kwargs.get("filter", ""):
@@ -218,7 +218,7 @@ class MozuRestClient:
             _qstring_fields.append("includeInactive={{include_inactive}}".format(dict(**kwargs)))
 
         if _qstring_fields:
-            _qstring = "&".join(_qstring_filter)
+            _qstring = "&".join(_qstring_fields)
             document_list_uri = document_list_uri + "?" + _qstring
 
         _document_list_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
