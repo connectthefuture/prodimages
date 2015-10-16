@@ -224,7 +224,7 @@ class MozuRestClient:
             _qstring = quote_plus(_qstring)
             document_list_uri = document_list_uri + "?" + _qstring
 
-        print _qstring_fields, "QSTRING 227"
+        print _qstring_fields, "QSTRING 227", document_list_uri
 
         _document_list_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_list_response.status_code
