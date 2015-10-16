@@ -214,7 +214,7 @@ class MozuRestClient:
         if kwargs.get("page_size", "50"):
             _qstring_fields.append("pageSize={0}".format(kwargs.get("page_size", "50")))
             # For example, with a `pageSize `of 25, to get the 51st through the 75th items, use `startIndex=50`.
-            if kwargs.get("start_index", "0"):
+            if kwargs.get("start_index", "50"):
                 _qstring_fields.append("startIndex={start_index}".format(kwargs.get("start_index", "0")))
         if kwargs.get("include_inactive"):
             _qstring_fields.append("includeInactive={0}".format(kwargs.get("include_inactive")))
