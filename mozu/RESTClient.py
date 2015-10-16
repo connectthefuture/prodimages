@@ -120,7 +120,7 @@ class MozuRestClient:
             return {"Failed-POST", MozuRestClient.http_status_code}
 
     ## PUT - UpdateContent or Load to New Doc obj- Content stream - Send file
-    def send_content(self, src_filepath=None, mz_imageid=None, **kwargs):
+    def send_content(self,**kwargs):
         import requests
         from os import path
         ## FileContent
