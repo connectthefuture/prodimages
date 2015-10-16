@@ -218,7 +218,8 @@ class MozuRestClient:
             _qstring_fields.append("includeInactive={{include_inactive}}".format(**kwargs)))
 
         if _qstring_fields:
-            _qstring = "&".join(_qstring_fields)
+            from urllib import urlencode
+            _qstring = urlencode(_qstring_fields)
             document_list_uri = document_list_uri + "?" + _qstring
 
         _document_list_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
