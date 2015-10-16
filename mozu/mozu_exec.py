@@ -67,7 +67,7 @@ def update_data_mz_image(**kwargs):
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
-    kwargs['mz_imageid'] = select_db.execute().items()['mz_imageid']
+    kwargs['mz_imageid'] = select_db.execute().fetchone()['mz_imageid']
     md5checksum = []
     kwargs['md5checksum'] = md5checksum
     mzclient = MozuRestClient(**kwargs)
