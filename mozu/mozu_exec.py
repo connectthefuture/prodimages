@@ -45,6 +45,7 @@ def upload_new(**kwargs):
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
     kwargs['mz_imageid'] = mz_imageid
+    mozu_image_table = mozu_image_table_instance()
     insert_db = mozu_image_table.insert(values=dict(**kwargs))
     insert_db.execute()
     print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
@@ -64,6 +65,7 @@ def upload_new(**kwargs):
 def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
+    mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
     kwargs['mz_imageid'] = select_db.execute()['mz_imageid']
     md5checksum = []
@@ -71,6 +73,7 @@ def update_data_mz_image(**kwargs):
     mzclient = MozuRestClient(**kwargs)
     update_resp = mzclient.update_mz_image(**kwargs)
     update_db = mozu_image_table.update(values=dict(**kwargs),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+
     res = update_db.execute()
     print res, 'Updated--> ', kwargs.items(), ' <-- ', update_db
     return update_resp
@@ -78,9 +81,10 @@ def update_data_mz_image(**kwargs):
 # DELETE - Delete Image/DocumentContent - Everything
 def delete_document_data_content(**kwargs):
     from RESTClient import MozuRestClient
-    from db import mozu_image_table_instance
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
+    mozu_image_table = mozu_image_table_instance()
+    # TODO: Need to delete from db or alter insome way
     print delete_resp.headers, "Delete", "MZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
 
@@ -95,7 +99,8 @@ def delete_document_data_content(**kwargs):
 #     image_content = _mzclient[     if not _mzclient.bf_imageid:
 #         # Get bflyid from Oracle using mz_id
 #         from db import mozu_image_table_instance
-#         bf_imageid = mozu_image_table_instance.select( whereclause=( (mozu_image_table_instance.c.mz_imageid == _mzclient.mz_imageid) ) )[0]['bf_imageid']
+          #mozu_image_table = mozu_image_table_instance()
+#         bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == _mzclient.mz_imageid) ) )[0]['bf_imageid']
 #         _mzclient.bf_imageid = bf_imageid
 #     if not outfile:
 #         outfile = path.join('/tmp', _mzclient.bf_imageid)
