@@ -195,7 +195,7 @@ class MozuRestClient:
     # Combined Methods using above base Methods
     ###
 
-    ##  List Files - GET - List of Document PROPERTIES on FileManager - ie. a Single documentList
+    ##  List Files - GET - List of Document Collection PROPERTIES on FileManager - ie. a Single documentList(ie. DocumentCollection)
     def get_mz_image_document_list(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -213,6 +213,7 @@ class MozuRestClient:
             _qstring_fields.append("responseFields={{response_fields}}".format(**kwargs))
         if kwargs.get("page_size", "50"):
             _qstring_fields.append("pageSize={{page_size}}".format(**kwargs))
+            # For example, with a `pageSize `of 25, to get the 51st through the 75th items, use `startIndex=3`.
             if kwargs.get("start_index"):
                 _qstring_fields.append("startIndex={{start_index}}".format(**kwargs))
         if kwargs.get("include_inactive", "True"):
