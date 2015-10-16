@@ -220,7 +220,7 @@ class MozuRestClient:
         if _qstring_fields:
             from urllib import urlencode, quote_plus
             #_qstring = urlencode(_qstring_fields)
-            _qstring = "&".join(_qstring_filter)
+            _qstring = "&".join(_qstring_fields)
             _qstring = quote_plus(_qstring)
             document_list_uri = document_list_uri + "?" + _qstring
 
