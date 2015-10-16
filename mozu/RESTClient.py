@@ -220,10 +220,10 @@ class MozuRestClient:
             _qstring_fields.append("includeInactive={0}".format(kwargs.get("include_inactive", "True")))
 
         if _qstring_fields:
-            from urllib import urlencode, quote
+            from urllib import urlencode, quote_plus
             #_qstring = urlencode(_qstring_fields)
             _qstring = "&".join(_qstring_fields)
-            _qstring = quote(_qstring)
+            #_qstring = quote_plus(_qstring)
             document_list_uri = document_list_uri + "?" + _qstring
 
         print  "QFields 227:\t", _qstring_fields, "\nDoclisturi with QString:\t", document_list_uri
