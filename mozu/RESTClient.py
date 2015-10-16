@@ -203,9 +203,10 @@ class MozuRestClient:
 
         ### build query string filter  make this a method eventually
         _qstring_fields = []
+        # "filter=IsDisplayed+eq+true"
         if kwargs.get("filter", ""):
             _qstring_fields.append("filter={{filter}}".format(**kwargs))
-        ## "sortBy=productCode+asc"
+        ## "sortBy=productCode+desc"
         if kwargs.get("sort_by", "name+desc"):
             _qstring_fields.append("sortBy={{sort_by}}".format(**kwargs))
         if kwargs.get("response_fields"):
