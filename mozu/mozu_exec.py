@@ -41,6 +41,7 @@ from mozu_image_util_functions import compile_todict_for_class_instance_variable
 
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
     kwargs['mz_imageid'] = mz_imageid
@@ -62,6 +63,7 @@ def upload_new(**kwargs):
 # PUT - Update Document Data and Content- Properties/Metadata
 def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
     kwargs['mz_imageid'] = select_db.execute()['mz_imageid']
     md5checksum = []
@@ -77,6 +79,7 @@ def update_data_mz_image(**kwargs):
 # DELETE - Delete Image/DocumentContent - Everything
 def delete_document_data_content(**kwargs):
     from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
     print delete_resp.headers, "Delete", "MZ CLIENTID in FUNCtion: ", kwargs
