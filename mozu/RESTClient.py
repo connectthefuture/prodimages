@@ -210,7 +210,7 @@ class MozuRestClient:
             _qstring_fields.append("sortBy={{sort_by}}".format(**kwargs)))
         if kwargs.get("response_fields"):
             _qstring_fields.append("responseFields={{response_fields}}".format(**kwargs)))
-        if kwargs.get("page_size", "40"):
+        if kwargs.get("page_size", "50"):
             _qstring_fields.append("pageSize={{page_size}}".format(**kwargs)))
             if kwargs.get("start_index"):
                 _qstring_fields.append("startIndex={{start_index}}".format(**kwargs)))
