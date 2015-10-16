@@ -46,14 +46,14 @@ def upload_new(**kwargs):
     ## Insert to mz_imageid + **kwargs to Oracle
     return {mz_imageid: document_resource}
 
-# PUT - Upload/Update Image/DocumentContent
-def upsert_content_mz_image(**kwargs):
-    from RESTClient import MozuRestClient
-    if not args:
-        mzclient = MozuRestClient(**kwargs)
-    update_resp = mzclient.send_content(**kwargs)
-    print update_resp.headers, "UpsertContent"
-    return update_resp
+# # PUT - Upload/Update Image/DocumentContent
+# def update_data_mz_image(**kwargs):
+#     from RESTClient import MozuRestClient
+#     if not args:
+#         mzclient = MozuRestClient(**kwargs)
+#     update_resp = mzclient.send_content(**kwargs)
+#     print update_resp.headers, "UpsertContent"
+#     return update_resp
 
 # PUT - Update Document Data and Content- Properties/Metadata
 def update_data_mz_image(**kwargs):
@@ -135,7 +135,7 @@ def main(list_of_filepaths):
                 elif int(load_content_resp.keys()[0]) == 409:
                     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
                     v['mz_imageid'] = select_db['mz_imageid']
-                    upsert_content_resp = upsert_content_mz_image(**v) #,dict(**v))
+                    upsert_content_resp = update_data_mz_image(**v) #,dict(**v))
                     if upsert_content_resp.http_status_code < 300:
                         update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                         res = update_db.execute()
@@ -145,7 +145,7 @@ def main(list_of_filepaths):
                     raise sqlalchemy.exc.IntegrityError()
             except sqlalchemy.exc.IntegrityError:
                 try:
-                    upsert_content_resp = upsert_content_mz_image(**v) #,dict(**v))
+                    upsert_content_resp = update_data_mz_image(**v) #,dict(**v))
                     if upsert_content_resp.http_status_code < 300:
                         update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                         res = update_db.execute()
@@ -156,7 +156,7 @@ def main(list_of_filepaths):
                     print "ENDING ERROR...", v
                     # mozu_image_table = mozu_image_table_instance()
                     # v['mz_imageid'] = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-                    # upsert_content_resp = upsert_content_mz_image(**v)
+                    # upsert_content_resp = update_data_mz_image(**v)
                     # if upsert_content_resp.http_status_code < 300:
                     #     update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
                     #     res = update_db.execute()
