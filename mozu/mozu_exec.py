@@ -13,7 +13,7 @@ def count_total_files_documents(**kwargs):
     else:
         returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
     print "Total Files in DocumentList: {}".format(returned_item_count)
-    return total_count
+    return returned_item_count
 
 def list_documents(**kwargs):
     from RESTClient import MozuRestClient
