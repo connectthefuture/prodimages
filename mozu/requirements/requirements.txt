@@ -1,0 +1,23 @@
+## Python Module Dependencies ##
+#
+httplib2
+Pillow
+PyExifTool
+pyOpenSSL
+python-dateutil
+python-mimeparse
+pytz
+pyzmq
+redis
+requests
+six
+SQLAlchemy
+sqlparse
+#trollius
+urllib3
+virtualenv3
+Werkzeug
+wheel
+xlrd
+xlwt
+zmq
