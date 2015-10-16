@@ -11,7 +11,7 @@ def count_total_files_documents(**kwargs):
     if not kwargs.get('page_size'):
         returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
     else:
-        returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['pageSize']
+        returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
     print "Total Files in DocumentList: {}".format(returned_item_count)
     return total_count
 
