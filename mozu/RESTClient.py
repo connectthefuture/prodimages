@@ -204,20 +204,20 @@ class MozuRestClient:
         ### build query string filter  make this a method eventually
         _qstring_fields = []
         # "filter=IsDisplayed+eq+true"
-        if kwargs.get("filter", ""):
+        if kwargs.get("filter"):
             _qstring_fields.append("filter={filter}".format(**kwargs))
         ## "sortBy=productCode+desc"
-        if kwargs.get("sort_by", "name+desc"):
-            _qstring_fields.append("sortBy={sort_by}".format(**kwargs))
+        if kwargs.get("sort_by"):
+            _qstring_fields.append("sortBy={0}".format(kwargs.get("sort_by", "name+desc")))
         if kwargs.get("response_fields"):
             _qstring_fields.append("responseFields={response_fields}".format(**kwargs))
-        if kwargs.get("page_size", "50"):
-            _qstring_fields.append("pageSize={page_size}".format(**kwargs))
+        if kwargs.get("page_size"):
+            _qstring_fields.append("pageSize={0}".format(kwargs.get("page_size", "50")))
             # For example, with a `pageSize `of 25, to get the 51st through the 75th items, use `startIndex=3`.
             if kwargs.get("start_index"):
                 _qstring_fields.append("startIndex={start_index}".format(**kwargs))
-        if kwargs.get("include_inactive", "True"):
-            _qstring_fields.append("includeInactive={include_inactive}".format(**kwargs))
+        if kwargs.get("include_inactive"):
+            _qstring_fields.append("includeInactive={0}".format(kwargs.get("include_inactive", "True")))
 
         if _qstring_fields:
             from urllib import urlencode, quote_plus
