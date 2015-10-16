@@ -79,14 +79,6 @@ def delete_document_data_content(**kwargs):
     return delete_resp
 
 
-
-select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-v['mz_imageid'] = select_db['mz_imageid']
-upsert_content_resp = upsert_content_mz_image(**v) #,dict(**v))
-if upsert_content_resp.http_status_code < 300:
-    update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
-    res = update_db.execute()
-    print res, 'Updated--> ', v.items(), ' <-- ', update_db
 ### GET Images - Content
 #
 # def download_document_content(outfile=None, **kwargs):
