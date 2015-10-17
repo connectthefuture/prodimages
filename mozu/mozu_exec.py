@@ -76,7 +76,7 @@ def update_data_mz_image(**kwargs):
         update_resp = mzclient.update_mz_image(**kwargs)
         update_db = mozu_image_table.update(values=dict(**kwargs),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
         res = update_db.execute()
-        print res, 'Updated--> ', kwargs.items(), ' <-- ', update_db
+        print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
     else:
         insert_db = mozu_image_table.insert(values=dict(**kwargs))
