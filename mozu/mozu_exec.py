@@ -70,7 +70,7 @@ def update_data_mz_image(**kwargs):
     select_result = select_db.execute()
     test = [ row for row in select_result ]
     print test
-    if select_result.returns_rows == True:
+    if test:
         kwargs['mz_imageid'] = select_result.fetchone()['mz_imageid']
         md5checksum = []
         kwargs['md5checksum'] = md5checksum
