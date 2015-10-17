@@ -68,6 +68,8 @@ def update_data_mz_image(**kwargs):
     mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
     select_result = select_db.execute()
+    test = [ row for row in select_result ]
+    print test
     if select_result.returns_rows == True:
         kwargs['mz_imageid'] = select_result.fetchone()['mz_imageid']
         md5checksum = []
@@ -79,6 +81,7 @@ def update_data_mz_image(**kwargs):
         print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
     else:
+        kwargs['mz_imageid'], kwargs['mozu_url'] = mzclient.upload_new(**kwargs)
         insert_db = mozu_image_table.insert(values=dict(**kwargs))
         insert_result = insert_db.execute()
         print "Not in DB. Insert Result: ", insert_result.is_insert
