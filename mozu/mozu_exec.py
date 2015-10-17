@@ -84,7 +84,7 @@ def update_data_mz_image(**kwargs):
         mzclient = MozuRestClient(**kwargs)
         post_resp = mzclient.create_new_mz_image()
         kwargs['mz_imageid'], kwargs['mozu_url'] =  post_resp #mzclient.create_new_mz_image(**kwargs)
-        insert_db = mozu_image_table.insert(values=dict(**kwargs))
+        insert_db = mozu_image_table.insert(**kwargs)
         insert_result = insert_db.execute()
         print "Not in DB. Insert Result: ", insert_result.is_insert
         return insert_result.is_insert
