@@ -70,7 +70,7 @@ def update_data_mz_image(**kwargs):
     select_result = select_db.execute()
     test = [ row for row in select_result ]
     print test
-    if test:
+    if test :
         kwargs['mz_imageid'] = select_result.fetchone()['mz_imageid']
         md5checksum = []
         kwargs['md5checksum'] = md5checksum
@@ -81,6 +81,7 @@ def update_data_mz_image(**kwargs):
         print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
     else:
+        mzclient = MozuRestClient(**kwargs)
         kwargs['mz_imageid'], kwargs['mozu_url'] = mzclient.upload_new(**kwargs)
         insert_db = mozu_image_table.insert(values=dict(**kwargs))
         insert_result = insert_db.execute()
