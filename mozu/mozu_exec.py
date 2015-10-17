@@ -82,6 +82,7 @@ def update_data_mz_image(**kwargs):
         return update_resp
     else:
         mzclient = MozuRestClient(**kwargs)
+        mzclient.create_new_mz_image()
         kwargs['mz_imageid'], kwargs['mozu_url'] = mzclient.create_new_mz_image(**kwargs)
         insert_db = mozu_image_table.insert(values=dict(**kwargs))
         insert_result = insert_db.execute()
