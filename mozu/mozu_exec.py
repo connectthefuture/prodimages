@@ -67,16 +67,22 @@ def update_data_mz_image(**kwargs):
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
-    kwargs['mz_imageid'] = select_db.execute().fetchone()['mz_imageid']
-    md5checksum = []
-    kwargs['md5checksum'] = md5checksum
-    mzclient = MozuRestClient(**kwargs)
-    update_resp = mzclient.update_mz_image(**kwargs)
-    update_db = mozu_image_table.update(values=dict(**kwargs),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
-
-    res = update_db.execute()
-    print res, 'Updated--> ', kwargs.items(), ' <-- ', update_db
-    return update_resp
+    select_result = select_db.execute()
+    if select_result.returns_rows == True:
+        kwargs['mz_imageid'] = s_result.fetchone()['mz_imageid']
+        md5checksum = []
+        kwargs['md5checksum'] = md5checksum
+        mzclient = MozuRestClient(**kwargs)
+        update_resp = mzclient.update_mz_image(**kwargs)
+        update_db = mozu_image_table.update(values=dict(**kwargs),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+        res = update_db.execute()
+        print res, 'Updated--> ', kwargs.items(), ' <-- ', update_db
+        return update_resp
+    else:
+        insert_db = mozu_image_table.insert(values=dict(**kwargs))
+        insert_result = insert_db.execute()
+        print "Not in DB. Insert Result: ", insert_result.is_insert
+        return insert_result.is_insert
 
 # DELETE - Delete Image/DocumentContent - Everything
 def delete_document_data_content(**kwargs):
