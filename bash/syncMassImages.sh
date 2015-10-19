@@ -78,7 +78,7 @@ find /mnt/Post_Ready/aPhotoPush -mindepth 1 -type d -empty -exec rmdir {} \;
 find /mnt/Design/LookletSync -mindepth 1 -type d -empty -exec rmdir {} \;
 find /mnt/Design/LookletEditorial -mindepth 1 -type d -empty -exec rmdir {} \;
 
-#/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x_vendorget_module_cronjobDloader.py Editorial ALL 12
+# /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x_vendorget_module_cronjobDloader.py Editorial ALL 12
 
 #############
 ## sync crontab
