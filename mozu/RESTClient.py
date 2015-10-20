@@ -129,7 +129,7 @@ class MozuRestClient:
             _qstring = ""
 
         request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"] + _qstring
-        return quote_plus(request_url_string)
+        return request_url_string
 
 
     ## POST - Document - Create New
@@ -235,7 +235,7 @@ class MozuRestClient:
         _qstring = self.uri_querystring_formatter(**kwargs)
         document_list_uri = MozuRestClient.__document_data_api + "?" + _qstring
         print  "QFields 227:\t", kwargs, "\nDoclisturi with QString:\t", document_list_uri
-        _document_list_response = requests.get(quote_plus(document_list_uri), data=json.dumps(self.document_payload), headers=self.headers, verify=False)
+        _document_list_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_list_response.status_code
         print "DocumentGetResponse: {0}".format(_document_list_response.json())
         print document_list_uri
