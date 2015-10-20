@@ -60,7 +60,7 @@ class MozuRestClient:
             self.bf_imageid = kwargs.get('src_filepath').split('/')[-1]
             self.ext = self.bf_imageid.split('.')[-1].lower()
         elif kwargs.get('bf_imageid'):
-            self.bf_imageid = kwargs.get('bf_imageid')
+            self.bf_imageid = str(kwargs.get('bf_imageid'))
             self.ext = self.bf_imageid.split('.')[-1].lower()
 
         else:
