@@ -138,13 +138,6 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
     return instance_properties
 
 ###########################
-mozu_image_table_valid_keys = [ 'id',
-                                'bf_imageid',
-                                'mz_imageid',
-                                'md5checksum',
-                                'created_date',
-                                'modified_date',
-                                'updated_count' ]
 
 def include_keys(dictionary, keys):
     """Filters a dict by only including certain keys only."""
@@ -154,10 +147,10 @@ def include_keys(dictionary, keys):
 def merge_properties(obj1, obj2):
     for property in obj1.__dict__:
         if not callable(obj1.__dict__[property]):
-            value = getattr(obj1,property);
+            value = getattr(obj1,property)
             if value is not None:
-                setattr(obj2, property, value);
-    return obj2;
+                setattr(obj2, property, value)
+    return obj2
 
 
 def merge_dict(data, *override):

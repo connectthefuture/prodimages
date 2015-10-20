@@ -10,6 +10,10 @@ __tenant_name__                 = '11146'
 __tenant_url__                  = "{0}://t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
 ### build Mozu API Url String
 __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
+### valid keys for filtering args
+__mozu_image_table_valid_keys__       = [ 'id', 'bf_imageid', 'mz_imageid', 'md5checksum', 'created_date', 'modified_date', 'updated_count' ]
+__mozu_query_filter_valid_keys__      = [ 'sortBy', 'filter', 'responseFields', 'pageSize', 'startIndex', 'includeInactive' ]
+__mozu_query_filter_valid_operators__ = [ 'sw', 'cont', 'in' ]
 
 
 from base_config import authenticate
@@ -202,36 +206,10 @@ class MozuRestClient:
     def get_mz_image_document_list(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
-        document_list_uri = MozuRestClient.__document_data_api
-
-        ### build query string filter  make this a method eventually
-        _qstring_fields = []
-        # "filter=IsDisplayed+eq+true"
-        if kwargs.get("filter"):
-            _qstring_fields.append("filter={filter}".format(**kwargs))
-        ## "sortBy=productCode+desc"
-        if kwargs.get("sort_by", "name+desc"):
-            _qstring_fields.append("sortBy={0}".format(kwargs.get("sort_by", "name+desc")))
-        if kwargs.get("response_fields"):
-            _qstring_fields.append("responseFields={response_fields}".format(**kwargs))
-        if kwargs.get("page_size", "50"):
-            _qstring_fields.append("pageSize={0}".format(kwargs.get("page_size", "50")))
-            # For example, with a `pageSize `of 25, to get the 51st through the 75th items, use `startIndex=50`.
-            if kwargs.get("start_index"):
-                _qstring_fields.append("startIndex={start_index}".format(kwargs.get("start_index", "0")))
-        if kwargs.get("include_inactive"):
-            _qstring_fields.append("includeInactive={0}".format(kwargs.get("include_inactive")))
-
-        if _qstring_fields:
-            from urllib import urlencode, quote_plus
-            #_qstring = urlencode(_qstring_fields)
-            _qstring = "&".join(_qstring_fields)
-            #_qstring = quote_plus(_qstring)
-            document_list_uri = document_list_uri + "?" + _qstring
-
+        _qstring = self.uri_querystring_formatter(**kwargs)
+        document_list_uri = MozuRestClient.__document_data_api + "?" + _qstring
         print  "QFields 227:\t", _qstring_fields, "\nDoclisturi with QString:\t", document_list_uri
-
-        _document_list_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
+        _document_list_response = requests.get(quote_plus(document_list_uri), data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_list_response.status_code
         print "DocumentGetResponse: {0}".format(_document_list_response.json())
         print document_list_uri
@@ -276,6 +254,20 @@ class MozuRestClient:
             with open(outfile,'w') as f:
                 f.write(resp.content)
         return resp.content.headers()
+
+
+    def uri_querystring_formatter(self, **kwargs)
+        from mozu_image_util_functions import include_keys
+        from urllib import urlencode, quote_plus
+        ## Default qstring params camel cased to adhere to mozu format
+        kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
+        kwargs["pageSize" ] = kwargs.get("page_size", "50")
+        kwargs["startIndex" ] = kwargs.get("start_index", "0")
+        #TODO camel case function --> qstring_args = include_keys(kwargs, camel_cased(mozu_image_table_valid_keys))
+        qstring_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+        _qstring = "?{}".format(urlencode(**qstring_args))
+        request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"]
+        return request_url_string
 
 
 def main():

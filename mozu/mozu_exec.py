@@ -7,7 +7,8 @@
 #######################################
 import sqlalchemy
 from db import mozu_image_table_instance
-from mozu_image_util_functions import compile_todict_for_class_instance_variables
+from mozu_image_util_functions import include_keys
+from RESTClient import __mozu_image_table_valid_keys__
 
 def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
@@ -39,12 +40,11 @@ def resource_documents_list(**kwargs):
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
-    from mozu_image_util_functions import compile_todict_for_class_instance_variables, mozu_image_table_valid_keys, include_keys
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
     kwargs['mz_imageid'] = mz_imageid
     mozu_image_table = mozu_image_table_instance()
-    table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
+    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     insert_db.execute()
     print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
@@ -64,7 +64,6 @@ def upload_new(**kwargs):
 def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
-    from mozu_image_util_functions import include_keys, mozu_image_table_valid_keys
     mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
     select_result = select_db.execute()
@@ -76,7 +75,7 @@ def update_data_mz_image(**kwargs):
         kwargs['md5checksum'] = md5checksum
         mzclient = MozuRestClient(**kwargs)
         update_resp = mzclient.update_mz_image(**kwargs)
-        table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
+        table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
         res = update_db.execute()
         print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
@@ -87,7 +86,7 @@ def update_data_mz_image(**kwargs):
         # kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
         if type(post_resp) == dict:
             kwargs['mz_imageid'] = post_resp.keys()[0]
-            table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
+            table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
             insert_db = mozu_image_table.insert(**table_args)
             insert_result = insert_db.execute()
             print "Not in DB. Insert Result: ", insert_result.is_insert
@@ -150,8 +149,9 @@ def main(list_of_filepaths):
 
     ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
     compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
-    for k,v in compiled_instance_vars.iteritems():
-        if not kwargs.get('mz_imageid'):
+    for key,value in compiled_instance_vars.iteritems():
+        v = include_keys(value, __mozu_image_table_valid_keys__)
+        if not v.get('mz_imageid'):
             #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
@@ -185,13 +185,11 @@ def main(list_of_filepaths):
                     print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
                 except:
                     print "ENDING ERROR...", v
-                    # mozu_image_table = mozu_image_table_instance()
-                    # v['mz_imageid'] = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-                    # upsert_content_resp = update_data_mz_image(**v)
-                    # if upsert_content_resp.http_status_code < 300:
-                    #     update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
-                    #     res = update_db.execute()
-                    #     print res, 'Updated with Integrity Errors --> ', v.items(), ' <-- ', update_db
+
+        elif v.get('mz_imageid'):
+            print "KWARGS has MZID: {}".format(v.get('mz_imageid'))
+            pass
+
 
 ## Run in shell as mozu_exec.py *args
 if __name__ == '__main__':
