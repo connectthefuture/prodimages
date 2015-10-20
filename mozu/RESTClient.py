@@ -126,9 +126,9 @@ class MozuRestClient:
             _qstring = "?{}".format(urlencode(**qstring_args))
         else:
             _qstring = ""
-        finally:
-            request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"] + _qstring
-            return quote_plus(request_url_string)
+
+        request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"] + _qstring
+        return quote_plus(request_url_string)
 
 
     ## POST - Document - Create New
