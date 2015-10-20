@@ -112,7 +112,8 @@ def get_exif_all_data(src_filepath):
         except ValueError:
             metadata = {}
             return metadata
-    else: pass
+    else:
+        pass
 
 ## Compile Inserts as dict with key == bluefly file name
 def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
@@ -137,12 +138,12 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
             print 'TYPE Error, Compiler132'
     return instance_properties
 
-###########################
 
 def include_keys(dictionary, keys):
     """Filters a dict by only including certain keys only."""
     key_set = set(keys) & set(dictionary.keys())
     return {key: dictionary[key] for key in key_set}
+
 
 def merge_properties(obj1, obj2):
     for property in obj1.__dict__:
