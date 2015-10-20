@@ -44,7 +44,6 @@ class MozuRestClient:
     def __init__(self, **kwargs):
         MozuRestClient.__endpoints["endpoint_resource_doclist"] = MozuRestClient.__document_data_api
         self.mz_imageid = kwargs.get('mz_imageid', '')
-        request_url_string
         if type(self.mz_imageid) == str:
             self.document_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid + "/content"
             self.document_metadata_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid
