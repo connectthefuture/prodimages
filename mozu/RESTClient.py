@@ -111,7 +111,7 @@ class MozuRestClient:
         _document_data_response = requests.post(MozuRestClient.__document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         print "DocumentPostResponse: {0}".format(_document_data_response.status_code)
         MozuRestClient.http_status_code = _document_data_response.status_code
-        if MozuRestClient.http_status_code < 400:
+        if MozuRestClient.http_status_code == 201:
             try:
                 self.mz_imageid = _document_data_response.json()['id']
                 self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid + "/content"
@@ -119,7 +119,7 @@ class MozuRestClient:
             except KeyError:
                 return (_document_data_response, None,)
         else:
-            return {"Failed-POST", MozuRestClient.http_status_code}
+            return {"Failed-POST with code: ", MozuRestClient.http_status_code}
 
     ## PUT - UpdateContent or Load to New Doc obj- Content stream - Send file
     def send_content(self,**kwargs):
