@@ -12,7 +12,7 @@ def log(original_function, filename=None):
     print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
         result = original_function(*args, **kwargs)
-        with open(filename, "wb+") as logfile:
+        with open(filename, "ab+") as logfile:
             logfile.write("Start: {0}".format(start_time))
             logfile.write("Function '%s' called with positional arguments %s and keyword arguments %s. The result was %s.\n" % (original_function.__name__, args, kwargs, result))
             end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
