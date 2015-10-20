@@ -60,7 +60,7 @@ class MozuRestClient:
             self.bf_imageid = kwargs.get('src_filepath').split('/')[-1]
             self.ext = self.bf_imageid.split('.')[-1].lower()
         elif kwargs.get('bf_imageid'):
-            self.bf_imageid = str(kwargs.get('bf_imageid'))
+            self.bf_imageid = kwargs.get('bf_imageid')
             self.ext = self.bf_imageid.split('.')[-1].lower()
 
         else:
@@ -156,7 +156,7 @@ class MozuRestClient:
         ## FileContent
         src_filepath = kwargs.get('src_filepath', "")
         mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.bf_imageid   = src_filepath.split('/')[:-1]
+        self.bf_imageid   = src_filepath.split('/')[-1]
         self.ext = self.bf_imageid.split('.')[-1]
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
@@ -171,7 +171,7 @@ class MozuRestClient:
     def update_mz_image(self,**kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
-        _mz_imageid = kwargs.get('mz_imageid', "")
+        _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         if kwargs.get("properties", dict(self.properties.items()['tags']).values()):
             self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
