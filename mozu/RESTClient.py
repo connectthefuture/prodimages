@@ -112,7 +112,7 @@ class MozuRestClient:
 
     def uri_querystring_formatter(self, **kwargs):
         from mozu_image_util_functions import include_keys
-        from urllib import urlencode, quote_plus
+        from urllib import urlencode, quote_plus, urlunquote
         ## Default qstring params camel cased to adhere to mozu format
         if kwargs.get("name") or kwargs.get("bf_imageid"):
             kwargs['name'] =  kwargs.get("bf_imageid", kwargs.get("name"))
@@ -124,7 +124,7 @@ class MozuRestClient:
             kwargs["startIndex" ] = kwargs.get("start_index", "0")
             qstring_args = include_keys(kwargs, __mozu_query_filter_valid_keys__)
             print qstring_args
-            _qstring = "?{}".format(urlencode(qstring_args))
+            _qstring = "?{}".format(urlunquote(urlencode(qstring_args)))
         else:
             _qstring = ""
 
