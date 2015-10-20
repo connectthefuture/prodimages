@@ -188,8 +188,7 @@ def main(list_of_filepaths):
 
         elif v.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(v.get('mz_imageid'))
-            pass
-
+            
 
 ## Run in shell as mozu_exec.py *args
 if __name__ == '__main__':
