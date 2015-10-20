@@ -14,7 +14,7 @@ def log(original_function, filename=None):
         result = original_function(*args, **kwargs)
         with open(filename, "wb+") as logfile:
             logfile.write("\nStart: {0}".format(start_time))
-            logfile.write("\n\tFunction '%s' called with\n\tpositional arguments: %s\n\tkeyword arguments: %s.\nThe result was %s.\n" % (original_function.__name__, args, kwargs, result))
+            logfile.write("\n\tFunction '%s' called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function,__name__, kwargs, args, result))
             end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
             logfile.write("\nEnd: {0}".format(end_time))
         return result
