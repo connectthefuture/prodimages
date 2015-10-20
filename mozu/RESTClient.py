@@ -18,6 +18,7 @@ __mozu_document_filter_valid_keys__      = [ 'name', 'filter', 'responseFields',
 
 
 from base_config import authenticate
+from mozu_image_util_functions import log
 
 
 class MozuBflyDocument:
@@ -41,6 +42,7 @@ class MozuRestClient:
     __document_data_api = __document_data_api__
 
 
+    @log
     def __init__(self, **kwargs):
         MozuRestClient.__endpoints["endpoint_resource_doclist"] = MozuRestClient.__document_data_api
         self.mz_imageid = kwargs.get('mz_imageid', '')
@@ -79,37 +81,45 @@ class MozuRestClient:
         #super(MozuRestClient, self).__init__(**kwargs)
 
 
+    @log
     def __str__(self):
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
         return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid , MozuRestClient.http_status_code)
 
+    @log
     def __repr__(self):
         dictrepr = dict.__repr__(self)
         return '{0}({1})'.format(type(self).__name__, dictrepr)
 
+    @log
     def __setitem__(self, key, value):
         #dict.__setitem__(self, key, value)
         self.__dict__[key] = value
         #self[key] = value
 
+    @log
     def __getitem__(self, key):
         #return dict.__getitem__(self, key)
         #return self[key]
         return self.__dict__[key]
 
+    @log
     def __delitem__(self, key):
         del self.__getitem__(dict)[key]
 
+    @log
     def __contains__(self, key, value):
         return self.__getitem__(dict(self)).__contains__(key)
         #return dict.__getitem__(self).__contains__(value)
 
-    # def update(self, *args, **kwargs):
+    #@log
+    #def update(self, *args, **kwargs):
     #     print 'update', args, kwargs
     #     for k, v in dict(*args, **kwargs).iteritems():
     #         self[k] = v
 
 
+    @log
     def uri_querystring_formatter(self, **kwargs):
         from mozu_image_util_functions import include_keys
         from urllib import urlencode, unquote
@@ -133,6 +143,7 @@ class MozuRestClient:
 
 
     ## POST - Document - Create New
+    @log
     def create_new_mz_image(self):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -150,6 +161,7 @@ class MozuRestClient:
             return {"Failed-POST with code: ", MozuRestClient.http_status_code}
 
     ## PUT - UpdateContent or Load to New Doc obj- Content stream - Send file
+    @log
     def send_content(self,**kwargs):
         import requests
         from os import path
@@ -172,6 +184,7 @@ class MozuRestClient:
 
 
     ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
+    @log
     def update_mz_image(self,**kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -191,7 +204,9 @@ class MozuRestClient:
             return _document_data_response
 
     ## GET - Single Document Obj by documentId .ie mz_imageid
-    ## -- The Document properties that define the content used by the content management system (CMS).
+    ## -- The Document properties that
+    define the content used by the content management system (CMS).
+    @log
     def get_mz_image_document(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -207,6 +222,7 @@ class MozuRestClient:
             return _document_content_response.headers
 
     ## DELETE - Document Content - Then DELETE the Document Data Object with mzid
+    @log
     def delete_mz_image(self,**kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -232,6 +248,7 @@ class MozuRestClient:
     ###
 
     ##  List Files - GET - List of Document Collection PROPERTIES on FileManager - ie. a Single documentList(ie. DocumentCollection)
+    @log
     def get_mz_image_document_list(self, **kwargs):
         import requests, json
         from urllib import urlencode, unquote
@@ -250,6 +267,7 @@ class MozuRestClient:
             return _document_list_response.headers
 
     ## HEAD - Single Documents Content Headers
+    @log
     def get_mz_image_document_content_headers(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
@@ -265,6 +283,7 @@ class MozuRestClient:
             return _document_content_response.headers
 
     ## Download File - GET - Document Content and download to Local or Remote File
+    @log
     def download_mz_image_content(self, outfile=None, **kwargs):
         import requests, json
         from os import path as path

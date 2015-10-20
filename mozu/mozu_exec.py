@@ -7,9 +7,10 @@
 #######################################
 import sqlalchemy
 from db import mozu_image_table_instance
-from mozu_image_util_functions import include_keys
+from mozu_image_util_functions import include_keys, log
 from RESTClient import __mozu_image_table_valid_keys__
 
+@log
 def count_total_files_documents(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
@@ -20,12 +21,14 @@ def count_total_files_documents(**kwargs):
     print "Total Files in DocumentList: {}".format(returned_item_count)
     return returned_item_count
 
+@log
 def list_documents(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
     documents = mzclient.get_mz_image_document_list()['items']
     return documents
 
+@log
 def resource_documents_list(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
@@ -36,7 +39,7 @@ def resource_documents_list(**kwargs):
 ##### Single File / Single Document Obj
 #######################################
 # Post - New Image, Creates Document
-
+@log
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
@@ -51,7 +54,7 @@ def upload_new(**kwargs):
     print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
     ## Insert to mz_imageid + **kwargs to Oracle
     return {mz_imageid: document_resource}
-
+# @log
 # # PUT - Upload/Update Image/DocumentContent
 # def upsert_data_mz_image(**kwargs):
 #     from RESTClient import MozuRestClient
@@ -62,6 +65,7 @@ def upload_new(**kwargs):
 #     return update_resp
 
 # PUT - Update Document Data and Content- Properties/Metadata
+@log
 def upsert_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
@@ -106,6 +110,7 @@ def upsert_data_mz_image(**kwargs):
             print post_resp, ' Failed'
 
 # DELETE - Delete Image/DocumentContent - Everything
+@log
 def delete_document_data_content(**kwargs):
     from RESTClient import MozuRestClient
     mzclient = MozuRestClient(**kwargs)
@@ -153,6 +158,7 @@ def delete_document_data_content(**kwargs):
 ### Main - Conditions ##
 #######################################
 ########
+@log
 def main(list_of_filepaths):
     import sqlalchemy
     from db import mozu_image_table_instance

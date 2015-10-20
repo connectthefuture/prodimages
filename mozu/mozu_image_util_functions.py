@@ -3,16 +3,21 @@
 
 # Defining a log function decorator to use as @log
 def log(original_function, filename=None):
-    import logging
+    import logging, datetime
     from os import path as path
     if filename is None:
-        filename = str("__main__" + "_log.txt")
+        filename = path.join("/root/DropboxSync/bflyProdimagesSync", str("__main__" + "_log.txt")
     logging.basicConfig(filename=filename, level=logging.INFO)
+
+    start_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
     print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
         result = original_function(*args, **kwargs)
         with open(filename, "ab+") as logfile:
+            logfile.write("Start: {0}".format(start_time))
             logfile.write("Function '%s' called with positional arguments %s and keyword arguments %s. The result was %s.\n" % (original_function.__name__, args, kwargs, result))
+            end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
+            logfile.write("End: {0}".format(end_time))
         return result
     return new_function
 
@@ -32,6 +37,7 @@ def mr_logger(src_filepath,*args):
 
 ### Utility Funx - Get File Data
 ## util func calcs md5 of file
+@log
 def md5_checksumer(src_filepath):
     import hashlib
     import os.path as path
@@ -49,6 +55,7 @@ def md5_checksumer(src_filepath):
             return False
 
 # Converts image to jpeg
+@log
 def magick_convert_to_jpeg(img, destdir=None):
     import subprocess
     ext = img.split('.')[-1]
@@ -100,6 +107,7 @@ def magick_convert_to_jpeg(img, destdir=None):
 
 ########################
 ## Extracts the image metadata from file
+@log
 def get_exif_all_data(src_filepath):
     import exiftool
     print type(src_filepath), src_filepath
@@ -116,6 +124,7 @@ def get_exif_all_data(src_filepath):
         pass
 
 ## Compile Inserts as dict with key == bluefly file name
+@log
 def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
     instance_properties = {}
     for img in list_of_images:
@@ -139,12 +148,14 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
     return instance_properties
 
 
+@log
 def include_keys(dictionary, keys):
     """Filters a dict by only including certain keys only."""
     key_set = set(keys) & set(dictionary.keys())
     return {key: dictionary[key] for key in key_set}
 
 
+@log
 def merge_properties(obj1, obj2):
     for property in obj1.__dict__:
         if not callable(obj1.__dict__[property]):
@@ -154,6 +165,7 @@ def merge_properties(obj1, obj2):
     return obj2
 
 
+@log
 def merge_dict(data, *override):
     result = {}
     for current_dict in (data,) + override:

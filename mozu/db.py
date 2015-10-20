@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+from mozu_image_util_functions import log
 ########################### DB Table Defs ############################
 ##
+@log
 def mozu_image_table_instance(**kwargs):
     import sqlalchemy, datetime
     from sqlalchemy import Table, Column, Integer, String, DateTime, MetaData, create_engine
@@ -16,11 +18,11 @@ def mozu_image_table_instance(**kwargs):
         #Column('id', Integer, Sequence('mozu_image_seq_trigger'), primary_key=True),
         Column('id', Integer, server_default=FetchedValue(), primary_key=True),
         Column('bf_imageid', String(19), unique=True, nullable=False),
-        Column('mz_imageid', String(37)), 
+        Column('mz_imageid', String(37)),
         Column('md5checksum', String(32)),
-        Column('created_date', oracle_dialect.DATE, server_default=FetchedValue()), 
-        Column('modified_date', oracle_dialect.DATE, onupdate=datetime.datetime.now), 
-        Column('updated_count', Integer, default=0)    
+        Column('created_date', oracle_dialect.DATE, server_default=FetchedValue()),
+        Column('modified_date', oracle_dialect.DATE, onupdate=datetime.datetime.now),
+        Column('updated_count', Integer, default=0)
         )
     return mozu_image_table
 
