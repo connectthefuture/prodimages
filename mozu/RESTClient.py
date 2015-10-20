@@ -14,7 +14,7 @@ __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __lis
 __mozu_image_table_valid_keys__       = [ 'id', 'bf_imageid', 'mz_imageid', 'md5checksum', 'created_date', 'modified_date', 'updated_count' ]
 __mozu_query_filter_valid_keys__      = [ 'sortBy', 'filter', 'responseFields', 'pageSize', 'startIndex', 'includeInactive' ]
 __mozu_query_filter_valid_operators__ = [ 'sw', 'cont', 'in' ]
-__mozu_document_filter_valid_keys__      = [ 'filter', 'responseFields', 'includeInactive' ]
+__mozu_document_filter_valid_keys__      = [ 'name', 'filter', 'responseFields', 'includeInactive' ]
 
 
 from base_config import authenticate
@@ -114,19 +114,21 @@ class MozuRestClient:
         from mozu_image_util_functions import include_keys
         from urllib import urlencode, quote_plus
         ## Default qstring params camel cased to adhere to mozu format
-        if kwargs.get("name", "") and kwargs.get("bf_imageid", ""):
+        if kwargs.get("name") or kwargs.get("bf_imageid"):
+            kwargs['name'] =  kwargs.get("bf_imageid", kwargs.get("name"))
             qstring_args = include_keys(kwargs, __mozu_document_filter_valid_keys__)
             _qstring = "?{}".format(urlencode(**qstring_args))
-        elif not kwargs.get("mz_imageid", ""):
+        elif not kwargs.get("mz_imageid"):
             kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
             kwargs["pageSize" ] = kwargs.get("page_size", "50")
             kwargs["startIndex" ] = kwargs.get("start_index", "0")
-            qstring_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+            qstring_args = include_keys(kwargs, __mozu_query_filter_valid_keys__)
             _qstring = "?{}".format(urlencode(**qstring_args))
         else:
             _qstring = ""
-        request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"] + _qstring
-        return quote_plus(request_url_string)
+        finally:
+            request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"] + _qstring
+            return quote_plus(request_url_string)
 
 
     ## POST - Document - Create New
