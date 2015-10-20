@@ -95,7 +95,7 @@ def upsert_data_mz_image(**kwargs):
             except sqlalchemy.exc.IntegrityError:
                 update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
                 update_result = update_db.execute()
-                print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
+                print post_resp, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
                 return update_result
         else:
             print post_resp, ' Failed'
