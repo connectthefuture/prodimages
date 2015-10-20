@@ -88,7 +88,7 @@ class MozuRestClient:
 
     #@log
     def __repr__(self):
-        dictrepr = dict.__repr__(self)
+        dictrepr = dict.__repr__(self.__dict__)
         return '{0}({1})'.format(type(self).__name__, dictrepr)
 
     @log
