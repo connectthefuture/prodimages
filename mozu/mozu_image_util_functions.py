@@ -12,11 +12,11 @@ def log(original_function, filename=None):
     print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
         result = original_function(*args, **kwargs)
-        with open(filename, "ab+") as logfile:
-            logfile.write("Start: {0}".format(start_time))
-            logfile.write("Function '%s' called with\n\tpositional arguments: %s\n\tkeyword arguments: %s.\nThe result was %s.\n" % (original_function.__name__, args, kwargs, result))
+        with open(filename, "wb+") as logfile:
+            logfile.write("\nStart: {0}".format(start_time))
+            logfile.write("\n\tFunction '%s' called with\n\tpositional arguments: %s\n\tkeyword arguments: %s.\nThe result was %s.\n" % (original_function.__name__, args, kwargs, result))
             end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
-            logfile.write("End: {0}".format(end_time))
+            logfile.write("\nEnd: {0}".format(end_time))
         return result
     return new_function
 
