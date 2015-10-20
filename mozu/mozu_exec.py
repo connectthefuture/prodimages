@@ -45,6 +45,7 @@ def upload_new(**kwargs):
     kwargs['mz_imageid'] = mz_imageid
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+    mzclient.send_content(**kwargs)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     insert_db.execute()
     print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
@@ -89,15 +90,17 @@ def upsert_data_mz_image(**kwargs):
             kwargs['mz_imageid'] = post_resp.keys()[0]
             table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
             try:
+                content_response = mzclient.send_content(**kwargs)
                 insert_db = mozu_image_table.insert(**table_args)
                 print insert_db
                 insert_result = insert_db.execute()
-                print "Not in DB. Insert Result: ", insert_result.is_insert
+                print content_response, "Not in DB. Insert Result: ", insert_result.is_insert
                 return insert_result.is_insert
             except sqlalchemy.exc.IntegrityError:
+                content_response = mzclient.send_content(**kwargs)
                 update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
                 update_result = update_db.execute()
-                print post_resp, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
+                print content_response, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
                 return update_result
         else:
             print post_resp, ' Failed'
