@@ -43,8 +43,8 @@ class MozuRestClient:
 
     def __init__(self, **kwargs):
         MozuRestClient.__endpoints["endpoint_resource_doclist"] = MozuRestClient.__document_data_api
-        self.qstring_filter = kwargs.get('qstring_filter', '')
         self.mz_imageid = kwargs.get('mz_imageid', '')
+        request_url_string
         if type(self.mz_imageid) == str:
             self.document_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid + "/content"
             self.document_metadata_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid
@@ -74,6 +74,7 @@ class MozuRestClient:
         self.document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
         self.document_response = ''
         print 'Document Payload Set, Response Initialized'
+        self.request_url_string = self.uri_querystring_formatter(**kwargs)
 
         print kwargs, "End Init -- kwargs"
         #super(MozuRestClient, self).__init__(**kwargs)
