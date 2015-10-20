@@ -113,18 +113,18 @@ class MozuRestClient:
     def uri_querystring_formatter(self, **kwargs)
         from mozu_image_util_functions import include_keys
         from urllib import urlencode, quote_plus
-
         ## Default qstring params camel cased to adhere to mozu format
-        if kwargs.get("name") and kwargs.get("bf_imageid"):
+        if kwargs.get("name", "") and kwargs.get("bf_imageid", ""):
             qstring_args = include_keys(kwargs, __mozu_document_filter_valid_keys__)
-        else:
+            _qstring = "?{}".format(urlencode(**qstring_args))
+        elif not kwargs.get("mz_imageid", ""):
             kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
             kwargs["pageSize" ] = kwargs.get("page_size", "50")
             kwargs["startIndex" ] = kwargs.get("start_index", "0")
-            # TODO: camel case function --> qstring_args = include_keys(kwargs, camel_cased(mozu_image_table_valid_keys))
             qstring_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-
-        _qstring = "?{}".format(urlencode(**qstring_args))
+            _qstring = "?{}".format(urlencode(**qstring_args))
+        else:
+            _qstring = ""
         request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"] + _qstring
         return quote_plus(request_url_string)
 
