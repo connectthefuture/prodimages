@@ -102,10 +102,16 @@ def upsert_data_mz_image(**kwargs):
                 return insert_result.is_insert
             except sqlalchemy.exc.IntegrityError:
                 content_response = mzclient.send_content(**kwargs)
-                update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
-                update_result = update_db.execute()
-                print content_response, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
-                return update_result
+                if kwargs.get('bf_imageid'):
+                    kwargs.get('bf_imageid')
+                    update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+                    update_result = update_db.execute()
+                    print content_response, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
+                    return update_result
+                else:
+                    print 'NO BFID to update ', locals()
+
+                    insert_db = mozu_image_table.insert(**table_args)
         else:
             print post_resp, ' Failed'
 
