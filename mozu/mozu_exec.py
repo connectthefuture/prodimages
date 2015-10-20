@@ -83,13 +83,17 @@ def update_data_mz_image(**kwargs):
         return update_resp
     else:
         mzclient = MozuRestClient(**kwargs)
-        #post_resp = mzclient.create_new_mz_image()
-        kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
-        table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
-        insert_db = mozu_image_table.insert(**table_args)
-        insert_result = insert_db.execute()
-        print "Not in DB. Insert Result: ", insert_result.is_insert
-        return insert_result.is_insert
+        post_resp = mzclient.create_new_mz_image()
+        # kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
+        if type(post_resp) == dict:
+            kwargs['mz_imageid'] = post_resp.keys()[0]
+            table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
+            insert_db = mozu_image_table.insert(**table_args)
+            insert_result = insert_db.execute()
+            print "Not in DB. Insert Result: ", insert_result.is_insert
+            return insert_result.is_insert
+        else:
+            print post_resp, ' Failed'
 
 # DELETE - Delete Image/DocumentContent - Everything
 def delete_document_data_content(**kwargs):
@@ -97,6 +101,7 @@ def delete_document_data_content(**kwargs):
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
     mozu_image_table = mozu_image_table_instance()
+
     delete_db = mozu_image_table.delete( whereclause=( (mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) ) )
     #res = delete_db.execute()
     # TODO: Need to delete from db or alter insome way
