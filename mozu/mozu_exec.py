@@ -77,6 +77,7 @@ def upsert_data_mz_image(**kwargs):
         update_resp = mzclient.update_mz_image(**kwargs)
         table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+        print update_db
         res = update_db.execute()
         print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
@@ -89,6 +90,7 @@ def upsert_data_mz_image(**kwargs):
             table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
             try:
                 insert_db = mozu_image_table.insert(**table_args)
+                print insert_db
                 insert_result = insert_db.execute()
                 print "Not in DB. Insert Result: ", insert_result.is_insert
                 return insert_result.is_insert

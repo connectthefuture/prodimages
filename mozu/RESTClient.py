@@ -171,7 +171,7 @@ class MozuRestClient:
     def update_mz_image(self,**kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
-        _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        _mz_imageid = kwargs.get('mz_imageid', "")
         if kwargs.get("properties", dict(self.properties.items()['tags']).values()):
             self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
