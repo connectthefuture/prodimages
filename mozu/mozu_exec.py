@@ -35,18 +35,17 @@ def resource_documents_list(**kwargs):
 ##### Single File / Single Document Obj
 #######################################
 # Post - New Image, Creates Document
-import sqlalchemy
-from db import mozu_image_table_instance
-from mozu_image_util_functions import compile_todict_for_class_instance_variables
 
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
+    from mozu_image_util_functions import compile_todict_for_class_instance_variables, mozu_image_table_valid_keys, include_keys
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
     kwargs['mz_imageid'] = mz_imageid
     mozu_image_table = mozu_image_table_instance()
-    insert_db = mozu_image_table.insert(values=dict(**kwargs))
+    table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
+    insert_db = mozu_image_table.insert(values=dict(**table_args))
     insert_db.execute()
     print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
     ## Insert to mz_imageid + **kwargs to Oracle
@@ -65,6 +64,7 @@ def upload_new(**kwargs):
 def update_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
+    from mozu_image_util_functions import include_keys, mozu_image_table_valid_keys
     mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
     select_result = select_db.execute()
@@ -76,7 +76,8 @@ def update_data_mz_image(**kwargs):
         kwargs['md5checksum'] = md5checksum
         mzclient = MozuRestClient(**kwargs)
         update_resp = mzclient.update_mz_image(**kwargs)
-        update_db = mozu_image_table.update(values=dict(**kwargs),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+        table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
+        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
         res = update_db.execute()
         print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
@@ -84,7 +85,8 @@ def update_data_mz_image(**kwargs):
         mzclient = MozuRestClient(**kwargs)
         #post_resp = mzclient.create_new_mz_image()
         kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
-        insert_db = mozu_image_table.insert(**kwargs)
+        table_args = include_keys(kwargs, ,mozu_image_table_valid_keys)
+        insert_db = mozu_image_table.insert(**table_args)
         insert_result = insert_db.execute()
         print "Not in DB. Insert Result: ", insert_result.is_insert
         return insert_result.is_insert
