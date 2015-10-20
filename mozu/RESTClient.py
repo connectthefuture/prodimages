@@ -81,38 +81,38 @@ class MozuRestClient:
         #super(MozuRestClient, self).__init__(**kwargs)
 
 
-    #@log
+    @log
     def __str__(self):
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
         return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid , MozuRestClient.http_status_code)
 
-    #@log
+    @log
     def __repr__(self):
-        dictrepr = dict.__repr__(self)
+        dictrepr = self.__repr__(dict)
         return '{0}({1})'.format(type(self).__name__, dictrepr)
 
-    #@log
+    @log
     def __setitem__(self, key, value):
         #dict.__setitem__(self, key, value)
         self.__dict__[key] = value
         #self[key] = value
 
-    #@log
+    @log
     def __getitem__(self, key):
         #return dict.__getitem__(self, key)
         #return self[key]
         return self.__dict__[key]
 
-    #@log
+    @log
     def __delitem__(self, key):
         del self.__getitem__(dict)[key]
 
-    #@log
+    @log
     def __contains__(self, key, value):
         return self.__getitem__(dict(self)).__contains__(key)
         #return dict.__getitem__(self).__contains__(value)
 
-    #@log
+    @log
     #def update(self, *args, **kwargs):
     #     print 'update', args, kwargs
     #     for k, v in dict(*args, **kwargs).iteritems():
