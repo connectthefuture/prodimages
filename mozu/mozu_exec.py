@@ -87,10 +87,16 @@ def upsert_data_mz_image(**kwargs):
         if type(post_resp) == dict:
             kwargs['mz_imageid'] = post_resp.keys()[0]
             table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-            insert_db = mozu_image_table.insert(**table_args)
-            insert_result = insert_db.execute()
-            print "Not in DB. Insert Result: ", insert_result.is_insert
-            return insert_result.is_insert
+            try:
+                insert_db = mozu_image_table.insert(**table_args)
+                insert_result = insert_db.execute()
+                print "Not in DB. Insert Result: ", insert_result.is_insert
+                return insert_result.is_insert
+            except sqlalchemy.exc.IntegrityError:
+                update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+                res = update_db.execute()
+                print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
+                return update_resp
         else:
             print post_resp, ' Failed'
 
