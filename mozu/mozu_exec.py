@@ -171,7 +171,7 @@ def main(list_of_filepaths):
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
 
     ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
-    compiled_instance_vars = compile_todict_for_class_instance_variables(insert_list_filepaths)
+    compiled_instance_vars = compile_todict_for_class_instance_variables(list_of_filepaths)
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
         if not v.get('mz_imageid'):
