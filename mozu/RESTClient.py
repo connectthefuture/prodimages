@@ -112,7 +112,7 @@ class MozuRestClient:
 
     def uri_querystring_formatter(self, **kwargs):
         from mozu_image_util_functions import include_keys
-        from urllib import urlencode, quote_plus, parse
+        from urllib import urlencode, unquote, parse
         ## Default qstring params camel cased to adhere to mozu format
         if kwargs.get("name") or kwargs.get("bf_imageid"):
             kwargs['name'] =  kwargs.get("bf_imageid", kwargs.get("name"))
@@ -230,7 +230,7 @@ class MozuRestClient:
     ##  List Files - GET - List of Document Collection PROPERTIES on FileManager - ie. a Single documentList(ie. DocumentCollection)
     def get_mz_image_document_list(self, **kwargs):
         import requests, json
-        from urllib import urlencode, quote_plus
+        from urllib import urlencode, unquote, parse
         self.headers["Content-type"] = 'application/json'
         _qstring = self.uri_querystring_formatter(**kwargs)
         document_list_uri = MozuRestClient.__document_data_api + "?" + _qstring
