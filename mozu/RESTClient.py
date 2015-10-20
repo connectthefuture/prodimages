@@ -112,7 +112,7 @@ class MozuRestClient:
         return self.__getitem__(dict(self)).__contains__(key)
         #return dict.__getitem__(self).__contains__(value)
 
-    @log
+    #@log
     #def update(self, *args, **kwargs):
     #     print 'update', args, kwargs
     #     for k, v in dict(*args, **kwargs).iteritems():
