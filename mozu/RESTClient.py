@@ -160,12 +160,16 @@ class MozuRestClient:
         self.ext = self.bf_imageid.split('.')[-1]
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
-        stream = open(path.abspath(src_filepath), 'rb').read()
-        self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
-        _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
-        MozuRestClient.http_status_code = _content_response.status_code
-        print "ContentPutResponse: {0}".format(_content_response.status_code)
-        return _content_response
+        try:
+            stream = open(path.abspath(src_filepath), 'rb').read()
+            self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
+            _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
+            MozuRestClient.http_status_code = _content_response.status_code
+            print "ContentPutResponse: {0}".format(_content_response.status_code)
+            return _content_response
+        except IOError:
+            print "OIO Error 171 Failed send_content"
+
 
     ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
     def update_mz_image(self,**kwargs):
