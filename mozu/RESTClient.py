@@ -204,8 +204,7 @@ class MozuRestClient:
             return _document_data_response
 
     ## GET - Single Document Obj by documentId .ie mz_imageid
-    ## -- The Document properties that
-    define the content used by the content management system (CMS).
+    ## -- The Document properties that define the content used by the content management system (CMS).
     @log
     def get_mz_image_document(self, **kwargs):
         import requests, json
@@ -246,7 +245,6 @@ class MozuRestClient:
     ###
     # Combined Methods using above base Methods
     ###
-
     ##  List Files - GET - List of Document Collection PROPERTIES on FileManager - ie. a Single documentList(ie. DocumentCollection)
     @log
     def get_mz_image_document_list(self, **kwargs):
