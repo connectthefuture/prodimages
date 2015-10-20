@@ -110,7 +110,7 @@ class MozuRestClient:
     #         self[k] = v
 
 
-    def uri_querystring_formatter(self, **kwargs)
+    def uri_querystring_formatter(self, **kwargs):
         from mozu_image_util_functions import include_keys
         from urllib import urlencode, quote_plus
         ## Default qstring params camel cased to adhere to mozu format
