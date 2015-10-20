@@ -230,6 +230,7 @@ class MozuRestClient:
     ##  List Files - GET - List of Document Collection PROPERTIES on FileManager - ie. a Single documentList(ie. DocumentCollection)
     def get_mz_image_document_list(self, **kwargs):
         import requests, json
+        from urllib import urlencode, quote_plus
         self.headers["Content-type"] = 'application/json'
         _qstring = self.uri_querystring_formatter(**kwargs)
         document_list_uri = MozuRestClient.__document_data_api + "?" + _qstring
