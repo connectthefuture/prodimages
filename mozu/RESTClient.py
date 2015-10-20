@@ -233,7 +233,7 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _qstring = self.uri_querystring_formatter(**kwargs)
         document_list_uri = MozuRestClient.__document_data_api + "?" + _qstring
-        print  "QFields 227:\t", _qstring_fields, "\nDoclisturi with QString:\t", document_list_uri
+        print  "QFields 227:\t", kwargs, "\nDoclisturi with QString:\t", document_list_uri
         _document_list_response = requests.get(quote_plus(document_list_uri), data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_list_response.status_code
         print "DocumentGetResponse: {0}".format(_document_list_response.json())
