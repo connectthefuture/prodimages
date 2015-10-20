@@ -86,9 +86,9 @@ class MozuRestClient:
         print "MozuID: {0}\tBflyID: {1}".format(self.mz_imageid, self.bf_imageid)
         return "MZID: %s - BFID: %s - Status: %i" % (self.mz_imageid, self.bf_imageid , MozuRestClient.http_status_code)
 
-    @log
+    #@log
     def __repr__(self):
-        dictrepr = self.__repr__(dict)
+        dictrepr = dict.__repr__(self)
         return '{0}({1})'.format(type(self).__name__, dictrepr)
 
     @log
