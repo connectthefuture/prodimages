@@ -124,7 +124,7 @@ class MozuRestClient:
             kwargs["startIndex" ] = kwargs.get("start_index", "0")
             qstring_args = include_keys(kwargs, __mozu_query_filter_valid_keys__)
             print qstring_args
-            #_qstring = "?{}".format(urlencode(**qstring_args))
+            _qstring = "?{}".format(urlencode(**qstring_args))
         else:
             _qstring = ""
 
