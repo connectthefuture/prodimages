@@ -119,7 +119,7 @@ class MozuRestClient:
             qstring_args = include_keys(kwargs, __mozu_document_filter_valid_keys__)
             _qstring = "?{}".format(urlencode(qstring_args))
         elif not kwargs.get("mz_imageid"):
-            kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
+            kwargs["sortBy"] =  kwargs.get("sort_by", "name desc")
             kwargs["pageSize" ] = kwargs.get("page_size", "50")
             kwargs["startIndex" ] = kwargs.get("start_index", "0")
             qstring_args = include_keys(kwargs, __mozu_query_filter_valid_keys__)
