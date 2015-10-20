@@ -6,9 +6,8 @@ def log(original_function, filename=None):
     import logging, datetime
     from os import path as path
     if filename is None:
-        filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str("__main__" + "_log.txt")
+        filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str("__main__" + "_log.txt"))
     logging.basicConfig(filename=filename, level=logging.INFO)
-
     start_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
     print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
