@@ -14,6 +14,7 @@ __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __lis
 __mozu_image_table_valid_keys__       = [ 'id', 'bf_imageid', 'mz_imageid', 'md5checksum', 'created_date', 'modified_date', 'updated_count' ]
 __mozu_query_filter_valid_keys__      = [ 'sortBy', 'filter', 'responseFields', 'pageSize', 'startIndex', 'includeInactive' ]
 __mozu_query_filter_valid_operators__ = [ 'sw', 'cont', 'in' ]
+__mozu_document_filter_valid_keys__      = [ 'filter', 'responseFields', 'includeInactive' ]
 
 
 from base_config import authenticate
@@ -108,6 +109,26 @@ class MozuRestClient:
     #     for k, v in dict(*args, **kwargs).iteritems():
     #         self[k] = v
 
+
+    def uri_querystring_formatter(self, **kwargs)
+        from mozu_image_util_functions import include_keys
+        from urllib import urlencode, quote_plus
+
+        ## Default qstring params camel cased to adhere to mozu format
+        if kwargs.get("name") and kwargs.get("bf_imageid"):
+            qstring_args = include_keys(kwargs, __mozu_document_filter_valid_keys__)
+        else:
+            kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
+            kwargs["pageSize" ] = kwargs.get("page_size", "50")
+            kwargs["startIndex" ] = kwargs.get("start_index", "0")
+            # TODO: camel case function --> qstring_args = include_keys(kwargs, camel_cased(mozu_image_table_valid_keys))
+            qstring_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+
+        _qstring = "?{}".format(urlencode(**qstring_args))
+        request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"] + _qstring
+        return quote_plus(request_url_string)
+
+
     ## POST - Document - Create New
     def create_new_mz_image(self):
         import requests, json
@@ -198,6 +219,7 @@ class MozuRestClient:
 
         #files = {'media': open(src_filepath, 'rb')}
 
+
     ###
     # Combined Methods using above base Methods
     ###
@@ -255,19 +277,6 @@ class MozuRestClient:
                 f.write(resp.content)
         return resp.content.headers()
 
-
-    def uri_querystring_formatter(self, **kwargs)
-        from mozu_image_util_functions import include_keys
-        from urllib import urlencode, quote_plus
-        ## Default qstring params camel cased to adhere to mozu format
-        kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
-        kwargs["pageSize" ] = kwargs.get("page_size", "50")
-        kwargs["startIndex" ] = kwargs.get("start_index", "0")
-        #TODO camel case function --> qstring_args = include_keys(kwargs, camel_cased(mozu_image_table_valid_keys))
-        qstring_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-        _qstring = "?{}".format(urlencode(**qstring_args))
-        request_url_string = MozuRestClient.__endpoints["endpoint_resource_doclist"]
-        return request_url_string
 
 
 def main():
