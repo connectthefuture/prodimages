@@ -154,7 +154,7 @@ class MozuRestClient:
             try:
                 self.mz_imageid = _document_data_response.json()['id']
                 self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid + "/content"
-                return {self.mz_imageid: self.document_resource}
+                return (self.mz_imageid, self.document_resource,)
             except KeyError:
                 return (_document_data_response, None,)
         else:
