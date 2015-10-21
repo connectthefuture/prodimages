@@ -97,7 +97,7 @@ def upsert_data_mz_image(**kwargs):
             try:
                 content_response = mzclient.send_content(**kwargs)
                 insert_db = mozu_image_table.insert(**table_args)
-                print print "\nInsert Statement: \v", insert_db
+                print "\nInsert Statement: \v", insert_db
                 insert_result = insert_db.execute()
                 print content_response, "Not in DB. Insert Result: ", insert_result.is_insert
                 return insert_result.is_insert
