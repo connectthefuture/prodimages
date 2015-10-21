@@ -186,7 +186,7 @@ def main(list_of_filepaths):
     print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
-        print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v,key,value)
+        print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v,key,value.popitem())
         if not v.get('mz_imageid'):
             #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
@@ -236,7 +236,7 @@ if __name__ == '__main__':
             for arg in sys.argv[1:]:
                 insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
-        print len(insert_list_filepaths), insert_list_filepaths
+        print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
         main(insert_list_filepaths)
     except IndexError:
         print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
