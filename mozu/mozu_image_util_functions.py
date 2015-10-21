@@ -3,7 +3,7 @@
 
 # Defining a log function decorator to use as @log
 def log(original_function, filename=None):
-    import logging, datetime
+    import logging, datetime, json
     from os import path as path
     if filename is None:
         filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str(original_function.__name__ + "_log.txt"))
