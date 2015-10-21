@@ -756,10 +756,10 @@ if os.path.isdir(tmp_processing):
         
         if path.isfile(pngout):
             print ' Is file PNGOUT', pngout, img
-            jpgout = mozu_image_util_functions.magickConvert_to_jpeg(pngout,destdir=destdir)
+            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=destdir)
         else:
             #pass
-            jpgout = mozu_image_util_functions.magickConvert_to_jpeg(img,destdir=destdir)
+            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=destdir)
 
         mozu_exec.main(jpgout)
         #
