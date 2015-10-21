@@ -14,7 +14,7 @@ def log(original_function, filename=None):
         result = original_function(*args, **kwargs)
         with open(filename, "wb+") as logfile:
             logfile.write("\nStart: {0}".format(start_time))
-            logfile.write("\n\tFunction '%s' called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, kwargs, args, result))
+            logfile.write("\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), json.dumps(args), result))
             end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
             logfile.write("\nEnd: {0}".format(end_time))
         return result
@@ -138,8 +138,9 @@ def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
                 print str(type(image_metadata.values()))
                 #tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
                 try:
-                    tags = [ "{}:::{}".format(k,v) for k,v in image_metadata.iteritems() ] #image_metadata.values()
+                    tags = [ "{}={}".format(k,v) for k,v in image_metadata.iteritems() ] #image_metadata.values()
                 except AttributeError:
+                    print 'Tags Attrib Error'
                     tags = []
             else:
                 tags = kwargs.get('tags')
