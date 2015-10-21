@@ -128,7 +128,7 @@ def get_exif_all_data(src_filepath):
 def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
     import os.path as path
     instance_properties = {}
-    print 'Compile 130\n', list_of_images, kwargs
+    print 'Compile 130\n', list(list_of_images), kwargs
     for img in list_of_images:
         path.isfile(img), ' <IsFile'
         bf_imageid = path.basename(img)
