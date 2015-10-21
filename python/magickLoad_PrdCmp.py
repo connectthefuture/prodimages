@@ -3,10 +3,13 @@
 
 import sys
 
-sys.path.append('python/jbmodules/image_processing/magick_tweaks')
-sys.path.append('mozu/')
-sys.path.append('/usr/local/batchRunScripts/mozu')
 sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
+sys.path.append('/usr/local/batchRunScripts/mozu')
+sys.path.append('/usr/local/batchRunScripts/python')
+sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
+sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
+sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
+sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
 
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
     import pycurl, os, shutil, re
@@ -840,6 +843,7 @@ for upload_file in upload_tmp_loading:
 
 
 ## Mozu
+import mozu_exec, mozu_image_util_functions
 upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
 mozu_exec.main(upload_tmp_mozu_loading_glob)
 ##
