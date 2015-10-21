@@ -9,12 +9,12 @@ def log(original_function, filename=None):
         filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str(original_function.__name__ + "_log.txt"))
     logging.basicConfig(filename=filename, level=logging.INFO)
     start_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
-    print "Logging to … {0}".format(path.abspath(filename))
+    # print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
         result = original_function(*args, **kwargs)
         with open(filename, "wb+") as logfile:
             logfile.write("\nStart: {0}".format(start_time))
-            logfile.write( "\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), args, result)              
+            logfile.write( "\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), args, result)
             )
             end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
             logfile.write("\nEnd: {0}".format(end_time))
