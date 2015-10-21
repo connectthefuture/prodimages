@@ -749,21 +749,19 @@ if os.path.isdir(tmp_processing):
         ############################
         ###### mozu
         ############################
-        # import sys
-        # from os import chdir as chdir
-        # chdir('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
-        # import convert_format_to_jpeg
-        # from convert_format_to_jpeg import magickConvert_to_jpeg as magickConvert_to_jpeg
-        # chdir('/usr/local/batchRunScripts/mozu')
-        # import prodimages_upload_orcl
-        # from prodimages_upload_orcl import main_upload_post as main_upload_post
-        # import os
-        # if os.path.isfile(pngout):
-        #     print ' Is file PNGOUT', pngout, img
-        #     jpgout = magickConvert_to_jpeg(pngout,destdir=destdir)
-        # else:
-        #     #pass
-        #     jpgout = magickConvert_to_jpeg(img,destdir=destdir)
+        import sys
+        from os import chdir, path
+        chdir('/usr/local/batchRunScripts/mozu')
+        import mozu_exec, mozu_image_util_functions
+        
+        if path.isfile(pngout):
+            print ' Is file PNGOUT', pngout, img
+            jpgout = mozu_image_util_functions.magickConvert_to_jpeg(pngout,destdir=destdir)
+        else:
+            #pass
+            jpgout = mozu_image_util_functions.magickConvert_to_jpeg(img,destdir=destdir)
+
+        mozu_exec.main(jpgout)
         #
         # ## --> Uncomment to run the MOZU piece fully
         # try:
@@ -772,7 +770,8 @@ if os.path.isdir(tmp_processing):
         #     print 'IOERROR - 772'
         #     pass
         ############################
-
+        ###### END mozu
+        ############################
     #metadict = metadata_info_dict(img)
     #dimens = get_imagesize_variables(img)
     #test_img = get_image_color_minmax(img)
