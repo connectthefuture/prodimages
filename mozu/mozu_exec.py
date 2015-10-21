@@ -179,10 +179,10 @@ def main(list_of_filepaths):
     import sqlalchemy
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
-
+    list_of_filepaths_unicode = [ f.decode(sys.getfilesystemencoding()) for f in list_of_filepaths if f ]
     ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
-    print type(list_of_filepaths), '<--Type\tLenLoFilepaths', len(list_of_filepaths), '\t', list_of_filepaths
-    compiled_instance_vars = compile_todict_for_class_instance_variables(list_of_filepaths)
+    print type(list_of_filepaths_unicode), '<--Type\tLenLoFilepaths', len(list_of_filepaths_unicode), '\t', list_of_filepaths_unicode
+    compiled_instance_vars = compile_todict_for_class_instance_variables(list_of_filepaths_unicode)
     print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)

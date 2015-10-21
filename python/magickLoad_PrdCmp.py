@@ -642,7 +642,7 @@ regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 ### Date Defs
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
-todaysdatefullsecs = '{:%Y-%m-%d_%H:%M.%S}'.format(datetime.datetime.now())
+todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
 todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
 ### Define tmp and archive paths prior to Creating
