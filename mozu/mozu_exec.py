@@ -50,6 +50,7 @@ def upload_new(**kwargs):
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     mzclient.send_content(**kwargs)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
+    print "Inserting with, ", insert_db
     insert_db.execute()
     print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
     ## Insert to mz_imageid + **kwargs to Oracle
@@ -82,7 +83,7 @@ def upsert_data_mz_image(**kwargs):
         update_resp = mzclient.update_mz_image(**kwargs)
         table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
-        print update_db
+        print "\nUpdate Statement: \v", update_db
         res = update_db.execute()
         print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
@@ -96,7 +97,7 @@ def upsert_data_mz_image(**kwargs):
             try:
                 content_response = mzclient.send_content(**kwargs)
                 insert_db = mozu_image_table.insert(**table_args)
-                print insert_db
+                print print "\nInsert Statement: \v", insert_db
                 insert_result = insert_db.execute()
                 print content_response, "Not in DB. Insert Result: ", insert_result.is_insert
                 return insert_result.is_insert
@@ -105,6 +106,7 @@ def upsert_data_mz_image(**kwargs):
                 if kwargs.get('bf_imageid'):
                     kwargs.get('bf_imageid')
                     update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+                    print "\nUpdate Statement: \v", update_db
                     update_result = update_db.execute()
                     print content_response, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
                     return update_result
@@ -112,6 +114,7 @@ def upsert_data_mz_image(**kwargs):
                     print 'NO BFID to update ', locals()
 
                     insert_db = mozu_image_table.insert(**table_args)
+                    print "\nInsert Statement: \v", insert_db
         else:
             print post_resp, ' Failed'
 
