@@ -747,7 +747,10 @@ def main(root_img_dir=None):
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
                 ## TODO: pngout will be the image to POST to mozu returned from mozu
                 #  ie. response = send_to_mozu(pngout)  then save response in postgres --> and push the id to mozu again
-
+                
+                from mozu import mozu_exec as mozu_exec
+                mz_res = mozu_exec.main(pngout)
+                print mz_res
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
             except AttributeError:
