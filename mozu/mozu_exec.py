@@ -181,7 +181,7 @@ def main(list_of_filepaths):
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
     # print type(list_of_filepaths), '<--Type\tLenLoFilepaths', len(list_of_filepaths), '\t', list_of_filepaths
-    compiled_instance_vars = compile_todict_for_class_instance_variables(list(list_of_filepaths))
+    compiled_instance_vars = compile_todict_for_class_instance_variables(list_of_filepaths)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
@@ -236,7 +236,7 @@ if __name__ == '__main__':
     insert_list = []
     try:
         if path.isfile(path.abspath(sys.argv[1])):
-            for arg in sys.argv[0].split():
+            for arg in " ".join(sys.argv[1:]):
                 insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
         print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
