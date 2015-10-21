@@ -1,15 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
+# Defining a log function decorator to use as @log
+def log(original_function, filename=None):
+    import logging, datetime, json
+    from os import path as path
+    if filename is None:
+        filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str(original_function.__name__ + "magick_log.txt"))
+    logging.basicConfig(filename=filename, level=logging.INFO)
+    start_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
+    # print "Logging to … {0}".format(path.abspath(filename))
+    def new_function(*args, **kwargs):
+        result = original_function(*args, **kwargs)
+        with open(filename, "wb+") as logfile:
+            logfile.write("\nStart: {0}".format(start_time))
+            logfile.write( "\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), args, result)
+            )
+            end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
+            logfile.write("\nEnd: {0}".format(end_time))
+        return result
+    return new_function
 
-sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
-sys.path.append('/usr/local/batchRunScripts/mozu')
-sys.path.append('/usr/local/batchRunScripts/python')
-sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
-sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
-sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
-sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
 
 def copy_to_imagedrop_upload(src_filepath, destdir=None):
     import pycurl, os, shutil, re
@@ -386,7 +397,7 @@ def subproc_magick_medium_jpg(img, destdir=None):
     else:
         return img
 
-
+@log
 def subproc_magick_png(img, destdir=None):
     import subprocess,re,os
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
@@ -633,255 +644,270 @@ def subproc_magick_png(img, destdir=None):
 #############################
 
 #############################
-import sys,glob,shutil,os,re,datetime
-regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
-regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
-regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
+@log
+def main():
+    import sys,glob,shutil,os,re,datetime
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
+    sys.path.append('/usr/local/batchRunScripts/mozu')
+    sys.path.append('/usr/local/batchRunScripts/python')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace'
+    
+    regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
+    regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
+    regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
 
-### Date Defs
-todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
-todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
-todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
-todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+    ### Date Defs
+    todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
+    todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+    todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
+    todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
-### Define tmp and archive paths prior to Creating
-tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
-tmp_processing_l = os.path.join(tmp_processing, "largejpg")
-tmp_processing_m = os.path.join(tmp_processing, "mediumjpg")
-tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
-tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
+    ### Define tmp and archive paths prior to Creating
+    tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
+    tmp_processing_l = os.path.join(tmp_processing, "largejpg")
+    tmp_processing_m = os.path.join(tmp_processing, "mediumjpg")
+    tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
+    tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
 
-## Define for Creating Archive dirs
-archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
-archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatearch).replace(",", ""))
+    ## Define for Creating Archive dirs
+    archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+    archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatearch).replace(",", ""))
 
-imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
-imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
+    imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
+    imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
 
-###################
-## Create Lock File
-###################
-#locker = os.path.join(rootdir, 'LOCKED.lock')
-#if os.path.isfile(locker):
-#    break
-#else:
-#    with open(locker, 'wb') as f:
-#        f.write(todaysdatefull)
-#        f.close()
+    ###################
+    ## Create Lock File
+    ###################
+    #locker = os.path.join(rootdir, 'LOCKED.lock')
+    #if os.path.isfile(locker):
+    #    break
+    #else:
+    #    with open(locker, 'wb') as f:
+    #        f.write(todaysdatefull)
+    #        f.close()
 
-try:
-    root_img_dir = os.path.abspath(sys.argv[1])
-    destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
-    tmp_processing = root_img_dir
-    tmp_loading = destdir
-except:
-    root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
-    destdir      =  tmp_loading
-if os.path.isdir(root_img_dir): pass
-else:
-    root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
-    destdir      =  tmp_loading
-
-
-###########
-## Test for ex
-#root_img_dir =  tmp_processing
-walkedout_tmp = glob.glob(os.path.join(root_img_dir, '*/*.*g'))
-image_ct = len(walkedout_tmp)
-starttime = todaysdatefull
-if image_ct == 0:
-    print "Nothing to Process"
-else:
-### Make Tmp Folders for Processing And Uploading -- tmp_dirs are dated with time(hr:min)to prevent collisions
-    print 'Processing -- %s Files \nStarted --> %s \n' % (image_ct, starttime)
     try:
-        os.makedirs(archive_uploaded, 16877)
+        root_img_dir = os.path.abspath(sys.argv[1])
+        destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
+        tmp_processing = root_img_dir
+        tmp_loading = destdir
     except:
-        pass
-
-    try:
-        os.makedirs(tmp_processing, 16877)
-    except:
-        pass
-
-    try:
-        os.makedirs(tmp_processing_l, 16877)
-    except:
-        pass
-
-    try:
-        os.makedirs(tmp_processing_m, 16877)
-    except:
-        pass
-
-    try:
-        os.makedirs(tmp_loading, 16877)
-    except:
-        pass
-
-    try:
-        os.makedirs(tmp_mozu_loading, 16877)
-    except:
-        pass
-
-    try:
-        os.makedirs(imgdest_png_final, 16877)
-    except:
-        pass
-
-    try:
-        os.makedirs(imgdest_jpg_final, 16877)
-    except:
-        pass
-
-####################################################
-## Begin Processing and compiling images for Loading
-####################################################
-
-## Move All DropFinal Files from Retouchers dirs to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
-walkedout_tmp = glob.glob(os.path.join(root_img_dir, '*/*.*g'))
-[ shutil.move(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
+        root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
+        destdir      =  tmp_loading
+    if os.path.isdir(root_img_dir): pass
+    else:
+        root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
+        destdir      =  tmp_loading
 
 
-### Rename Files moved into Temp Processing Floder
-walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-[ rename_retouched_file(file) for file in walkedout_tmp ]
-
-if os.path.isdir(tmp_processing):
-    for img in glob.glob(os.path.join(tmp_processing,'*.??[gG]')):
-        if regex_coded.findall(img):
-            img = rename_retouched_file(img)
-        pngout = subproc_magick_png(img, destdir=tmp_processing)
-        subproc_magick_large_jpg(pngout, destdir=tmp_loading)
-        subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
-
-        ############################
-        ###### mozu
-        ############################
-        import sys
-        from os import chdir, path
-        chdir('/usr/local/batchRunScripts/mozu')
-        import mozu_exec, mozu_image_util_functions
-        
-        if path.isfile(pngout):
-            print ' Is file PNGOUT', pngout, img
-            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
-        else:
-            #pass
-            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=tmp_mozu_loading)
-
-        mozu_exec.main(jpgout)
-        #
-        # ## --> Uncomment to run the MOZU piece fully
-        # try:
-        #     prodimages_upload_orcl.main_upload_post(os.path.join(destdir,os.path.basename(img.split('.')[0] + '.jpg')))
-        # except KeyError:
-        #     print 'IOERROR - 772'
-        #     pass
-        ############################
-        ###### END mozu
-        ############################
-    #metadict = metadata_info_dict(img)
-    #dimens = get_imagesize_variables(img)
-    #test_img = get_image_color_minmax(img)
-
-## Clean up the jpegs sent to mozu
-
-# tmp_jpg = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-# [ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
-############################
-############################
-
-### Glob created PNGs and copy to Load Dir then Store in Arch dir
-tmp_png = tmp_mozu_png = glob.glob(os.path.join(tmp_processing, '*.png'))
-
-[ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
-[ shutil.copy2(file, os.path.join(tmp_mozu_loading, os.path.basename(file))) for file in tmp_mozu_png ]
-[ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
-
-
-## ARCHIVED Backup
-## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
-
-###### All PNGs Created and moved to Archive plus Copy sent to Load Directory
-###
-######
-#### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
-###
-#load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
-#[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
-
-## UPLOAD NFS with PyCurl everything in tmp_loading
-###
-import time
-upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
-
-for upload_file in upload_tmp_loading:
-    #### UPLOAD upload_file via NFS to imagedrop
-    ## Then rm loading tmp dir
-    try:
-        result = copy_to_imagedrop_upload(upload_file, destdir='/mnt/Post_Complete/ImageDrop')
-        if result:
-            print "Uploaded {}".format(upload_file)
-            time.sleep(float(.1))
-            shutil.move(upload_file, archive_uploaded)
-        else:
-            print result, upload_file
+    ###########
+    ## Test for ex
+    #root_img_dir =  tmp_processing
+    walkedout_tmp = glob.glob(os.path.join(root_img_dir, '*/*.*g'))
+    image_ct = len(walkedout_tmp)
+    starttime = todaysdatefull
+    if image_ct == 0:
+        print "Nothing to Process"
+    else:
+    ### Make Tmp Folders for Processing And Uploading -- tmp_dirs are dated with time(hr:min)to prevent collisions
+        print 'Processing -- %s Files \nStarted --> %s \n' % (image_ct, starttime)
+        try:
+            os.makedirs(archive_uploaded, 16877)
+        except:
             pass
-            ##time.sleep(float(3))
+
+        try:
+            os.makedirs(tmp_processing, 16877)
+        except:
+            pass
+
+        try:
+            os.makedirs(tmp_processing_l, 16877)
+        except:
+            pass
+
+        try:
+            os.makedirs(tmp_processing_m, 16877)
+        except:
+            pass
+
+        try:
+            os.makedirs(tmp_loading, 16877)
+        except:
+            pass
+
+        try:
+            os.makedirs(tmp_mozu_loading, 16877)
+        except:
+            pass
+
+        try:
+            os.makedirs(imgdest_png_final, 16877)
+        except:
+            pass
+
+        try:
+            os.makedirs(imgdest_jpg_final, 16877)
+        except:
+            pass
+
+    ####################################################
+    ## Begin Processing and compiling images for Loading
+    ####################################################
+
+    ## Move All DropFinal Files from Retouchers dirs to tmp_processing from drop folders Then Mogrify to create pngs copy to load and arch dirs
+    walkedout_tmp = glob.glob(os.path.join(root_img_dir, '*/*.*g'))
+    [ shutil.move(file, os.path.join(tmp_processing, os.path.basename(file))) for file in walkedout_tmp ]
+
+
+    ### Rename Files moved into Temp Processing Floder
+    walkedout_tmp = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+    [ rename_retouched_file(file) for file in walkedout_tmp ]
+
+    if os.path.isdir(tmp_processing):
+        for img in glob.glob(os.path.join(tmp_processing,'*.??[gG]')):
+            if regex_coded.findall(img):
+                img = rename_retouched_file(img)
+            pngout = subproc_magick_png(img, destdir=tmp_processing)
+            subproc_magick_large_jpg(pngout, destdir=tmp_loading)
+            subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
+
+            ############################
+            ###### mozu
+            ############################
+            import sys
+            from os import chdir, path
+            chdir('/usr/local/batchRunScripts/mozu')
+            import mozu_exec, mozu_image_util_functions
+            
+            if path.isfile(pngout):
+                print ' Is file PNGOUT', pngout, img
+                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
+            else:
+                #pass
+                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=tmp_mozu_loading)
+
+            mozu_exec.main(jpgout)
+            #
+            # ## --> Uncomment to run the MOZU piece fully
             # try:
-            #     ftpload_to_imagedrop(upload_file)
-            #     print "Uploaded {}".format(upload_file)
-            #     time.sleep(float(.3))
-            #     shutil.move(upload_file, archive_uploaded)
-            # except:
+            #     prodimages_upload_orcl.main_upload_post(os.path.join(destdir,os.path.basename(img.split('.')[0] + '.jpg')))
+            # except KeyError:
+            #     print 'IOERROR - 772'
             #     pass
+            ############################
+            ###### END mozu
+            ############################
+        #metadict = metadata_info_dict(img)
+        #dimens = get_imagesize_variables(img)
+        #test_img = get_image_color_minmax(img)
+
+    ## Clean up the jpegs sent to mozu
+
+    # tmp_jpg = glob.glob(os.path.join(tmp_processing, '*.jpg'))
+    # [ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
+    ############################
+    ############################
+
+    ### Glob created PNGs and copy to Load Dir then Store in Arch dir
+    tmp_png = tmp_mozu_png = glob.glob(os.path.join(tmp_processing, '*.png'))
+
+    [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
+    [ shutil.copy2(file, os.path.join(tmp_mozu_loading, os.path.basename(file))) for file in tmp_mozu_png ]
+    [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
+
+
+    ## ARCHIVED Backup
+    ## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
+
+    ###### All PNGs Created and moved to Archive plus Copy sent to Load Directory
+    ###
+    ######
+    #### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
+    ###
+    #load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
+    #[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
+
+    ## UPLOAD NFS with PyCurl everything in tmp_loading
+    ###
+    import time
+    upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
+
+    for upload_file in upload_tmp_loading:
+        #### UPLOAD upload_file via NFS to imagedrop
+        ## Then rm loading tmp dir
+        try:
+            result = copy_to_imagedrop_upload(upload_file, destdir='/mnt/Post_Complete/ImageDrop')
+            if result:
+                print "Uploaded {}".format(upload_file)
+                time.sleep(float(.1))
+                shutil.move(upload_file, archive_uploaded)
+            else:
+                print result, upload_file
+                pass
+                ##time.sleep(float(3))
+                # try:
+                #     ftpload_to_imagedrop(upload_file)
+                #     print "Uploaded {}".format(upload_file)
+                #     time.sleep(float(.3))
+                #     shutil.move(upload_file, archive_uploaded)
+                # except:
+                #     pass
+
+        except:
+            print "Error moving Finals to Arch {}".format(file)
+
+
+    ## Mozu
+    import mozu_exec, mozu_image_util_functions, glob
+    upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
+    print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', type(upload_tmp_mozu_loading_glob), len(upload_tmp_loading), ' <-- Now MozuExec'
+    mozu_exec.main(upload_tmp_mozu_loading_glob)
+    ##
+
+    ### Check for okb files and send to Uploader via email
+    zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors', '*/*.*g'))
+    # if zerobytefiles:
+    #     import jbmodules.mailing_funcs
+    #     for f in zerobytefiles:
+    #         groupeddict = jbmodules.mailing_funcs.failed_upload_alerts(f)
+    #         send_email_zerobyte_alerts(groupeddict=groupeddict)
+
+    ## After completed Process and Load to imagedrop
+    ###  Finally Remove the 2 tmp folder trees for process and load if Empty
+    try:
+        upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
+        if len(upload_tmp_loading_remainder) == 0 and os.path.isdir(tmp_loading):
+            shutil.rmtree(tmp_loading)
 
     except:
-        print "Error moving Finals to Arch {}".format(file)
+        pass
+
+    ## remove the processing tmp folder
+    if os.path.isdir(tmp_processing):
+        shutil.rmtree(tmp_processing)
+    else:
+        print tmp_processing, ' tmp_processing Does not Exist, tmp_loading-->', tmp_loading
+    # try:
+    #     upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
+    #     upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
+    #     if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
+
+    # except:
+    #     pass
+
+    ###################
+    ## Remove Lock file
+    ###################
+    #if os.path.isfile(locker):
+    #    os.remove(locker)
 
 
-## Mozu
-import mozu_exec, mozu_image_util_functions, glob
-upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
-print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec', type(upload_tmp_mozu_loading_glob), len(upload_tmp_loading), ' Now MozuExec'
-mozu_exec.main(upload_tmp_mozu_loading_glob)
-##
+if __name__ == '__main__':
 
-### Check for okb files and send to Uploader via email
-zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors', '*/*.*g'))
-# if zerobytefiles:
-#     import jbmodules.mailing_funcs
-#     for f in zerobytefiles:
-#         groupeddict = jbmodules.mailing_funcs.failed_upload_alerts(f)
-#         send_email_zerobyte_alerts(groupeddict=groupeddict)
-
-## After completed Process and Load to imagedrop
-###  Finally Remove the 2 tmp folder trees for process and load if Empty
-try:
-    upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
-    if len(upload_tmp_loading_remainder) == 0 and os.path.isdir(tmp_loading):
-        shutil.rmtree(tmp_loading)
-
-except:
-    pass
-
-## remove the processing tmp folder
-if os.path.isdir(tmp_processing):
-    shutil.rmtree(tmp_processing)
-else:
-    print tmp_processing, ' tmp_processing Does not Exist, tmp_loading-->', tmp_loading
-# try:
-#     upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
-#     upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
-#     if len(upload_tmp_processing_png_remainder) == 0 and len(upload_tmp_processing_jpg_remainder) == 0:
-
-# except:
-#     pass
-
-###################
-## Remove Lock file
-###################
-#if os.path.isfile(locker):
-#    os.remove(locker)
+    main()
