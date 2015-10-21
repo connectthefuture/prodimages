@@ -74,8 +74,8 @@ def upsert_data_mz_image(**kwargs):
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
     select_result = select_db.execute()
     test = [ row for row in select_result ]
-    print test
-    if test :
+    print select_db, '\n\nTEST -->\n', test
+    if test:
         kwargs['mz_imageid'] = select_result.fetchone()['mz_imageid']
         md5checksum = []
         kwargs['md5checksum'] = md5checksum
@@ -105,7 +105,17 @@ def upsert_data_mz_image(**kwargs):
                 content_response = mzclient.send_content(**kwargs)
                 if kwargs.get('bf_imageid'):
                     kwargs.get('bf_imageid')
-                    update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+                    update_db = mozu_image_table.update(values=dict(**table_args),
+                                                        whereclause=  #mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
+                                                        (mozu_image_table.c.bf_imageid == v['bf_imageid'])
+                                                        |
+                                                        (mozu_image_table.c.mz_imageid == v['mz_imageid'])
+                                                        )
+
+
+
+
+
                     print "\nUpdate Statement: \v", update_db
                     update_result = update_db.execute()
                     print content_response, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
