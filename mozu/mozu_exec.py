@@ -193,7 +193,7 @@ def main(list_of_filepaths):
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
-                v['mz_imageid'], response = upload_new(**v)[0]
+                v['mz_imageid'], response = upload_new(**v)
                 load_content_resp = upload_new(**v)
                 mozu_image_table = mozu_image_table_instance()
                 if int(load_content_resp.keys()[0]) < 400:
