@@ -653,7 +653,7 @@ def main():
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace'
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
     
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
