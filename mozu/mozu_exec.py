@@ -83,9 +83,9 @@ def upsert_data_mz_image(**kwargs):
         update_resp = mzclient.update_mz_image(**kwargs)
         table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
-        print "\nUpdate Statement: \v", update_db
+        print "1\nUpdate Statement: \v", update_db
         res = update_db.execute()
-        print res, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
+        print res, '2-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
     else:
         mzclient = MozuRestClient(**kwargs)
@@ -97,7 +97,7 @@ def upsert_data_mz_image(**kwargs):
             try:
                 content_response = mzclient.send_content(**kwargs)
                 insert_db = mozu_image_table.insert(**table_args)
-                print "\nInsert Statement: \v", insert_db
+                print "3-\nInsert Statement: \v", insert_db
                 insert_result = insert_db.execute()
                 print content_response, "Not in DB. Insert Result: ", insert_result.is_insert
                 return insert_result.is_insert
@@ -112,19 +112,16 @@ def upsert_data_mz_image(**kwargs):
                                                         (mozu_image_table.c.mz_imageid == v['mz_imageid'])
                                                         )
 
-
-
-
-
-                    print "\nUpdate Statement: \v", update_db
+                    print "4-\nUpdate Statement: \v", update_db
                     update_result = update_db.execute()
-                    print content_response, 'Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
+                    print content_response, '4.5-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
                     return update_result
                 else:
-                    print 'NO BFID to update ', locals()
+
+                    #print 'NO BFID to update ', locals()
 
                     insert_db = mozu_image_table.insert(**table_args)
-                    print "\nInsert Statement: \v", insert_db
+                    print "5-\nInsert Statement: \v", insert_db
         else:
             print mz_imageid, ' Failed'
 
@@ -236,10 +233,10 @@ if __name__ == '__main__':
     insert_list = []
     try:
         if path.isfile(path.abspath(sys.argv[1])):
-            for arg in sys.argv:
+            for arg in sys.argv[1:]:
                 insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
-        print insert_list_filepaths
+        print len(insert_list_filepaths), insert_list_filepaths
         main(insert_list_filepaths)
     except IndexError:
         print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
