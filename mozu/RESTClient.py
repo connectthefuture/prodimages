@@ -158,7 +158,7 @@ class MozuRestClient:
             except KeyError:
                 return (_document_data_response, None,)
         else:
-            return {"Failed-POST with code: ", MozuRestClient.http_status_code}
+            return ("Failed-POST with code", MozuRestClient.http_status_code)
 
     ## PUT - UpdateContent or Load to New Doc obj- Content stream - Send file
     @log
