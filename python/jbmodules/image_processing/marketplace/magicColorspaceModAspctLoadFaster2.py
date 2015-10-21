@@ -750,7 +750,7 @@ def main(root_img_dir=None):
                 
                 from mozu import mozu_exec as mozu_exec
                 mz_res = mozu_exec.main(pngout)
-                print mz_res
+                print mz_res, ' <-- MOZU-Done'
                 subproc_magick_large_jpg(pngout, destdir=destdir)
                 subproc_magick_medium_jpg(pngout, destdir=destdir)
             except AttributeError:
@@ -763,6 +763,9 @@ def main(root_img_dir=None):
         if regex_coded.findall(img):
             img = rename_retouched_file(img)
         pngout = subproc_magick_png(img, destdir=destdir)
+        from mozu import mozu_exec as mozu_exec
+        mz_res = mozu_exec.main(pngout)
+        print mz_res, ' <-- MOZU-Done'
         subproc_magick_large_jpg(pngout, destdir=destdir)
         subproc_magick_medium_jpg(pngout, destdir=destdir)
 

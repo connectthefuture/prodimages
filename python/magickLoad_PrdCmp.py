@@ -841,15 +841,17 @@ zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop
 ###  Finally Remove the 2 tmp folder trees for process and load if Empty
 try:
     upload_tmp_loading_remainder = glob.glob(os.path.join(tmp_loading, '*.*g'))
-    if len(upload_tmp_loading_remainder) == 0:
+    if len(upload_tmp_loading_remainder) == 0 and os.path.isdir(tmp_loading):
         shutil.rmtree(tmp_loading)
 
 except:
     pass
 
 ## remove the processing tmp folder
-shutil.rmtree(tmp_processing)
-
+if os.path.isdir(tmp_processing):
+    shutil.rmtree(tmp_processing)
+else:
+    print tmp_processing, ' tmp_processing Does not Exist, tmp_loading-->', tmp_loading
 # try:
 #     upload_tmp_processing_png_remainder = glob.glob(os.path.join(tmp_processing, '*.*g'))
 #     upload_tmp_processing_jpg_remainder = glob.glob(os.path.join(tmp_processing, '*/*.*g'))
