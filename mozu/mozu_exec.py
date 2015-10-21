@@ -186,7 +186,7 @@ def main(list_of_filepaths):
     print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
-        print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v,key,value.popitem())
+        print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v.items(), key , value.popitem())
         if not v.get('mz_imageid'):
             #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
