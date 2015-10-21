@@ -845,7 +845,7 @@ for upload_file in upload_tmp_loading:
 ## Mozu
 import mozu_exec, mozu_image_util_functions
 upload_tmp_mozu_loading_glob = [ os.path.abspath(f) for f in glob.glob(os.path.join(tmp_mozu_loading, '*.*g')) if os.path.isfile(f) ]
-print type(upload_tmp_mozu_loading_glob), len(upload_tmp_loading), ' Now MozuExec'
+print 'MozuExec', '\n\n\n\n\t\t\t\tMozuExec', type(upload_tmp_mozu_loading_glob), len(upload_tmp_loading), ' Now MozuExec'
 mozu_exec.main(upload_tmp_mozu_loading_glob)
 ##
 
