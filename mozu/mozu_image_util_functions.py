@@ -127,6 +127,7 @@ def get_exif_all_data(src_filepath):
 @log
 def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
     instance_properties = {}
+    print 'Compile 130\n', list_of_images, kwargs
     for img in list_of_images:
         bf_imageid = img.split('/')[-1]
         #print locals(), "localSSY"
