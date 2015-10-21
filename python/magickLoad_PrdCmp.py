@@ -639,6 +639,7 @@ regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 ### Date Defs
 todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
 todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+todaysdatefullsecs = '{:%Y-%m-%d_%H:%M.%S}'.format(datetime.datetime.now())
 todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
 ### Define tmp and archive paths prior to Creating
@@ -646,6 +647,7 @@ tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processi
 tmp_processing_l = os.path.join(tmp_processing, "largejpg")
 tmp_processing_m = os.path.join(tmp_processing, "mediumjpg")
 tmp_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_loading" , "tmp_" + str(todaysdatefull).replace(",", ""))
+tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
 
 ## Define for Creating Archive dirs
 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
@@ -716,6 +718,11 @@ else:
         pass
 
     try:
+        os.makedirs(tmp_mozu_loading, 16877)
+    except:
+        pass
+
+    try:
         os.makedirs(imgdest_png_final, 16877)
     except:
         pass
@@ -756,10 +763,10 @@ if os.path.isdir(tmp_processing):
         
         if path.isfile(pngout):
             print ' Is file PNGOUT', pngout, img
-            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=destdir)
+            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
         else:
             #pass
-            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=destdir)
+            jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=tmp_mozu_loading)
 
         mozu_exec.main(jpgout)
         #
@@ -784,9 +791,10 @@ if os.path.isdir(tmp_processing):
 ############################
 
 ### Glob created PNGs and copy to Load Dir then Store in Arch dir
-tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
+tmp_png = tmp_mozu_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 
 [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
+[ shutil.copy2(file, os.path.join(tmp_mozu_loading, os.path.basename(file))) for file in tmp_mozu_png ]
 [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
 
 
@@ -805,6 +813,7 @@ tmp_png = glob.glob(os.path.join(tmp_processing, '*.png'))
 ###
 import time
 upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
+
 for upload_file in upload_tmp_loading:
     #### UPLOAD upload_file via NFS to imagedrop
     ## Then rm loading tmp dir
@@ -828,6 +837,12 @@ for upload_file in upload_tmp_loading:
 
     except:
         print "Error moving Finals to Arch {}".format(file)
+
+
+## Mozu
+upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
+mozu_exec.main(upload_tmp_mozu_loading_glob)
+##
 
 ### Check for okb files and send to Uploader via email
 zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors', '*/*.*g'))
