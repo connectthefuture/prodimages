@@ -54,7 +54,7 @@ def upload_new(**kwargs):
     insert_db.execute()
     print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
     ## Insert to mz_imageid + **kwargs to Oracle
-    return {mz_imageid: document_resource}
+    return mz_imageid, document_resource
 # @log
 # # PUT - Upload/Update Image/DocumentContent
 # def upsert_data_mz_image(**kwargs):
