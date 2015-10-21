@@ -184,10 +184,12 @@ def main(list_of_filepaths):
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
 
     ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
+    print type(list_of_filepaths), '<--Type\tLenLoFilepaths', len(list_of_filepaths), '\t', list_of_filepaths
     compiled_instance_vars = compile_todict_for_class_instance_variables(list_of_filepaths)
+    print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys)()
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
-        print "v {} \nkey{}\vvalue: {}".format(v,key,value)
+        print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v,key,value)
         if not v.get('mz_imageid'):
             #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
