@@ -89,10 +89,10 @@ def upsert_data_mz_image(**kwargs):
         return update_resp
     else:
         mzclient = MozuRestClient(**kwargs)
-        post_resp = mzclient.create_new_mz_image()
+        mz_imageid, document_resource = mzclient.create_new_mz_image()
         # kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
-        if type(post_resp) == dict:
-            kwargs['mz_imageid'] = post_resp.keys()[0]
+        if mz_imageid: #type(post_resp) == dict:
+            kwargs['mz_imageid'] = mz_imageid # mz_imageid.keys()[0]
             table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
             try:
                 content_response = mzclient.send_content(**kwargs)
@@ -126,7 +126,7 @@ def upsert_data_mz_image(**kwargs):
                     insert_db = mozu_image_table.insert(**table_args)
                     print "\nInsert Statement: \v", insert_db
         else:
-            print post_resp, ' Failed'
+            print mz_imageid, ' Failed'
 
 # DELETE - Delete Image/DocumentContent - Everything
 @log
