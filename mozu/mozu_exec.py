@@ -179,14 +179,13 @@ def main(list_of_filepaths):
     import sqlalchemy, sys
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
-    #list_of_filepaths = [ f.decode(sys.getfilesystemencoding()) for f in list_of_filepaths.pop() if f ]
-    ## Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
-    print type(list_of_filepaths), '<--Type\tLenLoFilepaths', len(list_of_filepaths), '\t', list_of_filepaths
+    # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
+    # print type(list_of_filepaths), '<--Type\tLenLoFilepaths', len(list_of_filepaths), '\t', list_of_filepaths
     compiled_instance_vars = compile_todict_for_class_instance_variables(list(list_of_filepaths))
-    print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
+    # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
-        print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v.items(), key , value.popitem())
+        # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v.items(), key , value.popitem())
         if not v.get('mz_imageid'):
             #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
@@ -196,15 +195,18 @@ def main(list_of_filepaths):
                 load_content_resp = upload_new(**v)
                 mozu_image_table = mozu_image_table_instance()
                 if int(load_content_resp.keys()[0]) < 400:
-                    insert_db = mozu_image_table.insert(values=dict(**v))
+                    table_args = include_keys(v, __mozu_image_table_valid_keys__)
+                    insert_db = mozu_image_table.insert(values=dict(**table_args))
                     insert_db.execute()
                     print 'Inserted --> ', v.items(), ' <-- ', insert_db
                 elif int(load_content_resp.keys()[0]) == 409:
-                    select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == v['bf_imageid']) ) )
-                    v['mz_imageid'] = select_db['mz_imageid']
+                    table_args = include_keys(v, __mozu_image_table_valid_keys__)
+                    select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) )
+                    table_args['mz_imageid'] = v['mz_imageid'] = select_db['mz_imageid']
+
                     upsert_content_resp = upsert_data_mz_image(**v) #,dict(**v))
                     if upsert_content_resp.http_status_code < 300:
-                        update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
+                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
                         res = update_db.execute()
                         print res, 'Updated--> ', v.items(), ' <-- ', update_db
                 else:
@@ -214,9 +216,10 @@ def main(list_of_filepaths):
                 try:
                     upsert_content_resp = upsert_data_mz_image(**v) #,dict(**v))
                     if upsert_content_resp.http_status_code < 300:
-                        update_db = mozu_image_table.update(values=dict(**v),whereclause=mozu_image_table.c.bf_imageid==v['bf_imageid'])
+                        table_args = include_keys(v, __mozu_image_table_valid_keys__)
+                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
                         res = update_db.execute()
-                        print res, 'Updated--> ', v.items(), ' <-- ', update_db
+                        print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
 
                     print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
                 except:
