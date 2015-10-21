@@ -126,10 +126,12 @@ def get_exif_all_data(src_filepath):
 ## Compile Inserts as dict with key == bluefly file name
 @log
 def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
+    import os.path as path
     instance_properties = {}
     print 'Compile 130\n', list_of_images, kwargs
     for img in list_of_images:
-        bf_imageid = img.split('/')[-1]
+        path.isfile(img), ' <IsFile'
+        bf_imageid = path.abspath(img).split('/')[-1]
         #print locals(), "localSSY"
         try:
             #mozu_image_table = mozu_image_table_instance()
