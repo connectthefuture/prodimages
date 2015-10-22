@@ -73,57 +73,61 @@ def upsert_data_mz_image(**kwargs):
     mozu_image_table = mozu_image_table_instance()
     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
     select_result = select_db.execute()
-    #test = [ row for row in select_result ]
-    print select_db, '\n\nTEST -->\n'  #, test
-    if select_result.items()['mz_imageid']:
-        kwargs['mz_imageid'] = select_result.items()['mz_imageid']
-        md5checksum = []
-        kwargs['md5checksum'] = md5checksum
-        mzclient = MozuRestClient(**kwargs)
-        update_resp = mzclient.update_mz_image(**kwargs)
-        table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
-        print "1\nUpdate Statement: \v", update_db
-        update_result.items() = update_db.execute()
-        print update_result, '2-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
-        return update_resp
-    else:
-        mzclient = MozuRestClient(**kwargs)
-        mz_imageid, document_resource = mzclient.create_new_mz_image()
-        # kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
-        if mz_imageid: #type(post_resp) == dict:
-            kwargs['mz_imageid'] = mz_imageid # mz_imageid.keys()[0]
-            table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-            try:
-                content_response = mzclient.send_content(**kwargs)
-                insert_db = mozu_image_table.insert(**table_args)
-                print "3-\nInsert Statement: \v", insert_db
-                insert_result = insert_db.execute()
-                print content_response, "Not in DB. Insert Result: ", insert_result.items()['mz_imageid']
-                return insert_result.items()
-            except sqlalchemy.exc.IntegrityError:
-                content_response = mzclient.send_content(**kwargs)
-                if kwargs.get('bf_imageid'):
-                    kwargs.get('bf_imageid')
-                    update_db = mozu_image_table.update(values=dict(**table_args),
-                                                        whereclause=  #mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
-                                                        (mozu_image_table.c.bf_imageid == v['bf_imageid'])
-                                                        |
-                                                        (mozu_image_table.c.mz_imageid == v['mz_imageid'])
-                                                        )
+    test = [ row for row in select_result ]
+    print select_db, '\n\nTEST -->\n', kwargs  #, test
+    if test:
+        try:
+            if select_result.items()['mz_imageid']:
+                kwargs['mz_imageid'] = select_result.items()['mz_imageid']
+                md5checksum = []
+                kwargs['md5checksum'] = md5checksum
+                mzclient = MozuRestClient(**kwargs)
+                update_resp = mzclient.update_mz_image(**kwargs)
+                table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+                update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+                print "1\nUpdate Statement: \v", update_db
+                update_result.items() = update_db.execute()
+                print update_result, '2-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
+                return update_resp
+            else:
+                mzclient = MozuRestClient(**kwargs)
+                mz_imageid, document_resource = mzclient.create_new_mz_image()
+                # kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
+                if mz_imageid: #type(post_resp) == dict:
+                    kwargs['mz_imageid'] = mz_imageid # mz_imageid.keys()[0]
+                    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+                    try:
+                        content_response = mzclient.send_content(**kwargs)
+                        insert_db = mozu_image_table.insert(**table_args)
+                        print "3-\nInsert Statement: \v", insert_db
+                        insert_result = insert_db.execute()
+                        print content_response, "Not in DB. Insert Result: ", insert_result.items()['mz_imageid']
+                        return insert_result.items()
+                    except sqlalchemy.exc.IntegrityError:
+                        content_response = mzclient.send_content(**kwargs)
+                        if kwargs.get('bf_imageid'):
+                            kwargs.get('bf_imageid')
+                            update_db = mozu_image_table.update(values=dict(**table_args),
+                                                                whereclause=  #mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
+                                                                (mozu_image_table.c.bf_imageid == v['bf_imageid'])
+                                                                |
+                                                                (mozu_image_table.c.mz_imageid == v['mz_imageid'])
+                                                                )
 
-                    print "4-\nUpdate Statement: \v", update_db
-                    update_result = update_db.execute()
-                    print content_response, '4.5-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
-                    return update_result.items()
+                            print "4-\nUpdate Statement: \v", update_db
+                            update_result = update_db.execute()
+                            print content_response, '4.5-Updated--> Maybe', kwargs.items(), ' <--kwargs.items ', update_db
+                            #return update_result.items()
+                        else:
+
+                            #print 'NO BFID to update ', locals()
+
+                            insert_db = mozu_image_table.insert(**table_args)
+                            print "5-\nFailed Insert Statement: \v", insert_db
                 else:
-
-                    #print 'NO BFID to update ', locals()
-
-                    insert_db = mozu_image_table.insert(**table_args)
-                    print "5-\nFailed Insert Statement: \v", insert_db
-        else:
-            print mz_imageid, ' Failed'
+                    print mz_imageid, ' Failed'
+        except AttributeError:
+            print ' 128 AttribError in Upsert_mz_exec Locals -->', locals()
 
 # DELETE - Delete Image/DocumentContent - Everything
 @log
