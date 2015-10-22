@@ -152,8 +152,6 @@ def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
                 instance_properties[img] = {"bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', ''), "md5checksum": md5checksum, "tags": tags}
             except OSError:
                 print 'Fake OSErr, TYPE Error, Compiler150'
-        finally:
-            pass
     return instance_properties
 
 
