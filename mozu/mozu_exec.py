@@ -136,7 +136,7 @@ def delete_document_data_content(**kwargs):
     delete_db = mozu_image_table.delete( whereclause=( (mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) ) )
     #res = delete_db.execute()
     # TODO: Need to delete from db or alter insome way
-    print delete_resp.headers, "Delete", "MZ CLIENTID in FUNCtion: ", kwargs
+    print delete_resp.headers, "Delete \n", delete_db, "\nMZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
 
 
