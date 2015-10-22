@@ -110,7 +110,7 @@ def magick_convert_to_jpeg(img, destdir=None):
 @log
 def get_exif_all_data(src_filepath):
     import exiftool
-    print type(src_filepath), src_filepath
+    print "ExifExtract: ", type(src_filepath), src_filepath
     if src_filepath is not None:
         try:
             if src_filepath.split('.')[-1].lower() == 'jpg' or 'png':
@@ -128,7 +128,7 @@ def get_exif_all_data(src_filepath):
 def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
     import os.path as path
     instance_properties = {}
-    print 'Compile 130\n', list(fileslist), kwargs
+    print 'Compile 131\n', list(fileslist), kwargs
     for img in fileslist:
         if path.isfile(img):
             bf_imageid = path.basename(img)
@@ -148,7 +148,7 @@ def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
                         tags = []
                 else:
                     tags = kwargs.get('tags')
-                print type(img), 'Compiler147'
+                print type(img), 'Compiler151'
                 instance_properties[img] = {"bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', ''), "md5checksum": md5checksum, "tags": tags}
             except OSError:
                 print 'Fake OSErr, TYPE Error, Compiler150'
