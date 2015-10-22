@@ -52,6 +52,7 @@ class Task(object):
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         #time.sleep(0.1) # pretend to take some time to do the work
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
+        from mozu import *
         # try:
         jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
 
@@ -60,9 +61,35 @@ class Task(object):
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
         if os.path.isfile(pngout):
             magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
-        if os.path.isfile(pngout):
             ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
-
+            try:
+                ############################
+                ###### mozu
+                ############################
+                import sys, datetime
+                from os import chdir, path, makedirs
+                todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
+                tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
+                if path.isdir(tmp_mozu_loading):
+                    pass
+                else:
+                    try:
+                        os.makedirs(tmp_mozu_loading, 16877)
+                    except:
+                        print " Error", tmp_mozu_loading
+                chdir('/usr/local/batchRunScripts/mozu')
+                import mozu_exec, mozu_image_util_functions
+                ## Compress and convert to jpg
+                if path.isfile(pngout):
+                    print ' Is file PNGOUT', pngout, img
+                    jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
+                else:
+                    #pass
+                    jpgout = mozu_image_util_functions.magick_convert_to_jpeg(self.img,destdir=tmp_mozu_loading)
+                mozu_exec.main(jpgout)
+                ############################
+            except ImportError:
+                print 'Import Error multiprocmagick2:69'
         #os.remove(self.tmppngout[1])
         # except TypeError:
         #         print self.img, ' <-- Type-Error in Task -->', self.destdir
