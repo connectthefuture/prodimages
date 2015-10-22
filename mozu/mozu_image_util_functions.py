@@ -125,11 +125,11 @@ def get_exif_all_data(src_filepath):
 
 ## Compile Inserts as dict with key == bluefly file name
 @log
-def compile_todict_for_class_instance_variables(list_of_images,**kwargs):
+def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
     import os.path as path
     instance_properties = {}
-    print 'Compile 130\n', list(list_of_images), kwargs
-    for img in list_of_images:
+    print 'Compile 130\n', list(fileslist), kwargs
+    for img in fileslist:
         path.isfile(img), ' <IsFile'
         bf_imageid = path.basename(img)
         #print locals(), "localSSY"

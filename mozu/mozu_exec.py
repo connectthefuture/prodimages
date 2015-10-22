@@ -175,13 +175,13 @@ def delete_document_data_content(**kwargs):
 #######################################
 ########
 @log
-def main(list_of_filepaths):
+def main(fileslist=None):
     import sqlalchemy, sys
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
-    # print type(list_of_filepaths), '<--Type\tLenLoFilepaths', len(list_of_filepaths), '\t', list_of_filepaths
-    compiled_instance_vars = compile_todict_for_class_instance_variables(list_of_filepaths)
+    # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
+    compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     print compiled_instance_vars, "186-MZEXECY"
     for key,value in compiled_instance_vars.iteritems():
@@ -241,6 +241,6 @@ if __name__ == '__main__':
                 insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
         print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
-        print locals(), arg #main(insert_list_filepaths)
+        main(fileslist=insert_list_filepaths)
     except IndexError:
         print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
