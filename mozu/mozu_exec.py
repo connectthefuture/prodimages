@@ -183,7 +183,7 @@ def main(fileslist=None):
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
-    print compiled_instance_vars, "186-MZEXECY"
+    #print compiled_instance_vars, "186-MZEXECY"
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
         # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v.items(), key , value.popitem())
