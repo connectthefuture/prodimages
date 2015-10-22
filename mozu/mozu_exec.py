@@ -84,7 +84,7 @@ def upsert_data_mz_image(**kwargs):
         table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
         print "1\nUpdate Statement: \v", update_db
-        update_result = update_db.execute()
+        update_result.items() = update_db.execute()
         print update_result, '2-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
         return update_resp
     else:
