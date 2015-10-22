@@ -183,6 +183,7 @@ def main(list_of_filepaths):
     # print type(list_of_filepaths), '<--Type\tLenLoFilepaths', len(list_of_filepaths), '\t', list_of_filepaths
     compiled_instance_vars = compile_todict_for_class_instance_variables(list_of_filepaths)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
+    print compiled_instance_vars, "186-MZEXECY"
     for key,value in compiled_instance_vars.iteritems():
         v = include_keys(value, __mozu_image_table_valid_keys__)
         # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v.items(), key , value.popitem())
@@ -203,7 +204,7 @@ def main(list_of_filepaths):
                     table_args = include_keys(v, __mozu_image_table_valid_keys__)
                     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) )
                     table_args['mz_imageid'] = v['mz_imageid'] = select_db['mz_imageid']
-
+                    print locals
                     upsert_content_resp = upsert_data_mz_image(**v) #,dict(**v))
                     if upsert_content_resp.http_status_code < 300:
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
