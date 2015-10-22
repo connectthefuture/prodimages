@@ -130,28 +130,30 @@ def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
     instance_properties = {}
     print 'Compile 130\n', list(fileslist), kwargs
     for img in fileslist:
-        path.isfile(img), ' <IsFile'
-        bf_imageid = path.basename(img)
-        #print locals(), "localSSY"
-        try:
-            #mozu_image_table = mozu_image_table_instance()
-            md5checksum = md5_checksumer(img)
-            print type(md5checksum)
-            if not kwargs.get('tags'):
-                image_metadata = get_exif_all_data(img)
-                #print str(type(image_metadata.values()))
-                #tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
-                try:
-                    tags = [ "{}={}".format(k,v) for k,v in image_metadata.iteritems() ] #image_metadata.values()
-                except AttributeError:
-                    print 'Tags Attrib Error'
-                    tags = []
-            else:
-                tags = kwargs.get('tags')
-            print type(img), 'Compiler147'
-            instance_properties[img] = {"bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', ''), "md5checksum": md5checksum, "tags": tags}
-        except OSError:
-            print 'Fake OSErr, TYPE Error, Compiler150'
+        if path.isfile(img), ' <IsFile'
+            bf_imageid = path.basename(img)
+            #print locals(), "localSSY"
+            try:
+                #mozu_image_table = mozu_image_table_instance()
+                md5checksum = md5_checksumer(img)
+                print type(md5checksum)
+                if not kwargs.get('tags'):
+                    image_metadata = get_exif_all_data(img)
+                    #print str(type(image_metadata.values()))
+                    #tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
+                    try:
+                        tags = [ "{}={}".format(k,v) for k,v in image_metadata.iteritems() ] #image_metadata.values()
+                    except AttributeError:
+                        print 'Tags Attrib Error'
+                        tags = []
+                else:
+                    tags = kwargs.get('tags')
+                print type(img), 'Compiler147'
+                instance_properties[img] = {"bf_imageid": bf_imageid, "mz_imageid": kwargs.get('mz_imageid', ''), "md5checksum": md5checksum, "tags": tags}
+            except OSError:
+                print 'Fake OSErr, TYPE Error, Compiler150'
+        finally:
+            pass
     return instance_properties
 
 
