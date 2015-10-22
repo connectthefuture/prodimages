@@ -130,7 +130,7 @@ def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
     instance_properties = {}
     print 'Compile 130\n', list(fileslist), kwargs
     for img in fileslist:
-        if path.isfile(img), ' <IsFile'
+        if path.isfile(img):
             bf_imageid = path.basename(img)
             #print locals(), "localSSY"
             try:
