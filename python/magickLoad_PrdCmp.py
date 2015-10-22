@@ -784,7 +784,7 @@ def main():
             from os import chdir, path
             chdir('/usr/local/batchRunScripts/mozu')
             import mozu_exec, mozu_image_util_functions
-            ## Compress and convert to jpg
+            ## Compress and convert to jpg and store in separate dir for concurrent xfers
             if path.isfile(pngout):
                 print ' Is file PNGOUT', pngout, img
                 jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
@@ -792,7 +792,7 @@ def main():
                 #pass
                 jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=tmp_mozu_loading)
 
-            mozu_exec.main(jpgout)
+            mozu_exec.main(fileslist=[jpgout])
             #
             # ## --> Uncomment to run the MOZU piece fully
             # try:
@@ -854,7 +854,7 @@ def main():
     import mozu_exec, mozu_image_util_functions, glob
     upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
     print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', type(upload_tmp_mozu_loading_glob), len(upload_tmp_loading), ' <-- Now MozuExec'
-    #mozu_exec.main(upload_tmp_mozu_loading_glob)
+    mozu_exec.main(fileslist=upload_tmp_mozu_loading_glob)
     ##
 
     ### Check for okb files and send to Uploader via email

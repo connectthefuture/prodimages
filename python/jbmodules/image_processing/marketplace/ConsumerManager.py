@@ -53,8 +53,45 @@ class Task(object):
         ## TODO: Possible insertion of Mozu and/or GoogleDrive upload and key exchange
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
-        #try:
-        return ##'%s -- %s' % (ret, self.img, self.destdir)
+        try:
+            ############################
+            ###### mozu
+            ############################
+            import sys, datetime
+            from os import chdir, path, makedirs
+            todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
+            tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
+            if path.isdir(tmp_mozu_loading):
+                pass
+            else:
+                try:
+                    os.makedirs(tmp_mozu_loading, 16877)
+                except:
+                    print " Error", tmp_mozu_loading
+            chdir('/usr/local/batchRunScripts/mozu')
+            import mozu_exec, mozu_image_util_functions
+            ## Compress and convert to jpg
+            if path.isfile(pngout):
+                print ' Is file PNGOUT', pngout, img
+                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
+            else:
+                #pass
+                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(self.img,destdir=tmp_mozu_loading)
+            mozu_exec.main(jpgout)
+            ############################
+        except ImportError:
+            print 'Import Error multiprocmagick2:69'
+            #os.remove(self.tmppngout[1])
+            # except TypeError:
+            #         print self.img, ' <-- Type-Error in Task -->', self.destdir
+            #         pass
+            # except AttributeError:
+            #         print self.img, ' <-- AttributeError in Task -->', self.destdir
+            #         pass
+            # except IndexError:
+            #     ' None Type Error End '
+            #     pass
+        return '-ret- %s \n-path- %s \n-dest- %s \n' % (ret, self.img, self.destdir)
         #except TypeError:
         #    print 'TypeError in __call__'
         #    pass
