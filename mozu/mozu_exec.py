@@ -223,7 +223,7 @@ def main(fileslist=None):
                         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
 
                     print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
-                except:
+                except IOError:
                     print "ENDING ERROR...", v
 
         elif v.get('mz_imageid'):
