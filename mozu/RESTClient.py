@@ -180,7 +180,7 @@ class MozuRestClient:
             MozuRestClient.http_status_code = _content_response.status_code
             print "ContentPutResponse: {0}".format(_content_response.status_code)
             return _content_response
-        except IOError:
+        except AttributeError:
             print "OIO Error 171 Failed send_content"
 
 
