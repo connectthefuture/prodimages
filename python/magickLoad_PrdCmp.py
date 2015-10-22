@@ -654,7 +654,7 @@ def main():
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
-    
+
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.jpg$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
@@ -784,7 +784,7 @@ def main():
             from os import chdir, path
             chdir('/usr/local/batchRunScripts/mozu')
             import mozu_exec, mozu_image_util_functions
-            
+            ## Compress and convert to jpg
             if path.isfile(pngout):
                 print ' Is file PNGOUT', pngout, img
                 jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
@@ -807,20 +807,13 @@ def main():
         #dimens = get_imagesize_variables(img)
         #test_img = get_image_color_minmax(img)
 
-    ## Clean up the jpegs sent to mozu
-
-    # tmp_jpg = glob.glob(os.path.join(tmp_processing, '*.jpg'))
-    # [ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
     ############################
     ############################
-
     ### Glob created PNGs and copy to Load Dir then Store in Arch dir
-    tmp_png = tmp_mozu_png = glob.glob(os.path.join(tmp_processing, '*.png'))
+    tmp_png =  glob.glob(os.path.join(tmp_processing, '*.png'))
 
     [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
-    [ shutil.copy2(file, os.path.join(tmp_mozu_loading, os.path.basename(file))) for file in tmp_mozu_png ]
     [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
-
 
     ## ARCHIVED Backup
     ## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
@@ -829,12 +822,6 @@ def main():
     ###
     ######
     #### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
-    ###
-    #load_jpgs = glob.glob(os.path.join(tmp_processing, '*/*.jpg'))
-    #[ shutil.move(file, os.path.join(tmp_loading, os.path.basename(file))) for file in load_jpgs ]
-
-    ## UPLOAD NFS with PyCurl everything in tmp_loading
-    ###
     import time
     upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
 
@@ -867,17 +854,11 @@ def main():
     import mozu_exec, mozu_image_util_functions, glob
     upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
     print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', type(upload_tmp_mozu_loading_glob), len(upload_tmp_loading), ' <-- Now MozuExec'
-    mozu_exec.main(upload_tmp_mozu_loading_glob)
+    #mozu_exec.main(upload_tmp_mozu_loading_glob)
     ##
 
     ### Check for okb files and send to Uploader via email
     zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors', '*/*.*g'))
-    # if zerobytefiles:
-    #     import jbmodules.mailing_funcs
-    #     for f in zerobytefiles:
-    #         groupeddict = jbmodules.mailing_funcs.failed_upload_alerts(f)
-    #         send_email_zerobyte_alerts(groupeddict=groupeddict)
-
     ## After completed Process and Load to imagedrop
     ###  Finally Remove the 2 tmp folder trees for process and load if Empty
     try:
@@ -901,6 +882,12 @@ def main():
     # except:
     #     pass
 
+    ###############
+    ## Clean up the jpegs sent to mozu
+    ###############
+    # tmp_jpg = glob.glob(os.path.join(tmp_mozu_loading, '*.jpg'))
+    # [ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
+    ################
     ###################
     ## Remove Lock file
     ###################
