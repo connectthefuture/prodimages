@@ -85,7 +85,7 @@ def upsert_data_mz_image(**kwargs):
                 update_resp = mzclient.update_mz_image(**kwargs)
                 table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
                 update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
-                print "1\nUpdate Statement: \v", update_db
+                print "1\nUpdate Statement: \t", update_db
                 update_result = update_db.execute()
                 print update_result, '2-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
                 return update_resp
@@ -99,7 +99,7 @@ def upsert_data_mz_image(**kwargs):
                     try:
                         content_response = mzclient.send_content(**kwargs)
                         insert_db = mozu_image_table.insert(**table_args)
-                        print "3-\nInsert Statement: \v", insert_db
+                        print "3-\nInsert Statement: \t", insert_db
                         insert_result = insert_db.execute()
                         print content_response, "Not in DB. Insert Result: ", insert_result.items()['mz_imageid']
                         return insert_result.items()
@@ -114,16 +114,16 @@ def upsert_data_mz_image(**kwargs):
                                                                 (mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
                                                                 )
 
-                            print "4-\nUpdate Statement: \v", update_db
+                            print "4-\nUpdate Statement: \t", update_db
                             update_result = update_db.execute()
                             print content_response, '4.5-Updated--> Maybe', kwargs.items(), ' <--kwargs.items ', update_db
-                            #return update_result.items()
+                            return update_result
                         else:
 
                             #print 'NO BFID to update ', locals()
 
                             insert_db = mozu_image_table.insert(**table_args)
-                            print "5-\nFailed Insert Statement: \v", insert_db
+                            print "5-\nFailed Insert Statement: \t", insert_db
                 else:
                     print mz_imageid, ' Failed'
         except AttributeError:
@@ -225,9 +225,9 @@ def main(fileslist=None):
                         res = update_db.execute()
                         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
 
-                    print 'IntegrityError and everything is or will be commented out below because it is in the db already', v
+                    print 'IntegrityError and everything is or will be commented out below because it is in the db already'
                 except IOError:
-                    print "ENDING ERROR...", v
+                    print "ENDING ERROR...", values
 
         elif values.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
