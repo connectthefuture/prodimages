@@ -662,8 +662,8 @@ def main():
 
     ### Date Defs
     todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-    todaysdatefull = todaysdatefullsecs[:10]
-    todaysdate = todaysdatefull[:6] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+    todaysdatefull = todaysdatefullsecs[:12]
+    todaysdate = todaysdatefull[:10] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
     todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
     ### Define tmp and archive paths prior to Creating
