@@ -167,7 +167,7 @@ class MozuRestClient:
         import requests
         from os import path
         ## FileContent
-        src_filepath = kwargs.get('src_filepath')
+        src_filepath = kwargs.get('src_filepath', '')
         mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.bf_imageid   = src_filepath.split('/')[-1]
         self.ext = self.bf_imageid.split('.')[-1]
