@@ -128,6 +128,7 @@ def upsert_data_mz_image(**kwargs):
                     print mz_imageid, ' Failed'
         except AttributeError:
             print ' 128 AttribError in Upsert_mz_exec Locals -->', locals()
+            pass
 
 # DELETE - Delete Image/DocumentContent - Everything
 @log
