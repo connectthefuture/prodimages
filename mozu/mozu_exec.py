@@ -109,9 +109,9 @@ def upsert_data_mz_image(**kwargs):
                             kwargs.get('bf_imageid')
                             update_db = mozu_image_table.update(values=dict(**table_args),
                                                                 whereclause=  #mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
-                                                                (mozu_image_table.c.bf_imageid == v['bf_imageid'])
+                                                                (mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                                                                 |
-                                                                (mozu_image_table.c.mz_imageid == v['mz_imageid'])
+                                                                (mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
                                                                 )
 
                             print "4-\nUpdate Statement: \v", update_db
@@ -183,45 +183,44 @@ def main(fileslist=None):
     import sqlalchemy, sys
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
-    # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **v keys set per instance
+    # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     #print compiled_instance_vars, "186-MZEXECY"
-    for key,value in compiled_instance_vars.iteritems():
-        v = include_keys(value, __mozu_image_table_valid_keys__)
-        # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalue:\t{}".format(v.items(), key , value.popitem())
-        if not v.get('mz_imageid'):
+    for key,values in compiled_instance_vars.iteritems():
+        # v = include_keys(values, __mozu_image_table_valid_keys__)
+        # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalues:\t{}".format(v.items(), key , values.popitem())
+        if not values.get('mz_imageid'):
             #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             ### ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
-                v['mz_imageid'], response = upload_new(**v)
-                load_content_resp = upload_new(**v)
+                values['mz_imageid'], response = upload_new(**values)
+                load_content_resp = upload_new(**values)
                 mozu_image_table = mozu_image_table_instance()
                 if int(load_content_resp.keys()[0]) < 400:
                     table_args = include_keys(v, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
                     insert_db.execute()
-                    print 'Inserted --> ', v.items(), ' <-- ', insert_db
+                    print 'Inserted --> ', values.items(), ' <-- ', insert_db
                 elif int(load_content_resp.keys()[0]) == 409:
-                    table_args = include_keys(v, __mozu_image_table_valid_keys__)
+                    table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) )
-                    table_args['mz_imageid'] = v['mz_imageid'] = select_db['mz_imageid']
-                    print locals
-                    upsert_content_resp = upsert_data_mz_image(**v) #,dict(**v))
+                    table_args['mz_imageid'] = values['mz_imageid'] = select_db['mz_imageid']
+                    upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
                     if upsert_content_resp.http_status_code < 300:
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
                         res = update_db.execute()
-                        print res, 'Updated--> ', v.items(), ' <-- ', update_db
+                        print res, 'Updated--> ', values.items(), ' <-- ', update_db
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
             except sqlalchemy.exc.IntegrityError:
                 try:
-                    upsert_content_resp = upsert_data_mz_image(**v) #,dict(**v))
+                    upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
                     if upsert_content_resp.http_status_code < 300:
-                        table_args = include_keys(v, __mozu_image_table_valid_keys__)
+                        table_args = include_keys(values, __mozu_image_table_valid_keys__)
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
                         res = update_db.execute()
                         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
@@ -230,8 +229,8 @@ def main(fileslist=None):
                 except IOError:
                     print "ENDING ERROR...", v
 
-        elif v.get('mz_imageid'):
-            print "KWARGS has MZID: {}".format(v.get('mz_imageid'))
+        elif values.get('mz_imageid'):
+            print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
 
 
 ## Run in shell as mozu_exec.py *args
