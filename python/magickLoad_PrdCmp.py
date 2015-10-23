@@ -661,10 +661,10 @@ def main():
 
 
     ### Date Defs
-    todaysdate = '{:%Y,%m,%d}'.format(datetime.datetime.now())
-    todaysdatefull = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
-    todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
-    todaysdatearch = '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+    todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+    todaysdatefull = todaysdatefullsecs[:10]
+    todaysdate = todaysdatefull[:6] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+    todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 
     ### Define tmp and archive paths prior to Creating
     tmp_processing = os.path.join("/mnt/Post_Complete/Complete_to_Load/.tmp_processing" , "tmp_" + str(todaysdatefull).replace(",", ""))
@@ -794,7 +794,7 @@ def main():
 
             mozu_exec.main(fileslist=[jpgout])
             #
-            # ## --> Uncomment to run the MOZU piece fully
+            # ## --> Uncomment to run the MOZU piece fully -- Outdated
             # try:
             #     prodimages_upload_orcl.main_upload_post(os.path.join(destdir,os.path.basename(img.split('.')[0] + '.jpg')))
             # except KeyError:
