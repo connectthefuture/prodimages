@@ -7,7 +7,7 @@ def log(original_function, filename=None):
     from os import path as path
     if filename is None:
         filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str(original_function.__name__ + "_log.txt"))
-    logging.basicConfig(filename=filename, level=logging.INFO)
+    logging.basicConfig(filename=filename, level=logging.DEBUG) # level=logging.INFO)
     start_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
     # print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
