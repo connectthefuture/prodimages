@@ -697,7 +697,7 @@ def main():
         destdir = os.path.abspath(sys.argv[2]) #'/Users/johnb/Pictures'
         tmp_processing = root_img_dir
         tmp_loading = destdir
-    except:
+    except IndexError:
         root_img_dir =  '/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly'
         destdir      =  tmp_loading
     if os.path.isdir(root_img_dir): pass
@@ -830,7 +830,7 @@ def main():
     import mozu_exec, mozu_image_util_functions, glob
     upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
 
-    print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', type(upload_tmp_mozu_loading_glob), len(upload_tmp_loading), ' <-- Now MozuExec'
+    print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', ' <-- Now MozuExec'
     mozu_exec.main(fileslist=upload_tmp_mozu_loading_glob)
     ##
 
