@@ -201,7 +201,7 @@ def main(fileslist=None):
                 load_content_resp = upload_new(**values)
                 mozu_image_table = mozu_image_table_instance()
                 if int(load_content_resp.keys()[0]) < 400:
-                    table_args = include_keys(v, __mozu_image_table_valid_keys__)
+                    table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
                     insert_db.execute()
                     print 'Inserted --> ', values.items(), ' <-- ', insert_db

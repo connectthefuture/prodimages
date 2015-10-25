@@ -743,14 +743,10 @@ def main():
             pass
 
         try:
-            os.makedirs(tmp_mozu_loading, 16877)
+            os.makedirs(imgdest_jpg_mozu, 16877)
         except:
             pass
 
-        try:
-            os.makedirs(imgdest_jpg_mozu)
-        except:
-            pass
 
         try:
             os.makedirs(imgdest_png_final, 16877)
@@ -783,9 +779,11 @@ def main():
             subproc_magick_large_jpg(pngout, destdir=tmp_loading)
             subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
 
-            ############################
-            ###### BEGIN mozu ############################
-            ############################
+            ##############################################
+            #####  BEGIN MOZU pt 1 of 2 ##################
+            ##############################################
+            ## Make Jpegs and collect Finals in mozu loading dir
+            #######
             import sys
             from os import chdir, path
             chdir('/usr/local/batchRunScripts/mozu')
@@ -794,46 +792,32 @@ def main():
             #if path.isfile(pngout):
             try:
                 print ' Is file PNGOUT', pngout, img
-                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
+                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=imgdest_jpg_mozu)
             except IOError:
-                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=tmp_mozu_loading)
+                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=imgdest_jpg_mozu)
                 pass
 
             # Try and make a list without needing globbing below
             mz_converted_jpgs.append(jpgout)
 
-            ############################
-            ###### END mozu ############################
-            ############################
+            ###########################################
+            ###### END mozu ###########################
+            ###########################################
+
         #metadict = metadata_info_dict(img)
         #dimens = get_imagesize_variables(img)
         #test_img = get_image_color_minmax(img)
 
-    ############################
-    ############################
+    ##########################################################
     ### Glob created PNGs and copy to Load Dir then Store in Arch dir
     tmp_png =  glob.glob(os.path.join(tmp_processing, '*.png'))
 
     [ shutil.copy2(file, os.path.join(tmp_loading, os.path.basename(file))) for file in tmp_png ]
     [ shutil.move(file, os.path.join(imgdest_png_final, os.path.basename(file))) for file in tmp_png ]
 
-    ## TODO: Fix so all go through funcs. Glob Mozu Jpegs to tmp Originals dir for now by passing productions sharpening funcs
-    tmp_mozu_jpg = glob.glob(os.path.join(tmp_mozu_loading, '*.jpg'))
-    [ shutil.move(file, os.path.join(imgdest_jpg_mozu, os.path.basename(file))) for file in tmp_mozu_jpg ]
-
     ## ARCHIVED Backup
     ## All JPGs in Root dir Only of tmp_processing will be now Archived as all Conversions are completed
     ###### All PNGs Created and moved to Archive plus Copy sent to Load Directory
-    ###
-    ######
-    ## Mozu
-    import mozu_exec, mozu_image_util_functions, glob
-    upload_tmp_mozu_loading_glob = glob.glob(os.path.join(tmp_mozu_loading, '*.*g'))
-
-    print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', ' <-- Now MozuExec'
-    mozu_exec.main(fileslist=upload_tmp_mozu_loading_glob)
-    ##
-
     #### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
     import time
     upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
@@ -863,7 +847,20 @@ def main():
         except:
             print "Error moving Finals to Arch {}".format(file)
 
+    ######################################################
+    ### #####  BEGIN MOZU pt 2 of 2 ######################
+    ######################################################
+    ## TODO: Fix so all go through funcs. Glob Mozu Jpegs to tmp Originals dir for now by passing productions sharpening funcs
+    ######################################################
+    ## Mozu  Xfer ####
+    import mozu_exec, mozu_image_util_functions, glob
+    upload_imgdest_jpg_mozu_glob = glob.glob(os.path.join(imgdest_jpg_mozu, '*.*g'))
 
+    print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', ' <-- Now MozuExec'
+    mozu_exec.main(fileslist=upload_imgdest_jpg_mozu_glob)
+    #######################################################
+    ############### END MOZU ##############################
+    #######################################################
 
     ### Check for okb files and send to Uploader via email
     zerobytefiles = glob.glob(os.path.join('/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/zero_byte_errors', '*/*.*g'))
@@ -890,10 +887,6 @@ def main():
     #     pass
 
     ###############
-    ## Clean up the jpegs sent to mozu
-    ###############
-    # tmp_jpg = glob.glob(os.path.join(tmp_mozu_loading, '*.jpg'))
-    # [ shutil.move(file, os.path.join(imgdest_jpg_final, os.path.basename(file))) for file in tmp_jpg ]
     ################
     ###################
     ## Remove Lock file
