@@ -256,7 +256,7 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     from RESTClient import MozuRestClient
     import mozu_exec, mozu_image_util_functions
     mozu_exec.main(final_mozu_list)
-    for f in final_mozu_list:
+    for f in glob.glob(final_mozu_list):
         shutil.move(f, imgdest_jpg_mozu_loaded)
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
     #poolMozu = multiprocessing.Pool(8)
