@@ -194,12 +194,27 @@ def main(fileslist):
     from mozu_image_util_functions import compile_todict_for_class_instance_variables, magick_convert_to_jpeg
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
-    if fileslist[0].split('/')[-1] == 'JPG_MOZU_LOAD':
+    ### Date Defs
+    from os import path # chdir , curdir
+    import datetime #, glob, shutil
+
+    todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+    todaysdatefull = todaysdatefullsecs[:12]
+    todaysdate = todaysdatefull[:8]  # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+
+    # Define for Creating Archive dirs
+    archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+    # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
+    archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
+    imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
+    # imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
+
+    if fileslist[0].split('/')[-1] != 'JPG_MOZU_LOAD':
         from os import path
-        fileslist_jpegs = [ path.abspath(f) for f in fileslist if f ]
+        fileslist_jpegs = fileslist # [ path.abspath(f) for f in fileslist if f ]
     else:
         #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
-        fileslist_jpegs = [magick_convert_to_jpeg(f) for f in fileslist if f]
+        fileslist_jpegs = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
 
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
