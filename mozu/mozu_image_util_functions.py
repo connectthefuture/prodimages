@@ -139,7 +139,7 @@ def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
                 md5checksum = md5_checksumer(img)
                 print type(md5checksum)
                 if not kwargs.get('tags'):
-                    image_metadata = get_exif_all_data(img)
+                    image_metadata = get_exif_all_data(path.abspath(img))
                     #print str(type(image_metadata.values()))
                     #tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
                     try:
