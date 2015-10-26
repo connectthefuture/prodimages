@@ -38,4 +38,5 @@ def batch_load_dated_mozu_jpgs(rootdir=None):
     #if path.isfile(pngout):
     load_batch_mozu_list = glob.glob(path.join(archive_uploaded_day, '*/JPG_MOZU_LOAD/*.??[gG]'))
     for f in load_batch_mozu_list:
-        jpgout = mozu_image_util_functions.magick_convert_to_jpeg(f,destdir=imgdest_jpg_mozu)
+        print path.abspath(f)
+        #jpgout = mozu_image_util_functions.magick_convert_to_jpeg(f,destdir=imgdest_jpg_mozu)
