@@ -172,13 +172,6 @@ def merge_properties(obj1, obj2):
     return obj2
 
 
-@log
-def merge_dict(data, *override):
-    result = {}
-    for current_dict in (data,) + override:
-        result.update(current_dict)
-    return result
-
 ###########################
 def main():
     pass
