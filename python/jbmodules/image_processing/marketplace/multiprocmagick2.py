@@ -240,13 +240,13 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     from os import chdir, path, curdir
 
-    try:
-        os.makedirs(imgdest_jpg_mozu, 16877)
-        for f in img_list:
-            shutil.copy2(f, imgdest_jpg_mozu)
-    except:
-        pass
-
+    # try:
+    #     os.makedirs(imgdest_jpg_mozu, 16877)
+    # except:
+    #     pass
+    #
+    # for f in img_list:
+    #     shutil.copy2(f, imgdest_jpg_mozu)
 
     final_mozu_list = path.join(imgdest_jpg_mozu, '*/*/*.??[gG]')
     # Send em all to Mozu AFTER MULTIPROC-THREADS are Done
