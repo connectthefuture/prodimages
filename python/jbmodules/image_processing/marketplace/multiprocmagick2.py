@@ -233,7 +233,7 @@ def funkRunner3(root_img_dir=None, single_flag=None):
 
 
     ########## MOZU - Five ##########
-    # Send em all to Mozu
+    # Send em all to Mozu AFTER MULTIPROC-THREADS are Done
     from os import chdir, path, curdir
     # os.chdir(os.path.join(os.path.abspath(os.curdir), '../mozu'))
     # print os.path.abspath(os.curdir)
