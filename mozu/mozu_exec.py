@@ -195,7 +195,8 @@ def main(fileslist):
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
     if fileslist[0].split('/')[-1] == 'JPG_MOZU_LOAD':
-        fileslist_jpegs = fileslist
+        from os import path
+        fileslist_jpegs = [ path.abspath(f) for f in fileslist if f ]
     else:
         #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
         fileslist_jpegs = [magick_convert_to_jpeg(f) for f in fileslist if f]
