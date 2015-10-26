@@ -126,7 +126,7 @@ def upsert_data_mz_image(**kwargs):
                             print "5-\nFailed Insert Statement: \t", insert_db
                 else:
                     print mz_imageid, ' Failed'
-        except AttributeError:
+        except OSError:
             print ' 128 AttribError in Upsert_mz_exec Locals -->', locals()
             pass
 
