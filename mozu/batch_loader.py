@@ -47,7 +47,6 @@ def batch_load_dated_mozu_jpgs(rootdir=None):
     load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.*[gG]'))
 
     return load_batch_mozu_done
-
     #for f in load_batch_mozu_list:
     #    print path.abspath(f)
     #    #jpgout = mozu_image_util_functions.magick_convert_to_jpeg(f,destdir=imgdest_jpg_mozu)
