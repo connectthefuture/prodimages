@@ -130,6 +130,9 @@ def upsert_data_mz_image(**kwargs):
             print ' 128 Type-aka-OldAttribError in Upsert_mz_exec Locals -->', locals()
             #pass
 
+    else:
+        res = upload_new(**kwargs)
+        return res
 # DELETE - Delete Image/DocumentContent - Everything
 @log
 def delete_document_data_content(**kwargs):
