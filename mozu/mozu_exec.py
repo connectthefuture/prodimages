@@ -58,7 +58,7 @@ def upload_new(**kwargs):
             print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
         except sqlalchemy.exc.IntegrityError:
             print 'PASSING IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
-    return mz_imageid, content_response
+    return content_response
 
 # @log
 # # PUT - Upload/Update Image/DocumentContent
