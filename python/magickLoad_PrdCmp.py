@@ -786,7 +786,8 @@ def main():
             #######
             import sys
             from os import chdir, path
-            chdir('/usr/local/batchRunScripts/mozu')
+            
+            #chdir('/usr/local/batchRunScripts/mozu')
             import mozu_exec, mozu_image_util_functions
             ## Compress and convert to jpg and store in separate dir for concurrent xfers
             #if path.isfile(pngout):

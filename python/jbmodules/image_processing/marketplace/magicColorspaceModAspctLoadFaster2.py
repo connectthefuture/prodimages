@@ -769,7 +769,16 @@ def main(root_img_dir=None):
 
                 import sys
                 from os import chdir, path
-                chdir('/usr/local/batchRunScripts/mozu')
+                import sys,glob,shutil,os,re,datetime
+                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
+                sys.path.append('/usr/local/batchRunScripts/mozu')
+                sys.path.append('/usr/local/batchRunScripts/python')
+                sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
+                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
+                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
+                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
+
+                #chdir('/usr/local/batchRunScripts/mozu')
                 import mozu_exec, mozu_image_util_functions
                 ## Compress and convert to jpg and store in separate dir for concurrent xfers
                 #if path.isfile(pngout):
