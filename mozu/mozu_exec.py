@@ -248,7 +248,7 @@ def main(fileslist=None):
                 #         res = update_db.execute()
                 #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
                 #
-                print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
+                print 'TYPE or Value Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 pass
                 # except IOError:
