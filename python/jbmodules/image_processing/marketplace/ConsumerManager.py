@@ -5,6 +5,25 @@ import os
 import multiprocessing
 from Queue import Empty
 
+### Date Defs
+from os import chdir, path, curdir
+import datetime, glob, shutil
+
+######
+todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+todaysdatefull = todaysdatefullsecs[:12]
+todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
+globals imgdest_jpg_mozu
+imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
+
+try:
+    os.makedirs(imgdest_jpg_mozu, 16877)
+except:
+    pass
+
+
 class Consumer(multiprocessing.Process):
 
     def __init__(self, tasks, results, consumers_finished):
@@ -42,7 +61,7 @@ class Task(object):
 
     def __call__(self):
         import jbmodules
-        import os
+        import os, shutil
         from jbmodules import image_processing
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
@@ -51,6 +70,8 @@ class Task(object):
         print self.img, ' <-- self.img ', self.rgbmean
         pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
         ## TODO: Possible insertion of Mozu and/or GoogleDrive upload and key exchange
+        ## COPY TO MOZU DAILY DIR DEFINED AS GLOBAL ABOVE
+        shutil.copy2(pngout, imgdest_jpg_mozu)
         magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
         ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
         # try:
