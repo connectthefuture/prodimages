@@ -71,11 +71,10 @@ def upsert_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
-    select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) )
-    select_result = select_db.execute()
-    test = [ row for row in select_result ]
-    print select_db, '\n\nTEST -->\n', kwargs  #, test
-    if test:
+    select_result = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) ).execute().fetchone()
+    #test = [ row for row in select_result ]
+    print select_result, '\n\nTEST -->\n', kwargs  #, test
+    if select_result:
         try:
             if select_result.fetchone()['mz_imageid']:
                 kwargs['mz_imageid'] = select_result.fetchone()['mz_imageid']
@@ -207,8 +206,10 @@ def main(fileslist=None):
                     print 'Inserted --> ', values.items(), ' <-- ', insert_db
                 elif int(load_content_resp.keys()[0]) == 409:
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                    select_db = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) )
-                    table_args['mz_imageid'] = values['mz_imageid'] = select_db['mz_imageid']
+                    mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
+                    #bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['bf_imageid']
+
+                    table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
                     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
                     if upsert_content_resp.http_status_code < 300:
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
