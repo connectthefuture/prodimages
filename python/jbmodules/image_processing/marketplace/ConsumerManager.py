@@ -15,7 +15,7 @@ todaysdatefull = todaysdatefullsecs[:12]
 todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
 todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
-globals imgdest_jpg_mozu
+global imgdest_jpg_mozu
 imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
 
 try:
