@@ -821,7 +821,7 @@ def main():
     #### All Files Converted for Upload, Now glob search and move large and medium named jpgs to tmp loading
     import time
     upload_tmp_loading = glob.glob(os.path.join(tmp_loading, '*.*g'))
-    upload_tmp_loading_mozuall = glob.glob(os.path.join(imgdest_jpg_mozu, '*.jpg'))
+    #upload_tmp_loading_mozuall = glob.glob(os.path.join(imgdest_jpg_mozu, '*.jpg'))
 
     for upload_file in upload_tmp_loading:
         #### UPLOAD upload_file via NFS to imagedrop
