@@ -194,7 +194,7 @@ def main(fileslist):
     from mozu_image_util_functions import compile_todict_for_class_instance_variables, magick_convert_to_jpeg
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
-    if fileslist.split('/')[-1] == 'JPG_MOZU_LOAD':
+    if fileslist[0].split('/')[-1] == 'JPG_MOZU_LOAD':
         fileslist_jpegs = fileslist
     else:
         #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
