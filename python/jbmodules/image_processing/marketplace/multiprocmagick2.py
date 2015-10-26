@@ -162,6 +162,15 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     destdir = '/mnt/Post_Complete/ImageDrop'
     print 'Starting Funkrunner2 Pools'
 
+    ## Get all modules on poython exec path
+    import sys
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
+    sys.path.append('/usr/local/batchRunScripts/mozu')
+    sys.path.append('/usr/local/batchRunScripts/python')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
 
     ########## One ##########
     #
@@ -226,8 +235,8 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     ########## MOZU - Five ##########
     # Send em all to Mozu
     from os import chdir, path, curdir
-    os.chdir(os.path.join(os.path.abspath(os.curdir), '../mozu'))
-    print os.path.abspath(os.curdir)
+    # os.chdir(os.path.join(os.path.abspath(os.curdir), '../mozu'))
+    # print os.path.abspath(os.curdir)
     from RESTClient import MozuRestClient
     import mozu_exec  #, db, mozu_image_util_functions
     mozu_exec.main(img_list)
