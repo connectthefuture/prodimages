@@ -6,9 +6,10 @@ from mozu_image_util_functions import log
 ##
 @log
 def mozu_image_table_instance(**kwargs):
-    import sqlalchemy, datetime
-    from sqlalchemy import Table, Column, Integer, String, DateTime, MetaData, create_engine
-    from sqlalchemy import Sequence, FetchedValue, Text
+    import sqlalchemy
+    import datetime
+    from sqlalchemy import Table, Column, Integer, String, MetaData, create_engine, DateTime
+    from sqlalchemy import FetchedValue, Text, Sequence
     from sqlalchemy.dialects import oracle as oracle_dialect
 
     db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
