@@ -227,7 +227,7 @@ def main(fileslist=None):
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
-            except OSError: #sqlalchemy.exc.IntegrityError:
+            except TypeError: #sqlalchemy.exc.IntegrityError:
                 # try:
                 #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
                 #     if upsert_content_resp.http_status_code < 300:
@@ -236,7 +236,7 @@ def main(fileslist=None):
                 #         res = update_db.execute()
                 #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
                 #
-                print 'IntegrityError and everything is or will be commented out below because it is in the db already'
+                print 'TypeError and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 pass
 
