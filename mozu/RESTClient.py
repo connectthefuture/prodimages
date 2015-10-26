@@ -159,7 +159,7 @@ class MozuRestClient:
             except KeyError:
                 return (_document_data_response, "Keyerror",)
         else:
-            return ("Failed-POST with code: {}".format(MozuRestClient.http_status_code), MozuRestClient.http_status_code,)
+            return "Failed-POST with code: {}".format(MozuRestClient.http_status_code), MozuRestClient.http_status_code,
 
     ## PUT - UpdateContent or Load to New Doc obj- Content stream - Send file
     @log
@@ -198,11 +198,11 @@ class MozuRestClient:
         if kwargs.get("src_filepath"):
             _document_content_response = self.send_content(**kwargs) #requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
             print _document_content_response.headers
-        MozuRestClient.http_status_code = _document_content_response.status_code
+            MozuRestClient.http_status_code = _document_content_response.status_code
         try:
             return _document_data_response.json()['id']
         except KeyError:
-            return _document_data_response
+            return MozuRestClient.http_status_code
 
     ## GET - Single Document Obj by documentId .ie mz_imageid
     ## -- The Document properties that define the content used by the content management system (CMS).
