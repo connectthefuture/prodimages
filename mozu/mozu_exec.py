@@ -43,6 +43,7 @@ def resource_documents_list(**kwargs):
 def upload_new(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
+
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
     kwargs['mz_imageid'] = mz_imageid
@@ -52,9 +53,11 @@ def upload_new(**kwargs):
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     print "Inserting with, ", insert_db
     if len(mz_imageid) > 20:
-        insert_db.execute()
-        print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
-        # # Insert to mz_imageid + **kwargs to Oracle
+        try:
+            insert_db.execute()
+            print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
+        except sqlalchemy.exc.IntegrityError:
+            print 'PASSING IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
     return mz_imageid, document_resource
 
 # @log
