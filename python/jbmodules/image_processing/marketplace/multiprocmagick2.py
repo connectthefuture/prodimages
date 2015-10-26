@@ -254,10 +254,10 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     # chdir(os.path.join(os.path.abspath(curdir), '../mozu'))
     # print path.abspath(curdir)
     from RESTClient import MozuRestClient
-    import mozu_exec, mozu_image_util_functions
+    import mozu_exec
     mozu_exec.main(final_mozu_list)
-    for f in final_mozu_list:
-        shutil.move(f, imgdest_jpg_mozu_loaded)
+    #for f in final_mozu_list:
+        #shutil.move(f, imgdest_jpg_mozu_loaded)
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
     #poolMozu = multiprocessing.Pool(8)
     #     import os
