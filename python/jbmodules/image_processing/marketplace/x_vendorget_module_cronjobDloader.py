@@ -173,7 +173,7 @@ def get_exif_all_data(image_filepath):
 #     ## Check for stored tokens
 #     import cPickle as pickle
 #     initdir = path.abspath(curdir)
-#     #chdir(path.dirname(path.realpath(__file__)))    
+#     #chdir(path.dirname(path.realpath(__file__)))
 #     #TOKENS_FILE = 'tokens.pkl'
 
 #     if path.isfile(TOKENS_FILE):
@@ -195,7 +195,7 @@ def get_exif_all_data(image_filepath):
 
 #             #else:
 #             #    oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
-        
+
 #         box_api_token_root = "https://app.box.com/api/oauth2/token"
 #         data = {
 #              ##'Authorization': "Bearer " + access_token,
@@ -214,11 +214,11 @@ def get_exif_all_data(image_filepath):
 #         try:
 #             access_token = newcreds['access_token']
 #             refresh_token = newcreds['refresh_token']
-            
+
 #             ## Replace old cred dumping new creds to tokens.pkl
-#             ##---NOTE---## refresh token is valid for 60 days, 
+#             ##---NOTE---## refresh token is valid for 60 days,
 #             ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
-           
+
 #             with open(TOKENS_FILE,'wb') as fw:
 #                 pickle.dump((access_token, refresh_token,),  fw)
 #                 print('BoxSuccess')
@@ -826,6 +826,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None):
 
     #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
     print 'Single Flaggin It with --> ', single_flag, '\n', urlsdload_list
+    ## This is where almost all the work begins...
     multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_flag=single_flag)
     print 'Done With multiprocmagick --> ', root_img_dir
 
