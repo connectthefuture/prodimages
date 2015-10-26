@@ -128,7 +128,7 @@ def upsert_data_mz_image(**kwargs):
                     print mz_imageid, ' Failed'
         except TypeError:
             print ' 128 Type-aka-OldAttribError in Upsert_mz_exec Locals -->', locals()
-            pass
+            #pass
 
 # DELETE - Delete Image/DocumentContent - Everything
 @log
@@ -218,17 +218,18 @@ def main(fileslist=None):
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
             except sqlalchemy.exc.IntegrityError:
-                try:
-                    upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
-                    if upsert_content_resp.http_status_code < 300:
-                        table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
-                        res = update_db.execute()
-                        print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
-
-                    print 'IntegrityError and everything is or will be commented out below because it is in the db already'
-                except IOError:
-                    print "ENDING ERROR...", values
+                # try:
+                #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
+                #     if upsert_content_resp.http_status_code < 300:
+                #         table_args = include_keys(values, __mozu_image_table_valid_keys__)
+                #         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
+                #         res = update_db.execute()
+                #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
+                #
+                print 'IntegrityError and everything is or will be commented out below because it is in the db already'
+                return 'IntegrityError'
+                # except IOError:
+                #     print "ENDING ERROR...", values
 
         elif values.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
