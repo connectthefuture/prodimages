@@ -195,9 +195,9 @@ def main(fileslist):
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
     if fileslist.split('/')[-1] == 'JPG_MOZU_LOAD':
-        fileslist_jpegs = [ magick_convert_to_jpeg(f) for f in fileslist if f ]
+        fileslist_jpegs = fileslist
     else:
-        fileslist_jpegs = sorted(list(set(fileslist)))
+        fileslist_jpegs = [magick_convert_to_jpeg(f) for f in fileslist if f]
 
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
