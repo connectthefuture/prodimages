@@ -227,7 +227,7 @@ def main(fileslist=None):
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
-            except TypeError: #sqlalchemy.exc.IntegrityError:
+            except ValueError: #sqlalchemy.exc.IntegrityError:
                 # try:
                 #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
                 #     if upsert_content_resp.http_status_code < 300:
@@ -236,10 +236,21 @@ def main(fileslist=None):
                 #         res = update_db.execute()
                 #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
                 #
-                print 'TypeError and everything is or will be commented out below because it is in the db already'
+                print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 pass
-
+            except TypeError:  # sqlalchemy.exc.IntegrityError:
+                # try:
+                #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
+                #     if upsert_content_resp.http_status_code < 300:
+                #         table_args = include_keys(values, __mozu_image_table_valid_keys__)
+                #         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
+                #         res = update_db.execute()
+                #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
+                #
+                print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
+                #return 'IntegrityError'
+                pass
                 # except IOError:
                 #     print "ENDING ERROR...", values
 
