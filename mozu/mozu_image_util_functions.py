@@ -110,12 +110,13 @@ def magick_convert_to_jpeg(img, destdir=None):
 @log
 def get_exif_all_data(src_filepath):
     import exiftool
+    from os import path
     print "ExifExtract: ", type(src_filepath), src_filepath
     if src_filepath is not None:
         try:
             if src_filepath.split('.')[-1].lower() == 'jpg' or 'png':
                 with exiftool.ExifTool() as et:
-                    metadata = et.get_metadata(src_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
+                    metadata = et.get_metadata(path.abspath(src_filepath))  # ['XMP:DateCreated'][:10].replace(':','-')
                 return metadata
         except ValueError:
             metadata = {}
