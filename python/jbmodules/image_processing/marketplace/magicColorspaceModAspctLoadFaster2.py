@@ -745,8 +745,45 @@ def main(root_img_dir=None):
                 ## Generate png from source then jpgs from png
 
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
+
                 ## TODO: pngout will be the image to POST to mozu returned from mozu
                 #  ie. response = send_to_mozu(pngout)  then save response in postgres --> and push the id to mozu again
+
+                ##############################################
+                ## Make Jpegs and collect Finals in mozu loading dir
+                #######
+                from os import path # chdir , curdir
+                import datetime #, glob, shutil
+
+                todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+                todaysdatefull = todaysdatefullsecs[:12]
+                todaysdate = todaysdatefull[:8]  # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+
+                # Define for Creating Archive dirs
+                archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+                # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
+                archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
+
+
+                imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
+
+                import sys
+                from os import chdir, path
+                chdir('/usr/local/batchRunScripts/mozu')
+                import mozu_exec, mozu_image_util_functions
+                ## Compress and convert to jpg and store in separate dir for concurrent xfers
+                #if path.isfile(pngout):
+                try:
+                    print ' Is file PNGOUT', pngout, img
+                    jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=imgdest_jpg_mozu)
+                except IOError:
+                    jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=imgdest_jpg_mozu)
+                    pass
+
+                # Try and make a list without needing globbing below
+                mz_converted_jpgs.append(jpgout)
+
+                ###########################################
 
                 # from mozu import mozu_exec
                 # mz_res = mozu_exec.main(pngout)

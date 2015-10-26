@@ -222,51 +222,6 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     s.start()
 
 
-    print 'MOZU START '
-    ########## MOZU - Five ##########
-    ### Date Defs
-    from os import chdir, path, curdir
-    import datetime, glob, shutil
-
-    todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-    todaysdatefull = todaysdatefullsecs[:12]
-    todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
-    todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
-
-    ## Define for Creating Archive dirs
-    archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
-    #archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
-    archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
-    imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
-    imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
-
-
-    # try:
-    #     os.makedirs(imgdest_jpg_mozu, 16877)
-    # except:
-    #     pass
-    #
-    # for f in img_list:
-    #     shutil.copy2(f, imgdest_jpg_mozu)
-
-    final_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*/*/*.??[gG]'))
-    # Send em all to Mozu AFTER MULTIPROC-THREADS are Done
-    # chdir(os.path.join(os.path.abspath(curdir), '../mozu'))
-    # print path.abspath(curdir)
-    from RESTClient import MozuRestClient
-    import mozu_exec
-    mozu_exec.main(final_mozu_list)
-    #for f in final_mozu_list:
-        #shutil.move(f, imgdest_jpg_mozu_loaded)
-    # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
-    #poolMozu = multiprocessing.Pool(8)
-    #     import os
-    #     poolMozu.map(os.remove, img_list)
-    #     poolMozu.close()
-    #     poolMozu.join()
-    #     print' And now they are Gone'
-
-    print 'MOZU DONE '
 
     if single_flag and len(imagesGlob) <= 7:
         settest = list(set([ f.split('/')[:9] for f in glob.glob(imagesGlob) if f is not None ] ))
