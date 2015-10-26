@@ -126,8 +126,8 @@ def upsert_data_mz_image(**kwargs):
                             print "5-\nFailed Insert Statement: \t", insert_db
                 else:
                     print mz_imageid, ' Failed'
-        except OSError:
-            print ' 128 AttribError in Upsert_mz_exec Locals -->', locals()
+        except TypeError:
+            print ' 128 Type-aka-OldAttribError in Upsert_mz_exec Locals -->', locals()
             pass
 
 # DELETE - Delete Image/DocumentContent - Everything
