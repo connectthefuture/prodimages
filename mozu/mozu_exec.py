@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-import pdb;pdb.set_trace()
+# import pdb;pdb.set_trace()
 
 #######################################
 ## Listing and Info about Document List
@@ -191,11 +191,15 @@ def delete_document_data_content(**kwargs):
 def main(fileslist):
     import sqlalchemy
     from db import mozu_image_table_instance
-    from mozu_image_util_functions import compile_todict_for_class_instance_variables  #, magick_convert_to_jpeg
+    from mozu_image_util_functions import compile_todict_for_class_instance_variables, magick_convert_to_jpeg
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
-    # fileslist_jpegs = [magick_convert_to_jpeg(f) for f in fileslist if f]
-    compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
+    if fileslist.split('/')[-1] == 'JPG_MOZU_LOAD':
+        fileslist_jpegs = [ magick_convert_to_jpeg(f) for f in fileslist if f ]
+    else:
+        fileslist_jpegs = sorted(list(set(fileslist)))
+
+    compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     # print compiled_instance_vars, "186-MZEXECY"
     for key,values in compiled_instance_vars.iteritems():
