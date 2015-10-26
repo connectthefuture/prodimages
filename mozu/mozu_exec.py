@@ -197,6 +197,7 @@ def main(fileslist):
     if fileslist.split('/')[-1] == 'JPG_MOZU_LOAD':
         fileslist_jpegs = fileslist
     else:
+        #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
         fileslist_jpegs = [magick_convert_to_jpeg(f) for f in fileslist if f]
 
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
