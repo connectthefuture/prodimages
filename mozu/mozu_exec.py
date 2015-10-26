@@ -51,13 +51,11 @@ def upload_new(**kwargs):
     mzclient.send_content(**kwargs)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     print "Inserting with, ", insert_db
-    if len(mz_imageid) > 16:
+    if len(mz_imageid) > 20:
         insert_db.execute()
         print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
-        ## Insert to mz_imageid + **kwargs to Oracle
-        return mz_imageid, document_resource
-    else:
-        return
+        # # Insert to mz_imageid + **kwargs to Oracle
+    return mz_imageid, document_resource
 
 # @log
 # # PUT - Upload/Update Image/DocumentContent
@@ -124,7 +122,7 @@ def upsert_data_mz_image(**kwargs):
                             return update_result.fetchone()
                         else:
 
-                            #print 'NO BFID to update ', locals()
+                            # print 'NO BFID to update ', locals()
 
                             insert_db = mozu_image_table.insert(**table_args)
                             print "5-\nFailed Insert Statement: \t", insert_db
