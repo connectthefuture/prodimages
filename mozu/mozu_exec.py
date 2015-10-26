@@ -77,8 +77,8 @@ def upsert_data_mz_image(**kwargs):
     print select_db, '\n\nTEST -->\n', kwargs  #, test
     if test:
         try:
-            if select_result.items()['mz_imageid']:
-                kwargs['mz_imageid'] = select_result.items()['mz_imageid']
+            if select_result.fetchone()['mz_imageid']:
+                kwargs['mz_imageid'] = select_result.fetchone()['mz_imageid']
                 md5checksum = []
                 kwargs['md5checksum'] = md5checksum
                 mzclient = MozuRestClient(**kwargs)
@@ -101,8 +101,8 @@ def upsert_data_mz_image(**kwargs):
                         insert_db = mozu_image_table.insert(**table_args)
                         print "3-\nInsert Statement: \t", insert_db
                         insert_result = insert_db.execute()
-                        print content_response, "Not in DB. Insert Result: ", insert_result.items()['mz_imageid']
-                        return insert_result.items()
+                        print content_response, "Not in DB. Insert Result: ", insert_result.fetchone()['mz_imageid']
+                        return insert_result.fetchone()
                     except sqlalchemy.exc.IntegrityError:
                         content_response = mzclient.send_content(**kwargs)
                         if kwargs.get('bf_imageid'):
@@ -117,7 +117,7 @@ def upsert_data_mz_image(**kwargs):
                             print "4-\nUpdate Statement: \t", update_db
                             update_result = update_db.execute()
                             print content_response, '4.5-Updated--> Maybe', kwargs.items(), ' <--kwargs.items ', update_db
-                            return update_result
+                            return update_result.fetchone()
                         else:
 
                             #print 'NO BFID to update ', locals()
@@ -150,16 +150,16 @@ def delete_document_data_content(**kwargs):
 # def download_document_content(outfile=None, **kwargs):
 #     from RESTClient import MozuRestClient
 #     print kwargs, 'KWARGS-26'
-#     _mzclient = MozuRestClient(**kwargs)
+#     mzclient = MozuRestClient(**kwargs)
 #     from os import path as path
-#     image_content = _mzclient[     if not _mzclient.bf_imageid:
+#     image_content = mzclient[     if not mzclient.bf_imageid:
 #         # Get bflyid from Oracle using mz_id
 #         from db import mozu_image_table_instance
           #mozu_image_table = mozu_image_table_instance()
-#         bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == _mzclient.mz_imageid) ) )[0]['bf_imageid']
-#         _mzclient.bf_imageid = bf_imageid
+#         bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == mzclient.mz_imageid) ) ).execute().fetchone()['bf_imageid']
+#         mzclient.bf_imageid = bf_imageid
 #     if not outfile:
-#         outfile = path.join('/tmp', _mzclient.bf_imageid)
+#         outfile = path.join('/tmp', mzclient.bf_imageid)
 #     else: pass
 #     with open(outfile,'w') as f:
 #         f.write(image_content)
@@ -170,8 +170,8 @@ def delete_document_data_content(**kwargs):
 # def read_document_content_headers(**kwargs):
 #     from RESTClient import MozuRestClient
 #     print kwargs, 'KWARGS-47'
-#     _mzclient = MozuRestClient(**kwargs)
-#     image_data = _mzclient_h[ders()
+#     mzclient = MozuRestClient(**kwargs)
+#     image_data = mzclient.headers
 #     print image_data
 #     return image_data
 
