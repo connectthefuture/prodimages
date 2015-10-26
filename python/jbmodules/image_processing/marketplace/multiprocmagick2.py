@@ -238,7 +238,8 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     #archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
     archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
-    from os import chdir, path, curdir
+    imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
+
 
     # try:
     #     os.makedirs(imgdest_jpg_mozu, 16877)
@@ -255,6 +256,8 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     from RESTClient import MozuRestClient
     import mozu_exec, mozu_image_util_functions
     mozu_exec.main(final_mozu_list)
+    for f in final_mozu_list:
+        shutil.move(f, imgdest_jpg_mozu_loaded)
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
     #poolMozu = multiprocessing.Pool(8)
     #     import os

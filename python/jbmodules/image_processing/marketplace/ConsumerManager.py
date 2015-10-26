@@ -6,7 +6,7 @@ import multiprocessing
 from Queue import Empty
 
 ### Date Defs
-from os import chdir, path, curdir
+from os import chdir, path, curdir, makedirs
 import datetime, glob, shutil
 
 ######
@@ -18,9 +18,12 @@ archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
 archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
 global imgdest_jpg_mozu
 imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
+global imgdest_jpg_mozu_loaded
+imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 
 try:
-    os.makedirs(imgdest_jpg_mozu, 16877)
+    makedirs(imgdest_jpg_mozu, 16877)
+    makedirs(imgdest_jpg_mozu_loaded, 16877)
 except:
     pass
 
