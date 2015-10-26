@@ -49,7 +49,7 @@ def upload_new(**kwargs):
     kwargs['mz_imageid'] = mz_imageid
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-    mzclient.send_content(**kwargs)
+    content_response = mzclient.send_content(**kwargs)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     print "Inserting with, ", insert_db
     if len(mz_imageid) > 20:
@@ -58,7 +58,7 @@ def upload_new(**kwargs):
             print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
         except sqlalchemy.exc.IntegrityError:
             print 'PASSING IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
-    return mz_imageid, document_resource
+    return mz_imageid, content_response
 
 # @log
 # # PUT - Upload/Update Image/DocumentContent
