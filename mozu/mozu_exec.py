@@ -108,7 +108,7 @@ def upsert_data_mz_image(**kwargs):
                         if kwargs.get('bf_imageid'):
                             kwargs.get('bf_imageid')
                             update_db = mozu_image_table.update(values=dict(**table_args),
-                                                                whereclause=  #mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
+                                                                whereclause=  # mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
                                                                 (mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                                                                 |
                                                                 (mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
@@ -138,8 +138,8 @@ def delete_document_data_content(**kwargs):
     delete_resp = mzclient.delete_mz_image()
     mozu_image_table = mozu_image_table_instance()
 
-    delete_db = mozu_image_table.delete( whereclause=( (mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) ) )
-    #res = delete_db.execute()
+    delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) )
+    # res = delete_db.execute()
     # TODO: Need to delete from db or alter insome way
     print delete_resp.headers, "Delete \n", delete_db, "\nMZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
@@ -181,20 +181,20 @@ def delete_document_data_content(**kwargs):
 ########
 @log
 def main(fileslist=None):
-    import sqlalchemy, sys
+    import sqlalchemy
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
-    #print compiled_instance_vars, "186-MZEXECY"
+    # print compiled_instance_vars, "186-MZEXECY"
     for key,values in compiled_instance_vars.iteritems():
         # v = include_keys(values, __mozu_image_table_valid_keys__)
         # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalues:\t{}".format(v.items(), key , values.popitem())
         if not values.get('mz_imageid'):
-            #### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
-            ### ---> before loading(would actually need to redo the md5checksum from compiler)
+            # ### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
+            # ## ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
                 values['mz_imageid'], response = upload_new(**values)
@@ -211,7 +211,7 @@ def main(fileslist=None):
                     #bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['bf_imageid']
 
                     table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-                    upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
+                    upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
                     if upsert_content_resp.http_status_code < 300:
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
                         res = update_db.execute()
@@ -247,7 +247,7 @@ if __name__ == '__main__':
     try:
         if path.isfile(path.abspath(sys.argv[1])):
             for arg in " ".join(sys.argv[1:]):
-                insert_list.append(arg)##'/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
+                insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
         print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
         main(fileslist=insert_list_filepaths)
