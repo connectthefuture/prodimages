@@ -224,13 +224,36 @@ def funkRunner3(root_img_dir=None, single_flag=None):
 
     print 'MOZU START '
     ########## MOZU - Five ##########
-    # Send em all to Mozu AFTER MULTIPROC-THREADS are Done
+    ### Date Defs
     from os import chdir, path, curdir
-    # os.chdir(os.path.join(os.path.abspath(os.curdir), '../mozu'))
-    # print os.path.abspath(os.curdir)
+    import datetime, glob, shutil
+
+    todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+    todaysdatefull = todaysdatefullsecs[:12]
+    todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+    todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
+
+    ## Define for Creating Archive dirs
+    archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+    archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
+    imgdest_jpg_mozu = path.join(archive_uploaded, 'JPG_MOZU_LOAD')
+    from os import chdir, path, curdir
+
+    try:
+        os.makedirs(imgdest_jpg_mozu, 16877)
+    except:
+        pass
+
+    for f in img_list:
+        shutil.copy2(f, imgdest_jpg_mozu)
+
+    final_mozu_list = path.join(imgdest_jpg_mozu, '*/*/*.??[gG]')
+    # Send em all to Mozu AFTER MULTIPROC-THREADS are Done
+    # chdir(os.path.join(os.path.abspath(curdir), '../mozu'))
+    # print path.abspath(curdir)
     from RESTClient import MozuRestClient
-    import mozu_exec  #, db, mozu_image_util_functions
-    mozu_exec.main(img_list)
+    import mozu_exec, mozu_image_util_functions
+    mozu_exec.main(final_mozu_list)
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
     #poolMozu = multiprocessing.Pool(8)
     #     import os
