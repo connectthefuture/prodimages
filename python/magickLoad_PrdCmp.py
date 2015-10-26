@@ -857,7 +857,7 @@ def main():
     upload_imgdest_jpg_mozu_glob = glob.glob(os.path.join(imgdest_jpg_mozu, '*.*g'))
 
     print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', ' <-- Now MozuExec'
-    mozu_exec.main(fileslist=upload_imgdest_jpg_mozu_glob)
+    mozu_exec.main(upload_imgdest_jpg_mozu_glob)
     #######################################################
     ############### END MOZU ##############################
     #######################################################
