@@ -126,12 +126,12 @@ class MozuRestClient:
         ## Default qstring params camel cased to adhere to mozu format
         if kwargs.get("name"): # or kwargs.get("bf_imageid"):
             kwargs['name'] =  kwargs.get("name")
-            kwargs["pageSize"] = kwargs.get("page_size", "200")
+            kwargs["pageSize"] = kwargs.get("page_size", "100")
             qstring_args = include_keys(kwargs, __mozu_document_filter_valid_keys__)
             _qstring = "?{}".format(urlencode(qstring_args))
         elif not kwargs.get("mz_imageid"):
             kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
-            kwargs["pageSize"] = kwargs.get("page_size", "50")
+            kwargs["pageSize"] = kwargs.get("page_size", "100")
             kwargs["startIndex" ] = kwargs.get("start_index", "0")
             qstring_args = include_keys(kwargs, __mozu_query_filter_valid_keys__)
             print qstring_args
@@ -157,9 +157,9 @@ class MozuRestClient:
                 self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid + "/content"
                 return (self.mz_imageid, self.document_resource,)
             except KeyError:
-                return (_document_data_response, None,)
+                return (_document_data_response, "Keyerror",)
         else:
-            return ("Failed-POST with code", MozuRestClient.http_status_code)
+            return ("Failed-POST with code: {}".format(MozuRestClient.http_status_code), MozuRestClient.http_status_code,)
 
     ## PUT - UpdateContent or Load to New Doc obj- Content stream - Send file
     @log
