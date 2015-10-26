@@ -221,7 +221,25 @@ def funkRunner3(root_img_dir=None, single_flag=None):
             print 'Deleted {0} after uploading'.format(img)
     else:
         print 'multproc2', single_flag, len(imagesGlob), '<-- LENGlob'
-    ########## Five ##########
+
+
+    ########## MOZU - Five ##########
+    # Send em all to Mozu
+    from os import chdir, path, curdir
+    os.chdir(os.path.join(os.path.abspath(os.curdir), '../mozu'))
+    print os.path.abspath(os.curdir)
+    from RESTClient import MozuRestClient
+    import mozu_exec  #, db, mozu_image_util_functions
+    mozu_exec.main(img_list)
+    # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
+    #poolMozu = multiprocessing.Pool(8)
+    #     import os
+    #     poolMozu.map(os.remove, img_list)
+    #     poolMozu.close()
+    #     poolMozu.join()
+    #     print' And now they are Gone'
+
+    ########## SIX ##########
     # Delete em all
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
     #     poolDelete = multiprocessing.Pool(8)

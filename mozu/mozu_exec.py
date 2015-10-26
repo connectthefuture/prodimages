@@ -188,7 +188,7 @@ def delete_document_data_content(**kwargs):
 #######################################
 ########
 @log
-def main(fileslist=None):
+def main(fileslist):
     import sqlalchemy
     from db import mozu_image_table_instance
     from mozu_image_util_functions import compile_todict_for_class_instance_variables
