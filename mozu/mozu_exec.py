@@ -71,26 +71,27 @@ def upsert_data_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
-    select_result = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ) ).execute().fetchone()
-    #test = [ row for row in select_result ]
-    print select_result, '\n\nTEST -->\n', kwargs  #, test
+    select_result = mozu_image_table.select( whereclause=(mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) ).execute().fetchone()
+    # test = [ row for row in select_result ]
+    print select_result, '\n\nTEST -->\n', kwargs  # , test
     if select_result:
         try:
-            if select_result.fetchone()['mz_imageid']:
-                kwargs['mz_imageid'] = select_result.fetchone()['mz_imageid']
+            if select_result['mz_imageid']:
+                kwargs['mz_imageid'] = select_result['mz_imageid']
                 md5checksum = []
                 kwargs['md5checksum'] = md5checksum
                 mzclient = MozuRestClient(**kwargs)
                 update_resp = mzclient.update_mz_image(**kwargs)
                 table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-                update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
+                update_db = mozu_image_table.update(values=dict(**table_args), whereclause=mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid'))
                 print "1\nUpdate Statement: \t", update_db
                 update_result = update_db.execute()
                 print update_result, '2-Updated--> ', kwargs.items(), ' <--kwargs.items ', update_db
                 return update_resp
             else:
                 mzclient = MozuRestClient(**kwargs)
-                mz_imageid, document_resource = mzclient.create_new_mz_image()
+                # mz_imageid, document_resource = mzclient.create_new_mz_image()
+                mz_imageid = mzclient.get_mz_image_document_list(name=kwargs.get('bf_imageid'))['id']
                 # kwargs['mz_imageid'], kwargs['mozu_url'] =  mzclient.create_new_mz_image() #mzclient.create_new_mz_image(**kwargs)
                 if mz_imageid: #type(post_resp) == dict:
                     kwargs['mz_imageid'] = mz_imageid # mz_imageid.keys()[0]
