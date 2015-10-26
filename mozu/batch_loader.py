@@ -23,15 +23,6 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 
-
-    # try:
-    #     os.makedirs(imgdest_jpg_mozu, 16877)
-    # except:
-    #     pass
-    #
-    # for f in img_list:
-    #     shutil.copy2(f, imgdest_jpg_mozu)
-
     import mozu_exec  #, mozu_image_util_functions
     ## Compress and convert to jpg and store in separate dir for concurrent xfers
     #if path.isfile(pngout):

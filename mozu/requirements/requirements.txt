@@ -15,7 +15,7 @@ sqlalchemy
 sqlparse
 #trollius
 urllib3
-virtualenv3
+virtualenv
 Werkzeug
 wheel
 xlrd

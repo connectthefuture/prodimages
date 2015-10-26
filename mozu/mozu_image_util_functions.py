@@ -143,7 +143,7 @@ def compile_todict_for_class_instance_variables(fileslist=None, **kwargs):
                     # print str(type(image_metadata.values()))
                     # tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
                     try:
-                        tags = [ "{}={}".format(k,v) for k,v in image_metadata.iteritems() if k.split(':')[-1] == 'Directory' ] #image_metadata.values()
+                        tags = [ "{}={}".format(k,v) for k,v in image_metadata.iteritems() if k.split(':')[-1] == 'DateCreated' ] #image_metadata.values() ['XMP:DateCreated'][:10].replace(':','-')
                     except AttributeError:
                         print 'Tags Attrib Error'
                         tags = []
