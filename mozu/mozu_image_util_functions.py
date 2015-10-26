@@ -126,22 +126,22 @@ def get_exif_all_data(src_filepath):
 
 ## Compile Inserts as dict with key == bluefly file name
 @log
-def compile_todict_for_class_instance_variables(fileslist=None,**kwargs):
+def compile_todict_for_class_instance_variables(fileslist=None, **kwargs):
     import os.path as path
     instance_properties = {}
     print 'Compile 131\n', list(fileslist), kwargs
     for img in fileslist:
         if path.isfile(img):
             bf_imageid = path.basename(img)
-            #print locals(), "localSSY"
+            # print locals(), "localSSY"
             try:
-                #mozu_image_table = mozu_image_table_instance()
+                # mozu_image_table = mozu_image_table_instance()
                 md5checksum = md5_checksumer(img)
                 print type(md5checksum)
                 if not kwargs.get('tags'):
                     image_metadata = get_exif_all_data(path.abspath(img))
-                    #print str(type(image_metadata.values()))
-                    #tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
+                    # print str(type(image_metadata.values()))
+                    # tags = ['TestTag1', str(type(image_metadata.values()))] #image_metadata.values()
                     try:
                         tags = [ "{}={}".format(k,v) for k,v in image_metadata.iteritems() if k.split(':')[0] == 'SourceFile' ] #image_metadata.values()
                     except AttributeError:
