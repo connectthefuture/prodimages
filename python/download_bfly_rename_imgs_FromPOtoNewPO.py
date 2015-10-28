@@ -48,7 +48,7 @@ def sqlQuery_GetStyleVendor_ByPO(ponum):
     # AND POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE like '%vendornum%'"
 
     result = connection.execute(querymake_StylesByPO)
-    vendor_style_ = {}
+    styleslist = []
     for row in result:
         #style = {}
         #style['vendor_style'] = row['vendor_style']
@@ -83,7 +83,7 @@ def main():
         if len(args1) == 2 and args1[1].isdigit():
             oldponum = args1[0]
             newponum = args1[1]
-            merge_styles = sqlQuery_GetStyleVendor_ByPO(ponum)
+            merge_styles = sqlQuery_GetStyleVendor_ByPO(oldponum, newponum)
         else:
             print "You neew to provide both the original po number and the po number to move images to.\nPo numbers are 6 digits each separated by a space."
             pass
@@ -94,7 +94,7 @@ def main():
 
         netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
         old_colorstyle = item['oldstyle']
-        new_colorstyle = = item['newstyle']
+        new_colorstyle = item['newstyle']
         ext_PNG     = '.png'
         ext_JPG     = '.jpg'
 
