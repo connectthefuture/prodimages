@@ -99,7 +99,7 @@ def main():
         ext_JPG     = '.jpg'
 
         netsrv101_url_file = path.join(netsrv101_url, old_colorstyle[:4], old_colorstyle + ext_PNG)
-        renamed_from_newpo_toload = path.join(path.abspath(path.expanduser('~')), new_colorstyle + ext_PNG)
+        renamed_from_newpo_toload = path.join(path.abspath(path.expanduser('~')), 'Pictures', new_colorstyle + ext_PNG)
         try:
             url_download_file(netsrv101_url_file, renamed_from_newpo_toload)
             alt = 0
@@ -110,7 +110,7 @@ def main():
                     colorstyleoldalt = old_colorstyle + ext_ALT
                     netsrv101_url_filealt = path.join(netsrv101_url, old_colorstyle[:4], colorstyleoldalt)
                     colorstylenewalt = new_colorstyle + ext_ALT
-                    renamed_from_newpo_toloadalt = path.join(path.abspath(curdir), colorstylenewalt)
+                    renamed_from_newpo_toloadalt = path.join(path.abspath(path.expanduser('~')), 'Pictures', colorstylenewalt)
                     if url_download_file(netsrv101_url_filealt, renamed_from_newpo_toloadalt):
                         url_download_file(netsrv101_url_filealt, renamed_from_newpo_toloadalt)
                 except IOError:
