@@ -117,3 +117,7 @@ def main():
                     pass
         except IOError:
             pass
+
+
+if __name__ == '__main__':
+    main()
