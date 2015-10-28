@@ -102,7 +102,6 @@ def main():
         renamed_from_newpo_toload = path.join(path.abspath(path.expanduser('~')), new_colorstyle + ext_PNG)
         try:
             url_download_file(netsrv101_url_file, renamed_from_newpo_toload)
-
             alt = 0
             for x in range(1,6):
                 try:
