@@ -80,7 +80,7 @@ def main():
     regex_n = re.compile(r'.*?\n.*?')
     args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
     try:
-        if len(args1) == 2 and args1[1].isdigit():
+        if len(args1) == 2:
             oldponum = args1[0]
             newponum = args1[1]
             merge_styles = sqlQuery_GetStyleVendor_ByPO(oldponum, newponum)
