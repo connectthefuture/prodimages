@@ -83,7 +83,7 @@ def main():
         if len(args) == 2:
             oldponum = args[0]
             newponum = args[1]
-            merge_styles = sqlQuery_GetStyleVendor_ByPO(oldponum, newponum)
+            merge_styles = sqlQuery_oldimage_newpo_duplimerge(oldponum, newponum)
         else:
             print "You neew to provide both the original po number and the po number to move images to.\nPo numbers are 6 digits each separated by a space."
             pass
