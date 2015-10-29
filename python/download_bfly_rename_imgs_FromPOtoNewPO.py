@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os, sys, re, csv
+
 import pdb;pdb.set_trace()
 
 
@@ -61,28 +61,6 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
     return merge_styles
 
 
-def sqlQuery_GetStyleVendor_ByPO(ponum):
-    import sqlalchemy
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
-    #orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
-    connection = orcl_engine.connect()
-    querymake_StylesByPO="SELECT POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style, POMGR.PO_LINE.PO_HDR_ID AS po_hdr_id FROM POMGR.PRODUCT_COLOR INNER JOIN POMGR.PO_LINE ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "'"
-
-    # AND POMGR_SNP.PRODUCT_COLOR.VENDOR_STYLE like '%vendornum%'"
-
-    result = connection.execute(querymake_StylesByPO)
-    styleslist = []
-    for row in result:
-        #style = {}
-        #style['vendor_style'] = row['vendor_style']
-        #consigstyle['vendor_style'] = row['vendor_style']
-        #styles[row['colorstyle']] = style
-        style = row['colorstyle']
-        styleslist.append(style)
-    connection.close()
-    return styleslist
-
-
 def url_download_file(url,dest_filepath):
     import urllib
     resp = urllib.urlretrieve(url, dest_filepath)
@@ -98,8 +76,6 @@ def main():
     import sys, urllib
     from os import chdir,curdir,path
     args = sys.argv[1:]
-    regex_r = re.compile(r'.*?\r.*?')
-    regex_n = re.compile(r'.*?\n.*?')
     print 'Moving images from PO: {} to PO --> {}'.format(*args)
     try:
         if len(args) == 2:
@@ -137,7 +113,7 @@ def main():
                         url_download_file(netsrv101_url_filealt, renamed_from_newpo_toloadalt)
                 except IOError:
                     pass
-        except IOError:
+        except AttributeError:
             pass
 
 
