@@ -78,12 +78,11 @@ def main():
     args = sys.argv[1:]
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
-    print args
-    args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
+    print 'Moving images from PO: {} to PO --> {}'.format(*args)
     try:
-        if len(args1) == 2:
-            oldponum = args1[0]
-            newponum = args1[1]
+        if len(args) == 2:
+            oldponum = args[0]
+            newponum = args[1]
             merge_styles = sqlQuery_GetStyleVendor_ByPO(oldponum, newponum)
         else:
             print "You neew to provide both the original po number and the po number to move images to.\nPo numbers are 6 digits each separated by a space."
