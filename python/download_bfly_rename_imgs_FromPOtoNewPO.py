@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os, sys, re, csv
+import pdb;pdb.set_trace()
 
 
 def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
