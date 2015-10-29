@@ -6,25 +6,7 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
     import sqlalchemy,sys
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-    query_image_duplimerge ="""with data as (
-                                SELECT POMGR.PO_LINE.PO_HDR_ID      AS ponumber,
-                                  POMGR.PRODUCT_COLOR.ID            AS colorstyle,
-                                  POMGR.PRODUCT_COLOR.VENDOR_STYLE  AS vendor_style
-                                FROM
-                                  POMGR.PO_LINE
-                                JOIN POMGR.PRODUCT_COLOR
-                                ON
-                                  POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID
-                                WHERE
-                                  POMGR.PO_LINE.PO_HDR_ID IN ('{0}', '{1}')
-                                order by 3, 2 desc)
-                                select count(distinct DATA.COLORSTYLE), DATA.VENDOR_STYLE, min(DATA.COLORSTYLE) as oldstyle, max(DATA.COLORSTYLE) as newstyle
-                                from data
-                                group by DATA.VENDOR_STYLE
-                                having min(DATA.PONUMBER) <> max(DATA.ponumber)
-                                and count(distinct DATA.COLORSTYLE) = 2;
-                                order by
-                                  colorstyle DESC""".format(oldpo, newpo)
+    query_image_duplimerge ="""with data as ( SELECT POMGR.PO_LINE.PO_HDR_ID AS ponumber, POMGR.PRODUCT_COLOR.ID AS colorstyle, POMGR.PRODUCT_COLOR.VENDOR_STYLE AS vendor_style FROM POMGR.PO_LINE JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.PO_LINE.PO_HDR_ID IN ('{0}', '{1}') order by 3, 2 desc) select count(distinct DATA.COLORSTYLE), DATA.VENDOR_STYLE, min(DATA.COLORSTYLE) as oldstyle, max(DATA.COLORSTYLE) as newstyle from data group by DATA.VENDOR_STYLE having min(DATA.PONUMBER) <> max(DATA.ponumber) and count(distinct DATA.COLORSTYLE) = 2; order by colorstyle DESC""".format(oldpo, newpo)
 
     result = connection.execute(query_image_duplimerge)
 
@@ -56,7 +38,6 @@ def sqlQuery_GetStyleVendor_ByPO(ponum):
         #styles[row['colorstyle']] = style
         style = row['colorstyle']
         styleslist.append(style)
-    #print consigstyles
     connection.close()
     return styleslist
 
