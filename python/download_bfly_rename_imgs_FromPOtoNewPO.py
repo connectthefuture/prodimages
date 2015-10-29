@@ -78,6 +78,7 @@ def main():
     args = sys.argv[1:]
     regex_r = re.compile(r'.*?\r.*?')
     regex_n = re.compile(r'.*?\n.*?')
+    print args
     args1 = args[0].split('\n')   #(','.join(str(arg) for arg in args)).split('\n')
     try:
         if len(args1) == 2:
