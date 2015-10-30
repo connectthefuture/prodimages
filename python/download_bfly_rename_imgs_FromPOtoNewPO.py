@@ -9,7 +9,7 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
     connection = orcl_engine.connect()
     query_image_duplimerge = """WITH
     data AS
-      (
+        (
         SELECT
           POMGR.PO_LINE.PO_HDR_ID          AS ponumber,
           POMGR.PRODUCT_COLOR.ID           AS colorstyle,
@@ -24,7 +24,7 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
         ON
           POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID
         WHERE
-          POMGR.PO_LINE.PO_HDR_ID IN ('{0}', '{1}')
+          POMGR.PO_LINE.PO_HDR_ID IN (\'{0}\', \'{1}\')
         GROUP BY
           POMGR.PO_LINE.PO_HDR_ID,
           POMGR.PRODUCT_COLOR.ID,
@@ -34,7 +34,7 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
           3,
           4 asc nulls last,
           2 DESC
-  )
+          )
     SELECT
       COUNT(DISTINCT data.colorstyle),
       data.vendor_style,
