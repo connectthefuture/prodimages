@@ -25,13 +25,15 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
     result = connection.execute(query_image_duplimerge)
 
     merge_styles = []
-    total_count =
+    total_count_rem = len(result)
+    total_count_incr = 0
     for row in result:
         styles = {}
         styles['oldstyle'] = row['oldstyle']
         styles['newstyle'] = row['newstyle']
-        total_count += 1
-        print "Styles Total: {}\vRemaining: {}".format(total_count)
+        total_count_incr += 1
+        total_count_rem -= 1
+        print "Styles Total: {}\vRemaining: {}".format(total_count_incr, total_count_rem)
         merge_styles.append(styles)
     connection.close()
     return merge_styles
