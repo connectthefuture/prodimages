@@ -24,7 +24,7 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
         ON
           POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID
         WHERE
-          POMGR.PO_LINE.PO_HDR_ID IN (\'{0}\', \'{1}\')
+          POMGR.PO_LINE.PO_HDR_ID IN (\\'{0}\\', \\'{1}\\')
         GROUP BY
           POMGR.PO_LINE.PO_HDR_ID,
           POMGR.PRODUCT_COLOR.ID,
