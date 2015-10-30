@@ -14,8 +14,8 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
     total_count_incr = 0
     for row in result:
         styles = {}
-        styles['oldstyle'] = row['oldstyle']
-        styles['newstyle'] = row['newstyle']
+        styles['oldstyle'] = str(row['oldstyle'])
+        styles['newstyle'] = str(row['newstyle'])
         total_count_incr += 1
         total_count_rem -= 1
         print "Styles Total: {}\vRemaining: {}".format(total_count_incr, total_count_rem)
