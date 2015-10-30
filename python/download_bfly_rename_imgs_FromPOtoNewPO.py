@@ -24,11 +24,23 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
     return merge_styles
 
 
+# def url_download_file(url,dest_filepath):
+#     import urllib
+#     resp = urllib.urlretrieve(url, dest_filepath)
+#     if resp:
+#         print "Retrieved: " + url + " ---> " + dest_filepath
+#         return dest_filepath
+#     else:
+#         return
+
+
 def url_download_file(url,dest_filepath):
-    import urllib
-    resp = urllib.urlretrieve(url, dest_filepath)
-    if resp and resp.ok:
+    import requests
+    resp = requests.get(url, dest_filepath)
+    if resp:
         print "Retrieved: " + url + " ---> " + dest_filepath
+        with open(dest_filepath, 'wb+') as f:
+            f.write(resp.content)
         return dest_filepath
     else:
         return
