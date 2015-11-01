@@ -26,13 +26,15 @@ def sqlQuery_oldimage_newpo_duplimerge(oldpo, newpo):
 
 def url_download_file(url,dest_filepath):
     import urllib
-    resp = urllib.urlretrieve(url, dest_filepath)
-    if resp:
-        print "Retrieved: " + url + " ---> " + dest_filepath
-        return dest_filepath
-    else:
-        return
-
+    try:
+        resp = urllib.urlretrieve(url, dest_filepath)
+        if resp:
+            print "Retrieved: " + url + " ---> " + dest_filepath
+            return dest_filepath
+        else:
+            return
+    except IOError:
+        print 'IOERROR 30'
 
 # def url_download_file(url,dest_filepath):
 #     import requests
