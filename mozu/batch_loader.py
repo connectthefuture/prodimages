@@ -28,12 +28,14 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     #if path.isfile(pngout):
     load_collect_batch_mozu_list = glob.glob(path.join(archive_uploaded_day, '*/JPG_MOZU_LOAD/*.??[gG]'))
     for f in load_collect_batch_mozu_list:
-        shutil.move(f, imgdest_jpg_mozu)
+        print '31-->', f, imgdest_jpg_mozu
+        #shutil.move(f, imgdest_jpg_mozu)
 
     load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.??[gG]'))
     mozu_exec.main(load_batch_mozu_list)
     for f in load_collect_batch_mozu_list:
-        shutil.move(f, imgdest_jpg_mozu_loaded)
+        print '37-->', f, imgdest_jpg_mozu_loaded
+        #shutil.move(f, imgdest_jpg_mozu_loaded)
     load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.*[gG]'))
 
     return load_batch_mozu_done
