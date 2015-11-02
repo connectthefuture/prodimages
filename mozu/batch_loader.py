@@ -35,12 +35,12 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
         print '31-->', f, imgdest_jpg_mozu
         shutil.move(f, imgdest_jpg_mozu)
 
-    load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.[Jj][Pp][gG]'))
+    load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.??[gG]'))
     mozu_exec.main(load_batch_mozu_list)
     for f in load_collect_batch_mozu_list:
         print '37-->', f, imgdest_jpg_mozu_loaded
         shutil.move(f, imgdest_jpg_mozu_loaded)
-    load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.*[gG]'))
+    load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.[Jj][Pp][gG]'))
 
     return load_batch_mozu_done
     # for f in load_batch_mozu_list:

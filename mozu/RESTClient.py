@@ -59,7 +59,7 @@ class MozuRestClient:
         self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : MozuRestClient.__tenant_name, 'x-vol-master-catalog' : '1' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         ## TODO does the logic and order below with src_filepath and bf_imageid work or should bf_imageid be first?
         if kwargs.get('src_filepath'):
-            self.bf_imageid = kwargs.get('src_filepath').split('/')[-1]
+            self.bf_imageid = kwargs.get('src_filepath').split('/')[-1].split('.')[0]
             self.ext = self.bf_imageid.split('.')[-1].lower()
         elif kwargs.get('bf_imageid'):
             self.bf_imageid = kwargs.get('bf_imageid')
@@ -169,7 +169,7 @@ class MozuRestClient:
         ## FileContent
         src_filepath = kwargs.get('src_filepath', '')
         mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.bf_imageid   = src_filepath.split('/')[-1]
+        self.bf_imageid   = src_filepath.split('/')[-1].split('.')[0]
         self.ext = self.bf_imageid.split('.')[-1]
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype

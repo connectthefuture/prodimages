@@ -132,7 +132,7 @@ def compile_todict_for_class_instance_variables(fileslist=None, **kwargs):
     print 'Compile 131\n', list(fileslist), kwargs
     for img in fileslist:
         if path.isfile(img):
-            bf_imageid = path.basename(img)
+            bf_imageid = path.basename(img).split('.')[0]
             # print locals(), "localSSY"
             try:
                 # mozu_image_table = mozu_image_table_instance()
