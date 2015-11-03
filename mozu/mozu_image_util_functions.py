@@ -66,7 +66,7 @@ def magick_convert_to_jpeg(img, destdir=None):
         outfile = path.join(destdir, outfile)
     else:
         import os.path as path
-        outfile = path.join(destdir, outfile)
+        outfile = path.join(path.abspath(destdir), outfile)
     subprocess.call([
         'convert',
         '-colorspace',
@@ -184,7 +184,7 @@ if __name__ == '__main__':
     import sys
     try:
         if sys.argv[1] and len(sys.argv) == 2:
-            magick_convert_to_jpeg(sys.argv[1], sys.argv[2]):
+            magick_convert_to_jpeg(sys.argv[1], destdir=sys.argv[2]):
         elif len(sys.argv) == 2:
             magick_convert_to_jpeg(sys.argv[1], destdir=None)
     except IndexError:
