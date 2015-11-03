@@ -61,7 +61,9 @@ def magick_convert_to_jpeg(img, destdir=None):
     ext = img.split('.')[-1]
     outfile = img.split('/')[-1].split('.')[0] + ".jpg"
     if not destdir:
-        pass
+        import os.path as path
+        destdir = path.abspath(path.dirname(img))
+        outfile = path.join(destdir, outfile)
     else:
         import os.path as path
         outfile = path.join(destdir, outfile)
