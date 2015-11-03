@@ -39,7 +39,10 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     mozu_exec.main(load_batch_mozu_list)
     for f in load_collect_batch_mozu_list:
         print '37-->', f, imgdest_jpg_mozu_loaded
-        rename(f, path.join(imgdest_jpg_mozu_loaded, path.basename(f)))
+        try:
+            rename(f, path.join(imgdest_jpg_mozu_loaded, path.basename(f)))
+        except OSError:
+            print 'OS ERROR 45'
     load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.[Jj][Pp][gG]'))
 
     return load_batch_mozu_done
