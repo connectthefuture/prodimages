@@ -169,8 +169,9 @@ class MozuRestClient:
         ## FileContent
         src_filepath = kwargs.get('src_filepath', '')
         mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.bf_imageid   = src_filepath.split('/')[-1].split('.')[0]
-        self.ext = self.bf_imageid.split('.')[-1]
+        self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
+        if not self.ext:
+            self.ext = 'jpg'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
         try:
