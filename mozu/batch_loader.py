@@ -4,8 +4,8 @@
 def batch_load_dated_mozu_jpgs(archive_root=None):
     ########## MOZU - Five ##########
     ### Date Defs
-    from os import path, makedirs  # , curdir, chdir
-    import datetime, glob, shutil
+    from os import path, makedirs, rename  # , curdir, chdir
+    import datetime, glob # , shutil
 
     todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
     todaysdatefull = todaysdatefullsecs[:12]
@@ -29,17 +29,17 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
 
     import mozu_exec  #, mozu_image_util_functions
     ## Compress and convert to jpg and store in separate dir for concurrent xfers
-    #if path.isfile(pngout):
+    # if path.isfile(pngout):
     load_collect_batch_mozu_list = glob.glob(path.join(archive_uploaded_day, '*/JPG_MOZU_LOAD/*.??[gG]'))
     for f in load_collect_batch_mozu_list:
         print '31-->', f, imgdest_jpg_mozu
-        shutil.move(f, imgdest_jpg_mozu)
+        rename(f, imgdest_jpg_mozu)
 
     load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.??[gG]'))
     mozu_exec.main(load_batch_mozu_list)
     for f in load_collect_batch_mozu_list:
         print '37-->', f, imgdest_jpg_mozu_loaded
-        shutil.move(f, imgdest_jpg_mozu_loaded)
+        rename(f, imgdest_jpg_mozu_loaded)
     load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.[Jj][Pp][gG]'))
 
     return load_batch_mozu_done
