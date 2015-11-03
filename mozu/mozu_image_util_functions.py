@@ -185,8 +185,8 @@ if __name__ == '__main__':
     try:
         if sys.argv[1] and len(sys.argv) == 2:
             magick_convert_to_jpeg(sys.argv[1], destdir=sys.argv[2]):
-        elif len(sys.argv) == 2:
-            magick_convert_to_jpeg(sys.argv[1], destdir=None)
+        elif len(sys.argv) = 1:
+            magick_convert_to_jpeg(sys.argv[1])
     except IndexError:
         pass
     main()
