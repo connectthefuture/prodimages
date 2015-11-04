@@ -24,7 +24,7 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
     try:
         makedirs(imgdest_jpg_mozu_loaded)
-    except OSError:
+    except IOError:
         pass
 
     import mozu_exec  #, mozu_image_util_functions
