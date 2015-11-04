@@ -18,7 +18,7 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
         archive_root = '/mnt/Post_Complete/Complete_Archive/Uploaded'
 
     # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
-    dated_dir = "dateloaded_" + str(todaysdate).replace(",", "")
+    dated_dir = "dateloaded_" + str(todaysdate)
     archive_uploaded_day = path.join(archive_root, dated_dir)
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
