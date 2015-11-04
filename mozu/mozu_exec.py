@@ -271,7 +271,7 @@ def main(fileslist):
                 #
                 print 'TYPE or Value Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
-                pass
+                #pass
                 # except IOError:
                 #     print "ENDING ERROR...", values
 
