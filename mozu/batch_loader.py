@@ -30,12 +30,12 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     import mozu_exec  #, mozu_image_util_functions
     ## Compress and convert to jpg and store in separate dir for concurrent xfers
     # if path.isfile(pngout):
-    load_collect_batch_mozu_list = glob.glob(path.join(archive_uploaded_day, '*/JPG_MOZU_LOAD/*.??[gG]'))
+    load_collect_batch_mozu_list = glob.glob(path.join(archive_uploaded_day, '*/JPG_MOZU_LOAD/*.[Jj][Pp][gG]'))
     for f in load_collect_batch_mozu_list:
         print '31-->', f, imgdest_jpg_mozu
         # rename(f, imgdest_jpg_mozu)
         rename(f, path.join(imgdest_jpg_mozu, path.basename(f)))
-    load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.??[gG]'))
+    load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.[Jj][Pp][gG]'))
     mozu_exec.main(load_batch_mozu_list)
     for f in load_collect_batch_mozu_list:
         print '37-->', f, imgdest_jpg_mozu_loaded
