@@ -260,7 +260,6 @@ def main(fileslist):
                 #
                 print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
-                pass
             except TypeError:  # sqlalchemy.exc.IntegrityError:
                 # try:
                 #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
