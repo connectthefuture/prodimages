@@ -59,9 +59,9 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
                     ftpmodtime_dict[path.join(host, remote_dir, fname)] = [delta.days, moddate] # .strftime("%Y%m%d %H:%M:%S")
                     cnt += 1
                 else:
-                    print fname, ' \t\t Failed -- Out of Date Bounds'
+                    print fname, ' \t\t\t Failed -- Out of Date Bounds'
             else:
-                print fname, ' \t\t Failed due to Filtering'
+                print fname, ' \t\t\t Failed due to Filtering'
     except TypeError:
         print 'Type Error'
     finally:
