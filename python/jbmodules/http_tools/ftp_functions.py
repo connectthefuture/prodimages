@@ -65,6 +65,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
                     print fname, ' \t\t\t Failed -- Out of Date Bounds'
             else:
                 print fname, ' \t\t\t Failed due to Filtering'
+        session.quit()
     except TypeError:
         print 'Type Error'
     finally:
