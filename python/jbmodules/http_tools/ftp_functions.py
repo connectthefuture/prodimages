@@ -71,23 +71,27 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         session.quit()
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
     if download is True:
-        downloaded_files_dict = {}
+        print 'To Download {} File to \v{}: '.forma(cnt,destdir)
+        confirm = str(input('Enter "Y" to begin: '))
+        if confirm == 'Y':
+            downloaded_files_dict = {}
 
-        if destdir:
-            for k,v in sorted_ftpdict.items():
-                if path.exists(destdir):
-                    pass
-                else:
-                    makedirs(destdir)
+            if destdir:
+                for k,v in sorted_ftpdict.items():
+                    if path.exists(destdir):
+                        pass
+                    else:
+                        makedirs(destdir)
                     destpath = path.join(destdir, k.split('/')[-1])
-                res = urlretrieve(path.join(login_url_string,k), destpath)
-                downloaded_files_dict[k.split('/')[-1]] = destpath
-                print res
-                print 'Finished Downloading {} Files to: {}'.format(cnt,destpath)
-                return downloaded_files_dict
+                    res = urlretrieve(path.join(login_url_string,k), destpath)
+                    downloaded_files_dict[k.split('/')[-1]] = destpath
+                    print res
+                    print 'Finished Downloading {} Files to: {}'.format(cnt,destpath)
+                    return downloaded_files_dict
+            else:
+                print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
         else:
-            print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
-
+            print 'You decided to forgo the download this time'
     else:
         return sorted_ftpdict
 
