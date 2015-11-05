@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import ipdb; ipdb.set_trace()
 
 ###
 ## backup for 56 then 7 curl err
