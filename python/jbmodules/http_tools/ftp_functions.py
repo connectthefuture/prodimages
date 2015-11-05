@@ -27,8 +27,9 @@ def dload_ftplib(destpath, filename):
     session.quit()
 
 
-def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',), download=False, destdir='.'):
+def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',), download=False, destdir=None):
     import ftplib, collections, re
+    from urllib import urlretrieve
     from os import path, makedirs
     from datetime import datetime, timedelta
     host = 'netsrv101.l3.bluefly.com'
@@ -70,9 +71,23 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         session.quit()
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
     if download is True:
-        for k,v in sorted_ftpdict.items():
-            destpath = path.join(destdir, k.split('/')[-1])
-            urllib.urlretrieve(path.join(login_url_string,k), destpath)
+        downloaded_files_dict = {}
+
+        if destdir:
+            for k,v in sorted_ftpdict.items():
+                if path.exists(destdir):
+                    pass
+                else:
+                    makedirs(destdir)
+                    destpath = path.join(destdir, k.split('/')[-1])
+                res = urlretrieve(path.join(login_url_string,k), destpath)
+                downloaded_files_dict[k.split('/')[-1]] = destpath
+                print res
+                print 'Finished Downloading {} Files to: {}'.format(cnt,destpath)
+                return downloaded_files_dict
+        else:
+            print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
+
     else:
         return sorted_ftpdict
 
@@ -85,9 +100,9 @@ if __name__ == '__main__':
         listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',))
     elif len(sys.argv[1:]) == 3 and sys.argv[3].lower() == 'download':
         if sys.argv[3] == 'DOWNLOAD':
-            dest=path.join(path.expanduser('~'), 'Pictures', ext_filter.upper())
+            dest=path.join(path.expanduser('~'), 'Pictures', ext_filter.upper(), sys.argv[1])
         else:
-            dest=path.join(path.abspath('.'), 'FilesDownloaded', ext_filter.upper())
+            dest=path.join(path.abspath('.'), 'FilesDownloaded', ext_filter.upper(), sys.argv[1])
         listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',), download=True, destdir=dest)
     else:
         listcontents_ftplib(sys.argv[1],ext_filter=ext_filter)
