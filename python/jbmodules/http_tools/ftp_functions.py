@@ -27,11 +27,12 @@ def dload_ftplib(destpath, filename):
     session.quit()
 
 
-def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',)):
+def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',), download=False, destdir='.'):
     import ftplib, collections, re
     from os import path
     from datetime import datetime, timedelta
     host = 'netsrv101.l3.bluefly.com'
+    login_url_string  = 'ftp://imagedrop:imagedrop0@' + host
     session = ftplib.FTP(host, 'imagedrop', 'imagedrop0')
     if not remote_dir:
         remote_dir = path.join("/mnt/images/images", ftp_dir)
@@ -68,7 +69,12 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         #session.storbinary('STOR ' + filename, fileread, 8*1024)
         session.quit()
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
-    return sorted_ftpdict
+    if download is True:
+        for k,v in sorted_ftpdict.items():
+            destpath = path.join(destdir, k.split('/')[-1])
+            urllib.urlretrieve(path.join(login_url_string,k), destpath)
+    else:
+        return sorted_ftpdict
 
 
 if __name__ == '__main__':
