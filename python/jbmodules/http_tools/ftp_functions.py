@@ -104,6 +104,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
 
 if __name__ == '__main__':
     import sys
+    from os import path, makedirs
     if len(sys.argv[1:]) < 4:
         ext_filter = 'png'
     if len(sys.argv[1:]) == 2:
