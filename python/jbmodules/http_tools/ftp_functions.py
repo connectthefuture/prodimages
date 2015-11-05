@@ -77,8 +77,8 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
     if download is True:
         print 'To Download {} File to \v{}: '.format(cnt,destdir)
-        confirm = str(input('Enter "Y" to begin: '))
-        if confirm == 'Y':
+        confirm = str(raw_input('Enter "Yes" to begin: '))
+        if confirm[0].lower() == 'y':
             downloaded_files_dict = {}
 
             if destdir:
@@ -96,7 +96,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
             else:
                 print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
         else:
-            print 'You decided to forgo the download this time'
+            print 'You responded: {}.\nWhich means you decided to forgo the download this time.'
     else:
         print locals()
         return sorted_ftpdict
