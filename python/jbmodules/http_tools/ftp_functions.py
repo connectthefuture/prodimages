@@ -82,4 +82,4 @@ if __name__ == '__main__':
     if len(sys.argv[1:]) == 2:
         listcontents_ftplib(sys.argv[1],ext_filter='png', range_tuple=(sys.argv[2],'',))
     else:
-        listcontents_ftplib(sys.argv[1],ext_filter='png'
+        listcontents_ftplib(sys.argv[1],ext_filter='png')
