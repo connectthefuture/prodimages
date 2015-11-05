@@ -79,9 +79,15 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
 
 if __name__ == '__main__':
     import sys
+    if len(sys.argv[1:]) < 4:
+        ext_filter = 'png'
     if len(sys.argv[1:]) == 2:
-        listcontents_ftplib(sys.argv[1],ext_filter='png', range_tuple=(sys.argv[2],'',))
+        listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',))
     elif len(sys.argv[1:]) == 3 and sys.argv[3].lower() == 'download':
-        listcontents_ftplib(sys.argv[1],ext_filter='png', range_tuple=(sys.argv[2],'',), download=True)
+        if sys.argv[3] == 'DOWNLOAD':
+            dest=path.join(path.expanduser('~'), 'Pictures', sys.argv[1])
+        else:
+            dest=path.join(path.abspath('.'), 'FilesDownloaded', sys.argv[1])
+        listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',), download=True, destdir=dest)
     else:
-        listcontents_ftplib(sys.argv[1],ext_filter='png')
+        listcontents_ftplib(sys.argv[1],ext_filter=ext_filter)
