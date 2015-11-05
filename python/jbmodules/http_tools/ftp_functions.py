@@ -37,8 +37,10 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
     login_url_string  = 'ftp://imagedrop:imagedrop0@' + host
     session = ftplib.FTP(host, 'imagedrop', 'imagedrop0')
     if not remote_dir:
-        remote_dir = path.join("/mnt/images/images", ftp_dir)
-    session.cwd(remote_dir)
+        rootdir = '/mnt/images'
+        reldir = path.join("images", ftp_dir)
+        remote_dir = path.join(rootdir, reldir)
+    session.cwd(reldir)
     dirlist = session.nlst()
     print session.pwd(), dirlist
     cnt = 0
