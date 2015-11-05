@@ -3,29 +3,29 @@
 import pdb; pdb.set_trace()
 
 ###
-## backup for 56 then 7 curl err
-def upload_to_imagedrop(img):
-    import ftplib
-    session = ftplib.FTP('netsrv101.l3.bluefly.com', 'imagedrop', 'imagedrop0')
-    modified_time = session.sendcmd('MDTM ' + img)
-    fileread = open(file, 'rb')
-    filename = str(file.split('/')[-1])
-    #session.cwd("ImageDrop/")
-    session.storbinary('STOR ' + filename, fileread, 8*1024)
-    fileread.close()
-    session.quit()
-
-
-def dload_ftplib(destpath, filename):
-    import ftplib
-    from os import path
-    session = ftplib.FTP('netsrv101.l3.bluefly.com', 'imagedrop', 'imagedrop0')
-    filewrite = open(path.join(destpath, filename), 'wb')
-    remote_dir = path.join("/mnt/images/images", filename[:4])
-    session.cwd(remote_dir)
-    session.retrbinary('RETR ' + filename, filewrite.write)
-    filewrite.close()
-    session.quit()
+# ## backup for 56 then 7 curl err
+# def upload_to_imagedrop(img):
+#     import ftplib
+#     session = ftplib.FTP('netsrv101.l3.bluefly.com', 'imagedrop', 'imagedrop0')
+#     modified_time = session.sendcmd('MDTM ' + img)
+#     fileread = open(file, 'rb')
+#     filename = str(file.split('/')[-1])
+#     #session.cwd("ImageDrop/")
+#     session.storbinary('STOR ' + filename, fileread, 8*1024)
+#     fileread.close()
+#     session.quit()
+#
+#
+# def dload_ftplib(destpath, filename):
+#     import ftplib
+#     from os import path
+#     session = ftplib.FTP('netsrv101.l3.bluefly.com', 'imagedrop', 'imagedrop0')
+#     filewrite = open(path.join(destpath, filename), 'wb')
+#     remote_dir = path.join("/mnt/images/images", filename[:4])
+#     session.cwd(remote_dir)
+#     session.retrbinary('RETR ' + filename, filewrite.write)
+#     filewrite.close()
+#     session.quit()
 
 
 def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',), download=False, destdir=None):
