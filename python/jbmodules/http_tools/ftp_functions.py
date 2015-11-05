@@ -98,6 +98,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         else:
             print 'You decided to forgo the download this time'
     else:
+        print locals()
         return sorted_ftpdict
 
 
