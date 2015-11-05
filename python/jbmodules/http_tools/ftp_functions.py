@@ -87,8 +87,9 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
                         pass
                     else:
                         makedirs(destdir)
+                    srcpath = path.join(login_url_string,k)
                     destpath = path.join(destdir, k.split('/')[-1])
-                    res = urlretrieve(path.join(login_url_string,k), destpath)
+                    res = urlretrieve(srcpath, destpath)
                     downloaded_files_dict[k.split('/')[-1]] = destpath
                     print res
                     print 'Finished Downloading {} Files to: {}'.format(cnt,destpath)
