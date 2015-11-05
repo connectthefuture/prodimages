@@ -76,7 +76,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         session.quit()
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
     if download is True:
-        print 'To Download {} File to \v{}: '.forma(cnt,destdir)
+        print 'To Download {} File to \v{}: '.format(cnt,destdir)
         confirm = str(input('Enter "Y" to begin: '))
         if confirm == 'Y':
             downloaded_files_dict = {}
