@@ -29,7 +29,7 @@ def dload_ftplib(destpath, filename):
 
 def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',), download=False, destdir='.'):
     import ftplib, collections, re
-    from os import path
+    from os import path, makedirs
     from datetime import datetime, timedelta
     host = 'netsrv101.l3.bluefly.com'
     login_url_string  = 'ftp://imagedrop:imagedrop0@' + host
@@ -81,5 +81,7 @@ if __name__ == '__main__':
     import sys
     if len(sys.argv[1:]) == 2:
         listcontents_ftplib(sys.argv[1],ext_filter='png', range_tuple=(sys.argv[2],'',))
+    elif len(sys.argv[1:]) == 3 and sys.argv[3].lower() == 'download':
+        listcontents_ftplib(sys.argv[1],ext_filter='png', range_tuple=(sys.argv[2],'',), download=True)
     else:
         listcontents_ftplib(sys.argv[1],ext_filter='png')
