@@ -96,7 +96,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
             else:
                 print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
         else:
-            print 'You responded: {}.\nWhich means you decided to forgo the download this time.'
+            print 'You responded: "-- {} --".\nWhich means you decided to forgo the download this time.'.format(confirm)
     else:
         print locals()
         return sorted_ftpdict
