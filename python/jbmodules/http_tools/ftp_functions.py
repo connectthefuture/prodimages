@@ -85,9 +85,9 @@ if __name__ == '__main__':
         listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',))
     elif len(sys.argv[1:]) == 3 and sys.argv[3].lower() == 'download':
         if sys.argv[3] == 'DOWNLOAD':
-            dest=path.join(path.expanduser('~'), 'Pictures', sys.argv[1])
+            dest=path.join(path.expanduser('~'), 'Pictures', ext_filter.upper())
         else:
-            dest=path.join(path.abspath('.'), 'FilesDownloaded', sys.argv[1])
+            dest=path.join(path.abspath('.'), 'FilesDownloaded', ext_filter.upper())
         listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',), download=True, destdir=dest)
     else:
         listcontents_ftplib(sys.argv[1],ext_filter=ext_filter)
