@@ -37,7 +37,7 @@ def url_download_file(url, filepath):
         print 'FAILED ', url, filepath
         pass
 
-from timeout import timeout
+from timeout import timeout, TimeoutError
 @timeout(7)
 def prompt_confirm():
     try:
