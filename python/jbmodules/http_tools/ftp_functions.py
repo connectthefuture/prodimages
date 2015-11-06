@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import pdb; pdb.set_trace()
+# import pdb; pdb.set_trace()
 
 ###
 # ## backup for 56 then 7 curl err
