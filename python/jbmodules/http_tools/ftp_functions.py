@@ -65,10 +65,10 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         except AttributeError:
             print '64 AttributeError '
         finally:
-            #dirlist = session.nlst()
-            print session.pwd(), dirlist
+            dirlist = session.nlst()
+            #print session.pwd(), dirlist
 
-    dirlist = session.nlst()
+    # dirlist = session.nlst()
     cnt = 0
     ftpmodtime_dict = {}
     regex_filter = re.compile(r'.+?\.' + ext_filter)
