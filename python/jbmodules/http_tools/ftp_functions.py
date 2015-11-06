@@ -50,13 +50,14 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         reldir = path.join("images", ftp_dir)
         remote_dir = path.join(rootdir, reldir)
     try:
-        session.cwd(reldir)
+        session.cwd(remote_dir)
     except ftplib.error_perm:
         print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
         print session.nlst()
         session.cwd("images")
         print 'Remote Directory at URL: {} does not exist, closing ftp session.'.format(remote_dir)
         session.close()
+
     dirlist = session.nlst()
     print session.pwd(), dirlist
     cnt = 0
