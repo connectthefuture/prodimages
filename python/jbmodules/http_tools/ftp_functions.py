@@ -37,6 +37,13 @@ def url_download_file(url, filepath):
         print 'FAILED ', url, filepath
         pass
 
+from timeout import timeout
+@timeout(7)
+def prompt_confirm():
+    input_from_user = str(raw_input('Enter "Yes" to begin: '))
+    return input_from_user
+
+
 def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', destdir='', range_tuple=(1, '',)):
     import ftplib, collections, re
     from os import path, makedirs
@@ -107,7 +114,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
     sorted_ftpdict.update(zip(oldest_date[0],oldest_date[1]))
     if download is True:
         print 'To Download {0} Files\n\tLoaded Since {1:%b %d -- %Y} to \v{2}: '.format(cnt, oldest_date[1][1], destdir)
-        confirm = str(raw_input('Enter "Yes" to begin: '))
+        confirm = prompt_confirm()
         if confirm[0].lower() == 'y':
             downloaded_files_dict = {}
 
