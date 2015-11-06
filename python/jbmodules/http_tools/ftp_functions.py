@@ -41,9 +41,10 @@ from timeout import timeout, TimeoutError
 @timeout(7)
 def prompt_confirm():
     try:
-        input_from_user = str(raw_input('Enter "Yes" to begin: '))
+        input_from_user = str(raw_input('Enter "Yes" to begin: \tYou have 7 seconds to cancel download'))
         return input_from_user
     except TimeoutError:
+        print 'timeout signaled: proceeding with download.'
         return 'Yes'
 
 def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', destdir='', range_tuple=(1, '',)):
@@ -140,7 +141,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         else:
             print 'You responded: "-- {} --".\nWhich means you decided to forgo the download this time.'.format(confirm)
     else:
-        print final_message
+        print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
         return sorted_ftpdict
 
 
