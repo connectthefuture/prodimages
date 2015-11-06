@@ -53,14 +53,15 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         try:
             session.cwd(reldir)
         except ftplib.error_perm:
-            print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
+            print session.pwd(), '1 --56> ', remote_dir, ' Rem <-- --> Rel ', reldir
             print session.nlst()
             session.cwd("images")
-            print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
+            print session.pwd(), '2 --59> ', remote_dir, ' Rem <-- --> Rel ', reldir
+            print session.nlst()
             session.cwd(ftp_dir)
             print 'Remote Directory at URL: {} does not exist, closing ftp session.'.format(remote_dir)
             #session.close()
-    except AttributeError:
+        except AttributeError:
             print '64 AttributeError '
 
     dirlist = session.nlst()
