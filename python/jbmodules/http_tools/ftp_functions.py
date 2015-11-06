@@ -113,7 +113,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         session.quit()
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
     oldest_date = sorted_ftpdict.popitem()
-    final_message = 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
+    #final_message = 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
     sorted_ftpdict.update(zip(oldest_date[0],oldest_date[1]))
     if download is True:
         print '\n-----\n-----\nTo Download {0} Files\n\tLoaded Since {1:%b %d -- %Y} to \v{2}: '.format(cnt, oldest_date[1][1], destdir)
