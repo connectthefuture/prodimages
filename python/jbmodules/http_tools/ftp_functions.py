@@ -90,9 +90,9 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
                     cnt += 1
                     print fname, '\t\t\t\t\t Count Index -- {}\n\t\t\t\t\t Date: {}\vModified{} Days Ago'.format(cnt, moddate.strftime("%b %d -- %Y"), delta.days)
                 else:
-                    print fname, ' \t\t\t ModDate -{}- Beyond Date Bounds'.format(moddate.strftime("%b %d -- %Y"))
+                    print fname, ' \t\t\t\t ModDate -{}- Beyond Date Bounds'.format(moddate.strftime("%b %d -- %Y"))
             else:
-                print fname, ' \t\t\t Failed due to Filtering'
+                print fname, ' \t\t\t Failed due to Filtering only {}'.format(ext_filter)
         #session.quit()
     except TypeError:
         print 'Type Error'
