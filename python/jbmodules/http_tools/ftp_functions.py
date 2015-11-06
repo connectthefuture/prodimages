@@ -37,7 +37,7 @@ def url_download_file(url, filepath):
         print 'FAILED ', url, filepath
         pass
 
-def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',), download=False, destdir=None):
+def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download=False, destdir=None, range_tuple=(1, '',)):
     import ftplib, collections, re
     from os import path, makedirs
     from datetime import datetime, timedelta
@@ -79,7 +79,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
                 if range_bounds > delta.days:
                     ftpmodtime_dict[path.join(host, remote_dir, fname)] = [delta.days, moddate] # .strftime("%Y%m%d %H:%M:%S")
                     cnt += 1
-                    print fname, ' \t\t\t\t Counted -- {}\v Date: {}'.format(cnt, moddate.strftime("%b %d -- %Y"))
+                    print fname, '{} Days Old\t\t\t\t Counted -- {}\v Date: {}'.format(cnt, moddate.strftime("%b %d -- %Y"))
                 else:
                     print fname, ' \t\t\t Failed -- Out of Date Bounds'
             else:
@@ -132,8 +132,10 @@ if __name__ == '__main__':
     elif len(args) == 3 and args[2].lower() == 'download':
         if args[2].upper() == 'DOWNLOAD':
             dest=path.join(path.abspath(path.expanduser('~')), 'Pictures', ext_filter.upper(), args[0])
+            print dest, ' 1'
         else:
             dest=path.join(path.abspath('.'), 'FilesDownloaded', ext_filter.upper(), args[0])
+            print dest, ' 2'
         listcontents_ftplib(args[0],ext_filter=ext_filter, range_tuple=(args[1],'',), download=True, destdir=dest)
     else:
         listcontents_ftplib(args[0],ext_filter=ext_filter)
