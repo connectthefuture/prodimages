@@ -8,7 +8,7 @@ import signal
 
 
 class TimeoutError(Exception):
-    return 'Yes'
+    pass
 
 def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
     def decorator(func):
