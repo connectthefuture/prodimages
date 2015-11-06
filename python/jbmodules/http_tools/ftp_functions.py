@@ -37,7 +37,7 @@ def url_download_file(url, filepath):
         print 'FAILED ', url, filepath
         pass
 
-def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download=False, destdir=None, range_tuple=(1, '',)):
+def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download='', destdir=None, range_tuple=(1, '',)):
     import ftplib, collections, re
     from os import path, makedirs
     from datetime import datetime, timedelta
