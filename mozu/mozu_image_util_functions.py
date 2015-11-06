@@ -190,5 +190,4 @@ if __name__ == '__main__':
             magick_convert_to_jpeg(sys.argv[1])
     except IndexError:
         print locals()
-        pass
     main()
