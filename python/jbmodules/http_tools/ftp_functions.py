@@ -27,14 +27,29 @@ import pdb; pdb.set_trace()
 #     filewrite.close()
 #     session.quit()
 
+def url_download_file(url, filepath):
+    import urllib
+    import subprocess
+    #error_check = urllib.urlopen(url)
+    #urlcode_value = error_check.getcode()
+    # print urlcode_value
+
+    # if urlcode_value == 200:
+    try:
+        urllib.urlretrieve(url, os.path.join(filepath))
+        print "Retrieved: " + url + " ---> " + filepath
+        return filepath
+    except:
+        print 'FAILED ', url, filepath
+        pass
 
 def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1, '',), download=False, destdir=None):
     import ftplib, collections, re
-    from urllib import urlretrieve
     from os import path, makedirs
     from datetime import datetime, timedelta
     host = 'netsrv101.l3.bluefly.com'
     login_url_string  = 'ftp://imagedrop:imagedrop0@' + host
+    netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
     session = ftplib.FTP(host, 'imagedrop', 'imagedrop0')
     if not remote_dir:
         rootdir = '/mnt/images'
@@ -89,7 +104,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
                         makedirs(destdir)
                     srcpath_url = login_url_string + "/" + k
                     destpath = path.join(destdir, k.split('/')[-1])
-                    res = urlretrieve(srcpath_url, destpath)
+                    res = url_download_file(srcpath_url, destpath)
                     downloaded_files_dict[k.split('/')[-1]] = destpath
                     print res
                     print 'Finished Downloading {} Files to: {}'.format(cnt,destpath)
