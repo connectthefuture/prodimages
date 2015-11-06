@@ -50,7 +50,9 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         reldir = path.join("images", ftp_dir)
         remote_dir = path.join(rootdir, reldir)
         try:
-            session.cwd(reldir)
+            session.cwd(reldir.split('/')[0])
+            session.cwd(reldir.split('/')[1])
+            print 'Remote Directory at URL:\t\t{}\nParentDir:\t\t{}.'.format(remote_dir, session.pwd())
         except ftplib.error_perm:
             print session.pwd(), '1 --55> ', remote_dir, ' Rem <-- --> Rel ', reldir
             print session.nlst()
@@ -63,8 +65,10 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         except AttributeError:
             print '64 AttributeError '
         finally:
-            dirlist = session.nlst()
+            #dirlist = session.nlst()
             print session.pwd(), dirlist
+
+    dirlist = session.nlst()
     cnt = 0
     ftpmodtime_dict = {}
     regex_filter = re.compile(r'.+?\.' + ext_filter)
