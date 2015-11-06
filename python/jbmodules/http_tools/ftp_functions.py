@@ -106,7 +106,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
     final_message = 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
     sorted_ftpdict.update(zip(oldest_date[0],oldest_date[1]))
     if download is True:
-        print 'To Download {} Files to \v{}: '.format(cnt,destdir)
+        print 'To Download {0} Files\n\tLoaded Since {1:%b %d -- %Y} to \v{2}: '.format(cnt,destdir, oldest_date[1][1])
         confirm = str(raw_input('Enter "Yes" to begin: '))
         if confirm[0].lower() == 'y':
             downloaded_files_dict = {}
