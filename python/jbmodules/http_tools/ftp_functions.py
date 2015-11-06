@@ -99,10 +99,10 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
     except AttributeError:
         print '96 -- AttributeError Error'
     finally:
-        print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(moddate)
         #session.storbinary('STOR ' + filename, fileread, 8*1024)
         session.quit()
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
+    print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(sorted_ftpdict.popitem().values()[0])
     if download is True:
         print 'To Download {} Files to \v{}: '.format(cnt,destdir)
         confirm = str(raw_input('Enter "Yes" to begin: '))
