@@ -49,7 +49,10 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         rootdir = '/mnt/images'
         reldir = path.join("images", ftp_dir)
         remote_dir = path.join(rootdir, reldir)
-    session.cwd(reldir)
+    try:
+        session.cwd(reldir)
+    except ftplib.error_perm:
+        session.cwd(remote_dir)
     dirlist = session.nlst()
     print session.pwd(), dirlist
     cnt = 0
