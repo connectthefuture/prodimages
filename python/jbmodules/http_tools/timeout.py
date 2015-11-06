@@ -15,7 +15,7 @@ def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
         def _handle_timeout_sysargs(signum, frame):
             raise TimeoutError(error_message)
 
-        @functools.wraps(func)
+        @wraps(func)
         def wrapper(*args, **kwargs):
             signal.signal(signal.SIGALRM, _handle_timeout_sysargs)
             signal.alarm(seconds)
