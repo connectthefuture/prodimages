@@ -55,6 +55,8 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download=False,
         print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
         print session.nlst()
         session.cwd("images")
+        print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
+        print session.nlst()
         print 'Remote Directory at URL: {} does not exist, closing ftp session.'.format(remote_dir)
         session.close()
 
@@ -88,7 +90,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download=False,
     except TypeError:
         print 'Type Error'
     except AttributeError:
-        print ' AttributeError Error'
+        print 'AttributeError Error'
     finally:
         print 'End ', cnt, ' <-- TotalCount \vSince {0:%b %d -- %Y}'.format(moddate)
         #session.storbinary('STOR ' + filename, fileread, 8*1024)
