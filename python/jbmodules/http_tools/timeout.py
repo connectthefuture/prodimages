@@ -14,7 +14,7 @@ def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
     def decorator(func):
         def _handle_timeout_sysargs(signum, frame):
             #raise TimeoutError(error_message)
-            sys.argv[1]
+            return 'Yes'
         #@functools.wraps(func)
         def wrapper(*args, **kwargs):
             signal.signal(signal.SIGALRM, _handle_timeout_sysargs)
