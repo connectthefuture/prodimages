@@ -29,14 +29,8 @@ import pdb; pdb.set_trace()
 
 def url_download_file(url, filepath):
     import urllib
-    import subprocess
-    #error_check = urllib.urlopen(url)
-    #urlcode_value = error_check.getcode()
-    # print urlcode_value
-
-    # if urlcode_value == 200:
     try:
-        urllib.urlretrieve(url, os.path.join(filepath))
+        urllib.urlretrieve(url, filepath)
         print "Retrieved: " + url + " ---> " + filepath
         return filepath
     except:
