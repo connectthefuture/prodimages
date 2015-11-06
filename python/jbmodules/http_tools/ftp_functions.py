@@ -52,6 +52,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
     try:
         session.cwd(reldir)
     except ftplib.error_perm:
+        print session.pwd()
         session.cwd(remote_dir)
     dirlist = session.nlst()
     print session.pwd(), dirlist
