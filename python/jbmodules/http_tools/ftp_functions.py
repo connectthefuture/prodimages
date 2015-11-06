@@ -121,15 +121,16 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
 if __name__ == '__main__':
     import sys
     from os import path, makedirs
-    if len(sys.argv[1:]) < 4:
+    args = sys.argv[1:]
+    if len(args) < 4:
         ext_filter = 'png'
-    if len(sys.argv[1:]) == 2:
-        listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',))
-    elif len(sys.argv[1:]) == 3 and sys.argv[3].lower() == 'download':
-        if sys.argv[3].upper() == 'DOWNLOAD':
-            dest=path.join(path.expanduser('~'), 'Pictures', ext_filter.upper(), sys.argv[1])
+    if len(args) == 2:
+        listcontents_ftplib(args[0],ext_filter=ext_filter, range_tuple=(args[1],'',))
+    elif len(args) == 3 and args[2].lower() == 'download':
+        if args[2].upper() == 'DOWNLOAD':
+            dest=path.join(path.absbpath(path.expanduser('~')), 'Pictures', ext_filter.upper(), args[0])
         else:
-            dest=path.join(path.abspath('.'), 'FilesDownloaded', ext_filter.upper(), sys.argv[1])
-        listcontents_ftplib(sys.argv[1],ext_filter=ext_filter, range_tuple=(sys.argv[2],'',), download=True, destdir=dest)
+            dest=path.join(path.abspath('.'), 'FilesDownloaded', ext_filter.upper(), args[0])
+        listcontents_ftplib(args[0],ext_filter=ext_filter, range_tuple=(args[1],'',), download=True, destdir=dest)
     else:
-        listcontents_ftplib(sys.argv[1],ext_filter=ext_filter)
+        listcontents_ftplib(args[0],ext_filter=ext_filter)
