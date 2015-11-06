@@ -37,7 +37,7 @@ def url_download_file(url, filepath):
         print 'FAILED ', url, filepath
         pass
 
-def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download='', destdir=None, range_tuple=(1, '',)):
+def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', destdir='', range_tuple=(1, '',)):
     import ftplib, collections, re
     from os import path, makedirs
     from datetime import datetime, timedelta
@@ -50,15 +50,18 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download='', de
         reldir = path.join("images", ftp_dir)
         remote_dir = path.join(rootdir, reldir)
     try:
-        session.cwd(reldir)
-    except ftplib.error_perm:
-        print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
-        print session.nlst()
-        session.cwd("images")
-        print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
-        session.cwd(ftp_dir)
-        print 'Remote Directory at URL: {} does not exist, closing ftp session.'.format(remote_dir)
-        #session.close()
+        try:
+            session.cwd(reldir)
+        except ftplib.error_perm:
+            print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
+            print session.nlst()
+            session.cwd("images")
+            print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
+            session.cwd(ftp_dir)
+            print 'Remote Directory at URL: {} does not exist, closing ftp session.'.format(remote_dir)
+            #session.close()
+    except AttributeError:
+            print '64 AttributeError '
 
     dirlist = session.nlst()
     print session.pwd(), dirlist
@@ -81,7 +84,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download='', de
                 if range_bounds > delta.days:
                     ftpmodtime_dict[path.join(host, remote_dir, fname)] = [delta.days, moddate] # .strftime("%Y%m%d %H:%M:%S")
                     cnt += 1
-                    print fname, '{} Days Old\t\t\t\t Counted -- {}\v Date: {}'.format(cnt, moddate.strftime("%b %d -- %Y"))
+                    print fname, '{} Days Old\t\t\t\t Counted -- {}\v Date: {}'.format(delta.days, cnt, moddate.strftime("%b %d -- %Y"))
                 else:
                     print fname, ' \t\t\t Failed -- Out of Date Bounds'
             else:
@@ -90,7 +93,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download='', de
     except TypeError:
         print 'Type Error'
     except AttributeError:
-        print 'AttributeError Error'
+        print '96 -- AttributeError Error'
     finally:
         print 'End ', cnt, ' <-- TotalCount \vSince {0:%b %d -- %Y}'.format(moddate)
         #session.storbinary('STOR ' + filename, fileread, 8*1024)
