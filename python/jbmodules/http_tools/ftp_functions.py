@@ -133,7 +133,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
                     downloaded_files_dict[k.split('/')[-1]] = destpath
                     print res
                     cnt -= 1
-                    print 'Downloading ... {} Files Remain. {}'.format(cnt,destpath)
+                    print 'Downloading ... {} Files Remain - File: {}'.format(cnt,destpath)
                 print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
                 return downloaded_files_dict
             else:
