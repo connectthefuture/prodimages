@@ -40,9 +40,11 @@ def url_download_file(url, filepath):
 from timeout import timeout
 @timeout(7)
 def prompt_confirm():
-    input_from_user = str(raw_input('Enter "Yes" to begin: '))
-    return input_from_user
-
+    try:
+        input_from_user = str(raw_input('Enter "Yes" to begin: '))
+        return input_from_user
+    except TimeoutError:
+        return 'Yes'
 
 def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', destdir='', range_tuple=(1, '',)):
     import ftplib, collections, re
