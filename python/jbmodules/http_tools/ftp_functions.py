@@ -84,7 +84,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
                 #     #end   = timedelta(days=range_tuple[1])
                 # else:range_tuple[0]
                 delta = datetime.now() - moddate # timedelta(days=range_tuple[0])
-                range_bounds = range_tuple[0]
+                range_bounds = int(range_tuple[0])
                 if range_bounds > delta.days:
                     ftpmodtime_dict[path.join(host, remote_dir, fname)] = [delta.days, moddate] # .strftime("%Y%m%d %H:%M:%S")
                     cnt += 1
