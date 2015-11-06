@@ -118,6 +118,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
     if download is True:
         print '\n-----\n-----\nTo Download {0} Files\n\tLoaded Since {1:%b %d -- %Y} to \v{2}: '.format(cnt, oldest_date[1][1], destdir)
         confirm = prompt_confirm()
+        start_cnt = cnt
         if confirm[0].lower() == 'y':
             downloaded_files_dict = {}
 
@@ -134,7 +135,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
                     print res
                     cnt -= 1
                     print 'Downloading ... {} Files Remain - File: {}'.format(cnt,destpath)
-                print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
+                print 'End ',  ' <-- \nFiles Modified: ', start_cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
                 return downloaded_files_dict
             else:
                 print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
