@@ -41,7 +41,7 @@ from timeout import timeout, TimeoutError
 @timeout(7)
 def prompt_confirm():
     try:
-        input_from_user = str(raw_input('Enter "Yes" to begin: \tYou have 7 seconds to cancel download'))
+        input_from_user = str(raw_input('\n\nEnter "Yes" to begin: \tYou have 7 seconds to cancel download\n\n-----\n-----\n\n'))
         return input_from_user
     except TimeoutError:
         print 'timeout signaled: proceeding with download.'
