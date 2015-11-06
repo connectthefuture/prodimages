@@ -87,6 +87,8 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', download=False,
         #session.quit()
     except TypeError:
         print 'Type Error'
+    except AttributeError:
+        print ' AttributeError Error'
     finally:
         print 'End ', cnt, ' <-- TotalCount \vSince {0:%b %d -- %Y}'.format(moddate)
         #session.storbinary('STOR ' + filename, fileread, 8*1024)
