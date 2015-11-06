@@ -102,7 +102,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
                     downloaded_files_dict[k.split('/')[-1]] = destpath
                     print res
                     print 'Finished Downloading {} Files to: {}'.format(cnt,destpath)
-                    return downloaded_files_dict
+                return downloaded_files_dict
             else:
                 print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
         else:
