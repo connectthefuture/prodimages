@@ -104,7 +104,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
     oldest_date = sorted_ftpdict.popitem()
     print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
-    sorted_ftpdict.update(oldest_date)
+    sorted_ftpdict.update(oldest_date[0]: oldest_date[1])
     if download is True:
         print 'To Download {} Files to \v{}: '.format(cnt,destdir)
         confirm = str(raw_input('Enter "Yes" to begin: '))
