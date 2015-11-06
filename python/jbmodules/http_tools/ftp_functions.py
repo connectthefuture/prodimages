@@ -98,7 +98,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
                 if range_bounds > delta.days:
                     ftpmodtime_dict[path.join(host, remote_dir, fname)] = [delta.days, moddate] # .strftime("%Y%m%d %H:%M:%S")
                     cnt += 1
-                    print fname, '\t\t\t\t\t Count Index -- {}\n\t\t\t\t\t Date: {}\vModified{} Days Ago'.format(cnt, moddate.strftime("%b %d, %Y"), delta.days)
+                    print fname, '\t\t\t\t\t Count Index -- {}\n\t\t\t\t\t Date: {}\vModified a mere {} Days Ago'.format(cnt, moddate.strftime("%b %d, %Y"), delta.days)
                 else:
                     print fname, ' \t\t\t\t ModDate - {} - Beyond Date Bounds'.format(moddate.strftime("%b %d, %Y"))
             else:
