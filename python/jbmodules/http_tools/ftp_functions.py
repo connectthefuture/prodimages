@@ -103,7 +103,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         session.quit()
     sorted_ftpdict = collections.OrderedDict(sorted(ftpmodtime_dict.items(), key=lambda t: t[1][0], reverse=False))
     oldest_date = sorted_ftpdict.popitem()
-    print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
+    final_message = 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
     sorted_ftpdict.update(zip(oldest_date[0],oldest_date[1]))
     if download is True:
         print 'To Download {} Files to \v{}: '.format(cnt,destdir)
@@ -124,13 +124,14 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
                     print res
                     cnt -= 1
                     print 'Downloading ... {} Files Remain. {}'.format(cnt,destpath)
+                print final_message
                 return downloaded_files_dict
             else:
                 print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
         else:
             print 'You responded: "-- {} --".\nWhich means you decided to forgo the download this time.'.format(confirm)
     else:
-        print locals()
+        print final_message
         return sorted_ftpdict
 
 
