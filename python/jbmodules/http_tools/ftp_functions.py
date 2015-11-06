@@ -43,7 +43,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
     from datetime import datetime, timedelta
     host = 'netsrv101.l3.bluefly.com'
     login_url_string  = 'ftp://imagedrop:imagedrop0@' + host
-    netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images/'
+    netsrv101_url = 'ftp://imagedrop:imagedrop0@netsrv101.l3.bluefly.com//mnt/images/images'
     session = ftplib.FTP(host, 'imagedrop', 'imagedrop0')
     if not remote_dir:
         rootdir = '/mnt/images'
