@@ -134,7 +134,7 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
                     print res
                     cnt -= 1
                     print 'Downloading ... {} Files Remain. {}'.format(cnt,destpath)
-                print final_message
+                print 'End ',  ' <-- \nFiles Modified: ', cnt, '\t\tSince {0:%b %d -- %Y}'.format(oldest_date[1][1])
                 return downloaded_files_dict
             else:
                 print 'Cannot Download {} Files without DOWNLOAD or download as the sys arg 3 or destdir kwarg, \nit is None currently'.format(cnt)
