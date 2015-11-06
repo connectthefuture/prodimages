@@ -55,6 +55,7 @@ def listcontents_ftplib(ftp_dir, remote_dir=None, ext_filter='', range_tuple=(1,
         print session.pwd(), '--> ', remote_dir, ' Rem <-- --> Rel ', reldir
         print session.nlst()
         session.cwd("images")
+        session.cwd(ftp_dir)
     dirlist = session.nlst()
     print session.pwd(), dirlist
     cnt = 0
