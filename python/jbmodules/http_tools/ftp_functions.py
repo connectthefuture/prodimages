@@ -49,23 +49,22 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         rootdir = '/mnt/images'
         reldir = path.join("images", ftp_dir)
         remote_dir = path.join(rootdir, reldir)
-    try:
         try:
             session.cwd(reldir)
         except ftplib.error_perm:
-            print session.pwd(), '1 --56> ', remote_dir, ' Rem <-- --> Rel ', reldir
+            print session.pwd(), '1 --55> ', remote_dir, ' Rem <-- --> Rel ', reldir
             print session.nlst()
             session.cwd("images")
-            print session.pwd(), '2 --59> ', remote_dir, ' Rem <-- --> Rel ', reldir
+            print session.pwd(), '2 --58> ', remote_dir, ' Rem <-- --> Rel ', reldir
             print session.nlst()
             session.cwd(ftp_dir)
             print 'Remote Directory at URL: {} does not exist, closing ftp session.'.format(remote_dir)
             #session.close()
         except AttributeError:
             print '64 AttributeError '
-
-    dirlist = session.nlst()
-    print session.pwd(), dirlist
+        finally:
+            dirlist = session.nlst()
+            print session.pwd(), dirlist
     cnt = 0
     ftpmodtime_dict = {}
     regex_filter = re.compile(r'.+?\.' + ext_filter)
