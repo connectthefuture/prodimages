@@ -24,7 +24,7 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
     try:
         makedirs(imgdest_jpg_mozu_loaded)
-    except IOError:
+    except OSError:
         pass
 
     import mozu_exec  #, mozu_image_util_functions
@@ -42,7 +42,7 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
         print '37-->', f, imgdest_jpg_mozu_loaded
         try:
             rename(f, path.join(imgdest_jpg_mozu_loaded, path.basename(f)))
-        except IOError:
+        except OSError:
             print 'OS ERROR 45 ', f, imgdest_jpg_mozu_loaded, imgdest_jpg_mozu
     load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.[Jj][Pp][gG]'))
 
