@@ -209,7 +209,7 @@ def main(fileslist):
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     # imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 
-    if path.dirname(fileslist[0]).split('/')[-1] != 'JPG_MOZU_LOAD':
+    if path.dirname(fileslist[0]).split('/')[-1] == 'JPG_MOZU_LOAD':
         #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
         fileslist_jpegs = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
     else:
