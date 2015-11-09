@@ -22,8 +22,13 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     archive_uploaded_day = path.join(archive_root, dated_dir)
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
+    imgdest_png_stored = path.join(imgdest_jpg_mozu, 'PNG')
     try:
         makedirs(imgdest_jpg_mozu_loaded)
+    except OSError:
+        pass
+    try:
+        makedirs(imgdest_png_stored)
     except OSError:
         pass
 
@@ -48,7 +53,8 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
         except OSError:
             print 'OS ERROR 45 ', f, imgdest_jpg_mozu_loaded, imgdest_jpg_mozu
     load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.[Jj][Pp][gG]'))
-
+    # Store the pngs
+    store_png_list =  [ rename(f, path.join(imgdest_png_stored, path.basename(f))) for f in glob.glob(path.join(imgdest_jpg_mozu, '*.[Pp][Nn][gG]')) if f is not None]
     return load_batch_mozu_done
     # for f in load_batch_mozu_list:
     #    print path.abspath(f)
