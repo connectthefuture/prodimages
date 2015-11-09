@@ -209,7 +209,7 @@ def main(fileslist):
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     # imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 
-    if fileslist[0].split('/')[-2] != 'JPG_MOZU_LOAD':
+    if path.dirname(fileslist[0]).split('/')[-1] != 'JPG_MOZU_LOAD':
         from os import path
         fileslist_jpegs = fileslist # [ path.abspath(f) for f in fileslist if f ]
     else:
