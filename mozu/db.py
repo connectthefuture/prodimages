@@ -13,8 +13,8 @@ def mozu_image_table_instance(**kwargs):
     from sqlalchemy.dialects import oracle as oracle_dialect
 
 
-    db_uri = 'oracle+cx_oracle://MZIMG:Password12345@borac101-vip.l3.bluefly.com:1521/bfyprd11'
-    #db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+    #db_uri = 'oracle+cx_oracle://MZIMG:Password12345@borac101-vip.l3.bluefly.com:1521/bfyprd11'
+    db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
 
     engine = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False)
     metadata = MetaData(bind=engine)  #, quote_schema=True, schema='bfyqa1201')
