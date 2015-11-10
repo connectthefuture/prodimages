@@ -1,25 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def batch_load_dated_mozu_jpgs(archive_root=None):
+def batch_load_dated_mozu_jpgs(rootdir=None):
     ########## MOZU - Five ##########
     ### Date Defs
     from os import path, renames  # , curdir, chdir
     import datetime, glob # , shutil
 
-    todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-    todaysdatefull = todaysdatefullsecs[:12]
-    todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+    delta = kwargs.get('delta', '')
+    if delta:
+        days_ago = datetime.now() - timedelta(days=delta)
+        todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now()-days_ago)
+        print todaysdatefullsecs, ' <-- Deltaed'
+        todaysdatefull = todaysdatefullsecs[:12]
+        todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+    else:
+        todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+        todaysdatefull = todaysdatefullsecs[:12]
+        todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
 
     ## Define for Creating Archive dirs
-    if archive_root:
+    if rootdir:
         pass  # rootdir = archive
     else:
-        archive_root = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+        rootdir = '/mnt/Post_Complete/Complete_Archive/Uploaded'
 
     # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
     dated_dir = "dateloaded_" + str(todaysdate)
-    archive_uploaded_day = path.join(archive_root, dated_dir)
+    archive_uploaded_day = path.join(rootdir, dated_dir)
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
     # For later pulling production pngs into the batch as well
@@ -58,7 +66,16 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
 if __name__ == '__main__':
     import sys
     try:
-        rootdir = sys.argv[1]
-        batch_load_dated_mozu_jpgs(rootdir)
+        if sys.argv[1].isdigit():
+            delta = sys.argv[1]
+
+        else:
+            root = sys.argv[1]
+            if len(sys.argv[1:]) > 1:
+                if sys.argv[2].isdigit():
+                    delta = sys.argv[2]
+            else:
+                delta = ''
+        batch_load_dated_mozu_jpgs(rootdir=root,delta=delta)
     except IndexError:
         batch_load_dated_mozu_jpgs()
