@@ -4,7 +4,7 @@
 def batch_load_dated_mozu_jpgs(archive_root=None):
     ########## MOZU - Five ##########
     ### Date Defs
-    from os import path, makedirs, renames  # , curdir, chdir
+    from os import path, renames  # , curdir, chdir
     import datetime, glob # , shutil
 
     todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
@@ -24,7 +24,7 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
     # For later pulling production pngs into the batch as well
     #globby_production_png = path.join(archive_uploaded_day,'PNG', '*.png')
-    imgdest_png_stored = path.join(imgdest_jpg_mozu, 'PNG')
+    imgdest_png_stored = path.join(imgdest_jpg_mozu, 'LOADED')
 
     import mozu_exec  #, mozu_image_util_functions
     ## Compress and convert to jpg and store in separate dir for concurrent xfers
