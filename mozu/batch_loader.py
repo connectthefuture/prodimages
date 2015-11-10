@@ -35,7 +35,7 @@ def batch_load_dated_mozu_jpgs(archive_root=None):
             for f in load_collect_batch_mozu_list:
                 print '31-->', f, imgdest_jpg_mozu
                 # rename(f, imgdest_jpg_mozu)
-                rename(f, path.join(imgdest_jpg_mozu, path.basename(f)))
+                renames(f, path.join(imgdest_jpg_mozu, path.basename(f)))
     except IndexError:
         print ' Index Error'
     load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.[Jjp][Ppn][gG]'))
