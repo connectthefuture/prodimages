@@ -44,21 +44,24 @@ def batch_load_dated_mozu_jpgs(**kwargs):
     except IndexError:
         print ' Index Error'
     load_batch_mozu_list = glob.glob(path.join(imgdest_jpg_mozu, '*.[Jjp][Ppn][gG]'))
-    mozu_exec.main(load_batch_mozu_list)
-    for f in load_batch_mozu_list:
-        print '37-->', f, imgdest_jpg_mozu_loaded
-        try:
-            renames(f, path.join(imgdest_jpg_mozu_loaded, path.basename(f)))
-        except OSError:
-            print 'OS ERROR 45 ', f, imgdest_jpg_mozu_loaded, imgdest_jpg_mozu
-    load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.[Jj][Pp][gG]'))
-    # Store the pngs
-    store_png_list =  [ renames(f, path.join(imgdest_png_stored, path.basename(f))) for f in glob.glob(path.join(imgdest_jpg_mozu, '*.[Pp][Nn][gG]')) if f is not None]
-    return load_batch_mozu_done
-    # for f in load_batch_mozu_list:
-    #    print path.abspath(f)
-    #    #jpgout = mozu_image_util_functions.magick_convert_to_jpeg(f,destdir=imgdest_jpg_mozu)
-
+    print imgdest_jpg_mozu, ' <-- DEST Mozu begin mozu exec'
+    if len(load_batch_mozu_list) > 0:
+        mozu_exec.main(load_batch_mozu_list)
+        for f in load_batch_mozu_list:
+            print '37-->', f, imgdest_jpg_mozu_loaded
+            try:
+                renames(f, path.join(imgdest_jpg_mozu_loaded, path.basename(f)))
+            except OSError:
+                print 'OS ERROR 45 ', f, imgdest_jpg_mozu_loaded, imgdest_jpg_mozu
+        load_batch_mozu_done = glob.glob(path.join(imgdest_jpg_mozu_loaded, '*.[Jj][Pp][gG]'))
+        # Store the pngs
+        store_png_list =  [ renames(f, path.join(imgdest_png_stored, path.basename(f))) for f in glob.glob(path.join(imgdest_jpg_mozu, '*.[Pp][Nn][gG]')) if f is not None]
+        return load_batch_mozu_done
+        # for f in load_batch_mozu_list:
+        #    print path.abspath(f)
+        #    #jpgout = mozu_image_util_functions.magick_convert_to_jpeg(f,destdir=imgdest_jpg_mozu)
+    else:
+        print imgdest_jpg_mozu, ' <-- DEST Mozu ZERO FILES to Process'
 
 if __name__ == '__main__':
     import sys
