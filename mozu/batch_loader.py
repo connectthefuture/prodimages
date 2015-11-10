@@ -7,6 +7,8 @@ def batch_load_dated_mozu_jpgs(**kwargs):
     from os import path, renames  # , curdir, chdir
     import datetime, glob # , shutil
 
+    ## Define for Creating Archive dirs
+    rootdir = kwargs.get('rootdir', '/mnt/Post_Complete/Complete_Archive/Uploaded')
     delta = kwargs.get('delta', '')
     if delta:
         days_ago = datetime.timedelta(days=int(delta))
@@ -14,27 +16,26 @@ def batch_load_dated_mozu_jpgs(**kwargs):
         print todaysdatefullsecs, ' <-- Deltaed'
         todaysdatefull = todaysdatefullsecs[:12]
         todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+        todaysdate_real = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())[:8]
     else:
         todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
         todaysdatefull = todaysdatefullsecs[:12]
         todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
-
-    ## Define for Creating Archive dirs
-    rootdir = kwargs.get('rootdir', '/mnt/Post_Complete/Complete_Archive/Uploaded')
+        todaysdate_real = todaysdate
 
     # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
     dated_dir = "dateloaded_" + str(todaysdate)
-    archive_uploaded_day = path.join(rootdir, dated_dir)
-    imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
+    dated_search_dir = path.join(rootdir, dated_dir)
+    imgdest_jpg_mozu = path.join(todaysdate_real, 'JPG_MOZU_LOAD')
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
     # For later pulling production pngs into the batch as well
-    #globby_production_png = path.join(archive_uploaded_day,'PNG', '*.png')
+    #globby_production_png = path.join(dated_search_dir,'PNG', '*.png')
     imgdest_png_stored = path.join(imgdest_jpg_mozu, 'LOADED')
 
     import mozu_exec  #, mozu_image_util_functions
     ## Compress and convert to jpg and store in separate dir for concurrent xfers
     # if path.isfile(pngout):
-    load_collect_batch_mozu_list = glob.glob(path.join(archive_uploaded_day, '*/JPG_MOZU_LOAD/*.[Jjp][Ppn][gG]'))
+    load_collect_batch_mozu_list = glob.glob(path.join(dated_search_dir, '*/JPG_MOZU_LOAD/*.[Jjp][Ppn][gG]'))
     try:
         if load_collect_batch_mozu_list:
             for f in load_collect_batch_mozu_list:
