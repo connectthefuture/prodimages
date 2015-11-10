@@ -4,7 +4,7 @@
 def batch_load_dated_mozu_jpgs(archive_root=None):
     ########## MOZU - Five ##########
     ### Date Defs
-    from os import path, makedirs, rename  # , curdir, chdir
+    from os import path, makedirs, renames  # , curdir, chdir
     import datetime, glob # , shutil
 
     todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
