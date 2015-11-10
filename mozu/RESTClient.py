@@ -3,11 +3,12 @@
 
 # Import initial static vars and Auth func
 __base_protocol__               = "https"
-__base_url__                    = "home.mozu.com" #"staging-sb.mozu.com"
+__base_url__                    = "home.mozu.com" # "staging-sb.mozu.com"
 __listFQN__                     = 'files@mozu'
 __documentTypeFQN__             = 'image@mozu'
-__tenant_name__                 = '12106' #'11146'
+__tenant_name__                 = '12106' # '11146'
 __tenant_url__                  = "{0}://t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
+__master_catalogid__            = "2" # "1"
 ### build Mozu API Url String
 __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
 ### valid keys for filtering args
@@ -37,6 +38,7 @@ class MozuRestClient:
     __listFQN           = __listFQN__
     __documentTypeFQN   = __documentTypeFQN__
     __tenant_name       = __tenant_name__
+    __master_catalogid      = __master_catalogid__
     ### build Mozu API Url String
     __tenant_url        = __tenant_url__
     __document_data_api = __document_data_api__
@@ -56,7 +58,7 @@ class MozuRestClient:
         self.accessToken = authenticate()
 
         # Headers / Data-Payload and Filters
-        self.headers = {'Content-type': 'application/json', 'x-vol-app-claims' : self.accessToken, 'x-vol-tenant' : MozuRestClient.__tenant_name, 'x-vol-master-catalog' : '2' } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
+        self.headers = {'Content-type': 'application/json', 'x-vol-app-claims': self.accessToken, 'x-vol-tenant': MozuRestClient.__tenant_name, 'x-vol-master-catalog': MozuRestClient.__master_catalogid } #, 'x-vol-dataview-mode': 'Pending', # ??'x-vol-site' : '1', }
         ## TODO does the logic and order below with src_filepath and bf_imageid work or should bf_imageid be first?
         if kwargs.get('src_filepath'):
             self.bf_imageid, self.ext = kwargs.get('src_filepath').split('/')[-1].split('.')
