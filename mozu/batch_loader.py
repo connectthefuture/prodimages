@@ -68,14 +68,16 @@ if __name__ == '__main__':
     try:
         if sys.argv[1].isdigit():
             delta = sys.argv[1]
-            root = ''
+            batch_load_dated_mozu_jpgs(delta=delta)
         else:
             root = sys.argv[1]
             if len(sys.argv[1:]) > 1:
                 if sys.argv[2].isdigit():
                     delta = sys.argv[2]
+                    batch_load_dated_mozu_jpgs(rootdir=root,delta=delta)
+                else:
+                    print ' I dont know how to proceed with "{}" as your 2nd cmd line arg'.format(sya.argv[2])
             else:
-                delta = ''
-        batch_load_dated_mozu_jpgs(rootdir=root,delta=delta)
+                batch_load_dated_mozu_jpgs(rootdir=root)
     except IndexError:
         batch_load_dated_mozu_jpgs()
