@@ -15,27 +15,27 @@ def batch_load_dated_mozu_jpgs(**kwargs):
         todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now()-days_ago)
         print todaysdatefullsecs, ' <-- Deltaed'
         todaysdatefull = todaysdatefullsecs[:12]
-        todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+        search_date = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
         todaysdate_real = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())[:8]
     else:
         todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
         todaysdatefull = todaysdatefullsecs[:12]
-        todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
+        search_date = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
         todaysdate_real = todaysdate
 
     # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
-    dated_dir = "dateloaded_" + str(todaysdate)
-    dated_search_dir = path.join(rootdir, dated_dir)
-    imgdest_jpg_mozu = path.join(todaysdate_real, 'JPG_MOZU_LOAD')
+    search_dir = path.join(rootdir, "dateloaded_" + str(search_date))
+    currentdate_dir = path.join(rootdir, "dateloaded_" + str(todaysdate_real))
+    imgdest_jpg_mozu = path.join(currentdate_dir, 'JPG_MOZU_LOAD')
     imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
     # For later pulling production pngs into the batch as well
-    #globby_production_png = path.join(dated_search_dir,'PNG', '*.png')
+    #globby_production_png = path.join(search_dir,'PNG', '*.png')
     imgdest_png_stored = path.join(imgdest_jpg_mozu, 'LOADED')
 
     import mozu_exec  #, mozu_image_util_functions
     ## Compress and convert to jpg and store in separate dir for concurrent xfers
     # if path.isfile(pngout):
-    load_collect_batch_mozu_list = glob.glob(path.join(dated_search_dir, '*/JPG_MOZU_LOAD/*.[Jjp][Ppn][gG]'))
+    load_collect_batch_mozu_list = glob.glob(path.join(search_dir, '*/JPG_MOZU_LOAD/*.[Jjp][Ppn][gG]'))
     try:
         if load_collect_batch_mozu_list:
             for f in load_collect_batch_mozu_list:
