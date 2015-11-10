@@ -16,7 +16,7 @@ def get_mozu_client_authtoken():
     import requests, json
     _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
     _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
-    _auth_request = {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
+    _auth_request =  {'applicationId' : 'bluefly.ImageSync.1.0.0.release', 'sharedSecret' : '0b8eb07f0e654f2eb9d972276e0005d1'} ## {'applicationId' : 'bluefly.product_images.1.0.0.release', 'sharedSecret' : '53de2fb67cb04a95af323693caa48ddb'}
     _auth_response = requests.post(_auth_url, data=json.dumps(_auth_request), headers=_auth_headers, verify=False)
     # TODO: 5) add Validation(regex) to prevent unwanted updates
     print "Auth Response: {0}".format(_auth_response.status_code)
