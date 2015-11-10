@@ -61,7 +61,7 @@ def batch_load_dated_mozu_jpgs(**kwargs):
         #    print path.abspath(f)
         #    #jpgout = mozu_image_util_functions.magick_convert_to_jpeg(f,destdir=imgdest_jpg_mozu)
     else:
-        print imgdest_jpg_mozu, ' <-- DEST Mozu ZERO FILES to Process'
+        print imgdest_jpg_mozu, ' <-- DEST Mozu \n<---- ZERO FILES to Process'
 
 if __name__ == '__main__':
     import sys
