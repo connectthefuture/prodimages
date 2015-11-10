@@ -677,9 +677,10 @@ def main():
     archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
     archive_uploaded = os.path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
 
-    imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
+    imgdest_jpg_mozu = os.path.join(archive, "dateloaded_" + str(todaysdate), 'JPG_MOZU_LOAD')
+
+    #imgdest_jpg_final = os.path.join(archive_uploaded, 'JPG_RETOUCHED_ORIG')
     imgdest_png_final = os.path.join(archive_uploaded, 'PNG')
-    imgdest_jpg_mozu = os.path.join(archive_uploaded, 'JPG_MOZU_LOAD')
 
     ###################
     ## Create Lock File
@@ -753,10 +754,10 @@ def main():
         except:
             pass
 
-        try:
-            os.makedirs(imgdest_jpg_final, 16877)
-        except:
-            pass
+        # try:
+        #     os.makedirs(imgdest_jpg_final, 16877)
+        # except:
+        #     pass
 
     ####################################################
     ## Begin Processing and compiling images for Loading
@@ -786,7 +787,7 @@ def main():
             #######
             import sys
             from os import chdir, path
-            
+
             #chdir('/usr/local/batchRunScripts/mozu')
             import mozu_exec, mozu_image_util_functions
             ## Compress and convert to jpg and store in separate dir for concurrent xfers
