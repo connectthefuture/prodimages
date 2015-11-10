@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def batch_load_dated_mozu_jpgs(rootdir=None):
+def batch_load_dated_mozu_jpgs(**kwargs):
     ########## MOZU - Five ##########
     ### Date Defs
     from os import path, renames  # , curdir, chdir
@@ -20,10 +20,7 @@ def batch_load_dated_mozu_jpgs(rootdir=None):
         todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
 
     ## Define for Creating Archive dirs
-    if rootdir:
-        pass  # rootdir = archive
-    else:
-        rootdir = '/mnt/Post_Complete/Complete_Archive/Uploaded'
+    rootdir = kwargs.get('rootdir', '/mnt/Post_Complete/Complete_Archive/Uploaded')
 
     # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
     dated_dir = "dateloaded_" + str(todaysdate)
