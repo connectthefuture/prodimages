@@ -9,7 +9,7 @@ def batch_load_dated_mozu_jpgs(**kwargs):
 
     delta = kwargs.get('delta', '')
     if delta:
-        days_ago = datetime.timedelta(days=delta)
+        days_ago = datetime.timedelta(days=int(delta))
         todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now()-days_ago)
         print todaysdatefullsecs, ' <-- Deltaed'
         todaysdatefull = todaysdatefullsecs[:12]
