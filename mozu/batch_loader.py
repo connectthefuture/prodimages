@@ -68,7 +68,7 @@ if __name__ == '__main__':
     try:
         if sys.argv[1].isdigit():
             delta = sys.argv[1]
-
+            root = ''
         else:
             root = sys.argv[1]
             if len(sys.argv[1:]) > 1:
