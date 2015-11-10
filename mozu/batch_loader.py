@@ -21,7 +21,7 @@ def batch_load_dated_mozu_jpgs(**kwargs):
         todaysdatefullsecs = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
         todaysdatefull = todaysdatefullsecs[:12]
         search_date = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
-        todaysdate_real = todaysdate
+        todaysdate_real = search_date
 
     # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
     search_dir = path.join(rootdir, "dateloaded_" + str(search_date))
