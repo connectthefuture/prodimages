@@ -20,17 +20,16 @@ DB_URI_PRD    = 'oracle+cx_oracle://MZIMG:p1zza4me@borac102-vip.l3.bluefly.com:1
 MOZU_BASE_PRD = "home.mozu.com"
 TENANT_PRD    = '12106'
 MOZU_MASTER_CATID_PRD = "2"
-__PRD_AUTH__  = {'applicationId': 'bluefly.product_images.1.0.0.release',
-                'sharedSecret': '53de2fb67cb04a95af323693caa48ddb'}
+__PRD_AUTH__  = {'applicationId': 'bluefly.ImageSync.1.0.0.Release',
+                'sharedSecret': '0b8eb07f0e654f2eb9d972276e0005d1'}
 
 ## STANDARD CONFIGS -- Used in both STG and PRD ##
 MOZU_PROTOCOL  = "https"
 MOZU_LIST_FQN  = 'files@mozu'
 MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
-
-
-### ALL Variable Configs can be set above for
-
+#################################################
+### ALL Variable Configs can be set above for ###
+#################################################
 def set_environment():
     from os import environ
     # Set Standard Env vars
