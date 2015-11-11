@@ -2,8 +2,10 @@
 # coding: utf-8
 
 from os import environ
-from base_config import authenticate, set_environment
 from mozu_image_util_functions import log
+
+## Import and set static connection environmental variables -- sql_alchemy_uri, mozu_tenant etc.
+from base_config import authenticate, set_environment
 set_environment()
 
 # Import initial static vars and Auth func Can set using environ or static
