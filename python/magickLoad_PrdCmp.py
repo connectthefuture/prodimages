@@ -855,11 +855,14 @@ def main():
     ## TODO: Fix so all go through funcs. Glob Mozu Jpegs to tmp Originals dir for now by passing productions sharpening funcs
     ######################################################
     ## Mozu  Xfer ####
-    import mozu_exec, mozu_image_util_functions, glob
-    upload_imgdest_jpg_mozu_glob = glob.glob(os.path.join(imgdest_jpg_mozu, '*.*g'))
 
-    print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', ' <-- Now MozuExec'
-    mozu_exec.main(upload_imgdest_jpg_mozu_glob)
+    import mozu_exec, mozu_image_util_functions, glob
+    # upload_imgdest_jpg_mozu_glob = glob.glob(os.path.join(imgdest_jpg_mozu, '*.*g'))
+    #
+    # print 'MozuExec', '\n\n\n\n\v\v\t\t\t\tMozuExec\t', ' <-- Now MozuExec'
+    # mozu_exec.main(upload_imgdest_jpg_mozu_glob)
+
+
     #######################################################
     ############### END MOZU ##############################
     #######################################################
