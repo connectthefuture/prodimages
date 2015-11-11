@@ -6,8 +6,8 @@ globals()['DEBUG'] = True
 
 
 ## STAGING CONFIGS ##
-SITE_STG      = "14456"
-DB_URI_STG    = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+SITE_STG       = "14456"
+DB_URI_STG     = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
 MOZU_BASE_STG = "staging-sb.mozu.com"
 TENANT_STG    = '11146'
 MOZU_MASTER_CATID_STG = "1"
@@ -23,9 +23,20 @@ MOZU_MASTER_CATID_PRD = "2"
 __PRD_AUTH__  = {'applicationId': 'bluefly.product_images.1.0.0.release',
                 'sharedSecret': '53de2fb67cb04a95af323693caa48ddb'}
 
+## STANDARD CONFIGS -- Used in both STG and PRD ##
+MOZU_PROTOCOL  = "https"
+MOZU_LIST_FQN  = 'files@mozu'
+MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
+
+
+### ALL Variable Configs can be set above for
 
 def set_environment():
     from os import environ
+    # Set Standard Env vars
+    environ['MOZU_PROTOCOL'] = MOZU_PROTOCOL
+    environ['MOZU_LIST_FQN'] = MOZU_LIST_FQN
+    environ['MOZU_DOCUMENT_TYPE_FQN'] = MOZU_DOCUMENT_TYPE_FQN
     if globals()['DEBUG'] == True:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
         environ['MOZU_TENANT_NAME'] = TENANT_STG
@@ -61,9 +72,7 @@ def get_mozu_client_authtoken():
         _auth_request = __PRD_AUTH__
     else:
         _auth_request = __STG_AUTH__
-
     _auth_response = requests.post(_auth_url, data=json.dumps(_auth_request), headers=_auth_headers, verify=False)
-    # TODO: 5) add Validation(regex) to prevent unwanted updates
     print "Auth Response: {0}".format(_auth_response.status_code)
     _auth_response.raise_for_status()
     _auth = _auth_response.json()
@@ -78,4 +87,4 @@ def authenticate():
 
 
 if __name__ == '__main__':
-    authenticate()
+    set_environment()

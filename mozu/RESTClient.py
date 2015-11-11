@@ -2,24 +2,25 @@
 # coding: utf-8
 
 from os import environ
-# Import initial static vars and Auth func Can set using environ or static
-__base_protocol__               =  "https"
-__base_url__                    =  environ['MOZU_BASE_URL']
-__listFQN__                     =  'files@mozu'
-__documentTypeFQN__             =  'image@mozu'
-__tenant_name__                 =  environ['MOZU_TENANT_NAME']
-__tenant_url__                  =  "{0}://t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
-__master_catalogid__            =  environ['MOZU_MASTER_CATALOG_ID']
-### build Mozu API Url String
-__document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
-### valid keys for filtering args
-__mozu_image_table_valid_keys__       = [ 'id', 'bf_imageid', 'mz_imageid', 'md5checksum', 'created_date', 'modified_date', 'updated_count' ]
-__mozu_query_filter_valid_keys__      = [ 'sortBy', 'filter', 'responseFields', 'pageSize', 'startIndex', 'includeInactive' ]
-__mozu_query_filter_valid_operators__ = [ 'sw', 'cont', 'in' ]
-__mozu_document_filter_valid_keys__      = [ 'name', 'filter', 'responseFields', 'includeInactive' ]
-
-from base_config import authenticate
+from base_config import authenticate, set_environment
 from mozu_image_util_functions import log
+set_environment()
+
+# Import initial static vars and Auth func Can set using environ or static
+__base_protocol__          =  environ['MOZU_PROTOCOL']
+__base_url__               =  environ['MOZU_BASE_URL']
+__listFQN__                =  environ['MOZU_LIST_FQN']
+__documentTypeFQN__        =  environ['MOZU_DOCUMENT_TYPE_FQN']
+__master_catalogid__       =  environ['MOZU_MASTER_CATALOG_ID']
+__tenant_name__            =  environ['MOZU_TENANT_NAME']
+### build Mozu API Url Strings from env vars
+__tenant_url__             =  "{0}://t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
+__document_data_api__      = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
+### valid keys for filtering insert fields and other query fields or args`
+__mozu_image_table_valid_keys__         = [ 'id', 'bf_imageid', 'mz_imageid', 'md5checksum', 'created_date', 'modified_date', 'updated_count' ]
+__mozu_query_filter_valid_keys__        = [ 'sortBy', 'filter', 'responseFields', 'pageSize', 'startIndex', 'includeInactive' ]
+__mozu_query_filter_valid_operators__   = [ 'sw', 'cont', 'in' ]
+__mozu_document_filter_valid_keys__     = [ 'name', 'filter', 'responseFields', 'includeInactive' ]
 
 
 class MozuBflyDocument:
