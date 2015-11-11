@@ -16,7 +16,7 @@ __STG_AUTH__  = {'applicationId': 'bluefly.product_images.1.0.0.release',
 
 ## PROD CONFIGS ##
 SITE_PRD      = "16829"
-DB_URI_PRD    = 'oracle+cx_oracle://MZIMG:p1zza4me@borac102-vip.l3.bluefly.com:1521/bfyprd12'
+DB_URI_PRD    = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
 MOZU_BASE_PRD = "home.mozu.com"
 TENANT_PRD    = '12106'
 MOZU_MASTER_CATID_PRD = "2"
