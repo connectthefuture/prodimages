@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Import initial static vars and Auth func
-__base_protocol__               = "https"
-__base_url__                    = "home.mozu.com" # "staging-sb.mozu.com"
-__listFQN__                     = 'files@mozu'
-__documentTypeFQN__             = 'image@mozu'
-__tenant_name__                 = '12106' # '11146'
-__tenant_url__                  = "{0}://t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
-__master_catalogid__            = "2" # "1"
+from os import environ
+# Import initial static vars and Auth func Can set using environ or static
+__base_protocol__               =  "https"
+__base_url__                    =  environ['MOZU_BASE_URL']
+__listFQN__                     =  'files@mozu'
+__documentTypeFQN__             =  'image@mozu'
+__tenant_name__                 =  environ['MOZU_TENANT_NAME']
+__tenant_url__                  =  "{0}://t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
+__master_catalogid__            =  environ['MOZU_MASTER_CATALOG_ID']
 ### build Mozu API Url String
 __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
 ### valid keys for filtering args
@@ -16,7 +17,6 @@ __mozu_image_table_valid_keys__       = [ 'id', 'bf_imageid', 'mz_imageid', 'md5
 __mozu_query_filter_valid_keys__      = [ 'sortBy', 'filter', 'responseFields', 'pageSize', 'startIndex', 'includeInactive' ]
 __mozu_query_filter_valid_operators__ = [ 'sw', 'cont', 'in' ]
 __mozu_document_filter_valid_keys__      = [ 'name', 'filter', 'responseFields', 'includeInactive' ]
-
 
 from base_config import authenticate
 from mozu_image_util_functions import log

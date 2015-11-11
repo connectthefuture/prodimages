@@ -8,13 +8,13 @@ from mozu_image_util_functions import log
 def mozu_image_table_instance(**kwargs):
     import sqlalchemy
     import datetime
+    from os import environ
     from sqlalchemy import Table, Column, Integer, String, MetaData, create_engine, DateTime
     from sqlalchemy import FetchedValue, Text, Sequence
     from sqlalchemy.dialects import oracle as oracle_dialect
 
 
-    db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@borac102-vip.l3.bluefly.com:1521/bfyprd12'
-    #db_uri = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+    db_uri = environ['SQLALCHEMY_DATABASE_URI']
 
     engine = sqlalchemy.create_engine(db_uri, implicit_returning=False, coerce_to_decimal=False)
     metadata = MetaData(bind=engine)  #, quote_schema=True, schema='bfyqa1201')

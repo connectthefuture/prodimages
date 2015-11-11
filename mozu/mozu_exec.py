@@ -6,7 +6,6 @@
 ## Listing and Info about Document List
 #######################################
 import sqlalchemy
-from db import mozu_image_table_instance
 from mozu_image_util_functions import include_keys, log
 from RESTClient import __mozu_image_table_valid_keys__
 
@@ -142,6 +141,7 @@ def upsert_data_mz_image(**kwargs):
 @log
 def delete_document_data_content(**kwargs):
     from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
     mozu_image_table = mozu_image_table_instance()

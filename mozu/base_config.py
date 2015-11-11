@@ -1,25 +1,58 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# __base_protocol__               = "https"
-# __base_url__                    = "staging-sb.mozu.com"
-# __listFQN__                     = 'files@mozu'
-# __documentTypeFQN__             = 'image@mozu'
-# __tenant_name__                 = '11146'
-# __tenant_url__                  = "{0}\:\/\/t{1}.{2}".format(__base_protocol__, __tenant_name__,__base_url__ )
-# ### build Mozu API Url String
-# __document_data_api__   = __tenant_url__ + "/api/content/documentlists/" + __listFQN__ + "/documents"
+# Set DEBUG to False for Prod
+globals()['DEBUG'] = True
 
-# Set DEBUG to False
-DEBUG = True
-__STG_AUTH__ = {'applicationId': 'bluefly.product_images.1.0.0.release',
+
+## STAGING CONFIGS ##
+SITE_STG      = "14456"
+DB_URI_STG    = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
+MOZU_BASE_STG = "staging-sb.mozu.com"
+TENANT_STG    = '11146'
+MOZU_MASTER_CATID_STG = "1"
+__STG_AUTH__  = {'applicationId': 'bluefly.product_images.1.0.0.release',
                'sharedSecret': '53de2fb67cb04a95af323693caa48ddb'}
-__PRD_AUTH__ = {'applicationId': 'bluefly.product_images.1.0.0.release',
+
+## PROD CONFIGS ##
+SITE_PRD      = "16829"
+DB_URI_PRD    = 'oracle+cx_oracle://MZIMG:p1zza4me@borac102-vip.l3.bluefly.com:1521/bfyprd12'
+MOZU_BASE_PRD = "home.mozu.com"
+TENANT_PRD    = '12106'
+MOZU_MASTER_CATID_PRD = "2"
+__PRD_AUTH__  = {'applicationId': 'bluefly.product_images.1.0.0.release',
                 'sharedSecret': '53de2fb67cb04a95af323693caa48ddb'}
+
+
+def set_environment():
+    from os import environ
+    if globals()['DEBUG'] == True:
+        environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
+        environ['MOZU_TENANT_NAME'] = TENANT_STG
+        environ['MOZU_SITE_NAME'] = SITE_STG
+        environ['MOZU_BASE_URL'] = MOZU_BASE_STG
+        environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
+        print 'SET ENV 1 \n', environ
+    elif globals()['DEBUG'] == False:
+        environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
+        environ['MOZU_TENANT_NAME'] = TENANT_PRD
+        environ['MOZU_SITE_NAME'] = SITE_PRD
+        environ['MOZU_BASE_URL'] = MOZU_BASE_PRD
+        environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_PRD
+        print 'SET ENV 2 \n', environ
+    else:
+        environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
+        environ['MOZU_TENANT_NAME'] = TENANT_STG
+        environ['MOZU_SITE_NAME'] = SITE_STG
+        environ['MOZU_BASE_URL'] = MOZU_BASE_STG
+        environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
+        print 'SET ENV 3 \n', environ
+    return
 
 def get_mozu_client_authtoken():
     #  "http://requestb.in/q66719q6" #
     import requests, json
+    set_environment()
     _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
     _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
     if globals()['DEBUG'] == True:
@@ -28,7 +61,6 @@ def get_mozu_client_authtoken():
         _auth_request = __PRD_AUTH__
     else:
         _auth_request = __STG_AUTH__
-
 
     _auth_response = requests.post(_auth_url, data=json.dumps(_auth_request), headers=_auth_headers, verify=False)
     # TODO: 5) add Validation(regex) to prevent unwanted updates
