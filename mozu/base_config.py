@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+import pdb;pdb.set_trace()
 # Set DEBUG to False for Prod
 globals()['DEBUG'] = True # False
 
