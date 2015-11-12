@@ -27,6 +27,7 @@ __PRD_AUTH__  = {'applicationId': 'bluefly.ImageSync.1.0.0.Release',
 MOZU_PROTOCOL  = "https"
 MOZU_LIST_FQN  = 'files@mozu'
 MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
+
 #################################################
 ### ALL Variable Configs can be set above for ###
 #################################################
@@ -39,6 +40,7 @@ def set_environment():
     if globals()['DEBUG'] == True:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
         environ['MOZU_TENANT_NAME'] = TENANT_STG
+
         environ['MOZU_SITE_NAME'] = SITE_STG
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
