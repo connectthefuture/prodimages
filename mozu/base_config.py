@@ -38,9 +38,8 @@ def set_environment():
     environ['MOZU_LIST_FQN'] = MOZU_LIST_FQN
     environ['MOZU_DOCUMENT_TYPE_FQN'] = MOZU_DOCUMENT_TYPE_FQN
     if globals()['DEBUG'] == True:
-        environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
+        environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_STG
-
         environ['MOZU_SITE_NAME'] = SITE_STG
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
