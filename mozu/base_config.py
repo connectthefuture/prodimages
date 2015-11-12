@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # Set DEBUG to False for Prod
-globals()['DEBUG'] = False
+globals()['DEBUG'] = True # False
 
 
 ## STAGING CONFIGS ##
