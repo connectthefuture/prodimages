@@ -9,11 +9,11 @@ globals()['DEBUG'] = True # False
 ## STAGING CONFIGS ##
 SITE_STG       = "14456"
 DB_URI_STG     = 'oracle+cx_oracle://MZIMG:p1zza4me@qarac201-vip.qa.bluefly.com:1521/bfyqa1201'
-MOZU_BASE_STG = "staging-sb.mozu.com"
-TENANT_STG    = '11146'
+MOZU_BASE_STG  = "staging-sb.mozu.com"
+TENANT_STG     = '11146'
 MOZU_MASTER_CATID_STG = "1"
-__STG_AUTH__  = {'applicationId': 'bluefly.product_images.1.0.0.release',
-               'sharedSecret': '53de2fb67cb04a95af323693caa48ddb'}
+__STG_AUTH__   = {'applicationId': 'bluefly.product_images.1.0.0.release',
+                 'sharedSecret': '53de2fb67cb04a95af323693caa48ddb'}
 
 ## PROD CONFIGS ##
 SITE_PRD      = "16829"
