@@ -147,8 +147,8 @@ def compile_todict_for_class_instance_variables(fileslist=None, **kwargs):
                     try:
                         tags = [ "{}={}".format(k,v) for k,v in image_metadata.iteritems() if
                                  not k.split(':')[-1][10] != 'DateCreated'] #image_metadata.values() ['XMP:DateCreated'][:10].replace(':','-')
-                    except AttributeError:
-                        print 'Tags Attrib Error'
+                    except IndexError:
+                        print 'Tags Index--was Attrib Error'
                         tags = []
                 else:
                     tags = kwargs.get('tags')
