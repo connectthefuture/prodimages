@@ -34,7 +34,8 @@ MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
 #################################################
 def set_environment():
     from os import environ
-    # Set Standard Env vars
+    # Clear EnvVars then Set Standard Env vars
+    environ.clear()
     environ['MOZU_PROTOCOL'] = MOZU_PROTOCOL
     environ['MOZU_LIST_FQN'] = MOZU_LIST_FQN
     environ['MOZU_DOCUMENT_TYPE_FQN'] = MOZU_DOCUMENT_TYPE_FQN
