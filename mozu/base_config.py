@@ -44,21 +44,21 @@ def set_environment():
         environ['MOZU_SITE_NAME'] = SITE_STG
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
-        print 'SET ENV 1 \n', environ
+        print 'SET ENV 1\tDebug ON \n', environ
     elif globals()['DEBUG'] == False:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_PRD
         environ['MOZU_SITE_NAME'] = SITE_PRD
         environ['MOZU_BASE_URL'] = MOZU_BASE_PRD
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_PRD
-        print 'SET ENV 2 \n', environ
+        print 'SET ENV 2\tDebug OFF \n', environ
     else:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
         environ['MOZU_TENANT_NAME'] = TENANT_STG
         environ['MOZU_SITE_NAME'] = SITE_STG
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
-        print 'SET ENV 3 \n', environ
+        print 'SET ENV 3\tDebug ON \n', environ
     return
 
 def get_mozu_client_authtoken():
