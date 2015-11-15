@@ -60,6 +60,7 @@ def set_environment():
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
         print 'SET ENV 3\tDebug ON \n', environ
+    print 'LOCAL ENV SET for MOZU:\n\n ', dict(environ)
     return
 
 def get_mozu_client_authtoken():
