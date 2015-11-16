@@ -50,7 +50,7 @@ def upload_new(**kwargs):
     content_response = mzclient.send_content(**kwargs)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     print "Inserting with, ", insert_db
-    if len(mz_imageid) > 20:
+    if len(kwargs['mz_imageid']) > 20:
         try:
             insert_db.execute()
             print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
