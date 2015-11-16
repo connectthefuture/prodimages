@@ -75,6 +75,8 @@ def upload_new(**kwargs):
 # PUT - Update Document Data and Content- Properties/Metadata
 @log
 def upsert_data_mz_image(**kwargs):
+    import pdb
+    pdb.set_trace()
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
