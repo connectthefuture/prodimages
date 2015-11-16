@@ -43,14 +43,14 @@ def upload_new(**kwargs):
     from db import mozu_image_table_instance
 
     mzclient = MozuRestClient(**kwargs)
-    resp, document_resource = mzclient.create_new_mz_image()
-    kwargs['mz_imageid'] = resp.json()['mz_imageid']
+    mz_imageid, document_resource = mzclient.create_new_mz_image()
+    kwargs['mz_imageid'] = mz_imageid
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     content_response = mzclient.send_content(**kwargs)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     print "Inserting with, ", insert_db
-    if len(kwargs['mz_imageid']) > 20:
+    if len(mz_imageid) > 20:
         try:
             insert_db.execute()
             print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
@@ -258,7 +258,7 @@ def main(fileslist):
                 #
                 print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
-            except TypeError:  # sqlalchemy.exc.IntegrityError:
+            except KeyError:  # sqlalchemy.exc.IntegrityError:
                 # try:
                 #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
                 #     if upsert_content_resp.http_status_code < 300:
