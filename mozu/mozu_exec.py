@@ -43,8 +43,8 @@ def upload_new(**kwargs):
     from db import mozu_image_table_instance
 
     mzclient = MozuRestClient(**kwargs)
-    mz_imageid, document_resource = mzclient.create_new_mz_image()
-    kwargs['mz_imageid'] = mz_imageid
+    resp, document_resource = mzclient.create_new_mz_image()
+    kwargs['mz_imageid'] = resp.json()['mz_imageid']
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     content_response = mzclient.send_content(**kwargs)
