@@ -21,7 +21,7 @@ def arg_parser_simple():
 def sqlQuery_styles_bypo(po_number):
     import sqlalchemy, sys
     #engine_cnx = sqlalchemy.create_engine('mysql+mysqldb://root:mysql@prodimages.ny.bluefly.com:3301/www_django')
-    engine_cnx = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
+    engine_cnx = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@«-vip.l3.bluefly.com:1521/bfyprd11')
 
     connection = engine_cnx.connect()
     #querymake_styles_bypoMySQL = "SELECT colorstyle FROM product_snapshot_live WHERE po_number like '{0}' AND image_ready_dt IS NOT NULL ORDER BY colorstyle".format(po_number)
