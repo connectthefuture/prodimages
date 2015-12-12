@@ -8,16 +8,10 @@ python-dateutil
 python-mimeparse
 pytz
 pyzmq
-redis
 requests
 six
 sqlalchemy
 sqlparse
 #trollius
 urllib3
-virtualenv
-Werkzeug
-wheel
-xlrd
-xlwt
 zmq
