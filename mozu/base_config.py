@@ -3,7 +3,7 @@
 
 # import pdb;pdb.set_trace()
 # Set DEBUG to False for Prod
-globals()['DEBUG'] = False #True 
+globals()['DEBUG'] = True # False
 
 
 ## STAGING CONFIGS ##
