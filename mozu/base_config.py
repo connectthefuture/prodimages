@@ -92,7 +92,7 @@ def get_mozu_client_authtoken():
     print "Auth Response: {0}".format(_auth_response.status_code)
     print _auth_response.text
     print _auth_response.headers
-    print '\n\n', _auth_request, _auth_headers
+    print '\n\n', _auth_request, _auth_headers, '\t', _auth_url
     #print '\n', environ.items(), '\n'
     _auth_response.raise_for_status()
     _auth = _auth_response.json()
