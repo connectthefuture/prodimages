@@ -72,6 +72,7 @@ def set_environment():
 def get_mozu_client_authtoken():
     #  "http://requestb.in/q66719q6" #
     import requests, json
+    from os import environ
     set_environment()
     _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
     if globals()['PROD'] == False:
@@ -92,6 +93,7 @@ def get_mozu_client_authtoken():
     print _auth_response.text
     print _auth_response.cookies
     print _auth_response.history
+    print '\n', environ.items(), '\n'
     _auth_response.raise_for_status()
     _auth = _auth_response.json()
     # print "Auth Ticket: {0}".format(_auth["accessToken"])
