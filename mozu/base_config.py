@@ -73,7 +73,6 @@ def get_mozu_client_authtoken():
     #  "http://requestb.in/q66719q6" #
     import requests, json
     set_environment()
-    _auth_headers_prod_addition = {'x-vol-tenant': TENANT_PRD, 'x-vol-master-catalog': MOZU_MASTER_CATID_PRD }
     _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
     if globals()['PROD'] == False:
         _auth_request = __STG_AUTH__
@@ -82,6 +81,7 @@ def get_mozu_client_authtoken():
     elif globals()['PROD'] == True:
         _auth_request = __PRD_AUTH__
         _auth_url     = __MOZU_AUTH_URL_PRD__
+        _auth_headers_prod_addition = {'x-vol-tenant': TENANT_PRD, 'x-vol-master-catalog': MOZU_MASTER_CATID_PRD }
         _auth_headers = dict(list(_auth_headers.items()) + list(_auth_headers_prod_addition.items()))
         print _auth_headers
     else:
