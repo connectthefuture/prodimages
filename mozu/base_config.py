@@ -89,6 +89,7 @@ def get_mozu_client_authtoken():
         _auth_url     = __MOZU_AUTH_URL_STG__
     _auth_response = requests.post(_auth_url, data=json.dumps(_auth_request), headers=_auth_headers, verify=False)
     print "Auth Response: {0}".format(_auth_response.status_code)
+    print _auth_response.headers
     _auth_response.raise_for_status()
     _auth = _auth_response.json()
     # print "Auth Ticket: {0}".format(_auth["accessToken"])
