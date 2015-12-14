@@ -71,9 +71,9 @@ def get_mozu_client_authtoken():
     _auth_url = "https://home.mozu.com/api/platform/applications/authtickets"
 #    _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
     _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
-    if globals()['DEBUG'] == True:
+    if globals()['PROD'] == False:
         _auth_request = __STG_AUTH__
-    elif globals()['DEBUG'] == False:
+    elif globals()['PROD'] == True:
         _auth_request = __PRD_AUTH__
     else:
         _auth_request = __STG_AUTH__
