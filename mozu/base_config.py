@@ -3,7 +3,8 @@
 
 # import pdb;pdb.set_trace()
 # Set DEBUG to False for Prod
-globals()['DEBUG'] = True # False
+# globals()['DEBUG'] = False #True
+globals()['PROD'] = True #True
 
 
 ## STAGING CONFIGS ##
@@ -38,7 +39,7 @@ def set_environment():
     environ['MOZU_PROTOCOL'] = MOZU_PROTOCOL
     environ['MOZU_LIST_FQN'] = MOZU_LIST_FQN
     environ['MOZU_DOCUMENT_TYPE_FQN'] = MOZU_DOCUMENT_TYPE_FQN
-    if globals()['DEBUG'] == True:
+    if globals()['PROD'] == False:
         ## USING PRD Database in Debug, rest are STG
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_STG
@@ -46,7 +47,7 @@ def set_environment():
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
         print 'SET ENV 1\tDebug ON \n' #, environ
-    elif globals()['DEBUG'] == False:
+    elif globals()['PROD'] == True:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_PRD
         environ['MOZU_SITE_NAME'] = SITE_PRD
@@ -67,7 +68,8 @@ def get_mozu_client_authtoken():
     #  "http://requestb.in/q66719q6" #
     import requests, json
     set_environment()
-    _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
+    _auth_url = "https://home.mozu.com/api/platform/applications/authtickets"
+#    _auth_url = "https://home.staging.mozu.com/api/platform/applications/authtickets"
     _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
     if globals()['DEBUG'] == True:
         _auth_request = __STG_AUTH__
