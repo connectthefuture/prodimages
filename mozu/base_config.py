@@ -74,7 +74,7 @@ def get_mozu_client_authtoken():
     import requests, json
     from os import environ
     set_environment()
-    _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
+    _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate', 'x-vol-tenant': TENANT_PRD}
     if globals()['PROD'] == False:
         _auth_request = __STG_AUTH__
         _auth_url     = __MOZU_AUTH_URL_STG__
