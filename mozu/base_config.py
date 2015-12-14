@@ -82,7 +82,7 @@ def get_mozu_client_authtoken():
     elif globals()['PROD'] == True:
         _auth_request = __PRD_AUTH__
         _auth_url     = __MOZU_AUTH_URL_PRD__
-        _auth_headers = _auth_headers + _auth_headers_prod_addition
+        _auth_headers = dict(list(_auth_headers.items()) + list(_auth_headers_prod_addition.items()))
         print _auth_headers
     else:
         _auth_request = __STG_AUTH__
