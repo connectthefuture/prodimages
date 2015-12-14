@@ -46,21 +46,21 @@ def set_environment():
         environ['MOZU_SITE_NAME'] = SITE_STG
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
-        print 'SET ENV 1\tDebug ON \n' #, environ
+        print 'SET ENV 1\tSTAGING ENV CONFIG SET \n' #, environ
     elif globals()['PROD'] == True:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_PRD
         environ['MOZU_SITE_NAME'] = SITE_PRD
         environ['MOZU_BASE_URL'] = MOZU_BASE_PRD
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_PRD
-        print 'SET ENV 2\tDebug OFF \n' #, environ
+        print 'SET ENV 2\tPRODUCTION ENV CONFIG SET \t***RUNNING IN PRODUCTION***\n' #, environ
     else:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
         environ['MOZU_TENANT_NAME'] = TENANT_STG
         environ['MOZU_SITE_NAME'] = SITE_STG
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
-        print 'SET ENV 3\tDebug ON \n' #, environ
+        print 'SET ENV 3\tSTAGING ENV CONFIG ASSUMED \n' #, environ
     #print 'LOCAL ENV SET for MOZU:\n\n ', dict(environ)
     return
 
