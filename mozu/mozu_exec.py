@@ -290,7 +290,7 @@ if __name__ == '__main__':
     insert_list = []
     try:
         if path.isfile(path.abspath(sys.argv[1])):
-            for arg in " ".join(sys.argv[1:]):
+            for arg in sys.argv[1:]:
                 insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
         print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
