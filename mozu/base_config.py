@@ -71,7 +71,7 @@ def set_environment():
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_AUTH_URL'] = __MOZU_AUTH_URL_STG__
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
-        print 'SET ENV 3\tSTAGING ENV CONFIG ASSUMED PROD env var not Set\n' #, environ
+        print 'SET ENV 3\tSTAGING ENV CONFIG ASSUMED PROD env var not Set Correctly {} \n'.format(environ.get('PRD_ENV'))
     #print 'LOCAL ENV SET for MOZU:\n\n ', dict(environ)
     return
 
