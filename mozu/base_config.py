@@ -6,7 +6,7 @@
 # globals()['DEBUG'] = False #True
 from os import environ
 try:
-    if environ['PRD_ENV'] and environ['PRD_ENV'] != False:
+    if environ.get('PRD_ENV') and environ.get('PRD_ENV') != False:
         globals()['PRD_ENV'] = True
     else:
         globals()['PRD_ENV'] = False #True
