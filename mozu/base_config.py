@@ -6,12 +6,12 @@
 # globals()['DEBUG'] = False #True
 from os import environ
 try:
-    if environ.get('PRD_ENV') and environ.get('PRD_ENV') is not False:
-        globals()['PRD_ENV'] = True
+    if environ.get('PRD_ENV'):
+        globals()['PRD_ENV'] = 1
     else:
-        globals()['PRD_ENV'] = False #True
+        globals()['PRD_ENV'] = 0 #False
 except KeyError:
-    globals()['PRD_ENV'] = False
+    globals()['PRD_ENV'] = 0
 
 ## STAGING CONFIGS ##
 SITE_STG       = "14456"
@@ -41,13 +41,13 @@ MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
 #################################################
 ### ALL Variable Configs can be set above for ###
 #################################################
-def set_environment(PRD_ENV=False):
+def set_environment():
     from os import environ
     # Set Standard Env vars
     environ['MOZU_PROTOCOL'] = MOZU_PROTOCOL
     environ['MOZU_LIST_FQN'] = MOZU_LIST_FQN
     environ['MOZU_DOCUMENT_TYPE_FQN'] = MOZU_DOCUMENT_TYPE_FQN
-    if globals()['PRD_ENV'] == False:
+    if globals()['PRD_ENV'] == 0:
         ## USING PRD Database in Debug, rest are STG
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_STG
@@ -56,7 +56,7 @@ def set_environment(PRD_ENV=False):
         environ['MOZU_AUTH_URL'] = __MOZU_AUTH_URL_STG__
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
         print 'SET ENV 1\tSTAGING ENV CONFIG SET \t{}\n'.format(environ.get('PRD_ENV'))
-    elif globals()['PRD_ENV'] == True:
+    elif globals()['PRD_ENV'] == 1:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_PRD
         environ['MOZU_SITE_NAME'] = SITE_PRD
@@ -79,11 +79,11 @@ def get_mozu_client_authtoken():
     import requests, json
     set_environment()
     _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
-    if globals()['PRD_ENV'] == False:
+    if globals()['PRD_ENV'] == 0:
         _auth_request = __STG_AUTH__
         _auth_url     = __MOZU_AUTH_URL_STG__
 
-    elif globals()['PRD_ENV'] == True:
+    elif globals()['PRD_ENV'] == 1:
         _auth_request = __PRD_AUTH__
         _auth_url     = __MOZU_AUTH_URL_PRD__
         _auth_headers_prod_addition = {'x-vol-tenant': TENANT_PRD, 'x-vol-master-catalog': MOZU_MASTER_CATID_PRD }
