@@ -4,8 +4,7 @@
 # import pdb;pdb.set_trace()
 # Set DEBUG to False for Prod
 # globals()['DEBUG'] = False #True
-globals()['PROD'] = True #True
-
+globals()['PRD_ENV'] = True #True
 
 ## STAGING CONFIGS ##
 SITE_STG       = "14456"
@@ -41,7 +40,7 @@ def set_environment():
     environ['MOZU_PROTOCOL'] = MOZU_PROTOCOL
     environ['MOZU_LIST_FQN'] = MOZU_LIST_FQN
     environ['MOZU_DOCUMENT_TYPE_FQN'] = MOZU_DOCUMENT_TYPE_FQN
-    if globals()['PROD'] == False:
+    if globals()['PRD_ENV'] == False:
         ## USING PRD Database in Debug, rest are STG
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_STG
@@ -50,7 +49,7 @@ def set_environment():
         environ['MOZU_AUTH_URL'] = __MOZU_AUTH_URL_STG__
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
         print 'SET ENV 1\tSTAGING ENV CONFIG SET \n' #, environ
-    elif globals()['PROD'] == True:
+    elif globals()['PRD_ENV'] == True:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_PRD
         environ['MOZU_SITE_NAME'] = SITE_PRD
@@ -70,20 +69,18 @@ def set_environment():
     return
 
 def get_mozu_client_authtoken():
-    #  "http://requestb.in/q66719q6" #
     import requests, json
-    from os import environ
     set_environment()
-    _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate', 'x-vol-tenant': TENANT_PRD}
-    if globals()['PROD'] == False:
+    _auth_headers = {'Content-type': 'application/json', 'Accept-Encoding': 'gzip, deflate'}
+    if globals()['PRD_ENV'] == False:
         _auth_request = __STG_AUTH__
         _auth_url     = __MOZU_AUTH_URL_STG__
 
-    elif globals()['PROD'] == True:
+    elif globals()['PRD_ENV'] == True:
         _auth_request = __PRD_AUTH__
         _auth_url     = __MOZU_AUTH_URL_PRD__
         _auth_headers_prod_addition = {'x-vol-tenant': TENANT_PRD, 'x-vol-master-catalog': MOZU_MASTER_CATID_PRD }
-        #_auth_headers = dict(list(_auth_headers.items()) + list(_auth_headers_prod_addition.items()))
+        _auth_headers = dict(list(_auth_headers.items()) + list(_auth_headers_prod_addition.items()))
         #print environ
     else:
         _auth_request = __STG_AUTH__
