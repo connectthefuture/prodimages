@@ -52,7 +52,7 @@ def set_environment(PRD_ENV=False):
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
         environ['MOZU_AUTH_URL'] = __MOZU_AUTH_URL_STG__
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_STG
-        print 'SET ENV 1\tSTAGING ENV CONFIG SET \n' #, environ
+        print 'SET ENV 1\tSTAGING ENV CONFIG SET \t{}\n'.format(environ['PRD_ENV'])
     elif globals()['PRD_ENV'] == True:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
         environ['MOZU_TENANT_NAME'] = TENANT_PRD
@@ -60,7 +60,7 @@ def set_environment(PRD_ENV=False):
         environ['MOZU_BASE_URL'] = MOZU_BASE_PRD
         environ['MOZU_AUTH_URL'] = __MOZU_AUTH_URL_PRD__
         environ['MOZU_MASTER_CATALOG_ID'] = MOZU_MASTER_CATID_PRD
-        print 'SET ENV 2\tPRODUCTION ENV CONFIG SET \t***RUNNING IN PRODUCTION***\n' #, environ
+        print 'SET ENV 2\tPRODUCTION ENV CONFIG SET \t\v{}\t***RUNNING IN PRODUCTION***\n'.format(environ['PRD_ENV'])
     else:
         environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
         environ['MOZU_TENANT_NAME'] = TENANT_STG
