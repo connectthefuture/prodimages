@@ -4,7 +4,11 @@
 # import pdb;pdb.set_trace()
 # Set DEBUG to False for Prod
 # globals()['DEBUG'] = False #True
-globals()['PRD_ENV'] = True #True
+from os import environ
+if environ['PRD_ENV'] and environ['PRD_ENV'] == True:
+    globals()['PRD_ENV'] = True
+else:
+    globals()['PRD_ENV'] = False #True
 
 ## STAGING CONFIGS ##
 SITE_STG       = "14456"
@@ -34,7 +38,7 @@ MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
 #################################################
 ### ALL Variable Configs can be set above for ###
 #################################################
-def set_environment():
+def set_environment(PRD_ENV=False):
     from os import environ
     # Set Standard Env vars
     environ['MOZU_PROTOCOL'] = MOZU_PROTOCOL
