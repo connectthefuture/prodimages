@@ -5,10 +5,13 @@
 # Set DEBUG to False for Prod
 # globals()['DEBUG'] = False #True
 from os import environ
-if environ['PRD_ENV'] and environ['PRD_ENV'] != False:
-    globals()['PRD_ENV'] = True
-else:
-    globals()['PRD_ENV'] = False #True
+try:
+    if environ['PRD_ENV'] and environ['PRD_ENV'] != False:
+        globals()['PRD_ENV'] = True
+    else:
+        globals()['PRD_ENV'] = False #True
+except KeyError:
+    globals()['PRD_ENV'] = False
 
 ## STAGING CONFIGS ##
 SITE_STG       = "14456"
