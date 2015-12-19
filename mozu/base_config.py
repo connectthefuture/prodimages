@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# import pdb;pdb.set_trace()
-# Set DEBUG to False for Prod
-# globals()['DEBUG'] = False #True
+## Checks bash env for Debug and Testing Settings for globals()
 from os import environ
-try:
-    if environ.get('PRD_ENV'):
-        globals()['PRD_ENV'] = 1
-    else:
-        globals()['PRD_ENV'] = 0 #False
-except KeyError:
-    globals()['PRD_ENV'] = 0
+globals()['PRD_ENV'] = 0  # 1=True, 0=False
+if environ.get('PYDEBUG'): import pdb; pdb.set_trace()
+if environ.get('PRD_ENV'): globals()['PRD_ENV'] = 1
+else: globals()['PRD_ENV'] = 0
+### End Env
 
 ## STAGING CONFIGS ##
 SITE_STG       = "14456"
