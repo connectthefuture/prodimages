@@ -245,7 +245,7 @@ def main(fileslist):
                 elif int(load_content_resp.keys()[0]) == 409:
                     raise TypeError
                 else:
-                    print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
+                    print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.status_code)
                     raise ValueError #sqlalchemy.exc.IntegrityError()
             except TypeError:
                 print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
@@ -257,7 +257,7 @@ def main(fileslist):
                 table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
                 update_content_resp = update_content_mz_image(**values)
                 print "Updated Process Complete, ", update_content_resp.headers
-                if update_content_resp.http_status_code < 300:
+                if update_content_resp.status_code < 300:
                     update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                     res = update_db.execute()
                     print res, 'Updated--> ', values.items(), ' <-- ', update_db
