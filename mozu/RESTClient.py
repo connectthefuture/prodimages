@@ -213,6 +213,7 @@ class MozuRestClient:
         try:
             return _document_data_response.json()['id']
         except KeyError:
+            print 'REST Client Update mzimage Failed --> KeyError'
             return MozuRestClient.http_status_code
 
     ## GET - Single Document Obj by documentId .ie mz_imageid
