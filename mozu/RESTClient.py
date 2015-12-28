@@ -52,9 +52,10 @@ class MozuRestClient:
         MozuRestClient.__endpoints["endpoint_resource_doclist"] = MozuRestClient.__document_data_api
         self.mz_imageid = kwargs.get('mz_imageid', '')
         if type(self.mz_imageid) == str:
-            self.document_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid + "/content"
+            self.document_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid
+            self.document_resource_content  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid + "/content"
             self.document_metadata_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid
-            MozuRestClient.__endpoints["endpoint_resource_doc_content"] = self.document_resource
+            MozuRestClient.__endpoints["endpoint_resource_doc_content"] = self.document_resource_content
             MozuRestClient.__endpoints["endpoint_resource_doc_metadata"] = self.document_metadata_resource
 
         # Auth / Connect
@@ -69,10 +70,8 @@ class MozuRestClient:
         elif kwargs.get('bf_imageid'):
             self.bf_imageid = kwargs.get('bf_imageid')
             self.ext = 'jpg' # self.bf_imageid.split('.')[-1].lower()
-
         else:
             self.bf_imageid, self.ext = '', ''
-
 
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
@@ -81,7 +80,6 @@ class MozuRestClient:
         self.document_response = ''
         print 'Document Payload Set, Response Initialized'
         self.request_url_string = self.uri_querystring_formatter(**kwargs)
-
         print kwargs, "End Init -- kwargs"
         #super(MozuRestClient, self).__init__(**kwargs)
 
@@ -159,8 +157,8 @@ class MozuRestClient:
         if MozuRestClient.http_status_code == 201:
             try:
                 self.mz_imageid = _document_data_response.json()['id']
-                self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid + "/content"
-                return (self.mz_imageid, self.document_resource,)
+                self.document_resource_content = MozuRestClient.__document_data_api + "/" + self.mz_imageid + "/content"
+                return (self.mz_imageid, self.document_resource_content,)
             except KeyError:
                 return (_document_data_response, "Keyerror",)
         else:
@@ -299,13 +297,13 @@ class MozuRestClient:
         import requests, json
         from os import path as path
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
+        self.document_resource_content = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
         if not self.bf_imageid:
             # Get bflyid from Oracle using mz_id
             from db import mozu_image_table_instance
             self.bf_imageid = mozu_image_table_instance.select( whereclause=(mozu_image_table_instance.c.mz_imageid == self.mz_imageid) )[0]['bf_imageid']
         self.headers["Content-type"] = 'application/json'
-        resp = requests.get(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
+        resp = requests.get(self.document_resource_content, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = resp.status_code
         if MozuRestClient.http_status_code < 400 and MozuRestClient.http_status_code != 0:
             if not outfile:
