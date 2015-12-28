@@ -243,6 +243,7 @@ def main(fileslist):
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                     raise ValueError #sqlalchemy.exc.IntegrityError()
             except TypeError:
+                print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
                 mozu_image_table = mozu_image_table_instance()
                 table_args = include_keys(values, __mozu_image_table_valid_keys__)
                 mz_imageid = mozu_image_table.select(
@@ -277,7 +278,7 @@ def main(fileslist):
                 #         res = update_db.execute()
                 #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
                 #
-                print 'TYPE or Value Error and everything is or will be commented out below because it is in the db already'
+                print 'KEY Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
