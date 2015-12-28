@@ -253,9 +253,7 @@ def main(fileslist):
                 table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
                 upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
                 if upsert_content_resp.http_status_code < 300:
-                    update_db = mozu_image_table.update(values=dict(**table_args),
-                                                        whereclause=mozu_image_table.c.bf_imageid == table_args[
-                                                            'bf_imageid'])
+                    update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                     res = update_db.execute()
                     print res, 'Updated--> ', values.items(), ' <-- ', update_db
             except ValueError: #sqlalchemy.exc.IntegrityError:
