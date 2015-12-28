@@ -231,7 +231,6 @@ def main(fileslist):
             # ## ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
-                values['mz_imageid'], response = upload_new(**values)
                 load_content_resp = upload_new(**values)
                 mozu_image_table = mozu_image_table_instance()
                 if int(load_content_resp.keys()[0]) < 400:
@@ -240,19 +239,24 @@ def main(fileslist):
                     insert_db.execute()
                     print 'Inserted --> ', values.items(), ' <-- ', insert_db
                 elif int(load_content_resp.keys()[0]) == 409:
-                    table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                    mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
-                    #bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['bf_imageid']
-
-                    table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-                    upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
-                    if upsert_content_resp.http_status_code < 300:
-                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
-                        res = update_db.execute()
-                        print res, 'Updated--> ', values.items(), ' <-- ', update_db
+                    raise TypeError
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
-                    raise sqlalchemy.exc.IntegrityError()
+                    raise ValueError #sqlalchemy.exc.IntegrityError()
+            except TypeError:
+                table_args = include_keys(values, __mozu_image_table_valid_keys__)
+                mz_imageid = mozu_image_table.select(
+                    whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()[
+                    'mz_imageid']
+                # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['bf_imageid']
+                table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
+                upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
+                if upsert_content_resp.http_status_code < 300:
+                    update_db = mozu_image_table.update(values=dict(**table_args),
+                                                        whereclause=mozu_image_table.c.bf_imageid == table_args[
+                                                            'bf_imageid'])
+                    res = update_db.execute()
+                    print res, 'Updated--> ', values.items(), ' <-- ', update_db
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 # try:
                 #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
