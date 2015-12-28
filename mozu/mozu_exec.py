@@ -228,7 +228,6 @@ def main(fileslist):
 
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
-    # print compiled_instance_vars, "186-MZEXECY"
     for key,values in compiled_instance_vars.iteritems():
         # v = include_keys(values, __mozu_image_table_valid_keys__)
         # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalues:\t{}".format(v.items(), key , values.popitem())
@@ -265,31 +264,14 @@ def main(fileslist):
                     res = update_db.execute()
                     print res, 'Updated--> ', values.items(), ' <-- ', update_db
             except ValueError: #sqlalchemy.exc.IntegrityError:
-                # try:
-                #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
-                #     if upsert_content_resp.http_status_code < 300:
-                #         table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                #         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
-                #         res = update_db.execute()
-                #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
-                #
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
             except KeyError:  # sqlalchemy.exc.IntegrityError:
-                # try:
-                #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
-                #     if upsert_content_resp.http_status_code < 300:
-                #         table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                #         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
-                #         res = update_db.execute()
-                #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
-                #
                 print 'KEY Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
                 #     print "ENDING ERROR...", values
-
         elif values.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
 
