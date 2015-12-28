@@ -232,7 +232,6 @@ def main(fileslist):
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
                 load_content_resp = upload_new(**values)
-                mozu_image_table = mozu_image_table_instance()
                 if int(load_content_resp.keys()[0]) < 400:
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
@@ -244,6 +243,7 @@ def main(fileslist):
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                     raise ValueError #sqlalchemy.exc.IntegrityError()
             except TypeError:
+                mozu_image_table = mozu_image_table_instance()
                 table_args = include_keys(values, __mozu_image_table_valid_keys__)
                 mz_imageid = mozu_image_table.select(
                     whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()[
