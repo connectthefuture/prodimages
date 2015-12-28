@@ -113,6 +113,7 @@ def upsert_data_mz_image(**kwargs):
                         print content_response, "Not in DB. Insert Result: ", insert_result.fetchone()['mz_imageid']
                         return insert_result.fetchone()
                     except sqlalchemy.exc.IntegrityError:
+                        print '116 mozuexec error-- SQLAlchemy Integrity Error'
                         content_response = mzclient.send_content(**kwargs)
                         if kwargs.get('bf_imageid'):
                             kwargs.get('bf_imageid')
