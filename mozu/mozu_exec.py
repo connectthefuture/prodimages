@@ -64,13 +64,17 @@ def upload_new(**kwargs):
 
 # @log
 # # PUT - Upload/Update Image/DocumentContent
-# def upsert_data_mz_image(**kwargs):
-#     from RESTClient import MozuRestClient
-#     if not args:
-#         mzclient = MozuRestClient(**kwargs)
-#     update_resp = mzclient.send_content(**kwargs)
-#     print update_resp.headers, "UpsertContent"
-#     return update_resp
+def update_content_mz_image(**kwargs):
+    from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
+    mzclient = MozuRestClient(**kwargs)
+    content_response = mzclient.send_content(**kwargs)
+    print content_response.headers, "Update Mozu Content"
+    mozu_image_table = mozu_image_table_instance()
+    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+    update_db = mozu_image_table.update(values=dict(**table_args))
+    print content_response.headers, "Update DB MZ_IMAGE"
+    return content_response
 
 # PUT - Update Document Data and Content- Properties/Metadata
 @log
@@ -189,6 +193,7 @@ def delete_document_data_content(**kwargs):
 #     print image_data
 #     return image_data
 
+
 #######################################
 ### Main - Conditions ##
 #######################################
@@ -247,17 +252,15 @@ def main(fileslist):
                 print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
                 mozu_image_table = mozu_image_table_instance()
                 table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                mz_imageid = mozu_image_table.select(
-                    whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()[
-                    'mz_imageid']
-                # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['bf_imageid']
+                mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
+                #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
+                # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
                 table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-                from RESTClient import MozuRestClient
-                mzclient = MozuRestClient(**values)
-                upsert_content_resp = mzclient.send_content()
 
+                update_content_resp = update_content_mz_image(**values)
+                print "Updated Process Complete, ", update_content_resp.items()
                 #upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
-                if upsert_content_resp.http_status_code < 300:
+                if update_content_resp.http_status_code < 300:
                     update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                     res = update_db.execute()
                     print res, 'Updated--> ', values.items(), ' <-- ', update_db
