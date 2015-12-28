@@ -252,7 +252,7 @@ def main(fileslist):
                     'mz_imageid']
                 # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['bf_imageid']
                 table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-
+                from RESTClient import MozuRestClient
                 mzclient = MozuRestClient(**values)
                 upsert_content_resp = mzclient.send_content()
 
