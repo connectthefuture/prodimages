@@ -4,8 +4,8 @@
 ## Checks bash env for Debug and Testing Settings for globals()
 from os import environ
 globals()['PRD_ENV'] = 0  # 1=True, 0=False
-if environ.get('DEBUG'): globals()['DEBUG'] = 1
 if environ.get('PYDEBUG'): import pdb; pdb.set_trace()
+#if environ.get('DEBUG'): globals()['DEBUG'] = 1
 if environ.get('PRD_ENV'): globals()['PRD_ENV'] = 1
 else: globals()['PRD_ENV'] = 0
 ### End Env
