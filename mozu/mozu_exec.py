@@ -230,7 +230,7 @@ def main(fileslist):
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     for key,values in compiled_instance_vars.iteritems():
         # v = include_keys(values, __mozu_image_table_valid_keys__)
-        # if globals()['DEBUG'] = 1: print "IncludedKeys: {}\n\tkey:\t{}\n\tvalues:\t{}".format(v.items(), key , values.popitem())
+        # if globals()['DEBUG'] == 1: print "IncludedKeys: {}\n\tkey:\t{}\n\tvalues:\t{}".format(v.items(), key , values.popitem())
         if not values.get('mz_imageid'):
             # ### --> src_filepath = k # will need src_filepath in order to perfom any image manipulation
             # ## ---> before loading(would actually need to redo the md5checksum from compiler)
@@ -241,14 +241,14 @@ def main(fileslist):
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
                     insert_db.execute()
-                    if globals()['DEBUG'] = 1: print 'Inserted --> ', values.items(), ' <-- ', insert_db
+                    if globals()['DEBUG'] == 1: print 'Inserted --> ', values.items(), ' <-- ', insert_db
                 elif int(content_resp.keys()[0]) == 409:
                     raise TypeError
                 else:
-                    if globals()['DEBUG'] = 1: print "HTTP Status: {}\n Raising Integrity Error".format(content_resp.status_code)
+                    if globals()['DEBUG'] == 1: print "HTTP Status: {}\n Raising Integrity Error".format(content_resp.status_code)
                     raise ValueError #sqlalchemy.exc.IntegrityError()
             except TypeError:
-                if globals()['DEBUG'] = 1: print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
+                if globals()['DEBUG'] == 1: print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
                 mozu_image_table = mozu_image_table_instance()
                 table_args = include_keys(values, __mozu_image_table_valid_keys__)
                 mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
@@ -256,16 +256,16 @@ def main(fileslist):
                 # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
                 table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
                 update_content_resp = update_content_mz_image(**values)
-                if globals()['DEBUG'] = 1: print "Updated Process Complete, ", update_content_resp.headers
+                if globals()['DEBUG'] == 1: print "Updated Process Complete, ", update_content_resp.headers
                 if update_content_resp.status_code < 300:
                     update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                     res = update_db.execute()
-                    if globals()['DEBUG'] = 1: print res, 'Updated--> ', values.items(), ' <-- ', update_db
+                    if globals()['DEBUG'] == 1: print res, 'Updated--> ', values.items(), ' <-- ', update_db
             except ValueError: #sqlalchemy.exc.IntegrityError:
-                if globals()['DEBUG'] = 1: print 'VALUE Error and everything is or will be commented out below because it is in the db already'
+                if globals()['DEBUG'] == 1: print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
             except KeyError:  # sqlalchemy.exc.IntegrityError:
-                if globals()['DEBUG'] = 1: print 'KEY Error and everything is or will be commented out below because it is in the db already'
+                if globals()['DEBUG'] == 1: print 'KEY Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
