@@ -38,7 +38,7 @@ def resource_documents_list(**kwargs):
 #######################################
 # Post - New Image, Creates Document
 @log
-def upload_new(**kwargs):
+def upload_new_data_content(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
 
@@ -145,7 +145,7 @@ def upsert_data_mz_image(**kwargs):
             #pass
 
     else:
-        res = upload_new(**kwargs)
+        res = upload_new_data_content(**kwargs)
         return res
 # DELETE - Delete Image/DocumentContent - Everything
 @log
@@ -236,16 +236,16 @@ def main(fileslist):
             # ## ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
-                load_content_resp = upload_new(**values)
-                if int(load_content_resp.keys()[0]) < 400:
+                content_resp = upload_new_data_content(**values)
+                if int(content_resp.keys()[0]) < 400:
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
                     insert_db.execute()
                     print 'Inserted --> ', values.items(), ' <-- ', insert_db
-                elif int(load_content_resp.keys()[0]) == 409:
+                elif int(content_resp.keys()[0]) == 409:
                     raise TypeError
                 else:
-                    print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.status_code)
+                    print "HTTP Status: {}\n Raising Integrity Error".format(content_resp.status_code)
                     raise ValueError #sqlalchemy.exc.IntegrityError()
             except TypeError:
                 print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
