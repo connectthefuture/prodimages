@@ -803,7 +803,7 @@ def main():
                 # Try and make a list without needing globbing below
                 mz_converted_jpgs.append(jpgout)
             except AttributeError:
-                from shutil import move
+                # from shutil import move
                 print "AttributeError at 780 in magickLoad_PrdCmp.py --> ", img
                 #move(img, "/mnt/Post_Complete/Complete_to_Load/")
             ###########################################
