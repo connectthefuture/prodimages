@@ -74,7 +74,7 @@ def send_email_zerobyte_alerts(groupeddict=None,gmail_user=None,gmail_pass=None)
     mailServer.close()
 
 
-def send_attachment_gmail(toaddr, attach, subject=' -- File Attached -- ', text='Please save the attachement and open file locally.'):
+def send_attachment_gmail(toaddr, attach, subject=' -- File Attached -- ', text='Please save the attachement and open the file locally.'):
     import smtplib, os.path, email, sys
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEBase import MIMEBase
@@ -122,4 +122,3 @@ if __name__ == '__main__':
         send_attachment_gmail(toaddr, os.path.abspath(attachment))
     except IndexError:
         print('Please supply the to address and the path to your attachment as arg 1 and 2, respectively.')
-
