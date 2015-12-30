@@ -776,32 +776,36 @@ def main():
         for img in glob.glob(os.path.join(tmp_processing,'*.??[gG]')):
             if regex_coded.findall(img):
                 img = rename_retouched_file(img)
-            pngout = subproc_magick_png(img, destdir=tmp_processing)
-            subproc_magick_large_jpg(pngout, destdir=tmp_loading)
-            subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
-
-            ##############################################
-            #####  BEGIN MOZU pt 1 of 2 ##################
-            ##############################################
-            ## Make Jpegs and collect Finals in mozu loading dir
-            #######
-            import sys
-            from os import chdir, path
-
-            #chdir('/usr/local/batchRunScripts/mozu')
-            import mozu_exec, mozu_image_util_functions
-            ## Compress and convert to jpg and store in separate dir for concurrent xfers
-            #if path.isfile(pngout):
             try:
-                print ' Is file PNGOUT', pngout, img
-                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=imgdest_jpg_mozu)
-            except IOError:
-                jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=imgdest_jpg_mozu)
-                pass
+                pngout = subproc_magick_png(img, destdir=tmp_processing)
+                subproc_magick_large_jpg(pngout, destdir=tmp_loading)
+                subproc_magick_medium_jpg(pngout, destdir=tmp_loading)
 
-            # Try and make a list without needing globbing below
-            mz_converted_jpgs.append(jpgout)
+                ##############################################
+                #####  BEGIN MOZU pt 1 of 2 ##################
+                ##############################################
+                ## Make Jpegs and collect Finals in mozu loading dir
+                #######
+                import sys
+                from os import chdir, path
 
+                #chdir('/usr/local/batchRunScripts/mozu')
+                import mozu_exec, mozu_image_util_functions
+                ## Compress and convert to jpg and store in separate dir for concurrent xfers
+                #if path.isfile(pngout):
+                try:
+                    print ' Is file PNGOUT', pngout, img
+                    jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=imgdest_jpg_mozu)
+                except IOError:
+                    jpgout = mozu_image_util_functions.magick_convert_to_jpeg(img,destdir=imgdest_jpg_mozu)
+                    pass
+
+                # Try and make a list without needing globbing below
+                mz_converted_jpgs.append(jpgout)
+            except AttributeError:
+                from shutil import move
+                print "AttributeError at 780 in magickLoad_PrdCmp.py --> ", img
+                #move(img, "/mnt/Post_Complete/Complete_to_Load/")
             ###########################################
             ###### END mozu ###########################
             ###########################################
