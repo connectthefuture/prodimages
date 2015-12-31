@@ -423,7 +423,7 @@ def download_mplce_url(urldest_tuple):
         #from jbmodules
         try:
             res = pycurl_ftp(imageurl=image_url,destpath=destpath)
-            print 'FTEPPEE --> ', res
+            print 'FTEPPEE --> {}\n{}\t\n'.format(res, image_url, destpath)
             return destpath
         except pycurl.error, error:
             print 'Pycurl error in FTP Download --> ', error
