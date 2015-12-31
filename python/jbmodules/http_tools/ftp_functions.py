@@ -148,14 +148,14 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
 
 
 def pycurl_ftp_download(imageurl=None, destdir=None, **kwargs):
-    import pycurl, os
-
+    import pycurl, urllib
+    from os import path
     filename = imageurl.split('/')[-1]
     if kwargs.get('destpath'):
         destpath = kwargs.get('destpath')
     else:
-        destpath = os.path.join(destdir, filename)
-
+        destpath = path.join(destdir, filename)
+    imageurl = path.join(*urllib.unquote(imageurl).split('\\'))
     mediaType = "8"
     if kwargs.get('ftpuser') or kwargs.get('ftppass'):
         ftpUSERPWD = '{ftpuser}:{ftppass}'.format(**kwargs)
@@ -163,7 +163,7 @@ def pycurl_ftp_download(imageurl=None, destdir=None, **kwargs):
         ftpUSERPWD = imageurl.split('@')[0].replace('ftp://', '')
     ftpURL = 'ftp://' + imageurl.split('@')[1]
 
-    print 'FTP TRY --> ', imageurl, '\n\t---> ', destpath, '\n\t--UserPassUrl--> ', ftpUSERPWD, ftpURL
+    print 'FTP TRY --> ', imageurl, '\n\t-Dest--> ', destpath, '\n\t--UserPassUrl--> ', ftpUSERPWD, '-->| ', ftpURL
     if destpath != "" and imageurl != "":
         ## Create send data
 
@@ -186,8 +186,8 @@ def pycurl_ftp_download(imageurl=None, destdir=None, **kwargs):
 #        c.setopt(pycurl.FORBID_REUSE, 1)
 #        c.setopt(pycurl.FRESH_CONNECT, 1)
         #c.setopt(pycurl.INFILE, f)
-        #c.setopt(pycurl.INFILESIZE, os.path.getsize(destdir))
-        #c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(destdir))
+        #c.setopt(pycurl.INFILESIZE, path.getsize(destdir))
+        #c.setopt(pycurl.INFILESIZE_LARGE, path.getsize(destdir))
 #        c.setopt(pycurl.READFUNCTION, f.read());
 #        c.setopt(pycurl.READDATA, f.read());
         #c.setopt(pycurl.UPLOAD, 1L)
