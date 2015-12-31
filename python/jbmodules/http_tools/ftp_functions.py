@@ -162,7 +162,7 @@ def pycurl_ftp(imageurl=None, destdir=None, **kwargs):
         ftpUSERPWD = imageurl.split('@')[0].replace('ftp://', '')
     ftpURL = 'ftp://' + imageurl.split('@')[1]
 
-    print 'FTP TRY --> ', imageurl, '\n\t---> ', destpath
+    print 'FTP TRY --> ', imageurl, '\n\t---> ', destpath, '\n\t--UserPassUrl--> ', ftpUSERPWD, ftpURL
     if destpath != "" and imageurl != "":
         ## Create send data
 
