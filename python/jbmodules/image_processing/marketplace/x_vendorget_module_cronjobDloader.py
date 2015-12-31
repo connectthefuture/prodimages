@@ -386,7 +386,7 @@ def download_mplce_url(urldest_tuple):
 
     import urllib3
 
-    print ' 404 Trying Urllib3 ', image_url
+    print ' 404 - 1 - Trying Urllib3 ', image_url
     hostname = urllib3.get_host(image_url)[1]
 
     if regex_drive3.findall(image_url):
@@ -473,7 +473,7 @@ def download_mplce_url(urldest_tuple):
             elif urlcode_value < 400:
                 print urlcode_value
                 try:
-                    print 'TRYsub400', image_url, destpath, '367'
+                    print 'TRYsub400', image_url, destpath, '476'
                     if image_url[:5] == 'https':
                         res = requests.get(image_url, stream=True, timeout=11, verify=False, headers=headers)
                         print 'Streaming ', res.headers
@@ -491,7 +491,7 @@ def download_mplce_url(urldest_tuple):
             elif urlcode_value == 404:
                 ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
                 #import urllib3
-                print ' 404 Trying Urllib3 ', image_url
+                print ' 404 - 2 - Trying Urllib3 ', image_url
                 #hostname = urllib3.get_host(image_url)[1]
                 if hostname == 'marketplace.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
