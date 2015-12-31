@@ -452,7 +452,7 @@ def download_mplce_url(urldest_tuple):
                 print ' HTTP Yippie ', res
             else:
                 res = requests.get(image_url, timeout=12, verify=False, headers=headers)
-                print ' HTTPS Oh Yes ', image_url,  res.headers
+                print ' HTTPS Oh Yes ', image_url,  res.head
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value
