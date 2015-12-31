@@ -162,7 +162,7 @@ def pycurl_ftp(imageurl=None, destdir=None, **kwargs):
         ftpUSERPWD = imageurl.split('@')[0].replace('ftp://', '')
     ftpURL = 'ftp://' + imageurl.split('@')[1]
 
-
+    print 'FTP TRY --> ', imageurl, '\n\t---> ', destpath
     if destpath != "" and imageurl != "":
         ## Create send data
 
@@ -194,7 +194,7 @@ def pycurl_ftp(imageurl=None, destdir=None, **kwargs):
         try:
             c.perform()
             c.close()
-            print "Successfully Uploaded --> {0}".format(filename)
+            print "Successfully Retrieved --> {0}".format(filename)
             ## return 200
         except pycurl.error, error:
             errno, errstr = error
