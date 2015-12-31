@@ -290,7 +290,7 @@ def download_mplce_url(urldest_tuple):
     alt_number = destpath.split('_')[-1][0]
     try:
         image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
-        image_url = path.join(*urllib.unquote_plus(image_url))
+        image_url = urllib.unquote_plus(image_url)
     except:
         pass
     ########################################################
