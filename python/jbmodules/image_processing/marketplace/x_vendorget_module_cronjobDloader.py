@@ -338,6 +338,7 @@ def download_mplce_url(urldest_tuple):
     ########################################################
 
     regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
+    regex_ftpurl = re.compile(r'^ftp[s]?://.+?$', re.U)
     regex_drive2 = re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(?P<fileId>.+?)\&?.*?$', re.U)
     regex_drive3 = re.compile(r'^(https://d(.+?)\.google\.com/file/d/)(?P<fileId>.+?)/(edit|view)\?usp\=.*?$', re.U)
 
@@ -414,6 +415,17 @@ def download_mplce_url(urldest_tuple):
         except IndexError:
             print 'Final DRIVE Exception ', destpath, '\n', image_url
             #return
+
+    elif regex_ftpurl.findall(image_url):
+        print image_url, ' FTP--FTP\n...probably Jaipur...'
+        from http_tools.ftp_functions import pycurl_ftp
+        import pycurl
+        #from jbmodules
+        try:
+            res = pycurl_ftp(imageurl=image_url,destpath=destpath)
+            return destpath
+        except pycurl.error, error:
+            print 'Pycurl error in FTP Download --> ', error
 
     #############
     ## No Auth ##

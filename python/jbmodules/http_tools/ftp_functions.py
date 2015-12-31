@@ -146,6 +146,67 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         return sorted_ftpdict
 
 
+def pycurl_ftp(imageurl=None, destdir=None, **kwargs):
+    import pycurl, os
+
+    filename = imageurl.split('/')[-1]
+    if kwargs.get('destpath'):
+        destpath = kwargs.get('destpath')
+    else:
+        destpath = os.path.join(destdir, filename)
+
+    mediaType = "8"
+    if kwargs.get('ftpuser') or kwargs.get('ftppass'):
+        ftpUSERPWD = '{ftpuser}:{ftppass}'.format(**kwargs)
+    else:
+        ftpUSERPWD = imageurl.split('@')[0].replace('ftp://', '')
+    ftpURL = 'ftp://' + imageurl.split('@')[1]
+
+
+    if destpath != "" and imageurl != "":
+        ## Create send data
+
+        ### Send the request to Edgecast
+        c = pycurl.Curl()
+        c.f = open(destpath, 'wb')
+        c.setopt(pycurl.URL, ftpURL)
+        c.setopt(pycurl.USERPWD, ftpUSERPWD)
+        c.setopt(pycurl.WRITEDATA, c.f)
+        #m.add_handle(c)
+        # store some info
+        c.filename = destpath
+        c.url = ftpURL
+
+#        c.setopt(pycurl.PORT , 21)
+        c.setopt(pycurl.VERBOSE, 1)
+        c.setopt(c.CONNECTTIMEOUT, 5)
+        c.setopt(c.TIMEOUT, 8)
+        c.setopt(c.FAILONERROR, True)
+#        c.setopt(pycurl.FORBID_REUSE, 1)
+#        c.setopt(pycurl.FRESH_CONNECT, 1)
+        #c.setopt(pycurl.INFILE, f)
+        #c.setopt(pycurl.INFILESIZE, os.path.getsize(destdir))
+        #c.setopt(pycurl.INFILESIZE_LARGE, os.path.getsize(destdir))
+#        c.setopt(pycurl.READFUNCTION, f.read());
+#        c.setopt(pycurl.READDATA, f.read());
+        #c.setopt(pycurl.UPLOAD, 1L)
+
+        try:
+            c.perform()
+            c.close()
+            print "Successfully Uploaded --> {0}".format(filename)
+            ## return 200
+        except pycurl.error, error:
+            errno, errstr = error
+            print 'An error occurred: ', errstr
+            try:
+                c.close()
+            except:
+                print "Couldnt Close Cnx"
+                pass
+            return errno
+
+
 if __name__ == '__main__':
     import sys
     from os import path, makedirs
