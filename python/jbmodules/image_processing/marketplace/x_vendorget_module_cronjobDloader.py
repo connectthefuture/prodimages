@@ -276,7 +276,7 @@ def get_real_box_download_url(shared_link, access_token=None):
 
 def download_mplce_url(urldest_tuple):
     import requests, re, urllib, urllib2, urllib3, OpenSSL, subprocess
-    import os.path
+    from os import path
 
     import urllib3.contrib.pyopenssl
     urllib3.contrib.pyopenssl.inject_into_urllib3()
@@ -285,11 +285,12 @@ def download_mplce_url(urldest_tuple):
     countimage = 0
     countstyle = 0
     image_url, destpath = urldest_tuple
-    destdir = os.path.dirname(destpath)
+    destdir = path.dirname(destpath)
     colorstyle = destpath.split('/')[-1][:9]
     alt_number = destpath.split('_')[-1][0]
     try:
         image_url = 'https://www.drop'.join(image_url.split('https://wwwop'))
+        image_url = path.join(*urllib.unquote_plus(image_url))
     except:
         pass
     ########################################################
@@ -473,7 +474,11 @@ def download_mplce_url(urldest_tuple):
                 print urlcode_value
                 try:
                     print 'TRYsub400', image_url, destpath, '367'
-                    res = requests.get(image_url, timeout=11, verify=False, headers=headers)
+                    if image_url[:5] == 'https':
+                        res = requests.get(image_url, stream=True, timeout=11, verify=False, headers=headers)
+                        print 'Streaming ', res.headers
+                    else:
+                        res = requests.get(image_url, timeout=11, verify=False, headers=headers)
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
@@ -508,10 +513,10 @@ def download_mplce_url(urldest_tuple):
                     return destpath
                 except requests.exceptions.ConnectionError:
                     print '\t\tConnectionError FinalFailureNotice'
-                    import os.path
+                    import path
                     print urlcode_value
-                    badurldir = os.path.join(destdir,'error404')
-                    if os.path.isdir(badurldir):
+                    badurldir = path.join(destdir,'error404')
+                    if path.isdir(badurldir):
                         pass
                     else:
                         try:
@@ -519,7 +524,7 @@ def download_mplce_url(urldest_tuple):
                         except:
                             pass
                     try:
-                        with open(os.path.join(os.path.abspath(badurldir), image_url + '_error404.txt'), 'ab+') as f:
+                        with open(path.join(path.abspath(badurldir), image_url + '_error404.txt'), 'ab+') as f:
                             f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
                             return destpath
                     except:
