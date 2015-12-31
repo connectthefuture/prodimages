@@ -448,11 +448,11 @@ def download_mplce_url(urldest_tuple):
         try:
             print image_url, destpath
             if not image_url[:5] == 'https':
-                res = requests.get(image_url, timeout=17, verify=True, headers=headers)
+                res = requests.get(image_url, timeout=17, verify=False, headers=headers)
                 print ' HTTP Yippie ', res
             else:
                 res = requests.get(image_url, timeout=12, verify=False, headers=headers)
-                print ' HTTPS Oh Yes ', image_url,  res
+                print ' HTTPS Oh Yes ', image_url,  res.headers
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value
@@ -477,7 +477,7 @@ def download_mplce_url(urldest_tuple):
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
-                    print res
+                    print res.headers, ' RES HEAD <400'
                     return destpath
                 except:
                     #subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
@@ -507,7 +507,7 @@ def download_mplce_url(urldest_tuple):
                     print res, ' 2nd Attempt using Merchantry Replaced URL OK'
                     return destpath
                 except requests.exceptions.ConnectionError:
-                    print 'ConnectionError FinalFailureNotice'
+                    print '\t\tConnectionError FinalFailureNotice'
                     import os.path
                     print urlcode_value
                     badurldir = os.path.join(destdir,'error404')
@@ -523,7 +523,7 @@ def download_mplce_url(urldest_tuple):
                             f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
                             return destpath
                     except:
-                        print 'Print Failed write 404 file'
+                        print '\v\v\tPrint Failed write 404 file'
                         pass
 
         except requests.exceptions.ConnectionError:
