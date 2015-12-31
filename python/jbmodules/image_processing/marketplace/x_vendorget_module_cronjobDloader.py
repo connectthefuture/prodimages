@@ -418,12 +418,12 @@ def download_mplce_url(urldest_tuple):
 
     elif regex_ftpurl.findall(image_url):
         print image_url, ' FTP--FTP\n...probably Jaipur...'
-        from http_tools.ftp_functions import pycurl_ftp
+        from http_tools.ftp_functions import pycurl_ftp_download
         import pycurl
         #from jbmodules
         try:
-            res = pycurl_ftp(imageurl=image_url,destpath=destpath)
-            print 'FTEPPEE --> {}\n{}\t\n'.format(res, image_url, destpath)
+            res = pycurl_ftp_download(imageurl=image_url,destpath=destpath)
+            print 'FTEPPEE --> {}\n{}\t\n'.format(res.headers, image_url, destpath)
             return destpath
         except pycurl.error, error:
             print 'Pycurl error in FTP Download --> ', error
@@ -452,7 +452,7 @@ def download_mplce_url(urldest_tuple):
                 print ' HTTP Yippie ', res
             else:
                 res = requests.get(image_url, timeout=12, verify=False, headers=headers)
-                print ' HTTPS Oh Yes ', image_url,  res.head
+                print ' HTTPS Oh Yes ', image_url,  res.headers
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value

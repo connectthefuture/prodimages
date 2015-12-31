@@ -146,7 +146,8 @@ def listcontents_ftplib(ftp_dir, remote_dir='', ext_filter='', download='', dest
         return sorted_ftpdict
 
 
-def pycurl_ftp(imageurl=None, destdir=None, **kwargs):
+
+def pycurl_ftp_download(imageurl=None, destdir=None, **kwargs):
     import pycurl, os
 
     filename = imageurl.split('/')[-1]
