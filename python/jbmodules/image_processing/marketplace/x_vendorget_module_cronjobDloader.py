@@ -280,6 +280,7 @@ def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=Non
     else:
         colorstyle='NA'
         alt='NA'
+        ext = 'NA'
 
     if r.sadd("marketplace:currentsite", filename):
     #if r.mset("google_drive:ll_editorial", filename):
