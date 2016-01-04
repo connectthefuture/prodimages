@@ -235,6 +235,75 @@ def get_exif_all_data(image_filepath):
 #         #chdir(initdir)
 #         return access_token, refresh_token
 
+##########################
+##########################
+##########################
+def md5_checksumer(src_filepath):
+    import hashlib
+    import os.path as path
+    if src_filepath is not None and path.isfile(src_filepath):
+        filepath = path.abspath(src_filepath)
+        try:
+            _file = open(filepath, "rb")
+            content = _file.read()
+            _file.close()
+            md5 = hashlib.md5(content)
+            _hash = md5.hexdigest()
+            return _hash
+        except IndexError:
+            print "Not Index Error Checksummer"
+            return False
+
+##########################
+######### REDIS ##########
+##########################
+def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=None, colorstyle=None, alt=None, local_filepath=None, version=None):
+    import redis
+    # redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
+    #redis_port = 17996
+    redis_host = '127.0.0.1'
+    redis_port = 6379
+
+    r = redis.Redis(host=redis_host, port=redis_port, encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
+
+    if not filename:
+        filename=local_filepath.split('/')[-1]
+    if filename is not None and filename[:9].isdigit():
+        colorstyle = filename[:9]
+        ext = filename.split('.')[-1]
+        alt = filename.split('_')[1].split('.')[0][-1]
+        md5checksum = md5_checksumer(filename)
+        if alt.isdigit():
+            pass
+        else:
+            alt = 'NA'
+    else:
+        colorstyle='NA'
+        alt='NA'
+
+    if r.sadd("marketplace:currentsite", filename):
+    #if r.mset("google_drive:ll_editorial", filename):
+        ## Faking Hashes with Sets
+        ## r.set("filename:%s:colorstyle" % filename, colorstyle)
+        ## r.set("filename:%s:local_filepath" % filename, local_filepath)
+        r.hset("filename:%s" % filename, "md5checksum", md5checksum)
+        r.hset("filename:%s" % filename, "image_url", image_url)
+        r.hset("filename:%s" % filename, "colorstyle", colorstyle)
+        r.hset("filename:%s" % filename, "alt", alt)
+        r.hset("filename:%s" % filename, "ext", ext)
+        r.hset("filename:%s" % filename, "local_filepath", local_filepath)
+        r.hmset("filename:%s" % filename, {"media_version": version})
+        r.hsetnx("filename:%s" % filename, "ref_count", 0)
+        r.hincrby("filename:%s" % filename, "ref_count", 1)
+        print '\tREDIS SUCCESS --> ', r.hvals("filename:%s" % filename)
+        return True
+    else:
+        print '\tREDIS FAILED --> ', filename
+        return False
+
+###############
+###############
+###############
 
 def get_box_access_token():
     import os
@@ -588,6 +657,8 @@ def multi_url_downloader(argslist=None):
                     #print metadata.get('File:MIMEType'), ' <--BadImage - Removed --> ', downloaded_file
                 else:
                     count += 1
+                    #### Check and Add to Redis
+                    check_updated_image_by_md5checksum(downloaded_file)
                     #print count, ' NotRemoved --> ', downloaded_file, metadata.get('File:MIMEType')
                     q.task_done()
             except requests.exceptions.ConnectionError:
@@ -655,71 +726,6 @@ def mongo_update_url_dest_info(urldest_tuple):
             )     ## image_url=image_url, destpath=destpath)
         return updateCheck, destpath
 
-
-##########################
-def md5_checksumer(src_filepath):
-    import hashlib
-    import os.path as path
-    if src_filepath is not None and path.isfile(src_filepath):
-        filepath = path.abspath(src_filepath)
-        try:
-            _file = open(filepath, "rb")
-            content = _file.read()
-            _file.close()
-            md5 = hashlib.md5(content)
-            _hash = md5.hexdigest()
-            return _hash
-        except IndexError:
-            print "Not Index Error Checksummer"
-            return False
-
-##########################
-######### REDIS ##########
-##########################
-
-def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=None, colorstyle=None, alt=None, local_filepath=None, version=None):
-    import redis
-    # redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
-    #redis_port = 17996
-    redis_host = '127.0.0.1'
-    redis_port = 6379
-
-    r = redis.Redis(host=redis_host, port=redis_port, encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
-
-    if not filename:
-        filename=local_filepath.split('/')[-1]
-    if filename is not None and filename[:9].isdigit():
-        colorstyle = filename[:9]
-        ext = filename.split('.')[-1]
-        alt = filename.split('_')[1].split('.')[0][-1]
-        md5checksum = md5_checksumer(filename)
-        if alt.isdigit():
-            pass
-        else:
-            alt = 'NA'
-    else:
-        colorstyle='NA'
-        alt='NA'
-
-    if r.sadd("marketplace:currentsite", filename):
-    #if r.mset("google_drive:ll_editorial", filename):
-        ## Faking Hashes with Sets
-        ## r.set("filename:%s:colorstyle" % filename, colorstyle)
-        ## r.set("filename:%s:local_filepath" % filename, local_filepath)
-        r.hset("filename:%s" % filename, "md5checksum", md5checksum)
-        r.hset("filename:%s" % filename, "image_url", image_url)
-        r.hset("filename:%s" % filename, "colorstyle", colorstyle)
-        r.hset("filename:%s" % filename, "alt", alt)
-        r.hset("filename:%s" % filename, "ext", ext)
-        r.hset("filename:%s" % filename, "local_filepath", local_filepath)
-        r.hmset("filename:%s" % filename, {"media_version": version})
-        r.hsetnx("filename:%s" % filename, "ref_count", 0)
-        r.hincrby("filename:%s" % filename, "ref_count", 1)
-        print '\tREDIS SUCCESS --> ', r.hvals("filename:%s" % filename)
-        return True
-    else:
-        print '\tREDIS FAILED --> ', filename
-        return False
 
 
 def mongo_upsert_threaded(argslist=None):
