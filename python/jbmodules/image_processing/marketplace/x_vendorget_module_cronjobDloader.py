@@ -568,7 +568,12 @@ def multi_url_downloader(argslist=None):
                     with open('/mnt/Post_Complete/Complete_Archive/badfiles_200code_removed.txt','ab+') as f:
                         for k,v in metadata.items():
                             try:
-                                f.write("{}, '{}': '{}',".format(downloaded_file, k,v))
+                                import codecs
+                                mimetype = codecs.decode(metadata.get('File:MIMEType'), 'utf-8')
+                                keyutf8 = codecs.decode(k, 'utf-8')
+                                valuesutf8 = codecs.decode(v, 'utf-8')
+                                error_logged = "Wrong MIMEType: {}, '{}': '{}'\n\t{}".format(mimetype, keyutf8, valuesutf8, item)
+                                print error_logged
                             except UnicodeEncodeError:
                                 print 'UnicodeEncodeError Passing ---'
                                 pass
