@@ -475,14 +475,14 @@ def download_mplce_url(urldest_tuple):
                 try:
                     print 'TRYsub400', image_url, destpath, '476'
                     if image_url[:5] == 'https':
-                        res = requests.get(image_url, stream=False, timeout=11, verify=False, headers=headers)
+                        #res = requests.get(image_url, stream=False, timeout=11, verify=False, headers=headers)
                         print 'Streaming False ', res.headers
                     else:
-                        res = requests.get(image_url, timeout=11, verify=False, headers=headers)
+                        #res = requests.get(image_url, timeout=11, verify=False, headers=headers)
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
-                    print res.headers, ' RES HEAD <400'
+                    print res.headers, ' RES HEAD <400  URL-->\t', image_url
                     return destpath
                 except:
                     #subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
