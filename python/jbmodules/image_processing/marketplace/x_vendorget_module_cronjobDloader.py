@@ -483,7 +483,7 @@ def download_mplce_url(urldest_tuple):
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
-                    print res.headers, ' RES HEAD <400  URL-->\t', image_url
+                    print res.headers, ' RES HEAD <400  URL-->\t', image_url, '\v', destpath
                     return destpath
                 except:
                     #subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
