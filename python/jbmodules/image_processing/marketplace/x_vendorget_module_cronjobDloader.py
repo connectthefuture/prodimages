@@ -634,8 +634,8 @@ def multi_url_downloader(argslist=None):
                 metadata = get_exif_all_data(downloaded_file)
                 ## Catch placeholder from Merchantry and throw Key error after checking mdata for actual image
                 if metadata.get('File:MIMEType') is not None and metadata.get('File:MIMEType').split('/')[0] != 'image':
-                    import os
-
+                    from os import remove
+                    print 'Removing File with metadata--> ', metadata
                     # with open('/mnt/Post_Complete/Complete_Archive/badfiles_200code_removed.txt','ab+') as f:
                     #     for k,v in metadata.items():
                     #         try:
@@ -648,7 +648,7 @@ def multi_url_downloader(argslist=None):
                     #         except UnicodeEncodeError:
                     #             print 'UnicodeEncodeError Passing ---'
                     #             pass
-                    os.remove(downloaded_file)
+                    remove(downloaded_file)
                     q.task_done()
                 elif metadata.get('Composite:ImageSize') == '75x89':
                     print 'Halting and discarding Marchantry Placeholder.\n\tSize is--> ', metadata.get('Composite:ImageSize')
@@ -675,10 +675,10 @@ def multi_url_downloader(argslist=None):
                     pass
                 q.task_done()
             finally:
-                try:
-                    q.task_done()
-                except:
-                    pass
+                #try:
+                q.task_done()
+                #except:
+                #    pass
 
     cpus=multiprocessing.cpu_count() * 2 #detect number of cores
     print("Creating %d threads" % cpus)
