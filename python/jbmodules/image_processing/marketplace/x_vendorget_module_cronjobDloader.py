@@ -586,30 +586,27 @@ def download_mplce_url(urldest_tuple):
                     return destpath
                 except requests.exceptions.ConnectionError:
                     print '\t\tConnectionError FinalFailureNotice'
-                    import path
+                    # import path
                     print urlcode_value
-                    badurldir = path.join(destdir,'error404')
-                    if path.isdir(badurldir):
-                        pass
-                    else:
-                        try:
-                            os.makedirs(badurldir, 16877)
-                        except:
-                            pass
-                    try:
-                        with open(path.join(path.abspath(badurldir), image_url + '_error404.txt'), 'ab+') as f:
-                            f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
-                            return destpath
-                    except:
-                        print '\v\v\tPrint Failed write 404 file'
-                        pass
+                    # badurldir = path.join(destdir,'error404')
+                    # if path.isdir(badurldir):
+                    #     pass
+                    # else:
+                    #     try:
+                    #         os.makedirs(badurldir, 16877)
+                    #     except:
+                    #         pass
+                    # try:
+                    #     with open(path.join(path.abspath(badurldir), image_url + '_error404.txt'), 'ab+') as f:
+                    #         f.write("{0}\t{1}\n".format(image_url + '_imgnum_' + '_errcode_' + urlcode_value))
+                    #         return destpath
+                    # except:
+                    #     print '\v\v\tPrint Failed write 404 file'
 
         except requests.exceptions.ConnectionError:
             print 'ConnectionError\n ', locals()
-            pass
         except IOError:
             print 'Hidden IO Error Related to timeout value in get'
-            pass
 
 
 def multi_url_downloader(argslist=None):
