@@ -587,7 +587,7 @@ def download_mplce_url(urldest_tuple):
                 except requests.exceptions.ConnectionError:
                     print '\t\tConnectionError FinalFailureNotice'
                     # import path
-                    print urlcode_value
+                    return urlcode_value
                     # badurldir = path.join(destdir,'error404')
                     # if path.isdir(badurldir):
                     #     pass
@@ -605,6 +605,7 @@ def download_mplce_url(urldest_tuple):
 
         except requests.exceptions.ConnectionError:
             print 'ConnectionError\n ', locals()
+            return 0
         except IOError:
             print 'Hidden IO Error Related to timeout value in get'
 
@@ -663,10 +664,10 @@ def multi_url_downloader(argslist=None):
                 print 'ConnectionError Probably a timeout issue with download func--> ', downloaded_file
                 q.task_done()
             except AttributeError:
-                #print 'AttributeError --> ', downloaded_file
+                print 'AttributeError --> ', downloaded_file
                 q.task_done()
             except KeyError:
-                #print 'KeyError --> ', downloaded_file
+                print 'KeyError --> ', downloaded_file
                 try:
                     import os
                     os.remove(downloaded_file)
