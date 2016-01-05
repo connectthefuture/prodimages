@@ -605,7 +605,7 @@ def download_mplce_url(urldest_tuple):
                         pass
 
         except requests.exceptions.ConnectionError:
-            print 'ConnectionError'
+            print 'ConnectionError\n ', locals()
             pass
         except IOError:
             print 'Hidden IO Error Related to timeout value in get'
