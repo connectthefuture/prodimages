@@ -660,7 +660,7 @@ def multi_url_downloader(argslist=None):
                     count += 1
                     #### Check and Add to Redis
                     check_updated_image_by_md5checksum(downloaded_file)
-                    #print count, ' NotRemoved --> ', downloaded_file, metadata.get('File:MIMEType')
+                    print count, ' NotRemoved --> ', downloaded_file, metadata.get('File:MIMEType')
                     q.task_done()
             except requests.exceptions.ConnectionError:
                 print 'ConnectionError Probably a timeout issue with download func--> ', downloaded_file
