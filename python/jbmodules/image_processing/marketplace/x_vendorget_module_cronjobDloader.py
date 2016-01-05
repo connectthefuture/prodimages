@@ -669,16 +669,16 @@ def multi_url_downloader(argslist=None):
             except KeyError:
                 print 'KeyError --> ', downloaded_file
                 try:
-                    import os
-                    os.remove(downloaded_file)
+                    from os import remove
+                    remove(downloaded_file)
                 except:
                     pass
                 q.task_done()
-            # finally:
-            #     try:
-            #         q.task_done()
-            #     except:
-            #         pass
+            finally:
+                try:
+                    q.task_done()
+                except:
+                    pass
 
     cpus=multiprocessing.cpu_count() * 2 #detect number of cores
     print("Creating %d threads" % cpus)
