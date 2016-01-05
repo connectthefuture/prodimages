@@ -264,7 +264,7 @@ def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=Non
     redis_host = '127.0.0.1'
     redis_port = 6379
 
-    r = redis.Redis(host=redis_host, port=redis_port, encoding='utf-8', encoding_errors='strict')  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
+    r = redis.Redis(host=redis_host, port=redis_port, encoding='utf-8', encoding_errors='strict', db=0)  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
 
     if not filename:
         filename=local_filepath.split('/')[-1]
