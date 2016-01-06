@@ -57,7 +57,7 @@ SHELL=/bin/bash
 TODAY=`date +%Y%b%d`
 TODAY_REG=`date +%Y-%m-%d`
 PYTHONPATH=/opt/sbin:/opt/bin:/opt/lib:/usr/local/batchRunScripts/python
-
+PRD_ENV=1
 ##/usr/local/lib/python2.7/dist-packages:"$PYTHONPATH"
 
 PYTHONSTARTUP=/usr/local/batchRunScripts/python/pythonstartup.py
