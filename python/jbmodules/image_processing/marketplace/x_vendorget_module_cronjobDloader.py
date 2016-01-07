@@ -676,7 +676,7 @@ def multi_url_downloader(argslist=None):
                 q.task_done()
             finally:
                 #try:
-                q.task_done()
+                continue #q.task_done()
                 #except:
                 #    pass
 

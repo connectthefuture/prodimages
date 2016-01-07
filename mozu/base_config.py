@@ -46,7 +46,7 @@ def set_environment():
     environ['MOZU_DOCUMENT_TYPE_FQN'] = MOZU_DOCUMENT_TYPE_FQN
     if globals()['PRD_ENV'] == 0:
         ## USING PRD Database in Debug, rest are STG
-        environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_PRD
+        environ['SQLALCHEMY_DATABASE_URI'] = DB_URI_STG
         environ['MOZU_TENANT_NAME'] = TENANT_STG
         environ['MOZU_SITE_NAME'] = SITE_STG
         environ['MOZU_BASE_URL'] = MOZU_BASE_STG
