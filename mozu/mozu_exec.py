@@ -295,14 +295,15 @@ if __name__ == '__main__':
             print 'Deleting 2 ', sys.argv[2]
             sys.argv[1] = path.join('/mnt/images/', sys.argv[2][:4], sys.argv[2] + '.png')
             print 'SettingSysArg1 - 2 ', sys.argv[1]
+        else:
+            raise NameError
         if update_flag:
-            print 'Update Flag Set Continuing with reload Of -->  ', sys.argv[1]
+            print "Update Flag Set Continuing with reload Of -->  ", sys.argv[1]
     else:
         try:
             if path.isfile(path.abspath(sys.argv[1])):
                 for arg in sys.argv[1:]:
-                    insert_list.append(
-                        arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
+                    insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
             insert_list_filepaths = list(set(sorted(insert_list)))
             print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
             main(fileslist=insert_list_filepaths)
