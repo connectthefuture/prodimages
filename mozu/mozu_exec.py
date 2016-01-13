@@ -298,7 +298,7 @@ if __name__ == '__main__':
         else:
             raise NameError
         if update_flag:
-            print "Update Flag Set Continuing with reload Of -->  ", sys.argv[1]
+            print "Update Flag Set Continuing with reload Of -->  {}".format(sys.argv[1])
     else:
         try:
             if path.isfile(path.abspath(sys.argv[1])):
