@@ -278,14 +278,13 @@ def main(fileslist):
 if __name__ == '__main__':
     import sys
     from os import environ, path
-
-
     environ['PRD_ENV'] = '1'
     globals()['PRD_ENV'] = 1
-
     insert_list = []
-    print sys.argv[1]
+    update_flag = False
     if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
+        if sys.argv[1].upper() == 'U':
+            update_flag = True
         if path.isfile(sys.argv[2]):
             fpath = sys.argv[2]
             deletename = path.basename(fpath).split('.')[0]
@@ -296,6 +295,8 @@ if __name__ == '__main__':
             print 'Deleting 2 ', sys.argv[2]
             sys.argv[1] = path.join('/mnt/images/', sys.argv[2][:4], sys.argv[2] + '.png')
             print 'SettingSysArg1 - 2 ', sys.argv[1]
+        if update_flag:
+            print 'Update Flag Set Continuing with reload Of -->  ', sys.argv[1]
     else:
         try:
             if path.isfile(path.abspath(sys.argv[1])):
