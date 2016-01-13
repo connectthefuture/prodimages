@@ -269,10 +269,11 @@ def main(fileslist):
                         res = update_db.execute()
                         print res, 'Updated--> ', values.items(), ' <-- ', update_db
                 except TypeError:  # sqlalchemy.exc.IntegrityError:
-                    with open('/root/mozu_409_failed_not_in_db.txt', 'a') as errwrite:
-                        errwrite.write(locals())
-                        errwrite.write('\n')
-                        print 'TYPE Error locals writen to mozu_409_failed_not_in_db.txt in /root'
+                    with open('/root/mozu_409_failed_not_in_db.txt', 'ab+') as errwrite:
+                        for i in locals().iteritems()
+                            errwrite.write(i)
+                            errwrite.write('\n')
+                            print 'TYPE Error locals writen to mozu_409_failed_not_in_db.txt in /root'
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
