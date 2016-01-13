@@ -282,9 +282,12 @@ if __name__ == '__main__':
     globals()['PRD_ENV'] = 1
     insert_list = []
     update_flag = False
+    delete_flag = False
     if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
         if sys.argv[1].upper() == 'U':
             update_flag = True
+        elif sys.argv[1].upper() == 'D':
+            delete_flag = True
         if path.isfile(sys.argv[2]):
             fpath = sys.argv[2]
             deletename = path.basename(fpath).split('.')[0]
@@ -297,9 +300,11 @@ if __name__ == '__main__':
             print 'SettingSysArg1 - 2 ', sys.argv[1]
         else:
             raise NameError
-        if update_flag:
-            print "Update Flag Set Continuing with reload Of -->  {}".format(sys.argv[1])
-    else:
+        from mozu_find_del_exec import delete_by_mozuid
+        res = delete_by_mozuid(sys.argv[1])
+
+    if update_flag or not delete_flag:
+        print "Update Flag Set Continuing with reload Of -->  {}".format(sys.argv[1])
         try:
             if path.isfile(path.abspath(sys.argv[1])):
                 for arg in sys.argv[1:]:
