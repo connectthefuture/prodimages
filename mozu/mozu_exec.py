@@ -301,7 +301,7 @@ if __name__ == '__main__':
         else:
             raise NameError
         from mozu_find_del_exec import delete_by_mozuid
-        res = delete_by_mozuid(sys.argv[1])
+        #res = delete_by_mozuid(sys.argv[1])
         if sys.argv[1].upper() == 'U':
             update_flag = True
             print 'Update Flag Set ', sys.argv[1]
