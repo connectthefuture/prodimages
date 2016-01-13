@@ -270,7 +270,7 @@ def main(fileslist):
                         print res, 'Updated--> ', values.items(), ' <-- ', update_db
                 except TypeError:  # sqlalchemy.exc.IntegrityError:
                     with open('/root/mozu_409_failed_not_in_db.txt', 'ab+') as errwrite:
-                        for i in locals().iteritems()
+                        for i in locals().iteritems():
                             errwrite.write(i)
                             errwrite.write('\n')
                             print 'TYPE Error locals writen to mozu_409_failed_not_in_db.txt in /root'
