@@ -327,4 +327,4 @@ if __name__ == '__main__':
             print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
             main(fileslist=insert_list_filepaths)
         except IndexError:
-            print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
+            print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args{}".format(locals())
