@@ -7,6 +7,12 @@
 import sqlalchemy
 from mozu_image_util_functions import include_keys, log
 from RESTClient import __mozu_image_table_valid_keys__
+##
+## forcing db and config settings test without to see if this is even used
+from os import environ
+environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
+environ['PRD_ENV'] = '1'
+globals()['PRD_ENV'] = 1
 
 @log
 def count_total_files_documents(**kwargs):
@@ -277,17 +283,11 @@ def main(fileslist):
 
 if __name__ == '__main__':
     import sys
-    from os import environ, path
-    environ['PRD_ENV'] = '1'
-    globals()['PRD_ENV'] = 1
+    from os import path
     insert_list = []
     update_flag = False
     delete_flag = False
     if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
-        if sys.argv[1].upper() == 'U':
-            update_flag = True
-        elif sys.argv[1].upper() == 'D':
-            delete_flag = True
         if path.isfile(sys.argv[2]):
             fpath = sys.argv[2]
             deletename = path.basename(fpath).split('.')[0]
@@ -302,9 +302,14 @@ if __name__ == '__main__':
             raise NameError
         from mozu_find_del_exec import delete_by_mozuid
         res = delete_by_mozuid(sys.argv[1])
-
+        if sys.argv[1].upper() == 'U':
+            update_flag = True
+            print 'Update Flag Set ', sys.argv[1]
+        elif sys.argv[1].upper() == 'D':
+            delete_flag = True
+            print 'Delete Flag Set ', sys.argv[1]
     if update_flag or not delete_flag:
-        print "Update Flag Set Continuing with reload Of -->  {}".format(sys.argv[1])
+        print "Delete NOT Set or Update Flag Set Continuing with reload or reload Of -->  {}".format(sys.argv[1])
         try:
             if path.isfile(path.abspath(sys.argv[1])):
                 for arg in sys.argv[1:]:
