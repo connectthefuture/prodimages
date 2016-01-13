@@ -274,18 +274,15 @@ def main(fileslist):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
 
 
-## Run in shell as mozu_exec.py *args
-if __name__ == '__main__':
-    import sys
-    import os.path as path
-    insert_list = []
-    ## Run in shell as mozu_exec.py *args
+
 if __name__ == '__main__':
     import sys
     from os import environ, path
 
 
     environ['PRD_ENV'] = '1'
+    globals()['PRD_ENV'] = 1
+
     insert_list = []
     print sys.argv[1]
     if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
@@ -310,13 +307,3 @@ if __name__ == '__main__':
             main(fileslist=insert_list_filepaths)
         except IndexError:
             print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
-
-    try:
-        if path.isfile(path.abspath(sys.argv[1])):
-            for arg in sys.argv[1:]:
-                insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
-        insert_list_filepaths = list(set(sorted(insert_list)))
-        print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
-        main(fileslist=insert_list_filepaths)
-    except IndexError:
-        print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
