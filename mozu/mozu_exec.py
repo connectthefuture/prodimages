@@ -273,8 +273,8 @@ def main(fileslist):
                         for i in locals().iteritems():
                             logged = '{}:{}\n'.format(i[0],i[1])
                             errwrite.write(logged)
-                            errwrite.write('\n----------------------\n----------------------\n')
-                            print 'TYPE Error locals writen to mozu_409_failed_not_in_db.txt in /root'
+                        errwrite.write('\n----------------------\n----------------------\n')
+                        print 'TYPE Error locals writen to mozu_409_failed_not_in_db.txt in /root'
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
