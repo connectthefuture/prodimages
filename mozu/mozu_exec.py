@@ -279,12 +279,15 @@ if __name__ == '__main__':
     import sys
     import os.path as path
     insert_list = []
-    try:
-        if path.isfile(path.abspath(sys.argv[1])):
-            for arg in sys.argv[1:]:
-                insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
-        insert_list_filepaths = list(set(sorted(insert_list)))
-        print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
-        main(fileslist=insert_list_filepaths)
-    except IndexError:
-        print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
+    if sys.argv[1] == 'U'.lower() or sys.argv[1] == 'D'.lower():
+        print 'Deleting', sys.argv[2]
+    else:
+        try:
+            if path.isfile(path.abspath(sys.argv[1])):
+                for arg in sys.argv[1:]:
+                    insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
+            insert_list_filepaths = list(set(sorted(insert_list)))
+            print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
+            main(fileslist=insert_list_filepaths)
+        except IndexError:
+            print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
