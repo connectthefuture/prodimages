@@ -279,6 +279,7 @@ if __name__ == '__main__':
     import sys
     import os.path as path
     insert_list = []
+    print sys.argv[1]
     if sys.argv[1] == 'U'.lower() or sys.argv[1] == 'D'.lower():
         print 'Deleting', sys.argv[2]
     else:
