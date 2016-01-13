@@ -281,6 +281,7 @@ if __name__ == '__main__':
     import os.environ as environ
 
     environ['PRD_ENV'] = '1'
+    globals()['PRD_ENV'] = 1
     insert_list = []
     print sys.argv[1]
     if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
