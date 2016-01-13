@@ -296,6 +296,7 @@ if __name__ == '__main__':
     insert_list = []
     update_flag = False
     delete_flag = False
+
     if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
         if path.isfile(sys.argv[2]):
             fpath = sys.argv[2]
@@ -317,7 +318,7 @@ if __name__ == '__main__':
         elif sys.argv[1].upper() == 'D':
             delete_flag = True
             print 'Delete Flag Set ', sys.argv[1]
-    if update_flag or not delete_flag:
+    if update_flag and not delete_flag:
         print "Delete NOT Set or Update Flag Set Continuing with reload or reload Of -->  {}".format(sys.argv[1])
         try:
             if path.isfile(path.abspath(sys.argv[1])):
