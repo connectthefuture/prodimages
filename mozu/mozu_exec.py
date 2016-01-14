@@ -8,30 +8,30 @@ import sqlalchemy
 from mozu_image_util_functions import include_keys, log
 from RESTClient import __mozu_image_table_valid_keys__
 
-@log
-def count_total_files_documents(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    if not kwargs.get('page_size'):
-        returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
-    else:
-        returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
-    print "Total Files in DocumentList: {}".format(returned_item_count)
-    return returned_item_count
-
-@log
-def list_documents(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    documents = mzclient.get_mz_image_document_list()['items']
-    return documents
-
-@log
-def resource_documents_list(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    documents_list = mzclient.get_mz_image_document_list()
-    return documents_list
+# @log
+# def count_total_files_documents(**kwargs):
+#     from RESTClient import MozuRestClient
+#     mzclient = MozuRestClient(**kwargs)
+#     if not kwargs.get('page_size'):
+#         returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
+#     else:
+#         returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
+#     print "Total Files in DocumentList: {}".format(returned_item_count)
+#     return returned_item_count
+#
+# @log
+# def list_documents(**kwargs):
+#     from RESTClient import MozuRestClient
+#     mzclient = MozuRestClient(**kwargs)
+#     documents = mzclient.get_mz_image_document_list()['items']
+#     return documents
+#
+# @log
+# def resource_documents_list(**kwargs):
+#     from RESTClient import MozuRestClient
+#     mzclient = MozuRestClient(**kwargs)
+#     documents_list = mzclient.get_mz_image_document_list()
+#     return documents_list
 
 #######################################
 ##### Single File / Single Document Obj
