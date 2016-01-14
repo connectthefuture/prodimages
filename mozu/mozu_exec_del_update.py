@@ -29,48 +29,6 @@ from RESTClient import __mozu_image_table_valid_keys__
 #         return json.dumps(x.items())
 
 
-### Count with query params
-@log
-def count_total_files_documents(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    if not kwargs.get('page_size'):
-        returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
-    else:
-        returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
-    print "Total Files in DocumentList: {}".format(returned_item_count)
-    return returned_item_count
-
-## Find Docs using query
-@log
-def list_documents(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    documents = mzclient.get_mz_image_document_list()['items']
-    return documents
-
-## Get a list of docs
-@log
-def resource_documents_list(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    documents_list = mzclient.get_mz_image_document_list()
-    return documents_list
-
-# @log
-# # PUT - Upload/Update Image/DocumentContent
-def update_content_mz_image(**kwargs):
-    from RESTClient import MozuRestClient
-    from db import mozu_image_table_instance
-    mzclient = MozuRestClient(**kwargs)
-    content_response = mzclient.send_content(**kwargs)
-    print content_response.headers, "Update Mozu Content"
-    mozu_image_table = mozu_image_table_instance()
-    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-    update_db = mozu_image_table.update(values=dict(**table_args))
-    print content_response.headers, "Update DB MZ_IMAGE"
-    return content_response
-
 
 # DELETE - Delete Image/DocumentContent - Everything
 @log
@@ -97,9 +55,10 @@ def delete_by_mozuid(mz_imageid=None):
     resp = delete_document_data_content(mz_imageid=mz_imageid)
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
+    ret_select = mozu_image_table.select(whereclause=((mozu_image_table.c.mz_imageid == mz_imageid))).execute().fetchone()
     ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
     print 'Deleted bf_imageid', ret #ret.fetchone()
-    return ret
+    return ret_select['bf_imageid']
 
 # Delete doc content and db entry using bfly colorstyle to query db
 def delete_by_bflyid(bf_imageid=None):
@@ -114,48 +73,64 @@ def delete_by_bflyid(bf_imageid=None):
     mozu_image_table = mozu_image_table_instance()
     ret_select = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid == bf_imageid ))).execute()
     mz_imageid = ret_select.fetchone()['mz_imageid']
-    resp = delete_document_data_content(mz_imageid=mz_imageid)
+    if mz_imageid:
+        resp = delete_document_data_content(mz_imageid=mz_imageid)
 
-    ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
-    print 'Deleted bf_imageid', ret #ret.fetchone()
-    return ret
+        ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
+        print 'Deleted bf_imageid', ret #ret.fetchone()
+        return bf_imageid
 
+#### Update or UpdateDel -- aka "delete from mozu and db then reload to mozu and store new mozu docID"
 
-### Runs like
-# >>>> reslist = get_mozu_or_bf_id(styles_list=styles_list[:999]).execute().fetchall()
-################
-def get_mozu_or_bf_id(mz_imageid=None,bf_imageid=None,styles_list=None):
-    from os import chdir, path, curdir
-    try:
-        chdir(path.join('/usr/local/batchRunScripts', 'mozu'))
-        print 'Executing from ', path.abspath(curdir), bf_imageid, mz_imageid
-    except:
-        print 'Failed  from ', path.abspath(curdir)
+# @log
+# # PUT - Upload/Update Image/DocumentContent
+def update_content_mz_image(**kwargs):
+    from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
+    mzclient = MozuRestClient(**kwargs)
+    content_response = mzclient.send_content(**kwargs)
+    print content_response.headers, "Update Mozu Content"
     mozu_image_table = mozu_image_table_instance()
-    if styles_list:
-        ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.in_( tuple(styles_list) )))).execute()
-        print 'FZero'
-        return ret.fetchall()
-    elif bf_imageid:
-        ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.like("{}".format(bf_imageid) )))).execute()
-        print 'F1', ret.fetchone()
-        return ret.fetchone()
-    elif mz_imageid:
-        ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.like("{}".format(bf_imageid) )))).execute()
-        print 'F2'
-        return ret.fetchone()
+    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+    update_db = mozu_image_table.update(values=dict(**table_args))
+    print content_response.headers, "Update DB MZ_IMAGE"
+    return content_response
+
+## Delete current Mozu image and load newest version from netsrv101
+def update_replace_content(**kwargs):
+    if kwargs.get("mz_imageid"):
+        mz_imageid = kwargs.get("mz_imageid")
+        res = delete_by_mozuid(mz_imageid=mz_imageid)
+    elif kwargs.get("src_filepath"):
+        src_filepath = kwargs.get("src_filepath")
+        bf_imageid = src_filepath.split('/')[-1].split('.')[0]
+        ext = src_filepath.split('.')[-1]
+        res = delete_by_bflyid(bf_imageid=bf_imageid)
+    elif kwargs.get("bf_imageid"):
+        from os import path
+        bf_imageid = kwargs.get("bf_imageid")
+        ext = kwargs.get("ext", "png")
+        src_filepath = path.join('/mnt/images', bf_imageid[:4], bf_imageid + '.' + ext)
+        res = delete_by_bflyid(bf_imageid=bf_imageid)
     else:
-        return
-
-## This shouldnt work unless something is duplicated in the db and most likely in mozu, ie. style_l.jpg, style.png both "name" fields are just style
-def get_multi_mzid_by_bf_imageid(bf_imageid):
-    from db import mozu_image_table_instance
-    mozu_image_table = mozu_image_table_instance()
-    ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.like("%{}".format(bf_imageid) )))).execute()
-    return ret.fetchall()
+        raise KeyError
+    print 'Successful replace-update \n', locals()
+    return locals()
 
 
 if __name__ == '__main__':
-    print "Cannot be called from shell.\v Import using python..."
+    try:
+        from sys import argv
+        from os import path
+        arg1 = argv[1]
+        if len(arg1) == 9:
+            bf_imageid = arg1
+        elif path.isfile(arg1):
+            src_filepath = arg1
+        elif len(arg1) > 15:
+            mz_imageid = arg1
+        result = update_replace_content(dict(locals()))
+        print result
+    except:
+        print "Error or Cannot be called from shell.\v Import using python...", locals()
 

@@ -48,6 +48,34 @@ def cmd_line_argument_parse():
     return vars(res)
 
 
+### Count with query params
+@log
+def count_total_files_documents(**kwargs):
+    from RESTClient import MozuRestClient
+    mzclient = MozuRestClient(**kwargs)
+    if not kwargs.get('page_size'):
+        returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
+    else:
+        returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
+    print "Total Files in DocumentList: {}".format(returned_item_count)
+    return returned_item_count
+
+## Find Docs using query
+@log
+def list_documents(**kwargs):
+    from RESTClient import MozuRestClient
+    mzclient = MozuRestClient(**kwargs)
+    documents = mzclient.get_mz_image_document_list()['items']
+    return documents
+
+## Get a list of docs
+@log
+def resource_documents_list(**kwargs):
+    from RESTClient import MozuRestClient
+    mzclient = MozuRestClient(**kwargs)
+    documents_list = mzclient.get_mz_image_document_list()
+    return documents_list
+
 
 ### GET Images - Content
 #
@@ -81,7 +109,43 @@ def cmd_line_argument_parse():
 
 
 
+### Runs like
+# >>>> reslist = get_mozu_or_bf_id(styles_list=styles_list[:999]).execute().fetchall()
+################
+def get_mozu_or_bf_id(mz_imageid=None,bf_imageid=None,styles_list=None):
+    from os import chdir, path, curdir
+    try:
+        chdir(path.join('/usr/local/batchRunScripts', 'mozu'))
+        print 'Executing from ', path.abspath(curdir), bf_imageid, mz_imageid
+    except:
+        print 'Failed  from ', path.abspath(curdir)
+    from db import mozu_image_table_instance
+    mozu_image_table = mozu_image_table_instance()
+    if styles_list:
+        ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.in_( tuple(styles_list) )))).execute()
+        print 'FZero'
+        return ret.fetchall()
+    elif bf_imageid:
+        ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.like("{}".format(bf_imageid) )))).execute()
+        print 'F1', ret.fetchone()
+        return ret.fetchone()
+    elif mz_imageid:
+        ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.like("{}".format(bf_imageid) )))).execute()
+        print 'F2'
+        return ret.fetchone()
+    else:
+        return
 
+## This shouldnt work unless something is duplicated in the db and most likely in mozu, ie. style_l.jpg, style.png both "name" fields are just style
+def get_multi_mzid_by_bf_imageid(bf_imageid):
+    from db import mozu_image_table_instance
+    mozu_image_table = mozu_image_table_instance()
+    ret = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid.like("%{}".format(bf_imageid) )))).execute()
+    return ret.fetchall()
+
+
+
+## Want to eventually use arg parser above
 if __name__ == '__main__':
     import sys
     from os import path
