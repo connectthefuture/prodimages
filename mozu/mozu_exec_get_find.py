@@ -47,59 +47,6 @@ def cmd_line_argument_parse():
 
     return vars(res)
 
-@log
-def count_total_files_documents(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    if not kwargs.get('page_size'):
-        returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
-    else:
-        returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
-    print "Total Files in DocumentList: {}".format(returned_item_count)
-    return returned_item_count
-
-@log
-def list_documents(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    documents = mzclient.get_mz_image_document_list()['items']
-    return documents
-
-@log
-def resource_documents_list(**kwargs):
-    from RESTClient import MozuRestClient
-    mzclient = MozuRestClient(**kwargs)
-    documents_list = mzclient.get_mz_image_document_list()
-    return documents_list
-
-# @log
-# # PUT - Upload/Update Image/DocumentContent
-def update_content_mz_image(**kwargs):
-    from RESTClient import MozuRestClient
-    from db import mozu_image_table_instance
-    mzclient = MozuRestClient(**kwargs)
-    content_response = mzclient.send_content(**kwargs)
-    print content_response.headers, "Update Mozu Content"
-    mozu_image_table = mozu_image_table_instance()
-    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-    update_db = mozu_image_table.update(values=dict(**table_args))
-    print content_response.headers, "Update DB MZ_IMAGE"
-    return content_response
-
-
-# DELETE - Delete Image/DocumentContent - Everything
-@log
-def delete_document_data_content(**kwargs):
-    from RESTClient import MozuRestClient
-    from db import mozu_image_table_instance
-    mzclient = MozuRestClient(**kwargs)
-    delete_resp = mzclient.delete_mz_image()
-    mozu_image_table = mozu_image_table_instance()
-
-    delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) )
-    # res = delete_db.execute()
-    print delete_resp.headers, "Delete \n", delete_db, "\nMZ CLIENTID in FUNCtion: ", kwargs
-    return delete_resp
 
 
 ### GET Images - Content
@@ -157,7 +104,7 @@ if __name__ == '__main__':
             print 'SettingSysArg1 - 2 ', sys.argv[1]
         else:
             raise NameError
-        from mozu_find_del_exec import delete_by_mozuid
+        from mozu_exec_del_update import delete_by_mozuid
         #res = delete_by_mozuid(sys.argv[1])
         if sys.argv[1].upper() == 'U':
             update_flag = True
