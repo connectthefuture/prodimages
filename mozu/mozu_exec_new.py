@@ -136,8 +136,8 @@ if __name__ == '__main__':
     import sys
     from os import path
     insert_list = []
-    kwarguments = cmd_line_argument_parse()
-    print kwarguments
+    #kwarguments = cmd_line_argument_parse()
+    #print kwarguments
     update_flag = False
     delete_flag = False
     if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
