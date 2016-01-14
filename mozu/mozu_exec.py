@@ -7,12 +7,6 @@
 import sqlalchemy
 from mozu_image_util_functions import include_keys, log
 from RESTClient import __mozu_image_table_valid_keys__
-##
-## forcing db and config settings test without to see if this is even used
-from os import environ
-environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
-environ['PRD_ENV'] = '1'
-globals()['PRD_ENV'] = 1
 
 @log
 def count_total_files_documents(**kwargs):
@@ -255,32 +249,23 @@ def main(fileslist):
                     raise ValueError #sqlalchemy.exc.IntegrityError()
             except TypeError:
                 print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
-                try:
-                    mozu_image_table = mozu_image_table_instance()
-                    table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                    mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
-                    #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
-                    # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
-                    table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-                    update_content_resp = update_content_mz_image(**values)
-                    print "Updated Process Complete, ", update_content_resp.headers
-                    if update_content_resp.status_code < 300:
-                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
-                        res = update_db.execute()
-                        print res, 'Updated--> ', values.items(), ' <-- ', update_db
-                except TypeError:  # sqlalchemy.exc.IntegrityError:
-                    with open('/root/mozu_409_failed_not_in_db.txt', 'ab+') as errwrite:
-                        for i in locals().iteritems():
-                            logged = '{}:{}\n'.format(i[0],i[1])
-                            errwrite.write(logged)
-                        errwrite.write('\n----------------------\n----------------------\n')
-                        print 'TYPE Error locals writen to mozu_409_failed_not_in_db.txt in /root'
+                mozu_image_table = mozu_image_table_instance()
+                table_args = include_keys(values, __mozu_image_table_valid_keys__)
+                mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
+                #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
+                # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
+                table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
+                update_content_resp = update_content_mz_image(**values)
+                print "Updated Process Complete, ", update_content_resp.headers
+                if update_content_resp.status_code < 300:
+                    update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
+                    res = update_db.execute()
+                    print res, 'Updated--> ', values.items(), ' <-- ', update_db
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
             except KeyError:  # sqlalchemy.exc.IntegrityError:
                 print 'KEY Error and everything is or will be commented out below because it is in the db already'
-
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
@@ -289,43 +274,17 @@ def main(fileslist):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
 
 
-
+## Run in shell as mozu_exec.py *args
 if __name__ == '__main__':
     import sys
-    from os import path
+    import os.path as path
     insert_list = []
-    update_flag = False
-    delete_flag = False
-
-    if sys.argv[1].upper() == 'U' or sys.argv[1].upper() == 'D':
-        if path.isfile(sys.argv[2]):
-            fpath = sys.argv[2]
-            deletename = path.basename(fpath).split('.')[0]
-            print 'Deleting 1 ', deletename
-            sys.argv[1] = fpath
-            print 'SettingSysArg1 - 1 ', sys.argv[1]
-        elif len(sys.argv[2]) == 9:
-            print 'Deleting 2 ', sys.argv[2]
-            sys.argv[1] = path.join('/mnt/images/', sys.argv[2][:4], sys.argv[2] + '.png')
-            print 'SettingSysArg1 - 2 ', sys.argv[1]
-        else:
-            raise NameError
-        from mozu_find_del_exec import delete_by_mozuid
-        #res = delete_by_mozuid(sys.argv[1])
-        if sys.argv[1].upper() == 'U':
-            update_flag = True
-            print 'Update Flag Set ', sys.argv[1]
-        elif sys.argv[1].upper() == 'D':
-            delete_flag = True
-            print 'Delete Flag Set ', sys.argv[1]
-    if update_flag and not delete_flag:
-        print "Delete NOT Set or Update Flag Set Continuing with reload or reload Of -->  {}".format(sys.argv[1])
-        try:
-            if path.isfile(path.abspath(sys.argv[1])):
-                for arg in sys.argv[1:]:
-                    insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
-            insert_list_filepaths = list(set(sorted(insert_list)))
-            print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
-            main(fileslist=insert_list_filepaths)
-        except IndexError:
-            print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args{}".format(locals())
+    try:
+        if path.isfile(path.abspath(sys.argv[1])):
+            for arg in sys.argv[1:]:
+                insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
+        insert_list_filepaths = list(set(sorted(insert_list)))
+        print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
+        main(fileslist=insert_list_filepaths)
+    except IndexError:
+        print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
