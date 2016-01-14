@@ -9,10 +9,43 @@ from mozu_image_util_functions import include_keys, log
 from RESTClient import __mozu_image_table_valid_keys__
 ##
 ## forcing db and config settings test without to see if this is even used
-from os import environ
-environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
-environ['PRD_ENV'] = '1'
-globals()['PRD_ENV'] = 1
+# from os import environ
+# environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
+# environ['PRD_ENV'] = '1'
+# globals()['PRD_ENV'] = 1
+
+
+def cmd_line_argument_parse():
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Perform actions on Images to/from Bfly/Mozu',
+                                     prefix_chars='-+/',
+                                     add_help=True,
+                                     #version='1.1.0',
+                                     )
+
+   # parser.add_argument('--mode', choices=('insert', 'search', 'update', 'delete'), default='insert')
+    parser.add_argument('-d', action="store_false", default=None,
+                    help='Turn delete_flag OFF',
+                    )
+    parser.add_argument('+d', action="store_true", default=None,
+                    help='Turn delete_flag ON',
+                    )
+    parser.add_argument('-u', action="store_false", default=None,
+                    help='Turn update_flag OFF',
+                    )
+    parser.add_argument('+u', action="store_true", default=None,
+                    help='Turn update_flag ON',
+                    )
+    #parser.add_argument('//noarg', '++noarg', action="store_true", default=False)
+    parser.add_argument('-F', action='append_const', dest='const_collection',
+                    const='value-1-to-append',
+                    default=[],
+                    help='Use the F flag to Add different style numbers as a list to run commands on')
+    parser.parse_args('-d+d-u+u-F'.split())
+    res = parser.parse_args()
+
+    return vars(res)
 
 @log
 def count_total_files_documents(**kwargs):
@@ -99,37 +132,7 @@ def delete_document_data_content(**kwargs):
 #     print image_data
 #     return image_data
 
-def cmd_line_argument_parse():
-    import argparse
 
-    parser = argparse.ArgumentParser(description='Perform actions on Images to/from Bfly/Mozu',
-                                     prefix_chars='-+/',
-                                     add_help=True,
-                                     #version='1.1.0',
-                                     )
-
-   # parser.add_argument('--mode', choices=('insert', 'search', 'update', 'delete'), default='insert')
-    parser.add_argument('-d', action="store_false", default=None,
-                    help='Turn delete_flag OFF',
-                    )
-    parser.add_argument('+d', action="store_true", default=None,
-                    help='Turn delete_flag ON',
-                    )
-    parser.add_argument('-u', action="store_false", default=None,
-                    help='Turn update_flag OFF',
-                    )
-    parser.add_argument('+u', action="store_true", default=None,
-                    help='Turn update_flag ON',
-                    )
-    #parser.add_argument('//noarg', '++noarg', action="store_true", default=False)
-    parser.add_argument('-F', action='append_const', dest='const_collection',
-                    const='value-1-to-append',
-                    default=[],
-                    help='Use the F flag to Add different style numbers as a list to run commands on')
-    parser.parse_args('-d+d-u+u-F'.split())
-    res = parser.parse_args()
-
-    return vars(res)
 
 
 if __name__ == '__main__':
