@@ -106,6 +106,11 @@ def authenticate():
     auth = get_mozu_client_authtoken()
     return auth
 
+def authenticate_env():
+    set_environment()
+    auth = get_mozu_client_authtoken()
+    return auth
+
 
 if __name__ == '__main__':
     set_environment()
