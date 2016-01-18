@@ -124,8 +124,8 @@ def upsert_data_mz_image(**kwargs):
                             update_db = mozu_image_table.update(values=dict(**table_args),
                                                                 whereclause=  # mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
                                                                 (mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
-                                                                |
-                                                                (mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
+                                                                #|
+                                                                #(mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
                                                                 )
 
                             print "4-\nUpdate Statement: \t", update_db
@@ -158,7 +158,6 @@ def delete_document_data_content(**kwargs):
 
     delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) )
     # res = delete_db.execute()
-    # TODO: Need to delete from db or alter insome way
     print delete_resp.headers, "Delete \n", delete_db, "\nMZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
 
