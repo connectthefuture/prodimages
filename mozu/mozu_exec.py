@@ -250,16 +250,19 @@ def main(fileslist):
                 print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
                 mozu_image_table = mozu_image_table_instance()
                 table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
-                #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
-                # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
-                table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-                update_content_resp = update_content_mz_image(**values)
-                print "Updated Process Complete, ", update_content_resp.headers
-                if update_content_resp.status_code < 300:
-                    update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
-                    res = update_db.execute()
-                    print res, 'Updated--> ', values.items(), ' <-- ', update_db
+                try:
+                    mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
+                    #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
+                    # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
+                    table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
+                    update_content_resp = update_content_mz_image(**values)
+                    print "Updated Process Complete, ", update_content_resp.headers
+                    if update_content_resp.status_code < 300:
+                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
+                        res = update_db.execute()
+                        print res, 'Updated--> ', values.items(), ' <-- ', update_db
+                except TypeError:
+                    print 'Tried MZ QUERY to DB and failed with no Rows found.'
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
