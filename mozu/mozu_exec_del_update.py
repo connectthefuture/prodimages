@@ -72,14 +72,16 @@ def delete_by_bflyid(bf_imageid=None):
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
     ret_select = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid == bf_imageid ))).execute()
-    mz_imageid = ret_select.fetchone()['mz_imageid']
-    if mz_imageid:
-        resp = delete_document_data_content(mz_imageid=mz_imageid)
+    try:
+        mz_imageid = ret_select.fetchone()['mz_imageid']
+        if mz_imageid:
+            resp = delete_document_data_content(mz_imageid=mz_imageid)
 
-        ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
-        print 'Deleted bf_imageid', ret #ret.fetchone()
-        return bf_imageid
-
+            ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
+            print 'Deleted bf_imageid', ret #ret.fetchone()
+            return bf_imageid
+    except TypeError:
+        'NoneTpe Error in delete by bfid. {} Not in DB'.format(bf_imageid)
 #### Update or UpdateDel -- aka "delete from mozu and db then reload to mozu and store new mozu docID"
 
 # @log
