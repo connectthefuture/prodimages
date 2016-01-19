@@ -268,8 +268,8 @@ def main(fileslist):
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
-            except KeyError:  # sqlalchemy.exc.IntegrityError:
-                print 'KEY Error and everything is or will be commented out below because it is in the db already'
+            except AttributeError:  # sqlalchemy.exc.IntegrityError:
+                print 'Atrribute for Nonetype Key and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
