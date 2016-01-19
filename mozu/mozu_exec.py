@@ -251,7 +251,7 @@ def main(fileslist):
                 mozu_image_table = mozu_image_table_instance()
                 table_args = include_keys(values, __mozu_image_table_valid_keys__)
                 try:
-                    mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
+                    #mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
                     #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
                     # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
                     table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
