@@ -100,22 +100,27 @@ def update_content_mz_image(**kwargs):
 def update_replace_content(**kwargs):
     if kwargs.get("mz_imageid"):
         mz_imageid = kwargs.get("mz_imageid")
-        res = delete_by_mozuid(mz_imageid=mz_imageid)
+        bf_imageid = kwargs.get("bf_imageid")
+        res_del = delete_by_mozuid(mz_imageid=mz_imageid)
     elif kwargs.get("src_filepath"):
         src_filepath = kwargs.get("src_filepath")
         bf_imageid = src_filepath.split('/')[-1].split('.')[0]
         ext = src_filepath.split('.')[-1]
-        res = delete_by_bflyid(bf_imageid=bf_imageid)
+        res_del = delete_by_bflyid(bf_imageid=bf_imageid)
     elif kwargs.get("bf_imageid"):
         from os import path
         bf_imageid = kwargs.get("bf_imageid")
         ext = kwargs.get("ext", "png")
         src_filepath = path.join('/mnt/images', bf_imageid[:4], bf_imageid + '.' + ext)
-        res = delete_by_bflyid(bf_imageid=bf_imageid)
+        res_del = delete_by_bflyid(bf_imageid=bf_imageid)
+        res_update
     else:
         raise KeyError
+    kwargs["bf_imageid"] = bf_imageid
+    if bf_imageid:
+        resp = update_content_mz_image(**kwargs)
     print 'Successful replace-update \n', locals()
-    return locals()
+    return resp
 
 
 if __name__ == '__main__':
@@ -133,4 +138,3 @@ if __name__ == '__main__':
         print result
     except:
         print "Error or Cannot be called from shell.\v Import using python...", locals()
-

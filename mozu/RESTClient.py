@@ -244,10 +244,12 @@ class MozuRestClient:
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
         _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_data_response.status_code
-        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response.status_code, _document_content_response.status_code, _mz_imageid, self.document_resource)
+        print "DocumentDeleteResponse \n--ContentCode: {1} \n--DataCode: {0} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response.status_code, _document_content_response.status_code, _mz_imageid, self.document_resource)
         try:
+            print 'DELETED CONTENT AND RESOURCE-> {}'.format(_document_data_response.headers())
             return _document_data_response
         except KeyError:
+            print 'KEY ERROR OCCURED ---data response headers follow--->\n{}'.format(_document_data_response.headers())
             return _document_data_response.headers()
 
         #files = {'media': open(src_filepath, 'rb')}
@@ -281,6 +283,11 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        if not _mz_imageid and kwargs.get('bf_imageid', self.bf_imageid):
+            import db
+            _mzimg_table_instance = db.mozu_image_table_instance()
+            #_mz_imageid = _mzimg_table_instance.select().execute().fetchone()['mz_imageid']
+            self.mz_imageid = _mz_imageid
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
         # Get Content
         _document_content_response = requests.head(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False)
@@ -307,7 +314,7 @@ class MozuRestClient:
         MozuRestClient.http_status_code = resp.status_code
         if MozuRestClient.http_status_code < 400 and MozuRestClient.http_status_code != 0:
             if not outfile:
-                outfile = path.join('/tmp', self.bf_imageid)
+                outfile = path.join('/tmp', self.bf_imageid.jpg)
             else: pass
             with open(outfile,'w') as f:
                 f.write(resp.content)
