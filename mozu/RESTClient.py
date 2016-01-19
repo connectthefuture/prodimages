@@ -181,16 +181,17 @@ class MozuRestClient:
             self.ext = 'jpg'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
-        try:
+        if type(mz_imageid) == str:
             stream = open(path.abspath(src_filepath), 'rbU').read()
             self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
             _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
             MozuRestClient.http_status_code = _content_response.status_code
             print "ContentPutResponse: {0}".format(_content_response.status_code)
             return _content_response
+        else:
+            print "TYPE Error 193 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(mz_imageid))
         except AttributeError:
             print "OIO Error 171 Failed send_content"
-
 
     ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
     @log
