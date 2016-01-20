@@ -184,22 +184,24 @@ class MozuRestClient:
             self.ext = 'jpg'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
-        try:
-            if type(self.mz_imageid) == str and len(self.mz_imageid) > 0:
-                if kwargs.get('src_filepath'):
-                    stream = open(path.abspath(src_filepath), 'rb').read()
-                elif kwargs.get('data_stream'):
-                    stream = kwargs.get('stream')
-                self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid
-                _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
-                MozuRestClient.http_status_code = _content_response.status_code
-                print "ContentPutResponse: {0}\n{1}".format(_content_response.status_code, _content_response.headers)
-                return _content_response
-            else:
-                print "TYPE Error 198 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(self.mz_imageid))
-        except AttributeError:
-            print "OIO Error 200 Failed send_content"
-
+        if self.http_status_code <> 777:
+            try:
+                if type(self.mz_imageid) == str and len(self.mz_imageid) > 0:
+                    if kwargs.get('src_filepath'):
+                        stream = open(path.abspath(src_filepath), 'rb').read()
+                    elif kwargs.get('data_stream'):
+                        stream = kwargs.get('stream')
+                    self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid
+                    _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
+                    MozuRestClient.http_status_code = _content_response.status_code
+                    print "ContentPutResponse: {0}\n{1}".format(_content_response.status_code, _content_response.headers)
+                    return _content_response
+                else:
+                    print "TYPE Error 198 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(self.mz_imageid))
+            except AttributeError:
+                print "OIO Error 200 Failed send_content"
+        else:
+            print 'No Responses Recorded- Create IMG Success call or\nCreate Fail - 409 Status Not Recorded. Response Obj is Null'
     ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
     @log
     def update_mz_image(self,**kwargs):
