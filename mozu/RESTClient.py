@@ -195,9 +195,9 @@ class MozuRestClient:
                 print "ContentPutResponse: {0}".format(_content_response.status_code)
                 return _content_response
             else:
-                print "TYPE Error 193 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(mz_imageid))
+                print "TYPE Error 198 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(mz_imageid))
         except AttributeError:
-            print "OIO Error 171 Failed send_content"
+            print "OIO Error 200 Failed send_content"
 
     ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
     @log
