@@ -91,11 +91,11 @@ def update_content_mz_image(**kwargs):
     from db import mozu_image_table_instance
     mzclient = MozuRestClient(**kwargs)
     content_response = mzclient.send_content(**kwargs)
-    print content_response.headers, "Update Mozu Content"
+    print content_response.headers, "\nUpdate Mozu Content"
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     update_db = mozu_image_table.update(values=dict(**table_args))
-    print content_response.headers, "Update DB MZ_IMAGE"
+    print content_response.headers, "\nUpdate DB MZ_IMAGE"
     return content_response
 
 ## Delete current Mozu image and load newest version from netsrv101
@@ -125,7 +125,7 @@ def update_replace_content(**kwargs):
     kwargs["bf_imageid"] = bf_imageid
     if bf_imageid:
         resp = update_content_mz_image(**kwargs)
-    print 'Successful replace-update \n', locals()
+    print 'Successful replace-update \nLocals: \t', locals()
     return resp
 
 

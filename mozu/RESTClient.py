@@ -170,13 +170,14 @@ class MozuRestClient:
         import requests
         from os import path
         ## FileContent
-        if not self.bf_imageid:
+        if self.bf_imageid and kwargs.get('src_filepath'):
             src_filepath = kwargs.get('src_filepath')
-            mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+            self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        elif kwargs.get('src_filepath'):
+            src_filepath = kwargs.get('src_filepath')
+            self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
             self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
-        else:
-            src_filepath = kwargs.get('src_filepath')
-            mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+
         if not self.ext and kwargs.get('src_filepath'):
             self.ext = src_filepath.split('.')[-1]
         else:
@@ -184,18 +185,18 @@ class MozuRestClient:
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
         try:
-            if type(mz_imageid) == str and len(mz_imageid) > 0:
+            if type(self.mz_imageid) == str and len(self.mz_imageid) > 0:
                 if kwargs.get('src_filepath'):
                     stream = open(path.abspath(src_filepath), 'rb').read()
                 elif kwargs.get('data_stream'):
                     stream = kwargs.get('stream')
-                self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
+                self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid
                 _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
                 MozuRestClient.http_status_code = _content_response.status_code
                 print "ContentPutResponse: {0}\n{1}".format(_content_response.status_code, _content_response.headers)
                 return _content_response
             else:
-                print "TYPE Error 198 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(mz_imageid))
+                print "TYPE Error 198 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(self.mz_imageid))
         except AttributeError:
             print "OIO Error 200 Failed send_content"
 
