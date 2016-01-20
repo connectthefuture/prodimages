@@ -190,7 +190,7 @@ class MozuRestClient:
                 elif kwargs.get('data_stream'):
                     stream = kwargs.get('stream')
                 self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
-                _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, stream=True, verify=False)
+                _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, stream=False, verify=False)
                 MozuRestClient.http_status_code = _content_response.status_code
                 print "ContentPutResponse: {0}\n{1}".format(_content_response.status_code, _content_response.headers)
                 return _content_response
