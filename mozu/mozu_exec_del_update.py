@@ -115,7 +115,6 @@ def update_replace_content(**kwargs):
         ext = kwargs.get("ext", "png")
         src_filepath = path.join('/mnt/images', bf_imageid[:4], bf_imageid + '.' + ext)
         res_del = delete_by_bflyid(bf_imageid=bf_imageid)
-        res_update
     else:
         raise KeyError
     kwargs["bf_imageid"] = bf_imageid
