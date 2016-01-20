@@ -63,18 +63,18 @@ def upload_new_data_content(**kwargs):
     return content_response
 
 # @log
-# # PUT - Upload/Update Image/DocumentContent
-def update_content_mz_image(**kwargs):
-    from RESTClient import MozuRestClient
-    from db import mozu_image_table_instance
-    mzclient = MozuRestClient(**kwargs)
-    content_response = mzclient.send_content(**kwargs)
-    print content_response.headers, "Update Mozu Content"
-    mozu_image_table = mozu_image_table_instance()
-    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-    update_db = mozu_image_table.update(values=dict(**table_args))
-    print content_response.headers, "Update DB MZ_IMAGE"
-    return content_response
+# # # PUT - Upload/Update Image/DocumentContent
+# def update_content_mz_image(**kwargs):
+#     from RESTClient import MozuRestClient
+#     from db import mozu_image_table_instance
+#     mzclient = MozuRestClient(**kwargs)
+#     content_response = mzclient.send_content(**kwargs)
+#     print content_response.headers, "Update Mozu Content"
+#     mozu_image_table = mozu_image_table_instance()
+#     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+#     update_db = mozu_image_table.update(values=dict(**table_args))
+#     print content_response.headers, "Update DB MZ_IMAGE InitialMZExec"
+#     return content_response
 
 # PUT - Update Document Data and Content- Properties/Metadata
 @log

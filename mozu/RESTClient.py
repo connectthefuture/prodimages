@@ -171,15 +171,15 @@ class MozuRestClient:
         from os import path
         ## FileContent
         if self.bf_imageid and kwargs.get('src_filepath'):
-            src_filepath = kwargs.get('src_filepath')
+            _src_filepath = kwargs.get('src_filepath')
             self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         elif kwargs.get('src_filepath'):
-            src_filepath = kwargs.get('src_filepath')
+            _src_filepath = kwargs.get('src_filepath')
             self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
             self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
 
         if not self.ext and kwargs.get('src_filepath'):
-            self.ext = src_filepath.split('.')[-1]
+            self.ext = _src_filepath.split('.')[-1]
         else:
             self.ext = 'jpg'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
@@ -188,7 +188,7 @@ class MozuRestClient:
             try:
                 if type(self.mz_imageid) == str and len(self.mz_imageid) > 0:
                     if kwargs.get('src_filepath'):
-                        stream = open(path.abspath(src_filepath), 'rb').read()
+                        stream = open(path.abspath(_src_filepath), 'rb').read()
                     elif kwargs.get('data_stream'):
                         stream = kwargs.get('stream')
                     self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid

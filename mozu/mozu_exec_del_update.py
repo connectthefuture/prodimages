@@ -45,33 +45,33 @@ def delete_document_data_content(**kwargs):
     return delete_resp
 
 # Delete doc content and db entry using mzid to query db
-def delete_by_mozuid(mz_imageid=None):
+def delete_by_mozuid(**kwargs):
     from os import chdir, path, curdir
     try:
         chdir(path.join('/usr/local/batchRunScripts', 'mozu'))
-        print 'Executing from ', path.abspath(curdir), mz_imageid
+        print 'Executing from ', path.abspath(curdir), kwargs.get('mz_imageid')
     except:
         pass
-    resp = delete_document_data_content(mz_imageid=mz_imageid)
+    resp = delete_document_data_content(mz_imageid=kwargs.get('mz_imageid'))
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
-    ret_select = mozu_image_table.select(whereclause=((mozu_image_table.c.mz_imageid == mz_imageid))).execute().fetchone()
-    ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
+    ret_select = mozu_image_table.select(whereclause=((mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')))).execute().fetchone()
+    ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid') ))).execute()
     print 'Deleted bf_imageid', ret #ret.fetchone()
     return ret_select['bf_imageid']
 
 # Delete doc content and db entry using bfly colorstyle to query db
-def delete_by_bflyid(bf_imageid=None):
+def delete_by_bflyid(**kwargs):
     from os import chdir, path, curdir
     try:
         chdir(path.join('/usr/local/batchRunScripts', 'mozu'))
-        print 'Executing from ', path.abspath(curdir), bf_imageid
+        print 'Executing from ', path.abspath(curdir), kwargs.get('bf_imageid')
     except:
         pass
 
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
-    ret_select = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid == bf_imageid ))).execute()
+    ret_select = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid') ))).execute()
     try:
         mz_imageid = ret_select.fetchone()['mz_imageid']
         if mz_imageid:
@@ -79,9 +79,9 @@ def delete_by_bflyid(bf_imageid=None):
 
             ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
             print 'Deleted bf_imageid', ret #ret.fetchone()
-            return bf_imageid
+            return kwargs.get('bf_imageid')
     except TypeError:
-        'NoneTpe Error in delete by bfid. {} Not in DB'.format(bf_imageid)
+        'NoneTpe Error in delete by bfid. {} Not in DB'.format(kwargs.get('bf_imageid'))
 #### Update or UpdateDel -- aka "delete from mozu and db then reload to mozu and store new mozu docID"
 
 # @log
