@@ -186,7 +186,7 @@ class MozuRestClient:
         try:
             if type(mz_imageid) == str:
                 if kwargs.get('src_filepath'):
-                    stream = open(path.abspath(src_filepath), 'rbU').read()
+                    stream = open(path.abspath(src_filepath), 'rb').read()
                 elif kwargs.get('data_stream'):
                     stream = kwargs.get('stream')
                 self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
