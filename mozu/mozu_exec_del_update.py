@@ -61,7 +61,7 @@ def delete_by_mozuid(mz_imageid=None):
     return ret_select['bf_imageid']
 
 # Delete doc content and db entry using bfly colorstyle to query db
-def delete_by_bflyid(l=None):
+def delete_by_bflyid(bf_imageid=None):
     from os import chdir, path, curdir
     try:
         chdir(path.join('/usr/local/batchRunScripts', 'mozu'))

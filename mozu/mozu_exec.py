@@ -264,7 +264,7 @@ def main(fileslist):
                 #         print res, 'Updated--> ', values.items(), ' <-- ', update_db
                 # except TypeError:
                 #
-                print 'Tried MZ QUERY to DB and failed with no Rows found.'
+                print 'Tried Actually Didnt right Now, but .. MZ QUERY to DB and failed with no Rows found.'
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
