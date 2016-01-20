@@ -171,11 +171,11 @@ class MozuRestClient:
         from os import path
         ## FileContent
         if not self.bf_imageid:
-            src_filepath = kwargs.get('src_filepath', '')
+            src_filepath = kwargs.get('src_filepath')
             mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
             self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
         else:
-            src_filepath = kwargs.get('src_filepath', '')
+            src_filepath = kwargs.get('src_filepath')
             mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         if not self.ext:
             self.ext = 'jpg'
@@ -183,7 +183,10 @@ class MozuRestClient:
         self.headers["Content-type"] = self.mimetype
         try:
             if type(mz_imageid) == str:
-                stream = open(path.abspath(src_filepath), 'rbU').read()
+                if kwargs.get('src_filepath'):
+                    stream = open(path.abspath(src_filepath), 'rbU').read()
+                elif kwargs.get('data_stream'):
+                    stream = kwargs.get('stream')
                 self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
                 _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, stream=True, verify=False)
                 MozuRestClient.http_status_code = _content_response.status_code
