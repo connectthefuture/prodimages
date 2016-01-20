@@ -201,7 +201,7 @@ class MozuRestClient:
             except AttributeError:
                 print "OIO Error 200 Failed send_content"
         else:
-            print 'No Responses Recorded- Create IMG Success call or\nCreate Fail - 409 Status Not Recorded. Response Obj is Null'
+            print 'No Responses Recorded- Create IMG Success call or\nCreate Fail - 409 Status Not Recorded. Response Obj is Null - 777 init Code'
     ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
     @log
     def update_mz_image(self,**kwargs):
