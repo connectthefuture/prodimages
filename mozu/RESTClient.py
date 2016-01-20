@@ -185,7 +185,7 @@ class MozuRestClient:
             if type(mz_imageid) == str:
                 stream = open(path.abspath(src_filepath), 'rbU').read()
                 self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
-                _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
+                _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, stream=True, verify=False)
                 MozuRestClient.http_status_code = _content_response.status_code
                 print "ContentPutResponse: {0}".format(_content_response.status_code)
                 return _content_response
