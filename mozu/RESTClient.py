@@ -192,7 +192,7 @@ class MozuRestClient:
                 self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
                 _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, stream=True, verify=False)
                 MozuRestClient.http_status_code = _content_response.status_code
-                print "ContentPutResponse: {0}".format(_content_response.status_code)
+                print "ContentPutResponse: {0}\n{1}".format(_content_response.status_code, _content_response.headers)
                 return _content_response
             else:
                 print "TYPE Error 198 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(mz_imageid))
