@@ -35,6 +35,10 @@ MOZU_PROTOCOL  = "https"
 MOZU_LIST_FQN  = 'files@mozu'
 MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
 
+
+if environ.get('RALEIGH'):
+    DB_URI_STG = 'oracle+cx_oracle://MZIMG:m0zu1mages@192.168.5.159:1521/xe'
+
 #################################################
 ### ALL Variable Configs can be set above for ###
 #################################################
