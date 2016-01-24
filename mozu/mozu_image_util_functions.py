@@ -22,6 +22,7 @@ def log(original_function, filename=None):
             return result
         except TypeError:
             print 'NoneTypeError in Logger'
+            return
     return new_function
 
 ### Generic Logger
