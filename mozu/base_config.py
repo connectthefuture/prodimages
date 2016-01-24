@@ -6,7 +6,7 @@ from os import environ
 globals()['PRD_ENV'] = 0  # 1=True, 0=False
 if environ.get('PYDEBUG'): import pdb; pdb.set_trace()
 # if environ.get('DEBUG'): globals()['DEBUG'] = 1
-if environ.get('PRD_ENV') == 1: globals()['PRD_ENV'] = 1
+if environ.get('PRD_ENV'): globals()['PRD_ENV'] = 1
 else: globals()['PRD_ENV'] = 0
 ### End Env
 
@@ -34,10 +34,6 @@ __PRD_AUTH__  = {'applicationId': 'bluefly.ImageSync.1.0.0.Release',
 MOZU_PROTOCOL  = "https"
 MOZU_LIST_FQN  = 'files@mozu'
 MOZU_DOCUMENT_TYPE_FQN =  'image@mozu'
-
-
-if environ.get('RALEIGH'):
-    DB_URI_STG = 'oracle+cx_oracle://MZIMG:m0zu1mages@192.168.5.159:1521/xe'
 
 #################################################
 ### ALL Variable Configs can be set above for ###
@@ -107,11 +103,6 @@ def get_mozu_client_authtoken():
 
 
 def authenticate():
-    auth = get_mozu_client_authtoken()
-    return auth
-
-def authenticate_env():
-    set_environment()
     auth = get_mozu_client_authtoken()
     return auth
 

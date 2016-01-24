@@ -170,38 +170,28 @@ class MozuRestClient:
         import requests
         from os import path
         ## FileContent
-        if self.bf_imageid and kwargs.get('src_filepath'):
-            _src_filepath = kwargs.get('src_filepath')
-            self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        elif kwargs.get('src_filepath'):
-            _src_filepath = kwargs.get('src_filepath')
-            self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        if not self.bf_imageid:
+            src_filepath = kwargs.get('src_filepath', '')
+            mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
             self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
-
-        if not self.ext and kwargs.get('src_filepath'):
-            self.ext = _src_filepath.split('.')[-1]
         else:
+            src_filepath = kwargs.get('src_filepath', '')
+            mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        if not self.ext:
             self.ext = 'jpg'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
-        if self.http_status_code <> 777:
-            try:
-                if type(self.mz_imageid) == str and len(self.mz_imageid) > 0:
-                    if kwargs.get('src_filepath'):
-                        stream = open(path.abspath(_src_filepath), 'rb').read()
-                    elif kwargs.get('data_stream'):
-                        stream = kwargs.get('stream')
-                    self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid
-                    _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
-                    MozuRestClient.http_status_code = _content_response.status_code
-                    print "ContentPutResponse: {0}\n{1}".format(_content_response.status_code, _content_response.headers)
-                    return _content_response
-                else:
-                    print "TYPE Error 198 RESTClient Failed to send_content\nNo Exception Raised for Type {}".format(type(self.mz_imageid))
-            except AttributeError:
-                print "OIO Error 200 Failed send_content"
-        else:
-            print 'No Responses Recorded- Create IMG Success call or\nCreate Fail - 409 Status Not Recorded. Response Obj is Null - 777 init Code'
+        try:
+            stream = open(path.abspath(src_filepath), 'rb').read()
+            self.document_resource = MozuRestClient.__document_data_api + "/" + mz_imageid
+            _content_response = requests.put(self.document_resource + "/content", data=stream, headers=self.headers, verify=False)
+            MozuRestClient.http_status_code = _content_response.status_code
+            print "ContentPutResponse: {0}".format(_content_response.status_code)
+            return _content_response
+        except AttributeError:
+            print "OIO Error 171 Failed send_content"
+
+
     ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
     @log
     def update_mz_image(self,**kwargs):
@@ -254,12 +244,10 @@ class MozuRestClient:
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
         _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_data_response.status_code
-        print "DocumentDeleteResponse \n--ContentCode: {1} \n--DataCode: {0} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response.status_code, _document_content_response.status_code, _mz_imageid, self.document_resource)
+        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response.status_code, _document_content_response.status_code, _mz_imageid, self.document_resource)
         try:
-            print 'DELETED CONTENT AND RESOURCE-> {}'.format(_document_data_response.headers())
             return _document_data_response
         except KeyError:
-            print 'KEY ERROR OCCURED ---data response headers follow--->\n{}'.format(_document_data_response.headers())
             return _document_data_response.headers()
 
         #files = {'media': open(src_filepath, 'rb')}
@@ -293,11 +281,6 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        if not _mz_imageid and kwargs.get('bf_imageid', self.bf_imageid):
-            import db
-            _mzimg_table_instance = db.mozu_image_table_instance()
-            #_mz_imageid = _mzimg_table_instance.select().execute().fetchone()['mz_imageid']
-            self.mz_imageid = _mz_imageid
         self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
         # Get Content
         _document_content_response = requests.head(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False)
@@ -324,7 +307,7 @@ class MozuRestClient:
         MozuRestClient.http_status_code = resp.status_code
         if MozuRestClient.http_status_code < 400 and MozuRestClient.http_status_code != 0:
             if not outfile:
-                outfile = path.join('/tmp', self.bf_imageid.jpg)
+                outfile = path.join('/tmp', self.bf_imageid)
             else: pass
             with open(outfile,'w') as f:
                 f.write(resp.content)

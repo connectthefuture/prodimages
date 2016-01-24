@@ -8,30 +8,30 @@ import sqlalchemy
 from mozu_image_util_functions import include_keys, log
 from RESTClient import __mozu_image_table_valid_keys__
 
-# @log
-# def count_total_files_documents(**kwargs):
-#     from RESTClient import MozuRestClient
-#     mzclient = MozuRestClient(**kwargs)
-#     if not kwargs.get('page_size'):
-#         returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
-#     else:
-#         returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
-#     print "Total Files in DocumentList: {}".format(returned_item_count)
-#     return returned_item_count
-#
-# @log
-# def list_documents(**kwargs):
-#     from RESTClient import MozuRestClient
-#     mzclient = MozuRestClient(**kwargs)
-#     documents = mzclient.get_mz_image_document_list()['items']
-#     return documents
-#
-# @log
-# def resource_documents_list(**kwargs):
-#     from RESTClient import MozuRestClient
-#     mzclient = MozuRestClient(**kwargs)
-#     documents_list = mzclient.get_mz_image_document_list()
-#     return documents_list
+@log
+def count_total_files_documents(**kwargs):
+    from RESTClient import MozuRestClient
+    mzclient = MozuRestClient(**kwargs)
+    if not kwargs.get('page_size'):
+        returned_item_count = mzclient.get_mz_image_document_list()['totalCount']
+    else:
+        returned_item_count = mzclient.get_mz_image_document_list(**kwargs)['totalCount']
+    print "Total Files in DocumentList: {}".format(returned_item_count)
+    return returned_item_count
+
+@log
+def list_documents(**kwargs):
+    from RESTClient import MozuRestClient
+    mzclient = MozuRestClient(**kwargs)
+    documents = mzclient.get_mz_image_document_list()['items']
+    return documents
+
+@log
+def resource_documents_list(**kwargs):
+    from RESTClient import MozuRestClient
+    mzclient = MozuRestClient(**kwargs)
+    documents_list = mzclient.get_mz_image_document_list()
+    return documents_list
 
 #######################################
 ##### Single File / Single Document Obj
@@ -63,18 +63,18 @@ def upload_new_data_content(**kwargs):
     return content_response
 
 # @log
-# # # PUT - Upload/Update Image/DocumentContent
-# def update_content_mz_image(**kwargs):
-#     from RESTClient import MozuRestClient
-#     from db import mozu_image_table_instance
-#     mzclient = MozuRestClient(**kwargs)
-#     content_response = mzclient.send_content(**kwargs)
-#     print content_response.headers, "Update Mozu Content"
-#     mozu_image_table = mozu_image_table_instance()
-#     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-#     update_db = mozu_image_table.update(values=dict(**table_args))
-#     print content_response.headers, "Update DB MZ_IMAGE InitialMZExec"
-#     return content_response
+# # PUT - Upload/Update Image/DocumentContent
+def update_content_mz_image(**kwargs):
+    from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
+    mzclient = MozuRestClient(**kwargs)
+    content_response = mzclient.send_content(**kwargs)
+    print content_response.headers, "Update Mozu Content"
+    mozu_image_table = mozu_image_table_instance()
+    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+    update_db = mozu_image_table.update(values=dict(**table_args))
+    print content_response.headers, "Update DB MZ_IMAGE"
+    return content_response
 
 # PUT - Update Document Data and Content- Properties/Metadata
 @log
@@ -124,8 +124,8 @@ def upsert_data_mz_image(**kwargs):
                             update_db = mozu_image_table.update(values=dict(**table_args),
                                                                 whereclause=  # mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
                                                                 (mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
-                                                                #|
-                                                                #(mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
+                                                                |
+                                                                (mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
                                                                 )
 
                             print "4-\nUpdate Statement: \t", update_db
@@ -158,6 +158,7 @@ def delete_document_data_content(**kwargs):
 
     delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) )
     # res = delete_db.execute()
+    # TODO: Need to delete from db or alter insome way
     print delete_resp.headers, "Delete \n", delete_db, "\nMZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
 
@@ -247,29 +248,24 @@ def main(fileslist):
                     print "HTTP Status: {}\n Raising Integrity Error".format(content_resp.status_code)
                     raise ValueError #sqlalchemy.exc.IntegrityError()
             except TypeError:
-                # try:
-                #     print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
-                #     mozu_image_table = mozu_image_table_instance()
-                #     table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                #
-                #     mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
-                #     #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
-                #     # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
-                #     table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-                #     update_content_resp = update_content_mz_image(**values)
-                #     print "Updated Process Complete, ", update_content_resp.headers
-                #     if update_content_resp.status_code < 300:
-                #         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
-                #         res = update_db.execute()
-                #         print res, 'Updated--> ', values.items(), ' <-- ', update_db
-                # except TypeError:
-                #
-                print 'Tried Actually Didnt right Now, but .. MZ QUERY to DB and failed with no Rows found.'
+                print 'TYPE Error -- 409 DOCUMENT EXISTS continuing with update-->select query'
+                mozu_image_table = mozu_image_table_instance()
+                table_args = include_keys(values, __mozu_image_table_valid_keys__)
+                mz_imageid = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['bf_imageid']))).execute().fetchone()['mz_imageid']
+                #md5checksum = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == table_args['md5checksum']))).execute().fetchone()['mz_imageid']
+                # bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
+                table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
+                update_content_resp = update_content_mz_image(**values)
+                print "Updated Process Complete, ", update_content_resp.headers
+                if update_content_resp.status_code < 300:
+                    update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
+                    res = update_db.execute()
+                    print res, 'Updated--> ', values.items(), ' <-- ', update_db
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
-            except AttributeError:  # sqlalchemy.exc.IntegrityError:
-                print 'Atrribute for Nonetype Key and everything is or will be commented out below because it is in the db already'
+            except KeyError:  # sqlalchemy.exc.IntegrityError:
+                print 'KEY Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
