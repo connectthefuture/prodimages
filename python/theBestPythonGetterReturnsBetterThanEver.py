@@ -104,6 +104,22 @@ def main():
         """
     ###
 
+    daily_vendor_reshoot_query = """
+        select distinct data.`file_path`, data.`photo_date`, data.`colorstyle`, CONCAT('/mnt/Post_Ready', t3.`file_path`), t3.`photo_date`, data.`sample_image_dt`
+        FROM
+            (SELECT t1.`file_path`, t1.`colorstyle`, t2.`image_ready_dt` , t1.`photo_date`,t1.alt, t2.`sample_image_dt`
+            FROM `www_django`.`push_photoselects` t1
+            join `www_django`.`product_snapshot_live` t2 on t1.`colorstyle` = t2.`colorstyle`
+            where t1.photo_date BETWEEN SYSDATE( ) - INTERVAL 15 DAY AND SYSDATE( ) + INTERVAL 2 DAY
+            having (t2.`image_ready_dt` != '0000-00-00' or t2.`image_ready_dt` is not null)
+            and  t2.`sample_image_dt` is null)
+        AS data
+        join `data_imagepaths`.`post_ready_original` t3 on data.`colorstyle` = t3.`colorstyle`
+        where data.`image_ready_dt` < t3.`photo_date` and data.`alt` = t3.`alt`;
+        """
+    ###
+
+
     result = connection.execute(daily_incomplete_query)
     result_reshoot = connection.execute(daily_reshoot_query)
 
