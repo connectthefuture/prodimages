@@ -460,8 +460,21 @@ def download_mplce_url(urldest_tuple):
 
     print ' 404 - 1 - Trying Urllib3 ', image_url
     hostname = urllib3.get_host(image_url)[1]
-
-    if regex_drive3.findall(image_url):
+    ####################################################################################################
+    ####################################################################################################
+    ####
+    #################
+    ########### TEMPORARY RESTRICT URL from Merchantry Placeholder ###########
+    placeholder_url = 'https://pim-image-4b2a111d-0df4-447e-bc31-d288a9-s3bucket-1in4kl2m21ire.s3.amazonaws.com/7274a8bcbb3fa06076da6e1c2950e617b24baf4f5d467def6c88f276a0e15f12.jpg'
+    if image_url == placeholder_url:
+        print 'RESTRICTING DOWNLOAD of Merchantry Placeholder image.--> {}'.format(image_url)
+        return
+    ######################### END ###### Adjust below elif to initial if once removed above #############
+    #################
+    ####
+    ####################################################################################################
+    ####################################################################################################
+    elif regex_drive3.findall(image_url):
         image_url = drive_match_fileid(image_url)
         print image_url, ' DRIVE3 --ID--> '
         import http_tools.auth.Google.google_drive_auth_downloader as google_drive_auth_downloader
