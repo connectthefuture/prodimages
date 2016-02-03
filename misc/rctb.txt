@@ -247,8 +247,12 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 59 7,8,10,11,12,13,14,15,16,17,18,19 * * * /usr/local/batchRunScripts/bash/morningEventMail.sh
 8 8 * * * /usr/local/batchRunScripts/bash/morningEventMailIncompletes.sh 2>&1 >> /var/log/mail_lavenderreport.log
 ###########################################################################ss
-## Mail Upload Totals
+###########################################################################ss
+###### Mail Upload Totals ##########
 20,40,0 * * * * /usr/local/batchRunScripts/bash/mail_aggregated_imagedrop.sh
+#############################################################
+###### Mail Zero Byte Files Found in MARKETPLACE_ROOT To Me only #######
+2 * * * * /usr/local/batchRunScripts/bash/zero_byte_marketplace_mv_mail.sh
 #####################
 ######  DAILY #######
 ######  FILES #######
