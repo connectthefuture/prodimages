@@ -33,6 +33,7 @@ def main(bfly_url=None):
                 print style
                 styles.append(style)
         except AttributeError:
+            print 'AttributeError'
             pass
     return styles
 
