@@ -73,4 +73,5 @@ def main(bfly_url=None,check_status=None):
 
 
 if __name__ == '__main__':
-    main()
+    res = [ f for f in main() if f is not None ]
+    print res
