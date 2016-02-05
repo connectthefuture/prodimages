@@ -63,7 +63,9 @@ def main(bfly_url=None,check_status=None):
                 print bfstyle
                 if check_status:
                     status_code = url_tester(f)
-                    styles.append((bfstyle, status_code))
+                    res_tuple = (bfstyle, status_code,)
+                    styles.append(res_tuple)
+                    print res_tuple
                 else:
                     styles.append(bfstyle)
         except AttributeError:
@@ -73,6 +75,4 @@ def main(bfly_url=None,check_status=None):
 
 
 if __name__ == '__main__':
-    res = main()
-    for f in res:
-        print f, '\n'
+    main()
