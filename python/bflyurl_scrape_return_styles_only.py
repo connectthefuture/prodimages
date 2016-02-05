@@ -31,7 +31,7 @@ def url_tester_headers(url):
     return headers
 
 
-def main(bfly_url=None,check_status=None):
+def main(bfly_url=None,check_status=True):
     import sys, urlparse
     styles = []
     if not bfly_url:
