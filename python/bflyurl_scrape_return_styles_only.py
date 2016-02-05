@@ -39,9 +39,9 @@ def main(bfly_url=None):
             if not bfstyle:
                 bfstyle = f.split('?img=')[-1][:9]
         try:
-            if style.isdigit():
-                print style
-                styles.append(style)
+            if bfstyle.isdigit():
+                print bfstyle
+                styles.append(bfstyle)
         except AttributeError:
             print 'AttributeError'
             pass
