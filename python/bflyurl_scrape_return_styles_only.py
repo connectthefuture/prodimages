@@ -61,7 +61,7 @@ def main(bfly_url=None,check_status=None):
         try:
             if bfstyle.isdigit():
                 print bfstyle
-                if check_status
+                if check_status:
                     status_code = url_tester
                     styles.append((bfstyle, status_code))
                 else:
