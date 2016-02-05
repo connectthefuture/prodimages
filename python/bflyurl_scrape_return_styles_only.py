@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def url_get_links(targeturl):
-    import os,re,sys,requests
+    import requests
     from bs4 import BeautifulSoup
     r = requests.get(targeturl)
     soup = BeautifulSoup(r.text,"html.parser")
@@ -16,19 +16,29 @@ def url_get_links(targeturl):
 
 
 def main(bfly_url=None):
+    import sys, urlparse
     styles = []
-    import sys, os
     if not bfly_url:
         try:
             bfly_url = sys.argv[1]
         except:
             print 'Please enter a url to scrape'
-    #print 'Scraping --> {}'.format(bfly_url)
+    print 'Scraping --> {} for Bluefly Styles\n'.format(bfly_url)
     found_links = url_get_links(bfly_url)
-    for f in found_links:
-        try:
 
-            style=f.split('?productCode=')[-1][:9]
+    for f in found_links:
+        parsedurl =  urlparse.urlparse(f)
+        host    = parsedurl.netloc
+        qstring = parsedurl.query
+        path    = parsedurl.path
+        bfstyle = path.split('/')[-1]
+        if len(bfstyle) == 9 and bfstyle.isdigit():
+            pass
+        elif bfstyle[-3:] == '.ms':
+            bfstyle = f.split('?productCode=')[-1][:9]
+            if not bfstyle:
+                bfstyle = f.split('?img=')[-1][:9]
+        try:
             if style.isdigit():
                 print style
                 styles.append(style)
