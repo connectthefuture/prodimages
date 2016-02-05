@@ -15,7 +15,7 @@ def url_get_links(targeturl):
     return list(set(linklist))
 
 
-def main(bfly_url=None):
+def main(bfly_url=None,check_status=None):
     import sys, urlparse
     styles = []
     if not bfly_url:
@@ -45,6 +45,11 @@ def main(bfly_url=None):
         except AttributeError:
             print 'AttributeError'
             pass
+    if check_status:
+        import requests
+        styles = [ (s, str(requests.get(s).status_code)) for s in styles ]
+    else:
+        pass
     return styles
 
 
