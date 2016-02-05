@@ -45,7 +45,7 @@ def main(bfly_url=None):
         except AttributeError:
             print 'AttributeError'
             pass
-    return list(set(sorted(styles)))
+    return styles
 
 
 if __name__ == '__main__':
