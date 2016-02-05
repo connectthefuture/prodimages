@@ -21,6 +21,10 @@ def main(bfly_url=None,check_status=None):
     if not bfly_url:
         try:
             bfly_url = sys.argv[1]
+            try:
+                check_status = sys.argv[2]
+            except IndexError:
+                pass
         except:
             print 'Please enter a url to scrape'
     print 'Scraping --> {} for Bluefly Styles\n'.format(bfly_url)
