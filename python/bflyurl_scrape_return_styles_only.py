@@ -62,7 +62,7 @@ def main(bfly_url=None,check_status=None):
             if bfstyle.isdigit():
                 print bfstyle
                 if check_status:
-                    status_code = url_tester
+                    status_code = url_tester(f)
                     styles.append((bfstyle, status_code))
                 else:
                     styles.append(bfstyle)
@@ -73,5 +73,6 @@ def main(bfly_url=None,check_status=None):
 
 
 if __name__ == '__main__':
-    res = [ f for f in main() if f is not None ]
-    print res
+    res = main()
+    for f in res:
+        print f, '\n'
