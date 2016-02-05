@@ -31,7 +31,7 @@ def url_tester_headers(url):
     return headers
 
 
-def main(bfly_url=None,check_status=True):
+def main(bfly_url=None,check_status=None):
     import sys, urlparse
     styles = []
     if not bfly_url:
@@ -62,7 +62,7 @@ def main(bfly_url=None,check_status=True):
             if bfstyle.isdigit():
                 print bfstyle
                 if check_status:
-                    status_code = url_tester('http:'+f)
+                    status_code = url_tester('https:' + f.replace('https:'))
                     res_tuple = (bfstyle, status_code,)
                     styles.append(res_tuple)
                     print res_tuple
