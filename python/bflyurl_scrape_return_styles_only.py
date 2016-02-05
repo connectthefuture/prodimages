@@ -15,6 +15,22 @@ def url_get_links(targeturl):
     return list(set(linklist))
 
 
+def url_tester(url):
+    import requests
+    res = requests.get(url)
+    #res = requests.request('HEADERS', url)
+    http_code = res.status_code
+    return http_code
+
+
+def url_tester_headers(url):
+    import requests
+    #res = requests.get(url)
+    res = requests.request('HEADERS', url)
+    headers = res.headers
+    return headers
+
+
 def main(bfly_url=None,check_status=None):
     import sys, urlparse
     styles = []
@@ -45,15 +61,14 @@ def main(bfly_url=None,check_status=None):
         try:
             if bfstyle.isdigit():
                 print bfstyle
-                styles.append(bfstyle)
+                if check_status
+                    status_code = url_tester
+                    styles.append((bfstyle, status_code))
+                else:
+                    styles.append(bfstyle)
         except AttributeError:
             print 'AttributeError'
             pass
-    if check_status:
-        import requests
-        styles = [ (s, str(requests.get(s).status_code)) for s in styles ]
-    else:
-        pass
     return styles
 
 
