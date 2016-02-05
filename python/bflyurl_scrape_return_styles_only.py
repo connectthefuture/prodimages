@@ -62,7 +62,7 @@ def main(bfly_url=None,check_status=True):
             if bfstyle.isdigit():
                 print bfstyle
                 if check_status:
-                    status_code = url_tester('http://'+f)
+                    status_code = url_tester('http:'+f)
                     res_tuple = (bfstyle, status_code,)
                     styles.append(res_tuple)
                     print res_tuple
