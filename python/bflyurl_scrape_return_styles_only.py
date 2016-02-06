@@ -71,7 +71,7 @@ def main(bfly_url=None,check_status=None):
                     else:
                         styles.append(bfstyle)
         except AttributeError:
-            print 'AttributeError'
+            print 'AttributeError, url:{}'.format(f)
             pass
     return styles
 
