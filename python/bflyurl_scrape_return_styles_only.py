@@ -47,6 +47,7 @@ def main(bfly_url=None,check_status=None):
     found_links = url_get_links(bfly_url)
 
     for f in found_links:
+        print f
         try:
             parsedurl =  urlparse.urlparse(f)
             host    = parsedurl.netloc
@@ -54,8 +55,8 @@ def main(bfly_url=None,check_status=None):
             path    = parsedurl.path
             bfstyle = path.split('/')[-1]
             if len(bfstyle) == 9 and bfstyle.isdigit():
-                url = 'https:' + f
-                pass
+                if f[:2] == '//':
+                    url = 'https:' + f
             elif bfstyle[-3:] == '.ms':
                 url = f
                 bfstyle = f.split('?productCode=')[-1][:9]
