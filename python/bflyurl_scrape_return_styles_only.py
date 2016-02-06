@@ -53,8 +53,10 @@ def main(bfly_url=None,check_status=None):
         path    = parsedurl.path
         bfstyle = path.split('/')[-1]
         if len(bfstyle) == 9 and bfstyle.isdigit():
+            url = 'https:' + f
             pass
         elif bfstyle[-3:] == '.ms':
+            url = f
             bfstyle = f.split('?productCode=')[-1][:9]
             if not bfstyle:
                 bfstyle = f.split('?img=')[-1][:9]
@@ -62,7 +64,7 @@ def main(bfly_url=None,check_status=None):
             if bfstyle.isdigit():
                 print bfstyle
                 if check_status:
-                    status_code = url_tester('https:' + f.replace('https:',''))
+                    status_code = url_tester(url)
                     res_tuple = (bfstyle, status_code,)
                     styles.append(res_tuple)
                     print res_tuple
