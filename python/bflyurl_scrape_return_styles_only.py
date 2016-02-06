@@ -47,7 +47,6 @@ def main(bfly_url=None,check_status=None):
     found_links = url_get_links(bfly_url)
 
     for f in found_links:
-        print f
         try:
             parsedurl =  urlparse.urlparse(f)
             host    = parsedurl.netloc
@@ -62,15 +61,15 @@ def main(bfly_url=None,check_status=None):
                 bfstyle = f.split('?productCode=')[-1][:9]
                 if not bfstyle:
                     bfstyle = f.split('?img=')[-1][:9]
-                if bfstyle.isdigit():
-                    print bfstyle
-                    if check_status:
-                        status_code = url_tester(url)
-                        res_tuple = (bfstyle, status_code,)
-                        styles.append(res_tuple)
-                        print res_tuple
-                    else:
-                        styles.append(bfstyle)
+            if bfstyle.isdigit():
+                print bfstyle
+                if check_status:
+                    status_code = url_tester(url)
+                    res_tuple = (bfstyle, status_code,)
+                    styles.append(res_tuple)
+                    print res_tuple
+                else:
+                    styles.append(bfstyle)
         except AttributeError:
             print 'AttributeError, url:{}'.format(f)
             pass
