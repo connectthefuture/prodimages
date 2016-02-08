@@ -180,6 +180,31 @@ def merge_properties(obj1, obj2):
     return obj2
 
 
+@log
+def parse_pdp_html_get_mozuid_cdnkey(pdpurl):
+    from bs4 import BeautifulSoup
+    import urllib2
+    import json
+    if len(pdpurl) == 9 and pdpurl.isdigit():
+        pdpurl = 'http://beta.bluefly.com/cache-clear/p/' + url
+    else:
+        pass
+    page = urllib2.urlopen(pdpurl)
+    soup = BeautifulSoup(page.read(), "lxml")
+    sources=soup.findAll('script', {"id":"data-mz-preload-pagecontext"} )
+    res = []
+    for source in sources:
+        res.append(source)
+    context_data = json.loads(res[0].text)
+    outdict = {}
+    mz_image_data = {}
+    print context_data
+    mz_image_data['mz_imageid']      = context_data['cmsContext']['site']['id']
+    mz_image_data['bf_imageid']      = context_data['productCode']
+    mz_image_data['cdnCacheBustKey'] = context_data['cdnCacheBustKey']
+    outdict[context_data['productCode']] = mz_image_data
+    return outdict
+
 
 ###########################
 def main():
