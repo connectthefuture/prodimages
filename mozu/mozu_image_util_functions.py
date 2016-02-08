@@ -186,7 +186,7 @@ def parse_pdp_html_get_mozuid_cdnkey(pdpurl):
     import urllib2
     import json
     if len(pdpurl) == 9 and pdpurl.isdigit():
-        pdpurl = 'http://beta.bluefly.com/cache-clear/p/' + url
+        pdpurl = 'http://beta.bluefly.com/cache-clear/p/' + pdpurl
     else:
         pass
     page = urllib2.urlopen(pdpurl)
@@ -195,15 +195,18 @@ def parse_pdp_html_get_mozuid_cdnkey(pdpurl):
     res = []
     for source in sources:
         res.append(source)
-    context_data = json.loads(res[0].text)
-    outdict = {}
-    mz_image_data = {}
-    print context_data
-    mz_image_data['mz_imageid']      = context_data['cmsContext']['site']['id']
-    mz_image_data['bf_imageid']      = context_data['productCode']
-    mz_image_data['cdnCacheBustKey'] = context_data['cdnCacheBustKey']
-    outdict[context_data['productCode']] = mz_image_data
-    return outdict
+    try:
+        context_data = json.loads(res[0].text)
+        outdict = {}
+        mz_image_data = {}
+        print context_data
+        mz_image_data['mz_imageid']      = context_data['cmsContext']['site']['id']
+        mz_image_data['bf_imageid']      = context_data['productCode']
+        mz_image_data['cdnCacheBustKey'] = context_data['cdnCacheBustKey']
+        outdict[context_data['productCode']] = mz_image_data
+        return outdict
+    except IndexError:
+        print 'IndexError: Key not found in json results at\n\turl {}'.format(pdpurl)
 
 
 ###########################
