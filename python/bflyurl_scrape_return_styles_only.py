@@ -15,6 +15,19 @@ def url_get_links(targeturl):
     return list(set(linklist))
 
 
+def parse_pdp_html_get_missing_mozuid(url):
+    from bs4 import BeautifulSoup
+    import urllib2
+    page=urllib2.urlopen(url)
+    soup = BeautifulSoup(page.read(), "lxml")
+    sources=soup.findAll('script', {"id":"data-mz-preload-pagecontext"} )
+    import json
+    res = []
+    for source in sources:
+        res.append(source)
+    return json.loads(res[0].text)['cmsContext']['site']['id']
+
+
 def url_tester(url):
     import requests
     res = requests.get(url)
