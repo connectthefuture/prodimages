@@ -208,6 +208,14 @@ def parse_pdp_html_get_mozuid_cdnkey(pdpurl):
     except IndexError:
         print 'IndexError: Key not found in json results at\n\turl {}'.format(pdpurl)
 
+def correct_missing_db_ids(*args):
+    from db import mozu_image_table_instance
+    from RESTClient import __mozu_image_table_valid_keys__
+    mozu_image_table = mozu_image_table_instance()
+    table_args = include_keys(args, __mozu_image_table_valid_keys__)
+    insert_db = mozu_image_table.insert(values=dict(**table_args))
+    update_db = mozu_image_table.update(values=dict(**table_args), whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
+    insert_db.execute()
 
 ###########################
 def main():

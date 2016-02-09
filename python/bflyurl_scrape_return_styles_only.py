@@ -43,6 +43,23 @@ def parse_pdp_html_get_mozuid_cdnkey(pdpurl):
         print 'IndexError: Key not found in json results at\n\turl {}'.format(pdpurl)
 
 
+def parse_pdp_html_get_mozu_data_tags(pdpurl):
+    from bs4 import BeautifulSoup
+    import urllib2
+    import json
+    if len(pdpurl) == 9 and pdpurl.isdigit():
+        pdpurl = 'http://beta.bluefly.com/cache-clear/p/' + pdpurl
+    else:
+        pass
+    page = urllib2.urlopen(pdpurl)
+    soup = BeautifulSoup(page.read(), "lxml")
+    sources=soup.findAll('img', {"itemprop": "image"})
+    res = []
+    print sources #.children()
+    for source in sources:
+        res.append(source['data-mz-productimage-main'])
+    return res
+
 
 def url_tester(url):
     import requests
