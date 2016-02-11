@@ -29,7 +29,6 @@ from RESTClient import __mozu_image_table_valid_keys__
 #         return json.dumps(x.items())
 
 
-
 # DELETE - Delete Image/DocumentContent - Everything
 @log
 def delete_document_data_content(**kwargs):

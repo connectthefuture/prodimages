@@ -57,7 +57,9 @@ class MozuRestClient:
             self.document_metadata_resource  = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documents/" + self.mz_imageid
             MozuRestClient.__endpoints["endpoint_resource_doc_content"] = self.document_resource_content
             MozuRestClient.__endpoints["endpoint_resource_doc_metadata"] = self.document_metadata_resource
-
+        elif len(self.bf_imageid) >= 9:
+            self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
+            MozuRestClient.__endpoints["endpoint_resource_doc_tree_content"] = self.document_tree_resource_content
         # Auth / Connect
         self.accessToken = authenticate()
 
@@ -233,14 +235,22 @@ class MozuRestClient:
 
     ## DELETE - Document Content - Then DELETE the Document Data Object with mzid
     @log
-    def delete_mz_image(self,**kwargs):
+    def delete_mz_image(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid
+        _bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
+        if _mz_imageid:
+            # Use regular documentList content endpoint
+            self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
+            _endpoint = self.document_resource
+        elif _bf_imageid:
+            # Use alternate documentListTree content endpoint
+            self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
+            _endpoint = self.document_tree_resource_content
         # print "Initial MZID URL: {}".format(self.document_resource)
         # Delete Content
-        _document_content_response = requests.delete(self.document_resource + "/content", data=json.dumps(self.document_payload), headers=self.headers, verify=False)
+        _document_content_response = requests.delete(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
         _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_data_response.status_code
