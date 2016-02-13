@@ -37,8 +37,10 @@ def delete_document_data_content(**kwargs):
     mzclient = MozuRestClient(**kwargs)
     delete_resp = mzclient.delete_mz_image()
     mozu_image_table = mozu_image_table_instance()
-
-    delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) )
+    if kwargs.get('mz_imageid'):
+        delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) )
+    else:
+        delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid')) )
     # res = delete_db.execute()
     print delete_resp.headers, "Delete \n", delete_db, "\nMZ CLIENTID in FUNCtion: ", kwargs
     return delete_resp
@@ -48,14 +50,14 @@ def delete_by_mozuid(**kwargs):
     from os import chdir, path, curdir
     try:
         chdir(path.join('/usr/local/batchRunScripts', 'mozu'))
-        print 'Executing from ', path.abspath(curdir), kwargs.get('mz_imageid')
+        print 'Executing from ', path.abspath(curdir), kwargs.get('mz_imageid', '')
     except:
         pass
-    resp = delete_document_data_content(mz_imageid=kwargs.get('mz_imageid'))
+    resp = delete_document_data_content(mz_imageid=kwargs.get('mz_imageid', ''))
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
-    ret_select = mozu_image_table.select(whereclause=((mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')))).execute().fetchone()
-    ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid') ))).execute()
+    ret_select = mozu_image_table.select(whereclause=((mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid', '')))).execute().fetchone()
+    ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid', '') ))).execute()
     print 'Deleted bf_imageid', ret #ret.fetchone()
     return ret_select['bf_imageid']
 
@@ -64,23 +66,19 @@ def delete_by_bflyid(**kwargs):
     from os import chdir, path, curdir
     try:
         chdir(path.join('/usr/local/batchRunScripts', 'mozu'))
-        print 'Executing from ', path.abspath(curdir), kwargs.get('bf_imageid')
+        print 'Executing from ', path.abspath(curdir), kwargs.get('bf_imageid', '')
     except:
         pass
 
     from db import mozu_image_table_instance
     mozu_image_table = mozu_image_table_instance()
-    ret_select = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid') ))).execute()
+    #ret_select = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid') ))).execute()
     try:
-        mz_imageid = ret_select.fetchone()['mz_imageid']
-        if mz_imageid:
-            resp = delete_document_data_content(mz_imageid=mz_imageid)
-
-            ret = mozu_image_table.delete(whereclause=( (mozu_image_table.c.mz_imageid == mz_imageid ))).execute()
-            print 'Deleted bf_imageid', ret #ret.fetchone()
-            return kwargs.get('bf_imageid')
+        resp = delete_document_data_content(**kwargs)
+        print 'Deleted bf_imageid', ret #ret.fetchone()
+        return kwargs.get('bf_imageid', '')
     except TypeError:
-        'NoneTpe Error in delete by bfid. {} Not in DB'.format(kwargs.get('bf_imageid'))
+        'NoneTpe Error in delete by bfid. {} Not in DB'.format(kwargs.get('bf_imageid', ''))
 #### Update or UpdateDel -- aka "delete from mozu and db then reload to mozu and store new mozu docID"
 
 # @log
