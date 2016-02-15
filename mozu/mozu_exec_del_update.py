@@ -69,13 +69,14 @@ def delete_by_bflyid(**kwargs):
         print 'Executing from ', path.abspath(curdir), kwargs.get('bf_imageid', '')
     except:
         pass
-
-    from db import mozu_image_table_instance
-    mozu_image_table = mozu_image_table_instance()
-    #ret_select = mozu_image_table.select(whereclause=( (mozu_image_table.c.bf_imageid == kwargs.get('bf_imageid') ))).execute()
     try:
         resp = delete_document_data_content(**kwargs)
-        print 'Deleted bf_imageid', ret #ret.fetchone()
+        from db import mozu_image_table_instance
+        mozu_image_table = mozu_image_table_instance()
+        try:
+            ret = mozu_image_table.delete(whereclause=((mozu_image_table.c.mz_imageid == kwargs.get('bf_imageid', '')))).execute()
+        except:
+            print('Skipping Delete DB data when using delete by BFID')
         return kwargs.get('bf_imageid', '')
     except TypeError:
         'NoneTpe Error in delete by bfid. {} Not in DB'.format(kwargs.get('bf_imageid', ''))
