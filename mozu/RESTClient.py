@@ -78,7 +78,7 @@ class MozuRestClient:
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
         # Build Data Payload
-        self.document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
+        self._document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
         self.document_response = ''
         print 'Document Payload Set, Response Initialized'
         self.request_url_string = self.uri_querystring_formatter(**kwargs)
@@ -123,9 +123,24 @@ class MozuRestClient:
     #     for k, v in dict(*args, **kwargs).iteritems():
     #         self[k] = v
 
+    @property
+    def document_payload(self):
+        print("Getting Document Payload\n")
+        return self._document_payload
+
+    @document_payload.setter
+    def document_payload(self,**kwargs):
+        self.bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
+        self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        self.ext        = kwargs.get('ext', self.ext)
+        self.properties = kwargs.get('mz_imageid', self.mz_imageid)
+        self._document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
+        print("Setting Document Payload\n\t{}".format(self._document_payload))
+        return self._document_payload
+
 
     @log
-    def uri_querystring_formatter(self, **kwargs):
+    def uri_querystring_formatter(self,**kwargs):
         from mozu_image_util_functions import include_keys
         from urllib import urlencode, unquote
         ## Default qstring params camel cased to adhere to mozu format
