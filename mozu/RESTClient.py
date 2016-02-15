@@ -131,7 +131,7 @@ class MozuRestClient:
         self.ext        = kwargs.get('ext', self.ext)
         self.properties = kwargs.get('mz_imageid', self.mz_imageid)
         _document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
-        print("Setting Document Payload\n\t{}".format(self._document_payload))
+        print("Setting Document Payload\n\t{}".format(_document_payload))
         return _document_payload
     #document_payload = property(set_document_payload)
 
