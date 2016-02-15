@@ -240,13 +240,15 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         _bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
+        self.bf_imageid = _bf_imageid
+        self.mz_imageid = _mz_imageid
         if _mz_imageid:
             # Use regular documentList content endpoint
             self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
             _endpoint = self.document_resource
         elif _bf_imageid:
             # Use alternate documentListTree content endpoint
-            self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
+            self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + _bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
             _endpoint = self.document_tree_resource_content
         # print "Initial MZID URL: {}".format(self.document_resource)
         # Delete Content
