@@ -264,7 +264,7 @@ class MozuRestClient:
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
         _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_data_response.status_code
-        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response.status_code, _document_content_response.status_code, _mz_imageid, self.document_resource)
+        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response.status_code, _document_content_response.status_code, self.mz_imageid, self.document_resource)
         try:
             return _document_data_response
         except KeyError:
