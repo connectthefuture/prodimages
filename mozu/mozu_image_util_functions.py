@@ -217,6 +217,18 @@ def correct_missing_db_ids(*args):
     update_db = mozu_image_table.update(values=dict(**table_args), whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
     insert_db.execute()
 
+
+def netsrv101_path_maker(*args):
+    netsrv101_mnt = '/mnt/images'
+    ext = kwargs.get('ext', '.png')
+    files_list = []
+    if not args:
+        styles_list = ['351480205']
+    for f in args:
+        src = path.join(netsrv101_mnt, f[:4], f + ext).replace('\n', '')
+        files_list.append(src)
+    return files_list
+
 ###########################
 def main():
     pass
