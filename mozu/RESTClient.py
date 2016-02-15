@@ -249,19 +249,16 @@ class MozuRestClient:
     def delete_mz_image(self, **kwargs):
         import requests, json
         self.headers["Content-type"] = 'application/json'
-        _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        _bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
-        self.bf_imageid = _bf_imageid
-        self.mz_imageid = _mz_imageid
-        if _mz_imageid:
+        self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        self.bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
+        if self.mz_imageid:
             # Use regular documentList content endpoint
-            self.document_resource = MozuRestClient.__document_data_api + "/" + _mz_imageid + "/content"
+            self.document_resource = MozuRestClient.__document_data_api + "/" + self.mz_imageid + "/content"
             _endpoint = self.document_resource
-        elif _bf_imageid:
+        elif self.bf_imageid:
             # Use alternate documentListTree content endpoint
-            self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + _bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
+            self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
             _endpoint = self.document_tree_resource_content
-        # print "Initial MZID URL: {}".format(self.document_resource)
         # Delete Content
         _document_content_response = requests.delete(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
@@ -273,9 +270,7 @@ class MozuRestClient:
         except KeyError:
             return _document_data_response.headers()
 
-        #files = {'media': open(src_filepath, 'rb')}
-
-
+    ### files = {'media': open(src_filepath, 'rb')}
     ###
     # Combined Methods using above base Methods
     ###
