@@ -153,7 +153,7 @@ def upsert_data_mz_image(**kwargs):
 def main(fileslist):
     import sqlalchemy
     from db import mozu_image_table_instance
-    from mozu_image_util_functions import compile_todict_for_class_instance_variables, magick_convert_to_jpeg
+    from mozu_image_util_functions import compile_todict_for_class_instance_variables, magick_convert_to_jpeg, netsrv101_path_maker
     # Compiles Data Payload and other Vars per Doc -- Including src_filepath -- **values keys set per instance
     # print type(fileslist), '<--Type\tLenLoFilepaths', len(fileslist), '\t', fileslist
     ### Date Defs
@@ -176,7 +176,8 @@ def main(fileslist):
         fileslist_jpegs = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
     else:
         fileslist_jpegs = fileslist # [ path.abspath(f) for f in fileslist if f ]
-
+    if len(fileslist_jpegs[0]) == 9 and len(fileslist_jpegs) == 1:
+        fileslist_jpegs = netsrv101_path_maker(fileslist_jpegs)
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     # print compiled_instance_vars, "186-MZEXECY"
