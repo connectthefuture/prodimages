@@ -212,7 +212,7 @@ class MozuRestClient:
             self.ext = 'png'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
-        set_document_payload(**kwargs)
+        self.set_document_payload(**kwargs)
         try:
             stream = open(path.abspath(src_filepath), 'rb').read()
             _content_response = requests.put(_endpoint, data=stream, headers=self.headers, verify=False)
