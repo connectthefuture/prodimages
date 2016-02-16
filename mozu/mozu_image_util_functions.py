@@ -222,7 +222,7 @@ def insert_kwargs_to_oracle(**kwargs):
 def netsrv101_path_maker(*args,**kwargs):
     from os import path
     netsrv101_mnt = '/mnt/images'
-    ext = kwargs.get('ext', 'png')
+    ext = kwargs.get('ext', '.png')
     files_list = []
     for f in args:
         src = path.join(netsrv101_mnt, f[:4], f + ext).replace('\n', '')
