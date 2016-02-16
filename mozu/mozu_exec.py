@@ -172,12 +172,12 @@ def main(fileslist):
     # imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
     if path.dirname(fileslist[0]).split('/')[-1] == 'JPG_MOZU_LOAD':
         #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
-        fileslist_jpegs = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
+        fileslist = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
     else:
-        fileslist_jpegs = fileslist # [ path.abspath(f) for f in fileslist if f ]
+        fileslist = fileslist # [ path.abspath(f) for f in fileslist if f ]
     if not path.isfile(fileslist_jpegs[0]):
-        fileslist_jpegs = netsrv101_path_maker(fileslist_jpegs)
-    compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
+        fileslist = netsrv101_path_maker(fileslist_jpegs)
+    compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     # print compiled_instance_vars, "186-MZEXECY"
     for key,values in compiled_instance_vars.iteritems():
