@@ -219,9 +219,9 @@ def correct_missing_db_ids(**kwargs):
     insert_db.execute()
 
 
-def netsrv101_path_maker(*args):
+def netsrv101_path_maker(*args,**kwargs):
     netsrv101_mnt = '/mnt/images'
-    ext = kwargs.get('ext', '.png')
+    ext = kwargs.get('ext', 'png')
     files_list = []
     for f in args:
         src = path.join(netsrv101_mnt, f[:4], f + ext).replace('\n', '')
