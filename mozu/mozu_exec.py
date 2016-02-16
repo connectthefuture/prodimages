@@ -188,9 +188,8 @@ def main(fileslist):
             # ## ---> before loading(would actually need to redo the md5checksum from compiler)
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
-                #values['mz_imageid'], response = upload_new(**values)
+                values['mz_imageid'], response = upload_new(**values)
                 load_content_resp = upload_new(**values)
-                values['mz_imageid'] = load_content_resp.get('id')
                 mozu_image_table = mozu_image_table_instance()
                 if int(load_content_resp.keys()[0]) < 400:
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
