@@ -170,13 +170,12 @@ def main(fileslist):
     archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     # imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
-
     if path.dirname(fileslist[0]).split('/')[-1] == 'JPG_MOZU_LOAD':
         #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
         fileslist_jpegs = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
     else:
         fileslist_jpegs = fileslist # [ path.abspath(f) for f in fileslist if f ]
-    if len(fileslist_jpegs[0]) == 9 and len(fileslist_jpegs) == 1:
+    if not path.isfile(fileslist_jpegs[0]):
         fileslist_jpegs = netsrv101_path_maker(fileslist_jpegs)
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist_jpegs)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
@@ -215,31 +214,14 @@ def main(fileslist):
                     print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
             except ValueError: #sqlalchemy.exc.IntegrityError:
-                # try:
-                #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
-                #     if upsert_content_resp.http_status_code < 300:
-                #         table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                #         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
-                #         res = update_db.execute()
-                #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
-                #
                 print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
             except KeyError:  # sqlalchemy.exc.IntegrityError:
-                # try:
-                #     upsert_content_resp = upsert_data_mz_image(**values) #,dict(**values))
-                #     if upsert_content_resp.http_status_code < 300:
-                #         table_args = include_keys(values, __mozu_image_table_valid_keys__)
-                #         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
-                #         res = update_db.execute()
-                #         print res, 'Updated--> ', table_args.items(), ' <-- ', update_db
-                #
                 print 'TYPE or Value Error and everything is or will be commented out below because it is in the db already'
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
                 #     print "ENDING ERROR...", values
-
         elif values.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
 
