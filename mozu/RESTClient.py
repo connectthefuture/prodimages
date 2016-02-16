@@ -130,9 +130,7 @@ class MozuRestClient:
     def set_document_payload(self, **kwargs):
         self.bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
         self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.ext        = kwargs.get('ext', self.ext)
-        if not self.ext:
-            self.ext = 'png'
+        self.ext        = kwargs.get('ext', 'png')
         self.properties = kwargs.get('properties', self.properties)
         self.document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
         print("Setting Document Payload\n\t{}".format(self.document_payload))
@@ -299,7 +297,7 @@ class MozuRestClient:
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
         elif self.bf_imageid:
             # Use alternate documentListTree content endpoint
-            #self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
+            # self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         else:
             print('Failed to delete without mzid or bfid')
