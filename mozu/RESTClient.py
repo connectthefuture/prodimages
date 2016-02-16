@@ -133,7 +133,7 @@ class MozuRestClient:
         self.ext        = kwargs.get('ext', self.ext)
         self.properties = kwargs.get('properties', self.properties)
         self.document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
-        print("Setting Document Payload\n\t{}".format(_document_payload))
+        print("Setting Document Payload\n\t{}".format(self.document_payload))
         return self.document_payload
     #document_payload = property(set_document_payload)
 
@@ -147,7 +147,7 @@ class MozuRestClient:
         MozuRestClient.__endpoints["endpoint_resource_doc_tree_content"] =  MozuRestClient.__document_tree_api + self.bf_imageid + "/content"
         print("Setting Endpoints\n\t{}".format(MozuRestClient.__endpoints))
         return MozuRestClient.__endpoints
-    #endpoint_uri = property(set_document_payload)
+    #endpoint_uri = property(set_endpoint_uri)
 
     @log
     def set_query_string(self,**kwargs):
@@ -331,6 +331,7 @@ class MozuRestClient:
         _qstring = self.set_query_string(**kwargs)
         document_list_uri = MozuRestClient.__document_data_api + _qstring
         print  "QFields 227:\t", kwargs, "\nDoclisturi with QString:\t", document_list_uri
+        self.set_document_payload(**kwargs)
         _document_list_response = requests.get(document_list_uri, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_list_response.status_code
         print "DocumentGetResponse: {0}".format(_document_list_response.json())
