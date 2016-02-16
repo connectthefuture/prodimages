@@ -306,8 +306,8 @@ class MozuRestClient:
         # Delete Content
         _document_content_response = requests.delete(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         if self.mz_imageid:
-            _doc_metadata = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
-            _document_data_response = requests.delete(_doc_metadata, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
+            _doc_metadata_endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+            _document_data_response = requests.delete(_doc_metadata_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         else:
             _document_data_response = ''
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
