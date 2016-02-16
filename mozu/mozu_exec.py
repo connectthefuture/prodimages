@@ -142,51 +142,8 @@ def upsert_data_mz_image(**kwargs):
     else:
         res = upload_new(**kwargs)
         return res
-# DELETE - Delete Image/DocumentContent - Everything
-@log
-def delete_document_data_content(**kwargs):
-    from RESTClient import MozuRestClient
-    from db import mozu_image_table_instance
-    mzclient = MozuRestClient(**kwargs)
-    delete_resp = mzclient.delete_mz_image()
-    mozu_image_table = mozu_image_table_instance()
-
-    delete_db = mozu_image_table.delete( whereclause=(mozu_image_table.c.mz_imageid == kwargs.get('mz_imageid')) )
-    # res = delete_db.execute()
-    # TODO: Need to delete from db or alter insome way
-    print delete_resp.headers, "Delete \n", delete_db, "\nMZ CLIENTID in FUNCtion: ", kwargs
-    return delete_resp
 
 
-### GET Images - Content
-#
-# def download_document_content(outfile=None, **kwargs):
-#     from RESTClient import MozuRestClient
-#     print kwargs, 'KWARGS-26'
-#     mzclient = MozuRestClient(**kwargs)
-#     from os import path as path
-#     image_content = mzclient[     if not mzclient.bf_imageid:
-#         # Get bflyid from Oracle using mz_id
-#         from db import mozu_image_table_instance
-          #mozu_image_table = mozu_image_table_instance()
-#         bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == mzclient.mz_imageid) ) ).execute().fetchone()['bf_imageid']
-#         mzclient.bf_imageid = bf_imageid
-#     if not outfile:
-#         outfile = path.join('/tmp', mzclient.bf_imageid)
-#     else: pass
-#     with open(outfile,'w') as f:
-#         f.write(image_content)
-#     print locals(), "Downloaded Content"
-#     return path.abspath(outfile)
-#
-#
-# def read_document_content_headers(**kwargs):
-#     from RESTClient import MozuRestClient
-#     print kwargs, 'KWARGS-47'
-#     mzclient = MozuRestClient(**kwargs)
-#     image_data = mzclient.headers
-#     print image_data
-#     return image_data
 
 #######################################
 ### Main - Conditions ##
@@ -242,11 +199,13 @@ def main(fileslist):
                 elif int(load_content_resp.keys()[0]) == 409:
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
-                    #bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['bf_imageid']
-
+                    bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
+                    from mozu_exec_del_update import update_content_mz_image
+                    resp = update_content_mz_image(**values)
+                    table_args['bf_imageid'] = values['bf_imageid'] = bf_imageid
                     table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
-                    upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
-                    if upsert_content_resp.http_status_code < 300:
+                    #upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
+                    if resp.http_status_code < 300:
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
                         res = update_db.execute()
                         print res, 'Updated--> ', values.items(), ' <-- ', update_db
