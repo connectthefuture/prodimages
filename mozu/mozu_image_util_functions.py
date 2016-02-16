@@ -209,7 +209,7 @@ def parse_pdp_html_get_mozuid_cdnkey(pdpurl):
         print 'IndexError: Key not found in json results at\n\turl {}'.format(pdpurl)
 
 
-def correct_missing_db_ids(**kwargs):
+def insert_kwargs_to_oracle(**kwargs):
     from db import mozu_image_table_instance
     from RESTClient import __mozu_image_table_valid_keys__
     mozu_image_table = mozu_image_table_instance()
