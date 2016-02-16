@@ -74,14 +74,13 @@ class MozuRestClient:
             self.ext = self.ext.lower() # self.bf_imageid.split('.')[-1].lower()
         elif kwargs.get('bf_imageid'):
             self.bf_imageid = kwargs.get('bf_imageid')
-            self.ext = 'jpg' # self.bf_imageid.split('.')[-1].lower()
         else:
             self.bf_imageid, self.ext = '', ''
 
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
         # Build Data Payload
-        self.document_payload =  self.set_document_payload() #{'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
+        self.document_payload =  self.set_document_payload(**kwargs) #{'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
         self.document_response = ''
         print 'Document Payload Set, Response Initialized'
         self.request_url_string = self.set_query_string(**kwargs)
@@ -183,7 +182,7 @@ class MozuRestClient:
         if MozuRestClient.http_status_code == 201:
             try:
                 self.mz_imageid = _document_data_response.json()['id']
-                self.document_resource_content = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+                self.document_resource_content = self.set_endpoint_uri(**kwargs)['endpoint_resource_doc_content']
                 return (self.mz_imageid, self.document_resource_content,)
             except KeyError:
                 return (_document_data_response, "Keyerror",)
