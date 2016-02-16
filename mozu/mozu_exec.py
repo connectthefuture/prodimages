@@ -201,12 +201,13 @@ def main(fileslist):
                     mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
                     bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
                     from mozu_exec_del_update import update_content_mz_image
-                    resp = update_content_mz_image(**values)
                     table_args['bf_imageid'] = values['bf_imageid'] = bf_imageid
                     table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
+                    resp = update_content_mz_image(**values)
+                    print('RESP 207 mzexec: {}'.format(resp))
                     #upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
                     if resp.http_status_code < 300:
-                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid==table_args['bf_imageid'])
+                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                         res = update_db.execute()
                         print res, 'Updated--> ', values.items(), ' <-- ', update_db
                 else:
