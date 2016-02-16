@@ -220,6 +220,7 @@ def correct_missing_db_ids(**kwargs):
 
 
 def netsrv101_path_maker(*args,**kwargs):
+    from os import path
     netsrv101_mnt = '/mnt/images'
     ext = kwargs.get('ext', 'png')
     files_list = []
