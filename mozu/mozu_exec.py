@@ -175,7 +175,7 @@ def main(fileslist):
         fileslist = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
     else:
         fileslist = fileslist # [ path.abspath(f) for f in fileslist if f ]
-    if not path.isfile(fileslist_jpegs[0]):
+    if not path.isfile(fileslist[0]):
         fileslist = netsrv101_path_maker(fileslist_jpegs)
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
