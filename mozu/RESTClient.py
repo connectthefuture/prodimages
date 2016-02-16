@@ -211,7 +211,7 @@ class MozuRestClient:
             self.ext = src_filepath.split('.')[-1]
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         if not self.ext:
-            self.ext = 'jpg'
+            self.ext = 'png'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
         set_document_payload(**kwargs)
