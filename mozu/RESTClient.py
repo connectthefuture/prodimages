@@ -77,11 +77,11 @@ class MozuRestClient:
         else:
             self.bf_imageid, self.ext = '', ''
 
+        self.mz_imageid = kwargs.get('mz_imageid', '')
         ## Tags - Keywords - Metadata
         self.properties = {'tags': kwargs.get('tags','')}
         # Build Data Payload
         self.document_payload =  self.set_document_payload(**kwargs) #{'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
-        self.document_response = ''
         print 'Document Payload Set, Response Initialized'
         self.request_url_string = self.set_query_string(**kwargs)
         print kwargs, "End Init -- kwargs"
@@ -131,10 +131,10 @@ class MozuRestClient:
         self.bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
         self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         self.ext        = kwargs.get('ext', self.ext)
-        self.properties = kwargs.get('mz_imageid', self.mz_imageid)
-        _document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
+        self.properties = kwargs.get('properties', self.properties)
+        self.document_payload = {'listFQN' : MozuRestClient.__listFQN, 'documentTypeFQN' : MozuRestClient.__documentTypeFQN, 'name' : self.bf_imageid, 'extension' : self.ext, 'properties': self.properties}
         print("Setting Document Payload\n\t{}".format(_document_payload))
-        return _document_payload
+        return self.document_payload
     #document_payload = property(set_document_payload)
 
     @log
