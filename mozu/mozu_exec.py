@@ -176,7 +176,7 @@ def main(fileslist):
     else:
         fileslist = fileslist # [ path.abspath(f) for f in fileslist if f ]
     if not path.isfile(fileslist[0]):
-        fileslist = netsrv101_path_maker(fileslist_jpegs)
+        fileslist = netsrv101_path_maker(fileslist)
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     # print compiled_instance_vars, "186-MZEXECY"
