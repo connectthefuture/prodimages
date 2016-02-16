@@ -142,9 +142,9 @@ class MozuRestClient:
         self.bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
         self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         MozuRestClient.__endpoints["endpoint_resource_doclist"] = MozuRestClient.__document_data_api
-        MozuRestClient.__endpoints["endpoint_resource_doc_metadata"] = MozuRestClient.__endpoints["endpoint_resource_doclist"] + self.mz_imageid
+        MozuRestClient.__endpoints["endpoint_resource_doc_metadata"] = MozuRestClient.__endpoints["endpoint_resource_doclist"] + '/' + self.mz_imageid
         MozuRestClient.__endpoints["endpoint_resource_doc_content"] = MozuRestClient.__endpoints["endpoint_resource_doc_metadata"] + "/content"
-        MozuRestClient.__endpoints["endpoint_resource_doc_tree_content"] =  MozuRestClient.__document_tree_api + self.bf_imageid + "/content"
+        MozuRestClient.__endpoints["endpoint_resource_doc_tree_content"] =  MozuRestClient.__document_tree_api  + '/' +  self.bf_imageid + "/content"
         print("Setting Endpoints\n\t{}".format(MozuRestClient.__endpoints))
         return MozuRestClient.__endpoints
     #endpoint_uri = property(set_endpoint_uri)
