@@ -226,7 +226,10 @@ def netsrv101_path_maker(*args):
     for f in args:
         src = path.join(netsrv101_mnt, f[:4], f + ext).replace('\n', '')
         files_list.append(src)
-    return files_list
+    if len(files_list) == 1:
+        return files_list[0]
+    else:
+        return files_list
 
 ###########################
 def main():

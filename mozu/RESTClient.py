@@ -196,15 +196,18 @@ class MozuRestClient:
         import requests
         from os import path
         ## FileContent
-        if not self.mz_imageid:
-            src_filepath = kwargs.get('src_filepath', '')
-            mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-            self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
+        src_filepath = kwargs.get('src_filepath', '')
+        if self.mz_imageid:
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+        elif not self.bf_imageid and src_filepath:
+            self.bf_imageid = kwargs['bf_imageid'] = src_filepath.split('/')[-1].split('.')[0]
+            self.ext = src_filepath.split('.')[-1]
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         else:
-            src_filepath = kwargs.get('src_filepath', '')
-            mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+            from mozu_image_util_functions import netsrv101_path_maker
+            netsrv_src = netsrv101_path_maker(self.bf_imageid)
+            src_filepath = kwargs.get('src_filepath', netsrv_src)
+            self.ext = src_filepath.split('.')[-1]
         if not self.ext:
             self.ext = 'jpg'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
@@ -218,6 +221,7 @@ class MozuRestClient:
             return _content_response
         except AttributeError:
             print "OIO Error 171 Failed send_content"
+
 
     def get_content(self, **kwargs):
         import requests
@@ -297,6 +301,8 @@ class MozuRestClient:
             # Use alternate documentListTree content endpoint
             #self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
+        else:
+            return
         # Delete Content
         _document_content_response = requests.delete(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
