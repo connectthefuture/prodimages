@@ -112,22 +112,20 @@ class Task(object):
             #         jpgout = mozu_image_util_functions.magick_convert_to_jpeg(self.img,destdir=tmp_mozu_loading)
             #     mozu_exec.main(jpgout)
             #     ############################
-            # except ImportError:
-            #     print 'Import Error multiprocmagick2:69'
-                #os.remove(self.tmppngout[1])
-                # except TypeError:
-                #         print self.img, ' <-- Type-Error in Task -->', self.destdir
-                #         pass
-                # except AttributeError:
-                #         print self.img, ' <-- AttributeError in Task -->', self.destdir
-                #         pass
-                # except IndexError:
-                #     ' None Type Error End '
-                #     pass
+
             return '-ret- %s \n-path- %s \n-dest- %s \n' % (ret, self.img, self.destdir)
             #except TypeError:
             #    print 'TypeError in __call__'
             #    pass
+        except ImportError:
+            print 'Import Error multiprocmagick2:69'
+            os.remove(self.tmppngout[1])
+        except TypeError:
+            print self.img, ' <-- Type-Error in Task -->', self.destdir
+            pass
+        except IndexError:
+            ' None Type Error End '
+            pass
         except AttributeError:
             import os
             print 'Attribute error creating png in Consumer Manager, bad download expected'

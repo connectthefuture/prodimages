@@ -88,9 +88,9 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
         #consigstyle['vendor_style'] = row['vendor_style']
         styles[style_alt] = styledata
 
-    print '\n\n\n\n\n\n\n\t\tIn 5 Seconds\nWe will be Attempting\nt\tThe Download and Processing\vof\n\t\v{0} Image Urls\n\n\n\n\n\n'.format(len(styles))
+    print '\n\n\n\n\n\n\n\t\tIn Under 10 Seconds\nWe will be Attempting\nt\tThe Download and Processing\vof\n\t\v{0} Image Urls\n\n\n\n\n\n'.format(len(styles))
     from time import sleep
-    sleep(5)
+    sleep(10)
     connection.close()
     return styles
 
