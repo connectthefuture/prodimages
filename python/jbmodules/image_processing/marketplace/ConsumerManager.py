@@ -59,67 +59,82 @@ class Consumer(multiprocessing.Process):
 class Task(object):
     def __init__(self, img, rgbmean, destdir):
         import tempfile, shutil
+        import sys
+        sys.path.append('/usr/local/batchRunScripts/mozu')
+        sys.path.append('/usr/local/batchRunScripts/python')
+        sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
+        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
+        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
+        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
         self.img = img
         self.rgbmean = rgbmean
         self.destdir = destdir
 
     def __call__(self):
         import jbmodules
-        import os, shutil
+        import shutil
         from jbmodules import image_processing
         from jbmodules.image_processing import marketplace, magick_tweaks
         import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
         jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
         print self.img, ' <-- self.img ', self.rgbmean
-        pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
-        ## TODO: Possible insertion of Mozu and/or GoogleDrive upload and key exchange
-        ## COPY TO MOZU DAILY DIR DEFINED AS GLOBAL ABOVE
-        shutil.copy2(pngout, imgdest_jpg_mozu)
-        magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
-        ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
-        # try:
-        #     ############################
-        #     ###### mozu
-        #     ############################
-        #     import sys, datetime
-        #     from os import chdir, path, makedirs
-        #     todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
-        #     tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
-        #     if path.isdir(tmp_mozu_loading):
-        #         pass
-        #     else:
-        #         try:
-        #             os.makedirs(tmp_mozu_loading, 16877)
-        #         except:
-        #             print " Error", tmp_mozu_loading
-        #     chdir('/usr/local/batchRunScripts/mozu')
-        #     import mozu_exec, mozu_image_util_functions
-        #     ## Compress and convert to jpg
-        #     if path.isfile(pngout):
-        #         print ' Is file PNGOUT', pngout, img
-        #         jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
-        #     else:
-        #         #pass
-        #         jpgout = mozu_image_util_functions.magick_convert_to_jpeg(self.img,destdir=tmp_mozu_loading)
-        #     mozu_exec.main(jpgout)
-        #     ############################
-        # except ImportError:
-        #     print 'Import Error multiprocmagick2:69'
-            #os.remove(self.tmppngout[1])
-            # except TypeError:
-            #         print self.img, ' <-- Type-Error in Task -->', self.destdir
+        try:
+            pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
+            ## TODO: Possible insertion of Mozu and/or GoogleDrive upload and key exchange
+            ## COPY TO MOZU DAILY DIR DEFINED AS GLOBAL ABOVE
+            shutil.copy2(pngout, imgdest_jpg_mozu)
+            magickProc2.subproc_magick_large_jpg(pngout, destdir=self.destdir)
+            ret = magickProc2.subproc_magick_medium_jpg(pngout, destdir=self.destdir)
+            # try:
+            #     ############################
+            #     ###### mozu
+            #     ############################
+            #     import sys, datetime
+            #     from os import chdir, path, makedirs
+            #     todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
+            #     tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
+            #     if path.isdir(tmp_mozu_loading):
             #         pass
-            # except AttributeError:
-            #         print self.img, ' <-- AttributeError in Task -->', self.destdir
-            #         pass
-            # except IndexError:
-            #     ' None Type Error End '
-            #     pass
-        return '-ret- %s \n-path- %s \n-dest- %s \n' % (ret, self.img, self.destdir)
-        #except TypeError:
-        #    print 'TypeError in __call__'
-        #    pass
+            #     else:
+            #         try:
+            #             os.makedirs(tmp_mozu_loading, 16877)
+            #         except:
+            #             print " Error", tmp_mozu_loading
+            #     chdir('/usr/local/batchRunScripts/mozu')
+            #     import mozu_exec, mozu_image_util_functions
+            #     ## Compress and convert to jpg
+            #     if path.isfile(pngout):
+            #         print ' Is file PNGOUT', pngout, img
+            #         jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
+            #     else:
+            #         #pass
+            #         jpgout = mozu_image_util_functions.magick_convert_to_jpeg(self.img,destdir=tmp_mozu_loading)
+            #     mozu_exec.main(jpgout)
+            #     ############################
+            # except ImportError:
+            #     print 'Import Error multiprocmagick2:69'
+                #os.remove(self.tmppngout[1])
+                # except TypeError:
+                #         print self.img, ' <-- Type-Error in Task -->', self.destdir
+                #         pass
+                # except AttributeError:
+                #         print self.img, ' <-- AttributeError in Task -->', self.destdir
+                #         pass
+                # except IndexError:
+                #     ' None Type Error End '
+                #     pass
+            return '-ret- %s \n-path- %s \n-dest- %s \n' % (ret, self.img, self.destdir)
+            #except TypeError:
+            #    print 'TypeError in __call__'
+            #    pass
+        except AttributeError:
+            import os
+            print 'Attribute error creating png in Consumer Manager, bad download expected'
+            try:
+                os.remove(self.img)
+            except:
+                print 'Failed Removal in Consumer Manager'
 
     def __str__(self):
         return '%s -- %s' % (self.img, self.destdir)
