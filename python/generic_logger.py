@@ -42,7 +42,8 @@ def basic_log_file_obj(log_configuration='Admin_Client', **kwargs):
 
 
 if __name__ == '__main__':
-    pass()
+    basic_log_file_obj()
+    #pass()
 
 # if __name__ == '__main__':
 #     # Configure the logger
