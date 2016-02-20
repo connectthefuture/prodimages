@@ -4,6 +4,9 @@
 # Defining a log function decorator to use as @log
 def log(original_function, filename=None):
     import logging, datetime, json
+    logging._srcfile = None
+    logging.logThreads = 0
+    logging.logProcesses = 0
     from os import path as path
     if filename is None:
         filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str(original_function.__name__ + "_log.txt"))
@@ -15,15 +18,15 @@ def log(original_function, filename=None):
             result = original_function(*args, **kwargs)
             with open(filename, "wb+") as logfile:
                 logfile.write("\nStart: {0}".format(start_time))
-                logfile.write( "\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), args, result)
-                )
+                logfile.write( "\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), args, result))
                 end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
                 logfile.write("\nEnd: {0}".format(end_time))
             return result
-        except TypeError:
-            print 'NoneTypeError in Logger'
+        except TypeError as e:
+            logging.exception('NoneTypeError in Logger\nTraceback:\t{0}'.format(e))
             return
     return new_function
+
 
 ### Generic Logger
 def mr_logger(src_filepath,*args):
