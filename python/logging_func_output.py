@@ -49,7 +49,7 @@ def log_to_file(original_function, outfile=None, configfile=None):
     logging._srcfile = None
     logging.logThreads = 0
     logging.logProcesses = 0
-    configfile = kwargs.get('configfile', 'logconfig.ini')
+    configfile = kwargs.get('configfile', 'generic_logger_config.ini')
     if outfile is None:
         outfile = kwargs.get('outfile', str(original_function.__name__ + "_log.txt"))
         outfile = path.join("/root/DropboxSync/bflyProdimagesSync/log", path.filename(outfile))
