@@ -46,6 +46,9 @@ def mr_logger(src_filepath,*args):
 def log_to_file(original_function, outfile=None, configfile=None):
     import logging, datetime
     from os import path as path
+    logging._srcfile = None
+    logging.logThreads = 0
+    logging.logProcesses = 0
     configfile = kwargs.get('configfile', 'logconfig.ini')
     if outfile is None:
         outfile = kwargs.get('outfile', str(original_function.__name__ + "_log.txt"))
@@ -80,7 +83,11 @@ class OneLineExceptionFormatter(logging.Formatter):
 
 
 def configure_logging():
-    fh = logging.FileHandler('output.txt', 'w')
+    import logging
+    logging._srcfile = None
+    logging.logThreads = 0
+    logging.logProcesses = 0
+    fh = logging.FileHandler(__file__.__name__ + "_log.txt", 'w')
     f = OneLineExceptionFormatter('%(asctime)s|%(levelname)s|%(message)s|',
                                   '%d/%m/%Y %H:%M:%S')
     fh.setFormatter(f)

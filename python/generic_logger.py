@@ -4,6 +4,9 @@
 
 def basic_log_file_obj(log_configuration='Admin_Client', **kwargs):
     import logging, datetime
+    logging._srcfile = None
+    logging.logThreads = 0
+    logging.logProcesses = 0
     from os import path as path
     configfile = kwargs.get('configfile', 'generic_logger_config.ini')
     if outfile is None:
@@ -20,7 +23,7 @@ def basic_log_file_obj(log_configuration='Admin_Client', **kwargs):
         myLogger.setLevel(logging.WARNING)
         return myLogger
     else:
-        logging.basicConfig(filename=outfile, level=logging.DEBUG) # level=logging.INFO)
+        logging.basicConfig(filename=outfile, filemode='w', level=logging.DEBUG) # level=logging.INFO)
         myLogger = logging.getLogger(log_configuration)      
         imsg='\nLOGGING Level 1 - Active....\nINFO MODE SET'
         wmsg='\nLOGGING Level 2 - Active....\nWARNING MODE SET'
@@ -42,7 +45,13 @@ def basic_log_file_obj(log_configuration='Admin_Client', **kwargs):
 
 
 if __name__ == '__main__':
-    basic_log_file_obj()
+    #import sys
+    logrun = basic_log_file_obj()
+    numeric_level = getattr(logrun, loglevel.upper(), None)
+    logrun.debug('Numeric Level Arg Set to {0}'.format(numeric_level))
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: {0}'.format(loglevel))
+    logrun.basicConfig(level=numeric_level)
     #pass()
 
 # if __name__ == '__main__':
