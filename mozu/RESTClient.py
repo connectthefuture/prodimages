@@ -384,6 +384,7 @@ class MozuRestClient:
 
 
 def main():
+    print locals()
     pass
 
 

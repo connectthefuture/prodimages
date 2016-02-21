@@ -3,27 +3,35 @@
 
 # Defining a log function decorator to use as @log
 def log(original_function, filename=None):
-    import logging, datetime, json
+    from os import path, mkdir
+    #### Below for compatability with python 2 and 3
+    try:
+        from os import getcwdu as getcwd
+    except AttributeError:
+        print('Not Available in Python3 using getcwd instead')
+        from os import getcwd
+    if filename is None:
+        logdir = path.join(getcwd(), 'log')
+        mkdir(logdir)
+        filename = path.join(logdir, str(original_function.__name__ + "_log.txt"))
+    ####
+    import logging
     logging._srcfile = None
     logging.logThreads = 0
     logging.logProcesses = 0
-    from os import path as path
-    if filename is None:
-        filename = path.join("/root/DropboxSync/bflyProdimagesSync/log", str(original_function.__name__ + "_log.txt"))
     logging.basicConfig(filename=filename, level=logging.DEBUG) # level=logging.INFO)
-    start_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
     # print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
+        import datetime, json
         try:
             result = original_function(*args, **kwargs)
-            with open(filename, "wb+") as logfile:
-                logfile.write("\nStart: {0}".format(start_time))
-                logfile.write( "\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), args, result))
-                end_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')
-                logfile.write("\nEnd: {0}".format(end_time))
+            logging.info('Start: {0}'.format(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')))
+            logging.debug( "\n\tFunction \"%s\" called with\n\tkeyword arguments: %s\n\tpositional arguments: %s.\nThe result was %s.\n" % (original_function.__name__, json.dumps(kwargs), args, result))
+            logging.info('End: {0}'.format(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')))
             return result
         except TypeError as e:
             logging.exception('NoneTypeError in Logger\nTraceback:\t{0}'.format(e))
+            logging.info('End: {0}'.format(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')))
             return
     return new_function
 
