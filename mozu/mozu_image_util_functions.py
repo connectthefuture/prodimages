@@ -13,7 +13,7 @@ def log(original_function, filename=None):
     if filename is None:
         dbgsyncdir = '/root/DropboxSync/bflyProdimagesSync/log'
         if not path.isdir(dbgsyncdir):
-            logdir = path.join(getcwd(), 'log')
+            logdir = path.join(path.dirname(__file__), 'log')
         else:
             logdir = dbgsyncdir
         if not path.isdir(logdir): mkdir(logdir)
