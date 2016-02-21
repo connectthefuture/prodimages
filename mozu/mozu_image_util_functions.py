@@ -12,7 +12,7 @@ def log(original_function, filename=None):
         from os import getcwd
     if filename is None:
         logdir = path.join(getcwd(), 'log')
-        mkdir(logdir)
+        if not path.isdir(logdir): mkdir(logdir)
         filename = path.join(logdir, str(original_function.__name__ + "_log.txt"))
     ####
     import logging
@@ -30,7 +30,7 @@ def log(original_function, filename=None):
             logging.info('End: {0}'.format(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')))
             return result
         except TypeError as e:
-            logging.exception('NoneTypeError in Logger\nTraceback:\t{0}'.format(e))
+            logging.exception('NoneTypeError in Logger\n-might be json issue -\nTraceback:\t{0}\n\nArgs:\t{1}'.format(e, args))
             logging.info('End: {0}'.format(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d--%H:%M.%S')))
             return
     return new_function
