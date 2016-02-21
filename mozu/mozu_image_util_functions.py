@@ -24,7 +24,7 @@ def log(original_function, filename=None):
     logging.logThreads = 0
     logging.logProcesses = 0
     logging.basicConfig(filename=filename, level=logging.DEBUG) # level=logging.INFO)
-    # print "Logging to … {0}".format(path.abspath(filename))
+    print "Logging to … {0}".format(path.abspath(filename))
     def new_function(*args, **kwargs):
         import datetime, json
         try:
