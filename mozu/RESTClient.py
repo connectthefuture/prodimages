@@ -310,7 +310,7 @@ class MozuRestClient:
             _document_data_response = requests.delete(_doc_metadata_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         else:
             _document_data_response = ''
-        # Delete Document ID - Data TODO: Figure out how to determine the success or failure of Content delete
+        # Delete Document ID - Data TDO: Figure out how to determine the success or failure of Content delete
         # _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
         MozuRestClient.http_status_code = _document_content_response.status_code
         print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response, _document_content_response, self.mz_imageid, _endpoint)
