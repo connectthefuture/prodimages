@@ -186,6 +186,8 @@ class MozuRestClient:
                 return (self.mz_imageid, self.document_resource_content,)
             except KeyError:
                 return (_document_data_response, "Keyerror",)
+        elif MozuRestClient.http_status_code == 409:
+            return (_document_data_response, "409",)
         else:
             return (_document_data_response, "Keyerror",)  # "Failed-POST with code: {}".format(MozuRestClient.http_status_code), MozuRestClient.http_status_code,
 
