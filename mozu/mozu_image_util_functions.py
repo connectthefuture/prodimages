@@ -4,20 +4,6 @@
 # Defining a log function decorator to use as @log
 def log(original_function, filename=None):
     from os import path, mkdir
-    #### Below for compatability with python 2 and 3
-    try:
-        from os import getcwdu as getcwd
-    except AttributeError:
-        print('Not Available in Python3 using getcwd instead')
-        from os import getcwd
-    if filename is None:
-        dbgsyncdir = '/root/DropboxSync/bflyProdimagesSync/log'
-        if not path.isdir(dbgsyncdir):
-            logdir = path.join(path.dirname(__file__), 'log')
-        else:
-            logdir = dbgsyncdir
-        if not path.isdir(logdir): mkdir(logdir)
-        filename = path.join(logdir, str(original_function.__name__ + "_log.txt"))
     ####
     import logging
     logging._srcfile = None
