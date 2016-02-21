@@ -11,7 +11,7 @@ def log(original_function, filename=None):
         print('Not Available in Python3 using getcwd instead')
         from os import getcwd
     if filename is None:
-        dbgsyncdir = '/root/DropboxSync/bflyProdimagesSync'
+        dbgsyncdir = '/root/DropboxSync/bflyProdimagesSync/log'
         if not path.isdir(dbgsyncdir):
             logdir = path.join(getcwd(), 'log')
         else:
