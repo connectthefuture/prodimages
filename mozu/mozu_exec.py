@@ -217,7 +217,7 @@ def main(fileslist):
                     resp = update_content_mz_image(**values)
                     print('RESP 207 mzexec: {}'.format(resp))
                     #upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
-                    if resp.http_status_code < 300:
+                    if resp.http_status_code < 400:
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                         res = update_db.execute()
                         print res, 'Updated--> ', values.items(), ' <-- ', update_db

@@ -201,13 +201,14 @@ class MozuRestClient:
         if self.mz_imageid:
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
         elif not self.bf_imageid and src_filepath:
-            self.bf_imageid = kwargs['bf_imageid'] = src_filepath.split('/')[-1].split('.')[0]
+            self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
+            kwargs['bf_imageid'] = self.bf_imageid
             self.ext = src_filepath.split('.')[-1]
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         else:
             from mozu_image_util_functions import netsrv101_path_maker
             netsrv_src = netsrv101_path_maker(self.bf_imageid)
-            src_filepath = kwargs.get('src_filepath', netsrv_src)
+            kwargs['src_filepath'] = netsrv_src #kwargs.get('src_filepath', netsrv_src)
             self.ext = src_filepath.split('.')[-1]
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         import logging
