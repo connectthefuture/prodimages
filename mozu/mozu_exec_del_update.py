@@ -138,7 +138,7 @@ if __name__ == '__main__':
             src_filepath = arg1
         elif len(arg1) > 15:
             mz_imageid = arg1
-        result = update_replace_content(dict(locals()))
+        result = update_replace_content(dict(locals))
         print result
     except:
         print "Error or Cannot be called from shell.\v Import using python...", locals()
