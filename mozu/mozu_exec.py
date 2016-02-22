@@ -209,12 +209,12 @@ def main(fileslist):
                 values['mz_imageid'], response = upload_new(**values)
                 create_resource_resp = upload_new(**values)
                 mozu_image_table = mozu_image_table_instance()
-                if int(create_resource_resp.keys()[0]) < 400:
+                if int(create_resource_resp.keys()[0]) == int(201):
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
                     insert_db.execute()
                     print 'Inserted --> ', values.items(), ' <-- ', insert_db
-                elif int(create_resource_resp.keys()[0]) == 409:
+                elif int(create_resource_resp.keys()[0]) <= int(409):
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
                     bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
@@ -230,11 +230,11 @@ def main(fileslist):
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(create_resource_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
-            except ValueError: #sqlalchemy.exc.IntegrityError:
-                print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
+            except ValueError as ve: #sqlalchemy.exc.IntegrityError:
+                print 'VALUE Error and everything is or will be commented out below because it is in the db already', ve
                 #return 'IntegrityError'
-            except KeyError:  # sqlalchemy.exc.IntegrityError:
-                print 'TYPE or Value Error and everything is or will be commented out below because it is in the db already'
+            except KeyError as ke:  # sqlalchemy.exc.IntegrityError:
+                print 'Key Error and everything is or will be commented out below because it is in the db already', ke
                 #return 'IntegrityError'
                 #pass
                 # except IOError:
