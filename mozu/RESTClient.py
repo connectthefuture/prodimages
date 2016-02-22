@@ -387,7 +387,6 @@ class MozuRestClient:
 
 def main():
     print locals()
-    pass
 
 
 if __name__ == '__main__':
