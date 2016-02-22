@@ -11,7 +11,7 @@ def basic_log_file_obj(log_configuration='Admin_Client', outfile=None, **kwargs)
     from os import path as path
     configfile = kwargs.get('configfile', 'generic_logger_config.ini')
     if outfile is None:
-        outfile = kwargs.get('outfile', str(__file__.__name__ + "_log.txt"))
+        outfile = kwargs.get('outfile', str(__file__ + "_log.txt"))
         outfile = path.join("/root/DropboxSync/bflyProdimagesSync/log", path.filename(outfile))
     if configfile is not None:
         logging.config.fileConfig(path.normpath(configfile))
