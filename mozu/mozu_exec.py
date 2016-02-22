@@ -53,10 +53,10 @@ def upload_new(**kwargs):
     kwargs['bf_imageid'] = bf_imageid
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-    content_response = mzclient.send_content(**kwargs)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
     print "Inserting with, ", insert_db
-    if len(mz_imageid) > 20:
+    if type(mz_imageid) == type('str') or bf_imageid:
+        content_response = update_content_mz_image(**kwargs)
         try:
             insert_db.execute()
             print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
