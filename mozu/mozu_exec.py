@@ -209,6 +209,7 @@ def main(fileslist):
                 values['mz_imageid'], response = upload_new(**values)
                 create_resource_resp = upload_new(**values)
                 mozu_image_table = mozu_image_table_instance()
+                print 'Initial Post to Mozu {0}'.format(create_resource_resp.keys()[0])
                 if int(create_resource_resp.keys()[0]) == int(201):
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
