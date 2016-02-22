@@ -177,20 +177,20 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _document_data_response = requests.post(MozuRestClient.__document_data_api, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        print "DocumentPostResponse: {0}".format(_document_data_response.status_code)
+        print "DocumentPostResponse CreateNew: {0}".format(_document_data_response.status_code)
         MozuRestClient.http_status_code = _document_data_response.status_code
         if MozuRestClient.http_status_code == 201:
             try:
                 self.mz_imageid = _document_data_response.json()['id']
                 if self.mz_imageid:
                     _document_resource_content = self.set_endpoint_uri()['endpoint_resource_doc_content']
-                    return (self.mz_imageid, _document_resource_content,)
+                    return (self.mz_imageid, "documentListDocumentContent",)
                 else:
                     raise KeyError
             except KeyError:
-                return (_document_data_response, "Keyerror",)
+                return (_document_data_response, "documentTree",)
         elif MozuRestClient.http_status_code == 409:
-            return (_document_data_response, "409",)
+            return (_document_data_response, "documentTree",)
         else:
             return (_document_data_response, "Keyerror",)  # "Failed-POST with code: {}".format(MozuRestClient.http_status_code), MozuRestClient.http_status_code,
 
@@ -230,7 +230,7 @@ class MozuRestClient:
             stream = open(path.abspath(src_filepath), 'rb').read()
             _content_response = requests.put(_endpoint, data=stream, headers=self.headers, verify=False)
             MozuRestClient.http_status_code = _content_response.status_code
-            print "ContentPutResponse: {0}\n{1}".format(_content_response.status_code, _endpoint)
+            print "ContentPutResponse Send: {0}\n{1}".format(_content_response.status_code, _endpoint)
             mylogger.debug(_content_response)
             return _content_response
         except AttributeError as e:

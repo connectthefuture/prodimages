@@ -44,11 +44,13 @@ def upload_new(**kwargs):
 
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
-    if mz_imageid == "Keyerror":
+    if document_resource == "Keyerror":
         print mz_imageid
-    else:
-        pass
-    kwargs['mz_imageid'] = mz_imageid
+    elif document_resource == "documentTree":
+        bf_imageid = mzclient.bf_imageid
+    elif document_resource == "documentListDocumentContent":
+        kwargs['mz_imageid'] = mz_imageid
+    kwargs['bf_imageid'] = bf_imageid
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     content_response = mzclient.send_content(**kwargs)
