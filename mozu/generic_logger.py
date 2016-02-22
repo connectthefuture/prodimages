@@ -13,7 +13,7 @@ def basic_log_file_obj(log_configuration='Admin_Client', **kwargs):
     if outfile is None:
         outfile = kwargs.get('outfile', str(__file__.__name__ + "_log.txt"))
         outfile = path.join("/root/DropboxSync/bflyProdimagesSync/log", path.filename(outfile))
-    if configfile is not None and path.isfile(configfile):
+    if configfile is not None:
         logging.config.fileConfig(path.normpath(configfile))
         hdlr = logging.FileHandler(outfile)
         #formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
