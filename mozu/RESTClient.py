@@ -215,6 +215,7 @@ class MozuRestClient:
             self.ext = src_filepath.split('.')[-1]
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         ## debug logging
+        print _endpoint, " <-- Endpoint Choice"
         import generic_logger
         mylogger = generic_logger()
         mylogger.debug(_endpoint)
