@@ -2,7 +2,7 @@
 # coding: utf-8
 
 
-def basic_log_file_obj(log_configuration='Admin_Client', **kwargs):
+def basic_log_file_obj(log_configuration='Admin_Client', outfile=None, **kwargs):
     import logging, datetime
     import logging.config
     logging._srcfile = None
