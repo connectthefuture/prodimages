@@ -36,33 +36,6 @@ def resource_documents_list(**kwargs):
 #######################################
 ##### Single File / Single Document Obj
 #######################################
-# Post - New Image, Creates Document
-@log
-def upload_new(**kwargs):
-    from RESTClient import MozuRestClient
-    from db import mozu_image_table_instance
-
-    mzclient = MozuRestClient(**kwargs)
-    mz_imageid, document_resource = mzclient.create_new_mz_image()
-    if document_resource == "Keyerror":
-        print mz_imageid
-    elif document_resource == "documentTree":
-        bf_imageid = mzclient.bf_imageid
-    elif document_resource == "documentListDocumentContent":
-        kwargs['mz_imageid'] = mz_imageid
-    kwargs['bf_imageid'] = bf_imageid
-    mozu_image_table = mozu_image_table_instance()
-    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
-    insert_db = mozu_image_table.insert(values=dict(**table_args))
-    print "Inserting with, ", insert_db
-    if type(mz_imageid) == type('str') or bf_imageid:
-        content_response = update_content_mz_image(**kwargs)
-        try:
-            insert_db.execute()
-            print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
-        except sqlalchemy.exc.IntegrityError:
-            print 'PASSING IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
-    return content_response
 
 # @log
 # # PUT - Upload/Update Image/DocumentContent
@@ -158,6 +131,36 @@ def update_content_mz_image(**kwargs):
     update_db = mozu_image_table.update(values=dict(**table_args))
     print content_response.headers, "\nUpdate DB MZ_IMAGE"
     return content_response
+
+####
+# Post - New Image, Creates Document Resource or 409 error
+@log
+def upload_new(**kwargs):
+    from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
+
+    mzclient = MozuRestClient(**kwargs)
+    mz_imageid, document_resource = mzclient.create_new_mz_image()
+    if document_resource == "Keyerror":
+        print mz_imageid
+    elif document_resource == "documentTree":
+        bf_imageid = mzclient.bf_imageid
+    elif document_resource == "documentListDocumentContent":
+        kwargs['mz_imageid'] = mz_imageid
+    kwargs['bf_imageid'] = bf_imageid
+    mozu_image_table = mozu_image_table_instance()
+    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+    insert_db = mozu_image_table.insert(values=dict(**table_args))
+    print "Inserting with, ", insert_db
+    if kwargs['bf_imageid']:
+        content_response = update_content_mz_image(**kwargs)
+        try:
+            insert_db.execute()
+            print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
+        except sqlalchemy.exc.IntegrityError:
+            print 'PASSING IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
+    return content_response
+
 
 #######################################
 ### Main - Conditions ##
