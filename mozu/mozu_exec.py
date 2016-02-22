@@ -146,9 +146,9 @@ def upload_new(**kwargs):
         print mz_imageid
     elif document_resource == "documentTree":
         bf_imageid = mzclient.bf_imageid
+        kwargs['bf_imageid'] = bf_imageid
     elif document_resource == "documentListDocumentContent":
         kwargs['mz_imageid'] = mz_imageid
-    kwargs['bf_imageid'] = bf_imageid
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     insert_db = mozu_image_table.insert(values=dict(**table_args))
