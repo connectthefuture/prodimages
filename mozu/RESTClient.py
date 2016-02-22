@@ -158,14 +158,14 @@ class MozuRestClient:
             kwargs['name'] =  kwargs.get("name")
             kwargs["pageSize"] = kwargs.get("page_size", "150")
             qstring_args = include_keys(kwargs, __mozu_document_filter_valid_keys__)
-            _qstring = "?{}".format(urlencode(qstring_args))
+            _qstring = "?{0}".format(urlencode(qstring_args))
         elif not kwargs.get("mz_imageid"):
             kwargs["sortBy"] =  kwargs.get("sort_by", "name+desc")
             kwargs["pageSize"] = kwargs.get("page_size", "200")
             kwargs["startIndex" ] = kwargs.get("start_index", "0")
             qstring_args = include_keys(kwargs, __mozu_query_filter_valid_keys__)
             print qstring_args
-            _qstring = "?{}".format(unquote(urlencode(qstring_args)))
+            _qstring = "?{0}".format(unquote(urlencode(qstring_args)))
         else:
             _qstring = ""
         return _qstring
