@@ -123,7 +123,8 @@ def upsert_data_mz_image(**kwargs):
 def update_content_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance
-    mzclient = MozuRestClient()
+    mzclient = MozuRestClient(**kwargs)
+    mzclient.set_document_payload(**kwargs)
     content_response = mzclient.send_content(**kwargs)
     print content_response.headers, "\nUpdate Mozu Content"
     mozu_image_table = mozu_image_table_instance()
