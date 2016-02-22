@@ -142,8 +142,9 @@ def upload_new(**kwargs):
 
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
+    print mz_imageid, document_resource, ' <-- MozuID -- Docresource'
     if document_resource == "Keyerror":
-        print mz_imageid
+        print mz_imageid, ' <-- MozuID'
     elif document_resource == "documentTree":
         bf_imageid = mzclient.bf_imageid
         kwargs['bf_imageid'] = bf_imageid
