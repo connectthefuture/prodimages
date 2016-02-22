@@ -144,6 +144,18 @@ def upsert_data_mz_image(**kwargs):
         return res
 
 
+# # PUT - Upload/Update Image/DocumentContent
+def update_content_mz_image(**kwargs):
+    from RESTClient import MozuRestClient
+    from db import mozu_image_table_instance
+    mzclient = MozuRestClient()
+    content_response = mzclient.send_content(**kwargs)
+    print content_response.headers, "\nUpdate Mozu Content"
+    mozu_image_table = mozu_image_table_instance()
+    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+    update_db = mozu_image_table.update(values=dict(**table_args))
+    print content_response.headers, "\nUpdate DB MZ_IMAGE"
+    return content_response
 
 #######################################
 ### Main - Conditions ##
@@ -189,18 +201,17 @@ def main(fileslist):
             # Insert -- Then try Update if Insert to DB fails or Create NewDoc Fails to Mozu
             try:
                 values['mz_imageid'], response = upload_new(**values)
-                load_content_resp = upload_new(**values)
+                create_resource_resp = upload_new(**values)
                 mozu_image_table = mozu_image_table_instance()
-                if int(load_content_resp.keys()[0]) < 400:
+                if int(create_resource_resp.keys()[0]) < 400:
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
                     insert_db.execute()
                     print 'Inserted --> ', values.items(), ' <-- ', insert_db
-                elif int(load_content_resp.keys()[0]) == 409:
+                elif int(create_resource_resp.keys()[0]) == 409:
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
                     bf_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.mz_imageid == table_args['mz_imageid']) ) ).execute().fetchone()['bf_imageid']
-                    from mozu_exec_del_update import update_content_mz_image
                     table_args['bf_imageid'] = values['bf_imageid'] = bf_imageid
                     table_args['mz_imageid'] = values['mz_imageid'] = mz_imageid
                     resp = update_content_mz_image(**values)
@@ -211,7 +222,7 @@ def main(fileslist):
                         res = update_db.execute()
                         print res, 'Updated--> ', values.items(), ' <-- ', update_db
                 else:
-                    print "HTTP Status: {}\n Raising Integrity Error".format(load_content_resp.http_status_code)
+                    print "HTTP Status: {}\n Raising Integrity Error".format(create_resource_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
             except ValueError: #sqlalchemy.exc.IntegrityError:
                 print 'Type or VALUE Error and everything is or will be commented out below because it is in the db already'
