@@ -22,7 +22,7 @@ def mozu_image_table_instance(**kwargs):
         #Column('id', Integer, Sequence('mozu_image_seq_trigger'), primary_key=True),
         Column('id', Integer, server_default=FetchedValue(), primary_key=True),
         Column('bf_imageid', String(19), unique=True, nullable=False),
-        Column('mz_imageid', String(37)),
+        Column('mz_imageid', String(37), nullable=True),
         Column('md5checksum', String(32)),
         Column('created_date', oracle_dialect.DATE, server_default=FetchedValue()),
         Column('modified_date', oracle_dialect.DATE, onupdate=datetime.datetime.now),
