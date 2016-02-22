@@ -159,7 +159,9 @@ def upload_new(**kwargs):
             insert_db.execute()
             print 'Inserted --> ', kwargs.items(), ' <-- ', insert_db
         except sqlalchemy.exc.IntegrityError:
-            print 'PASSING IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
+            update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
+            print 'Updating after IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
+            update_db.execute()
     return content_response
 
 
