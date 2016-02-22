@@ -20,12 +20,12 @@ def basic_log_file_obj(log_configuration='Admin_Client', **kwargs):
         formatter = logging.Formatter('%(asctime)s | %(name)s | %(module)s-%(lineno)04d | %(levelname)s | %(message)s')
         hdlr.setFormatter(formatter)
         myLogger = logging.getLogger(log_configuration)
-        myLogger.addHandler(hdlr) 
+        myLogger.addHandler(hdlr)
         myLogger.setLevel(logging.WARNING)
         return myLogger
     else:
         logging.basicConfig(filename=outfile, filemode='w', level=logging.DEBUG) # level=logging.INFO)
-        myLogger = logging.getLogger(log_configuration)      
+        myLogger = logging.getLogger(log_configuration)
         imsg='\nLOGGING Level 1 - Active....\nINFO MODE SET'
         wmsg='\nLOGGING Level 2 - Active....\nWARNING MODE SET'
         emsg='\nLOGGING Level 3 - Active....\nERROR MODE SET'

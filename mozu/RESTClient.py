@@ -217,7 +217,7 @@ class MozuRestClient:
         ## debug logging
         print _endpoint, " <-- Endpoint Choice"
         import generic_logger
-        mylogger = generic_logger()
+        mylogger = generic_logger.basic_log_file_obj()
         mylogger.debug(_endpoint)
         if not self.ext:
             self.ext = 'png'
