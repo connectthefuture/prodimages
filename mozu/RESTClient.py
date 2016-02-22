@@ -227,6 +227,7 @@ class MozuRestClient:
         mylogger.debug(self.document_payload)
         mylogger.debug(self.headers)
         ## end debug logging
+        print 'Start Send Streaming Data Try'
         try:
             stream = open(path.abspath(src_filepath), 'rb').read()
             _content_response = requests.put(_endpoint, data=stream, headers=self.headers, verify=False)
