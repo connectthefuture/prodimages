@@ -212,8 +212,8 @@ def main(fileslist):
                 if int(create_resource_resp.keys()[0]) == int(201):
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
-                    insert_db.execute()
-                    print 'Inserted --> ', values.items(), ' <-- ', insert_db
+                    res_insrt = insert_db.execute()
+                    print 'Inserted --> ', values.items(), ' <-- ', dir(res_insrt)
                 elif int(create_resource_resp.keys()[0]) <= int(409):
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
