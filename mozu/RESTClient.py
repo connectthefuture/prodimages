@@ -182,8 +182,11 @@ class MozuRestClient:
         if MozuRestClient.http_status_code == 201:
             try:
                 self.mz_imageid = _document_data_response.json()['id']
-                self.document_resource_content = self.set_endpoint_uri(**kwargs)['endpoint_resource_doc_content']
-                return (self.mz_imageid, self.document_resource_content,)
+                if self.mz_imageid:
+                    _document_resource_content = self.set_endpoint_uri()['endpoint_resource_doc_content']
+                    return (self.mz_imageid, _document_resource_content,)
+                else:
+                    raise KeyError
             except KeyError:
                 return (_document_data_response, "Keyerror",)
         elif MozuRestClient.http_status_code == 409:
