@@ -130,7 +130,7 @@ def update_content_mz_image(**kwargs):
     mozu_image_table = mozu_image_table_instance()
     table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
     update_db = mozu_image_table.update(values=dict(**table_args))
-    print content_response.headers, "\nUpdate DB MZ_IMAGE"
+    print content_response, "\nUpdate DB MZ_IMAGE"
     return content_response
 
 ####
