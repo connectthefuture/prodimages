@@ -218,7 +218,7 @@ class MozuRestClient:
         print _endpoint, " <-- Endpoint Choice"
         import generic_logger
         mylogger = generic_logger.basic_log_file_obj()
-        mylogger.debug(_endpoint)
+        mylogger.info(_endpoint)
         if not self.ext:
             self.ext = 'png'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
@@ -233,7 +233,7 @@ class MozuRestClient:
             _content_response = requests.put(_endpoint, data=stream, headers=self.headers, verify=False)
             MozuRestClient.http_status_code = _content_response.status_code
             print "ContentPutResponse Send: {0}\n{1}".format(_content_response.status_code, _endpoint)
-            mylogger.debug(_content_response)
+            mylogger.warning(_content_response)
             return _content_response
         except AttributeError as e:
             mylogger.exception(e)

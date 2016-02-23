@@ -120,6 +120,7 @@ def upsert_data_mz_image(**kwargs):
 
 
 # # PUT - Upload/Update Image/DocumentContent
+@log
 def update_content_mz_image(**kwargs):
     from RESTClient import MozuRestClient
     from db import mozu_image_table_instance

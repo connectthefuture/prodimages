@@ -50,7 +50,7 @@ def mr_logger(src_filepath,*args):
 
 ### Utility Funx - Get File Data
 ## util func calcs md5 of file
-@log
+#@log
 def md5_checksumer(src_filepath):
     import hashlib
     import os.path as path
@@ -68,7 +68,7 @@ def md5_checksumer(src_filepath):
             return False
 
 # Converts image to jpeg
-@log
+#@log
 def magick_convert_to_jpeg(img, destdir=None):
     import subprocess
     ext = img.split('.')[-1]
@@ -122,7 +122,7 @@ def magick_convert_to_jpeg(img, destdir=None):
 
 ########################
 ## Extracts the image metadata from file
-@log
+#@log
 def get_exif_all_data(src_filepath):
     import exiftool
     from os import path
@@ -190,7 +190,7 @@ def merge_properties(obj1, obj2):
     return obj2
 
 
-@log
+#@log
 def parse_pdp_html_get_mozuid_cdnkey(pdpurl):
     from bs4 import BeautifulSoup
     import urllib2
