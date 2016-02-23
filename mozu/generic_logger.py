@@ -24,7 +24,7 @@ def basic_log_file_obj(log_configuration='Admin_Client', outfile=None, **kwargs)
         myLogger.setLevel(logging.WARNING)
         return myLogger
     else:
-        logging.basicConfig(filename=outfile, filemode='w', level=logging.DEBUG) # level=logging.INFO)
+        logging.basicConfig(filename=outfile, filemode='ab+', level=logging.DEBUG) # level=logging.INFO)
         myLogger = logging.getLogger(log_configuration)
         imsg='\nLOGGING Level 1 - Active....\nINFO MODE SET'
         wmsg='\nLOGGING Level 2 - Active....\nWARNING MODE SET'
