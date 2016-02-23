@@ -10,21 +10,24 @@ def basic_log_file_obj(log_configuration='Admin_Client', outfile=None, **kwargs)
     logging.logProcesses = 0
     from os import path as path
     configfile = kwargs.get('configfile', 'generic_logger_config.ini')
-    if outfile is None:
-        outfile = kwargs.get('outfile', str(__file__ + "_log.txt"))
-        outfile = path.join("/root/DropboxSync/bflyProdimagesSync/log", path.basename(outfile))
+    #if outfile is None:
+    #    outfile = kwargs.get('outfile', str(__file__ + "_log.txt"))
+    #    outfile = path.join("/root/DropboxSync/bflyProdimagesSync/log", path.basename(outfile))
     if configfile is not None:
         logging.config.fileConfig(path.normpath(configfile))
-        hdlr = logging.FileHandler(outfile)
+        #hdlr = logging.FileHandler
+        #cnslhdlr = logging.ConsoleHandler
         #formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-        formatter = logging.Formatter('%(asctime)s | %(name)s | %(module)s-%(lineno)04d | %(levelname)s | %(message)s')
-        hdlr.setFormatter(formatter)
+        #formatter = logging.Formatter('%(asctime)s | %(name)s | %(module)s-%(lineno)04d | %(levelname)s | %(message)s')
+        #hdlr.setFormatter(formatter)
+        #cnslhdlr.setFormatter(formatter)
         myLogger = logging.getLogger(log_configuration)
-        myLogger.addHandler(hdlr)
-        myLogger.setLevel(logging.WARNING)
+        #myLogger.addHandler(hdlr)
+        #myLogger.addHandler(cnslhdlr)
+        myLogger.setLevel(logging.INFO)
         return myLogger
     else:
-        logging.basicConfig(filename=outfile, filemode='ab+', level=logging.DEBUG) # level=logging.INFO)
+        logging.basicConfig(filename=outfile, filemode='wb+', level=logging.DEBUG) # level=logging.INFO)
         myLogger = logging.getLogger(log_configuration)
         imsg='\nLOGGING Level 1 - Active....\nINFO MODE SET'
         wmsg='\nLOGGING Level 2 - Active....\nWARNING MODE SET'
