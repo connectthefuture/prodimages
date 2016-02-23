@@ -229,12 +229,7 @@ def main(fileslist):
                     print('RESP 207 mzexec: {}'.format(resp))
                     #upsert_content_resp = upsert_data_mz_image(**values)  # ,dict(**values))
                     if resp.http_status_code < 400:
-                        update_db = mozu_image_table.update(values=dict(**table_args),
-                                                            whereclause=  # mozu_image_table.c.bf_imageid==kwargs.get('bf_imageid')
-                                                            (mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
-                                                            |
-                                                            (mozu_image_table.c.mz_imageid == table_args['mz_imageid'])
-                                                            )
+                        update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                         res = update_db.execute()
                         print dir(res), 'Updated--> ', values.items(), ' <-- ', update_db
                 else:
