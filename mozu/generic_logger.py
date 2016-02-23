@@ -24,7 +24,7 @@ def basic_log_file_obj(log_configuration='Admin_Client', outfile=None, **kwargs)
         myLogger = logging.getLogger(log_configuration)
         #myLogger.addHandler(hdlr)
         #myLogger.addHandler(cnslhdlr)
-        myLogger.setLevel(logging.INFO)
+        myLogger.setLevel(logging.DEBUG)
         return myLogger
     else:
         logging.basicConfig(filename=outfile, filemode='wb+', level=logging.DEBUG) # level=logging.INFO)
@@ -41,7 +41,7 @@ def basic_log_file_obj(log_configuration='Admin_Client', outfile=None, **kwargs)
         myLogger.critical(cmsg)
         myLogger.exception(exmsg)
         myLogger.debug(dmsg)
-        myLogger.setLevel(logging.WARNING)
+        myLogger.setLevel(logging.INFO)
         return myLogger
 
 #logger.error('We have a problem')
