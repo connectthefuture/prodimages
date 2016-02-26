@@ -81,6 +81,47 @@ def delete_by_bflyid(**kwargs):
     except TypeError:
         'NoneTpe Error in delete by bfid. {} Not in DB'.format(kwargs.get('bf_imageid', ''))
 #### Update or UpdateDel -- aka "delete from mozu and db then reload to mozu and store new mozu docID"
+def del_or_replace_by_bf_style_list(**kwargs):
+    from os import chdir, path
+    MOZU_CODE_DIR = '/usr/local/batchRunScripts/mozu'
+    JBMODULES_ROOT = '/usr/local/batchRunScript/python/jbmodules'
+    chdir(MOZU_CODE_DIR)
+    import mozu_exec_del_update
+    #mozu_exec.main(insert_list)
+
+    netsrv101_mnt = '/mnt/images'
+    ext = '.png'
+    files_list = []
+    missing_mzid = []
+
+    if not kwargs.get('styles_list'):
+        styles_list = ['351480205_alt01']##379612301 381880001 381879601 381878901 381856401 381856303 381856201 381720702 381689201 381640905 380874901 380874701 380874601 380471502 380306001 380305201 380304801 380303401 379801701 379612301 379597701 379597601 379597301 379597101 379578201 379534101 379448301 379366301 378548201 378536702 378536701 378536605 378536604 378536603 378536602 378536502 378536501 378536404 378536403 378536402 378536401 378536304 378536303 378536302 378536301 378534401 378444401 378444301 377849901 377849603 377849305 377809901 364184801 359178201 359164301 358207301 356190201 356088501 356088401 355434801 347278201 346088501 323643602']  # ['345496501'] #, '379438901','373101102']
+    for f in styles_list[0].split():
+        #client = MozuRestClient()
+        src = path.join(netsrv101_mnt, f[:4], f + ext).replace('\n', '')
+        if path.isfile(src):
+            files_list.append(src)
+            #mozu_exec_del_update.delete_by_bflyid(bf_imageid=f)
+            resp = mozu_exec_del_update.update_content_mz_image(bf_imageid=f, src_filepath=src)
+            print '\n\n\n\n\n\n\n\\t\tEND LOOP FILES LIST APPEND\n\n\n\n{0}\n\n\n'.format(resp)
+
+#     if 1==1: ##kwargs.get('REPLACE'):
+#         import mozu_exec
+#         mozu_exec.main(files_list)
+#         print files_list, f
+#         #res = mozu_exec_del_update.update_replace_content(bf_imageid=f)
+#     else:
+    return files_list
+
+#### basic db insert
+def insert_data_db(**kwargs):
+    from db import mozu_image_table_instance
+    from RESTClient import __mozu_image_table_valid_keys__
+    mozu_image_table = mozu_image_table_instance()
+    table_args = include_keys(kwargs, __mozu_image_table_valid_keys__)
+    insert_db = mozu_image_table.insert(values=dict(**table_args))
+    #update_db = mozu_image_table.update(values=dict(**table_args), whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
+    insert_db.execute()
 
 # @log
 # # PUT - Upload/Update Image/DocumentContent
