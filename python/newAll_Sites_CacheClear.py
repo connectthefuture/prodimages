@@ -401,7 +401,7 @@ def main(colorstyle_list=None):
 
     print versioned_links, 'Veers Linx'
     count = 0
-    if not versioned_links:
+    if not versioned_links[0]:
         print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
             version =  query_version_number(colorstyle)[colorstyle]['version']
@@ -416,7 +416,7 @@ def main(colorstyle_list=None):
             send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
             send_purge_request_edgecast('http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle))
 
-    elif len(versioned_links) <= 8550:
+    elif len(versioned_links[0]) <= 8550:
 
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
