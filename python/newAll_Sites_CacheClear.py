@@ -399,7 +399,7 @@ def main(colorstyle_list=None):
     ## Parse urllist returning only versioned List page images
     versioned_links = return_versioned_urls(pdp_urllist)
 
-    #print versioned_links
+    print versioned_links, 'Veers Linx'
     count = 0
     if not versioned_links:
         print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
@@ -414,6 +414,7 @@ def main(colorstyle_list=None):
             #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
             #send_purge_request_localis(colorstyle,version,POSTURL_BC)
             send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+            send_purge_request_edgecast('http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle))
 
     elif len(versioned_links) <= 8550:
 
@@ -440,6 +441,7 @@ def main(colorstyle_list=None):
                 #    print sys.stderr().read()
             except IndexError, e:
                 print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge.{}".format(e)
+                pass
     #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
     #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
     #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
