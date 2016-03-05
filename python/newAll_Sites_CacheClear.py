@@ -280,7 +280,7 @@ def main(colorstyle_list=None):
                     pdpalt01l    = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}_alt01.pct&outputx=583&outputy=700&level=1&ver={1}'.format(colorstyle, version)
                     email_img1   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
                     email_img2   = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
-       
+
 
                     bnclistpg    = "http://cdn.is.belleandclive.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=320&height=430&ver={1}".format(colorstyle,version)
                     bncpdpmain   = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=340&outputy=408&level=1&ver={1}".format(colorstyle,version)
@@ -409,6 +409,7 @@ def main(colorstyle_list=None):
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+            print "clearing local {} ver {}".format(colorstyle,version)
             send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
             #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
             #send_purge_request_localis(colorstyle,version,POSTURL_BC)
@@ -437,15 +438,14 @@ def main(colorstyle_list=None):
 
                 #except:
                 #    print sys.stderr().read()
-            except IndexError:
-                print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
+            except IndexError, e:
+                print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge.{}".format(e)
     #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
     #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
     #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
     #            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
     #            send_purge_request_localis(colorstyle,version,POSTURL_BC)
     #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-                pass
         for url_purge in versioned_links:
             send_purge_request_edgecast(url_purge[0])
             #csv_write_datedOutfile(url_purge)
