@@ -461,7 +461,7 @@ def main(colorstyle_list=None):
     #print generated_links
     count = 0
     if len(edgecast_listurls) <= 8550:
-
+        print 'Edgecastr list urlsa {}'.format(edgecast_listurls)
         #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
     ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
