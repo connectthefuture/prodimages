@@ -144,7 +144,7 @@ def upload_new(**kwargs):
     mzclient = MozuRestClient(**kwargs)
     mz_imageid, document_resource = mzclient.create_new_mz_image()
     print mz_imageid, document_resource, ' <-- MozuID -- Docresource'
-    if document_resource == "Keyerror":
+    if document_resource == "KeyError":
         print mz_imageid, ' <-- MozuID'
     elif document_resource == "documentTree":
         bf_imageid = mzclient.bf_imageid
@@ -231,7 +231,7 @@ def main(fileslist):
                     if resp.http_status_code < 400:
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                         res = update_db.execute()
-                        print res, 'Updated--> ', values.items(), ' <-- ', update_db
+                        print dir(res), 'Updated--> ', values.items(), ' <-- ', update_db
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(create_resource_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
