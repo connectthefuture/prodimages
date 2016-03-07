@@ -31,7 +31,7 @@ def download_server_imgs_rename_vendstyles(colorstyle,vendor_style):
     netsrv101_mnt = '/mnt/images'
     bfly_png = path.join(netsrv101_mnt, colorstyle[:4], colorstyle + ext_PNG).replace('\n', '').replace('.png.png','.png').replace('.jpg.jpg','.jpg')
 
-    vendor_style_file = path.join(path.abspath(getcwd), vendor_style + ext_PNG)
+    vendor_style_file = path.join(path.abspath(getcwd()), vendor_style + ext_PNG)
     #try:
     shutil.copy(bfly_png, vendor_style_file)    
     alt = 0
@@ -41,7 +41,7 @@ def download_server_imgs_rename_vendstyles(colorstyle,vendor_style):
             ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
             colorstylealt = colorstyle + ext_ALT
             c = vendor_style + ext_ALT
-            vendor_style_filealt = path.join(path.abspath(getcwd), vendor_stylealt)            
+            vendor_style_filealt = path.join(path.abspath(getcwd()), vendor_stylealt)            
             bfly_png_filealt = path.join(netsrv101_mnt, colorstyle[:4], colorstylealt)
             
             if path.isfile(bfly_png_filealt):
