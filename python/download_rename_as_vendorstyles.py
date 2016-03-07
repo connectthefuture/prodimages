@@ -46,6 +46,7 @@ def download_server_imgs_rename_vendstyles(colorstyle,vendor_style):
             
             if path.isfile(bfly_png_filealt):
                 shutil.copy(bfly_png_filealt, vendor_style_filealt)
+                print 'Copied {} to {}'.format(bfly_png_filealt, vendor_style_filealt)
             else:
                 print 'Not a File {0}'.format(bfly_png_filealt)
         except IOError:
