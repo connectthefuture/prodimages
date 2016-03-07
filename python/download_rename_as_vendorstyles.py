@@ -40,7 +40,7 @@ def download_server_imgs_rename_vendstyles(colorstyle,vendor_style):
             alt = x   
             ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
             colorstylealt = colorstyle + ext_ALT
-            c = vendor_style + ext_ALT
+            vendor_stylealt = vendor_style + ext_ALT
             vendor_style_filealt = path.join(path.abspath(getcwd()), vendor_stylealt)            
             bfly_png_filealt = path.join(netsrv101_mnt, colorstyle[:4], colorstylealt)
             
