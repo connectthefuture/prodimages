@@ -31,16 +31,16 @@ def download_server_imgs_rename_vendstyles(colorstyle,vendor_style):
     netsrv101_mnt = '/mnt/images'
     bfly_png = path.join(netsrv101_mnt, colorstyle[:4], colorstyle + ext_PNG).replace('\n', '').replace('.png.png','.png').replace('.jpg.jpg','.jpg')
 
-    vendor_style_file = path.join(path.abspath(getcwd()), vendor_style + ext_PNG)
+    vendor_style_file = path.join(path.abspath(getcwd()), vendor_style + "_1" + ext_PNG)
     #try:
     shutil.copy(bfly_png, vendor_style_file)    
-    alt = 0
+    alt = 1
     for x in xrange(1,6):
         try:
-            alt = x   
+            alt = x +1   
             ext_ALT = '_alt0{0}{1}'.format(str(alt),ext_PNG)
             colorstylealt = colorstyle + ext_ALT
-            vendor_stylealt = vendor_style + ext_ALT
+            vendor_stylealt = vendor_style + "_" + ext_ALT[-1]
             vendor_style_filealt = path.join(path.abspath(getcwd()), vendor_stylealt)            
             bfly_png_filealt = path.join(netsrv101_mnt, colorstyle[:4], colorstylealt)
             
