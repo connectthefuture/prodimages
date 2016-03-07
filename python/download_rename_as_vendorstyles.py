@@ -44,11 +44,10 @@ def download_server_imgs_rename_vendstyles(colorstyle,vendor_style):
             vendor_style_filealt = path.join(path.abspath(getcwd), vendor_stylealt)            
             bfly_png_filealt = path.join(netsrv101_mnt, colorstyle[:4], colorstylealt)
             
-            if path.isfile(bfly_png_filealt): #urllib.urlretrieve(bfly_png_filealt, vendor_style_filealt) == None:
-                shutil.copy(bfly_png_filealt
-                #return True
+            if path.isfile(bfly_png_filealt):
+                shutil.copy(bfly_png_filealt, vendor_style_filealt)
             else:
-                pass
+                print 'Not a File {0}'.format(bfly_png_filealt)
         except IOError:
             pass
 
