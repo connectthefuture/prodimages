@@ -66,14 +66,14 @@ def main(styles_list):
     print 'Rootdir is {0}'.format(rootdir)
     for k,v in colorvendorstyle_dict.iteritems():
         chdir(rootdir)
-        dload_dir = path.join(rootdir, k)
+        dload_dir = path.join(rootdir, str(k))
         try:
             makedirs(dload_dir)
         except:
             pass
         chdir(dload_dir)        
-        colorstyle = k
-        vendor_style = v
+        colorstyle = str(k)
+        vendor_style = str(v)
         print colorstyle,vendor_style
         download_server_imgs_rename_vendstyles(colorstyle,vendor_style)
 
