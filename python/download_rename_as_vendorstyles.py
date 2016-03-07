@@ -66,7 +66,7 @@ def main(styles_list):
     print 'Rootdir is {0}'.format(rootdir)
     for k,v in colorvendorstyle_dict.iteritems():
         chdir(rootdir)
-        dload_dir = abspath(rootdir, k)
+        dload_dir = path.abspath(rootdir, k)
         try:
             makedirs(dload_dir)
         except:
