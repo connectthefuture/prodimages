@@ -34,19 +34,21 @@ def url_get_links(targeturl):
     return list(set(linklist))
 
 
-def return_versioned_urls(text):
+def return_versioned_urls(urls_list):
     import os,sys,re
-    regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
+    regex = re.compile(r'https?:.+?ver=[1-9][0-9]?[0-9]?')
     regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=[0-9]{9}&width=49&height=59.*$')
     listurls = []
-    for line in text:
-        testfind =  regex.findall(line)
-        testswatch = regex_swatch.findall(line)
+    for url in urls_list:
+        testfind =  regex.findall(url)
+        testswatch = regex_swatch.findall(url)
         if testfind:
-            listurls.append(testfind)
+            listurls.append(testfind[0])
             #print testfind
+
         if testswatch:
-            listurls.append(testswatch)
+            listurls.append(testswatch[0])
+        else: pass
     return listurls
 
 
@@ -359,7 +361,7 @@ def main(colorstyle_list=None):
 
 
     ## Parse urllist returning only versioned List page images
-    versioned_links = return_versioned_urls(pdp_urllist)
+    versioned_links = return_versioned_urls(pdp_urllist[0])
 
     #print versioned_links
     count = 0
@@ -381,9 +383,9 @@ def main(colorstyle_list=None):
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
             try:
-                colorstyle = re.findall(regex, url_purge_local[0])
+                colorstyle = re.findall(regex, url_purge_local)
                 colorstyle = colorstyle.pop()[1]
-                version  = re.findall(regex, url_purge_local[0])
+                version  = re.findall(regex, url_purge_local)
                 version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
                 #try:
@@ -408,7 +410,7 @@ def main(colorstyle_list=None):
     #            send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
                 pass
         for url_purge in versioned_links:
-            send_purge_using_requests_edgecast(url_purge[0])
+            send_purge_using_requests_edgecast(url_purge)
             #csv_write_datedOutfile(url_purge)
 
     else:
