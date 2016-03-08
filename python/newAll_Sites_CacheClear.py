@@ -94,7 +94,7 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
         return res
     else:
-        pass
+        return
 
 
 def send_purge_using_requests_edgecast(mediaPath):
@@ -121,7 +121,7 @@ def send_purge_using_requests_edgecast(mediaPath):
         return res
     else:
         print 'Missing required Field'
-        pass
+        return
 
 
 
