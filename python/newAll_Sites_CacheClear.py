@@ -91,7 +91,7 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
                     "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
                     "Referer": POSTURL_Referer}
         try:
-            res = requests.post(POSTURL,data=data,headers=headers)
+            res = requests.post(POSTURL,data=data,headers=headers, timeout=7)
             print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
             return res
         except:
