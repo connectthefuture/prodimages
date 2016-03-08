@@ -291,7 +291,7 @@ class MozuRestClient:
             return MozuRestClient.http_status_code
         except: # json.JSONDecodeError:
             print 'JSONDECODE Error'
-            return
+            return _document_content_response
 
     # GET - Single Document Obj by documentId .ie mz_imageid
     ## -- The Document properties that define the content used by the content management system (CMS).
