@@ -289,8 +289,10 @@ class MozuRestClient:
         except KeyError:
             print 'REST Client Update mzimage Failed --> KeyError'
             return MozuRestClient.http_status_code
+        except JSONDecodeError:
+            return
 
-    ## GET - Single Document Obj by documentId .ie mz_imageid
+    # GET - Single Document Obj by documentId .ie mz_imageid
     ## -- The Document properties that define the content used by the content management system (CMS).
     @log
     def get_mz_image_document(self, **kwargs):
