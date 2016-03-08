@@ -373,11 +373,12 @@ def main(colorstyle_list=None):
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+            print "Starting purgeis"
             send_purge_using_requests_localis(POSTURL_ALLSITES, colorstyle=colorstyle,version=version)
             #send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
             #send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
-            send_purge_using_requests_localis(POSTURL_Mobile,colorstyle=colorstyle,version=version)
-
+            print "Ended  purgeis ", colorstyle
+            #send_purge_using_requests_localis(POSTURL_Mobile,colorstyle=colorstyle,version=version)
     elif len(versioned_links) <= 8550:
 
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
