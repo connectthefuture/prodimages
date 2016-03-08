@@ -384,7 +384,6 @@ def main(colorstyle_list=None):
         for url_purge_local in versioned_links:
             try:
                 colorstyle = re.findall(regex, url_purge_local)
-                colorstyle = colorstyle.pop()[1]
                 version  = re.findall(regex, url_purge_local)
                 version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
