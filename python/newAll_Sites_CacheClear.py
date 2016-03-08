@@ -82,13 +82,12 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         else:
             data = "style={0}&version={1}".format(colorstyle, version)
 
-        head_contenttype = {"Content-Type": "application/x-www-form-urlencoded"}
-        head_content_len= {"Content-length": str(len(data))}
-        #head_accept = {"Accept": "text/html"}
-        head_accept = {"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
-        head_useragent = {"User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0"}
-        head_referer = {"Referer": POSTURL_Referer}
-        headers= head_useragent + head_referer + head_contenttype + head_accept + head_content_len
+        headers = { "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-length": str(len(data)),
+                    #head_accept = {"Accept": "text/html",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
+                    "Referer": POSTURL_Referer}
         res = requests.post(POSTURL,data=data,headers=headers)
         print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
         return res
@@ -111,11 +110,10 @@ def send_purge_using_requests_edgecast(mediaPath):
         'MediaType' : mediaType
         })
         #data = json_encode(request_params)
-        head_authtoken = {"Authorization": "tok:{0}".format(token)}
-        head_content_len= {"Content-length": str(len(data))}
-        head_accept = {"Accept": "application/json"}
-        head_contenttype = {"Content-Type": "application/json"}
-        headers = head_authtoken + head_contenttype + head_accept + head_content_len
+        headers = { "Authorization": "tok:{0}".format(token),
+                    "Content-length": str(len(data)),
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"}
         res = requests.put(purgeURL,data=data,headers=headers)
         print "Successfully Sent Purge Request HTTP Status {0}".format(res.status_code)
         return res
@@ -373,10 +371,10 @@ def main(colorstyle_list=None):
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            send_purge_using_requests_localis(colorstyle,version,POSTURL_ALLSITES)
+            send_purge_using_requests_localis(POSTURL_ALLSITES, colorstyle=colorstyle,version=version)
             #send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
             #send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
-            send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
+            send_purge_using_requests_localis(POSTURL_Mobile,colorstyle=colorstyle,version=version)
 
     elif len(versioned_links) <= 8550:
 
@@ -393,8 +391,7 @@ def main(colorstyle_list=None):
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
                 POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-
-                send_purge_using_requests_localis(colorstyle,version,POSTURL_ALLSITES)
+                send_purge_using_requests_localis(POSTURL_ALLSITES, colorstyle=colorstyle,version=version)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
