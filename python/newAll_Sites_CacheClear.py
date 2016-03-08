@@ -366,7 +366,7 @@ def main(colorstyle_list=None):
     #print versioned_links
     count = 0
     if not versioned_links:
-        print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
+        print "No version links found Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
             version =  query_version_number(colorstyle)[colorstyle]['version']
             POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
@@ -396,7 +396,7 @@ def main(colorstyle_list=None):
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
-
+                print '<-- 399'
                 #except:
                 #    print sys.stderr().read()
             except IndexError:
@@ -407,14 +407,14 @@ def main(colorstyle_list=None):
     #            send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
     #            send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
     #            send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
+                print '<-- 410'
                 pass
         for url_purge in versioned_links:
+            print '<-- 412'
             send_purge_using_requests_edgecast(url_purge)
             #csv_write_datedOutfile(url_purge)
-
     else:
         print "Failed -- Over 8550 URLs Submitted"
-
 
 
     ## Now clear links from the generated urls
