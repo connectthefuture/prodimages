@@ -273,8 +273,8 @@ class MozuRestClient:
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
         _bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
-        if kwargs.get("properties", self.properties.items()['tags'].values()):
-            self.document_payload['properties'] = kwargs.get("properties", self.properties.items()['tags'].values())
+        if kwargs.get("properties", ""):
+            self.document_payload['properties'] = kwargs.get("properties", "")
         if kwargs.get("src_filepath") and not _bf_imageid:
             self.bf_imageid = kwargs['bf_imageid'] = kwargs.get("src_filepath").split('/')[-1].split('.')[0]
         _document_content_response = self.send_content(**kwargs) #requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
