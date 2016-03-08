@@ -289,7 +289,7 @@ class MozuRestClient:
         except KeyError:
             print 'REST Client Update mzimage Failed --> KeyError'
             return MozuRestClient.http_status_code
-        except JSONDecodeError:
+        except json.JSONDecodeError:
             print 'JSONDECODE Error'
             return
 
