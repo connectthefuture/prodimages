@@ -256,11 +256,12 @@ class MozuRestClient:
             self.ext = 'png'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg', 'jpeg'))
         self.headers["Content-type"] = self.mimetype
-        set_document_payload(**kwargs)
+        _qstring = self.set_query_string(**kwargs)
+        self.set_document_payload(**kwargs)
         try:
-            _content_response = requests.get(_endpoint, headers=self.headers, verify=False)
+            _content_response = requests.get(_endpoint + _qstring, headers=self.headers, verify=False)
             MozuRestClient.http_status_code = _content_response.status_code
-            print "ContentGetResponse: {0}".format(_content_response.status_code)
+            print "ContentGetResponse: {0}\nURL: {1}".format(_content_response.status_code, _endpoint + _qstring)
             return _content_response
         except AttributeError:
             print "OIO Error 171 Failed send_content"
