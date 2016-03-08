@@ -82,13 +82,13 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         else:
             data = "style={0}&version={1}".format(colorstyle, version)
 
-        head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
-        head_content_len= "Content-length: {0}".format(str(len(data)))
-        #head_accept = 'Accept: text/html'
-        head_accept = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-        head_useragent = 'User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0'
-        head_referer = 'Referer: {0}'.format(POSTURL_Referer)
-        headers=dict(head_useragent, head_referer, head_contenttype, head_accept, head_content_len)
+        head_contenttype = {"Content-Type": "application/x-www-form-urlencoded"}
+        head_content_len= {"Content-length": str(len(data))}
+        #head_accept = {"Accept": "text/html"}
+        head_accept = {"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
+        head_useragent = {"User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0"}
+        head_referer = {"Referer": POSTURL_Referer}
+        headers= head_useragent + head_referer + head_contenttype + head_accept + head_content_len
         res = requests.post(POSTURL,data=data,headers=headers)
         print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
         return res
@@ -111,11 +111,11 @@ def send_purge_using_requests_edgecast(mediaPath):
         'MediaType' : mediaType
         })
         #data = json_encode(request_params)
-        head_authtoken = "Authorization: tok:{0}".format(token)
-        head_content_len= "Content-length: {0}".format(str(len(data)))
-        head_accept = 'Accept: application/json'
-        head_contenttype = 'Content-Type: application/json'
-        headers = dict(head_authtoken, head_contenttype, head_accept, head_content_len)
+        head_authtoken = {"Authorization": "tok:{0}".format(token)}
+        head_content_len= {"Content-length": str(len(data))}
+        head_accept = {"Accept": "application/json"}
+        head_contenttype = {"Content-Type": "application/json"}
+        headers = head_authtoken + head_contenttype + head_accept + head_content_len
         res = requests.put(purgeURL,data=data,headers=headers)
         print "Successfully Sent Purge Request HTTP Status {0}".format(res.status_code)
         return res
