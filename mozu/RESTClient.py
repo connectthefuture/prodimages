@@ -216,16 +216,16 @@ class MozuRestClient:
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         ## debug logging
         print _endpoint, " <-- Endpoint Choice"
-        import generic_logger
-        mylogger = generic_logger.basic_log_file_obj()
-        mylogger.info(_endpoint)
+        #import generic_logger
+        # mylogger = generic_logger.basic_log_file_obj()
+        # mylogger.info(_endpoint)
         if not self.ext:
             self.ext = 'png'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg','jpeg'))
         self.headers["Content-type"] = self.mimetype
         self.set_document_payload(**kwargs)
-        mylogger.debug(self.document_payload)
-        mylogger.debug(self.headers)
+        # mylogger.debug(self.document_payload)
+        # mylogger.debug(self.headers)
         ## end debug logging
         print 'Start Send Streaming Data Try'
         try:
@@ -233,10 +233,10 @@ class MozuRestClient:
             _content_response = requests.put(_endpoint, data=stream, headers=self.headers, verify=False)
             MozuRestClient.http_status_code = _content_response.status_code
             print "ContentPutResponse Send: {0}\n{1}".format(_content_response.status_code, _endpoint)
-            mylogger.warning(_content_response)
+            # mylogger.warning(_content_response)
             return _content_response
         except AttributeError as e:
-            mylogger.exception(e)
+            # mylogger.exception(e)
             print "OIO Error 171 Failed send_content"
 
     ###

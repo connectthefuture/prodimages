@@ -51,10 +51,11 @@ def basic_log_file_obj(log_configuration='Admin_Client', outfile=None, **kwargs)
 if __name__ == '__main__':
     #import sys
     logrun = basic_log_file_obj()
-    numeric_level = getattr(logrun, loglevel.upper(), None)
+    numeric_level = 2
+    #numeric_level = getattr(logrun, loglevel.upper(), None)
     logrun.debug('Numeric Level Arg Set to {0}'.format(numeric_level))
-    if not isinstance(numeric_level, int):
-        raise ValueError('Invalid log level: {0}'.format(loglevel))
+    #if not isinstance(numeric_level, int):
+    #    raise ValueError('Invalid log level: {0}'.format(loglevel))
     logrun.basicConfig(level=numeric_level)
     #pass()
 
