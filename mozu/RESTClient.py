@@ -204,7 +204,7 @@ class MozuRestClient:
         if self.mz_imageid:
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
             print "send 1"
-        elif not self.bf_imageid and src_filepath is not None:
+        elif not kwargs.get("bf_imageid", self.bf_imageid) and src_filepath is not None:
             self.bf_imageid = src_filepath.split('/')[-1].split('.')[0]
             kwargs['bf_imageid'] = self.bf_imageid
             self.ext = src_filepath.split('.')[-1]
@@ -212,7 +212,7 @@ class MozuRestClient:
             print "send 2"
         else:
             from mozu_image_util_functions import netsrv101_path_maker
-            netsrv_src = netsrv101_path_maker(self.bf_imageid)
+            netsrv_src = netsrv101_path_maker(kwargs.get("bf_imageid", self.bf_imageid))
             kwargs['src_filepath'] = netsrv_src #kwargs.get('src_filepath', netsrv_src)
             src_filepath = kwargs['src_filepath']
             self.ext = src_filepath.split('.')[-1]
