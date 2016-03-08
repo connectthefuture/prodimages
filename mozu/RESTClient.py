@@ -290,6 +290,7 @@ class MozuRestClient:
             print 'REST Client Update mzimage Failed --> KeyError'
             return MozuRestClient.http_status_code
         except JSONDecodeError:
+            print 'JSONDECODE Error'
             return
 
     # GET - Single Document Obj by documentId .ie mz_imageid
