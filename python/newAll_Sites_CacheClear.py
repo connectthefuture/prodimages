@@ -90,7 +90,7 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
                     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                     "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
                     "Referer": POSTURL_Referer}
-        res = requests.post(POSTURL,data=data,headers=headers)
+        res = requests.post(POSTURL,data=data,headers=headers,timeout=5)
         print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
         return res
     else:
@@ -116,7 +116,7 @@ def send_purge_using_requests_edgecast(mediaPath):
                     "Content-length": str(len(data)),
                     "Accept": "application/json",
                     "Content-Type": "application/json"}
-        res = requests.put(purgeURL,data=data,headers=headers)
+        res = requests.put(purgeURL,data=data,headers=headers, timeout=5)
         print "Successfully Sent Purge Request HTTP Status {0}".format(res.status_code)
         return res
     else:
