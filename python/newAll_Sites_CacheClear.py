@@ -24,7 +24,7 @@ def url_get_links(targeturl):
     import os,re,sys,requests
     from bs4 import BeautifulSoup
     r = requests.get(targeturl)
-    soup = BeautifulSoup(r.text,"html5.parser")
+    soup = BeautifulSoup(r.text,"html5")
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
     linklist = []
     for link in soup.find_all('img'):
