@@ -366,7 +366,7 @@ def main(colorstyle_list=None):
                     ## Unique Set
                     edgecast_listurls = list(set(edgecast_listurls))
 
-                    print pdp_urllist,'EDGE\n', edgecast_listurls
+                    print pdp_urllist
 
                     #newlistpg = '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt01.pct&outputx=1800&outputy=2160&level=1&ver=1'
                     #'/mgen/Bluefly/eqzoom85.ms?img=325084201_alt02.pct&outputx=1800&outputy=2160&level=1&ver=1'
@@ -399,9 +399,9 @@ def main(colorstyle_list=None):
     ## Parse urllist returning only versioned List page images
     versioned_links = return_versioned_urls(pdp_urllist)
 
-    print versioned_links, 'Veers Linx'
+    #print versioned_links
     count = 0
-    if not versioned_links[0]:
+    if not versioned_links:
         print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
             version =  query_version_number(colorstyle)[colorstyle]['version']
@@ -409,14 +409,12 @@ def main(colorstyle_list=None):
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            print "clearing local {} ver {}".format(colorstyle,version)
             send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
             #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
             #send_purge_request_localis(colorstyle,version,POSTURL_BC)
             send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-            send_purge_request_edgecast('http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle))
 
-    elif len(versioned_links[0]) <= 8550:
+    elif len(versioned_links) <= 8550:
 
         regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
@@ -439,15 +437,15 @@ def main(colorstyle_list=None):
 
                 #except:
                 #    print sys.stderr().read()
-            except IndexError, e:
-                print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge.{}".format(e)
-                pass
+            except IndexError:
+                print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
     #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
     #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
     #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
     #            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
     #            send_purge_request_localis(colorstyle,version,POSTURL_BC)
     #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+                pass
         for url_purge in versioned_links:
             send_purge_request_edgecast(url_purge[0])
             #csv_write_datedOutfile(url_purge)
@@ -463,7 +461,7 @@ def main(colorstyle_list=None):
     #print generated_links
     count = 0
     if len(edgecast_listurls) <= 8550:
-        print 'Edgecastr list urlsa {}'.format(edgecast_listurls)
+
         #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
     ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
