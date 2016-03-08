@@ -27,7 +27,7 @@ def download_server_imgs_rename_vendstyles(colorstyle,vendor_style):
     import ftplib, urllib, shutil
     from os import path, chdir, getcwd
     colorstyle = str(colorstyle)
-    ext_PNG     = '.png'    
+    ext_PNG     = '.png'    #/Users/johnb/virtualenvs/GitHub-prodimages/mozu/mozu_exec.py
     netsrv101_mnt = '/mnt/images'
     bfly_png = path.join(netsrv101_mnt, colorstyle[:4], colorstyle + ext_PNG).replace('\n', '').replace('.png.png','.png').replace('.jpg.jpg','.jpg')
 
