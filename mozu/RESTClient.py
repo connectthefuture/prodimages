@@ -300,15 +300,15 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+        if _mz_imageid:
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+        else:
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
         # Get Content
         _document_content_response = requests.get(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
         MozuRestClient.http_status_code = _document_content_response.status_code
         print "DocumentGetResponse: {0}".format(_document_content_response.status_code)
-        try:
-            return _document_content_response.json()
-        except:
-            return _document_content_response
+        return _document_content_response
 
 
     ## DELETE - Document Content - Then DELETE the Document Data Object with mzid
@@ -375,15 +375,19 @@ class MozuRestClient:
         import requests, json
         self.headers["Content-type"] = 'application/json'
         _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
-        # Get Content
-        _document_content_response = requests.head(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
-        MozuRestClient.http_status_code = _document_content_response.status_code
-        print "DocumentGetResponse: {0}".format(_document_content_response.status_code)
+        if _mz_imageid:
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+        else:
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
+        # Get Content Headers
+        self.set_document_payload(**kwargs)
+        _document_content_response_head = requests.head(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
+        MozuRestClient.http_status_code = _document_content_response_head.status_code
+        print "DocumentGetResponse: {0}".format(_document_content_response_head.status_code)
         try:
-            return _document_content_response.json()
+            return _document_content_response_head
         except KeyError:
-            return _document_content_response.headers
+            return _document_content_response_head
 
     ## Download File - GET - Document Content and download to Local or Remote File
     @log
