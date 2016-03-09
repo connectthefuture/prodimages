@@ -217,7 +217,7 @@ class MozuRestClient:
             from mozu_image_util_functions import netsrv101_path_maker
             netsrv_src = netsrv101_path_maker(kwargs.get("bf_imageid", self.bf_imageid))
             kwargs['src_filepath'] = netsrv_src #kwargs.get('src_filepath', netsrv_src)
-            src_filepath = kwargs['src_filepath']
+            src_filepath = kwargs.get('src_filepath', '')
             self.ext = src_filepath.split('.')[-1]
             _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
             print "send 3"
