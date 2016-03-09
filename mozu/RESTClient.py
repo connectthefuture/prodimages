@@ -314,7 +314,7 @@ class MozuRestClient:
         try:
             _content_response = requests.get(_endpoint, headers=self.headers, verify=False)
             MozuRestClient.http_status_code = _content_response.status_code
-            print "ContentGetResponse: {0}\nURL: {1}".format(_content_response.status_code, _endpoint + _qstring)
+            print "ContentGetResponse: {0}\nURL: {1}".format(_content_response.status_code, _endpoint)
             return _content_response
         except AttributeError:
             print "OIO Error 171 Failed send_content"
