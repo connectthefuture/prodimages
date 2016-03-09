@@ -307,8 +307,9 @@ class MozuRestClient:
         print "DocumentGetResponse: {0}".format(_document_content_response.status_code)
         try:
             return _document_content_response.json()
-        except KeyError:
-            return _document_content_response.headers
+        except:
+            return _document_content_response
+
 
     ## DELETE - Document Content - Then DELETE the Document Data Object with mzid
     @log
