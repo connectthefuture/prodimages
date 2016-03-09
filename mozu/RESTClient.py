@@ -170,7 +170,10 @@ class MozuRestClient:
             _qstring = ""
         return _qstring
 
-
+    #
+    ### End setter functions, begin HTTP Methods
+    ###
+    #
     ## POST - Document - Create New
     @log
     def create_new_mz_image(self):
@@ -243,7 +246,53 @@ class MozuRestClient:
             # mylogger.exception(e)
             print "OIO Error 171 Failed send_content"
 
-    ###
+
+    ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
+    @log
+    def update_mz_image(self,**kwargs):
+        import requests, json
+        self.headers["Content-type"] = 'application/json'
+        _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        _bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
+        if kwargs.get("properties", ""):
+            self.document_payload['properties'] = kwargs.get("properties", "")
+        if kwargs.get("src_filepath") and not _bf_imageid:
+            self.bf_imageid = kwargs['bf_imageid'] = kwargs.get("src_filepath").split('/')[-1].split('.')[0]
+        _document_content_response = self.send_content(**kwargs) #requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        print _document_content_response.headers
+        MozuRestClient.http_status_code = _document_content_response.status_code
+        try:
+            return _document_content_response.json()['id']
+        except KeyError:
+            print 'REST Client Update mzimage Failed --> KeyError'
+            return MozuRestClient.http_status_code
+        except: # json.JSONDecodeError:
+            print 'JSONDECODE Error'
+            return _document_content_response
+
+
+    ######
+    # GET - Single Document Obj by documentId .ie mz_imageid
+    ## -- The Document properties that define the content used by the content management system (CMS).
+    @log
+    def get_mz_image_document(self, **kwargs):
+        import requests, json
+        self.headers["Content-type"] = 'application/json'
+        _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        if _mz_imageid:
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+        else:
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
+        # Get Content
+        _document_content_response = requests.get(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
+        MozuRestClient.http_status_code = _document_content_response.status_code
+        print "DocumentGetResponse: {0}".format(_document_content_response.status_code)
+        return _document_content_response
+
+
+    ##########
+    ### files = {'media': open(src_filepath, 'rb')}
+    ### GET File Content
     @log
     def get_content(self, **kwargs):
         import requests
@@ -270,86 +319,10 @@ class MozuRestClient:
         except AttributeError:
             print "OIO Error 171 Failed send_content"
 
-    ## UPDATE - multi PUT Document DATA AND/OR CONTENT -- uses self.send_content()
-    @log
-    def update_mz_image(self,**kwargs):
-        import requests, json
-        self.headers["Content-type"] = 'application/json'
-        _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        _bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
-        if kwargs.get("properties", ""):
-            self.document_payload['properties'] = kwargs.get("properties", "")
-        if kwargs.get("src_filepath") and not _bf_imageid:
-            self.bf_imageid = kwargs['bf_imageid'] = kwargs.get("src_filepath").split('/')[-1].split('.')[0]
-        _document_content_response = self.send_content(**kwargs) #requests.put(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        print _document_content_response.headers
-        MozuRestClient.http_status_code = _document_content_response.status_code
-        try:
-            return _document_content_response.json()['id']
-        except KeyError:
-            print 'REST Client Update mzimage Failed --> KeyError'
-            return MozuRestClient.http_status_code
-        except: # json.JSONDecodeError:
-            print 'JSONDECODE Error'
-            return _document_content_response
 
-    # GET - Single Document Obj by documentId .ie mz_imageid
-    ## -- The Document properties that define the content used by the content management system (CMS).
-    @log
-    def get_mz_image_document(self, **kwargs):
-        import requests, json
-        self.headers["Content-type"] = 'application/json'
-        _mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        if _mz_imageid:
-            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
-        else:
-            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
-        # Get Content
-        _document_content_response = requests.get(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False )
-        MozuRestClient.http_status_code = _document_content_response.status_code
-        print "DocumentGetResponse: {0}".format(_document_content_response.status_code)
-        return _document_content_response
-
-
-    ## DELETE - Document Content - Then DELETE the Document Data Object with mzid
-    @log
-    def delete_mz_image(self, **kwargs):
-        import requests, json
-        self.headers["Content-type"] = 'application/json'
-        self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
-        self.bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
-        if self.mz_imageid:
-            # Use regular documentList content endpoint
-            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
-        elif self.bf_imageid:
-            # Use alternate documentListTree content endpoint
-            # self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
-            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
-        else:
-            print('Failed to delete without mzid or bfid')
-            return
-        self.set_document_payload(**kwargs)
-        # Delete Content
-        _document_content_response = requests.delete(_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
-        if self.mz_imageid:
-            _doc_metadata_endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
-            _document_data_response = requests.delete(_doc_metadata_endpoint, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
-        else:
-            _document_data_response = ''
-        # Delete Document ID - Data TDO: Figure out how to determine the success or failure of Content delete
-        # _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
-        MozuRestClient.http_status_code = _document_content_response.status_code
-        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(_document_data_response, _document_content_response, self.mz_imageid, _endpoint)
-        try:
-            return _document_content_response
-        except KeyError:
-            return _document_content_response.headers()
-
-    ### files = {'media': open(src_filepath, 'rb')}
-    ###
-    # Combined Methods using above base Methods
-    ###
-    ##  List Files - GET - List of Document Collection PROPERTIES on FileManager - ie. a Single documentList(ie. DocumentCollection)
+    #####
+    #### Combined Methods using above base Methods
+    ##  GET -  List Files -  List of Document Collection PROPERTIES on FileManager - ie. a Single documentList(ie. DocumentCollection)
     @log
     def get_mz_image_document_list(self, **kwargs):
         import requests, json
@@ -369,7 +342,8 @@ class MozuRestClient:
         except KeyError:
             return _document_list_response.headers
 
-    ## HEAD - Single Documents Content Headers
+
+    ## GET HEAD - Single Documents Content Headers
     @log
     def get_mz_image_document_content_headers(self, **kwargs):
         import requests, json
@@ -389,7 +363,48 @@ class MozuRestClient:
         except KeyError:
             return _document_content_response_head
 
-    ## Download File - GET - Document Content and download to Local or Remote File
+
+    #####
+    ## DELETE - Document Content - Then DELETE the Document Data Object with mzid
+    @log
+    def delete_mz_image(self, **kwargs):
+        import requests, json
+        self.headers["Content-type"] = 'application/json'
+        self.mz_imageid = kwargs.get('mz_imageid', self.mz_imageid)
+        self.bf_imageid = kwargs.get('bf_imageid', self.bf_imageid)
+        if self.mz_imageid:
+            # Use regular documentList content endpoint
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+        elif self.bf_imageid:
+            # Use alternate documentListTree content endpoint
+            # self.document_tree_resource_content = MozuRestClient.__tenant_url + "/api/content/documentlists/" + MozuRestClient.__listFQN + "/documentTree/" + self.bf_imageid + "/content"  ## ?folderPath={folderPath}&folderId={folderId}
+            _endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_tree_content"]
+        else:
+            print('Failed to delete without mzid or bfid')
+            return
+        self.set_document_payload(**kwargs)
+        # Delete Content
+        _document_content_response = requests.delete(_endpoint, data=json.dumps(self.document_payload),
+                                                     headers=self.headers, verify=False)
+        if self.mz_imageid:
+            _doc_metadata_endpoint = self.set_endpoint_uri(**kwargs)["endpoint_resource_doc_content"]
+            _document_data_response = requests.delete(_doc_metadata_endpoint,
+                                                      data=json.dumps(self.document_payload), headers=self.headers,
+                                                      verify=False)
+        else:
+            _document_data_response = ''
+        # Delete Document ID - Data TDO: Figure out how to determine the success or failure of Content delete
+        # _document_data_response = requests.delete(self.document_resource, data=json.dumps(self.document_payload), headers=self.headers, verify=False)
+        MozuRestClient.http_status_code = _document_content_response.status_code
+        print "DocumentDeleteResponse \n--DataCode: {0} \n--ContentCode: {1} \n\tLocal_MozuID: {2}\n\t-->URL: {3}".format(
+            _document_data_response, _document_content_response, self.mz_imageid, _endpoint)
+        try:
+            return _document_content_response
+        except KeyError:
+            return _document_content_response.headers()
+
+
+    ## GET -- Download File - GET - Document Content and download to Local or Remote File
     @log
     def download_mz_image_content(self, outfile=None, **kwargs):
         import requests, json
