@@ -298,7 +298,7 @@ class MozuRestClient:
         import requests
         from os import path
         ## FileContent
-        if not kwargs.get('mz_imageid', self.mz_imageid):
+        if not kwargs.get('mz_imageid', self.mz_imageid) and kwargs.get('bf_imageid', self.bf_imageid):
             src_filepath = kwargs.get('src_filepath', '')
             self.bf_imageid = kwargs.get('bf_imageid', src_filepath.split('/')[-1].split('.')[0])
             self.ext = src_filepath.split('/')[-1].split('.')[-1]
