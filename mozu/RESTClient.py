@@ -260,7 +260,7 @@ class MozuRestClient:
             self.ext = 'png'
         self.mimetype = "image/{}".format(self.ext.lower().replace('jpg', 'jpeg'))
         self.headers["Content-type"] = self.mimetype
-        _qstring = self.set_query_string(**kwargs)
+
         self.set_document_payload(**kwargs)
         try:
             _content_response = requests.get(_endpoint, headers=self.headers, verify=False)
