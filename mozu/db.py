@@ -48,7 +48,7 @@ def mozu_bfly_imageid_url_table_instance(**kwargs):
         #Column('id', Integer, Sequence('mozu_image_seq_trigger'), primary_key=True),
         Column('id', Integer, server_default=FetchedValue(), primary_key=True),
         Column('bf_imageid', String(19), unique=True, nullable=False),
-        Column('mz_imageid', String(37)),
+        Column('mz_imageid', String(37), nullable=False),
         Column('md5checksum', String(32), nullable=True),
         Column('mz_hypr_class', String(29), nullable=True),
         Column('cdn_zoom_url', String(199), nullable=True),
