@@ -28,10 +28,12 @@ def url_get_links(targeturl):
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
     linklist = []
     for link in soup.find_all('img'):
-        linklist.append(link.get('src'))
+        foundlink = link.get('src')
+        linklist.append(foundlink)
         sorted(linklist)
+    ret = [x for x in linklist if x is not None]
     ## Return list of unique links
-    return list(set(linklist))
+    return list(set(ret))
 
 
 def return_versioned_urls(urls_list):
