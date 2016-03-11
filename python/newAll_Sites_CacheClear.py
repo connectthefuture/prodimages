@@ -84,14 +84,14 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         else:
             data = "style={0}&version={1}".format(colorstyle, version)
 
-        headers = { "Content-Type": "application/x-www-form-urlencoded",
-                    "Content-length": str(len(data)),
+        headers = { #"Content-Type": "application/x-www-form-urlencoded",
+                    #"Content-length": str(len(data)),
                     #head_accept = {"Accept": "text/html",
                     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                     "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
                     "Referer": POSTURL_Referer}
         try:
-            res = requests.post(POSTURL,data=data,headers=headers, timeout=7)
+            res = requests.post(POSTURL,data=data,headers=headers, timeout=2)
             print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
             return res
         except:
