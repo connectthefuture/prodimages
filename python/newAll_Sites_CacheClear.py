@@ -5,12 +5,16 @@ def query_version_number(colorstyle):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-    querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle,  POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyle)
+    querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle,  POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version,  POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as media_version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyle)
     result = connection.execute(querymake_version_number)
     styles = {}
     for row in result:
         style_info = {}
-        style_info['version'] = row['version']
+        v = row['media_version']
+        if v:
+            style_info['media_version'] = row['media_version']
+        else:
+            style_info['media_version'] = "null"
         # Convert Colorstyle to string then set as KEY
         styles[str(row['colorstyle'])] = style_info
     connection.close()
@@ -21,7 +25,7 @@ def query_version_number(colorstyle):
 
 
 def url_get_links(targeturl):
-    import os,re,sys,requests
+    import re,requests
     from bs4 import BeautifulSoup
     r = requests.get(targeturl)
     soup = BeautifulSoup(r.text,"html5")
@@ -37,25 +41,29 @@ def url_get_links(targeturl):
 
 
 def return_versioned_urls(urls_list):
-    import os,sys,re
+    import re
     regex = re.compile(r'https?:.+?ver=[1-9][0-9]?[0-9]?')
     regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=[0-9]{9}&width=49&height=59.*$')
     listurls = []
     for url in urls_list:
         testfind =  regex.findall(url)
+        print('Url {0}'.format(testfind))
         testswatch = regex_swatch.findall(url)
         if testfind:
             listurls.append(testfind[0])
-            #print testfind
+            print('Url testfound {0}'.format(testfind))
 
         if testswatch:
             listurls.append(testswatch[0])
-        else: pass
+            print('Url Swatch {0}'.format(testfind))
+
+        else:
+            print('Url not found in regex {0}'.format(url))
     return listurls
 
 
 def return_cleaned_bfly_urls(text):
-    import os,sys,re
+    import re
     regex = re.compile(r'http:.+?mgen/Bluefly/.+?')
     listurls = []
     for line in text:
@@ -134,7 +142,7 @@ def send_purge_using_requests_edgecast(mediaPath):
 
 ############ RUN ###########
 def main(colorstyle_list=None):
-    import sys,re,os
+    import sys,re
 
     if not colorstyle_list:
         colorstyle_list = sys.argv[1:]
@@ -156,9 +164,10 @@ def main(colorstyle_list=None):
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
     for colorstyle in colorstyle_list:
+        colorstyle = list([colorstyle])
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
-        version =  query_version_number(colorstyle)[colorstyle]['version']
+        version =  query_version_number(colorstyle)[colorstyle]['media_version']
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
@@ -229,11 +238,13 @@ def main(colorstyle_list=None):
             if colorstyle in link:
                 pdp_urllist.append(link)
                 vertest=link.split('&')[-1]
-                version = ''
-                if vertest[:4] == 'ver=':
-                    version = vertest[-1]
+                if version == "null":
+                    pass
                 else:
-                    version =  query_version_number(colorstyle)[colorstyle]['version']
+                    if vertest[:4] == 'ver=':
+                        version = vertest[-1]
+                    else:
+                        version =  query_version_number(colorstyle)[colorstyle]['media_version']
                 ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
                     ## static standard urls
@@ -374,7 +385,7 @@ def main(colorstyle_list=None):
     if not versioned_links:
         print "No version links found Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
-            version =  query_version_number(colorstyle)[colorstyle]['version']
+            version =  query_version_number(colorstyle)[colorstyle]['media_version']
             POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
