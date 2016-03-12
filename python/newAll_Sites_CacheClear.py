@@ -85,7 +85,7 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         POSTURL_Referer = POSTURL.replace('Clear2.php', 'Clear1.php')
 
         regex = re.compile(r'.+?Mobile.+?')
-        if re.findall(regex, POSTURL):
+        if regex.findall(POSTURL):
             data = "style={0}".format(colorstyle)
             # Replace Previous Line with uncommenting next line when versioning is added to mobile
             # Currently only need to POST Colorstyle to PHP script
@@ -395,8 +395,8 @@ def main(colorstyle_list=None):
         regex_ver = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
             try:
-                colorstyle = re.findall(regex_ver, url_purge_local)
-                version  = re.findall(regex_ver, url_purge_local).split('=')[-1]
+                colorstyle = regex_ver.findall(url_purge_local)
+                version  = regex_ver.findall(url_purge_local).split('=')[-1]
                 #version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
                 #try:
