@@ -416,7 +416,10 @@ def main(colorstyle_list=None):
     #            send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
     #            send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
     #            send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
-                print '<-- 410'
+                print '<-- 410 {0}'.format(url_purge_local)
+                pass
+            except AttributeError:
+                print '<-- 422  --- <--\nAttributeError - None Type {0}'.format(url_purge_local)
                 pass
         for url_purge in versioned_links:
             print '<-- 412'
