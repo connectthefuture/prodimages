@@ -149,7 +149,6 @@ def main(colorstyle_list=None):
 
     alturl = 'altimage.ms'
 
-
     #catid = get_catid_from_eventid(eventid)
     ## Join Catid to BC Url
     #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
@@ -161,7 +160,6 @@ def main(colorstyle_list=None):
     ## Then tack the generated urls for edgecast to list
     pdp_urllist = []
     edgecast_listurls = []
-    regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
     for colorstyle in colorstyle_list:
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
@@ -369,10 +367,7 @@ def main(colorstyle_list=None):
     #
     #
     #
-
-
-
-
+    #
     ## Parse urllist returning only versioned List page images
     versioned_links = return_versioned_urls(pdp_urllist)
     #print versioned_links
@@ -393,13 +388,12 @@ def main(colorstyle_list=None):
             #send_purge_using_requests_localis(POSTURL_Mobile,colorstyle=colorstyle,version=version)
     elif len(versioned_links) <= 8550:
 
-        regex_ver = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
+        regex_ver = re.compile(r'(.+?=)(?P<stylename>[0-9]{9})(.+?)(ver=(?P<version_number>[0-9][0-9]?[0-9]?[0-9]?))')
         for url_purge_local in versioned_links:
             try:
-                colorstyle = regex_ver.findall(url_purge_local)
-                vertuple = regex_ver.findall(url_purge_local)[0][-1].split('=')[0]
-                if vertuple[0] == 'ver':
-                    version  = vertuple[-1]
+                url_dict_matches  = regex_ver.match(url_purge_local).groupdict()
+                style = url_dict_matches['stylename']
+                ver = url_dict_matches['version_number']
                 #version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
                 #try:
@@ -407,7 +401,7 @@ def main(colorstyle_list=None):
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
                 POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-                send_purge_using_requests_localis(POSTURL_ALLSITES, colorstyle=colorstyle,version=version)
+                send_purge_using_requests_localis(POSTURL_ALLSITES, colorstyle=colorstyle,version=ver)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
                 #send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
