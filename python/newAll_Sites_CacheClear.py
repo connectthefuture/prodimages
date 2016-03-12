@@ -51,14 +51,13 @@ def return_versioned_urls(urls_list):
         testswatch = regex_swatch.findall(url)
         if testfind:
             listurls.append(testfind[0])
-            print('Url testfound {0}'.format(testfind))
-
+            print('1 Url Testfound {0}'.format(testfind))
         if testswatch:
             listurls.append(testswatch[0])
-            print('Url Swatch {0}'.format(testfind))
+            print('1 Url Swatch {0}'.format(testswatch))
 
         else:
-            print('Url not found in regex {0}'.format(url))
+            print('0 Url Not found in regex {0}'.format(url))
     return listurls
 
 
@@ -396,11 +395,11 @@ def main(colorstyle_list=None):
             #send_purge_using_requests_localis(POSTURL_Mobile,colorstyle=colorstyle,version=version)
     elif len(versioned_links) <= 8550:
 
-        regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
+        regex_ver = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
             try:
-                colorstyle = re.findall(regex, url_purge_local)
-                version  = re.findall(regex, url_purge_local).split('=')[-1]
+                colorstyle = re.findall(regex_ver, url_purge_local)
+                version  = re.findall(regex_ver, url_purge_local).split('=')[-1]
                 #version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
                 #try:
@@ -440,7 +439,7 @@ def main(colorstyle_list=None):
     count = 0
     if len(edgecast_listurls) <= 8550:
 
-        #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
+        #regex_ver = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
     ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
     #
