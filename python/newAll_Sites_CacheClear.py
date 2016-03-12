@@ -396,7 +396,9 @@ def main(colorstyle_list=None):
         for url_purge_local in versioned_links:
             try:
                 colorstyle = regex_ver.findall(url_purge_local)
-                version  = regex_ver.findall(url_purge_local).split('=')[-1]
+                vertuple = regex_ver.findall(url_purge_local)[0][-1].split('=')[0]
+                if vertuple[0] == 'ver':
+                    version  = vertuple[-1]
                 #version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
                 #try:
