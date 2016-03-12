@@ -164,7 +164,6 @@ def main(colorstyle_list=None):
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
     for colorstyle in colorstyle_list:
-        colorstyle = list([colorstyle])
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
         version =  query_version_number(colorstyle)[colorstyle]['media_version']
@@ -378,8 +377,7 @@ def main(colorstyle_list=None):
 
 
     ## Parse urllist returning only versioned List page images
-    versioned_links = return_versioned_urls(pdp_urllist[0])
-
+    versioned_links = return_versioned_urls(pdp_urllist)
     #print versioned_links
     count = 0
     if not versioned_links:
