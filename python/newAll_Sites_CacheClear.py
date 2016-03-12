@@ -236,13 +236,10 @@ def main(colorstyle_list=None):
             if colorstyle in link:
                 pdp_urllist.append(link)
                 vertest=link.split('&')[-1]
-                if version == "null":
-                    pass
+                if vertest[:4] == 'ver=':
+                    version = vertest[-1]
                 else:
-                    if vertest[:4] == 'ver=':
-                        version = vertest[-1]
-                    else:
-                        version =  query_version_number(colorstyle)[colorstyle]['media_version']
+                    version =  query_version_number(colorstyle)[colorstyle]['media_version']
                 ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
                     ## static standard urls
