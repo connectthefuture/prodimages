@@ -371,7 +371,6 @@ def main(colorstyle_list=None):
     ## Parse urllist returning only versioned List page images
     versioned_links = return_versioned_urls(pdp_urllist)
     #print versioned_links
-    count = 0
     if not versioned_links:
         print "No version links found Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
