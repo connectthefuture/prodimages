@@ -93,6 +93,7 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         else:
             data = "style={0}&version={1}".format(colorstyle, version)
 
+        print data, type(data)
         headers = { "Content-Type": "application/x-www-form-urlencoded",
                     "Content-length": str(len(data)),
                     #head_accept = {"Accept": "text/html",
