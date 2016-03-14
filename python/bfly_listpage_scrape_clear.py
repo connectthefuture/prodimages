@@ -307,7 +307,7 @@ for colorstyle in colorstyles:
 
 ## Parse urllist returning only versioned List page images
 #versioned_links = return_versioned_urls(list_urllist)
-import newAll_Sites_CacheClear_subproc
+import newAll_Sites_CacheClear
 #print versioned_links
 #count = 0
 #if len(versioned_links) <= 5000:
@@ -320,7 +320,7 @@ for k,v in clrversions.iteritems():
         POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
         #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
         #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-        newAll_Sites_CacheClear_subproc.subproc_localIS(colorstyle=colorstyle,version=version)
+        newAll_Sites_CacheClear.subproc_localIS(colorstyle=colorstyle,version=version)
             #except:
             #    print sys.stderr().read()
     except IndexError:
@@ -350,7 +350,7 @@ if len(edgecast_listurls) <= 12000:
         #    print sys.stderr().read()
 ####
     for url_purge in set(sorted(edgecast_listurls)):
-        newAll_Sites_CacheClear_subproc.send_purge_using_requests_edgecast(url_purge)
+        newAll_Sites_CacheClear.send_purge_using_requests_edgecast(url_purge)
         #csv_write_datedOutfile(url_purge)
 
 else:
