@@ -75,7 +75,7 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         #'style' : colorstyle,
         #'version' : version
         #})
-        POSTURL_Referer = POSTURL.replace('Clear2.php', 'Clear1.php')
+        POSTURL_Referer = POSTURL.replace('2.php', '1.php')
 
         regex = re.compile(r'.+?Mobile.+?')
         if re.findall(regex, POSTURL):
