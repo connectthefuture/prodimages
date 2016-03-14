@@ -128,12 +128,11 @@ def send_purge_request_edgecast(mediaPath):
                     "Accept": "application/json",
                     "Content-Type": "application/json"}
         res = requests.put(purgeURL,data=data,headers=headers)
-        print "Successfully Sent Purge Request to Edgecast\nHTTP Status {0}".format(res.status_code)
+        print "Successfully Sent Purge Request to Edgecast\nHTTP Status {0}\t{1}".format(res.status_code, mediaPath)
         return res
     else:
         print 'Missing required Field'
         return
-
 
 
 ############ RUN ###########
