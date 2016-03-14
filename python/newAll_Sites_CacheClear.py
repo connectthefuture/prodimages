@@ -65,7 +65,7 @@ def return_cleaned_bfly_urls(text):
     return listurls
 
 
-def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
+def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
     if colorstyle != "" and version != "":
         import requests,json,re
         ## Create send data
@@ -101,7 +101,14 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         return
 
 
-def send_purge_using_requests_edgecast(mediaPath):
+def subproc_localIS(colorstyle=None,version=None):
+    import subprocess
+    cmd = 'curl -X POST -d "style={0}" -d "version={1}" http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
+    subprocess.call(cmd)
+    return
+
+
+def send_purge_request_edgecast(mediaPath):
     import requests, json
     ## Setup variables
     token = "9af6d09a-1250-4766-85bd-29cebf1c984f"
