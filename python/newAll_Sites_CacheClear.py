@@ -105,7 +105,7 @@ def subproc_localIS(colorstyle=None,version=None):
     import subprocess
     from time import sleep
     cmdBF     = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
-    cmdMobile = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFMobileClear2.php'.format(colorstyle,version).split(' ')
+    cmdMobile = 'curl -X POST -d style={0} http://clearcache.bluefly.corp/BFMobileClear2.php'.format(colorstyle).split(' ')
     subprocess.call(cmdBF)
     sleep(.2)
     subprocess.call(cmdMobile)
