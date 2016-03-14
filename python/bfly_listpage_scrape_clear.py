@@ -350,7 +350,7 @@ if len(edgecast_listurls) <= 12000:
         #    print sys.stderr().read()
 ####
     for url_purge in set(sorted(edgecast_listurls)):
-        newAll_Sites_CacheClear.send_purge_using_requests_edgecast(url_purge)
+        newAll_Sites_CacheClear.send_purge_request_edgecast(url_purge)
         #csv_write_datedOutfile(url_purge)
 
 else:
