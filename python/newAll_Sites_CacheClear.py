@@ -65,20 +65,17 @@ def return_cleaned_bfly_urls(text):
     return listurls
 
 
-
-def send_purge_request_localis(colorstyle, version, POSTURL):
+def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
     if colorstyle != "" and version != "":
-        import pycurl,json,re
-
+        import requests,json,re
         ## Create send data
         #data = json.dumps({
         #'style' : colorstyle,
         #'version' : version
         #})
         POSTURL_Referer = POSTURL.replace('2.php', '1.php')
-
         regex = re.compile(r'.+?Mobile.+?')
-        if re.findall(regex, POSTURL):
+        if regex.findall(POSTURL):
             data = "style={0}".format(colorstyle)
             # Replace Previous Line with uncommenting next line when versioning is added to mobile
             # Currently only need to POST Colorstyle to PHP script
@@ -86,41 +83,30 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         else:
             data = "style={0}&version={1}".format(colorstyle, version)
 
-
-        head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
-        head_content_len= "Content-length: {0}".format(str(len(data)))
-        #head_accept = 'Accept: text/html'
-        head_accept = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-        head_useragent = 'User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0'
-        head_referer = 'Referer: {0}'.format(POSTURL_Referer)
-        c = pycurl.Curl()
-        c.setopt(c.URL, POSTURL)
-        c.setopt(pycurl.HEADER, 0)
-        #c.setopt(pycurl.INFOTYPE_HEADER_OUT, 1)
-        #c.setopt(pycurl.RETURNTRANSFER, 1)
-        c.setopt(pycurl.FORBID_REUSE, 1)
-        c.setopt(pycurl.FRESH_CONNECT, 1)
-        c.setopt(pycurl.POSTFIELDS, data)
-        c.setopt(pycurl.HTTPHEADER, [head_useragent, head_referer, head_contenttype, head_accept, head_content_len])
-        #c.setopt(c.POSTFIELDS, POSTDATA)
-        c.setopt(c.VERBOSE, True)
-        c.perform()
-        c.close()
-        print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
-        #head_authtoken = "Authorization: tok:{0}".format(token)
-        #head_content_len= "Content-length: {0}".format(str(len(POSTDATA)))
-        #head_accept = 'Accept: application/json'
-        #head_contenttype = 'Content-Type: application/json'
+        print data, type(data)
+        headers = { "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-length": str(len(data)),
+                    #head_accept = {"Accept": "text/html",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
+                    "Referer": POSTURL_Referer}
+        try:
+            res = requests.post(POSTURL,data=data)    #,headers=headers, timeout=3)
+            print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}".format(colorstyle, version, POSTURL)
+            return res
+        except:
+            print 'Failed Local IS Clear. Connection Timed out'
+            pass
+    else:
+        return
 
 
-
-def send_purge_request_edgecast(mediaPath):
-    import pycurl,json,sys,os
+def send_purge_using_requests_edgecast(mediaPath):
+    import requests, json
     ## Setup variables
     token = "9af6d09a-1250-4766-85bd-29cebf1c984f"
     account = "4936"
     mediaType = "8"
-
     purgeURL = "https://api.edgecast.com/v2/mcc/customers/{0}/edge/purge".format(account)
 
     if token != "" and account != "" and mediaPath != "" and mediaType != "":
@@ -130,31 +116,16 @@ def send_purge_request_edgecast(mediaPath):
         'MediaType' : mediaType
         })
         #data = json_encode(request_params)
-        head_authtoken = "Authorization: tok:{0}".format(token)
-        head_content_len= "Content-length: {0}".format(str(len(data)))
-        head_accept = 'Accept: application/json'
-        head_contenttype = 'Content-Type: application/json'
-        ### Send the request to Edgecast
-        c = pycurl.Curl()
-        c.setopt(pycurl.URL, purgeURL)
-        c.setopt(pycurl.PORT , 443)
-        c.setopt(pycurl.SSL_VERIFYPEER, 0)
-        c.setopt(pycurl.HEADER, 0)
-        #c.setopt(pycurl.INFOTYPE_HEADER_OUT, 1)
-        #c.setopt(pycurl.RETURNTRANSFER, 1)
-        c.setopt(pycurl.FORBID_REUSE, 1)
-        c.setopt(pycurl.FRESH_CONNECT, 1)
-        c.setopt(pycurl.CUSTOMREQUEST, "PUT")
-        c.setopt(pycurl.POSTFIELDS,data)
-        c.setopt(pycurl.HTTPHEADER, [head_authtoken, head_contenttype, head_accept, head_content_len])
-        try:
-            c.perform()
-            c.close()
-            print "Successfully Sent Purge Request for --> {0}".format(mediaPath)
-        except pycurl.error, error:
-            errno, errstr = error
-            print 'An error occurred: ', errstr
-
+        headers = { "Authorization": "tok:{0}".format(token),
+                    "Content-length": str(len(data)),
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"}
+        res = requests.put(purgeURL,data=data,headers=headers)
+        print "Successfully Sent Purge Request to Edgecast\nHTTP Status {0}".format(res.status_code)
+        return res
+    else:
+        print 'Missing required Field'
+        return
 
 
 
