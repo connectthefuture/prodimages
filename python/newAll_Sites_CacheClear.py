@@ -5,64 +5,55 @@ def query_version_number(colorstyle):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-    querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle,  POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version,  POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as media_version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyle)
+
+    querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle,  POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyle)
+
     result = connection.execute(querymake_version_number)
     styles = {}
     for row in result:
         style_info = {}
-        v = row['media_version']
-        if v:
-            style_info['media_version'] = row['media_version']
-        else:
-            style_info['media_version'] = "null"
+        style_info['version'] = row['version']
         # Convert Colorstyle to string then set as KEY
         styles[str(row['colorstyle'])] = style_info
+
     connection.close()
-    if len(styles) >= 1:
-        return styles
-    else:
-        return "1"
+    return styles
 
 
 def url_get_links(targeturl):
-    import re,requests
+    import os,re,sys,requests
     from bs4 import BeautifulSoup
     r = requests.get(targeturl)
-    soup = BeautifulSoup(r.text,"html5")
+    soup = BeautifulSoup(r.text,"html.parser")
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
     linklist = []
     for link in soup.find_all('img'):
-        foundlink = link.get('src')
-        linklist.append(foundlink)
+        linklist.append(link.get('src'))
         sorted(linklist)
-    ret = [x for x in linklist if x is not None]
     ## Return list of unique links
-    return list(set(ret))
+    return list(set(linklist))
 
 
-def return_versioned_urls(urls_list):
-    import re
-    regex = re.compile(r'https?:.+?ver=[1-9][0-9]?[0-9]?')
+
+def return_versioned_urls(text):
+    import os,sys,re
+    regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
     regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=[0-9]{9}&width=49&height=59.*$')
     listurls = []
-    for url in urls_list:
-        testfind =  regex.findall(url)
-        print('Url {0}'.format(testfind))
-        testswatch = regex_swatch.findall(url)
+    for line in text:
+        testfind =  regex.findall(line)
+        testswatch = regex_swatch.findall(line)
         if testfind:
-            listurls.append(testfind[0])
-            print('1 Url Testfound {0}'.format(testfind))
+            listurls.append(testfind)
+            #print testfind
         if testswatch:
-            listurls.append(testswatch[0])
-            print('1 Url Swatch {0}'.format(testswatch))
-
-        else:
-            print('0 Url Not found in regex {0}'.format(url))
+            listurls.append(testswatch)
     return listurls
 
 
+
 def return_cleaned_bfly_urls(text):
-    import re
+    import os,sys,re
     regex = re.compile(r'http:.+?mgen/Bluefly/.+?')
     listurls = []
     for line in text:
@@ -74,17 +65,20 @@ def return_cleaned_bfly_urls(text):
     return listurls
 
 
-def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
+
+def send_purge_request_localis(colorstyle, version, POSTURL):
     if colorstyle != "" and version != "":
-        import requests,json,re
+        import pycurl,json,re
+
         ## Create send data
         #data = json.dumps({
         #'style' : colorstyle,
         #'version' : version
         #})
-        POSTURL_Referer = POSTURL.replace('2.php', '1.php')
+        POSTURL_Referer = POSTURL.replace('Clear2.php', 'Clear1.php')
+
         regex = re.compile(r'.+?Mobile.+?')
-        if regex.findall(POSTURL):
+        if re.findall(regex, POSTURL):
             data = "style={0}".format(colorstyle)
             # Replace Previous Line with uncommenting next line when versioning is added to mobile
             # Currently only need to POST Colorstyle to PHP script
@@ -92,30 +86,41 @@ def send_purge_using_requests_localis(POSTURL, colorstyle=None, version=None):
         else:
             data = "style={0}&version={1}".format(colorstyle, version)
 
-        print data, type(data)
-        headers = { "Content-Type": "application/x-www-form-urlencoded",
-                    "Content-length": str(len(data)),
-                    #head_accept = {"Accept": "text/html",
-                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                    "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
-                    "Referer": POSTURL_Referer}
-        try:
-            res = requests.post(POSTURL,data=data,headers=headers, timeout=3)
-            print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}".format(colorstyle, version, POSTURL)
-            return res
-        except:
-            print 'Failed Local IS Clear. Connection Timed out'
-            pass
-    else:
-        return
+
+        head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
+        head_content_len= "Content-length: {0}".format(str(len(data)))
+        #head_accept = 'Accept: text/html'
+        head_accept = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        head_useragent = 'User-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0'
+        head_referer = 'Referer: {0}'.format(POSTURL_Referer)
+        c = pycurl.Curl()
+        c.setopt(c.URL, POSTURL)
+        c.setopt(pycurl.HEADER, 0)
+        #c.setopt(pycurl.INFOTYPE_HEADER_OUT, 1)
+        #c.setopt(pycurl.RETURNTRANSFER, 1)
+        c.setopt(pycurl.FORBID_REUSE, 1)
+        c.setopt(pycurl.FRESH_CONNECT, 1)
+        c.setopt(pycurl.POSTFIELDS, data)
+        c.setopt(pycurl.HTTPHEADER, [head_useragent, head_referer, head_contenttype, head_accept, head_content_len])
+        #c.setopt(c.POSTFIELDS, POSTDATA)
+        c.setopt(c.VERBOSE, True)
+        c.perform()
+        c.close()
+        print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}".format(colorstyle, version)
+        #head_authtoken = "Authorization: tok:{0}".format(token)
+        #head_content_len= "Content-length: {0}".format(str(len(POSTDATA)))
+        #head_accept = 'Accept: application/json'
+        #head_contenttype = 'Content-Type: application/json'
 
 
-def send_purge_using_requests_edgecast(mediaPath):
-    import requests, json
+
+def send_purge_request_edgecast(mediaPath):
+    import pycurl,json,sys,os
     ## Setup variables
     token = "9af6d09a-1250-4766-85bd-29cebf1c984f"
     account = "4936"
     mediaType = "8"
+
     purgeURL = "https://api.edgecast.com/v2/mcc/customers/{0}/edge/purge".format(account)
 
     if token != "" and account != "" and mediaPath != "" and mediaType != "":
@@ -125,45 +130,65 @@ def send_purge_using_requests_edgecast(mediaPath):
         'MediaType' : mediaType
         })
         #data = json_encode(request_params)
-        headers = { "Authorization": "tok:{0}".format(token),
-                    "Content-length": str(len(data)),
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"}
-        res = requests.put(purgeURL,data=data,headers=headers)
-        print "Successfully Sent Purge Request to Edgecast\nHTTP Status {0}".format(res.status_code)
-        return res
-    else:
-        print 'Missing required Field'
-        return
+        head_authtoken = "Authorization: tok:{0}".format(token)
+        head_content_len= "Content-length: {0}".format(str(len(data)))
+        head_accept = 'Accept: application/json'
+        head_contenttype = 'Content-Type: application/json'
+        ### Send the request to Edgecast
+        c = pycurl.Curl()
+        c.setopt(pycurl.URL, purgeURL)
+        c.setopt(pycurl.PORT , 443)
+        c.setopt(pycurl.SSL_VERIFYPEER, 0)
+        c.setopt(pycurl.HEADER, 0)
+        #c.setopt(pycurl.INFOTYPE_HEADER_OUT, 1)
+        #c.setopt(pycurl.RETURNTRANSFER, 1)
+        c.setopt(pycurl.FORBID_REUSE, 1)
+        c.setopt(pycurl.FRESH_CONNECT, 1)
+        c.setopt(pycurl.CUSTOMREQUEST, "PUT")
+        c.setopt(pycurl.POSTFIELDS,data)
+        c.setopt(pycurl.HTTPHEADER, [head_authtoken, head_contenttype, head_accept, head_content_len])
+        try:
+            c.perform()
+            c.close()
+            print "Successfully Sent Purge Request for --> {0}".format(mediaPath)
+        except pycurl.error, error:
+            errno, errstr = error
+            print 'An error occurred: ', errstr
 
 
 
 
 ############ RUN ###########
 def main(colorstyle_list=None):
-    import sys,re
+    import sys,re,os
 
     if not colorstyle_list:
         colorstyle_list = sys.argv[1:]
 
     alturl = 'altimage.ms'
 
+
     #catid = get_catid_from_eventid(eventid)
     ## Join Catid to BC Url
     #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
     #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
+
+
+
     #www.bluefly.com/Harrison-pink-check-classic-fit-dress-shirt/p/323108302/detail.fly
+
     #url_colorstyle_pdp = 'http://www.belleandclive.com/browse/product.jsp?id=' + colorstyle
 
     ## Get all Img links on PDP and append only the primary image urls and versions
     ## Then tack the generated urls for edgecast to list
     pdp_urllist = []
     edgecast_listurls = []
+    regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
     for colorstyle in colorstyle_list:
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
-        version =  query_version_number(colorstyle)[colorstyle]['media_version']
+        version =  query_version_number(colorstyle)[colorstyle]['version']
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
@@ -234,10 +259,11 @@ def main(colorstyle_list=None):
             if colorstyle in link:
                 pdp_urllist.append(link)
                 vertest=link.split('&')[-1]
+                version = ''
                 if vertest[:4] == 'ver=':
                     version = vertest[-1]
                 else:
-                    version =  query_version_number(colorstyle)[colorstyle]['media_version']
+                    version =  query_version_number(colorstyle)[colorstyle]['version']
                 ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
                     ## static standard urls
@@ -366,44 +392,49 @@ def main(colorstyle_list=None):
     #
     #
     #
-    #
+
+
+
+
     ## Parse urllist returning only versioned List page images
     versioned_links = return_versioned_urls(pdp_urllist)
+
     #print versioned_links
+    count = 0
     if not versioned_links:
-        print "No version links found Skipping Edgecast CDN Purge and Local Purge."
+        print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
-            version =  query_version_number(colorstyle)[colorstyle]['media_version']
+            version =  query_version_number(colorstyle)[colorstyle]['version']
             POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            print "Starting purgeis"
-            send_purge_using_requests_localis(POSTURL_ALLSITES, colorstyle=colorstyle,version=version)
-            #send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
-            #send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
-            print "Ended  purgeis ", colorstyle
-            #send_purge_using_requests_localis(POSTURL_Mobile,colorstyle=colorstyle,version=version)
+            send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
+            #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+            #send_purge_request_localis(colorstyle,version,POSTURL_BC)
+            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+
     elif len(versioned_links) <= 8550:
 
-        regex_ver = re.compile(r'(.+?=)(?P<stylename>[0-9]{9})(.+?)(ver=(?P<version_number>[0-9][0-9]?[0-9]?[0-9]?))')
+        regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
         for url_purge_local in versioned_links:
             try:
-                url_dict_matches  = regex_ver.match(url_purge_local).groupdict()
-                style = url_dict_matches['stylename']
-                ver = url_dict_matches['version_number']
-                #version = version.pop()[-1].split('=')[-1]
+                colorstyle = re.findall(regex, url_purge_local[0])
+                colorstyle = colorstyle.pop()[1]
+                version  = re.findall(regex, url_purge_local[0])
+                version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
                 #try:
                 POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
                 POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-                send_purge_using_requests_localis(POSTURL_ALLSITES, colorstyle=colorstyle,version=ver)
-                #send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
-                #send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
-                #send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
-                print '<-- 399'
+
+                send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
+                #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+                #send_purge_request_localis(colorstyle,version,POSTURL_BC)
+                #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
+
                 #except:
                 #    print sys.stderr().read()
             except IndexError:
@@ -411,20 +442,17 @@ def main(colorstyle_list=None):
     #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
     #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
     #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-    #            send_purge_using_requests_localis(colorstyle,version,POSTURL_BFY)
-    #            send_purge_using_requests_localis(colorstyle,version,POSTURL_BC)
-    #            send_purge_using_requests_localis(colorstyle,version,POSTURL_Mobile)
-                print '<-- 410 {0}'.format(url_purge_local)
-                pass
-            except AttributeError:
-                print '<-- 422  --- <--\nAttributeError - None Type {0}'.format(url_purge_local)
+    #            send_purge_request_localis(colorstyle,version,POSTURL_BFY)
+    #            send_purge_request_localis(colorstyle,version,POSTURL_BC)
+    #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
                 pass
         for url_purge in versioned_links:
-            print '<-- 412'
-            send_purge_using_requests_edgecast(url_purge)
+            send_purge_request_edgecast(url_purge[0])
             #csv_write_datedOutfile(url_purge)
+
     else:
         print "Failed -- Over 8550 URLs Submitted"
+
 
 
     ## Now clear links from the generated urls
@@ -434,7 +462,7 @@ def main(colorstyle_list=None):
     count = 0
     if len(edgecast_listurls) <= 8550:
 
-        #regex_ver = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
+        #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
     ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
     #
@@ -445,12 +473,12 @@ def main(colorstyle_list=None):
     #        version = version.pop()[-1].split('=')[-1]
     #        #print "{0} and version num {1}".format(colorstyle,version)
     #        #try:
-    #        send_purge_using_requests_localis(colorstyle,version)
+    #        send_purge_request_localis(colorstyle,version)
             #except:
             #    print sys.stderr().read()
     ####
         for url_purge in set(sorted(edgecast_listurls)):
-            send_purge_using_requests_edgecast(url_purge)
+            send_purge_request_edgecast(url_purge)
             #csv_write_datedOutfile(url_purge)
 
     else:
