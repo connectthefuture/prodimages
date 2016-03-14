@@ -103,7 +103,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
 
 def subproc_localIS(colorstyle=None,version=None):
     import subprocess
-    cmd = 'curl -X POST -d "style={0}" -d "version={1}" http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
+    cmd = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
     subprocess.call(cmd)
     return
 
