@@ -389,7 +389,7 @@ def main(colorstyle_list=None):
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
             print "Starting purgeis"
-            subproc_localIS(POSTURL_ALLSITES, colorstyle=colorstyle,version=version)
+            subproc_localIS(colorstyle=colorstyle,version=version)
             #subproc_localIS(colorstyle,version,POSTURL_BFY)
             #subproc_localIS(colorstyle,version,POSTURL_BC)
             print "Ended  purgeis ", colorstyle

@@ -29,8 +29,8 @@ def return_versioned_urls(text):
         if testswatch:
             listurls.append(testswatch)
     return listurls
-    
-    
+
+
 
 def return_cleaned_bfly_urls(text):
     import os,sys,re
@@ -47,7 +47,7 @@ def return_cleaned_bfly_urls(text):
 
 def query_version_number(colorstyle):
     import sqlalchemy
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')    
+    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
     if type(colorstyle) == list:
         colorstyles = colorstyle
@@ -58,8 +58,8 @@ def query_version_number(colorstyle):
 
     try:
         result = connection.execute(querymake_version_number)
-    
-    
+
+
         styles = {}
         for row in result:
             #style_info = {}
@@ -68,11 +68,11 @@ def query_version_number(colorstyle):
             styles[str(row['colorstyle'])] = row['version']
     except sqlalchemy.exc.DatabaseError:
         print 'This Search needs to have more than 1 style, \nyou returned zero or 1 style'
-    
+
     connection.close()
     return styles
 
-   
+
 def send_purge_request_localis(colorstyle, version, POSTURL):
     if colorstyle != "" and version != "":
         import pycurl,json
@@ -83,17 +83,17 @@ def send_purge_request_localis(colorstyle, version, POSTURL):
         #'version' : version
         #})
         POSTURL_Referer = POSTURL.replace('Clear2.php', 'Clear1.php')
-        
+
         regex = re.compile(r'.+?Mobile.+?')
         if re.findall(regex, POSTURL):
             data = "style={0}".format(colorstyle)
             # Replace Previous Line with uncommenting next line when versioning is added to mobile
-            # Currently only need to POST Colorstyle to PHP script       
+            # Currently only need to POST Colorstyle to PHP script
             ## data = "style={0}&version={1}".format(colorstyle, version)
         else:
             data = "style={0}&version={1}".format(colorstyle, version)
-            
-        
+
+
         head_contenttype = 'Content-Type: application/x-www-form-urlencoded'
         head_content_len= "Content-length: {0}".format(str(len(data)))
         #head_accept = 'Accept: text/html'
@@ -134,7 +134,7 @@ def send_purge_request_edgecast(mediaPath):
         ## Create send data
         data = json.dumps({
         'MediaPath' : mediaPath,
-        'MediaType' : mediaType 
+        'MediaType' : mediaType
         })
         #data = json_encode(request_params)
         head_authtoken = "Authorization: tok:{0}".format(token)
@@ -161,10 +161,10 @@ def send_purge_request_edgecast(mediaPath):
         except pycurl.error, error:
             errno, errstr = error
             print 'An error occurred: ', errstr
-            
-            
-            
-            
+
+
+
+
 ############ RUN ###########
 
 import sys,re,os
@@ -219,9 +219,9 @@ if num_styles.isdigit():
                 val = val.replace(' ','-').replace('_','-').replace('&','').lower()
                 apparel = '/apparel/'
                 if dept == 'mens':
-                    bfly_url = 'http://www.bluefly.com/{0}{3}designer-{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles,apparel) 
+                    bfly_url = 'http://www.bluefly.com/{0}{3}designer-{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles,apparel)
                 else:
-                    bfly_url = 'http://www.bluefly.com/{0}/designer-{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles)       
+                    bfly_url = 'http://www.bluefly.com/{0}/designer-{1}?so=new&vl=l&ppp={2}&cp=1&sosc=true'.format(dept,val,num_styles)
             except IndexError:
                 print 'Using Default New Arrivals URL with {} Styles'.format(num_styles)
                 bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp={0}&cp=1&sosc=true'.format(num_styles)
@@ -247,7 +247,7 @@ else:
                     bfly_url = 'http://www.bluefly.com/{0}/{1}{2}'.format(slug,brand, q)
                 except IndexError:
                     bfly_url = 'http://www.bluefly.com/{0}/{1}'.format(slug,brand)
-            
+
             except IndexError:
                 print 'Using Default New Arrivals URL with 48 Styles'
                 bfly_url = 'http://www.bluefly.com/new_arrivals?so=new&vl=l&ppp=48&cp=1&sosc=true'
@@ -274,7 +274,7 @@ for link in found_links:
             newlistpg      =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
             pdpg           =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=340&height=408'.format(colorstyle)
             pmlistpg       =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=50&height=60&ver=null'.format(colorstyle)
-            pmeventimg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)             
+            pmeventimg     =   'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=200&outputy=240&level=1&ver=null'.format(colorstyle)
             email_img1     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=140&height=182'.format(colorstyle)
             email_img2     =   'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=200&height=250'.format(colorstyle)
 
@@ -307,7 +307,7 @@ for colorstyle in colorstyles:
 
 ## Parse urllist returning only versioned List page images
 #versioned_links = return_versioned_urls(list_urllist)
-
+import newAll_Sites_CacheClear_subproc
 #print versioned_links
 #count = 0
 #if len(versioned_links) <= 5000:
@@ -320,7 +320,7 @@ for k,v in clrversions.iteritems():
         POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
         #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
         #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-        send_purge_request_localis(colorstyle,version,POSTURL_ALLSITES)
+        newAll_Sites_CacheClear_subproc.subproc_localIS(colorstyle=colorstyle,version=version)
             #except:
             #    print sys.stderr().read()
     except IndexError:
@@ -350,12 +350,11 @@ if len(edgecast_listurls) <= 12000:
         #    print sys.stderr().read()
 ####
     for url_purge in set(sorted(edgecast_listurls)):
-        send_purge_request_edgecast(url_purge)
+        newAll_Sites_CacheClear_subproc.send_purge_using_requests_edgecast(url_purge)
         #csv_write_datedOutfile(url_purge)
 
 else:
-    print "Failed -- Over 12000 URLs Submitted"    
+    print "Failed -- Over 12000 URLs Submitted"
 
 
 #print edgecast_listurls
-
