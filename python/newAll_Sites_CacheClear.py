@@ -104,7 +104,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
 def subproc_localIS(colorstyle=None,version=None):
     import subprocess, time
     cmdBF     = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
-    cmdMobile = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
+    cmdMobile = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFMobileClear2.php'.format(colorstyle,version).split(' ')
     subprocess.call(cmdBF)
     time.sleep(.2)
     subprocess.call(cmdMobile)
@@ -386,7 +386,7 @@ def main(colorstyle_list=None):
         print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
             version =  query_version_number(colorstyle)[colorstyle]['version']
-            POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll1.php"
+            POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
