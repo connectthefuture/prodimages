@@ -5,55 +5,64 @@ def query_version_number(colorstyle):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
-
-    querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle,  POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID RIGHT JOIN POMGR.VENDOR ON POMGR.VENDOR.ID = POMGR.PO_HDR.VENDOR_ID INNER JOIN POMGR.LK_PO_TYPE ON POMGR.LK_PO_TYPE.ID = POMGR.PO_HDR.PO_TYPE_ID LEFT JOIN POMGR.INVENTORY ON POMGR.INVENTORY.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyle)
-
+    querymake_version_number = "SELECT DISTINCT POMGR.PO_LINE.PRODUCT_COLOR_ID as colorstyle,  POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.VERSION as version,  POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION as media_version FROM POMGR.PRODUCT_COLOR RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.PRODUCT_COLOR.ID RIGHT JOIN POMGR.PO_HDR ON POMGR.PO_HDR.ID = POMGR.PO_LINE.PO_HDR_ID LEFT JOIN POMGR.PRODUCT_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_DETAIL.PRODUCT_ID LEFT JOIN POMGR.PRODUCT_COLOR_DETAIL ON POMGR.PRODUCT_COLOR.PRODUCT_ID = POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID WHERE POMGR.PRODUCT_COLOR.IMAGE_READY_DT is not null AND POMGR.PO_LINE.PRODUCT_COLOR_ID LIKE '%{0}%' ORDER BY POMGR.PO_LINE.PRODUCT_COLOR_ID DESC Nulls Last, POMGR.PRODUCT_COLOR.IMAGE_READY_DT DESC Nulls Last".format(colorstyle)
     result = connection.execute(querymake_version_number)
     styles = {}
     for row in result:
         style_info = {}
-        style_info['version'] = row['version']
+        v = row['media_version']
+        if v:
+            style_info['media_version'] = row['media_version']
+        else:
+            style_info['media_version'] = "null"
         # Convert Colorstyle to string then set as KEY
         styles[str(row['colorstyle'])] = style_info
-
     connection.close()
-    return styles
+    if len(styles) >= 1:
+        return styles
+    else:
+        return "1"
 
 
 def url_get_links(targeturl):
-    import os,re,sys,requests
+    import re,requests
     from bs4 import BeautifulSoup
     r = requests.get(targeturl)
-    soup = BeautifulSoup(r.text,"html.parser")
+    soup = BeautifulSoup(r.text,"html5")
     ###  soup is now Full HTML of target -- Below creates/returns list of unique links
     linklist = []
     for link in soup.find_all('img'):
-        linklist.append(link.get('src'))
+        foundlink = link.get('src')
+        linklist.append(foundlink)
         sorted(linklist)
+    ret = [x for x in linklist if x is not None]
     ## Return list of unique links
-    return list(set(linklist))
+    return list(set(ret))
 
 
-
-def return_versioned_urls(text):
-    import os,sys,re
-    regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
+def return_versioned_urls(urls_list):
+    import re
+    regex = re.compile(r'https?:.+?ver=[1-9][0-9]?[0-9]?')
     regex_swatch = re.compile(r'^http.*mgen/Bluefly/swatch.ms\?productCode=[0-9]{9}&width=49&height=59.*$')
     listurls = []
-    for line in text:
-        testfind =  regex.findall(line)
-        testswatch = regex_swatch.findall(line)
+    for url in urls_list:
+        testfind =  regex.findall(url)
+        print('Url {0}'.format(testfind))
+        testswatch = regex_swatch.findall(url)
         if testfind:
-            listurls.append(testfind)
-            #print testfind
+            listurls.append(testfind[0])
+            print('1 Url Testfound {0}'.format(testfind))
         if testswatch:
-            listurls.append(testswatch)
+            listurls.append(testswatch[0])
+            print('1 Url Swatch {0}'.format(testswatch))
+
+        else:
+            print('0 Url Not found in regex {0}'.format(url))
     return listurls
 
 
-
 def return_cleaned_bfly_urls(text):
-    import os,sys,re
+    import re
     regex = re.compile(r'http:.+?mgen/Bluefly/.+?')
     listurls = []
     for line in text:
@@ -65,6 +74,7 @@ def return_cleaned_bfly_urls(text):
     return listurls
 
 
+####### Not Working? #####
 def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
     if colorstyle != "" and version != "":
         import requests,json,re
@@ -91,7 +101,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
                     "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
                     "Referer": POSTURL_Referer}
         try:
-            res = requests.post(POSTURL,data=data)    #,headers=headers, timeout=3)
+            res = requests.post(POSTURL,data=data,headers=headers, timeout=3)
             print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}".format(colorstyle, version, POSTURL)
             return res
         except:
@@ -100,15 +110,20 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
     else:
         return
 
+##########################
+##########################
 
+##### Workaround using the subprocess module to call curl ####
+##
+#
 def subproc_localIS(colorstyle=None,version=None):
     import subprocess
     cmd = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
     subprocess.call(cmd)
     return
+#############
 
-
-def send_purge_request_edgecast(mediaPath):
+def send_purge_using_requests_edgecast(mediaPath):
     import requests, json
     ## Setup variables
     token = "9af6d09a-1250-4766-85bd-29cebf1c984f"
@@ -135,38 +150,31 @@ def send_purge_request_edgecast(mediaPath):
         return
 
 
-
 ############ RUN ###########
 def main(colorstyle_list=None):
-    import sys,re,os
+    import sys,re
 
     if not colorstyle_list:
         colorstyle_list = sys.argv[1:]
 
     alturl = 'altimage.ms'
 
-
     #catid = get_catid_from_eventid(eventid)
     ## Join Catid to BC Url
     #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
     #url_catid = 'http://www.belleandclive.com/browse/sales/details.jsp?categoryId=' + catid
-
-
-
     #www.bluefly.com/Harrison-pink-check-classic-fit-dress-shirt/p/323108302/detail.fly
-
     #url_colorstyle_pdp = 'http://www.belleandclive.com/browse/product.jsp?id=' + colorstyle
 
     ## Get all Img links on PDP and append only the primary image urls and versions
     ## Then tack the generated urls for edgecast to list
     pdp_urllist = []
     edgecast_listurls = []
-    regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
 
     for colorstyle in colorstyle_list:
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
-        version =  query_version_number(colorstyle)[colorstyle]['version']
+        version =  query_version_number(colorstyle)[colorstyle]['media_version']
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
@@ -187,7 +195,6 @@ def main(colorstyle_list=None):
         bncpdppopup  = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
         bncZoomthumb = "http://cdn.is.belleandclive.com/mgen/Bluefly/altimage.ms?img={0}.jpg&w=59&h=78&ver={1}".format(colorstyle,version)
         #bncZoom      = "http://cdn.is.belleandclive.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=1480&outputy=1680&level=1&ver={1}".format(colorstyle,version)
-
 
         mobile_list  = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=226&height=271'.format(colorstyle)
         mobile_zoom  = 'http://cdn.is.bluefly.com/mgen/Bluefly/eqzoom85.ms?img={0}.pct&outputx=720&outputy=864&level=1'.format(colorstyle)
@@ -237,11 +244,10 @@ def main(colorstyle_list=None):
             if colorstyle in link:
                 pdp_urllist.append(link)
                 vertest=link.split('&')[-1]
-                version = ''
                 if vertest[:4] == 'ver=':
                     version = vertest[-1]
                 else:
-                    version =  query_version_number(colorstyle)[colorstyle]['version']
+                    version =  query_version_number(colorstyle)[colorstyle]['media_version']
                 ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
                     ## static standard urls
@@ -370,49 +376,44 @@ def main(colorstyle_list=None):
     #
     #
     #
-
-
-
-
+    #
     ## Parse urllist returning only versioned List page images
     versioned_links = return_versioned_urls(pdp_urllist)
-
     #print versioned_links
-    count = 0
     if not versioned_links:
-        print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
+        print "No version links found Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
-            version =  query_version_number(colorstyle)[colorstyle]['version']
-            POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll1.php"
+            version =  query_version_number(colorstyle)[colorstyle]['media_version']
+            POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            subproc_localIS(colorstyle,version)
+            print "Starting purgeis"
+            subproc_localIS(POSTURL_ALLSITES, colorstyle=colorstyle,version=version)
             #subproc_localIS(colorstyle,version,POSTURL_BFY)
             #subproc_localIS(colorstyle,version,POSTURL_BC)
-            #subproc_localIS(colorstyle,version)
-
+            print "Ended  purgeis ", colorstyle
+            #subproc_localIS(POSTURL_Mobile,colorstyle=colorstyle,version=version)
     elif len(versioned_links) <= 8550:
 
-        regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
+        regex_ver = re.compile(r'(.+?=)(?P<stylename>[0-9]{9})(.+?)(ver=(?P<version_number>[0-9][0-9]?[0-9]?[0-9]?))')
         for url_purge_local in versioned_links:
             try:
-                colorstyle = re.findall(regex, url_purge_local[0])
-                colorstyle = colorstyle.pop()[1]
-                version  = re.findall(regex, url_purge_local[0])
-                version = version.pop()[-1].split('=')[-1]
+                url_dict_matches  = regex_ver.match(url_purge_local).groupdict()
+                style = url_dict_matches['stylename']
+                ver = url_dict_matches['version_number']
+                #version = version.pop()[-1].split('=')[-1]
                 #print "{0} and version num {1}".format(colorstyle,version)
                 #try:
                 POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
                 POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-
-                subproc_localIS(colorstyle,version)
+                subproc_localIS(colorstyle=colorstyle,version=ver)
                 #subproc_localIS(colorstyle,version,POSTURL_BFY)
                 #subproc_localIS(colorstyle,version,POSTURL_BC)
                 #subproc_localIS(colorstyle,version,POSTURL_Mobile)
-
+                print '<-- 399'
                 #except:
                 #    print sys.stderr().read()
             except IndexError:
@@ -423,14 +424,17 @@ def main(colorstyle_list=None):
     #            subproc_localIS(colorstyle,version,POSTURL_BFY)
     #            subproc_localIS(colorstyle,version,POSTURL_BC)
     #            subproc_localIS(colorstyle,version,POSTURL_Mobile)
+                print '<-- 410 {0}'.format(url_purge_local)
+                pass
+            except AttributeError:
+                print '<-- 422  --- <--\nAttributeError - None Type {0}'.format(url_purge_local)
                 pass
         for url_purge in versioned_links:
-            send_purge_request_edgecast(url_purge[0])
+            print '<-- 412'
+            send_purge_using_requests_edgecast(url_purge)
             #csv_write_datedOutfile(url_purge)
-
     else:
         print "Failed -- Over 8550 URLs Submitted"
-
 
 
     ## Now clear links from the generated urls
@@ -440,7 +444,7 @@ def main(colorstyle_list=None):
     count = 0
     if len(edgecast_listurls) <= 8550:
 
-        #regex = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
+        #regex_ver = re.compile(r'(.+?=)([0-9]{9})(.+?)(ver=[0-9][0-9]?[0-9]?[0-9]?)')
 
     ### DO NOT NEED TO CLEAR IS SERVERS SINCE ABOVE CLEARS ALL BASED ON STYLE AND VERSION, NOT URL
     #
@@ -456,7 +460,7 @@ def main(colorstyle_list=None):
             #    print sys.stderr().read()
     ####
         for url_purge in set(sorted(edgecast_listurls)):
-            send_purge_request_edgecast(url_purge)
+            send_purge_using_requests_edgecast(url_purge)
             #csv_write_datedOutfile(url_purge)
 
     else:
