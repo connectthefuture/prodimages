@@ -101,7 +101,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
         return
 
 
-def subproc_localIS(colorstyle=None,version=None):
+def send_purge_request_localis(colorstyle=None,version=None):
     import subprocess
     from time import sleep
     cmdBF     = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
@@ -391,10 +391,10 @@ def main(colorstyle_list=None):
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-            subproc_localIS(colorstyle,version)
-            #subproc_localIS(colorstyle,version,POSTURL_BFY)
-            #subproc_localIS(colorstyle,version,POSTURL_BC)
-            #subproc_localIS(colorstyle,version)
+            #send_purge_request_localis(colorstyle,version)
+            send_purge_request_localis(POSTURL_BFY,colorstyle,version)
+            #send_purge_request_localis(POSTURL_BC,colorstyle,version)
+            send_purge_request_localis(POSTURL_Mobile, colorstyle,version)
 
     elif len(versioned_links) <= 8550:
 
@@ -411,11 +411,10 @@ def main(colorstyle_list=None):
                 POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
                 POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
                 POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-
-                subproc_localIS(colorstyle,version)
-                #subproc_localIS(colorstyle,version,POSTURL_BFY)
-                #subproc_localIS(colorstyle,version,POSTURL_BC)
-                #subproc_localIS(colorstyle,version,POSTURL_Mobile)
+                #send_purge_request_localis(colorstyle,version)
+                send_purge_request_localis(POSTURL_BFY,colorstyle,version)
+                #send_purge_request_localis(colorstyle,version,POSTURL_BC)
+                send_purge_request_localis(POSTURL_Mobile,colorstyle,version)
 
                 #except:
                 #    print sys.stderr().read()
@@ -424,9 +423,9 @@ def main(colorstyle_list=None):
     #            POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
     #            POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
     #            POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
-    #            subproc_localIS(colorstyle,version,POSTURL_BFY)
-    #            subproc_localIS(colorstyle,version,POSTURL_BC)
-    #            subproc_localIS(colorstyle,version,POSTURL_Mobile)
+    #            send_purge_request_localis(POSTURL_BFY,colorstyle,version)
+    #            send_purge_request_localis(POSTURL_BC, colorstyle,version)
+    #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
                 pass
         for url_purge in versioned_links:
             send_purge_request_edgecast(url_purge[0])
@@ -455,7 +454,7 @@ def main(colorstyle_list=None):
     #        version = version.pop()[-1].split('=')[-1]
     #        #print "{0} and version num {1}".format(colorstyle,version)
     #        #try:
-    #        subproc_localIS(colorstyle,version)
+    #        send_purge_request_localis(colorstyle,version)
             #except:
             #    print sys.stderr().read()
     ####
