@@ -467,7 +467,8 @@ def download_mplce_url(urldest_tuple):
     ####
     #################
     ########### TEMPORARY RESTRICT URL from Merchantry Placeholder ###########
-    placeholder_url = 'https://pim-image-4b2a111d-0df4-447e-bc31-d288a9-s3bucket-1in4kl2m21ire.s3.amazonaws.com/7274a8bcbb3fa06076da6e1c2950e617b24baf4f5d467def6c88f276a0e15f12.jpg'
+    # old_blue_sweater_placeholder_url = 'https://pim-image-4b2a111d-0df4-447e-bc31-d288a9-s3bucket-1in4kl2m21ire.s3.amazonaws.com/7274a8bcbb3fa06076da6e1c2950e617b24baf4f5d467def6c88f276a0e15f12.jpg'
+    placeholder_url = 'https://pim-image-4b2a111d-0df4-447e-bc31-d288a9-s3bucket-1in4kl2m21ire.s3.amazonaws.com/5d167c72a8100a911f06940395589769857cbd395e452bf21416503d1c43861c.jpg'
     if image_url == placeholder_url:
         print 'RESTRICTING DOWNLOAD of Merchantry Placeholder image.--> {}'.format(image_url)
         return
