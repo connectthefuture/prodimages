@@ -101,7 +101,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
         return
 
 
-def send_purge_request_localis(colorstyle=None,version=None):
+def send_purge_curl_localis(colorstyle=None,version=None):
     import subprocess
     from time import sleep
     cmdBF     = 'curl -X POST -d style={0} -d version={1} http://clearcache.bluefly.corp/BFClear2.php'.format(colorstyle,version).split(' ')
