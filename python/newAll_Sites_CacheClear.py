@@ -351,7 +351,7 @@ def main(colorstyle_list=None):
                     ## Unique Set
                     edgecast_listurls = list(set(edgecast_listurls))
 
-                    print pdp_urllist
+                    #print pdp_urllist
 
                     #newlistpg = '/mgen/Bluefly/eqzoom85.ms?img=325084201_alt01.pct&outputx=1800&outputy=2160&level=1&ver=1'
                     #'/mgen/Bluefly/eqzoom85.ms?img=325084201_alt02.pct&outputx=1800&outputy=2160&level=1&ver=1'
