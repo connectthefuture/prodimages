@@ -434,7 +434,7 @@ def main(colorstyle_list=None):
             count = 0
             send_purge_request_edgecast(url_purge[0])
             count += 1
-            print('Edgecast Count: {0}'.format(count))
+            print('Edgecast AsynCount: {0}'.format(count))
             #csv_write_datedOutfile(url_purge)
 
     else:
