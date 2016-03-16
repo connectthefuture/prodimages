@@ -430,12 +430,11 @@ def main(colorstyle_list=None):
     #            send_purge_request_localis(POSTURL_BC, colorstyle,version)
     #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
                 pass
-        count = 0
+        #count = 0
         for url_purge in versioned_links:
-
             send_purge_request_edgecast(url_purge[0])
-            count += 1
-            print('Edgecast AsynCount: {0}'.format(count))
+            #count += 1
+            #print('Edgecast AsynCount: {0}'.format(count))
             #csv_write_datedOutfile(url_purge)
 
     else:
@@ -474,6 +473,5 @@ def main(colorstyle_list=None):
 
 
 #print edgecast_listurls
-
 if __name__ == '__main__':
     main()
