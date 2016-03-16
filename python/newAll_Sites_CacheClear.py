@@ -96,7 +96,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
         count = 0
         try:
             res = requests.post(POSTURL,data=data)    #,headers=headers, timeout=3)
-            print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}\nCount: {3}".format(colorstyle, version, POSTURL, count)
+            print "\nSuccessfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}\nCount: {3}".format(colorstyle, version, POSTURL, count)
             count += 1
             return res
         except:
