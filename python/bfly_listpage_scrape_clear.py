@@ -320,7 +320,8 @@ for k,v in clrversions.iteritems():
         POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
         #send_purge_request_localis(colorstyle,version,POSTURL_BFY)
         #send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
-        newAll_Sites_CacheClear.subproc_localIS(colorstyle=colorstyle,version=version)
+        newAll_Sites_CacheClear.send_purge_request_localis(POSTURL_BFY,colorstyle=colorstyle,version=version)
+        newAll_Sites_CacheClear.send_purge_request_localis(POSTURL_Mobile,colorstyle=colorstyle)
             #except:
             #    print sys.stderr().read()
     except IndexError:
