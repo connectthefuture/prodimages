@@ -93,9 +93,11 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
                     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                     "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
                     "Referer": POSTURL_Referer}
+        count = 0
         try:
             res = requests.post(POSTURL,data=data)    #,headers=headers, timeout=3)
-            print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}".format(colorstyle, version, POSTURL)
+            print "Successfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}\nCount: {3}".format(colorstyle, version, POSTURL, count)
+            count += 1
             return res
         except:
             print 'Failed Local IS Clear. Connection Timed out'
