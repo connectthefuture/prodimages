@@ -93,11 +93,9 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
                     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                     "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:20.0) Gecko/20100101 Firefox/20.0",
                     "Referer": POSTURL_Referer}
-        count = 0
         try:
             res = requests.post(POSTURL,data=data)    #,headers=headers, timeout=3)
-            print "\nSuccessfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}\nCount: {3}".format(colorstyle, version, POSTURL, count)
-            count += 1
+            print "\nSuccessfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}".format(colorstyle, version, POSTURL)
             return res
         except:
             print 'Failed Local IS Clear. Connection Timed out'
@@ -138,7 +136,7 @@ def send_purge_request_edgecast(mediaPath):
                     "Accept": "application/json",
                     "Content-Type": "application/json"}
         res = requests.put(purgeURL,data=data,headers=headers)
-        print "Successfully Sent Purge Request to Edgecast\nHTTP Status {0}\t{1}".format(res.status_code, mediaPath)
+        print "\nSuccessfully Sent Purge Request to Edgecast\nHTTP Status {0}\t{1}".format(res.status_code, mediaPath)
         return res
     else:
         print 'Missing required Field'
@@ -433,7 +431,10 @@ def main(colorstyle_list=None):
     #            send_purge_request_localis(colorstyle,version,POSTURL_Mobile)
                 pass
         for url_purge in versioned_links:
+            count = 0
             send_purge_request_edgecast(url_purge[0])
+            count += 1
+            print('Edgecast Count: {0}'.format(count))
             #csv_write_datedOutfile(url_purge)
 
     else:
