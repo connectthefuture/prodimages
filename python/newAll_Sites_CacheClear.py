@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from tomorrow import threads
+
 def query_version_number(colorstyle):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
@@ -19,7 +21,7 @@ def query_version_number(colorstyle):
     connection.close()
     return styles
 
-
+@threads(5)
 def url_get_links(targeturl):
     import os,re,sys,requests
     from bs4 import BeautifulSoup
@@ -34,7 +36,7 @@ def url_get_links(targeturl):
     return list(set(linklist))
 
 
-
+@threads(5)
 def return_versioned_urls(text):
     import os,sys,re
     regex = re.compile(r'http:.+?ver=[1-9][0-9]?[0-9]?')
@@ -52,6 +54,7 @@ def return_versioned_urls(text):
 
 
 
+@threads(5)
 def return_cleaned_bfly_urls(text):
     import os,sys,re
     regex = re.compile(r'http:.+?mgen/Bluefly/.+?')
@@ -112,7 +115,7 @@ def send_purge_curl_localis(colorstyle=None,version=None):
     #sleep(.2)
     return
 
-
+@threads(5)
 def send_purge_request_edgecast(mediaPath):
     import requests, json
     ## Setup variables
