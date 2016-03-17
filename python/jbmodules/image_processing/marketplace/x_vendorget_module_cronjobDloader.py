@@ -911,7 +911,7 @@ if __name__ == '__main__':
         try:
             vendor_brand = sys.argv[2]
             ALL = ''
-            if sys.argv[2][-3:] == 'ALL' or sys.argv[2].isdigit() == True or sys.argv[2].lower() == 'url':
+            if sys.argv[2][-3:].upper() == 'ALL' or sys.argv[2].isdigit() == True or sys.argv[2].lower() == 'url':
                 ALL = sys.argv[2]
                 vendor_brand = ''
             main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
