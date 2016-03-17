@@ -173,7 +173,11 @@ def main(colorstyle_list=None):
     for colorstyle in colorstyle_list:
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
-        version =  query_version_number(colorstyle)[colorstyle]['version']
+        try:
+            version =  query_version_number(colorstyle).get('colorstyle')['version']
+        except:
+            print('IndexErr - Version Error style {}'.format(colorstyle))
+            return
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
