@@ -471,7 +471,7 @@ function send_to_johnb_drop (){
     cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*/*.jpg $jbupload ;
     cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*.jpg $jbupload ;
     count=`ls $jbupload | wc -l` ;
-    echo "Finshed moving ${count} to ${jbupload}" ;
+    echo "Finshed moving ${count} image files to ${jbupload}" ;
 }
 
 ## Utility function to just reload my current working .bash_profile
