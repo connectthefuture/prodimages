@@ -469,6 +469,7 @@ function find_styles_recurse (){
 function send_to_johnb_drop (){
     jbupload=/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/
     cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*/*.jpg $jbupload ;
+    cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*.jpg $jbupload ;
     count=`ls $jbupload | wc -l` ;
     echo "Finshed moving ${count} to ${jbupload}" ;
 }
