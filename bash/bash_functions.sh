@@ -468,8 +468,7 @@ function find_styles_recurse (){
 #### Collect Marketplacer and send to my drop folder for processing magickLoad.py
 function send_to_johnb_drop (){
     jbupload=/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/
-    cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*/*.jpg $jbupload ;
-    cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*.jpg $jbupload ;
+    parallel -P16 cp {} $jbupload ::: `ls /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*/*.jpg /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*.jpg` ;
     count=`ls $jbupload | wc -l` ;
     echo "Finshed moving ${count} image files to ${jbupload}" ;
 }
