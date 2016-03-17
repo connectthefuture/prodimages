@@ -419,7 +419,7 @@ function profilePyScript ()
 function compfile_to_basefile ()
     {
     testImage="$1"
-    if [[ "$#" > 1 ]]; then
+    if [[ "$#" -gt 1 ]]; then
         baseImage="$2"
     else
         baseImage=/mnt/Post_Complete/Complete_Archive/.PDP/base_pdp_na_x700.jpg
@@ -428,7 +428,7 @@ function compfile_to_basefile ()
     bnameBase=$(basename "${baseImage}")
     cd $(dirname "${baseImage}")
     diffpix=$(convert "${testImage}" "${baseImage}" -resize "400x300!" MIFF:- | compare -metric AE -fuzz "10%" - null: 2>&1) ;
-    if [[ $diffpix > 0 ]]; then
+    if [[ $diffpix -gt 0 ]]; then
         echo "File `basename ${testImage}` has $(echo \"$diffpix\") Different Pixels vs the base input file `basename \"${baseImage}\"`"
     else
         mkdir -p matches/"${bnameBase}"_matches
@@ -469,10 +469,14 @@ function find_styles_recurse (){
 function send_to_johnb_drop (){
     jbupload=/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/
     cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*/*.jpg $jbupload ;
-    count=`ls $jbupload | wc -l`
-    echo "Finshed moving ${count} to ${jbupload}"
+    count=`ls $jbupload | wc -l` ;
+    echo "Finshed moving ${count} to ${jbupload}" ;
 }
 
+## Utility function to just reload my current working .bash_profile
+function ReloadBashProfile (){
+    . $HOME/.bash_profile
+}
 
 ## Split arg $1 by delimiter $2, and return last delimited field, ie. -1/$NF
 function splitdelimit() { echo $1 | awk -F"$2" '{print $NF}' ; }
@@ -506,7 +510,7 @@ PS2="$LIGHT_CYAN-$CYAN-$GRAY-$NO_COLOUR "
 function recent_styles_uploaded ()
     {
         {
-        if [[ "$#" > 0 ]]; then MINUTESAGO=$1
+        if [[ "$#" -gt 0 ]]; then MINUTESAGO=$1
         else MINUTESAGO=60
         fi;
         local QUERY=`echo -e "select distinct t1.colorstyle from www_django.image_update t1 join product_snapshot_live t2 on t1.colorstyle=t2.colorstyle where create_dt > date_sub(now(), interval $MINUTESAGO minute) and (t2.image_ready_dt is not null and t2.image_ready_dt != \"0000-00-00\");"` ;
