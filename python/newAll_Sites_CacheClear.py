@@ -177,6 +177,7 @@ def main(colorstyle_list=None):
             version =  query_version_number(colorstyle).get('colorstyle')['version']
         except:
             print('IndexErr - Version Error style {}'.format(colorstyle))
+            version = 'null'
             return
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
