@@ -469,9 +469,11 @@ function find_styles_recurse (){
 function send_to_johnb_drop (){
     jbupload=/mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/
     cp /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/*/*/*.jpg $jbupload ;
-    count=`ls $jbupload | wc -1`
+    count=`ls ${jbupload} | wc -1`
     echo "Finshed moving ${count} to ${jbupload}"
 }
+
+
 ## Split arg $1 by delimiter $2, and return last delimited field, ie. -1/$NF
 function splitdelimit() { echo $1 | awk -F"$2" '{print $NF}' ; }
 
