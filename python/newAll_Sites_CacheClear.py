@@ -178,7 +178,7 @@ def main(colorstyle_list=None):
         except:
             print('IndexErr - Version Error style {}'.format(colorstyle))
             version = 'null'
-            return
+            #return
         ## static standard urls
         oldlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=157&height=188'.format(colorstyle)
         newlistpg    = 'http://cdn.is.bluefly.com/mgen/Bluefly/prodImage.ms?productCode={0}&width=251&height=300'.format(colorstyle)
