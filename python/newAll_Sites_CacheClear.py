@@ -175,7 +175,9 @@ def main(colorstyle_list=None):
         found_links = url_get_links(bflypdp_url)
         try:
             print 'Version before query {}'.format(locals().get('version'))
-            version =  query_version_number(colorstyle).get('colorstyle')['version']
+            version =  query_version_number(colorstyle).get(colorstyle)['version']
+            print 'Version After query {}'.format(locals().get('version'))
+
         except:
             print('IndexErr - Version Error style {}'.format(colorstyle))
             version = 'null'
