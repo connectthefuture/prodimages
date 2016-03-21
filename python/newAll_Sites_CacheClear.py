@@ -95,7 +95,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
                     "Referer": POSTURL_Referer}
         try:
             res = requests.post(POSTURL,data=data)    #,headers=headers, timeout=3)
-            print "\nSuccessfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}".format(colorstyle, version, POSTURL)
+            print "\nSuccessfully Sent Local Purge Request for --> Style: {0} Ver: {1}\n{2}\n{3}".format(colorstyle, version, POSTURL, res.headers
             return res
         except:
             print 'Failed Local IS Clear. Connection Timed out'
