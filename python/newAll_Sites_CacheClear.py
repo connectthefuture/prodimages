@@ -401,6 +401,7 @@ def main(colorstyle_list=None):
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
             POSTURL_Mobile = "http://clearcache.bluefly.corp/BFMobileClear2.php"
+            print 'Sending Version to local ', version
             #send_purge_request_localis(colorstyle,version)
             send_purge_request_localis(POSTURL_BFY,colorstyle=colorstyle,version=version)
             #send_purge_request_localis(POSTURL_BC,colorstyle,version)
