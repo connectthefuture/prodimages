@@ -174,6 +174,7 @@ def main(colorstyle_list=None):
         bflypdp_url = "http://www.bluefly.com/Bluefly-generic-pdp-slug/p/{0}/detail.fly".format(colorstyle)
         found_links = url_get_links(bflypdp_url)
         try:
+            print 'Version Before query {0}, for {1}'.format(locals().get('version'), colorstyle)
             version =  query_version_number(colorstyle).get(colorstyle)['version']
             print 'Version After query {0}, for {1}'.format(locals().get('version'), colorstyle)
         except:
