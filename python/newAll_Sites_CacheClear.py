@@ -255,7 +255,7 @@ def main(colorstyle_list=None):
                 if vertest[:4] == 'ver=':
                     version = vertest[-1]
                 else:
-                    version =  query_version_number(colorstyle)[colorstyle]['version']
+                    version =  query_version_number(colorstyle).get(colorstyle)['version']
                 ## Create and append to edgecast list page urls for Edgecast
                 if alturl not in link:
                     ## static standard urls
@@ -396,7 +396,7 @@ def main(colorstyle_list=None):
     if not versioned_links:
         print "Product is not Live. Skipping Edgecast CDN Purge and Local Purge."
         for colorstyle in colorstyle_list:
-            version =  query_version_number(colorstyle)[colorstyle]['version']
+            version =  query_version_number(colorstyle).get(colorstyle)['version']
             POSTURL_ALLSITES = "http://clearcache.bluefly.corp/ClearAll2.php"
             POSTURL_BFY = "http://clearcache.bluefly.corp/BFClear2.php"
             POSTURL_BC = "http://clearcache.bluefly.corp/BnCClear2.php"
