@@ -78,7 +78,7 @@ def send_purge_request_localis(POSTURL, colorstyle=None, version=None):
         #})
         POSTURL_Referer = POSTURL.replace('2.php', '1.php')
         regex = re.compile(r'.+?Mobile.+?')
-        if regex.findall(POSTURL):
+        if regex.findall(POSTURL) or version is None:
             data = "style={0}".format(colorstyle)
             # Replace Previous Line with uncommenting next line when versioning is added to mobile
             # Currently only need to POST Colorstyle to PHP script
@@ -404,6 +404,8 @@ def main(colorstyle_list=None):
             print 'Sending Version to local ', version
             #send_purge_request_localis(colorstyle,version)
             send_purge_request_localis(POSTURL_BFY,colorstyle=colorstyle,version=version)
+            # to clear the list page separately since the clearAll doesnt work
+            send_purge_request_localis(POSTURL_BFY,colorstyle=colorstyle)
             #send_purge_request_localis(POSTURL_BC,colorstyle,version)
             send_purge_request_localis(POSTURL_Mobile, colorstyle=colorstyle,version=version)
 
@@ -425,6 +427,8 @@ def main(colorstyle_list=None):
                 #send_purge_request_localis(colorstyle,version)
                 print 'Sending Version to local ', version
                 send_purge_request_localis(POSTURL_BFY,colorstyle=colorstyle,version=version)
+                # to clear the list page separately since the clearAll doesnt work
+                send_purge_request_localis(POSTURL_BFY,colorstyle=colorstyle)
                 #send_purge_request_localis(colorstyle,version,POSTURL_BC)
                 send_purge_request_localis(POSTURL_Mobile,colorstyle=colorstyle,version=version)
 
