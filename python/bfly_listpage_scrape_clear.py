@@ -66,11 +66,13 @@ def query_version_number(colorstyle):
             #style_info['version'] = row['version']
             # Convert Colorstyle to string then set as KEY
             styles[str(row['colorstyle'])] = row['version']
+        return styles
     except sqlalchemy.exc.DatabaseError:
         print 'This Search needs to have more than 1 style, \nyou returned zero or 1 style'
 
-    connection.close()
-    return styles
+    finally:
+        connection.close()
+
 
 
 def send_purge_request_localis(colorstyle, version, POSTURL):
