@@ -32,7 +32,7 @@ def main(styles_list, imgnum=1, ext='.png', root_dir='/mnt/images'):
             #from RESTClient import MozuRestClient
             #rest_client = MozuRestClient()
             #resp = rest_client.send_content(src_filepath=src)
-            print src,'\n^^src^^\nfname+ext-vv', fname, '\t', ext
+            print len(src), len(src[0]),'\n^^src^^\nfname+ext-vv', fname, '\t', ext
             flist.append(src)
 
     loaded_filenames = [f.split('/')[-1].split('.')[0] for f in flist if f is not None]
