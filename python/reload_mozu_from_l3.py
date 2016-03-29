@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-def main(styles_list, imgnum=1, ext='.png', root_dir='/mnt/images'):
+def main(styles_list, imgnum=0, ext='.png', root_dir='/mnt/images'):
     from os import getcwd, environ, path, chdir
     import sys
     MOZU_CODE_DIR = '/usr/local/batchRunScripts/mozu'
@@ -44,10 +44,11 @@ def main(styles_list, imgnum=1, ext='.png', root_dir='/mnt/images'):
 
 if __name__ == '__main__':
     from sys import argv
-    if len(argv[1]) == 1:
-        imgnum=argv[1]
-        styleslist=argv[2:]
+    from os import environ
+    imgnum=int(environ.get('imgnum', 0))
+    styleslist=argv[1:]
+    if imgnum > 0:
         print imgnum, 'IMG NUM'
         main(styleslist, imgnum=imgnum)
     else:
-        main(argv[1:])
+        main(styleslist)
