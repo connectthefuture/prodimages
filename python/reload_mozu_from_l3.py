@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-def main(styles_list, ext='.png', root_dir='/mnt/images'):
+def main(styles_list, imgnum=1, ext='.png', root_dir='/mnt/images'):
     from os import getcwd, environ, path, chdir
     import sys
     MOZU_CODE_DIR = '/usr/local/batchRunScripts/mozu'
@@ -19,7 +19,10 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
     #environ['PRD_ENV'] = "1"
     # environ['PYDEBUG'] = "1"
     print('Starting.\nReloading {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(styles_list), root_dir))
-
+    if imgnum > 1 and imgnum <= 6:
+        ext= "alt0{0}{1}".format(str(imgnum-1), ext)
+    else:
+        ext = ext
     flist = []
     for fname in styles_list:
         print 'PreCond ', root_dir,fname+ext
@@ -40,4 +43,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
 
 if __name__ == '__main__':
     from sys import argv
-    main(argv[1:])
+    if len(argv[1]) == 1:
+        main(argv[2:], imgnum=argv[1])
+    else:
+        main(argv[1:])
