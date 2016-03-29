@@ -45,7 +45,7 @@ def main(styles_list, imgnum=0, ext='.png', root_dir='/mnt/images'):
 if __name__ == '__main__':
     from sys import argv
     from os import environ
-    imgnum=int(environ.get('imgnum', 0))
+    imgnum=int(environ.get('IMGNUM', 0))
     print 'IMGNUM set to {}'.format(imgnum)
     styleslist=argv[1:]
     if imgnum > 0:
