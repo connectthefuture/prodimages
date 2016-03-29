@@ -23,9 +23,10 @@ def main(styles_list, imgnum=1, ext='.png', root_dir='/mnt/images'):
         ext= "alt0{0}{1}".format(str(imgnum-1), ext)
     else:
         ext = ext
+    print ext, imgnum, ' <--- ext and imgnum'
     flist = []
     for fname in styles_list:
-        print 'PreCond ', root_dir,fname+ext
+        #print 'PreCond ', root_dir,fname+ext
         if fname is not None:
             src = path.join(root_dir, fname[:4], fname + ext) #.replace('\n',' ').replace('\r','').replace('  ',' ')
             #from RESTClient import MozuRestClient
