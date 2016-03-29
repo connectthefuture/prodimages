@@ -25,7 +25,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
             #from RESTClient import MozuRestClient
             #rest_client = MozuRestClient()
             #resp = rest_client.send_content(src_filepath=src)
-            print(src)
+            print src,'\n', fname, '\t', ext
             flist.append(src)
 
     import mozu_exec
