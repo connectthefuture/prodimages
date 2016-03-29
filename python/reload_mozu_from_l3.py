@@ -16,7 +16,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
     #######
     #######
     environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
-    environ['PRD_ENV'] = "1"
+    #environ['PRD_ENV'] = "1"
     # environ['PYDEBUG'] = "1"
     print('Starting.\nReloading {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(styles_list), root_dir))
 
