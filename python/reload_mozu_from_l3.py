@@ -28,11 +28,11 @@ def main(styles_list, imgnum=0, ext='.png', root_dir='/mnt/images'):
     for fname in styles_list:
         #print 'PreCond ', root_dir,fname+ext
         if fname is not None:
-            src = path.join(root_dir, fname[:4], fname + ext) #.replace('\n',' ').replace('\r','').replace('  ',' ')
+            src = path.join(root_dir, fname[:4], fname + ext).replace('\n',' ').replace('\r','').replace('  ',' ')
             #from RESTClient import MozuRestClient
             #rest_client = MozuRestClient()
             #resp = rest_client.send_content(src_filepath=src)
-            print len(src), len(src[0]),'\n^^src^^\nfname+ext-vv', fname, '\t', ext
+            #print len(src), len(src[0]),'\n^^src^^\nfname+ext-vv', fname, '\t', ext
             flist.append(src)
 
     loaded_filenames = [f.split('/')[-1].split('.')[0] for f in flist if f is not None]
