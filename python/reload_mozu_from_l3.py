@@ -24,7 +24,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
     for fname in styles_list:
         print 'PreCond ', root_dir,fname+ext
         if fname is not None:
-            src = path.join(root_dir, fname[:4], fname + ext).replace('\n',' ').replace('\r','').replace('  ',' ')
+            src = path.join(root_dir, fname[:4], fname + ext) #.replace('\n',' ').replace('\r','').replace('  ',' ')
             #from RESTClient import MozuRestClient
             #rest_client = MozuRestClient()
             #resp = rest_client.send_content(src_filepath=src)
@@ -40,4 +40,4 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
 
 if __name__ == '__main__':
     from sys import argv
-    main(styles_list=argv[1:])
+    main(argv[1:])
