@@ -234,6 +234,8 @@ def netsrv101_path_maker(*args,**kwargs):
     netsrv101_mnt = '/mnt/images'
     ext = kwargs.get('ext', '.png')
     files_list = []
+    if type(args) == 'tuple':
+        args = args[1]
     for f in args:
         print f, type(f), len(f), type(args), len(args)
         src = path.join(netsrv101_mnt, f[:4], f + ext).replace('\n', '').replace('.png.png','.png').replace('.jpg.jpg','.jpg')
