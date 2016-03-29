@@ -46,6 +46,7 @@ if __name__ == '__main__':
     from sys import argv
     from os import environ
     imgnum=int(environ.get('imgnum', 0))
+    print 'IMGNUM set to {}'.format(imgnum)
     styleslist=argv[1:]
     if imgnum > 0:
         print imgnum, 'IMG NUM'
