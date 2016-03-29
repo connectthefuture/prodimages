@@ -7,7 +7,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
     MOZU_CODE_DIR = '/usr/local/batchRunScripts/mozu'
     JBMODULES_ROOT = '/usr/local/batchRunScript/python/jbmodules'
     chdir(MOZU_CODE_DIR)
-    getcwd()
+    print getcwd()
 
     environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
     environ['PRD_ENV'] = "1"
