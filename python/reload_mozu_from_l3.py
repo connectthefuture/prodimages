@@ -20,7 +20,7 @@ def main(styles_list, imgnum=1, ext='.png', root_dir='/mnt/images'):
     # environ['PYDEBUG'] = "1"
     print('Starting.\nReloading {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(styles_list), root_dir))
     if imgnum > 1 and imgnum <= 6:
-        ext= "alt0{0}{1}".format(str(imgnum-1), ext)
+        ext= "_alt0{0}{1}".format(str(imgnum-1), ext)
     else:
         ext = ext
     print ext, imgnum, ' <--- ext and imgnum'
