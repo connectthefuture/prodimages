@@ -45,6 +45,9 @@ def main(styles_list, imgnum=1, ext='.png', root_dir='/mnt/images'):
 if __name__ == '__main__':
     from sys import argv
     if len(argv[1]) == 1:
-        main(argv[2:], imgnum=argv[1])
+        imgnum=argv[1]
+        styleslist=argv[2:]
+        print imgnum, 'IMG NUM'
+        main(styleslist, imgnum=imgnum)
     else:
         main(argv[1:])
