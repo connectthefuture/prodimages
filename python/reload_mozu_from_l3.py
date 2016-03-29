@@ -32,7 +32,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
             flist.append(src)
 
     loaded_filenames = [f.split('/')[-1].split('.')[0] for f in flist if f is not None]
-    mozu_exec.main(fileslist=flist)
+    mozu_exec.main(flist)
     print('Finished.\nReloaded {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(flist), root_dir))
     return loaded_filenames
 
