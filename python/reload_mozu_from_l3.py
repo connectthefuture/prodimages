@@ -14,6 +14,8 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
     # environ['PYDEBUG'] = "1"
     print('Starting.\nReloading {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(styles_list), root_dir))
 
+    import sys
+    sys.path.append('/usr/local/batchRunScripts/mozu')
     import db, mozu_image_util_functions
     flist = []
     for fname in styles_list.split():
