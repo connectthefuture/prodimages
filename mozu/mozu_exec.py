@@ -192,14 +192,19 @@ def main(fileslist):
     archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
     imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
     # imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
-    if path.dirname(fileslist[0]).split('/')[-1] == 'JPG_MOZU_LOAD':
-        #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
-        fileslist = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
-    else:
-        fileslist = fileslist # [ path.abspath(f) for f in fileslist if f ]
-    if not path.isfile(fileslist[0]):
-        fileslist = netsrv101_path_maker(fileslist)
+    try:
+        if path.dirname(fileslist[0]).split('/')[-1] == 'JPG_MOZU_LOAD':
+            #         fileslistX= [magick_convert_to_jpeg(f) for f in fileslist if f.split('.')[-1] == 'png']
+            fileslist = [magick_convert_to_jpeg(f, destdir=imgdest_jpg_mozu) for f in fileslist if f]
+    except AttributeError:
+        print 'AttributeErr in Mozuexec 196-200'
+    try:
+        if not path.isfile(fileslist[0]):
+            fileslist = netsrv101_path_maker(fileslist)
+    except AttributeError:
+        print 'AttributeErr in Mozuexec 196-205+'
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
+
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     # print compiled_instance_vars, "186-MZEXECY"
     for key,values in compiled_instance_vars.iteritems():
