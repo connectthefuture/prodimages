@@ -235,7 +235,7 @@ def netsrv101_path_maker(*args,**kwargs):
     ext = kwargs.get('ext', '.png')
     files_list = []
     for f in args:
-        print f, type(f)
+        print f, type(f), len(f), type(args), len(args)
         src = path.join(netsrv101_mnt, f[:4], f + ext).replace('\n', '').replace('.png.png','.png').replace('.jpg.jpg','.jpg')
         files_list.append(src)
     if len(files_list) == 1:
