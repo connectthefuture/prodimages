@@ -22,6 +22,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
 
     flist = []
     for fname in styles_list:
+        print 'PreCond ', root_dir,fname+ext
         if fname is not None:
             src = path.join(root_dir, fname[:4], fname + ext)
             #from RESTClient import MozuRestClient
