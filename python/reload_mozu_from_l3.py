@@ -18,7 +18,7 @@ def main(styles_list, ext='.png', root_dir='/mnt/images'):
     sys.path.append('/usr/local/batchRunScripts/mozu')
     import db, mozu_image_util_functions
     flist = []
-    for fname in styles_list.split():
+    for fname in styles_list:
         if fname is not None:
             src = path.join(root_dir, fname[:4], fname + ext)
             #from RESTClient import MozuRestClient
