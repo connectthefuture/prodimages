@@ -59,6 +59,34 @@ def mozu_bfly_imageid_url_table_instance(**kwargs):
     return mozu_image_table
 
 
+
+
+# -H
+
+# def get_media_version_numbers(productColorIds):
+#     import sqlalchemy
+#     products = [ i for i in productColorIds if len(i) == 9 and i.isdigit() ]
+#     db_cnx = 'pomgr.connenct'
+#     productId_media_versions = db_cnx.select.in(products)['media_version']
+#     return productId_media_versions
+#
+#
+# def set_media_version_numbers(productColorId, media_version):
+#     import requests, json
+#   headers = {Content-Type": "application/json"}
+#    media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
+#    update_products_dict = {
+#         	"products": [{
+#                 		"productColorId": productColorId,
+#                 		"attributes": [{
+#                 			"name": "media_version",
+#                 			"value": media_version
+#                 		}]
+#     },
+#
+#requests.put(media_version_api_url,data=update_products_dict, headers=headers)
+
+
 def main():
     pass
 
