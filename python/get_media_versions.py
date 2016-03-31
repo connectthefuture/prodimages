@@ -34,4 +34,5 @@ def query_version_number(colorstyle):
 if __name__ == '__main__':
     import sys
     args = sys.argv[1:]
-    query_version_number(args)
+    stylevers = query_version_number(args)
+    print stylevers
