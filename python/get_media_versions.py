@@ -153,7 +153,7 @@ if __name__ == '__main__':
     #args = sys.argv[1:]
     parsed = parser.parse_args(sys.argv)
     args = parsed.__dict__
-    print args
+    print args.items()
     if len(args) > 2: #and args.items()[-1] == 9:
         print '1'
         batch_process_by_style_list(args.styles_list)
