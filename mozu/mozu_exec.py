@@ -220,6 +220,7 @@ def main(fileslist):
                     insert_db = mozu_image_table.insert(values=dict(**table_args))
                     res_insrt = insert_db.execute()
                     print 'Inserted --> ', values.items(), ' <-- ', dir(res_insrt)
+                    styles_incr_media_version.append(table_args.get('bf_imageid', locals().get('bf_imageid')))
                 elif int(create_resource_resp.keys()[0]) <= int(409):
                     table_args = include_keys(values, __mozu_image_table_valid_keys__)
                     mz_imageid = mozu_image_table.select( whereclause=( (mozu_image_table.c.bf_imageid == table_args['bf_imageid']) ) ).execute().fetchone()['mz_imageid']
@@ -233,10 +234,11 @@ def main(fileslist):
                         update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
                         res = update_db.execute()
                         print res, 'Updated--> ', values.items(), ' <-- ', update_db
+                    styles_incr_media_version.append(table_args.get('bf_imageid', locals().get('bf_imageid')))
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(create_resource_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
-                styles_incr_media_version.append(table_args.get('bf_imageid',locals().get('bf_imageid')))
+
             except ValueError as ve: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already', ve
                 #return 'IntegrityError'
