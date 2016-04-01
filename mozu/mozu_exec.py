@@ -236,7 +236,7 @@ def main(fileslist):
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(create_resource_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
-                styles_incr_media_version.append(table_args.get('bf_imageid'),locals().get('bf_imageid'))
+                styles_incr_media_version.append(table_args.get('bf_imageid',locals().get('bf_imageid')))
             except ValueError as ve: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already', ve
                 #return 'IntegrityError'
@@ -248,7 +248,7 @@ def main(fileslist):
                 #     print "ENDING ERROR...", values
         elif values.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
-            styles_incr_media_version.append(values.get('bf_imageid'), locals().get('bf_imageid'))
+            styles_incr_media_version.append(values.get('bf_imageid', locals().get('bf_imageid')))
 
     return list(set(sorted(styles_incr_media_version)))
 
