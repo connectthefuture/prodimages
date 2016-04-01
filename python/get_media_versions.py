@@ -154,9 +154,9 @@ if __name__ == '__main__':
     parsed = parser.parse_args(sys.argv)
     args = parsed.__dict__
     print args.items()
-    if len(args) > 2: #and args.items()[-1] == 9:
+    if len(args.get('styles_list')) > 2: #and args.items()[-1] == 9:
         print '1'
-        batch_process_by_style_list(args.styles_list)
+        batch_process_by_style_list(args.get('styles_list'))
     elif len(args) == 2 and args[-1] < 9:
         set_media_version_number_single(args.style,args.version)
         print '2'
