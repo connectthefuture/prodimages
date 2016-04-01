@@ -77,13 +77,17 @@ def set_media_version_number_single(productColorId, media_version,**kwargs):
                             }],
                             }
     print "Sending Version info for {0} \nData: {1}".format(productColorId,update_products_dict)
-    res = requests.put(dest_url,data=update_products_dict, headers=headers)
+    res = requests.put(dest_url, data=json.dumps(update_products_dict), headers=headers)
+    return res
 
 
-def build_media_version_number_data_batch(colorstyles):
+def build_media_version_number_data_batch(colorstyles,**kwargs):
     import requests, json
     from collections import defaultdict
     headers = {"Content-Type": "application/json"}
+    media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
+    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
+    dest_url = kwargs.get('dest_url', QA_media_version_api_url)
     products = {}
     products['products'] = []
     product_styles = {}
@@ -99,7 +103,8 @@ def build_media_version_number_data_batch(colorstyles):
         products['products'].append(product_style_data_item)
     print "\n\nSending Version info for\n", products
     return products
-    #res = requests.put(QA_media_version_api_url,data=products, headers=headers)
+    res = requests.put(dest_url,data=json.dumps(products), headers=headers)
+    return res
 
 
 def exec_put_data_batch(**kwargs):
@@ -110,21 +115,23 @@ def exec_put_data_batch(**kwargs):
     headers = kwargs.get('headers', {"Content-Type": "application/json"} )
     data = kwargs.get('data', '')
     if data and headers:
-        res = requests.put(dest_url,data=data,headers=headers)
+        res = requests.put(dest_url,data=json.dumps(data),headers=headers)
         print res.headers, dest_url
+        return res
     else:
         print 'Either data or Headers not supplied '
 
 
 def batch_process_by_style_list(colorstyles):
     data = build_media_version_number_data_batch(colorstyles)
-    exec_put_data_batch(data=data)
+    res = exec_put_data_batch(data=data)
     print 'Done with {0}'.format(data)
+    return res
 
 def generic_increment_style_single(colorstyle):
     data = get_media_version_number(colorstyle).items()
-    set_media_version_number_single(data['colorstyle'],data['media_version'])
-
+    res = set_media_version_number_single(data['colorstyle'],data['media_version'])
+    return res
 
 if __name__ == '__main__':
     import sys, json
