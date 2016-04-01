@@ -73,7 +73,7 @@ def set_media_version_number_single(productColorId, media_version):
                             	}]
                             }],
                             }
-    print "Sending Version {0} for {1}".format(media_version, productColorId)
+    print "Sending Version info for {0} \nData: {1}".format(productColorId,update_products_dict)
     #res = requests.put(media_version_api_url,data=update_products_dict, headers=headers)
 
 
@@ -87,9 +87,10 @@ def set_media_version_number_batch(colorstyles):
         product_media_version_dict = {}
         product_media_version_dict['productColorId'] = style
         product_media_version_dict['media_version'] = ver.values()
-        products['products'] = product_media_version_dict
-    print "Sending Version {0} for {1}".format(media_version, productColorId)
-    #res = requests.put(media_version_api_url,data=products, headers=headers)
+        products[style] = product_media_version_dict
+    print "Sending Version info for {0}".format(products)
+
+    #res = requests.put(QA_media_version_api_url,data=products, headers=headers)
 
 
 
