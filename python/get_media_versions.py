@@ -66,7 +66,7 @@ def set_media_version_number_single(productColorId, media_version,**kwargs):
     headers = {"Content-Type": "application/json"}
     media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
     QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
-    dest_url = kwargs.get('dest_url', QA_media_version_api_url)
+    dest_url = kwargs.get('dest_url', media_version_api_url)
     update_products_dict = {
                             "products": [{
                             	"productColorId": productColorId,
@@ -87,7 +87,7 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
     headers = {"Content-Type": "application/json"}
     media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
     QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
-    dest_url = kwargs.get('dest_url', QA_media_version_api_url)
+    dest_url = kwargs.get('dest_url', media_version_api_url)
     products = {}
     products['products'] = []
     product_styles = {}
@@ -107,11 +107,11 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
     return res
 
 
-def exec_put_data_batch(**kwargs):
+def _exec_put_data_batch(**kwargs):
     import requests, json
     media_version_api_url    = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
     QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
-    dest_url = kwargs.get('dest_url', QA_media_version_api_url)
+    dest_url = kwargs.get('dest_url', media_version_api_url)
     headers = kwargs.get('headers', {"Content-Type": "application/json"} )
     data = kwargs.get('data', '')
     if data and headers:
@@ -124,13 +124,13 @@ def exec_put_data_batch(**kwargs):
 
 def batch_process_by_style_list(colorstyles):
     data = build_media_version_number_data_batch(colorstyles)
-    res = exec_put_data_batch(data=data)
+    res = _exec_put_data_batch(data=data)
     print 'Done with {0}'.format(data)
     return res
 
 def generic_increment_style_single(colorstyle):
     data = get_media_version_number(colorstyle).items()
-    res = set_media_version_number_single(data['colorstyle'],data['media_version'])
+    res = set_media_version_number_single(data[0][0],str(int(data[0][1]) + 1))
     return res
 
 if __name__ == '__main__':
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     #parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
     args = sys.argv[1:]
     #parsed = parser.parse_args(args)
-    if len(args) > 2 and args[-1] != 9:
+    if len(args) > 2 and args[-1] == 9:
         batch_process_by_style_list(args)
     elif len(args) == 2 and args[-1] < 9:
         set_media_version_number_single(args[0],args[1])
