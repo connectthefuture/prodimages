@@ -138,27 +138,29 @@ if __name__ == '__main__':
     import argparse
     #
     # Define and Instantiate parser Base
-    # parser = argparse.ArgumentParser(description='Utility functions to get and set media_version attrib') #,add_help=False)
-    # ##############################
-    # #
-    # ######### Style ##############
-    # parser.add_argument('--get-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle to get the current media_version')
-    # parser.add_argument('--set-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle AND the new media_version to set')
-    # parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
-    # parser.add_argument('--version', '--media-version', action='store', help='Valid 9 Digit Bluefly Style' )
-    # parser.add_argument('--batch', '-b', default=False, action='store_true', help='Set flag if batch inserts are desired and a list of styles numbers are supplied')
-    # #
-    ######### Styles List 1 or more
-    #parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
-    args = sys.argv[1:]
-    #parsed = parser.parse_args(args)
-    if len(args) > 2 and args[-1] == 9:
+    parser = argparse.ArgumentParser(description='Utility functions to get and set media_version attrib') #,add_help=False)
+    ##############################
+    #
+    ######### Style ##############
+    parser.add_argument('--get-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle to get the current media_version')
+    parser.add_argument('--set-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle AND the new media_version to set')
+    parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
+    parser.add_argument('--version', '--media-version', action='store', help='Valid 9 Digit Bluefly Style' )
+    parser.add_argument('--batch', '-b', default=False, action='store_true', help='Set flag if batch inserts are desired and a list of styles numbers are supplied')
+    #
+    ######## Styles List 1 or more
+    parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
+    #args = sys.argv[1:]
+    parsed = parser.parse_args(sys.argv)
+    parsed.__dict__
+    args = parsed.__dict__
+    if len(args) > 2: #and args.items()[-1] == 9:
         print '1'
-        batch_process_by_style_list(args)
+        batch_process_by_style_list(args.styles_list)
     elif len(args) == 2 and args[-1] < 9:
-        set_media_version_number_single(args[0],args[1])
+        set_media_version_number_single(args.style,args.version)
         print '2'
     else:
-        stylevers = get_media_version_number(args)
+        stylevers = get_media_version_number(args.styles_list)
         print '3'
         print stylevers
