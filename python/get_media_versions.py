@@ -80,7 +80,8 @@ def set_media_version_number_single(productColorId, media_version):
 def set_media_version_number_batch(colorstyles):
     import requests, json
     headers = {"Content-Type": "application/json"}
-    media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
+    media_version_api_url    = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
+    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
     products = {}
     for style,ver in get_query_version_number(colorstyles):
         product_media_version_dict = {}
