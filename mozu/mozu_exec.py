@@ -249,7 +249,7 @@ def main(fileslist):
         elif values.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
             styles_incr_media_version.append(values.get('bf_imageid', locals().get('bf_imageid')))
-
+    print 'styles list ', styles_incr_media_version
     return list(set(sorted(styles_incr_media_version)))
 
 
