@@ -152,8 +152,8 @@ if __name__ == '__main__':
     #parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
     args = sys.argv[1:]
     #parsed = parser.parse_args(args)
-    if len(args) > 2 and args[-1] == 9:
-        batch_process_by_style_list(args)
+    if len(args) > 2 and args[0][0].upper() == 'B':
+        batch_process_by_style_list(args[1:])
     elif len(args) == 2 and args[-1] < 9:
         set_media_version_number_single(args[0],args[1])
     else:
