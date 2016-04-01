@@ -268,4 +268,6 @@ if __name__ == '__main__':
     except IndexError:
         print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
 
+    #from media_version_ctrl import batch_process_by_style_list
+    #incrementer = batch_process_by_style_list(styles_incr)
     print styles_incr
