@@ -123,9 +123,32 @@ def batch_process_by_style_list(colorstyles):
 
 if __name__ == '__main__':
     import sys, json
+    import argparse
+    #
+    # Define and Instantiate parser Base
+    parser = argparse.ArgumentParser(description='Utility functions to get and set media_version attrib') #,add_help=False)
+    #
+    ##############################
+    ## Bluefly Script Related Args
+    ##############################
+    #
+    ######### Style
+    parser.add_argument('--get-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle to get the current media_version')
+    parser.add_argument('--set-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle AND the new media_version to set')
+    parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
+    parser.add_argument('--version', '--media-version', action='store', help='Valid 9 Digit Bluefly Style' )
+    parser.add_argument('--batch', '-b', default=False, action='store_true', help='Set flag if batch inserts are desired and a list of styles numbers are supplied')
+    #
+    ######### Styles List 1 or more
+    parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
+
+
     args = sys.argv[1:]
-    if args[0].upper() == 'BATCH':
-        batch_process_by_style_list(args[1:])
-    else:
-        stylevers = get_media_version_number(args)
+    parsed = parser.parse_args(''.join(args))
+
+    args = sys.argv[1:]
+    if args.get('styles_list') and args.get('batch') is True:
+        batch_process_by_style_list(args.get('styles_list'))
+    elif args.get('styles_list'):
+        stylevers = get_media_version_number(args.get('styles_list'))
         print stylevers
