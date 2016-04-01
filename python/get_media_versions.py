@@ -25,7 +25,7 @@ def query_version_number(colorstyle):
             FROM
               POMGR.PRODUCT_COLOR_DETAIL
             WHERE
-              POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID IN '{0}' """.format(colorstyles)
+              POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID IN {0} """.format(colorstyles)
     else:
         if type(colorstyle) == list:
             colorstyle=colorstyle[0]
