@@ -163,5 +163,5 @@ if __name__ == '__main__':
         print '2'
     else:
         stylevers = get_media_version_number(args)
-        print '3'
+        print '3\n\nNo changes sent\n'
         print stylevers

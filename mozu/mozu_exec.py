@@ -202,6 +202,7 @@ def main(fileslist):
     compiled_instance_vars = compile_todict_for_class_instance_variables(fileslist=fileslist)
     # print type(compiled_instance_vars), '<--Type\tLenCompiledInsVars', len(compiled_instance_vars), '\tKeys: ', compiled_instance_vars.keys()
     # print compiled_instance_vars, "186-MZEXECY"
+    styles_incr_media_version = []
     for key,values in compiled_instance_vars.iteritems():
         # v = include_keys(values, __mozu_image_table_valid_keys__)
         # print "IncludedKeys: {}\n\tkey:\t{}\n\tvalues:\t{}".format(v.items(), key , values.popitem())
@@ -235,6 +236,7 @@ def main(fileslist):
                 else:
                     print "HTTP Status: {}\n Raising Integrity Error".format(create_resource_resp.http_status_code)
                     raise sqlalchemy.exc.IntegrityError()
+                styles_incr_media_version.append(table_args.get('bf_imageid'),locals().get('bf_imageid'))
             except ValueError as ve: #sqlalchemy.exc.IntegrityError:
                 print 'VALUE Error and everything is or will be commented out below because it is in the db already', ve
                 #return 'IntegrityError'
@@ -246,6 +248,9 @@ def main(fileslist):
                 #     print "ENDING ERROR...", values
         elif values.get('mz_imageid'):
             print "KWARGS has MZID: {}".format(values.get('mz_imageid'))
+            styles_incr_media_version.append(values.get('bf_imageid'), locals().get('bf_imageid'))
+
+    return list(set(sorted(styles_incr_media_version)))
 
 
 ## Run in shell as mozu_exec.py *args
@@ -259,6 +264,8 @@ if __name__ == '__main__':
                 insert_list.append(arg)  # '/mnt/Post_Complete/Complete_Archive/xTestFiles/xTestMarketplace/999999/360128501.png'
         insert_list_filepaths = list(set(sorted(insert_list)))
         print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
-        main(fileslist=insert_list_filepaths)
+        styles_incr = main(fileslist=insert_list_filepaths)
     except IndexError:
         print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
+
+    print styles_incr
