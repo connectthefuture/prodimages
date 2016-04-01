@@ -265,9 +265,9 @@ if __name__ == '__main__':
         insert_list_filepaths = list(set(sorted(insert_list)))
         print "filelist_length", len(insert_list_filepaths), insert_list_filepaths
         styles_incr = main(fileslist=insert_list_filepaths)
+        # from media_version_ctrl import batch_process_by_style_list
+        # incrementer = batch_process_by_style_list(styles_incr)
+        print 'End O Line \n\n ', styles_incr
     except IndexError:
         print "To Run in shell you must provide at least 1 file path as an argument. \nArgs Separated by space. \n\t mozu_exec.py \*args"
 
-    #from media_version_ctrl import batch_process_by_style_list
-    #incrementer = batch_process_by_style_list(styles_incr)
-    print 'End O Line \n\n ', styles_incr
