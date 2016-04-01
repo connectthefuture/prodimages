@@ -155,13 +155,13 @@ if __name__ == '__main__':
     # args = parsed.__dict__
     # print args.items()
     args=sys.argv[1:]
-    if len(args) > 2 and len(args[-1]) == 9:
-        print '1'
-        batch_process_by_style_list(args)
-    elif len(args) == 2 and args[-1] < 9:
+    if len(args) == 2 and args[-1] < 9:
         set_media_version_number_single(args[0],args[1])
-        print '2'
+        print '1'
+    elif len(args) >= 1 and len(args[-1]) == 9:
+        print '22'
+        batch_process_by_style_list(args)
     else:
         stylevers = get_media_version_number(args)
-        print '3\n\nNo changes sent\n'
+        print '333\n\nNo changes sent\n'
         print stylevers
