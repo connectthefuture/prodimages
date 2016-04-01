@@ -108,7 +108,7 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
 
 
 def exec_put_data_batch(**kwargs):
-    import requests
+    import requests, json
     media_version_api_url    = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
     QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
     dest_url = kwargs.get('dest_url', QA_media_version_api_url)
