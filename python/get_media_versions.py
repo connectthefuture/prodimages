@@ -145,10 +145,9 @@ if __name__ == '__main__':
 
     args = sys.argv[1:]
     parsed = parser.parse_args(''.join(args))
-
+    print dir(parsed)
     if parsed.get('styles_list') and parsed.get('batch') is True:
         batch_process_by_style_list(parsed.get('styles_list'))
     elif parsed.get('styles_list'):
         stylevers = get_media_version_number(parsed.get('styles_list'))
         print stylevers
-    
