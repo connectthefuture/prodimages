@@ -139,8 +139,7 @@ if __name__ == '__main__':
     ######### Styles List 1 or more
     parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
     args = sys.argv[1:]
-    parsed = parser.parse_args(''.join(args))
-    print parsed.styles_list
+    parsed = parser.parse_args(args)
     if parsed.styles_list and parsed.batch is True:
         batch_process_by_style_list(parsed.styles_list)
     elif parsed.styles_list:
