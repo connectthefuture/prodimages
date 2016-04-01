@@ -59,7 +59,7 @@ def query_version_number(colorstyle):
             styles[str(row['colorstyle'])] = row['media_version']
         return styles
     except sqlalchemy.exc.DatabaseError:
-        print 'This Search needs to have more than 1 style, \nyou returned zero or 1 style'
+        print 'This Search needs to have at least 1 style supplied as args, \nyou returned zero results.'
 
     finally:
         connection.close()
