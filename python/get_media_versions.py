@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+
 # single style or multistyle list
-def get_query_version_number(colorstyle):
+def get_media_version_number(colorstyle):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
@@ -60,10 +61,12 @@ def get_query_version_number(colorstyle):
         connection.close()
 
 
-def set_media_version_number_single(productColorId, media_version):
+def set_media_version_number_single(productColorId, media_version,**kwargs):
     import requests, json
     headers = {"Content-Type": "application/json"}
     media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
+    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
+    dest_url = kwargs.get('dest_url', QA_media_version_api_url)
     update_products_dict = {
                             "products": [{
                             	"productColorId": productColorId,
@@ -74,31 +77,55 @@ def set_media_version_number_single(productColorId, media_version):
                             }],
                             }
     print "Sending Version info for {0} \nData: {1}".format(productColorId,update_products_dict)
-    #res = requests.put(media_version_api_url,data=update_products_dict, headers=headers)
+    res = requests.put(media_version_api_url,data=update_products_dict, headers=headers)
 
 
-def set_media_version_number_batch(colorstyles):
+def build_media_version_number_data_batch(colorstyles):
     import requests, json
+    from collections import defaultdict
     headers = {"Content-Type": "application/json"}
-    media_version_api_url    = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
-    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
     products = {}
-    for style,ver in get_query_version_number(colorstyles):
-        product_media_version_dict = {}
-        product_media_version_dict['productColorId'] = style
-        product_media_version_dict['media_version'] = ver.values()
-        products[style] = product_media_version_dict
-    print "Sending Version info for {0}".format(products)
-
+    products['products'] = []
+    product_styles = {}
+    #prod_style_ver_dict = get_media_version_number(colorstyles)
+    prod_style_ver_dict =  {'382835401': 3, '382835901': 4, '382836901': 4}
+    for style,ver in prod_style_ver_dict.items():
+        product_style_data_item = { "productColorId": style,
+                                     "attributes": [{ "name": "media_version", "value": ver }],
+                                     # "name": "alternate_image1", "value": "N"},
+                                     }
+        product_styles.setdefault(ver, []).append(product_style_data_item)
+        products['products'].append(product_style_data_item)
+    print "\n\nSending Version info for\n", products
+    return products
     #res = requests.put(QA_media_version_api_url,data=products, headers=headers)
 
 
+def exec_put_data_batch(**kwargs):
+    import requests
+    media_version_api_url    = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
+    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
+    dest_url = kwargs.get('dest_url', QA_media_version_api_url)
+    headers = kwargs.get('headers', {"Content-Type": "application/json"} )
+    data = kwargs.get('data', '')
+    if data and headers:
+        res = requests.put(dest_url,data=data,headers=headers)
+        print res
+    else:
+        print 'Either data or Headers not supplied '
 
 
+def batch_process_by_style_list(colorstyles):
+    data = build_media_version_number_data_batch(colorstyles)
+    exec_put_data_batch(data=data)
+    print 'Done with {0}'.format(data)
 
 
 if __name__ == '__main__':
-    import sys
+    import sys, json
     args = sys.argv[1:]
-    stylevers = get_query_version_number(args)
-    print stylevers
+    if args[0].upper() == 'BATCH':
+        batch_process_by_style_list(args[1:])
+    else:
+        stylevers = get_media_version_number(args)
+        print stylevers
