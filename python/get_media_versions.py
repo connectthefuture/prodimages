@@ -77,7 +77,7 @@ def set_media_version_number_single(productColorId, media_version,**kwargs):
                             }],
                             }
     print "Sending Version info for {0} \nData: {1}".format(productColorId,update_products_dict)
-    res = requests.put(media_version_api_url,data=update_products_dict, headers=headers)
+    res = requests.put(dest_url,data=update_products_dict, headers=headers)
 
 
 def build_media_version_number_data_batch(colorstyles):
@@ -122,7 +122,7 @@ def batch_process_by_style_list(colorstyles):
     print 'Done with {0}'.format(data)
 
 def generic_increment_style_single(colorstyle):
-    data = get_media_version_number(colorstyle)
+    data = get_media_version_number(colorstyle).items()
     set_media_version_number_single(data['colorstyle'],data['media_version'])
 
 
