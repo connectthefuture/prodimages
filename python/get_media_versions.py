@@ -130,7 +130,7 @@ def batch_process_by_style_list(colorstyles):
 
 def generic_increment_style_single(colorstyle):
     data = get_media_version_number(colorstyle).items()
-    res = set_media_version_number_single(data[0][0],str(int(data[0][1]) + 1))
+    res = set_media_version_number_single(data[0][0],str(int(data[0][1])))
     return res
 
 if __name__ == '__main__':
