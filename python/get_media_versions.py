@@ -152,8 +152,8 @@ if __name__ == '__main__':
     parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
     #args = sys.argv[1:]
     parsed = parser.parse_args(sys.argv)
-    parsed.__dict__
     args = parsed.__dict__
+    print args
     if len(args) > 2: #and args.items()[-1] == 9:
         print '1'
         batch_process_by_style_list(args.styles_list)
