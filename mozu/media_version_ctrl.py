@@ -94,13 +94,16 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
     prod_style_ver_dict = get_media_version_number(colorstyles)
     #prod_style_ver_dict =  {'382835401': 3, '382835901': 4, '382836901': 4}
     for style,ver in prod_style_ver_dict.items():
-        vernew = str(int(ver) + 1)
-        product_style_data_item = { "productColorId": style,
+        try:
+            vernew = str(int(ver) + 1)
+            product_style_data_item = { "productColorId": style,
                                      "attributes": [{ "name": "media_version", "value": vernew }],
                                      # "name": "alternate_image1", "value": "N"},
                                      }
-        product_styles.setdefault(vernew, []).append(product_style_data_item)
-        products['products'].append(product_style_data_item)
+            product_styles.setdefault(vernew, []).append(product_style_data_item)
+            products['products'].append(product_style_data_item)
+        except TypeError:
+            print 'NoneType Passing 106'
     print "\n\nSending Version info for\n", products
     return products
     res = requests.put(dest_url,data=json.dumps(products), headers=headers)
