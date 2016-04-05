@@ -158,7 +158,7 @@ if __name__ == '__main__':
     # args = parsed.__dict__
     # print args.items()
     args=sys.argv[1:]
-    if len(args) == 2 and args[-1] < 9:
+    if len(args) == 2 and len(args[-1]) < 9:
         set_media_version_number_single(args[0],args[1])
         print '1'
     elif len(args) >= 1 and len(args[-1]) == 9:
