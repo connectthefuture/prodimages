@@ -69,11 +69,11 @@ def set_media_version_number_single(productColorId, media_version,**kwargs):
     dest_url = kwargs.get('dest_url', media_version_api_url)
     update_products_dict = {
                             "products": [{
-                            	"productColorId": productColorId,
-                            	"attributes": [{
-                            		"name": "media_version",
-                            		"value": media_version
-                            	}]
+                                "productColorId": productColorId,
+                                "attributes": [{
+                                    "name": "media_version",
+                                    "value": media_version
+                                }]
                             }],
                             }
     print "Sending Version info for {0} \nData: {1}".format(productColorId,update_products_dict)
