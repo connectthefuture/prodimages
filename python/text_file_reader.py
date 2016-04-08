@@ -21,7 +21,7 @@ parser.add_argument('--file', '-f',
     type=argparse.FileType('R'), help='Provide the full path to the file to be read')
 ##
 ######## Outfile - write
-parser.add_argument('--outfile',
+parser.add_argument('--outfile', '-O',
     type=argparse.FileType('w'), help='The Output Destination Absolute Filepath. Reletive filepaths only is acceptable if output is to current directory')
 #
 parser.add_argument('--options', '-o',
