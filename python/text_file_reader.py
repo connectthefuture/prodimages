@@ -5,8 +5,7 @@
 def fmain(fpath):
     lnlist = []
     print dir(fpath)
-    with open(fpath, mode='rb') as f:
-        lines = [ l for l in f.read().split('\r') ]
+    lines = [ l for l in fpath.read().split('\r') ]
     return lines
 
 def main(url):
