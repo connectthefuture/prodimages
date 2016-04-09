@@ -4,14 +4,14 @@
 
 def fmain(fpath,options):
     lnlist = []
-    print dir(options), options
+    #print dir(options), options
     if options == 'line':
         lines = fpath.read().replace('\r',' ')
     elif options == 'split':
         lines = [ l for l in fpath.read().split('\r') if l is not None ]
     else:
         lines = fpath
-    print options, '<---- Options'
+    # print options, '<---- Options'
     return lines
 
 def main(url):
@@ -40,7 +40,7 @@ parser.add_argument('--options', '-o',
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    print dir(parser.parse_args())
+    # print dir(parser.parse_args())
     parsedargs=parser.parse_args()
     res = fmain(parsedargs.file,parsedargs.options)
     print('\n\n\n\n\n---- END ------\n\n\n\n')
