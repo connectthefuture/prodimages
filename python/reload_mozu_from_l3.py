@@ -48,7 +48,7 @@ def main(styles_list):
     ####
     ## Compile Actual Styles and Filename found and Ready to Send
     loaded_filenames = [f.split('/')[-1].split('.')[0] for f in flist if f is not None]
-    loaded_styles = list(set(sorted([f.split('/')[-1][:9] for f in flist if f is not None])))
+    loaded_styles = list(set(sorted([fn[:9] for fn in loaded_filenames if fn is not None])))
     print 'loaded styles', loaded_styles
     ### Send Collected to Mozu
     import db, mozu_image_util_functions, mozu_exec
