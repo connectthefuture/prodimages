@@ -2,10 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
-def fmain(fpath):
+def fmain(fpath,options):
     lnlist = []
     print dir(fpath)
-    lines = [ l for l in fpath.read().split('\r') ]
+    if options.line:
+        lines = [l for l in fpath.read()]
+    elif options.split:
+        lines = [ l for l in fpath.read().split('\r') ]
+    else:
+        lines = fpath
     return lines
 
 def main(url):
@@ -36,6 +41,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print dir(parser.parse_args())
     parsedargs=parser.parse_args()
-    res = fmain(parsedargs.file)
+    res = fmain(parsedargs.file,parsedargs.options)
     print('\n\n\n\n\n---- END ------\n\n\n\n')
     print res
