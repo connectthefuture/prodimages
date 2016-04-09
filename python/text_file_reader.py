@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser(description='Initial primary script description
 #
 ###### Cmdline arg as Choice for Scripts Actions. What do you want it to do.
 parser.add_argument('--file', '-f',
-    type=argparse.FileType('R'), help='Provide the full path to the file to be read')
+    type=argparse.FileType('r'), help='Provide the full path to the file to be read')
 ##
 ######## Outfile - write
 parser.add_argument('--outfile', '-O',
