@@ -30,7 +30,7 @@ parser.add_argument('--outfile', '-O',
     type=argparse.FileType('w'), help='The Output destination absolute filepath. Reletive filepaths are only acceptable if output is to current directory')
 #
 parser.add_argument('--options', '-o',
-    default='split', choices=['split', 'line', 'replace', 'delete'], help='Choice of Script Actions. Defaults to "split"')
+    default='split', choices=['split', 'line', 'replace', 'delete'], help='Choice of Script Actions. Defaults to [split]')
 
 if __name__ == '__main__':
     args = parser.parse_args()
