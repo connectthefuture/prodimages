@@ -37,7 +37,6 @@ def get_media_version_number(colorstyle):
                 POMGR.PRODUCT_COLOR_DETAIL.ZOOM_IMAGE as "0",
                 POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as "1",
                 POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as "2",
-
                 POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as "3",
                 POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as "4",
                 POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as "5",
@@ -65,7 +64,7 @@ def set_media_version_number_single(productColorId, media_version,**kwargs):
     import requests, json
     headers = {"Content-Type": "application/json"}
     media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
-    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
+    qa_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
     dest_url = kwargs.get('dest_url', media_version_api_url)
     update_products_dict = {
                             "products": [{
@@ -86,7 +85,7 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
     from collections import defaultdict
     headers = {"Content-Type": "application/json"}
     media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
-    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
+    qa_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
     dest_url = kwargs.get('dest_url', media_version_api_url)
     products = {}
     products['products'] = []
@@ -113,7 +112,7 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
 def _exec_put_data_batch(**kwargs):
     import requests, json
     media_version_api_url    = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
-    QA_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
+    qa_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
     dest_url = kwargs.get('dest_url', media_version_api_url)
     headers = kwargs.get('headers', {"Content-Type": "application/json"} )
     data = kwargs.get('data', '')
@@ -136,24 +135,27 @@ def generic_increment_style_single(colorstyle):
     res = set_media_version_number_single(data[0][0],str(int(data[0][1])))
     return res
 
+
+import argparse
+#
+# Define and Instantiate parser Base
+parser = argparse.ArgumentParser(description='Utility functions to get and set media_version attrib') #,add_help=False)
+##############################
+#
+######### Style ##############
+parser.add_argument('--get-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle to get the current media_version')
+parser.add_argument('--set-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle AND the new media_version to set')
+parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
+parser.add_argument('--version', '--media-version', action='store', help='Valid 9 Digit Bluefly Style' )
+parser.add_argument('--batch', '-b', default=False, action='store_true', help='Set flag if batch inserts are desired and a list of styles numbers are supplied')
+#
+######## Styles List 1 or more
+parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
+#
+#
 if __name__ == '__main__':
     import sys, json
-    import argparse
-    #
-    # Define and Instantiate parser Base
-    # parser = argparse.ArgumentParser(description='Utility functions to get and set media_version attrib') #,add_help=False)
-    # ##############################
-    # #
-    # ######### Style ##############
-    # parser.add_argument('--get-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle to get the current media_version')
-    # parser.add_argument('--set-version', default=False, action='store_true', help='Supply a valid 9 digit colorstyle AND the new media_version to set')
-    # parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
-    # parser.add_argument('--version', '--media-version', action='store', help='Valid 9 Digit Bluefly Style' )
-    # parser.add_argument('--batch', '-b', default=False, action='store_true', help='Set flag if batch inserts are desired and a list of styles numbers are supplied')
-    # #
-    # ######## Styles List 1 or more
-    # parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
-    # #args = sys.argv[1:]
+    #args = sys.argv[1:]
     # parsed = parser.parse_args(sys.argv)
     # args = parsed.__dict__
     # print args.items()
