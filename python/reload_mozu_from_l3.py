@@ -44,7 +44,7 @@ def main(styles_list):
         flist = []
         for x in range(1,7,1):
             li1 = create_list_files_to_send(styles_list, imgnum=x, ext=ext, root_dir=root_dir)
-            [ flist.append(f) for f in li1 if not f is not None ]
+            [ flist.append(f) for f in li1 if f is not None ]
     ####
     ## Compile Actual Styles and Filename found and Ready to Send
     loaded_filenames = [f.split('/')[-1].split('.')[0] for f in flist if f is not None]
