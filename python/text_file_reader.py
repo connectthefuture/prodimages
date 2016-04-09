@@ -11,7 +11,7 @@ def fmain(fpath,options):
         lines = [ l for l in fpath.read().split('\r') if l is not None ]
     else: #options ==   :
         lines = fpath
-    # print options, '<---- Options'
+    print options, '<---- Options'
     return lines
 
 def main(url):
@@ -43,5 +43,6 @@ if __name__ == '__main__':
     # print dir(parser.parse_args())
     parsedargs=parser.parse_args()
     res = fmain(parsedargs.file,parsedargs.options)
-    print('\n\n\n\n\n---- END ------\n\n\n\n')
+    print('\n\n--- START ---\n\n')
     print res
+    print('\n\n---- END ----\n\n')
