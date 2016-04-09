@@ -29,5 +29,5 @@ parser.add_argument('--options', '-o',
 
 if __name__ == '__main__':
     print parser.parse_args()
-    print('\n\n\n\n\n----------\n\n\n\n')
+    print('\n\n\n\n\n---- END ------\n\n\n\n')
     #main()
