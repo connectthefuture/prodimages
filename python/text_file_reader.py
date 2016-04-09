@@ -7,7 +7,7 @@ def fmain(fpath):
     with open(fpath, mode='rb') as f:
         lines = [ l for l in f.read().split('\r') ]
     return lines
-        
+
 def main(url):
     import requests
     resp = requests.get(url)
@@ -36,5 +36,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print dir(parser.parse_args())
     parsedargs=parser.parse_args()
+    res = fmain(parsedargs.file)
     print('\n\n\n\n\n---- END ------\n\n\n\n')
-    parsedargs.file)
+    print res
