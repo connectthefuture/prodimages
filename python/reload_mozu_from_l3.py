@@ -61,5 +61,5 @@ def main(styles_list):
 
 if __name__ == '__main__':
     from sys import argv
-    styleslist=argv[1:]
-    main(styleslist)
+    args=argv[1:]
+    main(args)
