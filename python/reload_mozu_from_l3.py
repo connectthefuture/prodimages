@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-## root_dir must have structure like <root_dir>/8888/888888888.png
+## root_dir must have structure .ie <root_dir>/8888/888888888.png
 def create_list_files_to_send(styles_list, imgnum=0, ext='.png', root_dir='/mnt/images'):
-    from os import getcwd, environ, path, chdir
-    import sys
+    from os import environ, path, chdir
+    environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
     # environ['PRD_ENV'] = "1"
     # environ['PYDEBUG'] = "1"
-    environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
     #
+    import sys
     MOZU_CODE_DIR = '/usr/local/batchRunScripts/mozu'
     sys.path.append(MOZU_CODE_DIR)
     chdir(MOZU_CODE_DIR)
