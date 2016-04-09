@@ -9,7 +9,7 @@ def fmain(fpath,options):
         lines = fpath.read().replace('\r',' ')
     elif options == 'split':
         lines = [ l for l in fpath.read().split('\r') if l is not None ]
-    elif options ==   :
+    else: #options ==   :
         lines = fpath
     # print options, '<---- Options'
     return lines
