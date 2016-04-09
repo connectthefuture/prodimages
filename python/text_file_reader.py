@@ -11,6 +11,7 @@ def fmain(fpath,options):
         lines = [ l for l in fpath.read().split('\r') ]
     else:
         lines = fpath
+    print options, '<---- Options'
     return lines
 
 def main(url):
