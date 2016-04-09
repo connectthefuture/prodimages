@@ -20,14 +20,14 @@ def create_list_files_to_send(styles_list, imgnum=0, ext='.png', root_dir='/mnt/
     print ext, imgnum, ' <--- ext and imgnum'
     flist = []
     if imgnum > 0 and imgnum <= 6:
-        for fname in styles_list:
-            #print 'PreCond ', root_dir,fname+ext
-            if fname is not None:
-                src = path.join(root_dir, fname[:4], fname + ext).replace('\n',' ').replace('\r','').replace('  ',' ')
+        for style in styles_list:
+            #print 'PreCond ', root_dir,style+ext
+            if style is not None:
+                src = path.join(root_dir, style[:4], style + ext).replace('\n',' ').replace('\r','').replace('  ',' ')
                 #from RESTClient import MozuRestClient
                 #rest_client = MozuRestClient()
                 #resp = rest_client.send_content(src_filepath=src)
-                #print len(src), len(src[0]),'\n^^src^^\nfname+ext-vv', fname, '\t', ext
+                #print len(src), len(src[0]),'\n^^src^^\nstyle+ext-vv', style, '\t', ext
                 flist.append(src)
     return flist
 
@@ -42,7 +42,7 @@ def main(styles_list):
         flist = create_list_files_to_send(styles_list, imgnum=imgnum, ext=ext, root_dir=root_dir)
     else:
         flist = []
-        for x in range(1,6,1):
+        for x in range(1,7,1):
             li1 = create_list_files_to_send(styles_list, imgnum=x, ext=ext, root_dir=root_dir)
             [ flist.append(f) for f in li1 if not f is not None ]
     ####
