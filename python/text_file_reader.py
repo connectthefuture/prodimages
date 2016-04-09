@@ -4,7 +4,7 @@
 
 def fmain(fpath,options):
     lnlist = []
-    print dir(options)
+    print dir(options), options
     if options.line:
         lines = [l for l in fpath.read()]
     elif options.split:
