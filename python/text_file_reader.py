@@ -2,7 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
-
+def fmain(fpath):
+    lnlist = []
+    with open(fpath, mode='rb') as f:
+        lines = [ l for l in f.read().split('\r') ]
+    return lines
+        
 def main(url):
     import requests
     resp = requests.get(url)
@@ -30,6 +35,6 @@ parser.add_argument('--options', '-o',
 if __name__ == '__main__':
     args = parser.parse_args()
     print dir(parser.parse_args())
-    print parser.parse_args()
+    parsedargs=parser.parse_args()
     print('\n\n\n\n\n---- END ------\n\n\n\n')
-    #main()
+    parsedargs.file)
