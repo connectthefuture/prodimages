@@ -4,7 +4,7 @@
 
 def fmain(fpath):
     lnlist = []
-    print fpath
+    print dir(fpath)
     with open(fpath, mode='rb') as f:
         lines = [ l for l in f.read().split('\r') ]
     return lines
