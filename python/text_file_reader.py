@@ -28,6 +28,8 @@ parser.add_argument('--options', '-o',
     default='split', choices=['split', 'line', 'replace', 'delete'], help='Choice of Script Actions')
 
 if __name__ == '__main__':
+    args = parser.parse_args()
+    print dir(parser.parse_args())
     print parser.parse_args()
     print('\n\n\n\n\n---- END ------\n\n\n\n')
     #main()
