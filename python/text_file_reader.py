@@ -6,7 +6,7 @@ def fmain(fpath,options):
     lnlist = []
     print dir(options), options
     if options == 'line':
-        lines = [ l.replace('\r',' ') for l in fpath.read() if l is not None ]
+        lines = fpath.read().replace('\r',' ')
     elif options == 'split':
         lines = [ l for l in fpath.read().split('\r') if l is not None ]
     else:
