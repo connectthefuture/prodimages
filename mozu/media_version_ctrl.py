@@ -156,17 +156,14 @@ parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, he
 if __name__ == '__main__':
     import sys, json
     #args = sys.argv[1:]
-    # parsed = parser.parse_args(sys.argv)
-    # args = parsed.__dict__
-    # print args.items()
-    args=sys.argv[1:]
-    if len(args) == 2 and len(args[-1]) < 9:
-        set_media_version_number_single(args[0],args[1])
+    parsedargs = parser.parse_args(sys.argv)
+    if len(parsedargs) == 2 and len(parsedargs[-1]) < 9:
+        set_media_version_number_single(parsedargs[0],parsedargs[1])
         print '1'
-    elif len(args) >= 1 and len(args[-1]) == 9:
+    elif len(parsedargs) >= 1 and len(parsedargs[-1]) == 9:
         print '22'
-        batch_process_by_style_list(args)
+        batch_process_by_style_list(parsedargs)
     else:
-        stylevers = get_media_version_number(args)
+        stylevers = get_media_version_number(parsedargs)
         print '333\n\nNo changes sent\n'
         print stylevers
