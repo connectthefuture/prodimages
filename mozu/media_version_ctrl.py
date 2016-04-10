@@ -156,7 +156,7 @@ parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, he
 if __name__ == '__main__':
     import sys, json
     #args = sys.argv[1:]
-    parsedargs = parser.parse_args(sys.argv)
+    parsedargs = parser.parse_args(sys.argv[1:])
     if parsedargs.version and parsedargs.style:
         set_media_version_number_single(parsedargs.style,parsedargs.version)
         print '1'
