@@ -139,7 +139,7 @@ def generic_increment_style_single(colorstyle):
 import argparse
 #
 # Define and Instantiate parser Base
-parser = argparse.ArgumentParser(description='Utility functions to get and set media_version attrib') #,add_help=False)
+parser = argparse.ArgumentParser(description='Utility functions to get and set media_version attrib for image updates and versioning of image url') #,add_help=False)
 ##############################
 #
 ######### Style ##############

@@ -46,4 +46,7 @@ if __name__ == '__main__':
     print('\n\n--- START ---\n\n')
     print res
     print('\n\n---- END ----\n\n')
-    #import sys
+    import sys
+    for line in res:
+        #sys.stderr.write("DEBUG: got line: " + line)
+        sys.stdout.write(line)
