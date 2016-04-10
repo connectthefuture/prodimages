@@ -157,13 +157,13 @@ if __name__ == '__main__':
     import sys, json
     #args = sys.argv[1:]
     parsedargs = parser.parse_args(sys.argv)
-    if len(parsedargs) == 2 and len(parsedargs[-1]) < 9:
-        set_media_version_number_single(parsedargs[0],parsedargs[1])
+    if parsedargs.version and parsedargs.style:
+        set_media_version_number_single(parsedargs.style,parsedargs.version)
         print '1'
-    elif len(parsedargs) >= 1 and len(parsedargs[-1]) == 9:
+    elif parsedargs.styles_list:
         print '22'
-        batch_process_by_style_list(parsedargs)
-    else:
-        stylevers = get_media_version_number(parsedargs)
+        batch_process_by_style_list(parsedargs.styles_list[0])
+    elif parsedargs.style and not parsedargs.styles_list:
+        stylevers = get_media_version_number(parsedargs.style)
         print '333\n\nNo changes sent\n'
         print stylevers
