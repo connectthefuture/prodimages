@@ -167,3 +167,7 @@ if __name__ == '__main__':
         stylevers = get_media_version_number(parsedargs.style)
         print '333\n\nNo changes sent\n'
         print stylevers
+
+    print('\n---- ARGS ----\n\n')
+    print parsedargs.__dict__
+    print('\n\n---- END ----\n')
