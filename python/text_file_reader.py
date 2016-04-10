@@ -25,7 +25,7 @@ def main(url):
 # Define and Instantiate parser Base
 import argparse
 #####
-parser = argparse.ArgumentParser(description='Initial primary script description and title') #,add_help=False)
+parser = argparse.ArgumentParser(description='Initial primary script description and title', add_help=True)
 #
 ###### Cmdline arg as Choice for Scripts Actions. What do you want it to do.
 parser.add_argument('--file', '-f',
