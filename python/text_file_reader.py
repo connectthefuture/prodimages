@@ -47,10 +47,10 @@ if __name__ == '__main__':
     print res
     print('\n\n---- END ----\n\n')
     import sys
-    ret = []
-    for line in res:
+    print dir(res), '<-- dirRes' #ret = []
+    #for line in res:
         #sys.stderr.write("DEBUG: got line: " + line)
-        ret.append(line)
-    sys.stdout.write(ret)
+    #    ret.append(line)
+    sys.stdout.write(res)
     sys.stdout.flush()
     sys.exit(0)
