@@ -161,7 +161,7 @@ if __name__ == '__main__':
         set_media_version_number_single(parsedargs.style,parsedargs.version)
         print '1'
     elif parsedargs.styles_list:
-        print '22'
+        print '22', parsedargs.styles_list[0]
         batch_process_by_style_list(parsedargs.styles_list[0])
     elif parsedargs.style and not parsedargs.styles_list:
         stylevers = get_media_version_number(parsedargs.style)
