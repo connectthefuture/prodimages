@@ -177,16 +177,16 @@ def compile_todict_for_class_instance_variables(fileslist=None, **kwargs):
 def include_keys(dictionary, keys):
     """Filters a dict by only including certain keys only."""
     key_set = set(keys) & set(dictionary.keys())
-    return {key: dictionary[key] for key in key_set}
+    return dict([(key, dictionary[key]) for key in key_set])
 
 
 @log
 def merge_properties(obj1, obj2):
-    for property in obj1.__dict__:
-        if not callable(obj1.__dict__[property]):
-            value = getattr(obj1,property)
+    for prop in obj1.__dict__:
+        if not callable(obj1.__dict__[prop]):
+            value = getattr(obj1,prop)
             if value is not None:
-                setattr(obj2, property, value)
+                setattr(obj2, prop, value)
     return obj2
 
 
