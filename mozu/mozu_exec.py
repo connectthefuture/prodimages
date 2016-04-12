@@ -164,7 +164,7 @@ def upload_new(**kwargs):
             update_db = mozu_image_table.update(values=dict(**table_args),whereclause=mozu_image_table.c.bf_imageid == table_args['bf_imageid'])
             print 'Updating after IntegrityERR with args--> ', kwargs     # # Insert to mz_imageid + **kwargs to Oracle
             update_db.execute()
-    return content_response
+        return content_response
 
 
 #######################################
