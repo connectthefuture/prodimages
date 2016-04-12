@@ -101,6 +101,31 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
     return products
 
 
+def build_image_attribs_data_batch(colorstyles,**kwargs):
+    products = {}
+    products['products'] = []
+    product_styles = {}
+    prod_style_ver_dict = get_media_version_number(colorstyles)
+    #prod_style_ver_dict =  {'382835401': 3, '382835901': 4, '382836901': 4}
+    for style,ver in prod_style_ver_dict.items():
+        try:
+            vernew = str(int(ver) + 1)
+            product_style_data_item = { "productColorId": style,
+                                     "attributes": [{ "name": "media_version",     "value": vernew,
+                                                      "name": "alternate_image_1", "value": "N",
+                                                      "name": "alternate_image_2", "value": "N",
+                                                      "name": "alternate_image_3", "value": "N",
+                                                      "name": "alternate_image_4", "value": "N",
+                                                      "name": "alternate_image_5", "value": "N"}],
+                                     }
+            product_styles.setdefault(vernew, []).append(product_style_data_item)
+            products['products'].append(product_style_data_item)
+        except TypeError:
+            print 'NoneType Passing 106'
+    print "\n\nSending Version info for\n", products
+    return products
+
+
 def _exec_put_data_batch(**kwargs):
     import requests, json
     media_version_api_url    = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
@@ -113,7 +138,7 @@ def _exec_put_data_batch(**kwargs):
         print res.headers, dest_url
         return res
     else:
-        print 'Either data or Headers not supplied '
+        print 'Either data or Headers not supplied'
 
 
 def batch_process_by_style_list(colorstyles):

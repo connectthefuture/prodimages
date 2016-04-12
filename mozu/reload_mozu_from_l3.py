@@ -51,7 +51,7 @@ def main(styles_list):
     loaded_styles = list(set(sorted([fn[:9] for fn in loaded_filenames if fn is not None])))
     print 'loaded styles', loaded_styles
     ### Send Collected to Mozu
-    import db, mozu_image_util_functions, mozu_exec
+    import mozu_exec
     print('Starting.\nReloading {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(styles_list), root_dir))
     mozu_exec.main(flist)
     print('Finished.\nReloaded {0} Images for {1} Styles\n{2} Total Files from {3} to Mozu'.format(ext.lstrip('.').upper(), len(loaded_styles), len(loaded_filenames),root_dir))
