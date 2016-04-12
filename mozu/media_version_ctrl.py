@@ -81,12 +81,6 @@ def set_media_version_number_single(productColorId, media_version,**kwargs):
 
 
 def build_media_version_number_data_batch(colorstyles,**kwargs):
-    import requests, json
-    from collections import defaultdict
-    headers = {"Content-Type": "application/json"}
-    media_version_api_url = 'http://ccapp102.l3.bluefly.com:17080/manager/api/v2/productsattributes/update'
-    qa_media_version_api_url = 'http://manager.qa.bluefly.com/manager/api/v2/productsattributes/update'
-    dest_url = kwargs.get('dest_url', media_version_api_url)
     products = {}
     products['products'] = []
     product_styles = {}
@@ -105,8 +99,6 @@ def build_media_version_number_data_batch(colorstyles,**kwargs):
             print 'NoneType Passing 106'
     print "\n\nSending Version info for\n", products
     return products
-    res = requests.put(dest_url,data=json.dumps(products), headers=headers)
-    return res
 
 
 def _exec_put_data_batch(**kwargs):
