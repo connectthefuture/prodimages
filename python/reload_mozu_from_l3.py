@@ -54,7 +54,13 @@ def main(styles_list):
     import db, mozu_image_util_functions, mozu_exec
     print('Starting.\nReloading {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(styles_list), root_dir))
     mozu_exec.main(flist)
-    print('Finished.\nReloaded {0} Images for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(flist), root_dir))
+    print('Finished.\nReloaded {0} Images for {1} Styles\n{2} Total Files from {3} to Mozu'.format(ext.lstrip('.').upper(), len(loaded_styles), len(loaded_filenames),root_dir))
+
+    ## Set Media Version for Loaded Styles
+    import media_version_ctrl
+    media_version_ctrl.batch_process_by_style_list(loaded_styles)
+    print('Finished.\nMedia Incr for {1} Styles from {2} to Mozu'.format(ext.lstrip('.').upper(), len(loaded_styles), root_dir))
+    ## Return File Path of Loaded Styles for further ops if needed
     return loaded_filenames
 
 
