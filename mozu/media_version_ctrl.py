@@ -112,11 +112,11 @@ def build_image_attribs_data_batch(colorstyles,**kwargs):
             vernew = str(int(ver) + 1)
             product_style_data_item = { "productColorId": style,
                                      "attributes": [{ "name": "media_version",     "value": vernew,
-                                                      "name": "alternate_image_1", "value": "N",
-                                                      "name": "alternate_image_2", "value": "N",
-                                                      "name": "alternate_image_3", "value": "N",
-                                                      "name": "alternate_image_4", "value": "N",
-                                                      "name": "alternate_image_5", "value": "N"}],
+                                                      "name": "alternate_image_1", "value": kwargs.get("alt01", ""),
+                                                      "name": "alternate_image_2", "value": kwargs.get("alt02", ""),
+                                                      "name": "alternate_image_3", "value": kwargs.get("alt03", ""),
+                                                      "name": "alternate_image_4", "value": kwargs.get("alt04", ""),
+                                                      "name": "alternate_image_5", "value": kwargs.get("alt05", "")}],
                                      }
             product_styles.setdefault(vernew, []).append(product_style_data_item)
             products['products'].append(product_style_data_item)
