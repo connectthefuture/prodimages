@@ -34,7 +34,7 @@ class MozuAlchemyClient:
     pass
 
 
-class MozuRestClient:
+class MozuRestClient(object):
     """Class to interact with Mozus REST API interface -- MozuRestClient"""
 
     # Class http_status_code
