@@ -141,6 +141,12 @@ def _exec_put_data_batch(**kwargs):
         print 'Either data or Headers not supplied'
 
 
+def batch_altimg_toggle_by_style_list(colorstyles, **kwargs):
+    data = build_image_attribs_data_batch(colorstyles, **kwargs)
+    res = _exec_put_data_batch(data=data)
+    print 'Done with {0}'.format(data)
+    return res
+
 def batch_process_by_style_list(colorstyles):
     data = build_media_version_number_data_batch(colorstyles)
     res = _exec_put_data_batch(data=data)
@@ -165,7 +171,7 @@ parser.add_argument('--set-version', default=False, action='store_true', help='S
 parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
 parser.add_argument('--version', '--media-version', action='store', help='Valid 9 Digit Bluefly Style' )
 parser.add_argument('--batch', '-b', default=False, action='store_true', help='Set flag if batch inserts are desired and a list of styles numbers are supplied')
-parser.add_argument('--altswitch', default=False, action='store_true', help='Set flag if batch alt image on/off is desired and a list of styles numbers are supplied')
+parser.add_argument('--altswitch', default="", action='store', help='Set flag if batch alt image on/off is desired and a list of styles numbers are supplied')
 
 #
 ######## Styles List 1 or more
@@ -176,7 +182,10 @@ if __name__ == '__main__':
     import sys, json
     #args = sys.argv[1:]
     parsedargs = parser.parse_args(sys.argv[1:])
-    if parsedargs.version and parsedargs.style:
+    if parsedargs.altswitch:
+        altoff = "alt0{}".format(int(parsedargs.altswitch) + 1)
+        batch_altimg_toggle_by_style_list(parsedargs.styles_list[0], altoff=altoff)
+    elif parsedargs.version and parsedargs.style:
         set_media_version_number_single(parsedargs.style,parsedargs.version)
         print '1'
     elif parsedargs.styles_list:
