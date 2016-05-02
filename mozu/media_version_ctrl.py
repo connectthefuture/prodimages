@@ -171,7 +171,7 @@ parser.add_argument('--set-version', default=False, action='store_true', help='S
 parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
 parser.add_argument('--version', '--media-version', action='store', help='Valid 9 Digit Bluefly Style' )
 parser.add_argument('--batch', '-b', default=False, action='store_true', help='Set flag if batch inserts are desired and a list of styles numbers are supplied')
-parser.add_argument('--altswitch', default="", action='store', help='Set flag if batch alt image on/off is desired and a list of styles numbers are supplied')
+parser.add_argument('--alt-toggle', '-a', default="", action='store', help='Add Image Number to turn image off if batch alt image on/off is desired and a list of styles numbers are supplied.\n\tie. alt01 is image number 2, so you would enter 2 for this field to turn alt01 off')
 
 #
 ######## Styles List 1 or more
@@ -182,8 +182,8 @@ if __name__ == '__main__':
     import sys, json
     #args = sys.argv[1:]
     parsedargs = parser.parse_args(sys.argv[1:])
-    if parsedargs.altswitch:
-        altoff = "alt0{}".format(int(parsedargs.altswitch) + 1)
+    if parsedargs.alt_toggle:
+        altoff = "alt0{}".format(int(parsedargs.alt_toggle) + 1)
         batch_altimg_toggle_by_style_list(parsedargs.styles_list[0], altoff=altoff)
     elif parsedargs.version and parsedargs.style:
         set_media_version_number_single(parsedargs.style,parsedargs.version)
