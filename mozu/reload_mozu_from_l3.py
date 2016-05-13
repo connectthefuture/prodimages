@@ -13,13 +13,14 @@ def create_list_files_to_send(styles_list, imgnum=0, ext='.png', root_dir='/mnt/
     sys.path.append(MOZU_CODE_DIR)
     chdir(MOZU_CODE_DIR)
     #######
-    if imgnum > 1 and imgnum <= 6:
+
+    if 1 < imgnum <= 6:
         ext= "_alt0{0}{1}".format(str(imgnum-1), ext)
     else:
         ext = ext
     print ext, imgnum, ' <--- ext and imgnum'
     flist = []
-    if imgnum > 0 and imgnum <= 6:
+    if 0 < imgnum <= 6:
         for style in styles_list:
             #print 'PreCond ', root_dir,style+ext
             if style is not None:
