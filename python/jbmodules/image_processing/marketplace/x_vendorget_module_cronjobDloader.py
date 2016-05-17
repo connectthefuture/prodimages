@@ -9,7 +9,7 @@ urllib3.contrib.pyopenssl.inject_into_urllib3()
 urllib3.disable_warnings()
 
 #global single_flag
-# 
+#
 # update_query="""SELECT DISTINCT
 #                   POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle,
 #                   POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER          AS alt,
@@ -199,14 +199,12 @@ def get_exif_all_data(image_filepath):
 #     TOKENS_FILE = 'tokens_priv.pkl'
 #     CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
 #     CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
-
 #     from os import chdir, path, curdir
 #     ## Check for stored tokens
 #     import cPickle as pickle
 #     initdir = path.abspath(curdir)
 #     #chdir(path.dirname(path.realpath(__file__)))
 #     #TOKENS_FILE = 'tokens.pkl'
-
 #     if path.isfile(TOKENS_FILE):
 #         import requests, json
 #         #with open(TOKENS_FILE,'rb') as fr:
@@ -217,16 +215,13 @@ def get_exif_all_data(image_filepath):
 #             except:
 #                 valid_refresh_token = None
 #                 pass
-
 #             if valid_refresh_token is not None:
 #                 pass
 #             else:
 #                 print 'Valid Refresh is None'
 #                 return
-
 #             #else:
 #             #    oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
-
 #         box_api_token_root = "https://app.box.com/api/oauth2/token"
 #         data = {
 #              ##'Authorization': "Bearer " + access_token,
@@ -245,11 +240,9 @@ def get_exif_all_data(image_filepath):
 #         try:
 #             access_token = newcreds['access_token']
 #             refresh_token = newcreds['refresh_token']
-
 #             ## Replace old cred dumping new creds to tokens.pkl
 #             ##---NOTE---## refresh token is valid for 60 days,
 #             ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
-
 #             with open(TOKENS_FILE,'wb') as fw:
 #                 pickle.dump((access_token, refresh_token,),  fw)
 #                 print('BoxSuccess')
