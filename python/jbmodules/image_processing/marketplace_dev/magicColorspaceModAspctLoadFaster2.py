@@ -773,7 +773,7 @@ def main(**kwargs):
                 sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
                 sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
                 sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
-                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
+                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
 
                 #chdir('/usr/local/batchRunScripts/mozu')
                 import mozu_exec, mozu_image_util_functions

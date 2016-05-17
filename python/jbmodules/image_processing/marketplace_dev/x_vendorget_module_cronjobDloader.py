@@ -836,7 +836,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
     countimage = 0
     countstyle = 0
     from os import environ

@@ -67,7 +67,7 @@ class Task(object):
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
-        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace')
+        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
         self.img = img
         self.rgbmean = rgbmean
         self.destdir = destdir
