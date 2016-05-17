@@ -10,7 +10,8 @@ urllib3.disable_warnings()
 
 #global single_flag
 #
-update_query="""SELECT DISTINCT
+def update_q(**kwargs):
+    update_query="""SELECT DISTINCT
                   POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle,
                   POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER          AS alt,
                   POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID             AS vendor_name,
@@ -36,6 +37,7 @@ update_query="""SELECT DISTINCT
                   AND POMGR.SUPPLIER_INGEST_STYLE.modified_date >= POMGR.SUPPLIER_INGEST_STYLE.created_date
                 ORDER BY vendor_name Nulls Last, img_ingest_dt DESC Nulls Last,  1,  colorstyle Nulls Last
                 """.format(kwargs.get(vendor, "_"), kwargs.get(str(date_range_int), "4"))
+    return update_query
 
 def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None, ALL=None, **kwargs):
     import sqlalchemy,sys
@@ -88,7 +90,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
     ##
     connection = orcl_engine.connect()
     if kwargs.get('q'):
-        query_marketplace_inprog = kwargs.get('q')
+        query_marketplace_inprog = update_q(**locals())
     print query_marketplace_inprog
     result = connection.execute(query_marketplace_inprog)
     styles = {}
@@ -920,7 +922,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
 if __name__ == '__main__':
     import sys
     if sys.argv[1] == 'UPDATE':
-        main(q=update_query)
+        main(q='UPDATE')
     else:
         try:
             vendor = sys.argv[1]
