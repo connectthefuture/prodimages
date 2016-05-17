@@ -36,7 +36,7 @@ def update_q(**kwargs):
                   AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3
                   AND POMGR.SUPPLIER_INGEST_STYLE.modified_date >= POMGR.SUPPLIER_INGEST_STYLE.created_date
                 ORDER BY vendor_name Nulls Last, img_ingest_dt DESC Nulls Last,  1,  colorstyle Nulls Last
-                """.format(kwargs.get(vendor, "_"), kwargs.get(str(date_range_int), "4"))
+                """.format(kwargs.get('vendor', '_'), kwargs.get('date_range_int', '4'))
     return update_query
 
 def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None, ALL=None, **kwargs):
