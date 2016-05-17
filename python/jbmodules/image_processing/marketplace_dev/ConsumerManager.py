@@ -22,9 +22,9 @@ global imgdest_jpg_mozu_loaded
 imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 mozu_sending_dir = environ.get('MOZU_HIERARCHY', '/mnt/Post_Complete/Complete_Archive/MozuRoot')
 try:
-    makedirs(archive)
-    makedirs(imgdest_jpg_mozu)
-    makedirs(imgdest_jpg_mozu_loaded)
+    makedirs(mozu_sending_dir)
+    #makedirs(imgdest_jpg_mozu)
+    #makedirs(imgdest_jpg_mozu_loaded)
 except:
     pass
 
