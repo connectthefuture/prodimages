@@ -887,13 +887,6 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     if vendor != '_' or vendor_brand:
         print res, ' <-- CoercedUnicode Failed Cuz of None Type'
         import os.path
-        #if res is not None and os.path.isdir(res):
-        #    root_img_dir = res
-        #    print ' If Vend/VendBrd ResIsDir rootimgdir --> ', res
-        #elif os.path.isdir(os.path.join(dest_root, vendor)):
-        #    root_img_dir = os.path.join(dest_root, vendor, '*')
-        #    print ' If Vend/VendBrd ResNOT-Dir rootimgdir then res --> ', root_img_dir, res
-        #else:
         if kwargs.get('root_img_dir', environ.get('ROOT_IMG_DIR', '')):
             root_img_dir = dest_root
         elif ALL:
@@ -913,8 +906,6 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     import os
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     import multiprocmagick2 as multiprocmagick2
-    #import jbmodules.image_processing.marketplace.multiprocmagick2 as multiprocmagick2
-
     #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
     print 'Single Flaggin It with --> ', single_flag, '\n', urlsdload_list
     ## This is where almost all the work begins...
