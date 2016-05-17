@@ -76,7 +76,9 @@ def funkRunner3(root_img_dir=None, single_flag=None):
             imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
         else:
             imagesGlob = os.path.join(root_img_dir, '*/*/*/{0}_[1-6].??[gG]'.format(single_flag))
-
+    elif os.environ.get('ROOT_IMG_DIR'):
+        root_img_dir = os.environ.get('ROOT_IMG_DIR')
+        imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
     else:
         imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
 
@@ -126,6 +128,8 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     else:
         print 'multproc2', single_flag, len(imagesGlob), '<-- LENGlob'
 
+    if img_dict and type(img_dict) == dict:
+        return img_dict
     ########## SIX ##########
     # Delete em all
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':

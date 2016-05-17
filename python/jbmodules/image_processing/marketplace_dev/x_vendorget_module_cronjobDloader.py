@@ -10,32 +10,32 @@ urllib3.disable_warnings()
 
 #global single_flag
 #
-# update_query="""SELECT DISTINCT
-#                   POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle,
-#                   POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER          AS alt,
-#                   POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID             AS vendor_name,
-#                   POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND          AS vendor_brand,
-#                   POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE          AS vendor_style,
-#                   POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID              AS genstyleid,
-#                   POMGR.PRODUCT_COLOR.COPY_READY_DT          AS copy_ready_dt,
-#                   POMGR.PRODUCT_COLOR.IMAGE_READY_DT         AS image_ready_dt,
-#                   POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE   AS img_ingest_dt,
-#                   POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE   AS style_ingest_dt,
-#                   POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt,
-#                   POMGR.PRODUCT_COLOR.ACTIVE                        AS active,
-#                   POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY      AS product_folder,
-#                   POMGR.SUPPLIER_INGEST_IMAGE.URL                   AS image_url
-#                 FROM POMGR.SUPPLIER_INGEST_STYLE
-#                 LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID
-#                 INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR
-#                 WHERE pomgr.supplier_ingest_image.created_date >= sysdate - {0}
-#                   AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{1}%'
-#                   AND POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL
-#                   AND POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER  <= 6
-#                   AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3
-#                   AND POMGR.SUPPLIER_INGEST_STYLE.modified_date >= POMGR.SUPPLIER_INGEST_STYLE.created_date
-#                 ORDER BY vendor_name Nulls Last, img_ingest_dt DESC Nulls Last,  1,  colorstyle Nulls Last
-#                 """.format(kwargs.get(vendor, "_"), kwargs.get(str(date_range_int), "4"))
+update_query="""SELECT DISTINCT
+                  POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle,
+                  POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER          AS alt,
+                  POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID             AS vendor_name,
+                  POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND          AS vendor_brand,
+                  POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE          AS vendor_style,
+                  POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID              AS genstyleid,
+                  POMGR.PRODUCT_COLOR.COPY_READY_DT          AS copy_ready_dt,
+                  POMGR.PRODUCT_COLOR.IMAGE_READY_DT         AS image_ready_dt,
+                  POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE   AS img_ingest_dt,
+                  POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE   AS style_ingest_dt,
+                  POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt,
+                  POMGR.PRODUCT_COLOR.ACTIVE                        AS active,
+                  POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY      AS product_folder,
+                  POMGR.SUPPLIER_INGEST_IMAGE.URL                   AS image_url
+                FROM POMGR.SUPPLIER_INGEST_STYLE
+                LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID
+                INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR
+                WHERE pomgr.supplier_ingest_image.created_date >= sysdate - {0}
+                  AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{1}%'
+                  AND POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL
+                  AND POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER  <= 6
+                  AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3
+                  AND POMGR.SUPPLIER_INGEST_STYLE.modified_date >= POMGR.SUPPLIER_INGEST_STYLE.created_date
+                ORDER BY vendor_name Nulls Last, img_ingest_dt DESC Nulls Last,  1,  colorstyle Nulls Last
+                """.format(kwargs.get(vendor, "_"), kwargs.get(str(date_range_int), "4"))
 
 def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None, ALL=None, **kwargs):
     import sqlalchemy,sys
@@ -49,7 +49,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
     except IndexError:
         pass
     #print vendor_brand, "Vendorbrand"
-    connection = orcl_engine.connect()
+
     if po_number:
         if ALL == 'Image':
             query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE (POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.PO_LINE.PO_HDR_ID LIKE '%{0}%' AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(po_number)
@@ -86,6 +86,9 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
     ## WHERE POMGR.PO_LINE.PO_HDR_ID = '" + ponum + "'"
     ## AND POMGR.PRODUCT_COLOR.COPY_READY_DT IS NOT NULL
     ##
+    connection = orcl_engine.connect()
+    if kwargs.get('q'):
+        query_marketplace_inprog = kwargs.get('q')
     print query_marketplace_inprog
     result = connection.execute(query_marketplace_inprog)
     styles = {}
@@ -98,14 +101,14 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
         styledata['vendor_style'] = row['vendor_style']
         styledata['product_folder'] = row['product_folder']
         styledata['image_url'] = row['image_url']
-        styledata['download_status'] = row['download_status']
+        # styledata['download_status'] = row['download_status']
         styledata['alt'] = row['alt']
         styledata['genstyleid'] = row['genstyleid']
         styledata['copy_ready_dt'] = row['copy_ready_dt']
         styledata['image_ready_dt'] = row['image_ready_dt']
         styledata['production_complete_dt'] = row['production_complete_dt']
         styledata['active'] = row['active']
-        styledata['third_supplierid'] = row['third_supplierid']
+        # styledata['third_supplierid'] = row['third_supplierid']
         styledata['ingest_dt'] = row['ingest_dt']
         style_alt = "{0}_{1}".format(row['colorstyle'], row['alt'])
         #consigstyle['vendor_style'] = row['vendor_style']
@@ -909,29 +912,33 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
     print 'Single Flaggin It with --> ', single_flag, '\n', urlsdload_list
     ## This is where almost all the work begins...
-    multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_flag=single_flag)
-    print 'Done With multiprocmagick --> ', root_img_dir
-
+    imgs_processed = multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_flag=single_flag)
+    print 'Done With multiprocmagick --> ', imgs_processed
+    if imgs_processed:
+        return imgs_processed
 
 if __name__ == '__main__':
     import sys
-    try:
-        vendor = sys.argv[1]
-        # Uncomment and complete to use po number in SQL query
-        # if vendor.isdigit() and len(vendor) == 6:
-        #     po_number = vendor
-        # else: pass
+    if sys.argv[1] == 'UPDATE':
+        main(q=update_query)
+    else:
         try:
-            vendor_brand = sys.argv[2]
-            ALL = ''
-            if sys.argv[2][-3:].upper() == 'ALL' or sys.argv[2].isdigit() == True or sys.argv[2].lower() == 'url':
-                ALL = sys.argv[2]
-                vendor_brand = ''
-            main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
+            vendor = sys.argv[1]
+            # Uncomment and complete to use po number in SQL query
+            # if vendor.isdigit() and len(vendor) == 6:
+            #     po_number = vendor
+            # else: pass
+            try:
+                vendor_brand = sys.argv[2]
+                ALL = ''
+                if sys.argv[2][-3:].upper() == 'ALL' or sys.argv[2].isdigit() == True or sys.argv[2].lower() == 'url':
+                    ALL = sys.argv[2]
+                    vendor_brand = ''
+                main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
+            except IndexError:
+                main(vendor=vendor)
         except IndexError:
-            main(vendor=vendor)
-    except IndexError:
-        main()
+            main()
 
 
 ## Its the Goods! 0307150250
