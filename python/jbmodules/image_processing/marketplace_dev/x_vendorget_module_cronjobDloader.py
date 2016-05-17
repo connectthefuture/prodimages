@@ -73,7 +73,10 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
     for row in result:
         styledata = {}
         styledata['colorstyle'] = row['colorstyle']
-        styledata['po_number'] = row['po_number']
+        try:
+            styledata['po_number'] = row['po_number']
+        except sqlalchemy.exc.NoSuchColumnError:
+            styledata['po_number'] = '999999'
         styledata['vendor_name'] = row['vendor_name']
         styledata['vendor_brand'] = row['vendor_brand']
         styledata['vendor_style'] = row['vendor_style']
