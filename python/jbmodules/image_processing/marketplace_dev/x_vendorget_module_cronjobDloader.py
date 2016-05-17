@@ -861,8 +861,12 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     testflag = str(vendor)
     if testflag.isdigit() and len(testflag) == 9:
         single_flag = str(vendor)
-    marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
 
+    if not kwargs.get('q'):
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
+    else:
+        q = kwargs.get('q')
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, q=q)
     #########
     #  Create 2 item tuple list of every style with valid incomplete urls
     #  Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
