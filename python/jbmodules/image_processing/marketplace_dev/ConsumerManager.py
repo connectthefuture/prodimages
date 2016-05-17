@@ -6,7 +6,7 @@ import multiprocessing
 from Queue import Empty
 
 ### Date Defs
-from os import chdir, path, curdir, makedirs
+from os import chdir, path, curdir, makedirs, environ
 import datetime, glob, shutil
 
 ######
@@ -20,7 +20,7 @@ global imgdest_jpg_mozu
 imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
 global imgdest_jpg_mozu_loaded
 imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
-
+mozu_sending_dir = environ.get('MOZU_HIERARCHY', '/mnt/Post_Complete/Complete_Archive/MozuRoot')
 try:
     makedirs(archive)
     makedirs(imgdest_jpg_mozu)
@@ -62,6 +62,7 @@ class Task(object):
     def __init__(self, img, rgbmean, destdir):
         import tempfile, shutil
         import sys
+        from os import environ, path
         sys.path.append('/usr/local/batchRunScripts/mozu')
         sys.path.append('/usr/local/batchRunScripts/python')
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
@@ -70,25 +71,37 @@ class Task(object):
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
         self.img = img
         self.rgbmean = rgbmean
-        self.destdir = destdir
-        self.pngout = ''
+        self.destdir          = destdir
+        self.mozu_sending_dir = mozu_sending_dir
+        self.pngout           = ''
+        self.mozu_out         = ''
 
     def __call__(self):
         import jbmodules
         import shutil
         from jbmodules import image_processing
-        from jbmodules.image_processing import marketplace, magick_tweaks
-        import jbmodules.image_processing.marketplace.magicColorspaceModAspctLoadFaster2 as magickProc2
+        from jbmodules.image_processing import marketplace_dev, magick_tweaks
+        import jbmodules.image_processing.marketplace_dev.magicColorspaceModAspctLoadFaster2 as magickProc2
         import jbmodules.image_processing.magick_tweaks.convert_img_srgb
         jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
         print self.img, ' <-- self.img ', self.rgbmean
         try:
+            if self.mozu_sending_dir:
+                _mozu_send_subdir = path.join(self.mozu_sending_dir, self.img.split('/')[-1][:4])
+                self.mozu_out = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=_mozu_send_subdir)
+                with open(path.join(self.mozu_sending_dir, todaysdate, 'index.txt'), mode='w') as fwrite:
+                    logged_line = '{0}\t{1}'.format(todaysdatefullsecs, self.mozu_out)
+                    fwrite.write(logged_line)
             self.pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
             ## TODO: Possible insertion of Mozu and/or GoogleDrive upload and key exchange
             ## COPY TO MOZU DAILY DIR DEFINED AS GLOBAL ABOVE
-            shutil.copy2(self.pngout, imgdest_jpg_mozu)
-            magickProc2.subproc_magick_large_jpg(self.pngout, destdir=self.destdir)
-            ret = magickProc2.subproc_magick_medium_jpg(self.pngout, destdir=self.destdir)
+            #shutil.copy2(self.pngout, imgdest_jpg_mozu)
+            if self.mozu_out:
+                magickProc2.subproc_magick_large_jpg(self.mozu_out, destdir=self.destdir)
+                ret = magickProc2.subproc_magick_medium_jpg(self.mozu_out, destdir=self.destdir)
+            else:
+                magickProc2.subproc_magick_large_jpg(self.png_out, destdir=self.destdir)
+                ret = magickProc2.subproc_magick_medium_jpg(self.png_out, destdir=self.destdir)
             # try:
             #     ############################
             #     ###### mozu

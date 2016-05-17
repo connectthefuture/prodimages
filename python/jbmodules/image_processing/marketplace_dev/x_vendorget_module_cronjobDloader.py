@@ -902,11 +902,51 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     if imgs_processed:
         return imgs_processed
 
+
+import argparse
+#
+# Define and Instantiate parser Base
+parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports', add_help=True)
+##############################
+#
+######### Style ##############
+parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
+parser.add_argument('--style', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
+parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Valid 9 Digit Bluefly Style' )
+parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by brand name')
+parser.add_argument('--days', '-d', action='store', help='Number of days prior to include in the scope of the import')
+parser.add_argument('--UPDATE', '-U', action='store_true', help='Only Process Updated images and do not include new styles')
+parser.add_argument('--ALL', '-A', action='store_true', default=False, help='Get both Incomplete and Complete to Import')
+
+#
+######## Styles List 1 or more
+# #
+# #
+# if __name__ == '__main__':
+#     import sys, json
+#     #args = sys.argv[1:]
+#     parsedargs = parser.parse_args(sys.argv[1:])
+#     if parsedargs.alt_toggle:
+#         altoff = "alt0{}".format(int(parsedargs.alt_toggle) + 1)
+#         batch_altimg_toggle_by_style_list(parsedargs.styles_list[0], altoff=altoff)
+#         print '0-Zero-Toggle'
+#     elif parsedargs.version and parsedargs.style:
+#         set_media_version_number_single(parsedargs.style,parsedargs.version)
+#         print '1'
+#     elif parsedargs.styles_list:
+#         print '22', parsedargs.styles_list[0]
+#         batch_process_by_style_list(parsedargs.styles_list[0])
+#     elif parsedargs.style and not parsedargs.styles_list:
+#         stylevers = get_media_version_number(parsedargs.style)
+#         print '333\n\nNo changes sent\n'
+#         print stylevers
+
 if __name__ == '__main__':
     import sys
+    parsedargs = parser.parse_args(sys.argv[1:])
     if sys.argv[1] == 'UPDATE':
         main(q='UPDATE')
-    else:
+    elif parsedargs.version and parsedargs.style:
         try:
             vendor = sys.argv[1]
             # Uncomment and complete to use po number in SQL query
