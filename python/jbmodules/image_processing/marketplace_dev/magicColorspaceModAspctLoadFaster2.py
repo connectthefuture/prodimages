@@ -696,14 +696,14 @@ def upload_imagedrop(root_dir):
         pass
 
 
-def main(root_img_dir=None):
+def main(**kwargs):
     import sys,glob,shutil,os,re
     from image_processing.magick_tweaks import convert_img_srgb
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')
 
-    if not root_img_dir:
+    if not kwargs.get('root_img_dir', os.environ.get('ROOT_IMG_DIR', '')):
         try:
             root_img_dir = sys.argv[1]
             if root_img_dir == 'jblocal':
@@ -714,7 +714,7 @@ def main(root_img_dir=None):
             root_img_dir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
             pass
     else:
-        pass
+        root_img_dir = kwargs.get('root_img_dir', os.environ.get('ROOT_IMG_DIR'))
 
     try:
         destdir = os.path.abspath(sys.argv[2])
@@ -734,7 +734,7 @@ def main(root_img_dir=None):
         #[ os.remove(f) for f in duplicates if f ]
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
         img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
-
+        mz_converted_jpgs = ''
         for k,v in img_dict.items():
             try:
                 img = k
@@ -743,7 +743,6 @@ def main(root_img_dir=None):
                 ## Get color pixel values from source img
                 rgbmean     = v.items()
                 ## Generate png from source then jpgs from png
-
                 pngout = subproc_magick_png(img, rgbmean=dict(rgbmean), destdir=destdir)
 
                 ## TODO: pngout will be the image to POST to mozu returned from mozu
@@ -763,8 +762,6 @@ def main(root_img_dir=None):
                 archive = '/mnt/Post_Complete/Complete_Archive/Uploaded'
                 # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
                 archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
-
-
                 imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
 
                 import sys
@@ -791,9 +788,7 @@ def main(root_img_dir=None):
 
                 # Try and make a list without needing globbing below
                 mz_converted_jpgs.append(jpgout)
-
                 ###########################################
-
                 # from mozu import mozu_exec
                 # mz_res = mozu_exec.main(pngout)
                 # print mz_res, ' <-- MOZU-Done'
@@ -802,7 +797,8 @@ def main(root_img_dir=None):
             except AttributeError:
                 print 'SOMETHING IS WRONG WITH THE IMAGE Error {}'.format(img)
                 pass
-
+            finally:
+                return mz_converted_jpgs
     else:
         'Image is ', root_img_dir
         img = root_img_dir

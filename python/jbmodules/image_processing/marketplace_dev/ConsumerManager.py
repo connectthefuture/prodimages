@@ -58,6 +58,7 @@ class Consumer(multiprocessing.Process):
 
 
 class Task(object):
+
     def __init__(self, img, rgbmean, destdir):
         import tempfile, shutil
         import sys

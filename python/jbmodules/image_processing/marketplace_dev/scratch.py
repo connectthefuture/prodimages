@@ -42,49 +42,6 @@ def rename_retouched_file(img):
         else:
             return img
 
-
-def get_aspect_ratio(img):
-    from PIL import Image
-    try:
-        im = Image.open(img)
-        w,h = im.size
-        print w,h, 'aspect funk W-H'
-        if w>h:
-            aspect_ratio = str(round(float(int(w))/float(int(h)),2))
-        elif h>=w:
-            aspect_ratio = str(round(float(int(h))/float(int(w)),2))
-
-        return aspect_ratio
-    except IOError:
-        pass
-
-
-def get_dimensions(img):
-    from PIL import Image
-    try:
-        im = Image.open(img)
-        w,h = im.size
-        dimensions = "{0}x{1}".format(int(w),int(h))
-        return dimensions
-    except IOError:
-        pass
-
-
-def get_exif_metadata_value(img, exiftag=None):
-    import pyexiv2
-    image_metadata = pyexiv2.ImageMetadata(img)
-    metadata = image_metadata.read()
-    if exiftag:
-        exifvalue = metadata[exiftag]
-        return (exiftag, exifvalue)
-
-    else:
-        metadict = {}
-        for mtag, mvalue in metadata.iteritems():
-            metadict[mtag] = mvalue
-        return metadict
-
-
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
     try:
