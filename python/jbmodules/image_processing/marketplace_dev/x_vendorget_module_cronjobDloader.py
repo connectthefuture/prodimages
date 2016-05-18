@@ -860,7 +860,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
 import argparse
 #
 # Define and Instantiate parser Base
-parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports\n\t export \"ROOT_IMG_DIR\" and/or \"DESTDIR\" to set env vars to overide default loading', add_help=True)
+parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports\n\n  export \"ROOT_IMG_DIR\" and/or \"DESTDIR\" to set env vars to overide default loading', add_help=True)
 ##############################
 #
 ######### Style ##############
