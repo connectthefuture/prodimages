@@ -25,10 +25,10 @@ mozu_log_dir = path.join(mozu_sending_dir, 'log')
 
 try:
     makedirs(mozu_log_dir)
-    makedirs(mozu_sending_dir)
+    #makedirs(mozu_sending_dir)
     #makedirs(imgdest_jpg_mozu)
     #makedirs(imgdest_jpg_mozu_loaded)
-except ArithmeticError:
+except OSError:
     pass
 
 
