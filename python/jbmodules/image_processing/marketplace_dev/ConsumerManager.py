@@ -16,10 +16,10 @@ todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
 todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 archive = '/mnt/Post_Complete/Complete_Archive/images'
 archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
-global imgdest_jpg_mozu
-imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
-global imgdest_jpg_mozu_loaded
-imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
+# global imgdest_jpg_mozu
+# imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
+# global imgdest_jpg_mozu_loaded
+# imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 mozu_sending_dir = environ.get('MOZU_HIERARCHY', '/mnt/Post_Complete/Complete_Archive/MozuRoot')
 try:
     makedirs(mozu_sending_dir)

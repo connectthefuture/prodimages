@@ -20,7 +20,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     #orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
 
-    date_range_int = kwargs.get('date_range', globals().get('date_range', "45"))
+    date_range_int = kwargs.get('date_range', "5")
     if kwargs.get('style_number'):
         colorstyle = kwargs.get('style_number')
         query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR like '%{0}%' and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 ORDER BY POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last".format(colorstyle)
@@ -787,14 +787,14 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     testflag = str(vendor)
     if testflag.isdigit() and len(testflag) == 9:
         single_flag = str(vendor)
-
+    date_range = kwargs.update('date_range', '5')
     if not kwargs.get('q'):
         q = kwargs.get('q')
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, q=q)
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, q=q, date_range=date_range)
     elif kwargs.get('style_number'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=date_range)
     #########
     #  Create 2 item tuple list of every style with valid incomplete urls
     #  Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
@@ -860,10 +860,10 @@ parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports',
 #
 ######### Style ##############
 #parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
-parser.add_argument('--style-number', '-s', action='store', help='A Valid 9 Digit Bluefly Style' )
-parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Valid 9 Digit Bluefly Style' )
-parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by brand name')
-parser.add_argument('--date-range', '-d', action='store', default='5', help='Number of days prior to include as the scope of the import')
+parser.add_argument('--style-number', '-s', action='store', default=False, help='A Valid 9 Digit Bluefly Style' )
+parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Vendor Name or ID use underscores in place of spaces if name is muitiple words' )
+parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by specific product Brand name')
+parser.add_argument('--date-range', '-d', action='store', default='5', help='Number of days prior to define the scope of the import')
 parser.add_argument('--UPDATE', '-U', action='store_true', default=False, help='Only Process Updated images and do not include new styles')
 parser.add_argument('--ALL', '-A', action='store_true', default=False, help='Get both Incomplete and Complete to Import')
 
@@ -871,25 +871,18 @@ parser.add_argument('--ALL', '-A', action='store_true', default=False, help='Get
 if __name__ == '__main__':
     import sys
     parsedargs = parser.parse_args(sys.argv[1:])
-    if parsedargs.date_range:
-        global date_range
-        date_range = parsedargs.date_range
     if parsedargs.UPDATE:
-        main(q='UPDATE')
+        main(q='UPDATE', date_range=parsedargs.date_range)
     elif parsedargs.style_number:
         style_number = parsedargs.style_number
         main(style_number=style_number)
     elif parsedargs.vendor:
-        try:
-            vendor = parsedargs.vendor
-            try:
-                vendor_brand = parsedargs.vendor_brand
-                ALL = parsedargs.ALL
-                main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL)
-            except IndexError:
-                main(vendor=vendor)
-        except IndexError:
-            main()
+        vendor = parsedargs.vendor
+        vendor_brand = parsedargs.vendor_brand
+        ALL = parsedargs.ALL
+        main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=parsedargs.date_range)
+    else:
+        main()
 
 
 ## Its the Goods! 0307150250

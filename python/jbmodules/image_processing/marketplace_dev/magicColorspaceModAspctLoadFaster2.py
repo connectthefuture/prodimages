@@ -718,9 +718,8 @@ def main(**kwargs):
 
     try:
         destdir = os.path.abspath(sys.argv[2])
-
         if not os.path.isdir(destdir):
-            os.makedirs(destdir, 16877)
+            os.makedirs(destdir)
     except IndexError:
         destdir =  '/mnt/Post_Complete/ImageDrop/' ##os.path.join(root_img_dir, 'output')
         # try:
@@ -734,7 +733,7 @@ def main(**kwargs):
         #[ os.remove(f) for f in duplicates if f ]
         imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
         img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
-        mz_converted_jpgs = ''
+        mz_converted_jpgs = []
         for k,v in img_dict.items():
             try:
                 img = k
@@ -812,18 +811,6 @@ def main(**kwargs):
         subproc_magick_medium_jpg(pngout, destdir=destdir)
 
 
-    #try:
-    #    upload_imagedrop(destdir)
-    #    failed_dir = os.path.join(destdir,'failed_upload','*.??[gG]')
-    #except:
-    #    print 'PrintUploadFailed'
-    #    pass
-    # while True:
-    #     if glob.glob(failed_dir):
-    #         destdir = failed_dir
-    #         failed_dir = os.path.join(destdir,'failed_upload','*.??[gG]')
-    #         upload_imagedrop(destdir)
-    #print 'NOT UPLOADING YET'
 
 if __name__ == '__main__':
     main()
