@@ -855,7 +855,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
 import argparse
 #
 # Define and Instantiate parser Base
-parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports', add_help=True)
+parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports\n\t export \"ROOT_IMG_DIR\" and/or \"DESTDIR\" to set env vars to overide default loading', add_help=True)
 ##############################
 #
 ######### Style ##############
@@ -864,14 +864,14 @@ parser.add_argument('--style-number', '-s', action='store', default=False, help=
 parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Vendor Name or ID use underscores in place of spaces if name is muitiple words' )
 parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by specific product Brand name')
 parser.add_argument('--date-range', '-d', action='store', default='5', help='Number of days prior to define the scope of the import')
-parser.add_argument('--UPDATE', '-U', action='store_true', default=False, help='Only Process Updated images and do not include new styles')
+parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles')
 parser.add_argument('--ALL', '-A', action='store_true', default=False, help='Get both Incomplete and Complete to Import')
 
 
 if __name__ == '__main__':
     import sys
     parsedargs = parser.parse_args(sys.argv[1:])
-    if parsedargs.UPDATE:
+    if parsedargs.update:
         main(q='UPDATE', date_range=parsedargs.date_range)
     elif parsedargs.style_number:
         style_number = parsedargs.style_number
