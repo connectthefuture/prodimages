@@ -21,11 +21,14 @@ archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replac
 # global imgdest_jpg_mozu_loaded
 # imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 mozu_sending_dir = environ.get('MOZU_HIERARCHY', '/mnt/Post_Complete/Complete_Archive/MozuRoot')
+mozu_log_dir = path.join(mozu_sending_dir, 'log')
+
 try:
+    makedirs(mozu_log_dir)
     makedirs(mozu_sending_dir)
     #makedirs(imgdest_jpg_mozu)
     #makedirs(imgdest_jpg_mozu_loaded)
-except:
+except ArithmeticError:
     pass
 
 
@@ -89,8 +92,8 @@ class Task(object):
             if self.mozu_sending_dir:
                 _mozu_send_subdir = path.join(self.mozu_sending_dir, self.img.split('/')[-1][:4])
                 self.mozu_out = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=_mozu_send_subdir)
-                with open(path.join(self.mozu_sending_dir, todaysdate, 'index.txt'), mode='w') as fwrite:
-                    logged_line = '{0}\t{1}'.format(todaysdatefullsecs, self.mozu_out)
+                with open(path.join(self.mozu_log_dir, todaysdate + '_index.txt'), mode='a+') as fwrite:
+                    logged_line = '{0}\t{1}\t{2}'.format('{:%Y%m%d%H%M%S}'.format(datetime.datetime.now()), 'PROCESSED', self.mozu_out)
                     fwrite.write(logged_line)
             self.pngout = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=self.destdir)
             ## TODO: Possible insertion of Mozu and/or GoogleDrive upload and key exchange
