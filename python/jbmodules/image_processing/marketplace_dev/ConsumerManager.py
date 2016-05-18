@@ -91,6 +91,10 @@ class Task(object):
         try:
             if self.mozu_sending_dir:
                 _mozu_send_subdir = path.join(self.mozu_sending_dir, self.img.split('/')[-1][:4])
+                try:
+                    makedirs(_mozu_send_subdir)
+                except Exception, e:
+                    pass
                 self.mozu_out = magickProc2.subproc_magick_png(self.img, rgbmean=self.rgbmean, destdir=_mozu_send_subdir)
                 with open(path.join(self.mozu_log_dir, todaysdate + '_index.txt'), mode='a+') as fwrite:
                     logged_line = '{0}\t{1}\t{2}'.format('{:%Y%m%d%H%M%S}'.format(datetime.datetime.now()), 'PROCESSED', self.mozu_out)
