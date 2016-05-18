@@ -787,7 +787,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     testflag = str(vendor)
     if testflag.isdigit() and len(testflag) == 9:
         single_flag = str(vendor)
-    date_range = kwargs.update('date_range', '5')
+    date_range = kwargs.get('date_range', '5')
     if not kwargs.get('q'):
         q = kwargs.get('q')
         marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, q=q, date_range=date_range)
