@@ -149,8 +149,6 @@ def get_exif_all_data(image_filepath):
     return metadata
 
 
-
-
 # def exchange_tokens(refresh_token=None):
 #     from boxsdk import OAuth2
 #     TOKENS_FILE = 'tokens_priv.pkl'
@@ -692,7 +690,6 @@ def mongo_update_url_dest_info(urldest_tuple):
         return updateCheck, destpath
 
 
-
 def mongo_upsert_threaded(argslist=None):
     import Queue
     import threading
@@ -884,18 +881,18 @@ if __name__ == '__main__':
         print '2\nStyle\n'
         style_number = parsedargs.style_number
         main(style_number=style_number)
+    elif parsedargs.styles_list:
+        print '3\nStyles List\n'
+        main(styles_list=parsedargs.styles_list)
     elif parsedargs.vendor:
-        print '3\nVendor\n'
+        print '4\nVendor\n'
         vendor = parsedargs.vendor
         vendor_brand = parsedargs.vendor_brand
-        ALL = parsedargs.ALL
+        ALL = parsedargs.all
         main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=parsedargs.date_range)
-    elif parsedargs.styles_list:
-        print '4\nStyles List\n'
-        main(styles_list=parsedargs.styles_list)
     else:
         print '5\nELSE\nLocals\n', locals()
         main()
 
-
-## Its the Goods! 0307150250
+## Its the Goods!  0307150250
+## Its the Goods2! 0518160242
