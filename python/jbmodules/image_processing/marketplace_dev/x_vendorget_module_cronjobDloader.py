@@ -79,17 +79,14 @@ def sqlQuery_GetIMarketplaceImgs(vendor=None, vendor_brand=None, po_number=None,
     return styles
 
 
-def parse_mplace_dict2tuple(styles_dict,dest_root=None):
+def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
     import os.path, sys
     count = ''
-    try:
-        if str(sys.argv[1]).isdigit() and len(str(sys.argv[1])) == 9:
-            count = 1
-        else:
-            count = len(set(list([k for k in styles_dict.keys()])))
-    except IndexError:
-        count = 2 #len(set(list([k for k in styles_dict.keys()])))
-
+    if kwargs.get('style_number'):
+        count = 1
+    else:
+        count = len(set(list([k for k in styles_dict.keys()])))
+    
     print ' Count ', count, styles_dict.keys()
 
     mproc_tuple_Qlist = []
@@ -802,7 +799,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     #  Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
     #########
     ## 1A ## Parse Query Result creating 2 item tuples as a list for multi thread
-    urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root)
+    urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root, **kwargs)
     ## Download the urls in the 2 tuple list
     ########
     ########
