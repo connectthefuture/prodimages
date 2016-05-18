@@ -872,16 +872,20 @@ if __name__ == '__main__':
     import sys
     parsedargs = parser.parse_args(sys.argv[1:])
     if parsedargs.update:
+        print '1\nUP\n'
         main(q='UPDATE', date_range=parsedargs.date_range)
     elif parsedargs.style_number:
+        print '2\nStyle\n'
         style_number = parsedargs.style_number
         main(style_number=style_number)
     elif parsedargs.vendor:
+        print '3\nVendor\n'
         vendor = parsedargs.vendor
         vendor_brand = parsedargs.vendor_brand
         ALL = parsedargs.ALL
         main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=parsedargs.date_range)
     else:
+        print '4\nELSE\nLocals\n', locals()
         main()
 
 
