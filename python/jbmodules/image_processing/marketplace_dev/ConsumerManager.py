@@ -150,9 +150,9 @@ class Task(object):
         except IndexError:
             ' None Type Error End '
             pass
-        except AttributeError:
+        except AttributeError, e:
             import os
-            print 'Attribute error creating png in Consumer Manager, bad download expected'
+            print 'Attribute error creating png in Consumer Manager, bad download expected\n', e
             try:
                 os.remove(self.img)
                 '\n\tDeleted {0} due to Attrib None Type error'.format(self.img)
