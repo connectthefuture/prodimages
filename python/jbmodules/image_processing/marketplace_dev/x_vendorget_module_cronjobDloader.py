@@ -877,9 +877,9 @@ if __name__ == '__main__':
         print '2\nStyle\n'
         style_number = parsedargs.style_number
         main(style_number=style_number)
-    elif parsedargs.styles_list:
+    elif parsedargs.styles_list[0]:
         print '3\nStyles List\n'
-        main(styles_list=parsedargs.styles_list)
+        main(styles_list=parsedargs.styles_list[0])
     elif parsedargs.vendor:
         print '4\nVendor\n'
         vendor = parsedargs.vendor
