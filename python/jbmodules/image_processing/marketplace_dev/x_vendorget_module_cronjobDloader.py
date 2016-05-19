@@ -785,10 +785,9 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
         single_flag = str(vendor)
     date_range = kwargs.get('date_range', '5')
     if kwargs.get('q'):
-        q = kwargs.get('q')
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, q=q, date_range=date_range)
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(q=kwargs.get('q'), date_range=date_range)
     elif kwargs.get('styles_list'):
-        marketplace_styles = styles_list_q(kwargs.get('styles_list'))
+        marketplace_styles = sqlQuery_GetIMarketplaceImgs(kwargs.get('styles_list'))
     elif kwargs.get('style_number'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
