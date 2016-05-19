@@ -43,7 +43,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor='_', vendor_brand='', po_number='', ALL=
     ####
     connection = orcl_engine.connect()
     if kwargs.get('q'):
-        query_marketplace_inprog = update_q(vendor=kwargs.get('vendor'), date_range=kwargs.get('date_range'))
+        query_marketplace_inprog = update_q(vendor=kwargs.get('vendor', '_'), date_range=kwargs.get('date_range', '5'))
     elif kwargs.get('styles_list'):
         query_marketplaprog = styles_list_q(kwargs.get('styles_list'))
     ####
