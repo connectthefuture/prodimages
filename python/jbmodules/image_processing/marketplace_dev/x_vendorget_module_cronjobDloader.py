@@ -793,6 +793,11 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
         marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=date_range)
+    ########
+    # Print Count only and return
+    if kwargs.get('count_only'):
+        print 'Total Styles in Query Range:\t{}'.format(len(marketplace_styles))
+        raise StandardError
     #########
     #  Create 2 item tuple list of every style with valid incomplete urls
     #  Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
@@ -865,6 +870,7 @@ parser.add_argument('--date-range', '-d', action='store', default='5', help='Num
 parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles')
 parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False, help='Get both Incomplete and Complete Product Images for Import')
 #
+parser.add_argument('--count-only', '--count', '-c', action='store_true', default=False, help='Runs the Query only and prints total styles included in search based on the args supplied')
 ##########################
 #
 if __name__ == '__main__':
