@@ -882,7 +882,7 @@ if __name__ == '__main__':
     parsedargs = parser.parse_args(sys.argv[1:])
     if parsedargs.update:
         print '1\nUP\n'
-        main(q='UPDATE', date_range=parsedargs.date_range, count_only=parsedargs.count_only)
+        main(q='UPDATE', date_range=parsedargs.date_range, count_only=parsedargs.count_only, parsedargs.vendor)
     elif parsedargs.style_number:
         print '2\nStyle\n'
         style_number = parsedargs.style_number
