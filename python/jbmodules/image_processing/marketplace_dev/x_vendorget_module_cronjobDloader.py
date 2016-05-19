@@ -878,7 +878,7 @@ if __name__ == '__main__':
     parsedargs = parser.parse_args(sys.argv[1:])
     if parsedargs.update:
         print '1\nUP\n'
-        main(q='UPDATE', date_range=parsedargs.date_range)
+        main(q='UPDATE', date_range=parsedargs.date_range, count_only=parsedargs.count_only)
     elif parsedargs.style_number:
         print '2\nStyle\n'
         style_number = parsedargs.style_number
@@ -891,10 +891,10 @@ if __name__ == '__main__':
         vendor = parsedargs.vendor
         vendor_brand = parsedargs.vendor_brand
         ALL = parsedargs.all
-        main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=parsedargs.date_range)
+        main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=parsedargs.date_range, count_only=parsedargs.count_only)
     else:
         print '5\nELSE\nLocals\n', locals()
-        main()
+        main(count_only=parsedargs.count_only)
 
 ## Its the Goods!  0307150250
 ## Its the Goods2! 0518160242
