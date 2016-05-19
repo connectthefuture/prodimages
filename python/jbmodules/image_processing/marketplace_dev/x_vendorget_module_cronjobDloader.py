@@ -23,7 +23,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor='_', vendor_brand='', po_number='', ALL=
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     # orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     #
-    if kwargs.get('q'):
+    if kwargs.get('q') or kwargs.get('styles_list'):
         pass
     elif kwargs.get('style_number'):
         colorstyle = kwargs.get('style_number')
