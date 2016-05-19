@@ -756,7 +756,7 @@ def mongo_upsert_threaded(argslist=None):
         return
 
 
-def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
+def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     sys.path.append('/usr/local/batchRunScripts/mozu')
     sys.path.append('/usr/local/batchRunScripts/python')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
