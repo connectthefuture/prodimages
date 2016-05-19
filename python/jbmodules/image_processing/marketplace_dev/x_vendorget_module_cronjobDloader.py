@@ -25,6 +25,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor='_', vendor_brand='', po_number='', ALL=
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     # orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     #
+    vendor = kwargs.get('vendor', '_')
     if kwargs.get('q') or kwargs.get('styles_list'):
         pass
     elif kwargs.get('style_number'):
@@ -45,7 +46,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor='_', vendor_brand='', po_number='', ALL=
     ####
     connection = orcl_engine.connect()
     if kwargs.get('q'):
-        query_marketplace_inprog = update_q(vendor=kwargs.get('vendor', '_'), date_range=kwargs.get('date_range', '5'))
+        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'))
     elif kwargs.get('styles_list'):
         query_marketplaprog = styles_list_q(kwargs.get('styles_list'))
     ####
