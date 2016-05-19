@@ -867,7 +867,7 @@ parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, he
 parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Vendor Name or ID use underscores in place of spaces if name is muitiple words' )
 parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by specific product Brand name')
 parser.add_argument('--date-range', '-d', action='store', default='5', help='Number of days prior to define the scope of the import')
-parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles')
+parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles. \nWill not work with additional arguments, \n\tuse --all flag for updating by vendor with --vendor flag.')
 parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False, help='Get both Incomplete and Complete Product Images for Import')
 #
 parser.add_argument('--count-only', '--count', '-c', action='store_true', default=False, help='Runs the Query only and prints total styles included in search based on the args supplied')
