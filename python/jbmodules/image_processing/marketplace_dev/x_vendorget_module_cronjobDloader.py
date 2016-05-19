@@ -796,7 +796,7 @@ def main(vendor=None, vendor_brand=None, dest_root=None, ALL=None, **kwargs):
     ########
     # Print Count only and return
     if kwargs.get('count_only'):
-        print 'Total Styles in Query Range:\t{}'.format(len(marketplace_styles))
+        print 'Total Styles in Query Range:\t{}\n\n'.format(len(marketplace_styles))
         raise StandardError
     #########
     #  Create 2 item tuple list of every style with valid incomplete urls
