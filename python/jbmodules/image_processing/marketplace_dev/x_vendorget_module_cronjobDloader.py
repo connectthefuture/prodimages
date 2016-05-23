@@ -762,6 +762,7 @@ def mongo_upsert_threaded(argslist=None):
 
 def duplicate_by_md5_mzimg(filepath, **kwargs):
     from db import mozu_image_table_instance
+    from os import stat
     mozu_image_table = mozu_image_table_instance()
     bf_imageid = filepath.split('/')[-1].split('.')[0]
     filepathMD5 = md5_checksumer(filepath)
@@ -777,7 +778,7 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
             print 'TypeError 777\n'
             return False
     elif filepathMD5 == dbmd5MD5['md5checksum']:
-        print 'Duplicate Checksum:\t', dbmd5MD5['md5checksum'], filepath
+        print 'Duplicate Checksum:\nDB:\t\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', stat(filepath)
         return False
     else:
         print 'ElseD', filepathMD5, bf_imageid
