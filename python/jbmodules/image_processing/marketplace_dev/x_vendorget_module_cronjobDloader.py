@@ -791,7 +791,7 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     if not ALL:
         ALL = ''
     if not vendor:
-        vendor = '_'
+        vendor = kwargs.get('vendor', '_')
 
     ################################
     # Get the New Style's Urls ####
@@ -802,15 +802,14 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     testflag = str(vendor)
     if testflag.isdigit() and len(testflag) == 9:
         single_flag = str(vendor)
-    date_range = kwargs.get('date_range', '5')
     if kwargs.get('q'):
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(q=kwargs.get('q'), vendor=vendor, date_range=date_range)
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(q=kwargs.get('q'), vendor=kwargs.get('vendor'), not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'))
     elif kwargs.get('styles_list'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(kwargs.get('styles_list'))
     elif kwargs.get('style_number'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=date_range)
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=kwargs.get('vendor'), vendor_brand=kwargs.get('vendor_brand'), ALL=kwargs.get('ALL'), date_range=kwargs.get('date_range'))
     ########
     # Print Count only and return
     if kwargs.get('count_only'):
