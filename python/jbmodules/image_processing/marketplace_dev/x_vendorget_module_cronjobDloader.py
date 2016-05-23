@@ -866,6 +866,7 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     #
     #  #################################################
 ###########    #
+    from base_config import *
     from glob import glob
     updateable = [ f for f in glob(path.join(root_img_dir, '*/*/*.??g')) if duplicate_by_md5_mzimg(f) ]
 ###########    #
