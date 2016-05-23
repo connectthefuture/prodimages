@@ -774,10 +774,10 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
             print 'Updateable Style, diff checksum\nDB:\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', filepath, '\n'
             return False
         except TypeError:
-            print 'TypeError 777'
+            print 'TypeError 777\n'
             return False
     elif filepathMD5 == dbmd5MD5['md5checksum']:
-        print 'Duplicate Checksum', dbmd5MD5['md5checksum'], filepath
+        print 'Duplicate Checksum:\t', dbmd5MD5['md5checksum'], filepath
         return filepath
     else:
         print 'ElseD', filepathMD5, bf_imageid
