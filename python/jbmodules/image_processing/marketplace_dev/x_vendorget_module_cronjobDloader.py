@@ -12,7 +12,7 @@ urllib3.disable_warnings()
 #
 def update_q(**kwargs):
     ## removes gaffos onslaught of duplication
-    not_vendor='Gaffo'
+    not_vendor=kwargs.get('not_vendor', 'Gaffo')
     update_query="SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_image.created_date >= sysdate - {date_range} AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{vendor}%' AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID not LIKE '%{not_vendor}%' AND POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL AND POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER  <= 6 AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3 AND POMGR.SUPPLIER_INGEST_STYLE.modified_date >= POMGR.SUPPLIER_INGEST_STYLE.created_date ORDER BY vendor_name Nulls Last, ingest_dt DESC Nulls Last,  1,  colorstyle Nulls Last".format(vendor=kwargs.get('vendor'), not_vendor=not_vendor, date_range=kwargs.get('date_range'))
     return str(update_query)
 
@@ -46,7 +46,7 @@ def sqlQuery_GetIMarketplaceImgs(vendor_brand='', ALL='', **kwargs):
     ####
     connection = orcl_engine.connect()
     if kwargs.get('q'):
-        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'))
+        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'), not_vendor=kwargs.get('not_vendor', ''))
     elif kwargs.get('styles_list'):
         query_marketplaprog = styles_list_q(kwargs.get('styles_list'))
     ####
@@ -901,6 +901,7 @@ parser.add_argument('--date-range', '-d', action='store', default='5', help='Num
 parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles. \nWill not work with additional arguments, \n\tuse --all flag for updating by vendor with --vendor flag.')
 parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False, help='Get both Incomplete and Complete Product Images for Import')
 #
+parser.add_argument('--not-vendor', '-nv', default='', action='store', help='Vendor Name or ID to EXCLUDE from Query' )
 parser.add_argument('--count-only', '--count', '-c', action='store_true', default=False, help='Runs the Query only and prints total styles included in search based on the args supplied')
 ##########################
 #
@@ -909,7 +910,12 @@ if __name__ == '__main__':
     parsedargs = parser.parse_args(sys.argv[1:])
     if parsedargs.update:
         print '1\nUP\n'
-        main(q='UPDATE', date_range=parsedargs.date_range, count_only=parsedargs.count_only, vendor=parsedargs.vendor)
+        main(q='UPDATE',
+             date_range=parsedargs.date_range,
+             count_only=parsedargs.count_only,
+             vendor=parsedargs.vendor,
+             not_vendor=parsedargs.not_vendor
+             )
     elif parsedargs.style_number:
         print '2\nStyle\n'
         style_number = parsedargs.style_number
@@ -919,10 +925,13 @@ if __name__ == '__main__':
         main(styles_list=parsedargs.styles_list[0])
     elif parsedargs.vendor:
         print '4\nVendor\n'
-        vendor = parsedargs.vendor
-        vendor_brand = parsedargs.vendor_brand
-        ALL = parsedargs.all
-        main(vendor=vendor, vendor_brand=vendor_brand, ALL=ALL, date_range=parsedargs.date_range, count_only=parsedargs.count_only)
+        main(vendor=parsedargs.vendor,
+             not_vendor=parsedargs.not_vendor,
+             vendor_brand=parsedargs.vendor_brand,
+             ALL=parsedargs.all,
+             date_range=parsedargs.date_range,
+             count_only=parsedargs.count_only
+             )
     else:
         print '5\nELSE\nLocals\n', locals()
         main(count_only=parsedargs.count_only)
