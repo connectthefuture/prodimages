@@ -765,8 +765,15 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
     mozu_image_table = mozu_image_table_instance()
     bf_imageid = filepath.split('/')[-1].split('.')[0]
     filepathMD5 = md5_checksumer(filepath)
-    dbmd5MD5  = mozu_image_table.select(whereclause=((mozu_image_table.c.md5checksum == filepathMD5))).execute().fetchone()['md5checksum']
-    dbmd5BFID = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone()['md5checksum']
+    dbmd5MD5 = ''
+    dbmd5BFID = ''
+    try:
+        dbmd5MD5  = mozu_image_table.select(whereclause=((mozu_image_table.c.md5checksum == filepathMD5))).execute().fetchone()['md5checksum']
+    except TypeError:
+        try:
+            dbmd5BFID = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone()['md5checksum']
+        except TypeError:
+            pass
     if filepathMD5 == dbmd5MD5:
         return filepath
     else:
@@ -866,7 +873,7 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
 ###########    #
     environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
     from glob import glob
-    updateable = [ f for f in glob(path.join(root_img_dir, '*/*/*.??g')) if f is not None and duplicate_by_md5_mzimg(f) ]
+    updateable = [ f for f in glob(path.join(root_img_dir, '*/*/*.??g')) if duplicate_by_md5_mzimg(f) ]
 ###########    #
     #
     # remove(f) for f in glob........
