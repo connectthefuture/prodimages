@@ -217,6 +217,7 @@ def get_exif_all_data(image_filepath):
 ##########################
 ##########################
 ##########################
+
 def md5_checksumer(src_filepath):
     import hashlib
     import os.path as path
@@ -759,6 +760,19 @@ def mongo_upsert_threaded(argslist=None):
         return
 
 
+def duplicate_by_md5_mzimg(filepath, **kwargs):
+    from db import mozu_image_table_instance
+    mozu_image_table = mozu_image_table_instance()
+    bf_imageid = filepath.split('/')[-1].split('.')[0]
+    filepathMD5 = md5_checksumer(filepath)
+    dbmd5MD5  = mozu_image_table.select(whereclause=((mozu_image_table.c.md5checksum == filepathMD5))).execute().fetchone()['md5checksum']
+    dbmd5BFID = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone()['md5checksum']
+    if filepathMD5 == dbmd5MD5:
+        return filepath
+    else:
+        return False
+
+
 def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     sys.path.append('/usr/local/batchRunScripts/mozu')
     sys.path.append('/usr/local/batchRunScripts/python')
@@ -768,7 +782,7 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
     countimage = 0
     countstyle = 0
-    from os import environ
+    from os import environ, path, chdir
     dest_root = kwargs.get('root_img_dir', environ.get('ROOT_IMG_DIR', ''))
     if not dest_root:
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
@@ -805,7 +819,7 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     #########
     #  Create 2 item tuple list of every style with valid incomplete urls
     #  Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
-    #########
+    #
     ## 1A ## Parse Query Result creating 2 item tuples as a list for multi thread
     urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root, **kwargs)
     ## Download the urls in the 2 tuple list
@@ -845,10 +859,21 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
         print ' Not vend Res-->IsDir AND rootimgdir --> ', res
 
     #########
+    #
+    #
+    #  #################################################
+    #
+    #  Insertion point of md5 check db mzimg.mozu_image
+    #
+    #  #################################################
+    from glob import glob
+    updateable = [ f for f in glob(path.join(root_img_dir, '*/*/*.??g')) if duplicate_by_md5_mzimg(f) ]
+    #
+    # remove(f) for f in glob........
+    #########
     ## 3X ### Process the images
     #
-    import os
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    chdir(path.dirname(path.abspath(__file__)))
     import multiprocmagick2 as multiprocmagick2
     #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
     print 'Single Flaggin It with --> ', single_flag, '\n', urlsdload_list
