@@ -771,15 +771,16 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
     if not dbmd5MD5:
         try:
             dbmd5BFID = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone() #['md5checksum']
-            print 'Updateable Style, diff checksum\n', dbmd5BFID['md5checksum'], filepathMD5, filepath
+            print 'Updateable Style, diff checksum\nDB:\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', filepath, '\n'
             return False
         except TypeError:
+            print 'TypeError 777'
             return False
     elif filepathMD5 == dbmd5MD5['md5checksum']:
         print 'Duplicate Checksum', dbmd5MD5['md5checksum'], filepath
         return filepath
     else:
-        print 'ElseD'
+        print 'ElseD', filepathMD5, bf_imageid
         return False
 
 
