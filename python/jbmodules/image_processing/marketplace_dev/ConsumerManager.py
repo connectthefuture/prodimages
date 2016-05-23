@@ -155,7 +155,7 @@ class Task(object):
             print 'Attribute error creating png in Consumer Manager, bad download expected\n', e
             try:
                 os.remove(self.img)
-                '\n\tDeleted {0} due to Attrib None Type error'.format(self.img)
+                print '\n\tDeleted {0} due to Attrib None Type error'.format(self.img)
             except:
                 print 'Failed Removal in Consumer Manager'
 
