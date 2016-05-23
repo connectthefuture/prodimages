@@ -819,7 +819,6 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     #########
     #  Create 2 item tuple list of every style with valid incomplete urls
     #  Each Tuple contains a full remote url[0] and a full absolute destination file path[1]
-    #
     ## 1A ## Parse Query Result creating 2 item tuples as a list for multi thread
     urlsdload_list = parse_mplace_dict2tuple(marketplace_styles, dest_root=dest_root, **kwargs)
     ## Download the urls in the 2 tuple list
@@ -866,8 +865,10 @@ def main(vendor='', vendor_brand='', dest_root='', ALL='', **kwargs):
     #  Insertion point of md5 check db mzimg.mozu_image
     #
     #  #################################################
+###########    #
     from glob import glob
     updateable = [ f for f in glob(path.join(root_img_dir, '*/*/*.??g')) if duplicate_by_md5_mzimg(f) ]
+###########    #
     #
     # remove(f) for f in glob........
     #########
