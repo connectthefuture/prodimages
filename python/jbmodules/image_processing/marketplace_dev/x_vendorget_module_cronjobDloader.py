@@ -818,10 +818,6 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
     #########
     ## 1 ## Query for new Marketplace Styles
     # global single_flag
-    single_flag = ''
-    testflag = str(vendor)
-    if testflag.isdigit() and len(testflag) == 9:
-        single_flag = str(vendor)
     if kwargs.get('update'):
         marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'))
     elif kwargs.get('styles_list'):
@@ -899,9 +895,9 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
     chdir(path.dirname(path.abspath(__file__)))
     import multiprocmagick2 as multiprocmagick2
     #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
-    print 'Single Flaggin It with --> ', single_flag, '\n', urlsdload_list
+    print 'Single Flaggin It with --> ', kwargs.get('style_number'), '\n', urlsdload_list
     ## This is where almost all the work begins...
-    imgs_processed = multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_flag=single_flag)
+    imgs_processed = multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_style=style_number, update=kwargs.get('update', ''))
     print 'Done With multiprocmagick --> ', imgs_processed
     if imgs_processed:
         return imgs_processed

@@ -44,7 +44,7 @@ def run_threaded_imgdict(argslist=None):
     return img_dict_list
 
 
-def funkRunner3(root_img_dir=None, single_flag=None):
+def funkRunner3(root_img_dir=None, single_style='', update=''):
     import multiprocessing
     #import Queue
     import threading
@@ -71,15 +71,19 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     # 1A
     # List of images to run through processing as glob of the root_img_dir
     #print root_img_dir, ' <-- Rootimgdir FunkR2'
-    if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE' or root_img_dir is None:
-        if not single_flag:
-            imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
-        else:
-            imagesGlob = os.path.join(root_img_dir, '*/*/*/{0}_[1-6].??[gG]'.format(single_flag))
+
+    if update:
+        root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
+        imagesGlob = os.path.join(root_img_dir, '*/999999/*.??[gG]')
+    elif single_style:
+        imagesGlob = os.path.join(root_img_dir, '*/*/*/{0}_[1-6].??[gG]'.format(single_style))
+    elif root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE' or root_img_dir is None:
+        imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
     elif os.environ.get('ROOT_IMG_DIR'):
         root_img_dir = os.environ.get('ROOT_IMG_DIR')
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
     else:
+        root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
 
     print imagesGlob, "GLOBB"
@@ -118,14 +122,14 @@ def funkRunner3(root_img_dir=None, single_flag=None):
     s.start()
 
 
-    if single_flag and len(imagesGlob) <= 7:
+    if single_style and len(imagesGlob) <= 7:
         settest = list(set([ f.split('/')[:9] for f in glob.glob(imagesGlob) if f is not None ] ))
         print settest, len(settest), ' <=====END FLAG TEST'
         for img in imagesGlob:
             os.remove(img)
             print 'Deleted {0} after uploading'.format(img)
     else:
-        print 'multproc2', single_flag, len(imagesGlob), '<-- LENGlob'
+        print 'multproc2', single_style, len(imagesGlob), '<-- LENGlob'
 
     if img_dict and type(img_dict) == dict:
         return img_dict
