@@ -787,6 +787,7 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
 
 
 def main(vendor_brand='', dest_root='', ALL='', **kwargs):
+    from os import environ, path, chdir, remove
     sys.path.append('/usr/local/batchRunScripts/mozu')
     sys.path.append('/usr/local/batchRunScripts/python')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
@@ -795,7 +796,7 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
     countimage = 0
     countstyle = 0
-    from os import environ, path, chdir
+
     dest_root = kwargs.get('root_img_dir', environ.get('ROOT_IMG_DIR', ''))
     if not dest_root:
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
@@ -877,9 +878,11 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
     #
     #  #################################################
 ###########    #
-    environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
-    from glob import glob
-    updateable = [ f for f in glob(path.join(root_img_dir, '*/*/*.??g')) if duplicate_by_md5_mzimg(f) ]
+    if kwargs.get('q') == 'UPDATE':
+        environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
+        from glob import glob
+        updateable = [ remove(f) for f in glob(path.join(root_img_dir, '*/*/*.??g')) if duplicate_by_md5_mzimg(f) ]
+        
 ###########    #
     #
     # remove(f) for f in glob........
