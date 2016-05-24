@@ -813,7 +813,7 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
         ALL = ''
 
     vendor = kwargs.get('vendor', '_')
-    kwargs.get('style_number', '')
+    style_number = kwargs.get('style_number', '')
     ################################
     # Get the New Style's Urls ####
     #########
