@@ -813,6 +813,7 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
         ALL = ''
 
     vendor = kwargs.get('vendor', '_')
+    kwargs.get('style_number', '')
     ################################
     # Get the New Style's Urls ####
     #########
@@ -822,7 +823,7 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
         marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'))
     elif kwargs.get('styles_list'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(kwargs.get('styles_list'))
-    elif kwargs.get('style_number'):
+    elif style_number:
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
         marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=kwargs.get('vendor_brand'), ALL=kwargs.get('ALL'), date_range=kwargs.get('date_range'))
