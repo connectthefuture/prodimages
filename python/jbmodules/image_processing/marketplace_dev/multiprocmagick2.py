@@ -100,7 +100,8 @@ def funkRunner3(root_img_dir=None, single_style='', update=''):
     poolRename.join()
     print 'Images Renamed'
 
-
+    ## replace the glob pattern for single styles after the rename
+    imagesGlob = imagesGlob.replace('_[-6]', '*')
     ########## Two ##########
     #
     # 2
