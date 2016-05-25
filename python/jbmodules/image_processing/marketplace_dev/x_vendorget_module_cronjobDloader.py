@@ -814,7 +814,7 @@ def main(vendor_brand='', dest_root='', **kwargs):
     if not kwargs.get('all', ''):
         all = ''
 
-    vendor = kwargs.get('vendor', '_')
+    vendor = kwargs.get('vendor')
     style_number = kwargs.get('style_number', '')
     ################################
     # Get the New Style's Urls ####
