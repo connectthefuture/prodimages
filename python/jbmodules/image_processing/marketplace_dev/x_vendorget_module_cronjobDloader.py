@@ -811,7 +811,7 @@ def main(vendor_brand='', dest_root='', all='', **kwargs):
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     else:
         pass
-    if not kwargs('all'):
+    if not kwargs('all', ''):
         all = ''
 
     vendor = kwargs.get('vendor', '_')
@@ -864,7 +864,7 @@ def main(vendor_brand='', dest_root='', all='', **kwargs):
         import os.path
         if kwargs.get('root_img_dir', environ.get('ROOT_IMG_DIR', '')):
             root_img_dir = dest_root
-        elif all:
+        elif kwargs.get('all', ''):
             root_img_dir = dest_root
         elif res is not None and os.path.isdir(res):
             root_img_dir = res
