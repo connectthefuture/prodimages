@@ -883,12 +883,21 @@ def main(vendor_brand='', dest_root='', **kwargs):
     #  Insertion point of md5 check db mzimg.mozu_image
     #
     #  #################################################
-###########    #
     if kwargs.get('update') and not kwargs.get('style_number'):
+        import multiprocessing
         environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
         from glob import glob
-        updateable = [ remove(f) for f in (glob(path.join(root_img_dir, '*/*/*.??g')) + glob(path.join(root_img_dir, '*/*/*/*.??g')) ) if duplicate_by_md5_mzimg(f) ]
-
+        poolDuplicateFilter = multiprocessing.Pool(8)
+        images =  (glob(path.join(root_img_dir, '*/*/*.??g')) + glob(path.join(root_img_dir, '*/*/*/*.??g')) )
+        while len(images) == 0:
+            print len(images), '  <-- Length of the Images to Filter,Process etc. Now the Filtererer'
+            break
+        resupdateable = poolDuplicateFilter.map(duplicate_by_md5_mzimg, images)
+        poolDuplicateFilter.close()
+        poolDuplicateFilter.join()
+        print 'Images Filtered'
+###########    #
+        print len(resupdateable), ' Updateable'
 ###########    #
     #
     # remove(f) for f in glob........
