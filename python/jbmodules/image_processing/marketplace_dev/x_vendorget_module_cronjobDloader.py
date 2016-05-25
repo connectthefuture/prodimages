@@ -795,7 +795,7 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
         return filepath
 
 
-def main(vendor_brand='', dest_root='', all='', **kwargs):
+def main(vendor_brand='', dest_root='', **kwargs):
     from os import environ, path, chdir, remove
     sys.path.append('/usr/local/batchRunScripts/mozu')
     sys.path.append('/usr/local/batchRunScripts/python')
