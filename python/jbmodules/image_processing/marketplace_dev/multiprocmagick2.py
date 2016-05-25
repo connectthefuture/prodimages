@@ -110,7 +110,8 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
     # 2
     # Extract image pixel data for enhancements. As list of tuples, [<url>, {rgbdata} ].. ithink
     if not single_style:
-        img_list =  [ f for f in glob.glob(os.path.join(root_img_dir, '*/*/*.??[gG]')) + glob.glob(os.path.join(root_img_dir, '*/*/*/*.??[gG]')) if f is not None ]
+        imagesGlob =  [ f for f in glob.glob(os.path.join(root_img_dir, '*/*/*.??[gG]')) + glob.glob(os.path.join(root_img_dir, '*/*/*/*.??[gG]')) if f is not None ]
+        img_list = [f for f in imagesGlob if f is not None]
         print type(img_list), '\tLen ImageList preThreaded', destdir
         img_dict = run_threaded_imgdict(argslist=(img_list,))
         print type(img_dict), '\tLen ImageDict postThreaded', destdir
