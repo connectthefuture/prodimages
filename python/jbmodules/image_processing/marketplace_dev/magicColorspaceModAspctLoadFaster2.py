@@ -32,7 +32,74 @@ def copy_to_imagedrop_upload(src_filepath, destdir=None):
         except:
             return False
 
+def upload_imagedrop(root_dir):
+    import os, sys, re, csv, shutil, glob
+    archive_uploaded = os.path.join(root_dir, 'uploaded')
+    tmp_failed = os.path.join(root_dir, 'failed_upload')
+    try:
+        os.makedirs(archive_uploaded, 16877)
+    except OSError:
+        try:
+            shutil.rmtree(archive_uploaded, ignore_errors = True)
+            os.makedirs(archive_uploaded, 16877)
+        except:
+            pass
 
+    try:
+        os.makedirs(tmp_failed, 16877)
+    except:
+        pass
+
+    import time
+    upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
+    for upload_file in upload_tmp_loading:
+        try:
+            code = copy_to_imagedrop_upload(upload_file)
+            if code == True or code == '200':
+                try:
+                    shutil.move(upload_file, archive_uploaded)
+                    time.sleep(float(.1))
+                    print "1stTryOK", upload_file
+                except OSError:
+                    dst_file = upload_file.replace(root_dir, archive_uploaded)
+                    print 'OSError I think...dst_file'
+                    try:
+                        if os.path.exists(dst_file):
+                            os.remove(dst_file)
+                        shutil.move(upload_file, archive_uploaded)
+                    except AttributeError:
+                        print 'AttributeError I think.../'
+                        pass
+            else:
+                print "Uploaded {}".format(upload_file)
+                time.sleep(float(.1))
+                try:
+                    shutil.move(upload_file, archive_uploaded)
+                except shutil.Error:
+                    print 'shutil line 677 Error I think.../'
+                    pass
+        except OSError:
+            print "Error moving Finals to Arch {}".format(file)
+            try:
+                shutil.move(upload_file, tmp_failed)
+            except shutil.Error:
+                pass
+
+    try:
+        if os.path.isdir(sys.argv[2]):
+            finaldir = os.path.abspath(sys.argv[2])
+            for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
+                try:
+                    shutil.move(f, finaldir)
+                except shutil.Error:
+                    pass
+    except:
+        print 'Failed to Archive {}'.format(upload_tmp_loading)
+        pass
+
+
+####
+####
 def rename_retouched_file(img):
     import os,re
     regex_coded = re.compile(r'.+?/[1-9][0-9]{8}_[1-6]\.[jJpPnNgG]{3}')
@@ -114,6 +181,7 @@ def get_exif_metadata_value(img, exiftag=None):
     except ImportError:
         print 'Missing pyexiv2 package. Try and find in apt-get, then pip or easy install or ignore this func'
         pass
+
 
 def get_image_color_minmax(img):
     import subprocess, os, sys, re
@@ -630,74 +698,17 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     return outfile #open(outfile).read() # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 
-def upload_imagedrop(root_dir):
-    import os, sys, re, csv, shutil, glob
-    archive_uploaded = os.path.join(root_dir, 'uploaded')
-    tmp_failed = os.path.join(root_dir, 'failed_upload')
-    try:
-        os.makedirs(archive_uploaded, 16877)
-    except OSError:
-        try:
-            shutil.rmtree(archive_uploaded, ignore_errors = True)
-            os.makedirs(archive_uploaded, 16877)
-        except:
-            pass
-
-    try:
-        os.makedirs(tmp_failed, 16877)
-    except:
-        pass
-
-    import time
-    upload_tmp_loading = glob.glob(os.path.join(root_dir, '*.*g'))
-    for upload_file in upload_tmp_loading:
-        try:
-            code = copy_to_imagedrop_upload(upload_file)
-            if code == True or code == '200':
-                try:
-                    shutil.move(upload_file, archive_uploaded)
-                    time.sleep(float(.1))
-                    print "1stTryOK", upload_file
-                except OSError:
-                    dst_file = upload_file.replace(root_dir, archive_uploaded)
-                    print 'OSError I think...dst_file'
-                    try:
-                        if os.path.exists(dst_file):
-                            os.remove(dst_file)
-                        shutil.move(upload_file, archive_uploaded)
-                    except AttributeError:
-                        print 'AttributeError I think.../'
-                        pass
-            else:
-                print "Uploaded {}".format(upload_file)
-                time.sleep(float(.1))
-                try:
-                    shutil.move(upload_file, archive_uploaded)
-                except shutil.Error:
-                    print 'shutil line 677 Error I think.../'
-                    pass
-        except OSError:
-            print "Error moving Finals to Arch {}".format(file)
-            try:
-                shutil.move(upload_file, tmp_failed)
-            except shutil.Error:
-                pass
-
-    try:
-        if os.path.isdir(sys.argv[2]):
-            finaldir = os.path.abspath(sys.argv[2])
-            for f in glob.glob(os.path.join(archive_uploaded, '*.*g')):
-                try:
-                    shutil.move(f, finaldir)
-                except shutil.Error:
-                    pass
-    except:
-        print 'Failed to Archive {}'.format(upload_tmp_loading)
-        pass
-
-
 def main(**kwargs):
     import sys,glob,shutil,os,re
+    from os import chdir, path
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
+    sys.path.append('/usr/local/batchRunScripts/mozu')
+    sys.path.append('/usr/local/batchRunScripts/python')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
+
     from image_processing.magick_tweaks import convert_img_srgb
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
@@ -707,32 +718,32 @@ def main(**kwargs):
         try:
             root_img_dir = sys.argv[1]
             if root_img_dir == 'jblocal':
-                root_img_dir = os.path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL')
+                root_img_dir = path.abspath('/mnt/Post_Ready/Retouchers/JohnBragato/MARKETPLACE_LOCAL')
             else:
-                root_img_dir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
+                root_img_dir = path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
         except IndexError:
-            root_img_dir = os.path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
+            root_img_dir = path.abspath('/mnt/Post_Complete/Complete_Archive/MARKETPLACE')
             pass
     else:
         root_img_dir = kwargs.get('root_img_dir', os.environ.get('ROOT_IMG_DIR'))
 
     try:
-        destdir = os.path.abspath(sys.argv[2])
-        if not os.path.isdir(destdir):
+        destdir = path.abspath(sys.argv[2])
+        if not path.isdir(destdir):
             os.makedirs(destdir)
     except IndexError:
-        destdir =  '/mnt/Post_Complete/ImageDrop/' ##os.path.join(root_img_dir, 'output')
+        destdir =  '/mnt/Post_Complete/ImageDrop/' ##path.join(root_img_dir, 'output')
         # try:
         #     os.makedirs(destdir, 16877)
         # except OSError:
         #     pass
 
-    if not type(root_img_dir) == list and os.path.isdir(root_img_dir):
+    if not type(root_img_dir) == list and path.isdir(root_img_dir):
         #import md5_unique_dup_files
         #duplicates = md5_unique_dup_files.find_duplicate_imgs(root_img_dir)[1]
         #[ os.remove(f) for f in duplicates if f ]
-        imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(os.path.join(root_img_dir,'*.??[gG]')))]
-        img_dict = sort_files_by_values(glob.glob(os.path.join(root_img_dir,'*.??[gG]')))
+        imgs_renamed = [rename_retouched_file(f) for f in (glob.glob(path.join(root_img_dir,'*.??[gG]')))]
+        img_dict = sort_files_by_values(glob.glob(path.join(root_img_dir,'*.??[gG]')))
         mz_converted_jpgs = []
         for k,v in img_dict.items():
             try:
@@ -762,17 +773,6 @@ def main(**kwargs):
                 # archive_uploaded = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""), "uploaded_" + str(todaysdatefullsecs).replace(",", ""))
                 archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
                 imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
-
-                import sys
-                from os import chdir, path
-                import sys,glob,shutil,os,re,datetime
-                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
-                sys.path.append('/usr/local/batchRunScripts/mozu')
-                sys.path.append('/usr/local/batchRunScripts/python')
-                sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
-                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
-                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
-                sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
 
                 #chdir('/usr/local/batchRunScripts/mozu')
                 import mozu_exec, mozu_image_util_functions
