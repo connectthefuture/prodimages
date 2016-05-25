@@ -30,7 +30,7 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     # orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     #
-    ALL = kwargs.get('ALL','')
+    all = kwargs.get('all','')
     vendor = kwargs.get('vendor', '_')
     vendor_brand = kwargs.get('vendor_brand', '')
     if kwargs.get('update') or kwargs.get('styles_list'):
@@ -39,13 +39,13 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
         colorstyle = kwargs.get('style_number')
         query_marketplace_inprog = single_style_q(colorstyle)
     elif vendor and not vendor_brand:
-        if not ALL:
+        if not all:
             query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {1} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and (POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID NOT LIKE '%TESTFLAG%') and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 ORDER BY POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last".format(vendor, kwargs.get('date_range', '15')).replace('TESTFLAG', 'TESTFLAG')
         else:
             query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_IMAGE.created_date as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {1} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and (POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NOT NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') ORDER BY POMGR.SUPPLIER_INGEST_IMAGE.created_date DESC nulls last, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor, kwargs.get('date_range', '30'))
     elif vendor_brand:
         # below is both complete and incomplete
-        if not ALL:
+        if not all:
             query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {2} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' and POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND LIKE '%{1}%') AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%' ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor, vendor_brand, kwargs.get('date_range', '15'))
         # below is prod not null
         else:
@@ -390,7 +390,7 @@ def download_mplce_url(urldest_tuple):
     # image_url = ''.join(image_url.split('%0A'))
     ########################################################
     ############       Finally     #########################
-    #####     Replace ALL url encoding % escapes    ########
+    #####     Replace all url encoding % escapes    ########
     ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
     # image_url  = image_url.replace('/Flat%2520Images/', '/Flat%20Images/')
     # print image_url, ' URL'
@@ -795,7 +795,7 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
         return filepath
 
 
-def main(vendor_brand='', dest_root='', ALL='', **kwargs):
+def main(vendor_brand='', dest_root='', all='', **kwargs):
     from os import environ, path, chdir, remove
     sys.path.append('/usr/local/batchRunScripts/mozu')
     sys.path.append('/usr/local/batchRunScripts/python')
@@ -811,8 +811,8 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     else:
         pass
-    if not ALL:
-        ALL = ''
+    if not all:
+        all = ''
 
     vendor = kwargs.get('vendor', '_')
     style_number = kwargs.get('style_number', '')
@@ -822,13 +822,13 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
     ## 1 ## Query for new Marketplace Styles
     # global single_flag
     if kwargs.get('update'):
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'))
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'), all=kwargs.get('all'),)
     elif kwargs.get('styles_list'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(kwargs.get('styles_list'))
     elif style_number:
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=kwargs.get('vendor_brand'), ALL=kwargs.get('ALL'), date_range=kwargs.get('date_range'))
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=kwargs.get('vendor_brand'), all=kwargs.get('all'), date_range=kwargs.get('date_range'))
     ########
     # Print Count only and return
     if kwargs.get('count_only'):
@@ -864,7 +864,7 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
         import os.path
         if kwargs.get('root_img_dir', environ.get('ROOT_IMG_DIR', '')):
             root_img_dir = dest_root
-        elif ALL:
+        elif all:
             root_img_dir = dest_root
         elif res is not None and os.path.isdir(res):
             root_img_dir = res
@@ -919,7 +919,7 @@ parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='stor
 parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by specific product Brand name')
 parser.add_argument('--date-range', '-d', action='store', default='5', help='Number of days prior to define the scope of the import')
 parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles. \nWill not work with additional arguments, \n\tuse --all flag for updating by vendor with --vendor flag.')
-parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False, help='Get both Incomplete and Complete Product Images for Import')
+parser.add_argument('--all', '--all', '-a', '-A', action='store_true', default=False, help='Get both Incomplete and Complete Product Images for Import')
 #
 parser.add_argument('--not-vendor', '-nv', default='', action='store', help='Vendor Name or ID to EXCLUDE from Query' )
 parser.add_argument('--count-only', '--count', '-c', action='store_true', default=False, help='Runs the Query only and prints total styles included in search based on the args supplied')
@@ -948,7 +948,7 @@ if __name__ == '__main__':
         main(vendor=parsedargs.vendor,
              not_vendor=parsedargs.not_vendor,
              vendor_brand=parsedargs.vendor_brand,
-             ALL=parsedargs.all,
+             all=parsedargs.all,
              date_range=parsedargs.date_range,
              count_only=parsedargs.count_only
              )
