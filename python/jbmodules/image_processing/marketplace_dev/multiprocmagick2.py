@@ -78,7 +78,7 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
         images = [f for f in glob.glob(imagesGlob) if f is not None]
     elif single_style:
         imagesGlob = glob.glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style))) + glob.glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
-        images = [f for f in glob.glob(imagesGlob) if f is not None]
+        images = [f for f in imagesGlob if f is not None]
     elif os.environ.get('ROOT_IMG_DIR') or root_img_dir:
         root_img_dir = os.environ.get('ROOT_IMG_DIR', root_img_dir)
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
