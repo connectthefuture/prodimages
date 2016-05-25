@@ -44,7 +44,7 @@ def run_threaded_imgdict(argslist=None):
     return img_dict_list
 
 
-def funkRunner3(root_img_dir=None, single_style='', update=''):
+def funkRunner3(root_img_dir='', single_style='', update=''):
     import multiprocessing
     #import Queue
     import threading
@@ -76,15 +76,13 @@ def funkRunner3(root_img_dir=None, single_style='', update=''):
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*/999999/*.??[gG]')
     elif single_style:
-        imagesGlob = os.path.join(root_img_dir, '*/*/*/{0}_[1-6].??[gG]'.format(single_style))
-    elif root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE' or root_img_dir is None:
-        imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
-    elif os.environ.get('ROOT_IMG_DIR'):
-        root_img_dir = os.environ.get('ROOT_IMG_DIR')
+        imagesGlob = os.path.join(root_img_dir, '*/*/*/{0}*.??[gG]'.format(single_style))
+    elif os.environ.get('ROOT_IMG_DIR') or root_img_dir:
+        root_img_dir = os.environ.get('ROOT_IMG_DIR', root_img_dir)
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
     else:
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
-        imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
+        imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
 
     print imagesGlob, "GLOBB11"
     # 1B
