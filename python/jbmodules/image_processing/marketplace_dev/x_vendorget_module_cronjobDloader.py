@@ -882,10 +882,10 @@ def main(vendor_brand='', dest_root='', ALL='', **kwargs):
     #
     #  #################################################
 ###########    #
-    if kwargs.get('update') == 'UPDATE':
+    if kwargs.get('update'):
         environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
         from glob import glob
-        updateable = [ remove(f) for f in glob(path.join(root_img_dir, '*/*/*.??g')) if duplicate_by_md5_mzimg(f) ]
+        updateable = [ remove(f) for f in (glob(path.join(root_img_dir, '*/*/*.??g')) + glob(path.join(root_img_dir, '*/*/*/*.??g')) ) if duplicate_by_md5_mzimg(f) ]
 
 ###########    #
     #
