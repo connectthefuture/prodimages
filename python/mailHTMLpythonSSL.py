@@ -95,7 +95,7 @@ if __name__ == '__main__':
         else:
             print len(toaddr.split('@')), '<-- lenElseOne--->Split ', toaddr.split('@')
             content = toaddr
-            toaddr  = 'john.bragato@bluefly.com stephen.parker@bluefly.com james.hoetker@bluefly.com john.bragato@gmail.com' #, sparker@udcny.com'
+            toaddr  = 'john.bragato@bluefly.com james.hoetker@bluefly.com john.bragato@gmail.com' #, sparker@udcny.com'
             try:
                 subject = sys.argv[2]
             except IndexError:
