@@ -86,7 +86,7 @@ def funkRunner3(root_img_dir=None, single_style='', update=''):
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*.??[gG]')
 
-    print imagesGlob, "GLOBB"
+    print imagesGlob, "GLOBB11"
     # 1B
     # Rename files using Multiproc pool
     poolRename = multiprocessing.Pool(8)
@@ -102,6 +102,7 @@ def funkRunner3(root_img_dir=None, single_style='', update=''):
 
     ## replace the glob pattern for single styles after the rename
     imagesGlob = imagesGlob.replace('_[1-6]', '*')
+    print imagesGlob, "GLOBB22"
     ########## Two ##########
     #
     # 2
