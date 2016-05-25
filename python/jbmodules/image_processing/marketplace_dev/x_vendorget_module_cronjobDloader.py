@@ -54,7 +54,7 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
     connection = orcl_engine.connect()
     if kwargs.get('update') and not kwargs.get('style_number'):
         query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'))
-        if vendor != '_' and kwargs.get('date_range'):
+        if vendor != '_' and kwargs.get('all'):
             query_marketplace_inprog.replace("AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3", "")
     elif kwargs.get('styles_list'):
         query_marketplaprog = styles_list_q(kwargs.get('styles_list'))
