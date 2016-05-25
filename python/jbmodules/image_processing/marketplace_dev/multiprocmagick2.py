@@ -76,7 +76,8 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*/999999/*.??[gG]')
     elif single_style:
-        imagesGlob = glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style))) + glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
+        imagesGlob = glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style)))
+        ig2 =  glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
     elif os.environ.get('ROOT_IMG_DIR') or root_img_dir:
         root_img_dir = os.environ.get('ROOT_IMG_DIR', root_img_dir)
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
