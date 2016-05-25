@@ -913,7 +913,7 @@ parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports\n
 ##############################
 #
 ######### Style ##############
-parser.add_argument('--style-number', '-s', action='store', default=False, help='A Single Valid 9 Digit Bluefly Style' )
+parser.add_argument('--style-number', '--style', '-s', action='store', default=False, help='A Single Valid 9 Digit Bluefly Style' )
 parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='A List of Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
 parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Vendor Name or ID use underscores in place of spaces if name is muitiple words' )
 parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by specific product Brand name')
