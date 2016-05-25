@@ -103,7 +103,7 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
     print 'Images Renamed'
 
     ## replace the glob pattern for single styles after the rename
-    imagesGlob = imagesGlob.replace('_[1-6]', '*')
+    #imagesGlob = imagesGlob.replace('_[1-6]', '*')
     print imagesGlob, "GLOBB22"
     ########## Two ##########
     #
