@@ -76,6 +76,7 @@ class Task(object):
         self.rgbmean = rgbmean
         self.destdir          = destdir
         self.mozu_sending_dir = mozu_sending_dir
+        self.mozu_log_dir = mozu_log_dir
         self.pngout           = ''
         self.mozu_out         = ''
 
