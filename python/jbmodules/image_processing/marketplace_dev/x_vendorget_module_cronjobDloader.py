@@ -811,7 +811,7 @@ def main(vendor_brand='', dest_root='', all='', **kwargs):
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     else:
         pass
-    if not all:
+    if not kwargs('all'):
         all = ''
 
     vendor = kwargs.get('vendor', '_')
@@ -822,7 +822,7 @@ def main(vendor_brand='', dest_root='', all='', **kwargs):
     ## 1 ## Query for new Marketplace Styles
     # global single_flag
     if kwargs.get('update'):
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'), all=kwargs.get('all'),)
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'), all=kwargs.get('all'))
     elif kwargs.get('styles_list'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(kwargs.get('styles_list'))
     elif style_number:
