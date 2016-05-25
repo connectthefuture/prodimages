@@ -48,7 +48,8 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
     import multiprocessing
     #import Queue
     import threading
-    import glob, os
+    import os
+    from glob import glob
     #from os import os.path
     import jbmodules
     from jbmodules import image_processing
@@ -75,18 +76,18 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
     if update:
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*/999999/*.??[gG]')
-        images = [f for f in glob.glob(imagesGlob) if f is not None]
+        images = [f for f in glob(imagesGlob) if f is not None]
     elif single_style:
-        imagesGlob = glob.glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style))) + glob.glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
+        imagesGlob = glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style))) + glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
         images = [f for f in imagesGlob if f is not None]
     elif os.environ.get('ROOT_IMG_DIR') or root_img_dir:
         root_img_dir = os.environ.get('ROOT_IMG_DIR', root_img_dir)
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
-        images = [f for f in glob.glob(imagesGlob) if f is not None]
+        images = [f for f in glob(imagesGlob) if f is not None]
     else:
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
-        images = [f for f in glob.glob(imagesGlob) if f is not None]
+        images = [f for f in glob(imagesGlob) if f is not None]
 
     print imagesGlob, "GLOBB11"
     # 1B
@@ -110,13 +111,13 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
     # 2
     # Extract image pixel data for enhancements. As list of tuples, [<url>, {rgbdata} ].. ithink
     if not single_style:
-        imagesGlob =  [ f for f in glob.glob(os.path.join(root_img_dir, '*/*/*.??[gG]')) + glob.glob(os.path.join(root_img_dir, '*/*/*/*.??[gG]')) if f is not None ]
+        imagesGlob =  [ f for f in glob(os.path.join(root_img_dir, '*/*/*.??[gG]')) + glob(os.path.join(root_img_dir, '*/*/*/*.??[gG]')) if f is not None ]
         img_list = [f for f in imagesGlob if f is not None]
         print type(img_list), '\tLen ImageList preThreaded', destdir
         img_dict = run_threaded_imgdict(argslist=(img_list,))
         print type(img_dict), '\tLen ImageDict postThreaded', destdir
     else:
-        imagesGlob = glob.glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style))) + glob.glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
+        imagesGlob = glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style))) + glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
         img_list = [f for f in imagesGlob if f is not None]
         img_dict = run_threaded_imgdict(argslist=(img_list,))
     ########## Three ##########
@@ -132,7 +133,7 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
 
     #
     # if single_style and len(imagesGlob) <= 7:
-    #     settest = list(set([ f.split('/')[:9] for f in glob.glob(imagesGlob) if f is not None ] ))
+    #     settest = list(set([ f.split('/')[:9] for f in glob(imagesGlob) if f is not None ] ))
     #     print settest, len(settest), ' <=====END FLAG TEST'
     #     for img in imagesGlob:
     #         os.remove(img)
