@@ -809,7 +809,7 @@ def main(**kwargs):
         #print mz_res, ' <-- MOZU-Done'
         subproc_magick_large_jpg(pngout, destdir=destdir)
         subproc_magick_medium_jpg(pngout, destdir=destdir)
-
+        return pngout
 
 
 if __name__ == '__main__':
