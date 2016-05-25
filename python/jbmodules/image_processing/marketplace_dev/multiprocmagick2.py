@@ -75,20 +75,24 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
     if update:
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*/999999/*.??[gG]')
+        images = [f for f in glob.glob(imagesGlob) if f is not None]
     elif single_style:
         imagesGlob = glob.glob(os.path.join(root_img_dir, '*/*/{0}*.??g'.format(single_style))) + glob.glob(os.path.join(root_img_dir, '*/*/*/{0}*.??g'.format(single_style)))
+        images = [f for f in glob.glob(imagesGlob) if f is not None]
     elif os.environ.get('ROOT_IMG_DIR') or root_img_dir:
         root_img_dir = os.environ.get('ROOT_IMG_DIR', root_img_dir)
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
+        images = [f for f in glob.glob(imagesGlob) if f is not None]
     else:
         root_img_dir = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
         imagesGlob = os.path.join(root_img_dir, '*/*/*.??[gG]')
+        images = [f for f in glob.glob(imagesGlob) if f is not None]
 
     print imagesGlob, "GLOBB11"
     # 1B
     # Rename files using Multiproc pool
     poolRename = multiprocessing.Pool(8)
-    images = [ f for f in glob.glob(imagesGlob) if f is not None ]
+
     while len(images) == 0:
         print len(images), '  <-- Length of the Images to Rename,Process etc. Now the Renamer'
         break
