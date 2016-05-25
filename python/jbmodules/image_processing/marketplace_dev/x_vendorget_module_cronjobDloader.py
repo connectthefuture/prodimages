@@ -824,7 +824,7 @@ def main(vendor_brand='', dest_root='', **kwargs):
     if kwargs.get('update'):
         marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'), all=kwargs.get('all'))
     elif kwargs.get('styles_list'):
-        marketplace_styles = sqlQuery_GetIMarketplaceImgs(kwargs.get('styles_list'))
+        marketplace_styles = sqlQuery_GetIMarketplaceImgs(styles_list=kwargs.get('styles_list'))
     elif style_number:
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
