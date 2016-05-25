@@ -55,7 +55,7 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
     ####
     connection = orcl_engine.connect()
     if kwargs.get('update') and not kwargs.get('style_number'):
-        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'), all=kwargs.get('all'))
+        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'), not_vendor=kwargs.get('not_vendor'), all=kwargs.get('all'))
     elif kwargs.get('styles_list'):
         query_marketplaprog = styles_list_q(kwargs.get('styles_list'))
     ####
@@ -822,7 +822,7 @@ def main(vendor_brand='', dest_root='', **kwargs):
     ## 1 ## Query for new Marketplace Styles
     # global single_flag
     if kwargs.get('update'):
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'), all=kwargs.get('all'))
+        marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), not_vendor=kwargs.get('not_vendor'), vendor=vendor, not_vendor=kwargs.get('not_vendor'), date_range=kwargs.get('date_range'), all=kwargs.get('all'))
     elif kwargs.get('styles_list'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(styles_list=kwargs.get('styles_list'))
     elif style_number:
