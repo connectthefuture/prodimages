@@ -34,7 +34,9 @@ except OSError:
 
 class Consumer(multiprocessing.Process):
 
-    def∫       multiprocessing.Process.__init__(self)
+    def __init__(self, tasks, results, consumers_finished):
+        # self.process_data =
+        multiprocessing.Process.__init__(self)
         self.tasks = tasks
         self.results = results
         self.consumers_finished = consumers_finished
