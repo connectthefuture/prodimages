@@ -810,8 +810,7 @@ def main(vendor_brand='', dest_root='', **kwargs):
         dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     else:
         pass
-    if not kwargs.get('all', ''):
-        all = ''
+    # all = kwargs.get('all', '')
 
     vendor = kwargs.get('vendor')
     style_number = kwargs.get('style_number', '')
