@@ -35,8 +35,10 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
     #
     vendor = kwargs.get('vendor', '_')
     vendor_brand = kwargs.get('vendor_brand', '')
-    if kwargs.get('update') or kwargs.get('styles_list'):
-        pass
+    if kwargs.get('update') and not kwargs.get('style_number'):
+        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'), not_vendor=kwargs.get('not_vendor'), all=kwargs.get('all'))
+    elif kwargs.get('styles_list'):
+        query_marketplace_inprog = styles_list_q(kwargs.get('styles_list'))
     elif kwargs.get('style_number'):
         colorstyle = kwargs.get('style_number')
         query_marketplace_inprog = single_style_q(colorstyle)
@@ -53,10 +55,7 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
         #    query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {2} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS not NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' and POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND LIKE '%{1}%') AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%' ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor, vendor_brand, kwargs.get('date_range', '30'))
     ####
     connection = orcl_engine.connect()
-    if kwargs.get('update') and not kwargs.get('style_number'):
-        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'), not_vendor=kwargs.get('not_vendor'), all=kwargs.get('all'))
-    elif kwargs.get('styles_list'):
-        query_marketplace_inprog = styles_list_q(kwargs.get('styles_list'))
+
     ####
     result = connection.execute(query_marketplace_inprog)
     styles = {}
