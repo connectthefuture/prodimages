@@ -318,11 +318,6 @@ def subproc_magick_large_jpg(img, destdir=None):
     if regex_valid_style_PNG.findall(img):
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_l.jpg')
 
-        # dimensions = get_dimensions(img)
-        # width  = dimensions.split('x')[0]
-        # height = dimensions.split('x')[1]
-        # if aspect_ratio == '1.2':
-
         aspect_ratio = get_aspect_ratio(img)
         if float(str(aspect_ratio)) == float(1.2):
             vert_horiz = '400x480'
@@ -392,12 +387,6 @@ def subproc_magick_medium_jpg(img, destdir=None):
         outfile = os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.jpg')
     else:
         outfile = os.path.join(destdir, img.split('/')[-1][:9] + '_m.jpg')
-
-
-    # dimensions = get_dimensions(img)
-    # width  = dimensions.split('x')[0]
-    # height = dimensions.split('x')[1]
-    #if aspect_ratio == '1.2':
 
     aspect_ratio = get_aspect_ratio(img)
     try:
