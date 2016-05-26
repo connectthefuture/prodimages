@@ -143,6 +143,8 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
 
     if img_dict and type(img_dict) == dict:
         return img_dict
+    else:
+        return img_list
     ########## SIX ##########
     # Delete em all
     # if root_img_dir == '/mnt/Post_Complete/Complete_Archive/MARKETPLACE':
