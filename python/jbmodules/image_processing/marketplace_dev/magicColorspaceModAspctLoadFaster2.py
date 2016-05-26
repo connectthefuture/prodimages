@@ -603,20 +603,13 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
                         print 'AUX5',  #height, 'hite<---->witth', width
 
 
-    #print dimensions, ' VERT PNG Fin ', vert_horiz, aspect_ratio
-
-
-    # Create a safe png then copy it and reuse tmp in following procs
-    #import tempfile, shutil
-    #tmpfileobj, tmpfile_path = tempfile.mkstemp(suffix=".png")
 
     subprocess.call([
         'convert',
         '-format',
         format,
         img,
-        # "-define",
-        #                    "stream:buffer-size\=0",
+
         '-define',
         'png:preserve-colormap\=true',
         '-define',
@@ -631,59 +624,38 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
         'png:compression-filter\=N',
         '-format',
         'png',
+
         '-modulate',
         modulate,
         '-depth',
         '8',
-
         "-density",
         "72",
         "-units",
         "pixelsperinch",
-
-        # '-bordercolor',
-        # 'white',
-        # '-border',
-        # '1x1',
 
         '-background',
         'white',
 
         "-define",
         "filter:blur=0.625",
-        #"filter:blur=0.88549061701764",
-
-        # '-crop',
-        # str(subprocess.call(["convert", img, "-virtual-pixel", "edge", "-blur", "0x15", "-fuzz", "1%", "-trim", "-format", "%wx%h%O", "info:"], stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False))
-        # ,
-
-        #"-fuzz",
-        #"10%",
-        #"-trim",
-        #'-gravity',
-        #'center',
-        #'+repage',
-        #"-gamma",
-        #".45455",
 
         "-distort",
         "Resize",
         #"-resample",
         vert_horiz,
-
-        #"-gamma",
-        #"2.2",
-
         '-background',
         'white',
+
         '-gravity',
         'center',
         '-extent',
-        dimensions,  ## +">",
+        dimensions,
 
         "-colorspace",
         "sRGB",
         #"-strip",
+
         '-unsharp',
         '2x2.7+0.5+0',
         '-quality',
@@ -692,9 +664,6 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
     ])
 
 
-    #tmpfileobj.close()
-    #shutil.copy2(tmpfile_path,outfile)
-    #print 'Done {}'.format(img)
     return outfile #open(outfile).read() # tmpfile_path  #os.path.join(destdir, img.split('/')[-1].split('.')[0] + '.png')
 
 

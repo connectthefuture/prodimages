@@ -10,6 +10,9 @@ urllib3.disable_warnings()
 
 #global single_flag
 #
+###############################
+######### SQL Queries #########
+###############################
 def update_q(**kwargs):
     ## removes gaffos onslaught of duplication
     not_vendor=kwargs.get('not_vendor', 'Gaffo')
@@ -27,6 +30,7 @@ def single_style_q(colorstyle):
     styles_list_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_STYLE.BLUEFLY_PRODUCT_COLOR = {0}".format(str(colorstyle))
     return str(styles_list_query)
 
+####
 def sqlQuery_GetIMarketplaceImgs(**kwargs):
     import sqlalchemy
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
@@ -90,6 +94,9 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
     return styles
 
 
+##############################################
+######### Examine Image Data/Compare #########
+##############################################
 def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
     import os.path, sys
     count = ''
@@ -140,7 +147,6 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
     return mproc_tuple_Qlist
 
 
-
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
@@ -151,7 +157,6 @@ def get_exif_all_data(image_filepath):
 ###############################
 ######### MD5 compare #########
 ###############################
-
 def md5_checksumer(src_filepath):
     import hashlib
     import os.path as path
@@ -274,7 +279,7 @@ def download_mplce_url(urldest_tuple):
     except:
         pass
     ########################################################
-    ########################################################
+    ##################  REGEX Filters Defined ##############
     ## Image URL Cleanup and Replace Extraneous/Bad Chars ##
     ########################################################
     ####### Dropbox Fix for View vs DL value ###############
@@ -300,23 +305,6 @@ def download_mplce_url(urldest_tuple):
         if not regex_dl.findall(image_url):
             image_url = image_url + '&dl=1'
 
-    ########################################################
-    ###########---- BEGIN UGLY Tmp Fix ---##################
-    ########################################################
-    ####### URL ENCODED % ESCAPES Fix ######################
-    ## Strip error causing Line Feed ascii char
-    #  -- Should be commented usually, only for temp fixing single uploads
-    # image_url = ''.join(image_url.split('%0A'))
-    ########################################################
-    ############       Finally     #########################
-    #####     Replace all url encoding % escapes    ########
-    ###  TWICE TO ACCOUNT FOR EX. %2520 --> %20 --> ' '  ###
-    # image_url  = image_url.replace('/Flat%2520Images/', '/Flat%20Images/')
-    # print image_url, ' URL'
-    ##############-------------------------#################
-    ##############---- END UGLY Tmp Fix ---#################
-    ########################################################
-
     regex_validurl = re.compile(r'^http[s]?://.+?$', re.U)
     regex_ftpurl = re.compile(r'^ftp[s]?://.+?$', re.U)
     regex_drive2 = re.compile(r'^(https://d(.+?)\.google\.com/).*\?id\=(?P<fileId>.+?)\&?.*?$', re.U)
@@ -329,9 +317,10 @@ def download_mplce_url(urldest_tuple):
     ########################
     #### DRIVE API AUTH ####
     #if regex_drive2.findall(image_url):
-
+    ########################################################
+    ########################################################
+    ########################################################
     import urllib3
-
     print ' 404 - 1 - Trying Urllib3 ', image_url
     hostname = urllib3.get_host(image_url)[1]
     ####################################################################################################
