@@ -23,7 +23,6 @@ def styles_list_q(styles_list):
     styles_list_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_STYLE.BLUEFLY_PRODUCT_COLOR in ({0})".format(str(styles_list).replace('[', '').replace(']', ''))
     return str(styles_list_query)
 
-
 def single_style_q(colorstyle):
     styles_list_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_STYLE.BLUEFLY_PRODUCT_COLOR = {0}".format(str(colorstyle))
     return str(styles_list_query)
@@ -141,14 +140,6 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
     return mproc_tuple_Qlist
 
 
-def drive_match_fileid(image_url):
-    import re
-    regex_drive3 = re.compile(r'^(https://d(.+?)\.google\.com/file/d/)(?P<fileid>.+?)/(edit|view)\?usp\=.*?$', re.U)
-    drivefile = regex_drive3.match(image_url)
-    if drivefile:
-        fileid = drivefile.groupdict()['fileid']
-        return fileid
-
 
 def get_exif_all_data(image_filepath):
     import exiftool
@@ -157,73 +148,9 @@ def get_exif_all_data(image_filepath):
     return metadata
 
 
-# def exchange_tokens(refresh_token=None):
-#     from boxsdk import OAuth2
-#     TOKENS_FILE = 'tokens_priv.pkl'
-#     CLIENT_ID = 'bxccmj5xnkngs8mggxv5ev49zuh80xs9'  # Insert Box client ID here
-#     CLIENT_SECRET = 'g4R1o909fgf1PSsa5mLMDslpAwcbfIQl'  # Insert Box client secret here
-#     from os import chdir, path, curdir
-#     ## Check for stored tokens
-#     import cPickle as pickle
-#     initdir = path.abspath(curdir)
-#     #chdir(path.dirname(path.realpath(__file__)))
-#     #TOKENS_FILE = 'tokens.pkl'
-#     if path.isfile(TOKENS_FILE):
-#         import requests, json
-#         #with open(TOKENS_FILE,'rb') as fr:
-#         #    oldaccess_token, valid_refresh_token = pickle.load(fr)
-#         with open(TOKENS_FILE,'rb') as fr:
-#             try:
-#                 oldaccess_token, valid_refresh_token = pickle.load(fr)
-#             except:
-#                 valid_refresh_token = None
-#                 pass
-#             if valid_refresh_token is not None:
-#                 pass
-#             else:
-#                 print 'Valid Refresh is None'
-#                 return
-#             #else:
-#             #    oldaccess_token, valid_refresh_token = 'uyT2xUxxZxROzlRjW8T6ge9q7Ne0drdC', 'IVilutwMwaxD9xWWLIpNVffJSQx4GX36Ido8Y2guCFzU6pKrhyovRtooJU8milXn'
-#         box_api_token_root = "https://app.box.com/api/oauth2/token"
-#         data = {
-#              ##'Authorization': "Bearer " + access_token,
-#              ##'BoxApi': "shared_link=" + shared_link,
-#              'grant_type': 'refresh_token',
-#              'refresh_token': valid_refresh_token,
-#              'client_id': CLIENT_ID,
-#              'client_secret': CLIENT_SECRET
-#              }
-#         headers = {
-#                 'Content-Type': 'application/json; charset=UTF-8'
-#         }
-#         res = requests.post(box_api_token_root, data=data, headers=headers)
-#         newcreds = json.loads(res.content)
-#         print(newcreds)
-#         try:
-#             access_token = newcreds['access_token']
-#             refresh_token = newcreds['refresh_token']
-#             ## Replace old cred dumping new creds to tokens.pkl
-#             ##---NOTE---## refresh token is valid for 60 days,
-#             ##  ------  ## afterwhich the pickle file token_priv should be manually edited/synced
-#             with open(TOKENS_FILE,'wb') as fw:
-#                 pickle.dump((access_token, refresh_token,),  fw)
-#                 print('BoxSuccess')
-#                 return access_token, refresh_token
-#         except KeyError:
-#             return
-#     ###################
-#     else:
-#         import __builtin__
-#         access_token, refresh_token = authenticate()
-#         pickle.dump((access_token, refresh_token,),  __builtin__.open(TOKENS_FILE,'wb'))
-#         #chdir(initdir)
-#         return access_token, refresh_token
-
-
-##########################
-##########################
-##########################
+###############################
+######### MD5 compare #########
+###############################
 
 def md5_checksumer(src_filepath):
     import hashlib
@@ -240,6 +167,31 @@ def md5_checksumer(src_filepath):
         except IndexError:
             print "Not Index Error Checksummer"
             return False
+
+def duplicate_by_md5_mzimg(filepath, **kwargs):
+    from db import mozu_image_table_instance
+    from os import stat
+    mozu_image_table = mozu_image_table_instance()
+    bf_imageid = filepath.split('/')[-1].split('.')[0]
+    filepathMD5 = md5_checksumer(filepath)
+    dbmd5MD5 = ''
+    dbmd5BFID = ''
+    dbmd5MD5  = mozu_image_table.select(whereclause=((mozu_image_table.c.md5checksum == filepathMD5))).execute().fetchone() #['md5checksum']
+    dbmd5BFID = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone()
+    if not dbmd5MD5:
+        if dbmd5BFID:
+            print 'Updateable Style, diff checksum\nDB:\t\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', filepath, '\n'
+            return filepath
+    elif filepathMD5 == dbmd5MD5['md5checksum']:
+        if dbmd5BFID and bf_imageid == dbmd5BFID['bf_imageid']:
+            print 'Duplicate Checksum:\nDB:\t\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', stat(filepath)
+            return False
+        else:
+            print 'ChecksumMatch Diffstyle:\nDB:\t\t', dbmd5BFID['bf_imageid'], '\nbfImageID:\t', bf_imageid, '\nPATH:\t', filepathMD5
+            return filepath
+    else:
+        print 'ElseD', filepathMD5, bf_imageid
+        return filepath
 
 ##########################
 ######### REDIS ##########
@@ -289,49 +241,18 @@ def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=Non
         print '\tREDIS FAILED --> ', filename
         return False
 
-###############
-###############
-###############
 
-def get_box_access_token():
-    import os
-    # reg
-    #initdir = os.path.abspath(__file__)
-    #os.chdir(os.path.join(os.path.abspath(__file__), '../../http_tools/auth/Box'))
-    from http_tools.auth.Box.boxapi_full_auth_dload import exchange_tokens
-    access_token, refresh_token = exchange_tokens()
-    #--# Return the valid access and fresh return token
-    ##---NOTE---## refresh token is valid for 60 days, afterwhich the pickle file should be manually synced
-    #os.chdir(initdir)
-    return access_token
+def drive_match_fileid(image_url):
+    import re
+    regex_drive3 = re.compile(r'^(https://d(.+?)\.google\.com/file/d/)(?P<fileid>.+?)/(edit|view)\?usp\=.*?$', re.U)
+    drivefile = regex_drive3.match(image_url)
+    if drivefile:
+        fileid = drivefile.groupdict()['fileid']
+        return fileid
 
-
-def get_real_box_download_url(shared_link, access_token=None):
-    import requests
-    # try:
-    #     access_token = get_box_access_token()
-    # except:
-    #     pass
-
-    if not access_token:
-        # GET TEMP DEVELOPER TOKEN TO PUSH THROUGH IF EXCHANGING FOR REFRESH KEY FAILS
-        access_token = '420ovyrdxCShLxroHTPjNYZCtktUOU3p' # get_box_access_token()
-    box_api_shared_root = "https://api.box.com/2.0/shared_items"
-    headers = {
-         'Authorization': "Bearer " + access_token,
-         'BoxApi': "shared_link=" + shared_link,
-     }
-    res = requests.get(box_api_shared_root, headers=headers)
-    try:
-        file_id = res.json()['id']
-        file_name = res.json()['name']
-        download_url = res.json()['shared_link']['download_url']
-        print 'downloadUrl', '<--->', download_url
-        return download_url
-    except ValueError:
-        print shared_link, ' Value3 Error '
-        return shared_link
-
+#############################
+###### Url Download #########
+#############################
 
 def download_mplce_url(urldest_tuple):
     import requests, re, urllib, urllib2, urllib3, OpenSSL, subprocess
@@ -403,41 +324,8 @@ def download_mplce_url(urldest_tuple):
 
     # regex_dropbox = re.compile(r'^https?://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
     ######################
-    #### BOX API AUTH ####
-    regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box\.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
-    if regex_boxapi.findall(image_url):
-        'REGEX BOXEd'
-        m = regex_boxapi.match(image_url)
-        m.groupdict()
-        try:
-            image_url_temp = image_url.rstrip('.jpg')
-            image_url = get_real_box_download_url(image_url_temp)
-            print 'boxingapi -->', image_url_temp, image_url, m.groupdict()
-        except OSError:
-            print "OSError LINE 356;"
-            pass
-    else:
-        pass
-    # finally:
-    #     pass
-    #         #import jbmodules.http_tools.auth.Box.boxapi_auth_downloader as boxapi_auth_downloader
-        #final_path = boxapi_auth_downloader.download_boxapi_drive_file(image_url=image_url, destpath=destpath)
-        #if final_path:
-            #return final_path
-        #else:
-        #    pass
-    # if regex_dropbox.findall(image_url):
-    #     import http_tools.auth.Dropbox.dropboxapi_service as dropboxapi_service
-    #     final_path = dropboxapi_service.download_auth_file(image_url=image_url, destpath=destpath)
-    #     if final_path:
-    #         return final_path
-    # elif regex_boxapi.findall(image_url):
-    #     import http_tools.auth.Box.boxapi_auth_downloader as boxapi_auth_downloader
-    #     final_path = boxapi_auth_downloader.download_boxapi_drive_file(image_url=image_url, destpath=destpath)
-    #     if final_path:
-    #         return final_path
-    # elif regex_drive2.findall(image_url):
-
+    #### BOX API AUTH #### removed
+    # regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box\.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
     ########################
     #### DRIVE API AUTH ####
     #if regex_drive2.findall(image_url):
@@ -594,7 +482,6 @@ def download_mplce_url(urldest_tuple):
         except IOError:
             print 'Hidden IO Error Related to timeout value in get'
 
-
 def multi_url_downloader(argslist=None):
     import Queue
     import threading
@@ -662,137 +549,7 @@ def multi_url_downloader(argslist=None):
 
     q.join() #block until all tasks are done
 
-
-def mongo_update_url_dest_info(urldest_tuple):
-    #print urldest_tuple, ' Url Dest Tuple mongo_update_url_dest_info'
-    image_url, destpath  = urldest_tuple[0]
-    image_url            = image_url
-    tmpfilename          = str(destpath.split('/')[-1])
-    colorstyle           = str(tmpfilename[:9])
-    image_number         = str(tmpfilename.split('.')[-2][-1])
-    content_type         = str(tmpfilename.split('.')[-1]).lower().replace('jpg', 'jpeg')
-    hostname             = None # '127.0.0.1' # 'mongodb://relic7:mongo7@ds031591.mongolab.com:31591/gridfs_mrktplce' # None
-    #hostname             = 'ds031591.mongolab.com:31591' ###'mongodb://mongo:mongo@prodimages.ny.bluefly.com:27017/gridfs_mrktplce' #
-    db_name              = 'gridfs_mrktplce' # hostname.split('/')[-1]
-
-    if image_url:
-        #import jbmodules
-        #from jbmodules import mongo_tools
-        import sys, os
-        jbmade = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        print jbmade
-        sys.path.append(jbmade)
-        sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
-        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
-        from mongo_tools import mongo_image_prep as mongo_image_prep
-
-        updateCheck = mongo_image_prep.update_gridfs_extract_metadata(
-            destpath,
-            hostname = hostname,
-            db_name = db_name,
-            image_url = image_url,
-            filename = tmpfilename,
-            colorstyle  = colorstyle,
-            image_number  = image_number,
-            content_type  = 'image/{}'.format(content_type)
-            )     ## image_url=image_url, destpath=destpath)
-        return updateCheck, destpath
-
-
-def mongo_upsert_threaded(argslist=None):
-    import Queue
-    import threading
-    import multiprocessing
-    # import jbmodules
-    qmongo = Queue.Queue()
-    #print type(argslist), type(argslist)
-    i = ''
-    for i in argslist: #put 30 tasks in the queue
-        if i:
-            #print i, ' Is a file to add to mongo argslist'
-            qmongo.put([i])
-
-    ## Return for
-    restest = ''
-    if i:
-        restest = '/'.join(i[1].split('/')[:-1])
-
-    def mongoworker():
-
-        count = 0
-        while True:
-            item = qmongo.get()
-            #print item, ' MongoWorker'
-            if item is None:
-                break
-            elif item is not None:
-                res, destpath = mongo_update_url_dest_info(item)
-                if not res and res is not False:
-                    #print ' NewsIt NotRes', count, res
-                    pass
-                elif res != 'Duplicate':
-                    pass #print ' NotRes Duplicate count is --> ', res, destpath
-                elif res == 'Duplicate' and destpath is not None:
-                    ## Then remove the download and delete
-                    try:
-                        import os
-                        os.remove(destpath)
-                        print ' -- MongoWorkerRemoved ', destpath, res
-                    except OSError:
-                        print ' OSError in MongoWorker '
-                        pass
-                    print ' Removed Duplicate image ', destpath.split('/')[-2], ' ---> ', item[0], ' Style\v ', destpath.split('/')[-1]
-
-            print ' Mongo Res Done', res
-            # try:
-            #     insertres =  jbmodules.mongo_image_prep.insert_gridfs_extract_metadata(item)
-            # except:
-            #     insertres =  jbmodules.mongo_image_prep.update_gridfs_extract_metadata(item)
-            count += 1
-            #print count, res, item, ' <-- now task done MongoWorker' ## '\n\t', imgdata
-            qmongo.task_done()
-
-    jobcount = multiprocessing.cpu_count() - 2 #len(argslist) #detect number of cores
-    print("Creating %d threads for the MongoMachine" % jobcount)
-    for i in xrange(jobcount):
-        tmongo = threading.Thread(target=mongoworker)
-        tmongo.daemon = True
-        tmongo.start()
-
-    qmongo.join() #block until all tasks are done
-    print 'Mongo Upsert threads done'
-    if restest:
-        return restest
-    else:
-        return
-
-
-def duplicate_by_md5_mzimg(filepath, **kwargs):
-    from db import mozu_image_table_instance
-    from os import stat
-    mozu_image_table = mozu_image_table_instance()
-    bf_imageid = filepath.split('/')[-1].split('.')[0]
-    filepathMD5 = md5_checksumer(filepath)
-    dbmd5MD5 = ''
-    dbmd5BFID = ''
-    dbmd5MD5  = mozu_image_table.select(whereclause=((mozu_image_table.c.md5checksum == filepathMD5))).execute().fetchone() #['md5checksum']
-    dbmd5BFID = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone()
-    if not dbmd5MD5:
-        if dbmd5BFID:
-            print 'Updateable Style, diff checksum\nDB:\t\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', filepath, '\n'
-            return filepath
-    elif filepathMD5 == dbmd5MD5['md5checksum']:
-        if dbmd5BFID and bf_imageid == dbmd5BFID['bf_imageid']:
-            print 'Duplicate Checksum:\nDB:\t\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', stat(filepath)
-            return False
-        else:
-            print 'ChecksumMatch Diffstyle:\nDB:\t\t', dbmd5BFID['bf_imageid'], '\nbfImageID:\t', bf_imageid, '\nPATH:\t', filepathMD5
-            return filepath
-    else:
-        print 'ElseD', filepathMD5, bf_imageid
-        return filepath
-
-
+########### Main ############
 def main(vendor_brand='', dest_root='', **kwargs):
     from os import environ, path, chdir, remove
     sys.path.append('/usr/local/batchRunScripts/mozu')
