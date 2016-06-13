@@ -5,7 +5,6 @@ def run_threaded_imgdict(argslist=None):
     import Queue
     import threading
     import multiprocessing
-    import jbmodules
     from jbmodules.image_processing.marketplace_dev.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
     q = Queue.Queue()
     # print type(argslist), len(argslist), ' type and length argslist \n'

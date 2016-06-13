@@ -291,7 +291,7 @@ def download_mplce_url(urldest_tuple):
     if regex_dbx.findall(image_url):
         if regex_dbxprev.findall(image_url):
             print 'REGEX DBXPRE'
-            import http_tools.auth.Dropbox.dropboxapi_service as dropboxapi_service
+            # import http_tools.auth.Dropbox.dropboxapi_service as dropboxapi_service
             final_path = image_url #dropboxapi_service.download_auth_file(image_url=image_url, destpath=destpath)
 
             if final_path:
@@ -351,6 +351,8 @@ def download_mplce_url(urldest_tuple):
                 print 'Final DRIVE Failure ', destpath, '\n', image_url
         except IndexError:
             print 'Final DRIVE Exception ', destpath, '\n', image_url
+        ## Tmp - Cannot use auth from johnb or http_tools above
+        except: pass
 
     elif regex_drive2.findall(image_url):
         print image_url, ' DRIVE'
@@ -366,6 +368,9 @@ def download_mplce_url(urldest_tuple):
         except IndexError:
             print 'Final DRIVE Exception ', destpath, '\n', image_url
             #return
+            ## Tmp - Cannot use auth from johnb or http_tools above
+        except:
+            pass
 
     elif regex_ftpurl.findall(image_url):
         print image_url, ' FTP--FTP\n...probably Jaipur...'
@@ -378,6 +383,8 @@ def download_mplce_url(urldest_tuple):
             return destpath
         except pycurl.error, error:
             print 'Pycurl error in FTP Download --> ', error
+        ## Tmp - Cannot use auth from johnb or http_tools above
+        except: pass
 
     #############
     ## No Auth ##
