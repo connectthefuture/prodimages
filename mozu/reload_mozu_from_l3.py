@@ -35,6 +35,9 @@ def create_list_files_to_send(styles_list, imgnum=0, ext='.png', root_dir='/mnt/
 
 def main(styles_list):
     from os import environ
+    ##### Temp ####
+    environ['IMGDIR'] = '/mnt/images'
+    ## ************* ##
     imgnum = int(environ.get('IMGNUM', 0))
     root_dir = environ.get('IMGDIR', '/mnt/Post_Complete/MozuRoot')
     ext = environ.get('IMGEXT','.png')
