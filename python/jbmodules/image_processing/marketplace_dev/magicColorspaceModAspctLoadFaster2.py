@@ -659,15 +659,9 @@ def subproc_magick_png(img, rgbmean=None, destdir=None):
 def main(**kwargs):
     import sys,glob,shutil,os,re
     from os import chdir, path
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
-    sys.path.append('/usr/local/batchRunScripts/mozu')
-    sys.path.append('/usr/local/batchRunScripts/python')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
 
-    from image_processing.magick_tweaks import convert_img_srgb
+    import convert_img_srgb
     regex_coded = re.compile(r'^.+?/[1-9][0-9]{8}_[1-6]\.[JjPpNnGg]{3}$')
     regex_alt = re.compile(r'^.+?/[1-9][0-9]{8}_\w+?0[1-6]\.[JjPpNnGg]{3}$')
     regex_valid_style = re.compile(r'^.+?/[1-9][0-9]{8}_?.*?\.[JjPpNnGg]{3}$')

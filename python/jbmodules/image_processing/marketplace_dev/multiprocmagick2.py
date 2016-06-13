@@ -5,15 +5,13 @@ def run_threaded_imgdict(argslist=None):
     import Queue
     import threading
     import multiprocessing
-    from jbmodules.image_processing.marketplace_dev.magicColorspaceModAspctLoadFaster2 import sort_files_by_values
+    from magicColorspaceModAspctLoadFaster2 import sort_files_by_values
     q = Queue.Queue()
-    # print type(argslist), len(argslist), ' type and length argslist \n'
-    #print type(argslist), type(argslist)
+
     for i in argslist[0]: #put 30 tasks in the queue
         #print 'i ', ' argslist'
         if i:
             q.put([i])
-
 
     img_dict_list = []
     def worker():
@@ -49,21 +47,12 @@ def funkRunner3(root_img_dir='', single_style='', update=''):
     import threading
     import os
     from glob import glob
-    #from os import os.path
-    import jbmodules
-    from jbmodules import image_processing
-    from jbmodules.image_processing.marketplace_dev.magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
+    from magicColorspaceModAspctLoadFaster2 import rename_retouched_file, sort_files_by_values
     destdir = os.environ.get('DESTDIR', '/mnt/Post_Complete/ImageDrop')
     print 'Starting Funkrunner2 Pools'
 
     ## Get all modules on poython exec path
     import sys
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/magick_tweaks')
-    sys.path.append('/usr/local/batchRunScripts/mozu')
-    sys.path.append('/usr/local/batchRunScripts/python')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
-    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
 
     ########## One ##########

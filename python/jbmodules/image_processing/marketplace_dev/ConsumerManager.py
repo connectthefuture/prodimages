@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-import os
 import multiprocessing
 from Queue import Empty
 
@@ -16,10 +15,6 @@ todaysdate = todaysdatefull[:8] # '{:%Y,%m,%d}'.format(datetime.datetime.now())
 todaysdatearch = todaysdatefull # '{:%Y,%m,%d,%H,%M}'.format(datetime.datetime.now())
 archive = '/mnt/Post_Complete/Complete_Archive/images'
 archive_uploaded_day = path.join(archive, "dateloaded_" + str(todaysdate).replace(",", ""))
-# global imgdest_jpg_mozu
-# imgdest_jpg_mozu = path.join(archive_uploaded_day, 'JPG_MOZU_LOAD')
-# global imgdest_jpg_mozu_loaded
-# imgdest_jpg_mozu_loaded = path.join(imgdest_jpg_mozu, 'LOADED')
 mozu_sending_dir = environ.get('MOZU_HIERARCHY', '/mnt/Post_Complete/Complete_Archive/MozuRoot')
 mozu_log_dir = path.join(mozu_sending_dir, 'log')
 
@@ -65,12 +60,6 @@ class Task(object):
     def __init__(self, img, rgbmean, destdir):
         import tempfile, shutil
         import sys
-        from os import environ, path
-        sys.path.append('/usr/local/batchRunScripts/mozu')
-        sys.path.append('/usr/local/batchRunScripts/python')
-        sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
-        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
-        sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
         sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
         self.img = img
         self.rgbmean = rgbmean
@@ -81,13 +70,9 @@ class Task(object):
         self.mozu_out         = ''
 
     def __call__(self):
-        import jbmodules
-        import shutil
-        from jbmodules import image_processing
-        from jbmodules.image_processing import marketplace_dev, magick_tweaks
-        import jbmodules.image_processing.marketplace_dev.magicColorspaceModAspctLoadFaster2 as magickProc2
-        import jbmodules.image_processing.magick_tweaks.convert_img_srgb
-        jbmodules.image_processing.magick_tweaks.convert_img_srgb.main(image_file=self.img)
+        import magicColorspaceModAspctLoadFaster2 as magickProc2
+        import convert_img_srgb
+        convert_img_srgb.main(image_file=self.img)
         print self.img, ' <-- self.img ', self.rgbmean
         try:
             if self.mozu_sending_dir:
@@ -110,32 +95,6 @@ class Task(object):
             else:
                 magickProc2.subproc_magick_large_jpg(self.png_out, destdir=self.destdir)
                 ret = magickProc2.subproc_magick_medium_jpg(self.png_out, destdir=self.destdir)
-            # try:
-            #     ############################
-            #     ###### mozu
-            #     ############################
-            #     import sys, datetime
-            #     from os import chdir, path, makedirs
-            #     todaysdatefullsecs = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
-            #     tmp_mozu_loading = os.path.join("/mnt/Post_Complete/Complete_Archive/.tmp_mozu_loading" , "tmp_" + str(todaysdatefullsecs).replace(",", ""))
-            #     if path.isdir(tmp_mozu_loading):
-            #         pass
-            #     else:
-            #         try:
-            #             os.makedirs(tmp_mozu_loading, 16877)
-            #         except:
-            #             print " Error", tmp_mozu_loading
-            #     chdir('/usr/local/batchRunScripts/mozu')
-            #     import mozu_exec, mozu_image_util_functions
-            #     ## Compress and convert to jpg
-            #     if path.isfile(pngout):
-            #         print ' Is file PNGOUT', pngout, img
-            #         jpgout = mozu_image_util_functions.magick_convert_to_jpeg(pngout,destdir=tmp_mozu_loading)
-            #     else:
-            #         #pass
-            #         jpgout = mozu_image_util_functions.magick_convert_to_jpeg(self.img,destdir=tmp_mozu_loading)
-            #     mozu_exec.main(jpgout)
-            #     ############################
 
             return '-ret- %s \n-path- %s \n-dest- %s \n' % (ret, self.img, self.destdir)
             #except TypeError:
