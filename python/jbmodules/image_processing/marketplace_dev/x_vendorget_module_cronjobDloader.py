@@ -713,7 +713,7 @@ parser = argparse.ArgumentParser(
 ##############################
 #
 ######### Style ##############
-parser.add_argument('--style-number', '--style', '-s', action='store', default=False,
+parser.add_argument('--style-number', '--style', '-s', action='store',
                     help='A Single Valid 9 Digit Bluefly Style')
 parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER,
                     help='A List of Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.')
