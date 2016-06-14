@@ -4,36 +4,45 @@
 ## Bypass Certificate authentication
 import urllib3
 import urllib3.contrib.pyopenssl
+
 urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 urllib3.disable_warnings()
 
-#global single_flag
+
+# global single_flag
 #
 ###############################
 ######### SQL Queries #########
 ###############################
 def update_q(**kwargs):
     ## removes gaffos onslaught of duplication
-    not_vendor=kwargs.get('not_vendor', 'Gaffo')
-    update_query="SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_image.created_date >= sysdate - {date_range} AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{vendor}%' AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID not LIKE '%{not_vendor}%' AND POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL AND POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER  <= 6 AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3 AND POMGR.SUPPLIER_INGEST_STYLE.modified_date >= POMGR.SUPPLIER_INGEST_STYLE.created_date ORDER BY vendor_name Nulls Last, ingest_dt DESC Nulls Last,  1,  colorstyle Nulls Last".format(vendor=kwargs.get('vendor'), not_vendor=not_vendor, date_range=kwargs.get('date_range'))
+    not_vendor = kwargs.get('not_vendor', 'Gaffo')
+    update_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_image.created_date >= sysdate - {date_range} AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{vendor}%' AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID not LIKE '%{not_vendor}%' AND POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL AND POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER  <= 6 AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3 AND POMGR.SUPPLIER_INGEST_STYLE.modified_date >= POMGR.SUPPLIER_INGEST_STYLE.created_date ORDER BY vendor_name Nulls Last, ingest_dt DESC Nulls Last,  1,  colorstyle Nulls Last".format(
+        vendor=kwargs.get('vendor'), not_vendor=not_vendor, date_range=kwargs.get('date_range'))
     if len(kwargs.get('vendor', '')) > 1 and kwargs.get('all'):
         update_query = update_query.replace("AND pomgr.supplier_ingest_image.created_date > image_ready_dt + 3", "")
     update_query = update_query.replace("AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID not LIKE '%%'", "")
     return str(update_query)
 
+
 def styles_list_q(styles_list):
-    styles_list_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_STYLE.BLUEFLY_PRODUCT_COLOR in ({0})".format(str(styles_list).replace('[', '').replace(']', ''))
+    styles_list_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_STYLE.BLUEFLY_PRODUCT_COLOR in ({0})".format(
+        str(styles_list).replace('[', '').replace(']', ''))
     return str(styles_list_query)
 
+
 def single_style_q(colorstyle):
-    styles_list_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_STYLE.BLUEFLY_PRODUCT_COLOR = {0}".format(str(colorstyle))
+    styles_list_query = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR AS colorstyle, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER AS alt, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID AS vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND AS vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE AS vendor_style, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID AS genstyleid, POMGR.PRODUCT_COLOR.production_complete_DT AS production_complete_dt, POMGR.PRODUCT_COLOR.COPY_READY_DT AS copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT AS image_ready_dt, POMGR.SUPPLIER_INGEST_IMAGE.CREATED_DATE AS ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE  AS style_ingest_dt, POMGR.SUPPLIER_INGEST_STYLE.MODIFIED_DATE  AS style_mod_dt, POMGR.PRODUCT_COLOR.ACTIVE  AS active, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY AS product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL  AS image_url FROM POMGR.SUPPLIER_INGEST_STYLE LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID INNER JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR WHERE pomgr.supplier_ingest_STYLE.BLUEFLY_PRODUCT_COLOR = {0}".format(
+        str(colorstyle))
     return str(styles_list_query)
+
 
 ####
 def sqlQuery_GetIMarketplaceImgs(**kwargs):
     import sqlalchemy
-    orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
+    orcl_engine = sqlalchemy.create_engine(
+        'oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     # orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://jbragato:Blu3f!y@192.168.30.66:1531/dssprd1')
     #
     vendor = kwargs.get('vendor', '_')
@@ -42,20 +51,23 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
         colorstyle = kwargs.get('style_number')
         query_marketplace_inprog = single_style_q(colorstyle)
     elif kwargs.get('update'):
-        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'), not_vendor=kwargs.get('not_vendor'), all=kwargs.get('all'))
+        query_marketplace_inprog = update_q(vendor=vendor, date_range=kwargs.get('date_range', '5'),
+                                            not_vendor=kwargs.get('not_vendor'), all=kwargs.get('all'))
     elif kwargs.get('styles_list'):
         query_marketplace_inprog = styles_list_q(kwargs.get('styles_list'))
 
     elif vendor and not vendor_brand:
-        #if not all:
-        query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {1} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and (POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID NOT LIKE '%TESTFLAG%') and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 ORDER BY POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last".format(vendor, kwargs.get('date_range', '15')).replace('TESTFLAG', 'TESTFLAG')
-        #else:
+        # if not all:
+        query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {1} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and (POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' AND POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID NOT LIKE '%TESTFLAG%') and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 ORDER BY POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last".format(
+            vendor, kwargs.get('date_range', '15')).replace('TESTFLAG', 'TESTFLAG')
+        # else:
         #    query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_IMAGE.created_date as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {1} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and (POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS NOT NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL) and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%') ORDER BY POMGR.SUPPLIER_INGEST_IMAGE.created_date DESC nulls last, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor, kwargs.get('date_range', '30'))
     elif vendor_brand:
         # below is both complete and incomplete
-        query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {2} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' and POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND LIKE '%{1}%') AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%' ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor, vendor_brand, kwargs.get('date_range', '15'))
+        query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {2} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and POMGR.SUPPLIER_INGEST_IMAGE.URL IS NOT NULL and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' and POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND LIKE '%{1}%') AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%' ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(
+            vendor, vendor_brand, kwargs.get('date_range', '15'))
         # below is prod not null
-        #else:
+        # else:
         #    query_marketplace_inprog = "SELECT DISTINCT POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR as colorstyle, POMGR.PO_LINE.PO_HDR_ID as po_number, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID as vendor_name, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND as vendor_brand, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_STYLE as vendor_style, POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_CATEGORY as product_folder, POMGR.SUPPLIER_INGEST_IMAGE.URL as image_url, POMGR.SUPPLIER_INGEST_IMAGE.DOWNLOADED as download_status, POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER as alt, POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID as genstyleid, POMGR.PRODUCT_COLOR.COPY_READY_DT as copy_ready_dt, POMGR.PRODUCT_COLOR.IMAGE_READY_DT as image_ready_dt, POMGR.PRODUCT_COLOR.PRODUCTION_COMPLETE_DT as production_complete_dt, POMGR.PRODUCT_COLOR.ACTIVE as active, POMGR.SUPPLIER_INGEST_SKU.THIRD_SUPPLIER_ID as third_supplierid, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE as ingest_dt FROM POMGR.SUPPLIER_INGEST_STYLE RIGHT JOIN POMGR.SUPPLIER_INGEST_SKU ON POMGR.SUPPLIER_INGEST_SKU.STYLE_ID = POMGR.SUPPLIER_INGEST_STYLE.ID LEFT JOIN POMGR.SUPPLIER_INGEST_IMAGE ON POMGR.SUPPLIER_INGEST_STYLE.ID = POMGR.SUPPLIER_INGEST_IMAGE.STYLE_ID RIGHT JOIN POMGR.PO_LINE ON POMGR.PO_LINE.PRODUCT_COLOR_ID = POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR RIGHT JOIN POMGR.PRODUCT_COLOR ON POMGR.PRODUCT_COLOR.ID = POMGR.PO_LINE.PRODUCT_COLOR_ID WHERE POMGR.SUPPLIER_INGEST_IMAGE.created_date >= sysdate - {2} and POMGR.SUPPLIER_INGEST_IMAGE.IMAGE_NUMBER <= 6 and POMGR.PRODUCT_COLOR.IMAGE_READY_DT IS not NULL and POMGR.SUPPLIER_INGEST_IMAGE.URL IS not NULL and (POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID LIKE '%{0}%' and POMGR.SUPPLIER_INGEST_STYLE.VENDOR_BRAND LIKE '%{1}%') AND POMGR.PRODUCT_COLOR.VENDOR_STYLE NOT LIKE '%VOID%' ORDER BY POMGR.SUPPLIER_INGEST_STYLE.BLUEFLY_PRODUCT_COLOR Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.CREATED_DATE DESC Nulls Last, POMGR.SUPPLIER_INGEST_STYLE.VENDOR_ID Nulls Last".format(vendor, vendor_brand, kwargs.get('date_range', '30'))
     ####
     connection = orcl_engine.connect()
@@ -85,10 +97,11 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
         # styledata['third_supplierid'] = row['third_supplierid']
         styledata['ingest_dt'] = row['ingest_dt']
         style_alt = "{0}_{1}".format(row['colorstyle'], row['alt'])
-        #consigstyle['vendor_style'] = row['vendor_style']
+        # consigstyle['vendor_style'] = row['vendor_style']
         styles[style_alt] = styledata
 
-    print '\n\n\n\n\n\n\n\t\tIn Under 10 Seconds\nWe will be Attempting\nt\tThe Download and Processing\vof\n\t\v{0} Image Urls\n\n\n\n\n\n'.format(len(styles))
+    print '\n\n\n\n\n\n\n\t\tIn Under 10 Seconds\nWe will be Attempting\nt\tThe Download and Processing\vof\n\t\v{0} Image Urls\n\n\n\n\n\n'.format(
+        len(styles))
     from time import sleep
     sleep(10)
     connection.close()
@@ -98,23 +111,23 @@ def sqlQuery_GetIMarketplaceImgs(**kwargs):
 ##############################################
 ######### Examine Image Data/Compare #########
 ##############################################
-def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
+def parse_mplace_dict2tuple(styles_dict, dest_root=None, **kwargs):
     import os.path, sys
     count = ''
     if kwargs.get('style_number'):
         count = 1
     else:
-        count = 2 # len(set(list([k for k in styles_dict.keys()])))
+        count = 2  # len(set(list([k for k in styles_dict.keys()])))
     print ' Count ', count, styles_dict.keys()
 
     mproc_tuple_Qlist = []
-    for k,v in styles_dict.iteritems():
+    for k, v in styles_dict.iteritems():
         try:
-            colorstyle  = v['colorstyle']
-            image_url   = v['image_url']
-            po_number   = v['po_number']
+            colorstyle = v['colorstyle']
+            image_url = v['image_url']
+            po_number = v['po_number']
             vendor_name = v['vendor_name']
-            alt_number  = v['alt']
+            alt_number = v['alt']
             ext = '.' + image_url.split('.')[-1]
             if len(image_url.split('.')[-1]) == 3:
                 ext = '.' + str(image_url.split('.')[-1][:3])
@@ -123,17 +136,17 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
             else:
                 ext = '.jpg'
             if alt_number:
-                bfly_ext = "_{0}{1}".format(alt_number,ext)
+                bfly_ext = "_{0}{1}".format(alt_number, ext)
                 ext = bfly_ext
             if count > 1:
-                destdir  = os.path.join(dest_root, str(vendor_name), str(po_number))
+                destdir = os.path.join(dest_root, str(vendor_name), str(po_number))
             elif count == 1:
-                destdir  = os.path.join(dest_root, str(vendor_name), str(po_number), str(colorstyle))
+                destdir = os.path.join(dest_root, str(vendor_name), str(po_number), str(colorstyle))
             else:
                 raise ValueError
 
             destpath = os.path.join(destdir, colorstyle + ext)
-            tupleargs = (image_url, destpath, )
+            tupleargs = (image_url, destpath,)
             mproc_tuple_Qlist.append(tupleargs)
             if os.path.isdir(destdir):
                 pass
@@ -143,7 +156,7 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
                 except:
                     pass
         except ValueError:
-            print 'Raised ValueError ', count, k,' ',v
+            print 'Raised ValueError ', count, k, ' ', v
             pass
     return mproc_tuple_Qlist
 
@@ -151,7 +164,7 @@ def parse_mplace_dict2tuple(styles_dict,dest_root=None, **kwargs):
 def get_exif_all_data(image_filepath):
     import exiftool
     with exiftool.ExifTool() as et:
-        metadata = et.get_metadata(image_filepath)#['XMP:DateCreated'][:10].replace(':','-')
+        metadata = et.get_metadata(image_filepath)  # ['XMP:DateCreated'][:10].replace(':','-')
     return metadata
 
 
@@ -174,6 +187,7 @@ def md5_checksumer(src_filepath):
             print "Not Index Error Checksummer"
             return False
 
+
 def duplicate_by_md5_mzimg(filepath, **kwargs):
     from db import mozu_image_table_instance
     from os import stat
@@ -182,37 +196,45 @@ def duplicate_by_md5_mzimg(filepath, **kwargs):
     filepathMD5 = md5_checksumer(filepath)
     dbmd5MD5 = ''
     dbmd5BFID = ''
-    dbmd5MD5  = mozu_image_table.select(whereclause=((mozu_image_table.c.md5checksum == filepathMD5))).execute().fetchone() #['md5checksum']
-    dbmd5BFID = mozu_image_table.select(whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone()
+    dbmd5MD5 = mozu_image_table.select(
+        whereclause=((mozu_image_table.c.md5checksum == filepathMD5))).execute().fetchone()  # ['md5checksum']
+    dbmd5BFID = mozu_image_table.select(
+        whereclause=((mozu_image_table.c.bf_imageid == bf_imageid))).execute().fetchone()
     if not dbmd5MD5:
         if dbmd5BFID:
-            print 'Updateable Style, diff checksum\nDB:\t\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', filepath, '\n'
+            print 'Updateable Style, diff checksum\nDB:\t\t', dbmd5BFID[
+                'md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', filepath, '\n'
             return filepath
     elif filepathMD5 == dbmd5MD5['md5checksum']:
         if dbmd5BFID and bf_imageid == dbmd5BFID['bf_imageid']:
-            print 'Duplicate Checksum:\nDB:\t\t', dbmd5BFID['md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', stat(filepath)
+            print 'Duplicate Checksum:\nDB:\t\t', dbmd5BFID[
+                'md5checksum'], '\nFPATHMD5:\t', filepathMD5, '\nPATH:\t', stat(filepath)
             return False
         else:
-            print 'ChecksumMatch Diffstyle:\nDB:\t\t', dbmd5BFID['bf_imageid'], '\nbfImageID:\t', bf_imageid, '\nPATH:\t', filepathMD5
+            print 'ChecksumMatch Diffstyle:\nDB:\t\t', dbmd5BFID[
+                'bf_imageid'], '\nbfImageID:\t', bf_imageid, '\nPATH:\t', filepathMD5
             return filepath
     else:
         print 'ElseD', filepathMD5, bf_imageid
         return filepath
 
+
 ##########################
 ######### REDIS ##########
 ##########################
-def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=None, colorstyle=None, alt=None, local_filepath=None, version=None):
+def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=None, colorstyle=None, alt=None,
+                                       local_filepath=None, version=None):
     import redis
-    #redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
-    #redis_port = 17996
+    # redis_host = 'pub-redis-17996.us-east-1-4.3.ec2.garantiadata.com'
+    # redis_port = 17996
     redis_host = '127.0.0.1'
     redis_port = 6379
 
-    r = redis.Redis(host=redis_host, port=redis_port, encoding='utf-8', encoding_errors='strict', db=0)  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
+    r = redis.Redis(host=redis_host, port=redis_port, encoding='utf-8', encoding_errors='strict',
+                    db=0)  ##,db=0, password=None, socket_timeout=None, connection_pool=None, unix_socket_path=None)
 
     if not filename:
-        filename=local_filepath.split('/')[-1]
+        filename = local_filepath.split('/')[-1]
     if filename is not None and filename[:9].isdigit():
         colorstyle = filename[:9]
         ext = filename.split('.')[-1]
@@ -223,12 +245,12 @@ def check_updated_image_by_md5checksum(filename, md5checksum=None, image_url=Non
         else:
             alt = 'NA'
     else:
-        colorstyle='NA'
-        alt='NA'
+        colorstyle = 'NA'
+        alt = 'NA'
         ext = 'NA'
 
     if r.sadd("marketplace:currentsite", filename):
-    #if r.mset("google_drive:ll_editorial", filename):
+        # if r.mset("google_drive:ll_editorial", filename):
         ## Faking Hashes with Sets
         ## r.set("filename:%s:colorstyle" % filename, colorstyle)
         ## r.set("filename:%s:local_filepath" % filename, local_filepath)
@@ -255,6 +277,7 @@ def drive_match_fileid(image_url):
     if drivefile:
         fileid = drivefile.groupdict()['fileid']
         return fileid
+
 
 #############################
 ###### Url Download #########
@@ -286,13 +309,15 @@ def download_mplce_url(urldest_tuple):
     ####### Dropbox Fix for View vs DL value ###############
     regex_dbx = re.compile(r'^https://www.dropbox.com/.+?\.[jpngJPNG]{3}$')
     regex_dbxprev = re.compile(r'^https://www.dropbox.com/.+?preview.*\.[jpngJPNG]{3}$')
-    image_url = image_url.replace('dl=9','dl=1').replace('dl=0', 'dl=1').replace('dl=2', 'dl=1').replace('dl=3', 'dl=1').replace('dl=4', 'dl=1').replace('dl=5', 'dl=1').replace('dl=6', 'dl=1').replace('dl=7', 'dl=1').replace('dl=8', 'dl=1')
+    image_url = image_url.replace('dl=9', 'dl=1').replace('dl=0', 'dl=1').replace('dl=2', 'dl=1').replace('dl=3',
+                                                                                                          'dl=1').replace(
+        'dl=4', 'dl=1').replace('dl=5', 'dl=1').replace('dl=6', 'dl=1').replace('dl=7', 'dl=1').replace('dl=8', 'dl=1')
     regex_dl = re.compile(r'^.+\?dl=1.*?$')
     if regex_dbx.findall(image_url):
         if regex_dbxprev.findall(image_url):
             print 'REGEX DBXPRE'
             # import http_tools.auth.Dropbox.dropboxapi_service as dropboxapi_service
-            final_path = image_url #dropboxapi_service.download_auth_file(image_url=image_url, destpath=destpath)
+            final_path = image_url  # dropboxapi_service.download_auth_file(image_url=image_url, destpath=destpath)
 
             if final_path:
                 print final_path, 'Final DBX Path'
@@ -317,7 +342,7 @@ def download_mplce_url(urldest_tuple):
     # regex_boxapi  = re.compile(r'^(https?)?(?:\://)?(?P<VENDER_ROOT>.*)?(.*?)\.box\.com/(s/)?(?P<SHARED_LINK_ID>.+)?/?(\.?[jpngJPNG]{3,4})?(.*?)?\??(.*?)?$', re.U)
     ########################
     #### DRIVE API AUTH ####
-    #if regex_drive2.findall(image_url):
+    # if regex_drive2.findall(image_url):
     ########################################################
     ########################################################
     ########################################################
@@ -352,12 +377,13 @@ def download_mplce_url(urldest_tuple):
         except IndexError:
             print 'Final DRIVE Exception ', destpath, '\n', image_url
         ## Tmp - Cannot use auth from johnb or http_tools above
-        except: pass
+        except:
+            pass
 
     elif regex_drive2.findall(image_url):
         print image_url, ' DRIVE'
-        #import jbmodules
-        #from jbmodules
+        # import jbmodules
+        # from jbmodules
         import http_tools.auth.Google.google_drive_auth_downloader as google_drive_auth_downloader
         try:
             final_path = google_drive_auth_downloader.download_google_drive_file(image_url=image_url, destpath=destpath)
@@ -367,7 +393,7 @@ def download_mplce_url(urldest_tuple):
                 print 'Final DRIVE Failure ', destpath, '\n', image_url
         except IndexError:
             print 'Final DRIVE Exception ', destpath, '\n', image_url
-            #return
+            # return
             ## Tmp - Cannot use auth from johnb or http_tools above
         except:
             pass
@@ -376,32 +402,35 @@ def download_mplce_url(urldest_tuple):
         print image_url, ' FTP--FTP\n...probably Jaipur...'
         from http_tools.ftp_functions import pycurl_ftp_download
         import pycurl
-        #from jbmodules
+        # from jbmodules
         try:
-            res = pycurl_ftp_download(imageurl=image_url,destpath=destpath)
+            res = pycurl_ftp_download(imageurl=image_url, destpath=destpath)
             print 'FTEPPEE --> {}\n{}\t\n'.format(res, image_url, destpath)
             return destpath
         except pycurl.error, error:
             print 'Pycurl error in FTP Download --> ', error
         ## Tmp - Cannot use auth from johnb or http_tools above
-        except: pass
+        except:
+            pass
 
     #############
     ## No Auth ##
     elif regex_validurl.findall(image_url):
         import httplib2
         # image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
-        #print 'RRR final', image_url
-        headers = {'Content-Accept': 'gzip', 'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
+        # print 'RRR final', image_url
+        headers = {'Content-Accept': 'gzip',
+                   'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
         ########################################################
         ####### Google Drive Fix ###############################
         ########################################################
         regex_drive = re.compile(r'^(https://drive.google.com/.+?)/edit\?usp=sharing$')
-        #regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/(edit|view)\?usp\=.*?$')
+        # regex_drive = re.compile(r'^(https://d(.+?)\.google\.com/.+?)/(edit|view)\?usp\=.*?$')
         if regex_drive.findall(image_url):
             image_url = image_url.split('/edit?')[0]
             image_url = image_url.split('/view?')[0]
-        else: pass
+        else:
+            pass
 
         try:
             print image_url, destpath
@@ -410,13 +439,13 @@ def download_mplce_url(urldest_tuple):
                 print ' HTTP Yippie ', res
             else:
                 res = requests.get(image_url, timeout=12, verify=False, headers=headers)
-                print ' HTTPS Oh Yes ', image_url,  res.headers
+                print ' HTTPS Oh Yes ', image_url, res.headers
             print 'ALMOST'
             urlcode_value = res.status_code
             print urlcode_value
             if urlcode_value == 209:
                 print urlcode_value
-                #res = urllib.urlretrieve(image_url, destpath)
+                # res = urllib.urlretrieve(image_url, destpath)
                 res = requests.get(image_url, timeout=7, verify=False, headers=headers)
                 with open(destpath, 'wb+') as f:
                     f.write(res.content)
@@ -432,25 +461,25 @@ def download_mplce_url(urldest_tuple):
                 try:
                     print 'TRYsub400', image_url, destpath, '476'
                     if image_url[:5] == 'https':
-                        #res = requests.get(image_url, stream=False, timeout=11, verify=False, headers=headers)
+                        # res = requests.get(image_url, stream=False, timeout=11, verify=False, headers=headers)
                         print 'Streaming False \n', res.headers, ' RES HTTPS HEAD <400  URL-->\t', image_url
                     else:
                         print ''
-                        #res = requests.get(image_url, timeout=11, verify=False, headers=headers)
+                        # res = requests.get(image_url, timeout=11, verify=False, headers=headers)
                     with open(destpath, 'wb+') as f:
                         f.write(res.content)
                         f.close()
                     print res.headers, ' RES HEAD <400  URL-->\t', image_url, '\v', destpath
                     return destpath
                 except:
-                    #subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
+                    # subprocess.call(['wget','-O','/'.join(destpath.split('/')[:-1]) + '/' + colorstyle + ext, image_url])
                     print 'Failed Downloading HTTPS file {}'.format(image_url)
 
             elif urlcode_value == 404:
                 ########## Temp Mrktplce MErchantry workaround to fix their urls they are feeding ###
-                #import urllib3
+                # import urllib3
                 print ' 404 - 2 - Trying Urllib3 ', image_url
-                #hostname = urllib3.get_host(image_url)[1]
+                # hostname = urllib3.get_host(image_url)[1]
                 if hostname == 'marketplace.merchantry.com':
                     image_url = image_url.replace(hostname, 'pim2.merchantry.com')
                 elif hostname == 'pim1.merchantry.com':
@@ -479,6 +508,7 @@ def download_mplce_url(urldest_tuple):
         except IOError:
             print 'Hidden IO Error Related to timeout value in get'
 
+
 def multi_url_downloader(argslist=None):
     import Queue
     import threading
@@ -486,7 +516,7 @@ def multi_url_downloader(argslist=None):
     import subprocess
     import requests
     q = Queue.Queue()
-    for i in argslist: #put 30 tasks in the queue
+    for i in argslist:  # put 30 tasks in the queue
         if i:
             q.put(i)
 
@@ -495,8 +525,8 @@ def multi_url_downloader(argslist=None):
         count = 0
         while True:
             item = q.get()
-            #execute a task: call a shell program and wait until it completes
-            #subprocess.call("echo "+str(item), shell=True)
+            # execute a task: call a shell program and wait until it completes
+            # subprocess.call("echo "+str(item), shell=True)
             downloaded_file = download_mplce_url(item)
             ## Delete Non Images before the whole shebang continues
             try:
@@ -508,9 +538,10 @@ def multi_url_downloader(argslist=None):
                     remove(downloaded_file)
                     q.task_done()
                 elif metadata.get('Composite:ImageSize') == '75x89':
-                    print 'Halting and discarding Marchantry Placeholder.\n\tSize is--> ', metadata.get('Composite:ImageSize')
+                    print 'Halting and discarding Marchantry Placeholder.\n\tSize is--> ', metadata.get(
+                        'Composite:ImageSize')
                     raise KeyError
-                    #print metadata.get('File:MIMEType'), ' <--BadImage - Removed --> ', downloaded_file
+                    # print metadata.get('File:MIMEType'), ' <--BadImage - Removed --> ', downloaded_file
                 else:
                     count += 1
                     #### Check and Add to Redis
@@ -532,19 +563,20 @@ def multi_url_downloader(argslist=None):
                     pass
                 q.task_done()
             finally:
-                #try:
-                print '\n\n\n\n\n\n\t\t\t\t\t\tDONE Downloading in Parallel\n\n\n\n\n\n' #q.task_done()
-                #except:
+                # try:
+                print '\n\n\n\n\n\n\t\t\t\t\t\tDONE Downloading in Parallel\n\n\n\n\n\n'  # q.task_done()
+                # except:
                 #    pass
 
-    cpus=multiprocessing.cpu_count() * 2 #detect number of cores
+    cpus = multiprocessing.cpu_count() * 2  # detect number of cores
     print("Creating %d threads" % cpus)
     for i in xrange(cpus):
-         t = threading.Thread(target=worker)
-         t.daemon = True
-         t.start()
+        t = threading.Thread(target=worker)
+        t.daemon = True
+        t.start()
 
-    q.join() #block until all tasks are done
+    q.join()  # block until all tasks are done
+
 
 ########### Main ############
 def main(vendor_brand='', dest_root='', **kwargs):
@@ -560,7 +592,7 @@ def main(vendor_brand='', dest_root='', **kwargs):
 
     dest_root = kwargs.get('root_img_dir', environ.get('ROOT_IMG_DIR', ''))
     if not dest_root:
-        dest_root='/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
+        dest_root = '/mnt/Post_Complete/Complete_Archive/MARKETPLACE'
     else:
         pass
     # all = kwargs.get('all', '')
@@ -573,13 +605,16 @@ def main(vendor_brand='', dest_root='', **kwargs):
     ## 1 ## Query for new Marketplace Styles
     # global single_flag
     if kwargs.get('update'):
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'), not_vendor=kwargs.get('not_vendor'), vendor=vendor, date_range=kwargs.get('date_range'), all=kwargs.get('all'))
+        marketplace_styles = sqlQuery_GetIMarketplaceImgs(update=kwargs.get('update'),
+                                                          not_vendor=kwargs.get('not_vendor'), vendor=vendor,
+                                                          date_range=kwargs.get('date_range'), all=kwargs.get('all'))
     elif kwargs.get('styles_list'):
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(styles_list=kwargs.get('styles_list'))
     elif style_number:
         marketplace_styles = sqlQuery_GetIMarketplaceImgs(style_number=kwargs.get('style_number'))
     else:
-        marketplace_styles=sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=kwargs.get('vendor_brand'), all=kwargs.get('all'), date_range=kwargs.get('date_range'))
+        marketplace_styles = sqlQuery_GetIMarketplaceImgs(vendor=vendor, vendor_brand=kwargs.get('vendor_brand'),
+                                                          all=kwargs.get('all'), date_range=kwargs.get('date_range'))
     ########
     # Print Count only and return
     if kwargs.get('count_only'):
@@ -602,7 +637,7 @@ def main(vendor_brand='', dest_root='', **kwargs):
     #  Import urls and download data+imageBlob into mongo db grisfs_mrktplce
     ##########################
     res = ''
-    #res = mongo_upsert_threaded(argslist=urlsdload_list)
+    # res = mongo_upsert_threaded(argslist=urlsdload_list)
     print ' Done With 2B Mongo Upsert Threads'
     ##########################
     ########
@@ -636,10 +671,11 @@ def main(vendor_brand='', dest_root='', **kwargs):
     #  #################################################
     if kwargs.get('update') and not kwargs.get('style_number'):
         import multiprocessing
-        environ['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
+        environ[
+            'SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://MZIMG:m0zu1mages@borac102-vip.l3.bluefly.com:1521/bfyprd12'
         from glob import glob
         poolDuplicateFilter = multiprocessing.Pool(8)
-        images =  glob(path.join(root_img_dir, '*/*/*.??g')) + glob(path.join(root_img_dir, '*/*/*/*.??g'))
+        images = glob(path.join(root_img_dir, '*/*/*.??g')) + glob(path.join(root_img_dir, '*/*/*/*.??g'))
         while len(images) == 0:
             print len(images), '  <-- Length of the Images to Filter,Process etc. Now the Filtererer'
             break
@@ -647,9 +683,9 @@ def main(vendor_brand='', dest_root='', **kwargs):
         poolDuplicateFilter.close()
         poolDuplicateFilter.join()
         print 'Images Filtered'
-###########    #
+        ###########    #
         print len(resupdateable), ' Updateable'
-###########    #
+    ###########    #
     #
     # remove(f) for f in glob........
     #########
@@ -657,36 +693,49 @@ def main(vendor_brand='', dest_root='', **kwargs):
     #
     chdir(path.dirname(path.abspath(__file__)))
     import multiprocmagick2 as multiprocmagick2
-    #multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
+    # multiprocmagick.funkRunner2(root_img_dir=root_img_dir)
     print 'Single Flaggin It with --> ', kwargs.get('style_number'), '\n', urlsdload_list
     ## This is where almost all the work begins...
-    imgs_processed = multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_style=style_number, update=kwargs.get('update', ''))
+    imgs_processed = multiprocmagick2.funkRunner3(root_img_dir=root_img_dir, single_style=style_number,
+                                                  update=kwargs.get('update', ''))
     print 'Done With multiprocmagick --> ', imgs_processed
     if imgs_processed:
         return imgs_processed
 
 
 import argparse
+
 #
 # Define and Instantiate parser Base
-parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports\n\n  export \"ROOT_IMG_DIR\" and/or \"DESTDIR\" to set env vars to overide default loading', add_help=True)
+parser = argparse.ArgumentParser(
+    description='Marketplace Vendor Image Imports\n\n  export \"ROOT_IMG_DIR\" and/or \"DESTDIR\" to set env vars to overide default loading',
+    add_help=True)
 ##############################
 #
 ######### Style ##############
-parser.add_argument('--style-number', '--style', '-s', action='store', default=False, help='A Single Valid 9 Digit Bluefly Style' )
-parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='A List of Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
-parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Vendor Name or ID use underscores in place of spaces if name is muitiple words' )
-parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by specific product Brand name')
-parser.add_argument('--date-range', '-d', action='store', default='5', help='Number of days prior to define the scope of the import')
-parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles. \nWill not work with additional arguments, \n\tuse --all flag for updating by vendor with --vendor flag.')
-parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False, help='Get both Incomplete and Complete Product Images for Import')
+parser.add_argument('--style-number', '--style', '-s', action='store', default=False,
+                    help='A Single Valid 9 Digit Bluefly Style')
+parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER,
+                    help='A List of Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.')
+parser.add_argument('--vendor', '--vendor-name', '-v', default='', action='store',
+                    help='Vendor Name or ID use underscores in place of spaces if name is muitiple words')
+parser.add_argument('--vendor-brand', '--brand', '-b', action='store', default='',
+                    help='Additionally Filter Vendor ID by specific product Brand name')
+parser.add_argument('--date-range', '-d', action='store', default='5',
+                    help='Number of days prior to define the scope of the import')
+parser.add_argument('--update', '-u', action='store_true', default=False,
+                    help='Only Process Updated images and do not include new styles. \nWill not work with additional arguments, \n\tuse --all flag for updating by vendor with --vendor flag.')
+parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False,
+                    help='Get both Incomplete and Complete Product Images for Import')
 #
-parser.add_argument('--not-vendor', '-nv', default='', action='store', help='Vendor Name or ID to EXCLUDE from Query' )
-parser.add_argument('--count-only', '--count', '-c', action='store_true', default=False, help='Runs the Query only and prints total styles included in search based on the args supplied')
+parser.add_argument('--not-vendor', '-nv', default='', action='store', help='Vendor Name or ID to EXCLUDE from Query')
+parser.add_argument('--count-only', '--count', '-c', action='store_true', default=False,
+                    help='Runs the Query only and prints total styles included in search based on the args supplied')
 ##########################
 #
 if __name__ == '__main__':
     import sys
+
     parsedargs = parser.parse_args(sys.argv[1:])
     if parsedargs.update:
         print '1\nUP\n'
