@@ -356,6 +356,8 @@ def download_mplce_url(urldest_tuple):
 
     elif regex_drive2.findall(image_url):
         print image_url, ' DRIVE'
+        #import jbmodules
+        #from jbmodules
         import http_tools.auth.Google.google_drive_auth_downloader as google_drive_auth_downloader
         try:
             final_path = google_drive_auth_downloader.download_google_drive_file(image_url=image_url, destpath=destpath)
@@ -366,7 +368,7 @@ def download_mplce_url(urldest_tuple):
         except IndexError:
             print 'Final DRIVE Exception ', destpath, '\n', image_url
             #return
-        ## Tmp - Cannot use auth from johnb or http_tools above
+            ## Tmp - Cannot use auth from johnb or http_tools above
         except:
             pass
 
@@ -374,6 +376,7 @@ def download_mplce_url(urldest_tuple):
         print image_url, ' FTP--FTP\n...probably Jaipur...'
         from http_tools.ftp_functions import pycurl_ftp_download
         import pycurl
+        #from jbmodules
         try:
             res = pycurl_ftp_download(imageurl=image_url,destpath=destpath)
             print 'FTEPPEE --> {}\n{}\t\n'.format(res, image_url, destpath)
@@ -388,6 +391,7 @@ def download_mplce_url(urldest_tuple):
     elif regex_validurl.findall(image_url):
         import httplib2
         # image_url = httplib2.urlnorm(httplib2.urllib.unquote(image_url))[-1]
+        #print 'RRR final', image_url
         headers = {'Content-Accept': 'gzip', 'User-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0'}
         ########################################################
         ####### Google Drive Fix ###############################
@@ -545,6 +549,11 @@ def multi_url_downloader(argslist=None):
 ########### Main ############
 def main(vendor_brand='', dest_root='', **kwargs):
     from os import environ, path, chdir, remove
+    sys.path.append('/usr/local/batchRunScripts/mozu')
+    sys.path.append('/usr/local/batchRunScripts/python')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/mongo_tools')
+    sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing')
     sys.path.append('/usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev')
     countimage = 0
     countstyle = 0
@@ -666,8 +675,8 @@ parser = argparse.ArgumentParser(description='Marketplace Vendor Image Imports\n
 ######### Style ##############
 parser.add_argument('--style-number', '--style', '-s', action='store', default=False, help='A Single Valid 9 Digit Bluefly Style' )
 parser.add_argument('styles_list', action='append', nargs=argparse.REMAINDER, help='A List of Valid 9 Digit Bluefly Style Numbers. Each style must be separated by a space.' )
-parser.add_argument('--vendor', '--vendor-name', '-v', default='', action='store', help='Vendor Name or ID use underscores in place of spaces if name is muitiple words' )
-parser.add_argument('--vendor-brand', '--brand', '-b', action='store', default='', help='Additionally Filter Vendor ID by specific product Brand name')
+parser.add_argument('--vendor', '--vendor-name', '-v', default='_', action='store', help='Vendor Name or ID use underscores in place of spaces if name is muitiple words' )
+parser.add_argument('--vendor-brand', '--brand', '-b', action='store', help='Additionally Filter Vendor ID by specific product Brand name')
 parser.add_argument('--date-range', '-d', action='store', default='5', help='Number of days prior to define the scope of the import')
 parser.add_argument('--update', '-u', action='store_true', default=False, help='Only Process Updated images and do not include new styles. \nWill not work with additional arguments, \n\tuse --all flag for updating by vendor with --vendor flag.')
 parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False, help='Get both Incomplete and Complete Product Images for Import')
