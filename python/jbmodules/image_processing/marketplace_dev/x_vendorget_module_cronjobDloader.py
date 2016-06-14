@@ -735,6 +735,7 @@ if __name__ == '__main__':
     import sys
 
     parsedargs = parser.parse_args(sys.argv[1:])
+    print parsedargs, "    <ParsedArgs"
     if parsedargs.update:
         print '1\nUP\n', parsedargs
         main(update=parsedargs.update,
