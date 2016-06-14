@@ -761,7 +761,7 @@ if __name__ == '__main__':
              count_only=parsedargs.count_only
              )
     else:
-        print '5\nELSE\nLocals\n', , parsedargs, '\n', locals()
+        print '5\nELSE\nLocals\n', parsedargs, '\n', locals()
         main(count_only=parsedargs.count_only)
 
 ## Its the Goods!  0307150250
