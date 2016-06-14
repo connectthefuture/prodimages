@@ -736,7 +736,7 @@ if __name__ == '__main__':
 
     parsedargs = parser.parse_args(sys.argv[1:])
     if parsedargs.update:
-        print '1\nUP\n'
+        print '1\nUP\n', parsedargs
         main(update=parsedargs.update,
              date_range=parsedargs.date_range,
              count_only=parsedargs.count_only,
@@ -745,14 +745,14 @@ if __name__ == '__main__':
              not_vendor=parsedargs.not_vendor
              )
     elif parsedargs.style_number:
-        print '2\nStyle\n'
+        print '2\nStyle\n', parsedargs
         style_number = parsedargs.style_number
         main(style_number=style_number)
     elif parsedargs.styles_list[0]:
-        print '3\nStyles List\n'
+        print '3\nStyles List\n', parsedargs
         main(styles_list=parsedargs.styles_list[0])
     elif parsedargs.vendor:
-        print '4\nVendor\n'
+        print '4\nVendor\n', parsedargs
         main(vendor=parsedargs.vendor,
              not_vendor=parsedargs.not_vendor,
              vendor_brand=parsedargs.vendor_brand,
@@ -761,7 +761,7 @@ if __name__ == '__main__':
              count_only=parsedargs.count_only
              )
     else:
-        print '5\nELSE\nLocals\n', locals()
+        print '5\nELSE\nLocals\n', , parsedargs, '\n', locals()
         main(count_only=parsedargs.count_only)
 
 ## Its the Goods!  0307150250
