@@ -723,7 +723,7 @@ parser.add_argument('--date-range', '-d', action='store', default='5',
                     help='Number of days prior to define the scope of the import')
 parser.add_argument('--update', '-u', action='store_true', default=False,
                     help='Only Process Updated images and do not include new styles. \nWill not work with additional arguments, \n\tuse --all flag for updating by vendor with --vendor flag.')
-parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true', default=False,
+parser.add_argument('--all', '--ALL', '-a', '-A', action='store_true',
                     help='Get both Incomplete and Complete Product Images for Import')
 #
 parser.add_argument('--not-vendor', '-nv', default='', action='store', help='Vendor Name or ID to EXCLUDE from Query')
