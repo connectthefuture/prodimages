@@ -8,8 +8,8 @@ def get_media_version_number(colorstyle):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
     if type(colorstyle) == list and len(colorstyle) > 1:
-        colorstyles = colorstyle
-        colorstyles = tuple(["{0}".format(s) for s in colorstyles])
+        colorstyles = tuple(colorstyle)
+        #colorstyles = tuple(["{0}".format(s) for s in colorstyles])
     # Multiple
         qry= """SELECT DISTINCT
               POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS "colorstyle",
