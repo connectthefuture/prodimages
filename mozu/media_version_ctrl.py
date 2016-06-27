@@ -8,8 +8,8 @@ def get_media_version_number(colorstyle):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
     if type(colorstyle) == list and len(colorstyle) > 1:
-        colorstyles = tuple(colorstyle)
-    #     colorstyles = tuple(["{0}".format(s) for s in colorstyles])
+        colorstyles = colorstyle
+        colorstyles = tuple(["{0}".format(s) for s in colorstyles])
     # Multiple
         qry= """SELECT DISTINCT
               POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS "colorstyle",
@@ -56,8 +56,8 @@ def get_media_version_number(colorstyle):
     except sqlalchemy.exc.DatabaseError:
         print 'This Search needs to have at least 1 style supplied as args, \nyou returned zero results.'
 
-    #finally:
-    #    connection.close()
+    finally:
+        connection.close()
 
 
 def set_media_version_number_single(productColorId, media_version,**kwargs):
