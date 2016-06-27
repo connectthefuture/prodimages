@@ -56,8 +56,8 @@ def get_media_version_number(colorstyle):
     except sqlalchemy.exc.DatabaseError:
         print 'This Search needs to have at least 1 style supplied as args, \nyou returned zero results.'
 
-    finally:
-        connection.close()
+    #finally:
+    #    connection.close()
 
 
 def set_media_version_number_single(productColorId, media_version,**kwargs):
