@@ -54,7 +54,7 @@ def get_media_version_number(colorstyle):
             # Convert Colorstyle to string then set as KEY
             productId_media_versions[str(row['colorstyle'])] = row['media_version']
         return productId_media_versions
-    except OSError:#sqlalchemy.exc.DatabaseError:
+    except sqlalchemy.exc.DatabaseError:
         print 'This Search needs to have at least 1 style supplied as args, \nyou returned zero results.'
 
     #finally:
