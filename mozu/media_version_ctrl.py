@@ -8,27 +8,24 @@ def get_media_version_number(colorstyle):
     orcl_engine = sqlalchemy.create_engine('oracle+cx_oracle://prod_team_ro:9thfl00r@borac101-vip.l3.bluefly.com:1521/bfyprd11')
     connection = orcl_engine.connect()
     if type(colorstyle) == list and len(colorstyle) > 1:
-        colorstyles = tuple(colorstyle)
-        #colorstyles = ",' ".join(colorstyle)
-        #colorstyles = tuple(["{0}".format(s) for s in colorstyles])
+        colorstyles = colorstyle
+        colorstyles = tuple(["{0}".format(s) for s in colorstyles])
     # Multiple
-        qry= "SELECT DISTINCT POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS colorstyle, POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION    AS media_version, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as m0, POMGR.PRODUCT_COLOR_DETAIL.ZOOM_IMAGE as z0, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as a1, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as a2, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as a3, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as a4, POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as a5, POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as swatch FROM POMGR.PRODUCT_COLOR_DETAIL WHERE POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID IN ('{0}')".format("', '".join(colorstyle))
-        # Multiple
-        # qry= """SELECT DISTINCT
-        #       POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS "colorstyle",
-        #       POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION    AS "media_version",
-        #       POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as "m0",
-        #       POMGR.PRODUCT_COLOR_DETAIL.ZOOM_IMAGE as "z0",
-        #       POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as "a1",
-        #       POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as "a2",
-        #       POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as "a3",
-        #       POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as "a4",
-        #       POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as "a5",
-        #       POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as "swatch"
-        #     FROM
-        #       POMGR.PRODUCT_COLOR_DETAIL
-        #     WHERE
-        #       POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID IN {0} """.format(colorstyles)
+        qry= """SELECT DISTINCT
+              POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS "colorstyle",
+              POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION    AS "media_version",
+              POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as "0m",
+              POMGR.PRODUCT_COLOR_DETAIL.ZOOM_IMAGE as "0",
+              POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as "1",
+              POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as "2",
+              POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as "3",
+              POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as "4",
+              POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as "5",
+              POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as "swatch"
+            FROM
+              POMGR.PRODUCT_COLOR_DETAIL
+            WHERE
+              POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID IN {0} """.format(colorstyles)
     else:
         if type(colorstyle) == list:
             colorstyle=colorstyle[0]
@@ -36,13 +33,13 @@ def get_media_version_number(colorstyle):
         qry= """SELECT DISTINCT
                 POMGR.PRODUCT_COLOR_DETAIL.PRODUCT_COLOR_ID AS "colorstyle",
                 POMGR.PRODUCT_COLOR_DETAIL.MEDIA_VERSION    AS "media_version",
-                POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as "m0",
-                POMGR.PRODUCT_COLOR_DETAIL.ZOOM_IMAGE as "z0",
-                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as "a1",
-                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as "a2",
-                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as "a3",
-                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as "a4",
-                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as "a5",
+                POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE as "0m",
+                POMGR.PRODUCT_COLOR_DETAIL.ZOOM_IMAGE as "0",
+                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_1 as "1",
+                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_2 as "2",
+                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_3 as "3",
+                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_4 as "4",
+                POMGR.PRODUCT_COLOR_DETAIL.ALTERNATE_IMAGE_5 as "5",
                 POMGR.PRODUCT_COLOR_DETAIL.MAIN_IMAGE_SWATCH as "swatch"
             FROM
               POMGR.PRODUCT_COLOR_DETAIL
@@ -59,8 +56,8 @@ def get_media_version_number(colorstyle):
     except sqlalchemy.exc.DatabaseError:
         print 'This Search needs to have at least 1 style supplied as args, \nyou returned zero results.'
 
-    finally:
-        connection.close()
+    #finally:
+    #    connection.close()
 
 
 def set_media_version_number_single(productColorId, media_version,**kwargs):
