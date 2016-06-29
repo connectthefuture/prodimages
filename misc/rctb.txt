@@ -84,9 +84,9 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###
 ##########
 ## Remote Dropbox RSync prodimages.ny.bluefly.com <--> ProdJohn8.bluefly.corp ## Syncs txt files lists from DropboxSync
-9,19,29,39,49,59 * * * * rsync -avzru  --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[1-6].??g' --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].??g' --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_alt0[1-9].??g' --exclude='*' --delete-after johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/jb_UPLOAD/ /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/ && rsync -avzru --delete-before -E /root/DropboxSync/bflyProdimagesSync/ johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ &&  rsync -avzru -E --delete-after johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ /root/DropboxSync/bflyProdimagesSync/ 2>&1 >> /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log && echo "Sync Completed at `date`"  >>  /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log && chmod -R 777 /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/ && chown root:root /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato
+#9,19,29,39,49,59 * * * * rsync -avzru  --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[1-6].??g' --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].??g' --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_alt0[1-9].??g' --exclude='*' --delete-after johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/jb_UPLOAD/ /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/ && rsync -avzru --delete-before -E /root/DropboxSync/bflyProdimagesSync/ johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ &&  rsync -avzru -E --delete-after johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/ /root/DropboxSync/bflyProdimagesSync/ 2>&1 >> /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log && echo "Sync Completed at `date`"  >>  /root/DropboxSync/bflyProdimagesSync/prodimages_sync.log && chmod -R 777 /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/ && chown root:root /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato
 ## Sync Dropbox MozuText Sync
-1,12,22,32,42,52   * * * * rsync --archive --compress --update johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/MissingMozu/  /root/DropboxSync/bflyProdimagesSync/MissingMozu/
+#1,12,22,32,42,52   * * * * rsync --archive --compress --update johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/MissingMozu/  /root/DropboxSync/bflyProdimagesSync/MissingMozu/
 ########## && rsync -avzru --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[1-6].??g' --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].??g' --include='[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_alt0[1-9].??g' --include='*/' --exclude='*' --remove-source-files --delete johnb@ProdJohn8:~/Dropbox/bflyXlsDocs/bflyProdimagesSync/jb_UPLOAD/ /mnt/Post_Complete/Complete_to_Load/Drop_FinalFilesOnly/JohnBragato/
 ##
 #
@@ -138,7 +138,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ############################# ******** ###########################
 ##########################
 ##### Rsyncn #############
-31 3,12,15,17,21 * * 1,2,3,4,5,7 rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still && echo "Sync Completed at `date`" >> /var/log/rsyncFile7Still.log ;
+#31 3,12,15,17,21 * * 1,2,3,4,5,7 rsync --archive --compress --update /mnt/Post_Ready/aPhotoPush/ /mnt/Post_Ready/Retouch_Still && echo "Sync Completed at `date`" >> /var/log/rsyncFile7Still.log ;
 ########################
 ###########################################################
 #####  WALKEN with WALKIN  ################################
@@ -146,15 +146,15 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ######  how to  ###########################################
 ######## Get FileSystem Info For Import MYSQL 3301 ########
 ###########################################################
-4 2 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null
+#4 2 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/Retouch_Still 2>&1 >> /dev/null
 ##############
 ## --> Daily #
-10 3,8,10,12,14,16,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
+#10 3,8,10,12,14,16,18,22 * * 1,2,3,4,5 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 ## --> Weekend Runs much less
-10 3,10,13,16,22    * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null  ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
+#10 3,10,13,16,22    * * 6,7 walkdir_fix_exiv2_csv.py /mnt/Post_Ready/aPhotoPush 2>&1 >> /dev/null  ##2>&1 > /var/log/photopaths_Stillpushselects_import.log && date >> /var/log/photopaths_Stillpushselects_import.log ;
 #
 ##### Zimages_1
-17 5,13,23 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/zImages_1 2>&1 > /var/log/photopaths_Zimages_selectslowrezimport.log && date >> /var/log/photopaths_Zimages_selectslowrezimport.log ;
+#17 5,13,23 * * * walkdir_fix_exiv2_csv.py /mnt/Post_Ready/zImages_1 2>&1 > /var/log/photopaths_Zimages_selectslowrezimport.log && date >> /var/log/photopaths_Zimages_selectslowrezimport.log ;
 #
 ##########################
 ## --> Mongo Imports ## ##
@@ -162,9 +162,9 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ###### ########## ########
 ###### ########## ########
 ###### Still Push ########
-17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/aPhotoPush/ -maxdepth 1 -type d -mtime 2); do image_db_data_prepare.py "$d" "retouch_still"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
+#17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/aPhotoPush/ -maxdepth 1 -type d -mtime 2); do image_db_data_prepare.py "$d" "retouch_still"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
 ###### Still Arch ########
-17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/Retouch_Still/ -maxdepth 1 -type d -mtime 2); do image_db_data_prepare.py "$d" "gridfs_file7"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
+#17 7,9,10,11,12,13,14,15,16,17,18,19,23 * * 1,2,3,4,5 for d in $(find /mnt/Post_Ready/Retouch_Still/ -maxdepth 1 -type d -mtime 2); do image_db_data_prepare.py "$d" "gridfs_file7"; done ; 2>&1 > /var/log/mongoWalkerStillLL.log && date >> /var/log/mongoWalkerStillLL.log ;
 ###### ########## ########
 ###### ########## ########
 ###### ########## ########
@@ -220,17 +220,17 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 41 5,20 * * * /usr/local/batchRunScripts/python/import_excel_tool_data.py 2>&1 > /var/log/tool_copy_data.log
 #
 #
-47 7,10,11.12,13,14,15,16,17,21 * * * /usr/local/batchRunScripts/bash/importEventStyleInfoPMA_live.sh
-48 7,10,11,12,13,14,15,16,18,21 * * * /usr/local/batchRunScripts/bash/importEventStyleStatus_live.sh
-49 6,10,11,12,13,14,15,16,17,21 * * * /usr/local/batchRunScripts/bash/importEventStyleStatusImgCpy_live.sh
-10 7,21 * * * /usr/local/batchRunScripts/bash/importPoUpcomingStatuses.sh
+#47 7,10,11.12,13,14,15,16,17,21 * * * /usr/local/batchRunScripts/bash/importEventStyleInfoPMA_live.sh
+#48 7,10,11,12,13,14,15,16,18,21 * * * /usr/local/batchRunScripts/bash/importEventStyleStatus_live.sh
+#49 6,10,11,12,13,14,15,16,17,21 * * * /usr/local/batchRunScripts/bash/importEventStyleStatusImgCpy_live.sh
+#10 7,21 * * * /usr/local/batchRunScripts/bash/importPoUpcomingStatuses.sh
 ################################################################################
 ## PM-DB-SEND Update Photographed Date in PM db find 1.jpg past 18h Get All Files
 ## updated in PM and make low-res for Z Image Dir lowrez for PM Updates Shot Attrib
 ## Updates Unique Shots based on dated Dir
-54 19 * * * /usr/local/batchRunScripts/python/pm_update_unique_photocompletion.py 2>&1 > /var/log/photoattrib_updatepm.log && date >> /var/log/photoattrib_updatepm.log
+#54 19 * * * /usr/local/batchRunScripts/python/pm_update_unique_photocompletion.py 2>&1 > /var/log/photoattrib_updatepm.log && date >> /var/log/photoattrib_updatepm.log
 ##
-## Then Copies new files to zImages
+### Then Copies new files to zImages
 27 22 * * * parallel --jobs 8 /usr/local/batchRunScripts/python/photo_organize.py {} /mnt/Post_Ready/zImages_1/ ::: $(find /mnt/Post_Ready/Retouch_Still/????15* -type f -mtime -7)
 ################################################################################
 ################################################################################
@@ -242,12 +242,12 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ####    MAIL   #######
 ######################
 ###### MAIL and The Lavender Report #
-## AM-MAIL-SEND Sends Retouching Files ToDo To Retouch Team
-50 7 * * * /usr/local/batchRunScripts/bash/numbersDailyMailFullReport.sh > /tmp/dailymail_log.txt 2>&1 >> /var/log/mail_dailyfileget.log
+### AM-MAIL-SEND Sends Retouching Files ToDo To Retouch Team
+#50 7 * * * /usr/local/batchRunScripts/bash/numbersDailyMailFullReport.sh > /tmp/dailymail_log.txt 2>&1 >> /var/log/mail_dailyfileget.log
 ##  Below will update reports for Generic Search Page script at 8:08AM sends
 ##  Lavender Report
 59 7,8,10,11,12,13,14,15,16,17,18,19 * * * /usr/local/batchRunScripts/bash/morningEventMail.sh
-8 8 * * * /usr/local/batchRunScripts/bash/morningEventMailIncompletes.sh 2>&1 >> /var/log/mail_lavenderreport.log
+#8 8 * * * /usr/local/batchRunScripts/bash/morningEventMailIncompletes.sh 2>&1 >> /var/log/mail_lavenderreport.log
 ###########################################################################ss
 ###########################################################################ss
 ###### Mail Upload Totals ##########
@@ -260,8 +260,8 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ######  FILES #######
 ###########################################################################
 ## AM-FILE-GET The Better Getter Gets Incomplete Files In the AM To Retouch
-20 7 * * * /usr/local/batchRunScripts/python/theBestPythonGetterReturnsBetterThanEver.py 2>&1 > /var/log/daily_getter_python.log && date >> /var/log/daily_getter_python.log
-40 7 * * * /usr/local/batchRunScripts/python/Getter_copyready_noimg.py 2>&1 > /var/log/daily_copy_getter_python.log && date >> /var/log/daily_copy_getter_python.log
+#20 7 * * * /usr/local/batchRunScripts/python/theBestPythonGetterReturnsBetterThanEver.py 2>&1 > /var/log/daily_getter_python.log && date >> /var/log/daily_getter_python.log
+#40 7 * * * /usr/local/batchRunScripts/python/Getter_copyready_noimg.py 2>&1 > /var/log/daily_copy_getter_python.log && date >> /var/log/daily_copy_getter_python.log
 #
 #
 ##############################################################################################
@@ -373,7 +373,7 @@ TNS_ADMIN=/usr/lib/oracle/11.2/client64/lib
 ##################################################################
 ##################################################################
 # 17 6,13,20 * * * /usr/local/batchRunScripts/python/cronjob_marketplace_nightly_improcloadFile7.py run '/mnt/Post_Complete/ImageDrop'  2>&1 > /var/log/marketplace_images.log
-24 7,15,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace/x_vendorget_module_cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
+24 7,15,20 * * * /usr/local/batchRunScripts/python/jbmodules/image_processing/marketplace_dev/x_vendorget_module_cronjobDloader.py 2>&1 > /var/log/marketplace_images.log
 ###########
 ## Delete previous 12 hours Marketplace files
 41 4,14,19 * * * parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE/*/??????/ -type f`
