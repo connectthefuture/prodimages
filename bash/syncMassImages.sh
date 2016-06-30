@@ -87,4 +87,4 @@ find /mnt/Design/LookletEditorial -mindepth 1 -type d -empty -exec rmdir {} \;
 
 cd /root && crontab crontabmain ;
 
-service mysql start
+#service mysql start
