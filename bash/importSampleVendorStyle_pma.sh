@@ -6,6 +6,10 @@
 DATE=`date "+%Y-%m-%d"`
 DAY=`date "+%Y-%m-%d-RetouchToDo"`
 
+# morning deletions
+/usr/bin/parallel -P32 rm ::: `find /mnt/Post_Complete/Complete_Archive/MARKETPLACE -mindepth 2 -type f`
+
+
 ## RUN SQL Query spooling Query to CSV
 
 dailyPhpMyAdminForImport=$SCRIPTS/sql/sampleid_rel_vendorstyle.sql
